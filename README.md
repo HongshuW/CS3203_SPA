@@ -1,4 +1,4 @@
-# Team 00
+# Team 41
 
 > Please fill in this Readme with the required information, and delete this box.
 > 
@@ -30,3 +30,4 @@ No additional instructions required.
 Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
 Lin Xingchen | 96105352 | e0559168@u.nus.edu | Macbook M1/CLion
+Loke Jin Xue Aaron | 93375468 | e0556043@u.nus.edu | Windows 10/Visual Studio Enterprise 2022
