@@ -2,8 +2,8 @@
 // Created by Xingchen Lin on 27/8/22.
 //
 
-#ifndef SPA_QUERY_TOKENIZER_H
-#define SPA_QUERY_TOKENIZER_H
+#ifndef SPA_QUERYTOKENIZER_H
+#define SPA_QUERYTOKENIZER_H
 
 #pragma once
 
@@ -31,4 +31,4 @@ namespace QB {
     };
 }
 
-#endif //SPA_QUERY_TOKENIZER_H
+#endif //SPA_QUERYTOKENIZER_H
