@@ -4,11 +4,11 @@
 
 #include "catch.hpp"
 
-#include "query_builder/query_tokenizer.h"
+#include "query_builder/QueryTokenizer.h"
 
 using QB::QueryTokenizer;
 
-TEST_CASE ("Test Query Tokenizer") {
+TEST_CASE ("Test query Tokenizer") {
     SECTION ("test empty query") {
         std::string query = "";
 

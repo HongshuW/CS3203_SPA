@@ -2,8 +2,8 @@
 // Created by Xingchen Lin on 27/8/22.
 //
 
-#include "query_builder/query_tokenizer.h"
-#include "query_builder/exceptions.h"
+#include "query_builder/QueryTokenizer.h"
+#include "query_builder/Exceptions.h"
 
 using QB::QueryTokenizer;
 

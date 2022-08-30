@@ -19,6 +19,16 @@ namespace QB {
     public:
         PQLTokenizeException(const std::string& msg = "") : std::runtime_error(msg) {}
     };
+
+    /**
+    * Represents an error that occurs during parsing of
+    * PQL tokens to Query object.
+    *
+    */
+    class PQLParseException : public std::runtime_error {
+    public:
+        PQLParseException(const std::string& msg = "") : std::runtime_error(msg) {}
+    };
 }
 
 #endif //SPA_EXCEPTIONS_H
