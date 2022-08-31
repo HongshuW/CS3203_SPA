@@ -4,7 +4,6 @@
 #include "catch.hpp"
 
 #include "query_evaluator/QueryEvaluator.h"
-#include "../test_util/TypicalQueries.h"
 #include "query_builder/QueryBuilder.h"
 
 using namespace QB;
