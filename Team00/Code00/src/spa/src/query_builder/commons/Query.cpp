@@ -9,9 +9,10 @@ using namespace QB;
 
 Query::Query()
     : declarations(new std::vector<Declaration>),
-      clauses(new std::vector<Clause *>){};
+      suchThatClauses(new std::vector<SuchThatClause*>){};
 
 Query::~Query() {
     delete declarations;
-    delete clauses;
+    delete selectClause;
+    delete suchThatClauses;
 }
