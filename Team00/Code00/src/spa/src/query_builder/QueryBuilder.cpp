@@ -4,6 +4,7 @@
 
 #include "query_builder/QueryBuilder.h"
 #include "query_builder/QueryTokenizer.h"
+#include "query_builder/QueryValidator.h"
 #include "QueryParser.h"
 #include <string>
 
@@ -14,6 +15,7 @@ Query QueryBuilder::buildPQLQuery(std::string& queryStr) {
     std::vector<std::string> tokens = tokenizer.tokenize();
     QueryParser parser = QueryParser(tokens);
     Query query = parser.parse();
-    // TODO: implement query validator
+    QueryValidator validator = QueryValidator(&query);
+    validator.validateQuery();
     return query;
 }

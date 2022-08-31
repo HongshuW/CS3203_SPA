@@ -29,6 +29,16 @@ namespace QB {
     public:
         PQLParseException(const std::string& msg = "") : std::runtime_error(msg) {}
     };
+
+    /**
+    * Represents an error that occurs during validation of
+    * PQL Query object.
+    *
+    */
+    class PQLValidationException : public std::runtime_error {
+    public:
+        PQLValidationException(const std::string& msg = "") : std::runtime_error(msg) {}
+    };
 }
 
 #endif //SPA_EXCEPTIONS_H
