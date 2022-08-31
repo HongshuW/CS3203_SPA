@@ -16,8 +16,6 @@ public:
     vector<string> header;
     list<tuple<Types...>> rows;
 
-    Table(vector<string> header, list<tuple<Types...>> rows);
-    void insertRow(tuple<Types...> row);
 };
 
 #endif //SPA_TABLE_H
