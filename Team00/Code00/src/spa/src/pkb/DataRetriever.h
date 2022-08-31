@@ -5,4 +5,13 @@
 #ifndef SPA_DATARETRIEVER_H
 #define SPA_DATARETRIEVER_H
 
+#include "EntityManager.h"
+#include "Table.h"
+
+class DataRetriever {
+public:
+    Table<string> * getVariables();
+
+};
+
 #endif //SPA_DATARETRIEVER_H
