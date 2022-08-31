@@ -19,9 +19,9 @@ namespace QE {
 
     public:
         explicit QueryEvaluator(PKB* pkb);
-        QueryResult evaluate(const Query& query);
-        QueryResult evaluateNoConditionQuery(const Query& query);
-        DesignEntity getDesignEntity(Synonym synonym, Query *query);
+        QueryResult evaluate(Query* query);
+        QueryResult evaluateNoConditionQuery(Query* query);
+        DesignEntity getDesignEntity(Synonym synonym, Query* query);
 
     };
 

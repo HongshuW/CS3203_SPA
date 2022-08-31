@@ -19,7 +19,7 @@ TEST_CASE("Test query evaluator") {
     auto query2 = QueryBuilder().buildPQLQuery(queryStr2);
 
     SECTION("test 1") {
-        queryEvaluator.evaluate(query);
+        queryEvaluator.evaluate(&query);
         //queryEvaluator.evaluate(query2);
 //        DesignEntity d = queryEvaluator.getDesignEntity(query2.selectClause->synonym, &query2);
 //        getDesignEntityString(d);

@@ -13,19 +13,27 @@ QueryEvaluator::QueryEvaluator(PKB *pkb) {
     this->pkb = pkb;
 }
 
-QueryResult QueryEvaluator::evaluate(const Query& query) {
+QueryResult QueryEvaluator::evaluate(Query* query) {
 
-    if (query.suchThatClauses->empty()) {
+    if (query->suchThatClauses->empty()) {
         this->evaluateNoConditionQuery(query);
     }
     return QueryResult();
 }
 
-QueryResult QueryEvaluator::evaluateNoConditionQuery(const Query &query) {
-    SelectClause* selectClause = query.selectClause;
-    RefType refType = getRefType(selectClause->synonym);
-    for (Declaration d: *query.declarations) {
-
+QueryResult QueryEvaluator::evaluateNoConditionQuery(Query *query) {
+    SelectClause* selectClause = query->selectClause;
+    Synonym synonym = selectClause->synonym;
+    DesignEntity designEntity = getDesignEntity(synonym, query);
+    switch (designEntity) {
+        case DesignEntity::STMT:
+            break;
+        case DesignEntity::VARIABLE:
+            break;
+        case DesignEntity::CONSTANT:
+            break;
+        default:
+            break;
     }
     return QueryResult();
 }
