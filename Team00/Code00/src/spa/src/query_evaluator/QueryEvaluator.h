@@ -7,18 +7,19 @@
 
 #include "QueryResult.h"
 #include "query_builder/commons/Query.h"
-#include "PKB.h"
+#include "pkb/DataRetriever.h"
+
 
 using namespace QB;
 
 namespace QE {
 
     class QueryEvaluator {
-        PKB* pkb;
+        DataRetriever* dataRetriever;
 
 
     public:
-        explicit QueryEvaluator(PKB* pkb);
+        explicit QueryEvaluator(DataRetriever* dataRetriever1);
         QueryResult evaluate(Query* query);
         QueryResult evaluateNoConditionQuery(Query* query);
         DesignEntity getDesignEntity(Synonym synonym, Query* query);
