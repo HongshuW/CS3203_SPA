@@ -8,14 +8,12 @@
 #pragma once
 
 #include "query_builder/commons/Synonym.h"
-#include "query_builder/clauses/Clause.h"
 
 namespace QB {
-    class SelectClause : public Clause {
+    class SelectClause {
     public:
         Synonym synonym;
         explicit SelectClause(Synonym synonym);
-        void accept() override;
 
         bool operator==(const SelectClause& selectClause1) const { return synonym == selectClause1.synonym; }
 
