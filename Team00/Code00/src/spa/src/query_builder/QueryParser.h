@@ -8,24 +8,25 @@
 #include "query_builder/commons/Query.h"
 #include "query_builder/commons/Ref.h"
 
+using namespace QB;
+using namespace std;
+
 namespace QB {
     class QueryParser {
     private:
         Query* query;
         unsigned int currIdx;
-        std::vector<std::string> tokens;
-        std::string peek();
-        std::string pop();
-        bool expect(std::string s);
-        bool match(std::string s);
+        vector<string> tokens;
+        string peek();
+        string previous();
+        string pop();
+        bool expect(string s);
+        bool match(string s);
         bool parseDeclarations();
         bool parseSelectClause();
         Ref parseRef();
-        bool isDigit(const std::string &str);
-        bool parseFollowsClause();
-        bool parseFollowsTClause();
+        bool isDigit(const string &str);
         bool parseSuchThatClause();
-        bool parsePatternClause();
 
     public:
         explicit QueryParser(std::vector<std::string> tokens);

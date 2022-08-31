@@ -11,6 +11,8 @@
 #include <vector>
 #include <unordered_map>
 
+using namespace std;
+
 namespace QB {
     enum class DesignEntity {
         STMT,
@@ -25,8 +27,8 @@ namespace QB {
         PROCEDURE,
     };
 
-    DesignEntity getDesignEntity(std::string&);
-    std::string getDesignEntityString(DesignEntity);
+    DesignEntity getDesignEntity(string&);
+    string getDesignEntityString(DesignEntity);
 
 }  // namespace QE
 

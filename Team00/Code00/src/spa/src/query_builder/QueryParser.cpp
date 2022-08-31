@@ -6,24 +6,22 @@
 #include "query_builder/commons/Synonym.h"
 #include "Exceptions.h"
 #include "query_builder/clauses/SelectClause.h"
-#include "query_builder/clauses/FollowsClause.h"
-#include "query_builder/clauses/FollowsTClause.h"
-
-using namespace QB;
-using namespace std;
+#include "query_builder/clauses/SuchThatClause.h"
 
 QueryParser::QueryParser(std::vector<std::string> tokens)
         : query(new Query()), currIdx(0), tokens(tokens) {};
 
-std::string QueryParser::peek() { return tokens[currIdx]; }
+string QueryParser::peek() { return tokens[currIdx]; }
 
-std::string QueryParser::pop() {
-    std:: string currToken = tokens[currIdx];
+string QueryParser::previous() { return tokens[currIdx - 1]; }
+
+string QueryParser::pop() {
+    string currToken = tokens[currIdx];
     currIdx++;
     return currToken;
 }
 
-bool QueryParser::match(std::string s) {
+bool QueryParser::match(string s) {
     if (peek().compare(s) == 0) {
         currIdx++;
         return true;
@@ -31,7 +29,7 @@ bool QueryParser::match(std::string s) {
     return false;
 }
 
-bool QueryParser::expect(std::string s) {
+bool QueryParser::expect(string s) {
     if (match(s)) {
         return true;
     }
@@ -74,7 +72,7 @@ bool QueryParser::parseSelectClause() {
         std::string synonymStr = pop();
         Synonym synonym = Synonym(synonymStr);
         SelectClause* selectClause = new SelectClause(synonym);
-        query->clauses->push_back(selectClause);
+        query->selectClause = selectClause;
     } catch (const PQLParseException& e) {
         return false;
     }
@@ -94,48 +92,8 @@ Ref QueryParser::parseRef() {
     }
 }
 
-bool QueryParser::isDigit(const std::string &str) {
+bool QueryParser::isDigit(const string &str) {
     return str.find_first_not_of("0123456789") == std::string::npos;
-}
-
-bool QueryParser::parseFollowsClause() {
-    unsigned int savedIdx = currIdx;
-
-    if (!match("Follows")) {
-        currIdx = savedIdx;
-        return false;
-    }
-
-    expect("(");
-    auto arg1 = parseRef();
-    expect(",");
-    auto arg2 = parseRef();
-    expect(")");
-
-    FollowsClause* followsClause = new FollowsClause(arg1, arg2);
-    query->clauses->push_back(followsClause);
-
-    return true;
-}
-
-bool QueryParser::parseFollowsTClause() {
-    unsigned int savedIdx = currIdx;
-
-    if (!match("Follows*")) {
-        currIdx = savedIdx;
-        return false;
-    }
-
-    expect("(");
-    auto arg1 = parseRef();
-    expect(",");
-    auto arg2 = parseRef();
-    expect(")");
-
-    FollowsTClause* followsTClause = new FollowsTClause(arg1, arg2);
-    query->clauses->push_back(followsTClause);
-
-    return true;
 }
 
 bool QueryParser::parseSuchThatClause() {
@@ -147,10 +105,20 @@ bool QueryParser::parseSuchThatClause() {
     }
 
     expect("that");
-    //! TODO: refactor and combine the similar functions
-    if (parseFollowsClause()) return true;
-    if (parseFollowsTClause()) return true;
-    return false;
+
+    string relationTypeStr = pop();
+    RelationType relationType = getRelationTypeFromStr(relationTypeStr);
+
+    expect("(");
+    auto arg1 = parseRef();
+    expect(",");
+    auto arg2 = parseRef();
+    expect(")");
+
+    SuchThatClause* suchThatClause = new SuchThatClause(relationType, arg1, arg2);
+    query->suchThatClauses->push_back(suchThatClause);
+
+    return true;
 }
 
 Query QueryParser::parse() {
@@ -165,7 +133,8 @@ Query QueryParser::parse() {
 
         while (currIdx < tokens.size()) {
             try {
-                if (parseSuchThatClause()) continue;
+                parseSuchThatClause();
+                currIdx++;
             } catch (const PQLParseException& e) {
                 throw PQLParseException(
                         "Expecting a such-that clause, got " + peek());
