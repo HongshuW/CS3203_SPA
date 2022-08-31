@@ -8,14 +8,9 @@
 using namespace std;
 
 template <typename... Types>
-Table<Types...>::Table(vector<string> header, vector<tuple<Types...>> rows) {
+Table<Types...>::Table(vector<string> header, list<tuple<Types...>> rows) {
     this->header = header;
     this->rows = rows;
-}
-
-template <typename... Types>
-tuple<Types...> Table<Types...>::getRowByIndex(int index) {
-    return this->rows[index];
 }
 
 template <typename... Types>

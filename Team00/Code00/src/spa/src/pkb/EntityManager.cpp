@@ -8,7 +8,7 @@ using namespace std;
 Table<string> * EntityManager::getVariables() {
     // dummy table for testing
     vector<string> header{"variable name"};
-    vector<tuple<string>> rows;
+    list<tuple<string>> rows;
     tuple<string> row1 = make_tuple("dummyVar1");
     tuple<string> row2 = make_tuple("dummyVar2");
     tuple<string> row3 = make_tuple("dummyVar3");
