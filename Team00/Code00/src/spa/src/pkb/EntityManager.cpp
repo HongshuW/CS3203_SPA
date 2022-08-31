@@ -16,7 +16,11 @@ Table<string> * EntityManager::getVariables() {
     rows.push_back(row2);
     rows.push_back(row3);
 
-    EntityManager::variableTable = Table<string>(header, rows);
+    Table<string> variableTable;
+    variableTable.header = header;
+    variableTable.rows = rows;
+
+    EntityManager::variableTable = variableTable;
 
     return &EntityManager::variableTable;
 }

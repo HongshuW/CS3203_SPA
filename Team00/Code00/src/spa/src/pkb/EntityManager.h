@@ -10,9 +10,7 @@ using namespace std;
 
 class EntityManager {
 public:
+    static Table<string> variableTable;
     static Table<string> * getVariables();
-
-private:
-	static Table<string> variableTable;
 
 };
