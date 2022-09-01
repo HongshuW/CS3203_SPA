@@ -9,7 +9,7 @@ using namespace std;
 
 TEST_CASE("Test Entity Manager") {
     SECTION("Get Variables in a Table") {
-        Table<string> * tablePtr = EntityManager::getVariables();
+        Table * tablePtr = EntityManager::getVariables();
         REQUIRE(tablePtr == &EntityManager::variableTable);
     }
 }

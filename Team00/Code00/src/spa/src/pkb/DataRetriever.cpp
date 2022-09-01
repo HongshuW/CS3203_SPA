@@ -5,6 +5,6 @@
 #include "DataRetriever.h"
 #include "EntityManager.h"
 
-Table<string> DataRetriever::getVariables() {
+Table DataRetriever::getVariables() {
     return *EntityManager::getVariables();
 }
