@@ -35,4 +35,36 @@ TEST_CASE("Test Table") {
         advance(rowsIterator, 1);
         REQUIRE(*rowsIterator == row3);
     }
+
+    SECTION("Get Column by Column Name") {
+        vector<string> header{"stmt number", "stmt type"};
+        list<vector<string>> rows;
+        vector<string> row1{"1", "assign"};
+        vector<string> row2{"2", "while"};
+        vector<string> row3{"3", "read"};
+        rows.push_back(row1);
+        rows.push_back(row2);
+        rows.push_back(row3);
+
+        // create and initialise table
+        Table stmtTable;
+        stmtTable.header = header;
+        stmtTable.rows = rows;
+
+        list<string> stmtNoColumn = stmtTable.getColumnByName("stmt number");
+        auto stmtNoIterator = stmtNoColumn.begin();
+        REQUIRE(*stmtNoIterator == "1");
+        advance(stmtNoIterator, 1);
+        REQUIRE(*stmtNoIterator == "2");
+        advance(stmtNoIterator, 1);
+        REQUIRE(*stmtNoIterator == "3");
+
+        list<string> stmtTypeColumn = stmtTable.getColumnByName("stmt type");
+        auto stmtTypeIterator = stmtTypeColumn.begin();
+        REQUIRE(*stmtTypeIterator == "assign");
+        advance(stmtTypeIterator, 1);
+        REQUIRE(*stmtTypeIterator == "while");
+        advance(stmtTypeIterator, 1);
+        REQUIRE(*stmtTypeIterator == "read");
+    }
 }
