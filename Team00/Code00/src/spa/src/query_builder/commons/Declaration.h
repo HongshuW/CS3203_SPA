@@ -25,8 +25,7 @@ namespace QB {
         DesignEntity getDesignEntity() { return designEntity; }
         Synonym getSynonym() { return synonym; }
 
-        Declaration(DesignEntity designEntity, Synonym synonym)
-                : designEntity(designEntity), synonym(synonym){};
+        Declaration(DesignEntity designEntity, Synonym synonym);
 
         bool operator==(const Declaration& a2) const {
             return designEntity == a2.designEntity && synonym == a2.synonym;
@@ -38,6 +37,8 @@ namespace QB {
             " designEntity: " << getDesignEntityString(declaration.designEntity);
             return os;
         }
+
+        static optional<Declaration> findDeclaration(Synonym& synonymObj, vector<Declaration>* declarations);
     };
 }
 #endif //SPA_DECLARATION_H
