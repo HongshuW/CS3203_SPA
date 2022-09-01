@@ -21,7 +21,7 @@ using QB::SelectClause;
 using QB::SuchThatClause;
 using QB::Underscore;
 
-TEST_CASE ("Test query Parser") {
+TEST_CASE ("Test Query Parser") {
     SECTION ("variable v1; Select v1") {
         std::string queryStr = "variable v1; Select v1";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
