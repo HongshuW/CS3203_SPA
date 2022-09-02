@@ -23,3 +23,7 @@ vector<string> Table::getColumnByIndex(int index) {
     }
     return output;
 }
+
+void Table::appendRow(vector<string> row) {
+    rows.push_back(row);
+}

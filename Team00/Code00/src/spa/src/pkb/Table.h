@@ -17,6 +17,7 @@ public:
     vector<vector<string>> rows;
 
     vector<string> getColumnByName(string columnName);
+    void appendRow(vector<string> row);
 
 private:
     vector<string> getColumnByIndex(int index);
