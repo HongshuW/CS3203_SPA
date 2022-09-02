@@ -30,7 +30,7 @@ TEST_CASE("Test Table") {
         // iterate through rows in the table
         REQUIRE(variableTable.rows[0] == row1);
         REQUIRE(variableTable.rows[1] == row2);
-        REQUIRE(variableTable.rows[2] == row1);
+        REQUIRE(variableTable.rows[2] == row3);
     }
 
     SECTION("Get Column by Column Name") {
@@ -51,8 +51,8 @@ TEST_CASE("Test Table") {
         // check statement number column
         vector<string> stmtNoColumn = stmtTable.getColumnByName("stmt number");
         REQUIRE(stmtNoColumn[0] == "1");
-        REQUIRE(stmtNoColumn[1] == "1");
-        REQUIRE(stmtNoColumn[2] == "1");
+        REQUIRE(stmtNoColumn[1] == "2");
+        REQUIRE(stmtNoColumn[2] == "3");
 
         // check statement number column
         vector<string> stmtTypeColumn = stmtTable.getColumnByName("stmt type");
