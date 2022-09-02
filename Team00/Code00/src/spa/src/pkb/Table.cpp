@@ -4,22 +4,22 @@
 
 #include "Table.h"
 
-list<string> Table::getColumnByName(string columnName) {
+vector<string> Table::getColumnByName(string columnName) {
     int numOfColumns = header.size();
     for (int i = 0; i < numOfColumns; i++) {
         if (header[i] == columnName) {
             return getColumnByIndex(i);
         }
     }
-    return getColumnByIndex(0);
+    vector<string> emptyVector;
+    return emptyVector;
 }
 
-list<string> Table::getColumnByIndex(int index) {
-    list<string> output;
-    auto rowsIterator = rows.begin();
-    while (rowsIterator != rows.end()) {
-        output.push_back((*rowsIterator)[index]);
-        advance(rowsIterator, 1);
+vector<string> Table::getColumnByIndex(int index) {
+    vector<string> output;
+    int size = rows.size();
+    for (int i = 0; i < size; i++) {
+        output.push_back(rows[i][index]);
     }
     return output;
 }

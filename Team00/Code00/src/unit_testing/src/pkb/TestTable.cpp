@@ -11,7 +11,7 @@ using namespace std;
 TEST_CASE("Test Table") {
     SECTION("Create Table") {
         vector<string> header{"variable name"};
-        list<vector<string>> rows;
+        vector<vector<string>> rows;
         vector<string> row1{"dummyVar1"};
         vector<string> row2{"dummyVar2"};
         vector<string> row3{"dummyVar3"};
@@ -28,17 +28,14 @@ TEST_CASE("Test Table") {
         REQUIRE(variableTable.header[0] == "variable name");
 
         // iterate through rows in the table
-        auto rowsIterator = variableTable.rows.begin();
-        REQUIRE(*rowsIterator == row1);
-        advance(rowsIterator, 1);
-        REQUIRE(*rowsIterator == row2);
-        advance(rowsIterator, 1);
-        REQUIRE(*rowsIterator == row3);
+        REQUIRE(variableTable.rows[0] == row1);
+        REQUIRE(variableTable.rows[1] == row2);
+        REQUIRE(variableTable.rows[2] == row1);
     }
 
     SECTION("Get Column by Column Name") {
         vector<string> header{"stmt number", "stmt type"};
-        list<vector<string>> rows;
+        vector<vector<string>> rows;
         vector<string> row1{"1", "assign"};
         vector<string> row2{"2", "while"};
         vector<string> row3{"3", "read"};
@@ -51,20 +48,20 @@ TEST_CASE("Test Table") {
         stmtTable.header = header;
         stmtTable.rows = rows;
 
-        list<string> stmtNoColumn = stmtTable.getColumnByName("stmt number");
-        auto stmtNoIterator = stmtNoColumn.begin();
-        REQUIRE(*stmtNoIterator == "1");
-        advance(stmtNoIterator, 1);
-        REQUIRE(*stmtNoIterator == "2");
-        advance(stmtNoIterator, 1);
-        REQUIRE(*stmtNoIterator == "3");
+        // check statement number column
+        vector<string> stmtNoColumn = stmtTable.getColumnByName("stmt number");
+        REQUIRE(stmtNoColumn[0] == "1");
+        REQUIRE(stmtNoColumn[1] == "1");
+        REQUIRE(stmtNoColumn[2] == "1");
 
-        list<string> stmtTypeColumn = stmtTable.getColumnByName("stmt type");
-        auto stmtTypeIterator = stmtTypeColumn.begin();
-        REQUIRE(*stmtTypeIterator == "assign");
-        advance(stmtTypeIterator, 1);
-        REQUIRE(*stmtTypeIterator == "while");
-        advance(stmtTypeIterator, 1);
-        REQUIRE(*stmtTypeIterator == "read");
+        // check statement number column
+        vector<string> stmtTypeColumn = stmtTable.getColumnByName("stmt type");
+        REQUIRE(stmtTypeColumn[0] == "assign");
+        REQUIRE(stmtTypeColumn[1] == "while");
+        REQUIRE(stmtTypeColumn[2] == "read");
+
+        // test invalid column
+        vector<string> invalidColumn = stmtTable.getColumnByName("dummny column");
+        REQUIRE(invalidColumn.size() == 0);
     }
 }
