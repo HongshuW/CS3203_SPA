@@ -17,13 +17,14 @@ TEST_CASE("Test Entity Manager") {
         list<string> variables;
         variables.push_back("dummyVarA");
         variables.push_back("dummyVarB");
+        int initialSize = EntityManager::variableTable.rows.size();
         EntityManager::saveVariables(variables);
 
         // check header is set automatically
         REQUIRE(EntityManager::variableTable.header[0] == "variable name");
 
         // check variables are added
-        REQUIRE(EntityManager::variableTable.rows[0][0] == "dummyVarA");
-        REQUIRE(EntityManager::variableTable.rows[1][0] == "dummyVarB");
+        REQUIRE(EntityManager::variableTable.rows[initialSize][0] == "dummyVarA");
+        REQUIRE(EntityManager::variableTable.rows[initialSize + 1][0] == "dummyVarB");
     }
 }
