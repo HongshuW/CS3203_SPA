@@ -7,8 +7,8 @@
 #include <utility>
 
 namespace QE {
-    QueryResult::QueryResult(Table<string> table) {
-        this->table = table;
+    QueryResult::QueryResult(Table table) {
+        this->table = std::move(table);
     }
 
     bool QueryResult::isEmpty() {

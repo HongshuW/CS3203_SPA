@@ -18,16 +18,8 @@ namespace QE {
         if (it != this->queryResult.table.header.end())
         {
             auto index = it - this->queryResult.table.header.begin();
-            switch (index) {
-                case 0: {
-                    for (auto row: this->queryResult.table.rows) {
-                        ans.push_back(get<0>(row));
-                    }
-                    break;
-                }
-                default: {
-                    break;
-                }
+            for (auto row: this->queryResult.table.rows) {
+                ans.push_back(row[index]);
             }
         }
         return ans;

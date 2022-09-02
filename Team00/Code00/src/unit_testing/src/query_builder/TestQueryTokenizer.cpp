@@ -8,7 +8,7 @@
 
 using QB::QueryTokenizer;
 
-TEST_CASE ("Test query Tokenizer") {
+TEST_CASE ("Test Query Tokenizer") {
     SECTION ("test empty query") {
         std::string query = "";
 

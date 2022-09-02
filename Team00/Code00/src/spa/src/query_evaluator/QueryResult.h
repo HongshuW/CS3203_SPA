@@ -13,8 +13,8 @@ namespace QE {
     class QueryResult {
 
     public:
-        Table<string> table;
-        explicit QueryResult(Table<string> table);
+        Table table;
+        explicit QueryResult(Table table);
         QueryResult();
         bool isEmpty();
 

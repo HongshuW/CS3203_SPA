@@ -21,11 +21,11 @@ TEST_CASE("Test query evaluator") {
     SECTION("evaluate variable v1; Select v1") {
         vector<string> header{"variable name"};
         vector<string> variables = vector<string>{"dummyVar1", "dummyVar2", "dummyVar3"};
-        list<tuple<string>> rows;
+        list<vector<string>> rows;
         for (const string& variable: variables) {
-            rows.emplace_back(variable);
+            rows.push_back(vector<string>{variable});
         }
-        Table<string> variableTable;
+        Table variableTable;
         variableTable.rows = rows;
         variableTable.header = header;
 
@@ -37,7 +37,7 @@ TEST_CASE("Test query evaluator") {
         auto expectedIt = expected.table.rows.begin();
         auto qRIt = queryResult.table.rows.begin();
         while (expectedIt != expected.table.rows.end()) {
-            REQUIRE(get<0>(*expectedIt) == get<0>(*qRIt));
+            REQUIRE((*expectedIt)[0] == (*qRIt)[0]);
             qRIt++;
             expectedIt++;
         }
