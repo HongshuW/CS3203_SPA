@@ -13,15 +13,6 @@ namespace QE {
     }
 
     vector<string> QueryResultFormatter::formatResult(const string& colName) {
-        auto ans = vector<string>{};
-        auto it = std::find(this->queryResult.table.header.begin(), this->queryResult.table.header.end(), colName);
-        if (it != this->queryResult.table.header.end())
-        {
-            auto index = it - this->queryResult.table.header.begin();
-            for (auto row: this->queryResult.table.rows) {
-                ans.push_back(row[index]);
-            }
-        }
-        return ans;
+        return this->queryResult.table.getColumnByName(colName);
     }
 } // QE

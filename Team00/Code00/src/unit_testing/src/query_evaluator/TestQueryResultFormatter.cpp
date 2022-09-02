@@ -10,7 +10,7 @@ using namespace QE;
 TEST_CASE("Test query result formatter") {
     vector<string> header{"variable name"};
     vector<string> variables = vector<string>{"dummyVar1", "dummyVar2", "dummyVar3"};
-    list<vector<string>> rows;
+    vector<vector<string>> rows;
     for (const string& variable: variables) {
         rows.push_back(vector<string>{variable});
     }
