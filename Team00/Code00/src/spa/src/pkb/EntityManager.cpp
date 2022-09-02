@@ -10,7 +10,7 @@ Table EntityManager::variableTable;
 Table * EntityManager::getVariables() {
     // dummy table for testing
     vector<string> header{"variable name"};
-    list<vector<string>> rows;
+    vector<vector<string>> rows;
     vector<string> row1{"dummyVar1"};
     vector<string> row2{"dummyVar2"};
     vector<string> row3{"dummyVar3"};
