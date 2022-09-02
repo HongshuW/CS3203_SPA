@@ -16,7 +16,7 @@ QueryEvaluator::QueryEvaluator(DataRetriever* dataRetriever1) {
 QueryResult QueryEvaluator::evaluate(Query* query) {
 
     if (query->suchThatClauses->empty()) {
-        this->evaluateNoConditionQuery(query);
+        return this->evaluateNoConditionQuery(query);
     }
     return QueryResult();
 }
@@ -30,9 +30,9 @@ QueryResult QueryEvaluator::evaluateNoConditionQuery(Query *query) {
             break;
         }
         case DesignEntity::VARIABLE: {
-            //Table<string> table = this->dataRetriever->getVariables();
-
-            break;
+            Table<string> table = this->dataRetriever->getVariables();
+            auto queryResult = QueryResult(table);
+            return queryResult;
         }
         case DesignEntity::CONSTANT: {
             break;

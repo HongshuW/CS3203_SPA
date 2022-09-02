@@ -5,6 +5,8 @@ using namespace std;
 #include "EntityManager.h"
 #include "Table.h"
 
+Table<string> EntityManager::variableTable;
+
 Table<string> * EntityManager::getVariables() {
     // dummy table for testing
     vector<string> header{"variable name"};
@@ -16,7 +18,8 @@ Table<string> * EntityManager::getVariables() {
     rows.push_back(row2);
     rows.push_back(row3);
 
-    EntityManager::variableTable = Table<string>(header, rows);
+    EntityManager::variableTable.header = header;
+    EntityManager::variableTable.rows = rows;
 
     return &EntityManager::variableTable;
 }

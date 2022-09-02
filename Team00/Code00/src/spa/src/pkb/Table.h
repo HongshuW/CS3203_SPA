@@ -13,12 +13,9 @@ using namespace std;
 template <typename... Types>
 class Table {
 public:
-    Table(vector<string> header, list<tuple<Types...>> rows);
-    void insertRow(tuple<Types...> row);
-
-private:
-    static vector<string> header;
+    vector<string> header;
     list<tuple<Types...>> rows;
+
 };
 
 #endif //SPA_TABLE_H
