@@ -14,12 +14,12 @@ using namespace std;
 class Table {
 public:
     vector<string> header;
-    list<vector<string>> rows;
+    vector<vector<string>> rows;
 
-    list<string> getColumnByName(string columnName);
+    vector<string> getColumnByName(string columnName);
 
 private:
-    list<string> getColumnByIndex(int index);
+    vector<string> getColumnByIndex(int index);
 
 };
 
