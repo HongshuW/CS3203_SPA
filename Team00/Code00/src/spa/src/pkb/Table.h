@@ -16,7 +16,11 @@ public:
     vector<string> header;
     vector<vector<string>> rows;
 
+    // getters
     vector<string> getColumnByName(string columnName);
+
+    // setters
+    void renameHeader(vector<string> newHeader);
     void appendRow(vector<string> row);
 
 private:

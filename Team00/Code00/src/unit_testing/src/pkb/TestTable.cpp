@@ -86,4 +86,15 @@ TEST_CASE("Test Table") {
         REQUIRE(variableTable.rows[1] == row2);
         REQUIRE(variableTable.rows[2] == row3);
     }
+
+    SECTION ("Rename header") {
+        vector<string> oldHeader{"typo"};
+        Table variableTable;
+        variableTable.header = oldHeader;
+
+        vector<string> newHeader{"variable Table"};
+        variableTable.renameHeader(newHeader);
+
+        REQUIRE(variableTable.header[0] == "variable Table");
+    }
 }

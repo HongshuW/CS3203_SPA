@@ -27,3 +27,7 @@ vector<string> Table::getColumnByIndex(int index) {
 void Table::appendRow(vector<string> row) {
     rows.push_back(row);
 }
+
+void Table::renameHeader(vector<string> newHeader) {
+    header = newHeader;
+}
