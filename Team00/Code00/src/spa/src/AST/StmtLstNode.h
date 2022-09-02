@@ -1,4 +1,6 @@
-class StmtLstNode :: public ASTNode
+#include "ASTNode.h"
+
+class StmtLstNode : public ASTNode
 {
 public:
 };

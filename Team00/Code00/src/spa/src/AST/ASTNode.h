@@ -1,7 +1,8 @@
-#include <string>
+//
+// Created by Tan Wei En on 2/9/22.
+//
 
-class ASTNode
-{
-public:
-	std::string stmtNo
-};
+#ifndef SPA_ASTNODE_H
+#define SPA_ASTNODE_H
+
+#endif //SPA_ASTNODE_H

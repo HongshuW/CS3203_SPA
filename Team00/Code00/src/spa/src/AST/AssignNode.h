@@ -1,4 +1,6 @@
-class AssignNode :: public ASTNode
+#include "ASTNode.h"
+
+class AssignNode: public ASTNode
 {
 public:
 };
