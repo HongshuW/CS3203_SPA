@@ -12,4 +12,19 @@ TEST_CASE("Test Entity Manager") {
         Table * tablePtr = EntityManager::getVariables();
         REQUIRE(tablePtr == &EntityManager::variableTable);
     }
+
+    SECTION("Save variables") {
+        list<string> variables;
+        variables.push_back("dummyVarA");
+        variables.push_back("dummyVarB");
+        int initialSize = EntityManager::variableTable.rows.size();
+        EntityManager::saveVariables(variables);
+
+        // check header is set automatically
+        REQUIRE(EntityManager::variableTable.header[0] == "variable name");
+
+        // check variables are added
+        REQUIRE(EntityManager::variableTable.rows[initialSize][0] == "dummyVarA");
+        REQUIRE(EntityManager::variableTable.rows[initialSize + 1][0] == "dummyVarB");
+    }
 }

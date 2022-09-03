@@ -64,4 +64,37 @@ TEST_CASE("Test Table") {
         vector<string> invalidColumn = stmtTable.getColumnByName("dummny column");
         REQUIRE(invalidColumn.size() == 0);
     }
+
+    SECTION("Append rows") {
+        vector<string> header{"variable name"};
+        vector<vector<string>> rows;
+        vector<string> row1{"dummyVar1"};
+        vector<string> row2{"dummyVar2"};
+        vector<string> row3{"dummyVar3"};
+
+        // create and initialise table
+        Table variableTable;
+        variableTable.header = header;
+        variableTable.rows = rows;
+
+        // append rows
+        variableTable.appendRow(row1);
+        variableTable.appendRow(row2);
+        variableTable.appendRow(row3);
+
+        REQUIRE(variableTable.rows[0] == row1);
+        REQUIRE(variableTable.rows[1] == row2);
+        REQUIRE(variableTable.rows[2] == row3);
+    }
+
+    SECTION ("Rename header") {
+        vector<string> oldHeader{"typo"};
+        Table variableTable;
+        variableTable.header = oldHeader;
+
+        vector<string> newHeader{"variable Table"};
+        variableTable.renameHeader(newHeader);
+
+        REQUIRE(variableTable.header[0] == "variable Table");
+    }
 }

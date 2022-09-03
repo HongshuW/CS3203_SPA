@@ -3,3 +3,8 @@
 //
 
 #include "DataModifier.h"
+#include "EntityManager.h"
+
+void DataModifier::saveVariables(list<string> variables) {
+    EntityManager::saveVariables(variables);
+}
