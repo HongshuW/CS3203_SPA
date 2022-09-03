@@ -12,6 +12,7 @@ private:
     std::string variable;
 public:
     VariableNode(std::string variable);
+    std::string getVariable();
 };
 
 #endif //SPA_VARIABLENODE_H

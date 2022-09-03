@@ -14,6 +14,7 @@ private:
     std::vector<std::shared_ptr<ProcedureNode>> procedureList;
 public:
     ProgramNode(std::vector<std::shared_ptr<ProcedureNode>> procedureList);
+    std::vector<std::shared_ptr<ProcedureNode>> getProcedureList();
 };
 
 #endif //SPA_PROGRAMNODE_H

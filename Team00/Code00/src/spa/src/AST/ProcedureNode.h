@@ -15,6 +15,7 @@ private:
     std::shared_ptr<AssignNode> assignNode;
 public:
     ProcedureNode(std::string procedureName, std::shared_ptr<AssignNode> assignNode);
+    AssignNode getAssignNode();
 };
 
 #endif //SPA_PROCEDURENODE_H

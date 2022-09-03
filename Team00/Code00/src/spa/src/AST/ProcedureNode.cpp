@@ -6,3 +6,7 @@
 
 ProcedureNode::ProcedureNode(std::string procedureName, std::shared_ptr<AssignNode> assignNode)
     : procedureName(procedureName), assignNode(assignNode) {}
+
+AssignNode ProcedureNode::getAssignNode() {
+    return *assignNode;
+}

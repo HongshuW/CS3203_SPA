@@ -7,5 +7,8 @@
 
 VariableNode::VariableNode(std::string variable)
     : variable(variable) {
-    std::cout << variable << std::endl;
+}
+
+std::string VariableNode::getVariable() {
+    return variable;
 }

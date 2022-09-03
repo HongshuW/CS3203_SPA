@@ -8,5 +8,8 @@
 NumberNode::NumberNode(std::string number)
     : number(number) {
     std::cout << number << std::endl;
+}
 
+std::string  NumberNode::getNumber() {
+    return number;
 }

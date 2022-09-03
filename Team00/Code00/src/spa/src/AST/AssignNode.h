@@ -19,6 +19,8 @@ private:
 
 public:
     AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<NumberNode> numberNode);
+    VariableNode getVariableNode();
+    NumberNode getNumberNode();
 };
 
 #endif //SPA_ASSIGNNODE_H
