@@ -18,4 +18,4 @@ public:
 
 private:
     static void setHeader(Table * table, vector<string> header);
-}; 
+};
