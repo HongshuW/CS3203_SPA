@@ -3,17 +3,31 @@
 //
 
 #include "Table.h"
-#include <vector>
 
-using namespace std;
-
-template <typename... Types>
-Table<Types...>::Table(vector<string> header, list<tuple<Types...>> rows) {
-    this->header = header;
-    this->rows = rows;
+vector<string> Table::getColumnByName(string columnName) {
+    int numOfColumns = header.size();
+    for (int i = 0; i < numOfColumns; i++) {
+        if (header[i] == columnName) {
+            return getColumnByIndex(i);
+        }
+    }
+    vector<string> emptyVector;
+    return emptyVector;
 }
 
-template <typename... Types>
-void Table<Types...>::insertRow(tuple<Types...> row) {
-    this->rows.push_back(row);
+vector<string> Table::getColumnByIndex(int index) {
+    vector<string> output;
+    int size = rows.size();
+    for (int i = 0; i < size; i++) {
+        output.push_back(rows[i][index]);
+    }
+    return output;
+}
+
+void Table::appendRow(vector<string> row) {
+    rows.push_back(row);
+}
+
+void Table::renameHeader(vector<string> newHeader) {
+    header = newHeader;
 }

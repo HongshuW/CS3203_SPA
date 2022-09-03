@@ -10,7 +10,7 @@
 
 class DataRetriever {
 public:
-    Table<string> getVariables();
+    Table getVariables();
 
 };
 

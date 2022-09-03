@@ -6,19 +6,26 @@
 #define SPA_TABLE_H
 
 #include <list>
+#include <string>
 #include <vector>
 
 using namespace std;
 
-template <typename... Types>
 class Table {
 public:
-    Table(vector<string> header, list<tuple<Types...>> rows);
-    void insertRow(tuple<Types...> row);
+    vector<string> header;
+    vector<vector<string>> rows;
+
+    // getters
+    vector<string> getColumnByName(string columnName);
+
+    // setters
+    void renameHeader(vector<string> newHeader);
+    void appendRow(vector<string> row);
 
 private:
-    static vector<string> header;
-    list<tuple<Types...>> rows;
+    vector<string> getColumnByIndex(int index);
+
 };
 
 #endif //SPA_TABLE_H
