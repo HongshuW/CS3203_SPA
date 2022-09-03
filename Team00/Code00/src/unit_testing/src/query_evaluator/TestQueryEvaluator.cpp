@@ -8,14 +8,15 @@
 
 using namespace QB;
 using QE::QueryEvaluator;
+using namespace std;
 
 TEST_CASE("Test query evaluator") {
 
     auto queryEvaluator = QueryEvaluator(new DataRetriever());
-    std::string queryStr = "variable v1; Select v1";
+    string queryStr = "variable v1; Select v1";
     auto query = QueryBuilder().buildPQLQuery(queryStr);
 
-    std::string queryStr2 = "stmt a, b, c; Select a";
+    string queryStr2 = "stmt a, b, c; Select a";
     auto query2 = QueryBuilder().buildPQLQuery(queryStr2);
 
     SECTION("evaluate variable v1; Select v1") {
