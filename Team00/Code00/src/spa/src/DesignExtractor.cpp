@@ -1,13 +1,9 @@
-#include<stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
+//
+// Created by Tan Wei En on 3/9/22.
+//
 
-using namespace std;
+#include "DesignExtractor.h"
 
+DesignExtractor::DesignExtractor(ProgramNode programNode)
+    : programNode(programNode){}
 
-#include "pkb/EntityManager.h"
-
-int DesignExtractor () {
-	return 0;
-}
