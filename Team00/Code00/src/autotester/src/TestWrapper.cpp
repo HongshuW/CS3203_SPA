@@ -32,22 +32,24 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
   // ...rest of your code...
-    ifstream t(filename);
-    stringstream buffer;
-    buffer << t.rdbuf();
-    string input = buffer.str();
+//    std::string myText;
+//    std::ifstream MyReadFile(filename);
+//    while (getline (MyReadFile, myText)) {
+//        // Output the text from the file
+//        std::cout << myText;
+//    }
+//
+//    MyReadFile.close();
 
-    cout << input << std::endl;
+    string input = "procedure Test { x = 1;}";
 
     Tokenizer tokenizer = Tokenizer(input);
     vector<string> tokens = tokenizer.tokenize();
     Parser parser = Parser(tokens);
     shared_ptr<ProgramNode> programNode = parser.parse();
 
-    DesignExtractor designExtractor = new DesignExtractor(programNode);
-    list<string> varList = designExtractor.extractVariables();
-    DataModifier dataMod = DataModifier();
-    dataMod.saveVariables(varList);
+    DesignExtractor* designExtractor = new DesignExtractor(*programNode);
+    designExtractor->saveVariableToPKB();
 }
 
 // method to evaluating a query
