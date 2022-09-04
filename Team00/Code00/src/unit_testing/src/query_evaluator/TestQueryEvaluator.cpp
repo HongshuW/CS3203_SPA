@@ -6,6 +6,7 @@
 #include "query_evaluator/QueryEvaluator.h"
 #include "query_builder/QueryBuilder.h"
 #include "Dummies/DummyDataRetriever.h"
+#include "Dummies/DummyQueryBuilder.h"
 
 using namespace QB;
 using QE::QueryEvaluator;
@@ -15,8 +16,13 @@ TEST_CASE("Test query evaluator") {
 
     auto queryEvaluator = QueryEvaluator(new TestQE::DummyDataRetriever());
     string queryStr = "variable v1; Select v1";
-    auto query = QueryBuilder().buildPQLQuery(queryStr);
 
+    Query * query = (new TestQE::DummyQueryBuilder())
+            ->addDeclaration(Declaration(QB::DesignEntity::VARIABLE, Synonym("v1")))
+            ->addSelectClause(new QB::SelectClause(Synonym("v1")))
+            ->buildPQLQuery();
+
+    //auto query = QueryBuilder().buildPQLQuery(queryStr);
     string queryStr2 = "stmt a, b, c; Select a";
     auto query2 = QueryBuilder().buildPQLQuery(queryStr2);
 
@@ -32,7 +38,7 @@ TEST_CASE("Test query evaluator") {
         variableTable.header = header;
 
         QE::QueryResult expected = QE::QueryResult(variableTable);
-        QE::QueryResult queryResult = queryEvaluator.evaluate(&query);
+        QE::QueryResult queryResult = queryEvaluator.evaluate(query);
 
         REQUIRE(expected.table.rows.size() == queryResult.table.rows.size());
 
@@ -45,7 +51,7 @@ TEST_CASE("Test query evaluator") {
         }
     }
     SECTION("Test getDesignEntity variable v1; Select v1") {
-        DesignEntity d = queryEvaluator.getDesignEntity(query.selectClause->synonym, &query);
+        DesignEntity d = queryEvaluator.getDesignEntity(query->selectClause->synonym, query);
         REQUIRE(d == DesignEntity::VARIABLE);
 
     }
