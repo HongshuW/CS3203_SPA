@@ -47,7 +47,6 @@ void TestWrapper::parse(std::string filename) {
     vector<string> tokens = tokenizer.tokenize();
     Parser parser = Parser(tokens);
     shared_ptr<ProgramNode> programNode = parser.parse();
-
     DesignExtractor* designExtractor = new DesignExtractor(*programNode);
     designExtractor->saveVariableToPKB();
 }
