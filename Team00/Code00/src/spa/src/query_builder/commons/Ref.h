@@ -10,6 +10,7 @@
 #include <iostream>
 #include "Synonym.h"
 #include "Underscore.h"
+#include "Ident.h"
 #include <unordered_set>
 #include <variant>
 #include <unordered_map>
@@ -21,11 +22,11 @@ namespace QB {
         SYNONYM,
         UNDERSCORE,
         INTEGER,
-        STRING
+        IDENT
     };
 
-    //! Synonym = 0, Underscore = 1, int = 2, string = 3
-    using Ref = variant<Synonym, Underscore, int, string>;
+    //! Synonym = 0, Underscore = 1, int = 2, Ident = 3
+    using Ref = variant<Synonym, Underscore, int, Ident>;
     static unordered_set refIndexSet = {0, 1, 2, 3};
     static unordered_set stmtRefIndexSet = {0, 1, 2};
     static unordered_set entRefIndexSet = {0, 1, 3};

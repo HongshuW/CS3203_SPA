@@ -9,7 +9,7 @@
 using namespace QB;
 
 TEST_CASE ("Test Query Tokenizer") {
-    SECTION ("test empty query") {
+    SECTION ("Test empty query") {
         std::string query = "";
 
         QueryTokenizer tokenizer = QueryTokenizer(query);

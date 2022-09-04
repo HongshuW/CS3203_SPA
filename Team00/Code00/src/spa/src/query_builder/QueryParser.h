@@ -23,12 +23,13 @@ namespace QB {
         bool expect(string s);
         bool match(string s);
         bool parseDeclarations();
-        bool parseSelectClause();
+        void parseSelectClause();
         Ref parseRef();
         bool isDigit(const string &str);
-        bool parseSuchThatClause();
+        void parseSuchThatClause();
 
     public:
+        //! Parse tokens to Query object, throw Syntax Error if encounter
         explicit QueryParser(std::vector<std::string> tokens);
 
         Query parse();
