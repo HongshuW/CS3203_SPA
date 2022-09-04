@@ -22,7 +22,8 @@ std::list<string> DesignExtractor::extractVariables() {
 
 void DesignExtractor::saveVariableToPKB() {
     DataModifier dataMod = DataModifier();
-    dataMod.saveVariables();
+    list<string> varList = extractVariables();
+    dataMod.saveVariables(varList);
 }
 
 
