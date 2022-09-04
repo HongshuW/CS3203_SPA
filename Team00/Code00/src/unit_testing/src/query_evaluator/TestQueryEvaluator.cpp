@@ -5,6 +5,7 @@
 
 #include "query_evaluator/QueryEvaluator.h"
 #include "query_builder/QueryBuilder.h"
+#include "Dummies/DummyDataRetriever.h"
 
 using namespace QB;
 using QE::QueryEvaluator;
@@ -12,7 +13,7 @@ using namespace std;
 
 TEST_CASE("Test query evaluator") {
 
-    auto queryEvaluator = QueryEvaluator(new DataRetriever());
+    auto queryEvaluator = QueryEvaluator(new TestQE::DummyDataRetriever());
     string queryStr = "variable v1; Select v1";
     auto query = QueryBuilder().buildPQLQuery(queryStr);
 

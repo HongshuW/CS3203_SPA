@@ -10,7 +10,7 @@
 
 class DataRetriever {
 public:
-    Table getVariables();
+    virtual Table getVariables();
 
 };
 
