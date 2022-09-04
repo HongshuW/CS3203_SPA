@@ -3,6 +3,7 @@
 //
 
 #include "DesignExtractor.h"
+#include "pkb/DataModifier.h"
 
 DesignExtractor::DesignExtractor(ProgramNode programNode)
     : programNode(programNode){
@@ -18,4 +19,17 @@ std::list<string> DesignExtractor::extractVariables() {
     variableList.push_back(variableNode.getVariable());
     return variableList;
 }
+
+void DesignExtractor::saveVariableToPKB() {
+    DataModifier dataMod = DataModifier();
+    list<string> varList = extractVariables();
+    dataMod.saveVariables(varList);
+}
+
+
+
+
+
+
+
 

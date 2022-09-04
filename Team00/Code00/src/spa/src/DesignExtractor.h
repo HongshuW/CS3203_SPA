@@ -14,6 +14,7 @@ private:
 public:
     DesignExtractor(ProgramNode programNode);
     std::list<string> extractVariables();
+    void saveVariableToPKB();
 };
 
 #endif //SPA_DESIGNEXTRACTOR_H
