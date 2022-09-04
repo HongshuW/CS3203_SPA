@@ -74,7 +74,7 @@ void QueryParser::parseSelectClause() {
     std::string synonymStr = pop();
     //! Throw syntax error if synonym is invalid
     Synonym synonym = Synonym(synonymStr);
-    SelectClause* selectClause = new SelectClause(synonym);
+    shared_ptr<SelectClause> selectClause = make_shared<SelectClause>(synonym);
     query->selectClause = selectClause;
 }
 
@@ -118,7 +118,8 @@ void QueryParser::parseSuchThatClause() {
     auto arg2 = parseRef();
     expect(")");
 
-    SuchThatClause* suchThatClause = new SuchThatClause(relationType, arg1, arg2, query->declarations);
+    shared_ptr<SuchThatClause> suchThatClause =
+        make_shared<SuchThatClause>(relationType, arg1, arg2, query->declarations);
     query->suchThatClauses->push_back(suchThatClause);
 }
 

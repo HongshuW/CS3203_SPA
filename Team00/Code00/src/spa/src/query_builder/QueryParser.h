@@ -14,7 +14,7 @@ using namespace std;
 namespace QB {
     class QueryParser {
     private:
-        Query* query;
+        shared_ptr<Query> query;
         unsigned int currIdx;
         vector<string> tokens;
         string peek();

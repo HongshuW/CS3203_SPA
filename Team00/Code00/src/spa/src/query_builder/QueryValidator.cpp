@@ -26,8 +26,8 @@ void QueryValidator::validateNoDuplicateDeclarations() {
 }
 void QueryValidator::validateSynonymDeclaredSelectClause() {
     //! Validate that synonym is declared for Select Clause
-    SelectClause* selectClause = query->selectClause;
-    vector<Declaration>* declarations = query->declarations;
+    shared_ptr<SelectClause> selectClause = query->selectClause;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
     if (!Declaration::findDeclaration(selectClause->synonym, declarations)) {
         throw PQLValidationException(
                 "Synonym: " + selectClause->synonym.synonym + " is not defined for Select Clause");
@@ -36,8 +36,8 @@ void QueryValidator::validateSynonymDeclaredSelectClause() {
 
 void QueryValidator::validateSynonymDeclaredSuchThatClause() {
     //! Validate that synonyms are declared for Such that Clause
-    vector<SuchThatClause*>* suchThatClauses = query->suchThatClauses;
-    vector<Declaration>* declarations = query->declarations;
+    shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
 
     for(auto suchThat : *suchThatClauses) {
         auto arg1 = get_if<Synonym>(&suchThat->arg1);
@@ -56,8 +56,8 @@ void QueryValidator::validateSynonymDeclaredSuchThatClause() {
 }
 
 void QueryValidator::validateArgRefTypeSuchThatClause() {
-    vector<SuchThatClause*>* suchThatClauses = query->suchThatClauses;
-    vector<Declaration>* declarations = query->declarations;
+    shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
 
     for(auto suchThat : *suchThatClauses) {
         RelationType relationType = suchThat->relationType;

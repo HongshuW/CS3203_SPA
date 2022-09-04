@@ -38,7 +38,7 @@ namespace QB {
             return os;
         }
 
-        static optional<Declaration> findDeclaration(Synonym& synonymObj, vector<Declaration>* declarations);
+        static optional<Declaration> findDeclaration(Synonym& synonymObj, shared_ptr<vector<Declaration>> declarations);
     };
 }
 #endif //SPA_DECLARATION_H

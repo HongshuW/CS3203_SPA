@@ -17,12 +17,12 @@ namespace QB {
     private:
         //! Update specific relationship type for Modifies (Modifies_S / Modifies_P) Clause
         //! and Uses Clause (Uses_S, Uses_P)
-        void updateSpecificModifiesUsesClause(vector<Declaration>* declarations);
+        void updateSpecificModifiesUsesClause(shared_ptr<vector<Declaration>> declarations);
     public:
         RelationType relationType;
         Ref arg1;
         Ref arg2;
-        SuchThatClause(RelationType relationType, Ref arg1, Ref arg2, vector<Declaration>* declarations);
+        SuchThatClause(RelationType relationType, Ref arg1, Ref arg2, shared_ptr<vector<Declaration>> declarations);
 
         bool operator==(const SuchThatClause& suchThatClause) const {
             return arg1 == suchThatClause.arg1 && arg2 == suchThatClause.arg2;

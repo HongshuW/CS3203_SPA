@@ -18,7 +18,7 @@ namespace QB {
         void validateArgRefTypeSuchThatClause();
         void validateSuchThatClause();
     public:
-        Query* query;
+        shared_ptr<Query> query;
         explicit QueryValidator(Query* query);
         void validateQuery();
     };

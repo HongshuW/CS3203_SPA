@@ -22,7 +22,7 @@ QueryResult QueryEvaluator::evaluate(Query* query) {
 }
 
 QueryResult QueryEvaluator::evaluateNoConditionQuery(Query *query) {
-    SelectClause* selectClause = query->selectClause;
+    shared_ptr<SelectClause> selectClause = query->selectClause;
     Synonym synonym = selectClause->synonym;
     DesignEntity designEntity = getDesignEntity(synonym, query);
     switch (designEntity) {

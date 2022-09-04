@@ -11,23 +11,25 @@
 #include <vector>
 #include <unordered_set>
 
+using namespace std;
+
 namespace QB {
     class QueryTokenizer {
     private:
-        const std::unordered_set<std::string> SYMBOL_SET = {"(", ")", ",", "_", ";"};
-        const std::unordered_set<std::string>  CLAUSE_SET_WITH_T = {"Follows", "Parent"};
+        const unordered_set<string> SYMBOL_SET = {"(", ")", ",", "_", ";"};
+        const unordered_set<string>  CLAUSE_SET_WITH_T = {"Follows", "Parent"};
         unsigned int currIdx;
-        std::string query;
-        std::string curr;
+        string query;
+        string curr;
         char peek();
         char pop();
         void processIdent();
         void processDigit();
         void processString();
     public:
-        std::vector<std::string> tokens;
-        QueryTokenizer(std::string query);
-        std::vector<std::string> tokenize();
+        vector<string> tokens;
+        QueryTokenizer(string query);
+        vector<string> tokenize();
     };
 }
 

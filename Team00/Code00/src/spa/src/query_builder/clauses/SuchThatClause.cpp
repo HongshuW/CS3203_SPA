@@ -6,7 +6,10 @@
 
 using namespace QB;
 
-SuchThatClause::SuchThatClause(RelationType relationType, Ref arg1, Ref arg2, vector<Declaration>* declarations) :
+SuchThatClause::SuchThatClause(RelationType relationType,
+                               Ref arg1,
+                               Ref arg2,
+                               shared_ptr<vector<Declaration>> declarations) :
     relationType(relationType),
     arg1(arg1),
     arg2(arg2) {
@@ -15,7 +18,7 @@ SuchThatClause::SuchThatClause(RelationType relationType, Ref arg1, Ref arg2, ve
     }
 };
 
-void SuchThatClause::updateSpecificModifiesUsesClause(vector<Declaration>* declarations) {
+void SuchThatClause::updateSpecificModifiesUsesClause(shared_ptr<vector<Declaration>> declarations) {
     if (getRefType(arg1) == RefType::INTEGER) {
         // Since arg1 is an integer, it must be a stmtRef
         relationType = relationType == RelationType::USES ? RelationType::USES_S : RelationType::MODIFIES_S;
