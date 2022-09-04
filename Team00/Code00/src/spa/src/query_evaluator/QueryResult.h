@@ -13,6 +13,7 @@ namespace QE {
     class QueryResult {
 
     public:
+        string colName;
         Table table;
         explicit QueryResult(Table table);
         QueryResult();

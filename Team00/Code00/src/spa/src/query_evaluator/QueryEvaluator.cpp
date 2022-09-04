@@ -32,6 +32,7 @@ QueryResult QueryEvaluator::evaluateNoConditionQuery(Query *query) {
         case DesignEntity::VARIABLE: {
             Table table = this->dataRetriever->getVariables();
             auto queryResult = QueryResult(table);
+            queryResult.colName = "variable name";
             return queryResult;
         }
         case DesignEntity::CONSTANT: {
