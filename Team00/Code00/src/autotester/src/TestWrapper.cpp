@@ -60,7 +60,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
       auto dataRetriever = new DataRetriever();
       auto queryResult = QueryEvaluator(dataRetriever).evaluate(&queryObj);
       auto resultFormatter = QueryResultFormatter(queryResult);
-      auto ans = resultFormatter.formatResult("variable name");
+      auto ans = resultFormatter.formatResult();
       for (const auto& element: ans) {
           results.push_back(element);
       }
