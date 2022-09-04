@@ -118,7 +118,7 @@ void QueryParser::parseSuchThatClause() {
     auto arg2 = parseRef();
     expect(")");
 
-    SuchThatClause* suchThatClause = new SuchThatClause(relationType, arg1, arg2);
+    SuchThatClause* suchThatClause = new SuchThatClause(relationType, arg1, arg2, query->declarations);
     query->suchThatClauses->push_back(suchThatClause);
 }
 

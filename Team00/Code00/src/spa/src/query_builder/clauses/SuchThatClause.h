@@ -10,17 +10,22 @@
 #include "query_builder/commons/Synonym.h"
 #include "query_builder/commons/Ref.h"
 #include "query_builder/commons/RelationType.h"
+#include "query_builder/commons/Declaration.h"
 
 namespace QB {
     class SuchThatClause {
+    private:
+        //! Update specific relationship type for Modifies (Modifies_S / Modifies_P) Clause
+        //! and Uses Clause (Uses_S, Uses_P)
+        void updateSpecificModifiesUsesClause(vector<Declaration>* declarations);
     public:
         RelationType relationType;
         Ref arg1;
         Ref arg2;
-        SuchThatClause(RelationType relationType, Ref arg1, Ref arg2);
+        SuchThatClause(RelationType relationType, Ref arg1, Ref arg2, vector<Declaration>* declarations);
 
-        bool operator==(const SuchThatClause& followsClause) const {
-            return arg1 == followsClause.arg1 && arg2 == followsClause.arg2;
+        bool operator==(const SuchThatClause& suchThatClause) const {
+            return arg1 == suchThatClause.arg1 && arg2 == suchThatClause.arg2;
         }
 
         // For printing

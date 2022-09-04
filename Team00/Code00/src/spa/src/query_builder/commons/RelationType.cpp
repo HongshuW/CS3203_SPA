@@ -12,7 +12,11 @@ namespace QB {
         {RelationType::PARENT, "Parent"},
         {RelationType::PARENT_T, "Parent*"},
         {RelationType::MODIFIES, "Modifies"},
-        {RelationType::USES, "Uses"}
+        {RelationType::MODIFIES_S, "Modifies_S"},
+        {RelationType::MODIFIES_P, "Modifies_P"},
+        {RelationType::USES, "Uses"},
+        {RelationType::USES_S, "Uses_S"},
+        {RelationType::USES_P, "Uses_P"}
     });
 
     unordered_map<std::string, RelationType> stringToRelationTypeMap({
@@ -21,7 +25,11 @@ namespace QB {
         {"Parent", RelationType::PARENT},
         {"Parent*", RelationType::PARENT_T},
         {"Modifies", RelationType::MODIFIES},
-        {"Uses", RelationType::USES}
+        {"Modifies_S", RelationType::MODIFIES_S},
+        {"Modifies_P", RelationType::MODIFIES_P},
+        {"Uses", RelationType::USES},
+        {"Uses_S", RelationType::USES_S},
+        {"Uses_P", RelationType::USES_P}
     });
 
     RelationType getRelationTypeFromStr(string& str) {

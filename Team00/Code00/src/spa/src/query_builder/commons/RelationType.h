@@ -20,7 +20,11 @@ namespace QB {
         PARENT,
         PARENT_T,
         MODIFIES,
-        USES
+        MODIFIES_S,
+        MODIFIES_P,
+        USES,
+        USES_S,
+        USES_P
     };
 
     RelationType getRelationTypeFromStr(string& str);

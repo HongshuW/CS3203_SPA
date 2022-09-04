@@ -12,7 +12,7 @@ QueryValidator::QueryValidator(Query* query)
         : query(query) {};
 
 void QueryValidator::validateNoDuplicateDeclarations() {
-    // Validate no duplicate synonym for declarations
+    //! Validate no duplicate synonym for declarations
     unordered_set<string> synonymSet;
     for (auto declaration : *(query->declarations)) {
         auto synonym = declaration.getSynonym().synonym;
@@ -25,7 +25,7 @@ void QueryValidator::validateNoDuplicateDeclarations() {
     }
 }
 void QueryValidator::validateSynonymDeclaredSelectClause() {
-    // Validate that synonym is declared for Select Clause
+    //! Validate that synonym is declared for Select Clause
     SelectClause* selectClause = query->selectClause;
     vector<Declaration>* declarations = query->declarations;
     if (!Declaration::findDeclaration(selectClause->synonym, declarations)) {
@@ -35,7 +35,7 @@ void QueryValidator::validateSynonymDeclaredSelectClause() {
 }
 
 void QueryValidator::validateSynonymDeclaredSuchThatClause() {
-    // Validate that synonyms are declared for Such that Clause
+    //! Validate that synonyms are declared for Such that Clause
     vector<SuchThatClause*>* suchThatClauses = query->suchThatClauses;
     vector<Declaration>* declarations = query->declarations;
 
@@ -64,28 +64,28 @@ void QueryValidator::validateArgRefTypeSuchThatClause() {
         int arg1RefIndex= suchThat->arg1.index();
         int arg2RefIndex= suchThat->arg2.index();
 
-        // The first argument for Modifies and Uses cannot be _
+        //! The first argument for Modifies and Uses cannot be _
         if (relationType == RelationType::MODIFIES || relationType == RelationType::USES) {
-            // relationType == Modifies, Uses
+            //! relationType == Modifies, Uses
             if (get_if<Underscore>(&suchThat->arg1)) {
                 throw PQLValidationException(
                         "First argument cannot be underscore for Such That Clause");
             }
 
-            // First arg can be either stmtRef or entRef
+            //! First arg can be either stmtRef or entRef
             if (!refIndexSet.count(arg1RefIndex)) {
                 throw PQLValidationException(
                         "Argument 1 must be stmtRef for " +
                         refTypeToString(static_cast<RefType>(relationType)) + "Clause");
             }
-            // Second arg must be entRef
+            //! Second arg must be entRef
             if (!entRefIndexSet.count(arg2RefIndex)) {
                 throw PQLValidationException(
                         "Argument 2 must be stmtRef" +
                         refTypeToString(static_cast<RefType>(relationType)) + "Clause");
             }
         } else {
-            // relationType == Parent, ParentT, Follows, FollowsT
+            //! relationType == Parent, ParentT, Follows, FollowsT
             if (!stmtRefIndexSet.count(arg1RefIndex)) {
                 throw PQLValidationException(
                         "Argument 1 must be stmtRef for " +

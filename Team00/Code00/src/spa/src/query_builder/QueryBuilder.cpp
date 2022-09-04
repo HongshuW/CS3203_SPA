@@ -15,7 +15,7 @@ Query QueryBuilder::buildPQLQuery(std::string& queryStr) {
     std::vector<std::string> tokens = tokenizer.tokenize();
     QueryParser parser = QueryParser(tokens);
     Query query = parser.parse();
-    QueryValidator validator = QueryValidator(&query);
-    validator.validateQuery();
+//    QueryValidator validator = QueryValidator(&query);
+//    validator.validateQuery();
     return query;
 }
