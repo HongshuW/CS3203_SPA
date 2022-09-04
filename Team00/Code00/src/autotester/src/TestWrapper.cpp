@@ -39,6 +39,7 @@ void TestWrapper::parse(std::string filename) {
         // Output the text from the file
         input.append(myText);
     }
+    MyReadFile.close();
 
    // string input = "procedure Test { x = 1;}";
     Tokenizer tokenizer = Tokenizer(input);
@@ -47,7 +48,7 @@ void TestWrapper::parse(std::string filename) {
     shared_ptr<ProgramNode> programNode = parser.parse();
     DesignExtractor* designExtractor = new DesignExtractor(*programNode);
     designExtractor->saveVariableToPKB();
-   // MyReadFile.close();
+
 }
 
 // method to evaluating a query
