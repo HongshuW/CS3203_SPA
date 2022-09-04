@@ -4,8 +4,10 @@
 
 #include "query_builder/QueryTokenizer.h"
 #include "query_builder/Exceptions.h"
+#include <iostream>
 
 using QB::QueryTokenizer;
+using namespace std;
 
 QueryTokenizer::QueryTokenizer(std::string query) : currIdx(0), query(query){};
 
