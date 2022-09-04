@@ -65,16 +65,16 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
       }
       delete dataRetriever;
   } catch (const PQLTokenizeException& e) {
-      string errorMessage = "SyntaxError: ";
-      errorMessage += e.what();
+      string errorMessage = "SyntaxError";
+//      errorMessage += e.what();
       results.push_back(errorMessage);
   } catch (const PQLParseException& e) {
-      string errorMessage = "SyntaxError: ";
-      errorMessage += e.what();
+      string errorMessage = "SyntaxError";
+//      errorMessage += e.what();
       results.push_back(errorMessage);
   } catch (const PQLValidationException& e) {
-      string errorMessage = "SemanticError: ";
-      errorMessage += e.what();
+      string errorMessage = "SemanticError";
+//      errorMessage += e.what();
       results.push_back(errorMessage);
   }
 
