@@ -32,17 +32,15 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
   // ...rest of your code...
-//    std::string myText;
-//    std::ifstream MyReadFile(filename);
-//    while (getline (MyReadFile, myText)) {
-//        // Output the text from the file
-//        std::cout << myText;
-//    }
-//
-//    MyReadFile.close();
+    std::string myText ;
+    std::ifstream MyReadFile(filename);
+    std::string input;
+    while (getline (MyReadFile, myText)) {
+        // Output the text from the file
+        input.append(myText);
+    }
 
-    string input = "procedure Test { x = 1;}";
-
+   // string input = "procedure Test { x = 1;}";
     Tokenizer tokenizer = Tokenizer(input);
     vector<string> tokens = tokenizer.tokenize();
     Parser parser = Parser(tokens);
@@ -50,6 +48,7 @@ void TestWrapper::parse(std::string filename) {
 
     DesignExtractor* designExtractor = new DesignExtractor(*programNode);
     designExtractor->saveVariableToPKB();
+   // MyReadFile.close();
 }
 
 // method to evaluating a query
@@ -82,4 +81,8 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
+}
+
+TestWrapper::~TestWrapper() {
+
 }
