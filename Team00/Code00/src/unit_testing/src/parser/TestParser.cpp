@@ -19,7 +19,7 @@ TEST_CASE("Test Parser") {
         Parser parser = Parser(tokens);
         auto testProgram = parser.parse();
 
-        // simpe program node
+        // simple program node
         auto assign = make_shared<AssignNode>(make_shared<VariableNode>("x"),
                                               make_shared<NumberNode>("1"));
         auto procedure = make_shared<ProcedureNode>("testProcedure", assign);
