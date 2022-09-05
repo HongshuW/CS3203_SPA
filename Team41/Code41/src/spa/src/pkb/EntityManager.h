@@ -20,5 +20,10 @@ public:
     static void saveVariables(list<string> variables);
 
 private:
+    static vector<string> procedureTableHeader;
+    static vector<string> statementTableHeader;
+    static vector<string> variableTableHeader;
+    static vector<string> constantTableHeader;
+
     static void setHeader(Table * table, vector<string> header);
 };

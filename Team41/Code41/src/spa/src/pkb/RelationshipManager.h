@@ -16,8 +16,16 @@ public:
     static Table followsStarTable;
     static Table parentTable;
     static Table parentStarTable;
-    static Table UsesTable;
-    static Table ModifiesTable;
+    static Table usesTable;
+    static Table modifiesTable;
+
+private:
+    static vector<string> followsTableHeader;
+    static vector<string> followsStarTableHeader;
+    static vector<string> parentTableHeader;
+    static vector<string> parentStarTableHeader;
+    static vector<string> usesTableHeader;
+    static vector<string> modifiesTableHeader;
 };
 
 #endif //SPA_RELATIONSHIPMANAGER_H

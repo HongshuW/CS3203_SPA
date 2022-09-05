@@ -21,7 +21,7 @@ TEST_CASE("Test Entity Manager") {
         EntityManager::saveVariables(variables);
 
         // check header is set automatically
-        REQUIRE(EntityManager::variableTable.header[0] == "variable name");
+        REQUIRE(EntityManager::variableTable.header[0] == "$variable_name");
 
         // check variables are added
         REQUIRE(EntityManager::variableTable.rows[initialSize][0] == "dummyVarA");
