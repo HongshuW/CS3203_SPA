@@ -3,13 +3,13 @@
 //
 
 #include "catch.hpp"
-
 #include "query_builder/QueryTokenizer.h"
+#include "query_builder/Exceptions.h"
 
-using QB::QueryTokenizer;
+using namespace QB;
 
 TEST_CASE ("Test Query Tokenizer") {
-    SECTION ("test empty query") {
+    SECTION ("Test empty query") {
         std::string query = "";
 
         QueryTokenizer tokenizer = QueryTokenizer(query);
@@ -63,6 +63,70 @@ TEST_CASE ("Test Query Tokenizer") {
         auto expected = std::vector<std::string>(
                 {"stmt", "s", ";", "Select", "s", "such", "that", "Follows*", "(", "6", ",",
                  "s", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("stmt s; Select s such that Parent (s, 12)") {
+        std::string query = "stmt s; Select s such that Parent (s, 12)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"stmt", "s", ";", "Select", "s", "such", "that", "Parent", "(", "s", ",",
+                 "12", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("assign a; Select a such that Parent* (_, a)") {
+        std::string query = "assign a; Select a such that Parent* (_, a)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"assign", "a", ";", "Select", "a", "such", "that", "Parent*", "(", "_", ",",
+                 "a", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("variable v; Select v such that Modifies (6, v)") {
+        std::string query = "variable v; Select v such that Modifies (6, v)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"variable", "v", ";", "Select", "v", "such", "that", "Modifies", "(", "6", ",",
+                 "v", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("variable v; Select v such that Uses (6, v)") {
+        std::string query = "variable v; Select v such that Uses (6, v)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"variable", "v", ";", "Select", "v", "such", "that", "Uses", "(", "6", ",",
+                 "v", ")"});
 
         REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
                            end(expected),
@@ -132,6 +196,28 @@ TEST_CASE ("Test Query Tokenizer") {
                            [](const std::string l, const std::string o) {
                                return l.compare(o) == 0;
                            }));
+    }
+
+    SECTION ("assign a; variable v; Select v such that Uses (a, v) pattern a (v, _\"x\"_)") {
+        std::string query = "assign a; variable v; Select v such that Uses (a, v) pattern a (v, _\"x\"_)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"assign", "a", ";", "variable", "v", ";", "Select", "v", "such", "that", "Uses", "(",
+                 "a", ",", "v", ")", "pattern", "a", "(", "v", ",", "_", "\"", "x", "\"", "_", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("Test unexpected tokens") {
+        std::string query = "stmt s& Select s such that Follows* (a, 6)";
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        REQUIRE_THROWS_AS(tokenizer.tokenize(), PQLTokenizeException);
     }
 }
 

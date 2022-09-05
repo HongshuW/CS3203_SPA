@@ -58,7 +58,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   try {
       auto queryObj = QueryBuilder().buildPQLQuery(query);
       auto dataRetriever = new DataRetriever();
-      auto queryResult = QueryEvaluator(dataRetriever).evaluate(&queryObj);
+      auto queryResult = QueryEvaluator(dataRetriever).evaluate(queryObj);
       auto resultFormatter = QueryResultFormatter(queryResult);
       auto ans = resultFormatter.formatResult();
       for (const auto& element: ans) {

@@ -10,14 +10,14 @@ namespace QB {
         {RefType::SYNONYM, 0},
         {RefType::UNDERSCORE, 1},
         {RefType::INTEGER, 2},
-        {RefType::STRING, 3}
+        {RefType::IDENT, 3}
     });
 
     unordered_map<int, RefType> indexToRefTypeMap({
         {0, RefType::SYNONYM},
         {1, RefType::UNDERSCORE},
         {2, RefType::INTEGER},
-        {3, RefType::STRING}
+        {3, RefType::IDENT}
     });
 
     //! For printing
@@ -25,7 +25,7 @@ namespace QB {
         {RefType::SYNONYM, "Synonym"},
         {RefType::UNDERSCORE, "Underscore"},
         {RefType::INTEGER, "Integer"},
-        {RefType::STRING, "String"}
+        {RefType::IDENT, "Ident"}
     });
 
     RefType getRefTypeFromIndex(int index) {

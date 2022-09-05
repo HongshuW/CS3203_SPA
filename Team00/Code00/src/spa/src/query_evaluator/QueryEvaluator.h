@@ -20,9 +20,9 @@ namespace QE {
 
     public:
         explicit QueryEvaluator(DataRetriever* dataRetriever1);
-        QueryResult evaluate(Query* query);
-        QueryResult evaluateNoConditionQuery(Query* query);
-        DesignEntity getDesignEntity(Synonym synonym, Query* query);
+        QueryResult evaluate(shared_ptr<Query> query);
+        QueryResult evaluateNoConditionQuery(shared_ptr<Query> query);
+        DesignEntity getDesignEntity(Synonym synonym, shared_ptr<Query> query);
 
     };
 

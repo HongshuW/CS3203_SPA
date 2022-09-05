@@ -31,7 +31,7 @@ TEST_CASE("Test query evaluator") {
         variableTable.header = header;
 
         QE::QueryResult expected = QE::QueryResult(variableTable);
-        QE::QueryResult queryResult = queryEvaluator.evaluate(&query);
+        QE::QueryResult queryResult = queryEvaluator.evaluate(query);
 
         REQUIRE(expected.table.rows.size() == queryResult.table.rows.size());
 
@@ -44,12 +44,12 @@ TEST_CASE("Test query evaluator") {
         }
     }
     SECTION("Test getDesignEntity variable v1; Select v1") {
-        DesignEntity d = queryEvaluator.getDesignEntity(query.selectClause->synonym, &query);
+        DesignEntity d = queryEvaluator.getDesignEntity(query->selectClause->synonym, query);
         REQUIRE(d == DesignEntity::VARIABLE);
 
     }
     SECTION("Test getDesignEntity stmt a, b, c; Select a") {
-        DesignEntity d = queryEvaluator.getDesignEntity(query2.selectClause->synonym, &query2);
+        DesignEntity d = queryEvaluator.getDesignEntity(query2->selectClause->synonym, query2);
         REQUIRE(d == DesignEntity::STMT);
     }
 }
