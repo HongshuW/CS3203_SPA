@@ -20,12 +20,11 @@ using namespace std;
 namespace QB {
     class Query {
     public:
-        vector<Declaration>* declarations;
-        SelectClause* selectClause;
-        vector<SuchThatClause*>* suchThatClauses;
+        shared_ptr<vector<Declaration>> declarations;
+        shared_ptr<SelectClause> selectClause;
+        shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses;
 
         Query();
-        ~Query();
 
         // For printing
         friend ostream& operator<<(ostream& os, Query const& query) {

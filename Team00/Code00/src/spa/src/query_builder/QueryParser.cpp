@@ -8,6 +8,8 @@
 #include "query_builder/clauses/SelectClause.h"
 #include "query_builder/clauses/SuchThatClause.h"
 
+using namespace QB;
+
 QueryParser::QueryParser(std::vector<std::string> tokens)
         : query(new Query()), currIdx(0), tokens(tokens) {};
 
@@ -33,7 +35,7 @@ bool QueryParser::expect(string s) {
     if (match(s)) {
         return true;
     }
-    throw PQLParseException("Expected '" + s + "', got '" + peek() + "'.");
+    throw PQLParseException("Expect '" + s + "', got '" + peek() + "'.");
 }
 
 bool QueryParser::parseDeclarations() {
@@ -50,6 +52,7 @@ bool QueryParser::parseDeclarations() {
     }
 
     std::string synonymStr = pop();
+    //! Throw syntax error if synonym is invalid
     Synonym synonym = Synonym(synonymStr);
     synonymList.push_back(synonym);
     while(!match(";")) {
@@ -67,26 +70,29 @@ bool QueryParser::parseDeclarations() {
     return true;
 }
 
-bool QueryParser::parseSelectClause() {
-    try {
-        std::string synonymStr = pop();
-        Synonym synonym = Synonym(synonymStr);
-        SelectClause* selectClause = new SelectClause(synonym);
-        query->selectClause = selectClause;
-    } catch (const PQLParseException& e) {
-        return false;
-    }
+void QueryParser::parseSelectClause() {
+    std::string synonymStr = pop();
+    //! Throw syntax error if synonym is invalid
+    Synonym synonym = Synonym(synonymStr);
+    shared_ptr<SelectClause> selectClause = make_shared<SelectClause>(synonym);
+    query->selectClause = selectClause;
 }
 
 Ref QueryParser::parseRef() {
+    //! Can be synonym, _, integer, or string
     if (match("_")) {
         return Underscore();
-    } else if (Synonym::isValidSynonym(peek())) {
-        std::string synonymStr = pop();
-        Synonym synonym = Synonym(synonymStr);
-        return synonym;
+    } else if (match("\"")) {
+        string identStr = pop();
+        expect("\"");
+        Ident ident = Ident(identStr);
+        return ident;
     } else if (isDigit(peek())) {
         return std::stoi(pop());
+    } else if (Synonym::isValidSynonym(peek())) {
+        string synonymStr = pop();
+        Synonym synonym = Synonym(synonymStr);
+        return synonym;
     } else {
         throw PQLParseException("Expecting a Ref, got " + peek());
     }
@@ -96,12 +102,9 @@ bool QueryParser::isDigit(const string &str) {
     return str.find_first_not_of("0123456789") == std::string::npos;
 }
 
-bool QueryParser::parseSuchThatClause() {
-    unsigned int savedIdx = currIdx;
-
+void QueryParser::parseSuchThatClause() {
     if (!match("such")) {
-        currIdx = savedIdx;
-        return false;
+        throw PQLParseException("Unexpected token '" + peek() + "'");
     }
 
     expect("that");
@@ -115,31 +118,27 @@ bool QueryParser::parseSuchThatClause() {
     auto arg2 = parseRef();
     expect(")");
 
-    SuchThatClause* suchThatClause = new SuchThatClause(relationType, arg1, arg2);
+    shared_ptr<SuchThatClause> suchThatClause =
+        make_shared<SuchThatClause>(relationType, arg1, arg2, query->declarations);
     query->suchThatClauses->push_back(suchThatClause);
-
-    return true;
 }
 
-Query QueryParser::parse() {
+shared_ptr<Query> QueryParser::parse() {
     while (currIdx < tokens.size()) {
         while (currIdx < tokens.size()) {
             if (!parseDeclarations()) break;
         }
 
+        //! Throw syntax error if curr != "Select"
         expect("Select");
 
         parseSelectClause();
 
         while (currIdx < tokens.size()) {
-            try {
-                parseSuchThatClause();
-                currIdx++;
-            } catch (const PQLParseException& e) {
-                throw PQLParseException(
-                        "Expecting a such-that clause, got " + peek());
-            }
+            parseSuchThatClause();
+            currIdx++;
+            //! Throw syntax error accordingly
         }
     }
-    return *query;
+    return query;
 }

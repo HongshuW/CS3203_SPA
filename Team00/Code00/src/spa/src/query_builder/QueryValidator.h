@@ -8,6 +8,9 @@
 #pragma once
 
 #include "query_builder/commons/Query.h"
+#include <unordered_set>
+
+using namespace std;
 
 namespace QB {
     class QueryValidator {
@@ -16,10 +19,13 @@ namespace QB {
         void validateSynonymDeclaredSelectClause();
         void validateSynonymDeclaredSuchThatClause();
         void validateArgRefTypeSuchThatClause();
+        void validateUsesModifiesNoUnderscoreForFirstArg();
+        void validateSynonymTypeSuchThatClause();
         void validateSuchThatClause();
     public:
-        Query* query;
-        explicit QueryValidator(Query* query);
+        //! Validate the Query object, throw Semantic Error if encounter
+        shared_ptr<Query> query;
+        explicit QueryValidator(shared_ptr<Query> query);
         void validateQuery();
     };
 }

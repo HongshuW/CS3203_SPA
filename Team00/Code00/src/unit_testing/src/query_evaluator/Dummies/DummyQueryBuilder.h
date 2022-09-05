@@ -11,13 +11,13 @@ namespace TestQE {
 
 class DummyQueryBuilder {
     vector<Declaration> declarations = vector<Declaration>{};
-    SelectClause * selectClause = new SelectClause(Synonym("dummySyn"));
+    shared_ptr<SelectClause> selectClause = make_shared<SelectClause>(SelectClause(Synonym("dummySyn"))) ;
     vector<SuchThatClause> suchThatClauses = vector<SuchThatClause>{};
 public:
     DummyQueryBuilder * addDeclaration(const Declaration& declaration);
-    DummyQueryBuilder * addSelectClause(SelectClause* selectClause1);
+    DummyQueryBuilder * addSelectClause(shared_ptr<SelectClause> selectClause1);
 
-    Query * buildPQLQuery();
+    shared_ptr<Query> buildPQLQuery();
 
     DummyQueryBuilder();
 };

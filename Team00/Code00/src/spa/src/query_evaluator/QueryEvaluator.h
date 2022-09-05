@@ -17,13 +17,15 @@ namespace QE {
 
     class QueryEvaluator {
         shared_ptr<DataPreprocessor> dataPreprocessor;
-        DesignEntity getDesignEntity(Synonym synonym, Query* query);
-
+        DesignEntity getDesignEntity(Synonym synonym, shared_ptr<Query> query);
+        string getDesignEntityColName(DesignEntity entity);
 
     public:
+
         explicit QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor);
-        QueryResult evaluate(Query* query);
-        QueryResult evaluateNoConditionQuery(Query* query);
+        QueryResult evaluate(shared_ptr<Query> query);
+        QueryResult evaluateNoConditionQuery(shared_ptr<Query> query);
+
 
     };
 

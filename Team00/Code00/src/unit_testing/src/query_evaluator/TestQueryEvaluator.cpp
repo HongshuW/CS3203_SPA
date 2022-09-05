@@ -22,9 +22,9 @@ TEST_CASE("Test query evaluator") {
     auto queryEvaluator = QueryEvaluator(dataPreprocessor);
     string queryStr = "variable v1; Select v1";
 
-    Query * query = (new TestQE::DummyQueryBuilder())
+    auto query = (new TestQE::DummyQueryBuilder())
             ->addDeclaration(Declaration(QB::DesignEntity::VARIABLE, Synonym("v1")))
-            ->addSelectClause(new QB::SelectClause(Synonym("v1")))
+            ->addSelectClause(make_shared<SelectClause>(QB::SelectClause(Synonym("v1"))))
             ->buildPQLQuery();
 
     //auto query = QueryBuilder().buildPQLQuery(queryStr);

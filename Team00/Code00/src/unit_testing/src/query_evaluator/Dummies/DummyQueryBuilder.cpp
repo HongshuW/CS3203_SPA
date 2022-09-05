@@ -8,8 +8,8 @@
 
 namespace TestQE {
 
-    Query * DummyQueryBuilder::buildPQLQuery() {
-        auto query = new Query();
+    shared_ptr<Query> DummyQueryBuilder::buildPQLQuery() {
+        auto query = make_shared<Query>();
         query->selectClause = this->selectClause;
         for (const auto& d: this-> declarations) {
             query->declarations->push_back(d);
@@ -26,7 +26,7 @@ namespace TestQE {
 
     }
 
-    DummyQueryBuilder *DummyQueryBuilder::addSelectClause(SelectClause * selectClause1) {
+    DummyQueryBuilder *DummyQueryBuilder::addSelectClause(shared_ptr<SelectClause> selectClause1) {
         this->selectClause = selectClause1;
         return this;
     }
