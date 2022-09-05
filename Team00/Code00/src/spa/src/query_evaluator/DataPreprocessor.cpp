@@ -50,7 +50,7 @@ namespace QE {
         return this->getRelationTable(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType);
     }
 
-    DataPreprocessor::DataPreprocessor(shared_ptr<DummyDataRetriever> dataRetriever) {
+    DataPreprocessor::DataPreprocessor(shared_ptr<FakeDataRetriever> dataRetriever) {
         this->dataRetriever = std::move(dataRetriever);
     }
 

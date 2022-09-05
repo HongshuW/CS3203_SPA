@@ -9,7 +9,7 @@
 #include "pkb/DataRetriever.h"
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/clauses/SuchThatClause.h"
-#include "DummyDataRetriever.h"
+#include "FakeDataRetriever.h"
 
 using namespace std;
 using namespace QB;
@@ -20,10 +20,10 @@ namespace QE {
         Table filerTableByColumnValue(const Table& table, const string& colName, const string& value);
         long getIndex(vector<string> v, const string& K);
     public:
-        shared_ptr<DummyDataRetriever> dataRetriever;
+        shared_ptr<FakeDataRetriever> dataRetriever;
         Table getAllByDesignEntity(DesignEntity designEntity);
         Table getTableByRelation(SuchThatClause suchThatClause);
-        explicit DataPreprocessor(shared_ptr<DummyDataRetriever> dataRetriever);
+        explicit DataPreprocessor(shared_ptr<FakeDataRetriever> dataRetriever);
     };
 
 } // QE

@@ -5,18 +5,19 @@
 
 #include "query_evaluator/QueryEvaluator.h"
 #include "query_builder/QueryBuilder.h"
-#include "Dummies/DummyDataRetriever.h"
 #include "Dummies/DummyQueryBuilder.h"
 #include "query_evaluator/DataPreprocessor.h"
+#include "DummyDataRetriever.h"
 #include <memory>
 
 using namespace std;
 using namespace QB;
 using QE::QueryEvaluator;
 using namespace std;
+using namespace TestQE;
 
 TEST_CASE("Test query evaluator") {
-    shared_ptr<QE::DummyDataRetriever> dummyDataRetriever = make_shared<QE::DummyDataRetriever>();
+    shared_ptr<DummyDataRetriever> dummyDataRetriever = make_shared<DummyDataRetriever>();
     auto  dataPreprocessor= make_shared<QE::DataPreprocessor>(QE::DataPreprocessor(dummyDataRetriever));
     auto queryEvaluator = QueryEvaluator(dataPreprocessor);
     string queryStr = "variable v1; Select v1";
