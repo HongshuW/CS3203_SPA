@@ -4,7 +4,10 @@ using namespace std;
 
 #include "EntityManager.h"
 
+Table EntityManager::procedureTable;
+Table EntityManager::statementTable;
 Table EntityManager::variableTable;
+Table EntityManager::constantTable;
 
 Table * EntityManager::getVariables() {
     return &EntityManager::variableTable;
