@@ -9,8 +9,8 @@
 using namespace QB;
 using namespace QE;
 
-QueryEvaluator::QueryEvaluator(DataRetriever* dataRetriever1) {
-    this->dataRetriever = dataRetriever1;
+QueryEvaluator::QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor) {
+    this->dataPreprocessor = dataPreprocessor;
 }
 
 QueryResult QueryEvaluator::evaluate(Query* query) {
@@ -25,26 +25,9 @@ QueryResult QueryEvaluator::evaluateNoConditionQuery(Query *query) {
     SelectClause* selectClause = query->selectClause;
     Synonym synonym = selectClause->synonym;
     DesignEntity designEntity = getDesignEntity(synonym, query);
-    switch (designEntity) {
-        case DesignEntity::STMT: {
-            break;
-        }
-        case DesignEntity::VARIABLE: {
-            Table table = this->dataRetriever->getVariables();
-            auto queryResult = QueryResult(table);
-            queryResult.colName = "variable name";
-            return queryResult;
-        }
-        case DesignEntity::CONSTANT: {
-            break;
-        }
-
-        default: {
-            break;
-        }
-
-    }
-    return QueryResult();
+    Table table = this->dataPreprocessor->getAllByDesignEntity(designEntity);
+    QueryResult queryResult = QueryResult(table);
+    return queryResult;
 }
 
 DesignEntity QueryEvaluator::getDesignEntity(Synonym synonym, Query *query) {

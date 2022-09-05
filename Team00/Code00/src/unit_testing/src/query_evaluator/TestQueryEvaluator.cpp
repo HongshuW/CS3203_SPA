@@ -7,14 +7,18 @@
 #include "query_builder/QueryBuilder.h"
 #include "Dummies/DummyDataRetriever.h"
 #include "Dummies/DummyQueryBuilder.h"
+#include "query_evaluator/DataPreprocessor.h"
+#include <memory>
 
+using namespace std;
 using namespace QB;
 using QE::QueryEvaluator;
 using namespace std;
 
 TEST_CASE("Test query evaluator") {
-
-    auto queryEvaluator = QueryEvaluator(new TestQE::DummyDataRetriever());
+    shared_ptr<QE::DummyDataRetriever> dummyDataRetriever = make_shared<QE::DummyDataRetriever>();
+    auto  dataPreprocessor= make_shared<QE::DataPreprocessor>(QE::DataPreprocessor(dummyDataRetriever));
+    auto queryEvaluator = QueryEvaluator(dataPreprocessor);
     string queryStr = "variable v1; Select v1";
 
     Query * query = (new TestQE::DummyQueryBuilder())
@@ -49,14 +53,5 @@ TEST_CASE("Test query evaluator") {
             qRIt++;
             expectedIt++;
         }
-    }
-    SECTION("Test getDesignEntity variable v1; Select v1") {
-        DesignEntity d = queryEvaluator.getDesignEntity(query->selectClause->synonym, query);
-        REQUIRE(d == DesignEntity::VARIABLE);
-
-    }
-    SECTION("Test getDesignEntity stmt a, b, c; Select a") {
-        DesignEntity d = queryEvaluator.getDesignEntity(query2.selectClause->synonym, &query2);
-        REQUIRE(d == DesignEntity::STMT);
     }
 }
