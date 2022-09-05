@@ -12,7 +12,7 @@ namespace QE {
         this->queryResult = std::move(queryResult);
     }
 
-    vector<string> QueryResultFormatter::formatResult(const string& colName) {
-        return this->queryResult.table.getColumnByName(colName);
+    vector<string> QueryResultFormatter::formatResult() {
+        return this->queryResult.table.getColumnByName(this->queryResult.colName);
     }
 } // QE

@@ -13,7 +13,7 @@ namespace QE {
         QueryResult queryResult;
     public:
         explicit QueryResultFormatter(QueryResult queryResult);
-        vector<string> formatResult(const string& colName);
+        vector<string> formatResult();
     };
 
 } // QE
