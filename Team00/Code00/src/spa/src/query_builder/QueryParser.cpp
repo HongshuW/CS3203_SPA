@@ -123,7 +123,7 @@ void QueryParser::parseSuchThatClause() {
     query->suchThatClauses->push_back(suchThatClause);
 }
 
-Query QueryParser::parse() {
+shared_ptr<Query> QueryParser::parse() {
     while (currIdx < tokens.size()) {
         while (currIdx < tokens.size()) {
             if (!parseDeclarations()) break;
@@ -140,5 +140,5 @@ Query QueryParser::parse() {
             //! Throw syntax error accordingly
         }
     }
-    return *query;
+    return query;
 }

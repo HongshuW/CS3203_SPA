@@ -27,9 +27,10 @@ namespace QB {
 
     //! Synonym = 0, Underscore = 1, int = 2, Ident = 3
     using Ref = variant<Synonym, Underscore, int, Ident>;
-    static unordered_set refIndexSet = {0, 1, 2, 3};
-    static unordered_set stmtRefIndexSet = {0, 1, 2};
-    static unordered_set entRefIndexSet = {0, 1, 3};
+    using RefTypeSet = unordered_set<unsigned int>;
+    static RefTypeSet refIndexSet = {0, 1, 2, 3};
+    static RefTypeSet stmtRefIndexSet = {0, 1, 2};
+    static RefTypeSet entRefIndexSet = {0, 1, 3};
 
     RefType getRefTypeFromIndex(int index);
     int getIndexFromRefType(RefType refType);

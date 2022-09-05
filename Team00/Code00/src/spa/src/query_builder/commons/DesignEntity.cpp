@@ -6,7 +6,7 @@
 #include "query_builder/Exceptions.h"
 
 namespace QB {
-    std::unordered_map<DesignEntity, std::string> designEntityToStringMap({
+    unordered_map<DesignEntity, std::string> designEntityToStringMap({
         {DesignEntity::STMT, "stmt"},
         {DesignEntity::READ, "read"},
         {DesignEntity::PRINT, "print"},
@@ -19,7 +19,7 @@ namespace QB {
         {DesignEntity::PROCEDURE, "procedure"}
     });
 
-    std::unordered_map<std::string, DesignEntity> stringToDesignEntityMap({
+    unordered_map<std::string, DesignEntity> stringToDesignEntityMap({
         {"stmt", DesignEntity::STMT},
         {"read", DesignEntity::READ},
         {"print", DesignEntity::PRINT},
@@ -41,7 +41,16 @@ namespace QB {
         }
     }
 
-    std::string getDesignEntityString(DesignEntity designEntity) {
+    string getDesignEntityString(DesignEntity designEntity) {
         return designEntityToStringMap.at(designEntity);
+    }
+
+    string getDesignEntitySetString(unordered_set<DesignEntity> set) {
+        string str = "";
+        for (auto designEntity : set) {
+            str += getDesignEntityString(designEntity);
+            str += ", ";
+        }
+        return str;
     }
 }

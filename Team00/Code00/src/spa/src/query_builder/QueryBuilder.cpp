@@ -10,12 +10,12 @@
 
 using namespace QB;
 
-Query QueryBuilder::buildPQLQuery(std::string& queryStr) {
+shared_ptr<Query> QueryBuilder::buildPQLQuery(std::string& queryStr) {
     QueryTokenizer tokenizer = QueryTokenizer(queryStr);
     std::vector<std::string> tokens = tokenizer.tokenize();
     QueryParser parser = QueryParser(tokens);
-    Query query = parser.parse();
-//    QueryValidator validator = QueryValidator(&query);
-//    validator.validateQuery();
-    return query;
+    shared_ptr<Query> queryPtr = parser.parse();
+    QueryValidator validator = QueryValidator(queryPtr);
+    validator.validateQuery();
+    return queryPtr;
 }

@@ -10,8 +10,12 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
+#include "DesignEntity.h"
+#include "Ref.h"
 
 using namespace std;
+using namespace QB;
 
 namespace QB {
     enum class RelationType {
@@ -29,6 +33,9 @@ namespace QB {
 
     RelationType getRelationTypeFromStr(string& str);
     string getStrFromRelationType(RelationType relationType);
+    pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
+    getSuchThatSynonymArgsTypeFromRelationType(RelationType relationType);
+    pair<RefTypeSet, RefTypeSet> getSuchThatArgsRefTypeFromRelationType(RelationType relationType);
 }
 
 #endif //SPA_RELATIONTYPE_H

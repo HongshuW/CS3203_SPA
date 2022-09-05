@@ -19,9 +19,9 @@ namespace QB {
          * Takes a PQL query string and convert it to a query object.
          *
          * @param string PQL query string.
-         * @return query object containing the query information.
+         * @return a shared pointer to the query object containing the query information.
          */
-        Query buildPQLQuery(std::string& queryStr);
+        shared_ptr<Query> buildPQLQuery(std::string& queryStr);
     };
 }
 

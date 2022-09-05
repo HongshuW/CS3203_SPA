@@ -25,7 +25,6 @@ namespace QB {
         shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses;
 
         Query();
-        ~Query();
 
         // For printing
         friend ostream& operator<<(ostream& os, Query const& query) {

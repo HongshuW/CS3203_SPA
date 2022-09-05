@@ -17,223 +17,223 @@ TEST_CASE ("Test Query Parser") {
     SECTION ("variable v1; Select v1") {
         std::string queryStr = "variable v1; Select v1";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::VARIABLE, Synonym("v1"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("v1")));
     }
 
     SECTION ("stmt a, b, c; Select a") {
         std::string queryStr = "stmt a, b, c; Select a";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 3);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 3);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("a")),
                         Declaration(DesignEntity::STMT, Synonym("b")),
                         Declaration(DesignEntity::STMT, Synonym("c"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("a")));
     }
 
     SECTION ("assign a; while w; Select a") {
         std::string queryStr = "assign a; while w; Select a";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 2);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 2);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
                         Declaration(DesignEntity::WHILE, Synonym("w"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("a")));
     }
 
     SECTION ("stmt s; Select s such that Parent (s, 12)") {
         std::string queryStr = "stmt s; Select s such that Parent (s, 12)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("s")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::PARENT, Synonym("s"), 12,
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("assign a; Select a such that Parent* (_, a)") {
         std::string queryStr = "assign a; Select a such that Parent* (_, a)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("a")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::PARENT_T, Underscore(), Synonym("a"),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("stmt s; Select s such that Follows (6, s)") {
         std::string queryStr = "stmt s; Select s such that Follows (6, s)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("s")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::FOLLOWS, 6, Synonym("s"),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("stmt s; Select s such that Follows* (s, 6)") {
         std::string queryStr = "stmt s; Select s such that Follows* (s, 6)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("s")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::FOLLOWS_T, Synonym("s"), 6,
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("stmt s; Select s such that Follows* (s, _)") {
         std::string queryStr = "stmt s; Select s such that Follows* (s, _)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("s")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::FOLLOWS_T, Synonym("s"), Underscore(),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("assign a; Select a such that Uses (a, \"x\")") {
         std::string queryStr = "assign a; Select a such that Uses (a, \"x\")";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("a")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("variable v; Select v such that Modifies (\"main\", v)") {
         std::string queryStr = "variable v; Select v such that Modifies (\"main\", v)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::VARIABLE, Synonym("v"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("v")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(query.suchThatClauses->at(0)->relationType == RelationType::MODIFIES_P);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_P);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::MODIFIES_P, Ident("main"), Synonym("v"),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("variable v; Select v such that Modifies (8, v)") {
         std::string queryStr = "variable v; Select v such that Modifies (8, v)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::VARIABLE, Synonym("v"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("v")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(query.suchThatClauses->at(0)->relationType == RelationType::MODIFIES_S);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_S);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::MODIFIES_S, 8, Synonym("v"),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("stmt s; Select s such that Modifies (s, _)") {
         std::string queryStr = "stmt s; Select s such that Modifies (s, _)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("s")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(query.suchThatClauses->at(0)->relationType == RelationType::MODIFIES_S);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_S);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::MODIFIES_S, Synonym("s"), Underscore(),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("procedure p; Select p such that Modifies (p, _)") {
         std::string queryStr = "procedure p; Select p such that Modifies (p, _)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::PROCEDURE, Synonym("p"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("p")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(query.suchThatClauses->at(0)->relationType == RelationType::MODIFIES_P);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_P);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::MODIFIES_P, Synonym("p"), Underscore(),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("assign a; Select a such that Uses (a, _)") {
         std::string queryStr = "assign a; Select a such that Uses (a, _)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("a")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(query.suchThatClauses->at(0)->relationType == RelationType::USES_S);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::USES_S);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Underscore(),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("procedure p; Select p such that Uses (p, _)") {
         std::string queryStr = "procedure p; Select p such that Uses (p, _)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query.declarations->size() == 1);
-        REQUIRE(*(query.declarations) ==
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::PROCEDURE, Synonym("p"))});
-        REQUIRE(*(query.selectClause) ==
+        REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("p")));
-        REQUIRE(query.suchThatClauses->size() == 1);
-        REQUIRE(query.suchThatClauses->at(0)->relationType == RelationType::USES_P);
-        REQUIRE(*(query.suchThatClauses)->at(0) ==
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::USES_P);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("p"), Underscore(),
-                               query.declarations));
+                               query->declarations));
     }
 
     SECTION ("'select' is not defined, throw PQLParseException") {
