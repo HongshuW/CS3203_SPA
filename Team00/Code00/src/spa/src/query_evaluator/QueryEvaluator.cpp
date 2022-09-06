@@ -9,8 +9,24 @@
 using namespace QB;
 using namespace QE;
 
-QueryEvaluator::QueryEvaluator(DataRetriever* dataRetriever1) {
-    this->dataRetriever = dataRetriever1;
+namespace QE {
+    //TODO: update map
+    unordered_map<DesignEntity, std::string> designEntityToColNameMap({
+                                                                              {DesignEntity::STMT, "stmt"},
+                                                                              {DesignEntity::READ, "read"},
+                                                                              {DesignEntity::PRINT, "print"},
+                                                                              {DesignEntity::CALL, "call"},
+                                                                              {DesignEntity::WHILE, "while"},
+                                                                              {DesignEntity::IF, "if"},
+                                                                              {DesignEntity::ASSIGN, "assign"},
+                                                                              {DesignEntity::VARIABLE, "variable name"},
+                                                                              {DesignEntity::CONSTANT, "constant"},
+                                                                              {DesignEntity::PROCEDURE, "procedure"}
+                                                                      });
+}
+
+QueryEvaluator::QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor) {
+    this->dataPreprocessor = dataPreprocessor;
 }
 
 QueryResult QueryEvaluator::evaluate(shared_ptr<Query> query) {
@@ -25,26 +41,10 @@ QueryResult QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query) {
     shared_ptr<SelectClause> selectClause = query->selectClause;
     Synonym synonym = selectClause->synonym;
     DesignEntity designEntity = getDesignEntity(synonym, query);
-    switch (designEntity) {
-        case DesignEntity::STMT: {
-            break;
-        }
-        case DesignEntity::VARIABLE: {
-            Table table = this->dataRetriever->getVariables();
-            auto queryResult = QueryResult(table);
-            queryResult.colName = "variable name";
-            return queryResult;
-        }
-        case DesignEntity::CONSTANT: {
-            break;
-        }
-
-        default: {
-            break;
-        }
-
-    }
-    return QueryResult();
+    Table table = this->dataPreprocessor->getAllByDesignEntity(designEntity);
+    QueryResult queryResult = QueryResult(table);
+    queryResult.colName = getDesignEntityColName(designEntity);
+    return queryResult;
 }
 
 DesignEntity QueryEvaluator::getDesignEntity(Synonym synonym, shared_ptr<Query> query) {
@@ -54,6 +54,10 @@ DesignEntity QueryEvaluator::getDesignEntity(Synonym synonym, shared_ptr<Query> 
         }
     }
     return static_cast<DesignEntity>(NULL);
+}
+
+string QueryEvaluator::getDesignEntityColName(DesignEntity entity) {
+    return designEntityToColNameMap.at(entity);
 }
 
 

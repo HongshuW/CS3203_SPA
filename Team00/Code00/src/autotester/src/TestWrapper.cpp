@@ -9,6 +9,7 @@
 #include "parser/Parser.h"
 #include "parser/Tokenizer.h"
 #include "DesignExtractor.h"
+#include "query_evaluator/DataPreprocessor.h"
 
 using namespace QB;
 using namespace QE;
@@ -57,14 +58,14 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   // ...code to evaluate query...
   try {
       auto queryObj = QueryBuilder().buildPQLQuery(query);
-      auto dataRetriever = new DataRetriever();
-      auto queryResult = QueryEvaluator(dataRetriever).evaluate(queryObj);
+      auto dataRetriever = make_shared<FakeDataRetriever>();
+      shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(DataPreprocessor(dataRetriever));
+      auto queryResult = QueryEvaluator(dataPreprocessor).evaluate(queryObj);
       auto resultFormatter = QueryResultFormatter(queryResult);
       auto ans = resultFormatter.formatResult();
       for (const auto& element: ans) {
           results.push_back(element);
       }
-      delete dataRetriever;
   } catch (const PQLTokenizeException& e) {
       string errorMessage = "SyntaxError";
 //      errorMessage += e.what();

@@ -1,7 +1,7 @@
 1 - Valid input
-variable x;
-Select x
-x
+variable Select;
+Select Select
+Test
 5000
 2 - SyntaxEror: Unexpected token
 variable x&

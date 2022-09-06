@@ -8,6 +8,7 @@
 #include "QueryResult.h"
 #include "query_builder/commons/Query.h"
 #include "pkb/DataRetriever.h"
+#include "DataPreprocessor.h"
 
 
 using namespace QB;
@@ -15,14 +16,16 @@ using namespace QB;
 namespace QE {
 
     class QueryEvaluator {
-        DataRetriever* dataRetriever;
-
+        shared_ptr<DataPreprocessor> dataPreprocessor;
+        DesignEntity getDesignEntity(Synonym synonym, shared_ptr<Query> query);
+        string getDesignEntityColName(DesignEntity entity);
 
     public:
-        explicit QueryEvaluator(DataRetriever* dataRetriever1);
+
+        explicit QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor);
         QueryResult evaluate(shared_ptr<Query> query);
         QueryResult evaluateNoConditionQuery(shared_ptr<Query> query);
-        DesignEntity getDesignEntity(Synonym synonym, shared_ptr<Query> query);
+
 
     };
 
