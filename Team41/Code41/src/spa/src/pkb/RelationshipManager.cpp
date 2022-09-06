@@ -18,3 +18,26 @@ vector<string> RelationshipManager::parentStarTableHeader{"$parent_statement", "
 vector<string> RelationshipManager::usesTableHeader{"$user", "$used"};
 vector<string> RelationshipManager::modifiesTableHeader{"$modifier", "$modified"};
 
+Table * RelationshipManager::getFollows() {
+    return &RelationshipManager::followsTable;
+}
+
+Table * RelationshipManager::getFollowsStar() {
+    return &RelationshipManager::followsStarTable;
+}
+
+Table * RelationshipManager::getParent() {
+    return &RelationshipManager::parentTable;
+}
+
+Table * RelationshipManager::getParentStar() {
+    return &RelationshipManager::parentStarTable;
+}
+
+Table * RelationshipManager::getUses() {
+    return &RelationshipManager::usesTable;
+}
+
+Table * RelationshipManager::getModifies() {
+    return &RelationshipManager::modifiesTable;
+}

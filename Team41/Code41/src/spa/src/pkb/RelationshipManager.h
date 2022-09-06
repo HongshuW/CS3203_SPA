@@ -11,6 +11,14 @@
 using namespace std;
 
 class RelationshipManager {
+public:
+    static Table * getFollows();
+    static Table * getFollowsStar();
+    static Table * getParent();
+    static Table * getParentStar();
+    static Table * getUses();
+    static Table * getModifies();
+
 private:
     static Table followsTable;
     static Table followsStarTable;
