@@ -11,7 +11,7 @@ namespace QE {
 
     class TableCombiner {
         /**
-         * @return a vector of pair of duplicate header indexes
+         * @return pairs of duplicate headers' index in the cross product table
          */
         vector<vector<int>> findDuplicateHeaders(vector<string> h1, vector<string> h2);
 

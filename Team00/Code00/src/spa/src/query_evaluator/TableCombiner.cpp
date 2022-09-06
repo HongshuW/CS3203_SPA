@@ -23,70 +23,41 @@ namespace QE {
     }
 
     Table TableCombiner::joinTable(const Table &t1, const Table &t2) {
+        int FIRST_DUP_IDX = 0;
+        int SECOND_DUP_IDX = 1;
+
         Table productTable = this->crossProduct(t1, t2);
-        Table joinTableResult = Table();
+        Table joinResultTable = Table();
         auto dupHeaders = this->findDuplicateHeaders(t1.header, t2.header);
+        unordered_set<int> colInxToRemove;
+        for (auto dupPair: dupHeaders) {
+            colInxToRemove.insert(dupPair[SECOND_DUP_IDX]);
+        }
+
         for (int i = 0; i < productTable.header.size(); ++i) {
-            for (auto dupPair: dupHeaders) {
-                
-            }
-
+            if (colInxToRemove.count(i)) continue;
+            joinResultTable.header.push_back(productTable.header[i]);
         }
 
-        for(auto row: productTable.rows) {
+        for (auto row: productTable.rows) {
+            bool isAdding = true;
             for (auto dupHeaderPair: dupHeaders) {
+                int col1Idx = dupHeaderPair[FIRST_DUP_IDX];
+                int col2Idx = dupHeaderPair[SECOND_DUP_IDX];
+                if (row[col1Idx] != row[col2Idx]) {
+                    isAdding = false;
+                }
 
             }
-
+            if (isAdding) {
+                vector<string> rowToInsert = vector<string>();
+                for (int i = 0; i < row.size(); ++i) {
+                    if (colInxToRemove.count(i)) continue;
+                    rowToInsert.push_back(row[i]);
+                }
+                joinResultTable.rows.push_back(rowToInsert);
+            }
         }
-
-
-
-//        int t1ColIdx = -1;
-//        int t2ColIdx = -1;
-//        int joinColsCount = 0;
-//        int countNeeded = 2;
-//        for (int i = 0 ; i < productTable.header.size(); i++) {
-//            if (productTable.header[i] == colName) {
-//                joinColsCount++;
-//                if (t1ColIdx == -1) {
-//                    t1ColIdx = i;
-//                } else {
-//                    t2ColIdx = i;
-//                }
-//            }
-//        }
-//        if (t1ColIdx == -1 || t2ColIdx == -1 || joinColsCount != countNeeded) {
-//            cout << "error when joining table" << endl;
-//            cout << "t1ColIdx: "  + t1ColIdx << endl;
-//            cout << "t2ColIdx: "  + t2ColIdx << endl;
-//            cout << "joinColsCount: "  + joinColsCount << endl;
-//            return Table();
-//        }
-//
-//        Table joinResultTable = Table();
-//
-//        //add headers excluding duplicated headers
-//        for (int i = 0; i < productTable.header.size(); ++i) {
-//            if (i != t2ColIdx) {
-//                joinResultTable.header.push_back(productTable.header[i]);
-//            }
-//        }
-//
-//        //add rows
-//        for (auto row: productTable.rows) {
-//            if (row[t1ColIdx] == row[t2ColIdx]) {
-//                auto rowToInsert = vector<string>();
-//                for (int i = 0; i < row.size(); ++i) {
-//                    //excluding duplicate col
-//                    if (i != t2ColIdx) {
-//                        rowToInsert.push_back(row[i]);
-//                    }
-//                }
-//                joinResultTable.rows.push_back(rowToInsert);
-//            }
-//        }
-//
         return joinResultTable;
     }
 
@@ -95,6 +66,7 @@ namespace QE {
         vector<vector<int>> ans;
         int h1Offset = h1.size();
         for (int i = 0; i < h1.size(); ++i) {
+            if (h1[i].find("$") != string::npos) continue; //skip default headers.
             h1Map.insert({h1[i], i});
         }
         for (int i = 0; i < h2.size(); ++i) {
