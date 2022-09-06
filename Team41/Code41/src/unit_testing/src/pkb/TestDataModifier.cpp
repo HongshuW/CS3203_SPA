@@ -10,21 +10,18 @@ using namespace std;
 
 TEST_CASE("Test Data Modifier") {
     SECTION ("Save variables") {
-        list<string> variables;
-        variables.push_back("dummyVarX");
-        variables.push_back("dummyVarY");
-        variables.push_back("dummyVarZ");
-        int initialSize = EntityManager::variableTable.rows.size();
+        list<string> variables{"dummyVarX", "dummyVarY", "dummyVarZ"};
+        int initialSize = (*EntityManager::getVariables()).rows.size();
 
         DataModifier dm;
         dm.saveVariables(variables);
 
         // check header is set automatically
-        REQUIRE(EntityManager::variableTable.header[0] == "$variable_name");
+        REQUIRE((*EntityManager::getVariables()).header[0] == "$variable_name");
 
         // check variables are added
-        REQUIRE(EntityManager::variableTable.rows[initialSize][0] == "dummyVarX");
-        REQUIRE(EntityManager::variableTable.rows[initialSize + 1][0] == "dummyVarY");
-        REQUIRE(EntityManager::variableTable.rows[initialSize + 2][0] == "dummyVarZ");
+        REQUIRE((*EntityManager::getVariables()).rows[initialSize][0] == "dummyVarX");
+        REQUIRE((*EntityManager::getVariables()).rows[initialSize + 1][0] == "dummyVarY");
+        REQUIRE((*EntityManager::getVariables()).rows[initialSize + 2][0] == "dummyVarZ");
     }
 }

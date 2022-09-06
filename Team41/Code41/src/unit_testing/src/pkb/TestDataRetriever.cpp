@@ -12,7 +12,7 @@ TEST_CASE("Test Data Retriever") {
         DataRetriever dr;
         Table table = dr.getVariables();
 
-        REQUIRE(table.header == EntityManager::variableTable.header);
-        REQUIRE(table.rows == EntityManager::variableTable.rows);
+        REQUIRE(table.header == (*EntityManager::getVariables()).header);
+        REQUIRE(table.rows == (*EntityManager::getVariables()).rows);
     }
 }

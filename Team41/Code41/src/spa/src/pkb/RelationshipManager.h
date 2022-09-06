@@ -11,7 +11,7 @@
 using namespace std;
 
 class RelationshipManager {
-public:
+private:
     static Table followsTable;
     static Table followsStarTable;
     static Table parentTable;
@@ -19,7 +19,6 @@ public:
     static Table usesTable;
     static Table modifiesTable;
 
-private:
     static vector<string> followsTableHeader;
     static vector<string> followsStarTableHeader;
     static vector<string> parentTableHeader;

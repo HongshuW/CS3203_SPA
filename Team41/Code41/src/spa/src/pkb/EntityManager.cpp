@@ -10,12 +10,12 @@ vector<string> EntityManager::statementTableHeader{"$statement_number", "$statem
 vector<string> EntityManager::variableTableHeader{"$variable_name"};
 vector<string> EntityManager::constantTableHeader{"$constant_value"};
 
-Table * EntityManager::getVariables() {
-    return &EntityManager::variableTable;
-}
-
 void EntityManager::setHeader(Table * table, vector<string> header) {
     table->renameHeader(header);
+}
+
+Table * EntityManager::getVariables() {
+    return &EntityManager::variableTable;
 }
 
 void EntityManager::saveVariables(list<string> variables) {
