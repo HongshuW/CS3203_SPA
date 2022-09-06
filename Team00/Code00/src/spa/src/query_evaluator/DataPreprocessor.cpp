@@ -59,6 +59,8 @@ namespace QE {
         RefType ref1Type = getRefType(ref1);
         RefType ref2Type = getRefType(ref2);
         Table relationTable = this->dataRetriever->getTableByRelationType(relationType);
+        //TODO::add declaration array dependency (not in synonym)
+        //TODO: check design entity of synonym
         if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::SYNONYM) {
             //1
             //assuming the table has two cols
@@ -120,7 +122,7 @@ namespace QE {
             int ref1Val = get<int>(ref1);
             Ident ref2Val = get<Ident>(ref2);
             relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref1Val));
-            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col_2", ref2Val.identStr);
+            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", ref2Val.identStr);
 
         } else if (ref1Type == RefType::IDENT && ref2Type == RefType::SYNONYM) {
             //9
@@ -128,7 +130,7 @@ namespace QE {
             vector<string> newHeaders = vector<string>{"$string_col", get<Synonym>(ref2).synonym};
             relationTable.renameHeader(newHeaders);
             Ident ref1Val = get<Ident>(ref1);
-            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", (ref1Val.identStr));
+            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
 
         } else if (ref1Type == RefType::IDENT && ref2Type == RefType::INTEGER) {
             //10
