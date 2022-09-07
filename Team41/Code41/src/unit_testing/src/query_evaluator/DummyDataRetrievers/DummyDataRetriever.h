@@ -12,7 +12,9 @@
 class DummyDataRetriever : public DataRetriever {
 public:
     Table getVariables() override;
+    Table getStmtsTable() override;
     Table getTableByRelationType(QB::RelationType relationType) override;
+    DesignEntity getDesignEntityOfStmt(int line_no) override;
     DummyDataRetriever();
 };
 

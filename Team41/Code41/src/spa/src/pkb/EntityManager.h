@@ -29,10 +29,26 @@ public:
     static void saveVariables(list<string> variables);
     static void saveConstants(list<string> constants);
 
+    static void setHeader(Table * table, vector<string> header);
+
+    static string STATEMENT_TABLE_COL1_NAME;
+    static string STATEMENT_TABLE_COL2_NAME;
+    static string VARIABLE_TABLE_COL1_NAME;
+    static string CONSTANT_TABLE_COL1_NAME;
+    static string USES_TABLE_COL1_NAME;
+    static string USES_TABLE_COL2_NAME;
+    static string PROCEDURE_TABLE_COL1_NAME;
+    static string PARENT_TABLE_COL1_NAME;
+    static string PARENT_TABLE_COL2_NAME;
+    static string MODIFIES_TABLE_COL1_NAME;
+    static string MODIFIES_TABLE_COL2_NAME;
+    static string FOLLOWS_TABLE_COL1_NAME;
+    static string FOLLOWS_TABLE_COL2_NAME;
 
 private:
     static ProcedureTable procedureTable;
     static StatementTable statementTable;
     static VariableTable variableTable;
     static ConstantTable constantTable;
+
 };

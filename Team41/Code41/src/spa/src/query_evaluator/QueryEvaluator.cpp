@@ -20,8 +20,8 @@ namespace QE {
                                                                               {DesignEntity::IF, "if"},
                                                                               {DesignEntity::ASSIGN, "assign"},
                                                                               {DesignEntity::VARIABLE, "$variable_name"},
-                                                                              {DesignEntity::CONSTANT, "constant"},
-                                                                              {DesignEntity::PROCEDURE, "procedure"}
+                                                                              {DesignEntity::CONSTANT, "$constant_value"},
+                                                                              {DesignEntity::PROCEDURE, "$procedure_name"}
                                                                       });
 }
 

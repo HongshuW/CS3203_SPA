@@ -7,6 +7,7 @@
 
 #include "EntityTable.h"
 
+
 class ProcedureTable : public EntityTable {
 public:
     explicit ProcedureTable();

@@ -7,7 +7,7 @@
 #include "query_builder/QueryBuilder.h"
 #include "Dummies/DummyQueryBuilder.h"
 #include "query_evaluator/DataPreprocessor.h"
-#include "DummyDataRetriever.h"
+#include "DummyDataRetrievers/DummyDataRetriever.h"
 #include <memory>
 
 using namespace std;

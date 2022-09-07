@@ -6,7 +6,6 @@
 #define SPA_STATEMENTTABLE_H
 
 #include "EntityTable.h"
-
 class StatementTable : public EntityTable {
 public:
     explicit StatementTable();

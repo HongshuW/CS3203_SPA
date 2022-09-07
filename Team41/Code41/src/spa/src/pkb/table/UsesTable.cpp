@@ -3,7 +3,8 @@
 //
 
 #include "UsesTable.h"
+#include "../EntityManager.h"
 
 UsesTable::UsesTable() {
-    header = vector<string>{"$user", "$used"};
+    header = vector<string>{EntityManager::USES_TABLE_COL1_NAME, EntityManager::USES_TABLE_COL2_NAME};
 }
