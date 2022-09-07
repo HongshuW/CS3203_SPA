@@ -7,12 +7,14 @@
 #ifndef SPA_NUMBERNODE_H
 #define SPA_NUMBERNODE_H
 
+using namespace std;
+
 class NumberNode : public ASTNode {
 private:
-    std::string number;
+    string number;
 public:
-    NumberNode(std::string number);
-    std::string getNumber();
+    NumberNode(string number);
+    string getNumber();
 };
 
 #endif //SPA_NUMBERNODE_H

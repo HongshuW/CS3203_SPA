@@ -4,8 +4,7 @@
 
 #include "ProcedureNode.h"
 
-ProcedureNode::ProcedureNode(std::string procedureName, std::shared_ptr<AssignNode> assignNode)
-        : procedureName(procedureName), assignNode(assignNode) {
+ProcedureNode::ProcedureNode(string procedureName, shared_ptr<AssignNode> assignNode) : procedureName(procedureName), assignNode(assignNode) {
     this -> setNodeType("procedure");
 }
 

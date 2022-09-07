@@ -8,13 +8,15 @@
 #ifndef SPA_PROCEDURENODE_H
 #define SPA_PROCEDURENODE_H
 
+using namespace std;
+
 class ProcedureNode : public ASTNode {
 private:
-    std::string procedureName;
+    string procedureName;
     // will change to statement list in the future
-    std::shared_ptr<AssignNode> assignNode;
+    shared_ptr<AssignNode> assignNode;
 public:
-    ProcedureNode(std::string procedureName, std::shared_ptr<AssignNode> assignNode);
+    ProcedureNode(string procedureName, shared_ptr<AssignNode> assignNode);
     AssignNode getAssignNode();
 };
 

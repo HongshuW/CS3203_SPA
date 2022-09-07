@@ -9,12 +9,14 @@
 #ifndef SPA_PROGRAMNODE_H
 #define SPA_PROGRAMNODE_H
 
+using namespace std;
+
 class ProgramNode : public ASTNode {
 private:
-    std::vector<std::shared_ptr<ProcedureNode>> procedureList;
+    vector<shared_ptr<ProcedureNode>> procedureList;
 public:
-    ProgramNode(std::vector<std::shared_ptr<ProcedureNode>> procedureList);
-    std::vector<std::shared_ptr<ProcedureNode>> getProcedureList();
+    ProgramNode(vector<shared_ptr<ProcedureNode>> procedureList);
+    vector<shared_ptr<ProcedureNode>> getProcedureList();
 };
 
 #endif //SPA_PROGRAMNODE_H

@@ -5,11 +5,10 @@
 #include "NumberNode.h"
 #include "iostream"
 
-NumberNode::NumberNode(std::string number)
-        : number(number) {
+NumberNode::NumberNode(string number) : number(number) {
     this -> setNodeType("number");
 }
 
-std::string  NumberNode::getNumber() {
+string  NumberNode::getNumber() {
     return number;
 }

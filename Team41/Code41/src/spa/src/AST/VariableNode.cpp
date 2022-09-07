@@ -5,11 +5,11 @@
 #include "VariableNode.h"
 #include "iostream"
 
-VariableNode::VariableNode(std::string variable)
+VariableNode::VariableNode(string variable)
         : variable(variable) {
     this -> setNodeType("variable");
 }
 
-std::string VariableNode::getVariable() {
+string VariableNode::getVariable() {
     return variable;
 }

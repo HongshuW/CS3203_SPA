@@ -7,12 +7,14 @@
 #ifndef SPA_VARIABLENODE_H
 #define SPA_VARIABLENODE_H
 
+using namespace std;
+
 class VariableNode : public ASTNode {
 private:
-    std::string variable;
+    string variable;
 public:
-    VariableNode(std::string variable);
-    std::string getVariable();
+    VariableNode(string variable);
+    string getVariable();
 };
 
 #endif //SPA_VARIABLENODE_H

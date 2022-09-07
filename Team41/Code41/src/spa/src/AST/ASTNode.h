@@ -8,13 +8,15 @@
 #ifndef SPA_ASTNODE_H
 #define SPA_ASTNODE_H
 
+using namespace std;
+
 class ASTNode {
 public:
     virtual ~ASTNode() = default;
-    std::string getNodeType() { return nodeType; };
-    void setNodeType(std::string type) {nodeType = std::move(type);}
+    string getNodeType();
+    void setNodeType(string type);
 private:
-    std::string nodeType;
+    string nodeType;
 };
 
 #endif //SPA_ASTNODE_H

@@ -4,3 +4,11 @@
 //
 #include "ASTNode.h"
 //
+
+string ASTNode::getNodeType() {
+    return nodeType;
+}
+
+void ASTNode::setNodeType(std::string type) {
+    nodeType = move(type);
+}
