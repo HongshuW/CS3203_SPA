@@ -9,6 +9,11 @@
 using namespace std;
 using namespace QB;
 namespace QE {
+    unordered_map<RefType, string> refTypeToColNameMap({
+                                                               {RefType::INTEGER, "$integer_col"},
+                                                               {RefType::IDENT, "$ident_col"},
+                                                               {RefType::UNDERSCORE, "$underscore_col"}
+    });
     Table DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
         switch (designEntity) {
 
@@ -61,16 +66,16 @@ namespace QE {
         //RefType can be synonym, integer, underscore or string
         RefType ref1Type = getRefType(ref1);
         RefType ref2Type = getRefType(ref2);
+        string col1Name = ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : refTypeToColNameMap.at(ref1Type);
+        string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : refTypeToColNameMap.at(ref2Type);
         Table relationTable = this->dataRetriever->getTableByRelationType(relationType);
+        vector<string> newHeaders = vector<string>{col1Name, col2Name};
+        relationTable.renameHeader(newHeaders);
         //TODO::add declaration array dependency (not in synonym)
         //TODO: check design entity of synonym
         if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::SYNONYM) {
             //1
             //assuming the table has two cols
-            Synonym syn1 = get<Synonym>(ref1);
-            Synonym syn2 = get<Synonym>(ref2);
-            vector<string> newHeaders = vector<string>{syn1.synonym, syn2.synonym};
-            relationTable.renameHeader(newHeaders);
             relationTable = this->filerTableByDesignEntity(relationTable,
                                                            syn1.synonym,
                                                            this->getDesignEntity(syn1,
@@ -83,56 +88,41 @@ namespace QE {
         } else if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::INTEGER) {
             //2
 
-            vector<string> newHeaders = vector<string>{get<Synonym>(ref1).synonym, "$integer_col"};
-            relationTable.renameHeader(newHeaders);
             int ref2Val = get<int>(ref2);
-            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref2Val));
+            relationTable = this->filerTableByColumnValue(relationTable, QE::refTypeToColNameMap.at(ref2Type), to_string(ref2Val));
 
         } else if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::IDENT) {
             //3
 
-            vector<string> newHeaders = vector<string>{get<Synonym>(ref1).synonym, "$string_col"};
-            relationTable.renameHeader(newHeaders);
             Ident ref2Val = get<Ident>(ref2);
             relationTable = this->filerTableByColumnValue(relationTable, "$string_col", ref2Val.identStr);
 
         } else if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::UNDERSCORE) {
             //4
 
-            vector<string> newHeaders = vector<string>{get<Synonym>(ref1).synonym, "$underscore_col"};
-            relationTable.renameHeader(newHeaders);
-
         } else if (ref1Type == RefType::INTEGER && ref2Type == RefType::SYNONYM) {
             //5
 
-            vector<string> newHeaders = vector<string>{"$integer_col", get<Synonym>(ref2).synonym};
-            relationTable.renameHeader(newHeaders);
             int ref1Val = get<int>(ref1);
-            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref1Val));
+            relationTable = this->filerTableByColumnValue(relationTable, QE::refTypeToColNameMap.at(ref1Type), to_string(ref1Val));
 
         } else if (ref1Type == RefType::INTEGER && ref2Type == RefType::INTEGER) {
             //6
 
-            vector<string> newHeaders = vector<string>{"$integer_col", "$integer_col_2"};
-            relationTable.renameHeader(newHeaders);
             int ref1Val = get<int>(ref1);
             int ref2Val = get<int>(ref2);
-            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref1Val));
-            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col_2", to_string(ref2Val));
+            relationTable = this->filerTableByColumnValue(relationTable, QE::refTypeToColNameMap.at(ref1Type), to_string(ref1Val));
+            relationTable = this->filerTableByColumnValue(relationTable, QE::refTypeToColNameMap.at(ref2Type), to_string(ref2Val));
 
         } else if (ref1Type == RefType::INTEGER && ref2Type == RefType::UNDERSCORE) {
             //7
 
-            vector<string> newHeaders = vector<string>{"$integer_col", "$underscore_col"};
-            relationTable.renameHeader(newHeaders);
             int ref1Val = get<int>(ref1);
             relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref1Val));
 
         } else if (ref1Type == RefType::INTEGER && ref2Type == RefType::IDENT) {
             //8
 
-            vector<string> newHeaders = vector<string>{"$integer_col", "$string_col"};
-            relationTable.renameHeader(newHeaders);
             int ref1Val = get<int>(ref1);
             Ident ref2Val = get<Ident>(ref2);
             relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref1Val));
@@ -141,16 +131,12 @@ namespace QE {
         } else if (ref1Type == RefType::IDENT && ref2Type == RefType::SYNONYM) {
             //9
 
-            vector<string> newHeaders = vector<string>{"$string_col", get<Synonym>(ref2).synonym};
-            relationTable.renameHeader(newHeaders);
             Ident ref1Val = get<Ident>(ref1);
             relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
 
         } else if (ref1Type == RefType::IDENT && ref2Type == RefType::INTEGER) {
             //10
 
-            vector<string> newHeaders = vector<string>{"$string_col", "$integer_col"};
-            relationTable.renameHeader(newHeaders);
             Ident ref1Val = get<Ident>(ref1);
             int ref2Val = get<int>(ref2);
             relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
@@ -159,15 +145,11 @@ namespace QE {
         } else if (ref1Type == RefType::IDENT && ref2Type == RefType::UNDERSCORE) {
             //11
 
-            vector<string> newHeaders = vector<string>{"$string_col", "$underscore_col"};
-            relationTable.renameHeader(newHeaders);
             Ident ref1Val = get<Ident>(ref1);
             relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
 
         } else if (ref1Type == RefType::IDENT && ref2Type == RefType::IDENT) {
             //12
-            vector<string> newHeaders = vector<string>{"$string_col", "$string_col_2"};
-            relationTable.renameHeader(newHeaders);
             Ident ref1Val = get<Ident>(ref1);
             Ident ref2Val = get<Ident>(ref2);
             relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
@@ -176,14 +158,10 @@ namespace QE {
         } else if (ref1Type == RefType::UNDERSCORE && ref2Type == RefType::SYNONYM) {
             //13
 
-            vector<string> newHeaders = vector<string>{"$underscore_col", get<Synonym>(ref2).synonym};
-            relationTable.renameHeader(newHeaders);
 
         } else if (ref1Type == RefType::UNDERSCORE && ref2Type == RefType::INTEGER) {
             //14
 
-            vector<string> newHeaders = vector<string>{"$underscore_col", "$integer_col"};
-            relationTable.renameHeader(newHeaders);
             Ident ref1Val = get<Ident>(ref1);
             int ref2Val = get<int>(ref2);
             relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
@@ -191,19 +169,15 @@ namespace QE {
 
         } else if (ref1Type == RefType::UNDERSCORE && ref2Type == RefType::IDENT) {
             //15
-            vector<string> newHeaders = vector<string>{"$underscore_col", "$string_col"};
-            relationTable.renameHeader(newHeaders);
             Ident ref2Val = get<Ident>(ref2);
             relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref2Val.identStr));
 
         } else if (ref1Type == RefType::UNDERSCORE && ref2Type == RefType::UNDERSCORE) {
             //16
-            vector<string> newHeaders = vector<string>{"$underscore_col", "$underscore_col_2"};
-            relationTable.renameHeader(newHeaders);
 
         }
 
-            return relationTable;
+        return relationTable;
     }
 
     Table DataPreprocessor::filerTableByColumnValue(const Table& table, const string& colName, const string& value) {
