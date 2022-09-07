@@ -21,10 +21,13 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
         case RelationType::PARENT_T:
             return *RelationshipManager::getParentT();
         case RelationType::MODIFIES_S:
-            return *RelationshipManager::getModifies();
+            return *RelationshipManager::getModifiesS();
+        case RelationType::MODIFIES_P:
+            return *RelationshipManager::getModifiesP();
         case RelationType::USES_S:
-            return *RelationshipManager::getUses();
-            //TODO: need to handle MODIFIES_P, USES_P, QPS will not return MODIFIES and USES
+            return *RelationshipManager::getUsesS();
+        case RelationType::USES_P:
+            return *RelationshipManager::getUsesP();
         default:
             return Table();
     }
