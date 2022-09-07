@@ -69,7 +69,7 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/DataPreprocessor.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
-        src/AST/StatementListNode.cpp src/AST/StatementListNode.h src/AST/ReadNode.cpp src/AST/ReadNode.h src/AST/PrintNode.cpp src/AST/PrintNode.h src/AST/CallNode.cpp src/AST/CallNode.h)
+        src/AST/StatementListNode.cpp src/AST/StatementListNode.h src/AST/ReadNode.cpp src/AST/ReadNode.h src/AST/PrintNode.cpp src/AST/PrintNode.h src/AST/CallNode.cpp src/AST/CallNode.h src/AST/ExpressionNode.cpp src/AST/ExpressionNode.h src/AST/TermNode.cpp src/AST/TermNode.h src/AST/FactorNode.cpp src/AST/FactorNode.h)
 
 
 # this makes the headers accessible for other projects which uses spa lib
