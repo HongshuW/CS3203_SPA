@@ -3,11 +3,11 @@
 //
 
 #include <vector>
-#include "ast/ProcedureNode.h"
-#include "ast/AssignNode.h"
-#include "ast/VariableNode.h"
-#include "ast/ASTNode.h"
-#include "ast/ProgramNode.h"
+#include "AST/ProcedureNode.h"
+#include "AST/AssignNode.h"
+#include "AST/VariableNode.h"
+#include "AST/ASTNode.h"
+#include "AST/ProgramNode.h"
 
 #ifndef SPA_PARSER_H
 #define SPA_PARSER_H

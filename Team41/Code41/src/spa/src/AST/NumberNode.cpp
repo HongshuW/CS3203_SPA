@@ -7,6 +7,7 @@
 
 NumberNode::NumberNode(std::string number)
         : number(number) {
+    this -> setNodeType("number");
 }
 
 std::string  NumberNode::getNumber() {

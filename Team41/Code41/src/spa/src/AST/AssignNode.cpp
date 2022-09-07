@@ -6,7 +6,9 @@
 #include "iostream"
 
 AssignNode::AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<NumberNode> numberNode)
-        : variableNode(variableNode), numberNode(numberNode) {};
+        : variableNode(variableNode), numberNode(numberNode) {
+    this ->setNodeType("assign");
+};
 
 
 VariableNode AssignNode::getVariableNode() {
