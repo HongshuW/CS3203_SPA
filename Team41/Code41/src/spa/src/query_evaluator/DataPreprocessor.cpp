@@ -76,6 +76,11 @@ namespace QE {
         if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::SYNONYM) {
             //1
             //assuming the table has two cols
+            Synonym syn1 = get<Synonym>(ref1);
+            Synonym syn2 = get<Synonym>(ref2);
+            vector<string> newHeaders = vector<string>{syn1.synonym, syn2.synonym};
+            relationTable.renameHeader(newHeaders);
+
             relationTable = this->filerTableByDesignEntity(relationTable,
                                                            syn1.synonym,
                                                            this->getDesignEntity(syn1,
