@@ -46,15 +46,18 @@ namespace QE {
         return Table();
     }
 
-    Table DataPreprocessor::getTableByRelation(SuchThatClause suchThatClause) {
-        return this->getRelationTable(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType);
+    Table
+    DataPreprocessor::getTableByRelation(SuchThatClause suchThatClause, shared_ptr<vector<Declaration>> declarations) {
+        return this->getRelationTable(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType,
+                                      declarations);
     }
 
-    DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever) {
+    DataPreprocessor::DataPreprocessor(shared_ptr<FakeDataRetriever> dataRetriever) {
         this->dataRetriever = std::move(dataRetriever);
     }
 
-    Table DataPreprocessor::getRelationTable(Ref ref1, Ref ref2, RelationType relationType) {
+    Table DataPreprocessor::getRelationTable(Ref ref1, Ref ref2, RelationType relationType,
+                                             shared_ptr<vector<Declaration>> declarations) {
         //RefType can be synonym, integer, underscore or string
         RefType ref1Type = getRefType(ref1);
         RefType ref2Type = getRefType(ref2);
@@ -64,8 +67,19 @@ namespace QE {
         if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::SYNONYM) {
             //1
             //assuming the table has two cols
-            vector<string> newHeaders = vector<string>{get<Synonym>(ref1).synonym, get<Synonym>(ref2).synonym};
+            Synonym syn1 = get<Synonym>(ref1);
+            Synonym syn2 = get<Synonym>(ref2);
+            vector<string> newHeaders = vector<string>{syn1.synonym, syn2.synonym};
             relationTable.renameHeader(newHeaders);
+            relationTable = this->filerTableByDesignEntity(relationTable,
+                                                           syn1.synonym,
+                                                           this->getDesignEntity(syn1,
+                                                                                 declarations));
+            relationTable = this->filerTableByDesignEntity(relationTable,
+                                                           syn2.synonym,
+                                                           this->getDesignEntity(syn2,
+                                                                                 declarations));
+
         } else if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::INTEGER) {
             //2
 
@@ -222,5 +236,58 @@ namespace QE {
             // present in the vector
             return -1;
         }
+    }
+
+    Table DataPreprocessor::filerTableByDesignEntity(const Table &table, const string &colName, DesignEntity designEntity) {
+        long colIdx = this->getIndex(table.header, colName);
+        Table filteredTable = Table();
+        filteredTable.header = table.header;
+        for (auto row: table.rows) {
+            string val = row[colIdx];
+            switch (designEntity) {
+                case DesignEntity::VARIABLE: {
+                    if (!this->is_number(val)) {
+                        filteredTable.appendRow(row);
+                    }
+                    break;
+                }
+                case DesignEntity::CONSTANT: {
+                    if (this->is_number(val)) {
+                        filteredTable.appendRow(row);
+                    }
+                    break;
+                }
+                case DesignEntity::PROCEDURE: {
+                    //todo: implement procedure filter
+                    break;
+                }
+                default: {
+                    if (!this->is_number(val)) {
+                        cout << "Error: stmt line is not a number" << endl;
+                    }
+                    if (designEntity == this->dataRetriever->getDesignEntityOfStmt(stoi(val))) {
+                        filteredTable.appendRow(row);
+                    }
+                }
+
+            }
+        }
+        return filteredTable;
+    }
+
+    bool DataPreprocessor::is_number(const std::string& s)
+    {
+        std::string::const_iterator it = s.begin();
+        while (it != s.end() && std::isdigit(*it)) ++it;
+        return !s.empty() && it == s.end();
+    }
+
+    DesignEntity DataPreprocessor::getDesignEntity(Synonym synonym, shared_ptr<vector<Declaration>> declarations) {
+        for (auto d: *declarations) {
+            if (synonym.synonym == d.getSynonym().synonym) {
+                return d.getDesignEntity();
+            }
+        }
+        return static_cast<DesignEntity>(NULL);
     }
 } // QE

@@ -7,8 +7,8 @@
 
 #include "pkb/DataRetriever.h"
 #include "pkb/table/Table.h"
-
-class DummyDataRetriever : public DataRetriever {
+#include "query_evaluator/FakeDataRetriever.h"
+class DummyDataRetriever : public QE::FakeDataRetriever {
 public:
     Table getVariables() override;
     Table getTableByRelationType(QB::RelationType relationType) override;

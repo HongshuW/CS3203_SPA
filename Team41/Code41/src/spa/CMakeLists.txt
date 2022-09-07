@@ -55,6 +55,8 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/Ident.cpp
         src/query_evaluator/DataPreprocessor.cpp
         src/query_evaluator/DataPreprocessor.h
+        src/query_evaluator/FakeDataRetriever.h
+        src/query_evaluator/FakeDataRetriever.cpp
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
         src/pkb/table/EntityTable.cpp
