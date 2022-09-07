@@ -12,13 +12,14 @@ SuchThatClause::SuchThatClause(RelationType relationType,
                                shared_ptr<vector<Declaration>> declarations) :
     relationType(relationType),
     arg1(arg1),
-    arg2(arg2) {
+    arg2(arg2),
+    declarations(declarations) {
     if (relationType == RelationType::MODIFIES || relationType == RelationType::USES) {
-        updateSpecificModifiesUsesClause(declarations);
+        updateSpecificModifiesUsesClause();
     }
 };
 
-void SuchThatClause::updateSpecificModifiesUsesClause(shared_ptr<vector<Declaration>> declarations) {
+void SuchThatClause::updateSpecificModifiesUsesClause() {
     if (getRefType(arg1) == RefType::INTEGER) {
         // Since arg1 is an integer, it must be a stmtRef
         relationType = relationType == RelationType::USES ? RelationType::USES_S : RelationType::MODIFIES_S;
