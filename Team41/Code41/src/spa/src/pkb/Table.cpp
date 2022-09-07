@@ -32,14 +32,14 @@ void Table::renameHeader(vector<string> newHeader) {
     header = newHeader;
 }
 
-bool Table::isEqual(Table otherTable) {
-    if (header.size() != otherTable.header.size()) return false;
-    if (rows.size() != otherTable.rows.size()) return false;
-    for (int i = 0; i < otherTable.header.size(); ++i) {
-        if (otherTable.header[i] != header[i]) return false;
+bool Table::isEqual(Table expected) {
+    if (header.size() != expected.header.size()) return false;
+    if (rows.size() != expected.rows.size()) return false;
+    for (int i = 0; i < expected.header.size(); ++i) {
+        if (expected.header[i] != header[i]) return false;
     }
-    for (int i = 0; i < otherTable.rows.size(); ++i) {
-        auto expectedRow = otherTable.rows[i];
+    for (int i = 0; i < expected.rows.size(); ++i) {
+        auto expectedRow = expected.rows[i];
         auto testResultRow = rows[i];
         if (expectedRow.size() != testResultRow.size()) return false;
         for (int j = 0; j < expectedRow.size(); ++j) {

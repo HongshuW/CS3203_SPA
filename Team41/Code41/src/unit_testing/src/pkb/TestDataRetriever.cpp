@@ -20,23 +20,23 @@ TEST_CASE("Test Data Retriever") {
         DataRetriever dr;
 
         Table actualFollowsTable = dr.getTableByRelationType(RelationType::FOLLOWS);
-        Table actualFollowsTTable = dr.getTableByRelationType(RelationType::FOLLOWS_T);
+        Table actualFollowsStarTable = dr.getTableByRelationType(RelationType::FOLLOWS_T);
         Table actualParentTable = dr.getTableByRelationType(RelationType::PARENT);
-        Table actualParentTTable = dr.getTableByRelationType(RelationType::PARENT_T);
+        Table actualParentStarTable = dr.getTableByRelationType(RelationType::PARENT_T);
         Table actualUsesTable = dr.getTableByRelationType(RelationType::USES);
         Table actualModifiesTable = dr.getTableByRelationType(RelationType::MODIFIES);
 
         Table expectedFollowsTable = *RelationshipManager::getFollows();
-        Table expectedFollowsStarTable = *RelationshipManager::getFollowsT();
+        Table expectedFollowsStarTable = *RelationshipManager::getFollowsStar();
         Table expectedParentTable = *RelationshipManager::getParent();
-        Table expectedParentStarTable = *RelationshipManager::getParentT();
+        Table expectedParentStarTable = *RelationshipManager::getParentStar();
         Table expectedUsesTable = *RelationshipManager::getUses();
         Table expectedModifiesTable = *RelationshipManager::getModifies();
 
         REQUIRE(actualFollowsTable.isEqual(expectedFollowsTable));
-        REQUIRE(actualFollowsTTable.isEqual(expectedFollowsStarTable));
+        REQUIRE(actualFollowsStarTable.isEqual(expectedFollowsStarTable));
         REQUIRE(actualParentTable.isEqual(expectedParentTable));
-        REQUIRE(actualParentTTable.isEqual(expectedParentStarTable));
+        REQUIRE(actualParentStarTable.isEqual(expectedParentStarTable));
         REQUIRE(actualUsesTable.isEqual(expectedUsesTable));
         REQUIRE(actualModifiesTable.isEqual(expectedModifiesTable));
     }

@@ -23,7 +23,7 @@ public:
     void renameHeader(vector<string> newHeader);
     void appendRow(vector<string> row);
 
-    bool isEqual(Table otherTable);
+    bool isEqual(Table expected);
 
 private:
     vector<string> getColumnByIndex(int index);
