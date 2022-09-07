@@ -53,14 +53,16 @@ namespace QE {
 
     Table
     DataPreprocessor::getTableByRelation(SuchThatClause suchThatClause) {
-        return this->getRelationTable(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType);
+        return this->getRelationTable(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType,
+                                      suchThatClause.declarations);
     }
 
-    DataPreprocessor::DataPreprocessor(shared_ptr<FakeDataRetriever> dataRetriever) {
+    DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever) {
         this->dataRetriever = std::move(dataRetriever);
     }
 
-    Table DataPreprocessor::getRelationTable(Ref ref1, Ref ref2, RelationType relationType) {
+    Table DataPreprocessor::getRelationTable(Ref ref1, Ref ref2, RelationType relationType,
+                                             shared_ptr<vector<Declaration>> declarations) {
         //RefType can be synonym, integer, underscore or string
         RefType ref1Type = getRefType(ref1);
         RefType ref2Type = getRefType(ref2);
@@ -76,10 +78,8 @@ namespace QE {
             //assuming the table has two cols
             Synonym syn1 = get<Synonym>(ref1);
             Synonym syn2 = get<Synonym>(ref2);
-            vector<string> newHeaders = vector<string>{syn1.synonym, syn2.synonym};
-            relationTable.renameHeader(newHeaders);
             relationTable = this->filerTableByDesignEntity(relationTable,
-                                                           syn1.synonym,
+                                                           col1Name,
                                                            this->getDesignEntity(syn1,
                                                                                  declarations));
             relationTable = this->filerTableByDesignEntity(relationTable,

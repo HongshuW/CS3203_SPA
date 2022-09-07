@@ -7,8 +7,8 @@
 
 TEST_CASE("Test Data Preprocessor") {
     //todo: replace fakeDR withh dummyDR
-    shared_ptr<QE::FakeDataRetriever> fakeDataRetriever = make_shared<QE::FakeDataRetriever>();
-    shared_ptr<QE::DataPreprocessor> dataPreprocessor = make_shared<QE::DataPreprocessor>(QE::DataPreprocessor(fakeDataRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>();
+    shared_ptr<QE::DataPreprocessor> dataPreprocessor = make_shared<QE::DataPreprocessor>(QE::DataPreprocessor(dataRetriever));
     SECTION("section 1") {
         shared_ptr<vector<Declaration>> declarations = make_shared<vector<Declaration>>();
         Synonym syn1 = Synonym("a1");

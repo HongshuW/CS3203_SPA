@@ -55,8 +55,6 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/Ident.cpp
         src/query_evaluator/DataPreprocessor.cpp
         src/query_evaluator/DataPreprocessor.h
-        src/query_evaluator/FakeDataRetriever.h
-        src/query_evaluator/FakeDataRetriever.cpp
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
         src/pkb/table/EntityTable.cpp
@@ -121,6 +119,7 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/RelationExtractor.h
         src/parser/ExprNodeParser.cpp
         src/parser/ExprNodeParser.h
+
         src/design_extractor/FollowsExtractor.cpp
         src/design_extractor/FollowsExtractor.h
         src/design_extractor/ParentExtractor.cpp
@@ -137,6 +136,8 @@ add_library(spa ${srcs} ${headers}
         src/AST/RelExprNode.h
         src/parser/CondExprParser.cpp
         src/parser/CondExprParser.h)
+
+
 
 
 # this makes the headers accessible for other projects which uses spa lib
