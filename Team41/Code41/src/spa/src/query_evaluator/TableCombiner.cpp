@@ -22,7 +22,9 @@ namespace QE {
         return productTable;
     }
 
-    Table TableCombiner::joinTable(const Table &t1, const Table &t2) {
+    Table TableCombiner::joinTable(Table t1, Table t2) {
+        if (t1.isHeaderEmpty()) return t2;
+        if (t2.isHeaderEmpty()) return t1;
         int FIRST_DUP_IDX = 0;
         int SECOND_DUP_IDX = 1;
 

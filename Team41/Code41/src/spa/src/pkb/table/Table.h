@@ -27,6 +27,8 @@ public:
     void addValues(list<string> values);
 
     bool isEqual(Table otherTable);
+    bool isHeaderEmpty();
+    bool isBodyEmpty();
 
 private:
     vector<string> getColumnByIndex(int index);

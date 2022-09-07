@@ -17,7 +17,7 @@ namespace QE {
 
         Table crossProduct(const Table& t1, const Table& t2);
     public:
-        Table joinTable(const Table &t1, const Table &t2);
+        Table joinTable(Table t1, Table t2);
 
     };
 

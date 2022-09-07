@@ -13,6 +13,7 @@ namespace QE {
     }
 
     vector<string> QueryResultFormatter::formatResult() {
+        //todo: remove duplicates in the result
         return this->queryResult.table.getColumnByName(this->queryResult.colName);
     }
 } // QE

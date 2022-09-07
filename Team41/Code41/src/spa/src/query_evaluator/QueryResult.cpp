@@ -15,5 +15,9 @@ namespace QE {
         return this->table.rows.empty();
     }
 
+    bool QueryResult::isEqual(QueryResult otherQueryResult) {
+        return this->colName == otherQueryResult.colName && this->table.isEqual(otherQueryResult.table);
+    }
+
     QueryResult::QueryResult() = default;
 } // QE
