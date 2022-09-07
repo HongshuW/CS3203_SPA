@@ -80,7 +80,6 @@ namespace QE {
             Synonym syn2 = get<Synonym>(ref2);
             vector<string> newHeaders = vector<string>{syn1.synonym, syn2.synonym};
             relationTable.renameHeader(newHeaders);
-
             relationTable = this->filerTableByDesignEntity(relationTable,
                                                            syn1.synonym,
                                                            this->getDesignEntity(syn1,
