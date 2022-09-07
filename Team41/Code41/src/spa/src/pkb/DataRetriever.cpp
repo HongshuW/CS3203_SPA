@@ -13,11 +13,11 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
         case RelationType::FOLLOWS:
             return *RelationshipManager::getFollows();
         case RelationType::FOLLOWS_T:
-            return *RelationshipManager::getFollowsStar();
+            return *RelationshipManager::getFollowsT();
         case RelationType::PARENT:
             return *RelationshipManager::getParent();
         case RelationType::PARENT_T:
-            return *RelationshipManager::getParentStar();
+            return *RelationshipManager::getParentT();
         case RelationType::MODIFIES:
             return *RelationshipManager::getModifies();
         case RelationType::USES:

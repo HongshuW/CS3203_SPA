@@ -13,24 +13,24 @@ using namespace std;
 class RelationshipManager {
 public:
     static Table * getFollows();
-    static Table * getFollowsStar();
+    static Table * getFollowsT();
     static Table * getParent();
-    static Table * getParentStar();
+    static Table * getParentT();
     static Table * getUses();
     static Table * getModifies();
 
 private:
     static Table followsTable;
-    static Table followsStarTable;
+    static Table followsTTable;
     static Table parentTable;
-    static Table parentStarTable;
+    static Table parentTTable;
     static Table usesTable;
     static Table modifiesTable;
 
     static vector<string> followsTableHeader;
-    static vector<string> followsStarTableHeader;
+    static vector<string> followsTTableHeader;
     static vector<string> parentTableHeader;
-    static vector<string> parentStarTableHeader;
+    static vector<string> parentTTableHeader;
     static vector<string> usesTableHeader;
     static vector<string> modifiesTableHeader;
 };
