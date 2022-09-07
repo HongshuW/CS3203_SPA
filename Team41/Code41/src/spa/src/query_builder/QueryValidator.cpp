@@ -8,11 +8,10 @@
 
 using namespace QB;
 
-QueryValidator::QueryValidator(Query* query)
-        : query(query) {};
+QueryValidator::QueryValidator(shared_ptr<QB::Query> query) : query(query){}
 
 void QueryValidator::validateNoDuplicateDeclarations() {
-    // Validate no duplicate synonym for declarations
+    //! Validate no duplicate synonym for declarations
     unordered_set<string> synonymSet;
     for (auto declaration : *(query->declarations)) {
         auto synonym = declaration.getSynonym().synonym;
@@ -25,9 +24,9 @@ void QueryValidator::validateNoDuplicateDeclarations() {
     }
 }
 void QueryValidator::validateSynonymDeclaredSelectClause() {
-    // Validate that synonym is declared for Select Clause
-    SelectClause* selectClause = query->selectClause;
-    vector<Declaration>* declarations = query->declarations;
+    //! Validate that synonym is declared for Select Clause
+    shared_ptr<SelectClause> selectClause = query->selectClause;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
     if (!Declaration::findDeclaration(selectClause->synonym, declarations)) {
         throw PQLValidationException(
                 "Synonym: " + selectClause->synonym.synonym + " is not defined for Select Clause");
@@ -35,9 +34,9 @@ void QueryValidator::validateSynonymDeclaredSelectClause() {
 }
 
 void QueryValidator::validateSynonymDeclaredSuchThatClause() {
-    // Validate that synonyms are declared for Such that Clause
-    vector<SuchThatClause*>* suchThatClauses = query->suchThatClauses;
-    vector<Declaration>* declarations = query->declarations;
+    //! Validate that synonyms are declared for Such that Clause
+    shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
 
     for(auto suchThat : *suchThatClauses) {
         auto arg1 = get_if<Synonym>(&suchThat->arg1);
@@ -56,62 +55,110 @@ void QueryValidator::validateSynonymDeclaredSuchThatClause() {
 }
 
 void QueryValidator::validateArgRefTypeSuchThatClause() {
-    vector<SuchThatClause*>* suchThatClauses = query->suchThatClauses;
-    vector<Declaration>* declarations = query->declarations;
+    shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
 
     for(auto suchThat : *suchThatClauses) {
         RelationType relationType = suchThat->relationType;
+        pair<RefTypeSet, RefTypeSet> validArgsTypes = getSuchThatArgsRefTypeFromRelationType(relationType);
+
         int arg1RefIndex= suchThat->arg1.index();
         int arg2RefIndex= suchThat->arg2.index();
 
-        // The first argument for Modifies and Uses cannot be _
-        if (relationType == RelationType::MODIFIES || relationType == RelationType::USES) {
-            // relationType == Modifies, Uses
-            if (get_if<Underscore>(&suchThat->arg1)) {
-                throw PQLValidationException(
-                        "First argument cannot be underscore for Such That Clause");
-            }
+        RefTypeSet validFirstArgTypes = validArgsTypes.first;
+        RefTypeSet validSecondArgTypes = validArgsTypes.second;
 
-            // First arg can be either stmtRef or entRef
-            if (!refIndexSet.count(arg1RefIndex)) {
-                throw PQLValidationException(
-                        "Argument 1 must be stmtRef for " +
-                        refTypeToString(static_cast<RefType>(relationType)) + "Clause");
-            }
-            // Second arg must be entRef
-            if (!entRefIndexSet.count(arg2RefIndex)) {
-                throw PQLValidationException(
-                        "Argument 2 must be stmtRef" +
-                        refTypeToString(static_cast<RefType>(relationType)) + "Clause");
-            }
-        } else {
-            // relationType == Parent, ParentT, Follows, FollowsT
-            if (!stmtRefIndexSet.count(arg1RefIndex)) {
-                throw PQLValidationException(
-                        "Argument 1 must be stmtRef for " +
-                        refTypeToString(static_cast<RefType>(relationType)) + "Clause");
-            }
+        if (!validFirstArgTypes.count(arg1RefIndex) || !validSecondArgTypes.count(arg2RefIndex)) {
+            throw PQLValidationException(
+                    "Argument types of " +
+                    getStrFromRelationType(relationType) +
+                    " do not match the expected RefTypes");
+        }
+    }
+}
 
-            if (!stmtRefIndexSet.count(arg2RefIndex)) {
+void QueryValidator::validateUsesModifiesNoUnderscoreForFirstArg() {
+    shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
+    for(auto suchThat : *suchThatClauses) {
+        RelationType relationType = suchThat->relationType;
+        if (relationType != RelationType::MODIFIES && relationType != RelationType::USES) {
+            continue;
+        }
+        if (get_if<Underscore>(&suchThat->arg1)) {
+            throw PQLValidationException(
+                    "First argument cannot be underscore for Uses/Modifies Clause as it leads to ambiguity");
+        }
+    }
+}
+
+void QueryValidator::validateSynonymTypeSuchThatClause() {
+    shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
+
+    for(auto suchThat : *suchThatClauses) {
+        RelationType relationType = suchThat->relationType;
+        pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>> validArgsSynonymTypes =
+                getSuchThatSynonymArgsTypeFromRelationType(relationType);
+
+        unordered_set<DesignEntity> validFirstArgSynonymTypes = validArgsSynonymTypes.first;
+        unordered_set<DesignEntity> validSecondArgSynonymTypes = validArgsSynonymTypes.second;
+
+        auto arg1 = get_if<Synonym>(&suchThat->arg1);
+        auto arg2 = get_if<Synonym>(&suchThat->arg2);
+
+        if (arg1) {
+            //! arg1 is a synonym, need to check for the correct DesignEntity type
+            auto declaration = Declaration::findDeclaration(*arg1, declarations);
+            auto designEntity = declaration->getDesignEntity();
+            if (!validFirstArgSynonymTypes.count(designEntity)) {
+                //! correct design entity not found, throw semantic error
                 throw PQLValidationException(
-                        "Argument 2 must be stmtRef" +
-                        refTypeToString(static_cast<RefType>(relationType)) + "Clause");
+                        "Current design entity arg 1: " +
+                        getDesignEntityString(designEntity) +
+                        ", does not match the allowed design entities: " +
+                        getDesignEntitySetString(validFirstArgSynonymTypes) +
+                        "for " +
+                        getStrFromRelationType(relationType) +
+                        " clause");
+            }
+        }
+
+        if (arg2) {
+            //! arg2 is a synonym, need to check for the correct DesignEntity type
+            auto declaration = Declaration::findDeclaration(*arg2, declarations);
+            auto designEntity = declaration->getDesignEntity();
+            if (!validSecondArgSynonymTypes.count(designEntity)) {
+                //! correct design entity not found, throw semantic error
+                throw PQLValidationException(
+                        "Current design entity for arg 2: " +
+                        getDesignEntityString(designEntity) +
+                        ", does not match the allowed design entities: " +
+                        getDesignEntitySetString(validSecondArgSynonymTypes) +
+                        "for " +
+                        getStrFromRelationType(relationType) +
+                        " clause");
             }
         }
     }
 }
 
 void QueryValidator::validateSuchThatClause() {
-    // Validate relationType, arg1 and arg2
+    //! Validate relationType, arg1 and arg2
     validateSynonymDeclaredSuchThatClause();
+    //! First arg for Uses and Modifies cannot be Underscore
+    validateUsesModifiesNoUnderscoreForFirstArg();
+    //! Validate the correct RefType for such that clause
+    //! e.g. Follows : (stmtRef, stmtRef), UsesS : (stmtRef, entRef)
     validateArgRefTypeSuchThatClause();
+    //! Validate the correct synonym types for such that clause
+    validateSynonymTypeSuchThatClause();
 }
 
 void QueryValidator::validateQuery() {
-    // Validation for declaration
+    //! Validation for declaration
     validateNoDuplicateDeclarations();
-    // Validation for select clause
+    //! Validation for select clause
     validateSynonymDeclaredSelectClause();
-    // Validation for such that clause (only Follows, and FollowsT)
+    //! Validation for such that clause (only Follows, and FollowsT)
     validateSuchThatClause();
 }

@@ -15,8 +15,8 @@ using namespace QB;
 
 class DataRetriever {
 public:
-    Table getVariables();
-    Table getTableByRelationType(RelationType relationType);
+    virtual Table getVariables();
+    virtual Table getTableByRelationType(RelationType relationType);
 
 };
 

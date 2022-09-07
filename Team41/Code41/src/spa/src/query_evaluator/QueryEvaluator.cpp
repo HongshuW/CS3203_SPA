@@ -19,7 +19,7 @@ namespace QE {
                                                                               {DesignEntity::WHILE, "while"},
                                                                               {DesignEntity::IF, "if"},
                                                                               {DesignEntity::ASSIGN, "assign"},
-                                                                              {DesignEntity::VARIABLE, "variable name"},
+                                                                              {DesignEntity::VARIABLE, "$variable_name"},
                                                                               {DesignEntity::CONSTANT, "constant"},
                                                                               {DesignEntity::PROCEDURE, "procedure"}
                                                                       });

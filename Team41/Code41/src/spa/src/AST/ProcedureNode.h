@@ -19,4 +19,3 @@ public:
 };
 
 #endif //SPA_PROCEDURENODE_H
-

@@ -6,7 +6,7 @@
 #include "iostream"
 
 NumberNode::NumberNode(std::string number)
-    : number(number) {
+        : number(number) {
 }
 
 std::string  NumberNode::getNumber() {

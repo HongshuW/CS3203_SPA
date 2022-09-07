@@ -23,8 +23,8 @@ TEST_CASE("Test Data Retriever") {
         Table actualFollowsTTable = dr.getTableByRelationType(RelationType::FOLLOWS_T);
         Table actualParentTable = dr.getTableByRelationType(RelationType::PARENT);
         Table actualParentTTable = dr.getTableByRelationType(RelationType::PARENT_T);
-        Table actualUsesTable = dr.getTableByRelationType(RelationType::USES);
-        Table actualModifiesTable = dr.getTableByRelationType(RelationType::MODIFIES);
+        Table actualUsesTable = dr.getTableByRelationType(RelationType::USES_S);
+        Table actualModifiesTable = dr.getTableByRelationType(RelationType::MODIFIES_S);
 
         Table expectedFollowsTable = *RelationshipManager::getFollows();
         Table expectedFollowsTTable = *RelationshipManager::getFollowsT();

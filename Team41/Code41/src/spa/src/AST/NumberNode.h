@@ -16,4 +16,3 @@ public:
 };
 
 #endif //SPA_NUMBERNODE_H
-

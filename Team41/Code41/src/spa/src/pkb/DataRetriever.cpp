@@ -3,6 +3,8 @@
 //
 
 #include "DataRetriever.h"
+#include "RelationshipManager.h"
+#include "EntityManager.h"
 
 Table DataRetriever::getVariables() {
     return *EntityManager::getVariables();
@@ -18,9 +20,12 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
             return *RelationshipManager::getParent();
         case RelationType::PARENT_T:
             return *RelationshipManager::getParentT();
-        case RelationType::MODIFIES:
+        case RelationType::MODIFIES_S:
             return *RelationshipManager::getModifies();
-        case RelationType::USES:
+        case RelationType::USES_S:
             return *RelationshipManager::getUses();
+            //TODO: need to handle MODIFIES_P, USES_P, QPS will not return MODIFIES and USES
+        default:
+            return Table();
     }
 }

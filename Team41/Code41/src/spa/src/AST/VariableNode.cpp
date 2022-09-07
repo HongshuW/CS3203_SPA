@@ -6,7 +6,7 @@
 #include "iostream"
 
 VariableNode::VariableNode(std::string variable)
-    : variable(variable) {
+        : variable(variable) {
 }
 
 std::string VariableNode::getVariable() {

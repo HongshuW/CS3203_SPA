@@ -1,13 +1,27 @@
-#include<stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
+//
+// Created by Tan Wei En on 3/9/22.
+//
 
-using namespace std;
+#include "DesignExtractor.h"
+#include "pkb/DataModifier.h"
 
+DesignExtractor::DesignExtractor(ProgramNode programNode)
+        : programNode(programNode){
+    programNode = programNode;
+}
 
-#include "pkb/EntityManager.h"
+std::list<string> DesignExtractor::extractVariables() {
+    std::vector<std::shared_ptr<ProcedureNode>> procedureList = programNode.getProcedureList();
+    ProcedureNode procedureNode = *procedureList.front();
+    AssignNode assignNode = procedureNode.getAssignNode();
+    VariableNode variableNode = assignNode.getVariableNode();
+    list<string> variableList;
+    variableList.push_back(variableNode.getVariable());
+    return variableList;
+}
 
-int DesignExtractor () {
-	return 0;
+void DesignExtractor::saveVariableToPKB() {
+    DataModifier dataMod = DataModifier();
+    list<string> varList = extractVariables();
+    dataMod.saveVariables(varList);
 }

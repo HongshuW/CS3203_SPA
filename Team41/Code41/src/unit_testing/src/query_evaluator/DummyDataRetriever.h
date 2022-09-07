@@ -5,13 +5,14 @@
 #ifndef SPA_DUMMYDATARETRIEVER_H
 #define SPA_DUMMYDATARETRIEVER_H
 
-#include "query_evaluator/FakeDataRetriever.h"
+#include "pkb/DataRetriever.h"
+#include "pkb/Table.h"
 
-class DummyDataRetriever : public QE::FakeDataRetriever {
-    public:
-        Table getVariables() override;
-        Table getTableByRelationType(QB::RelationType relationType) override;
-        DummyDataRetriever();
+class DummyDataRetriever : public DataRetriever {
+public:
+    Table getVariables() override;
+    Table getTableByRelationType(QB::RelationType relationType) override;
+    DummyDataRetriever();
 };
 
 

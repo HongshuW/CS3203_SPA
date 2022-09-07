@@ -8,11 +8,5 @@
 using namespace QB;
 
 Query::Query()
-    : declarations(new std::vector<Declaration>),
-      suchThatClauses(new std::vector<SuchThatClause*>){};
-
-Query::~Query() {
-    delete declarations;
-    delete selectClause;
-    delete suchThatClauses;
-}
+        : declarations(make_shared<vector<Declaration>>()),
+          suchThatClauses(make_shared<vector<shared_ptr<SuchThatClause>>>()){}
