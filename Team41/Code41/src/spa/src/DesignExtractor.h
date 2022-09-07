@@ -6,7 +6,7 @@
 #define SPA_DESIGNEXTRACTOR_H
 
 #include <list>
-#include "ast/ProgramNode.h"
+#include "AST/ProgramNode.h"
 
 class DesignExtractor {
 private:

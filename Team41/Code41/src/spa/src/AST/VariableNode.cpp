@@ -7,6 +7,7 @@
 
 VariableNode::VariableNode(std::string variable)
         : variable(variable) {
+    this -> setNodeType("variable");
 }
 
 std::string VariableNode::getVariable() {
