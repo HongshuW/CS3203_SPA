@@ -17,7 +17,7 @@ TEST_CASE("Test Data Preprocessor") {
         declarations->push_back({Declaration(QB::DesignEntity::IF, syn2)});
         //todo: clarify if ptr to declarations of the query are in each such that clause?
         SuchThatClause suchThatClause = SuchThatClause(QB::RelationType::FOLLOWS, syn1, syn2, declarations);
-        Table result = dataPreprocessor->getTableByRelation(suchThatClause, declarations);
+        Table result = dataPreprocessor->getTableByRelation(suchThatClause);
         cout << "finish" << endl;
 
     }

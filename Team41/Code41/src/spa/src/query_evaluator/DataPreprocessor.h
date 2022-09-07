@@ -16,7 +16,7 @@ using namespace QB;
 namespace QE {
 
     class DataPreprocessor {
-        Table getRelationTable(Ref ref1, Ref ref2, RelationType relationType, shared_ptr<vector<Declaration>> declarations);
+        Table getRelationTable(Ref ref1, Ref ref2, RelationType relationType);
         Table filerTableByColumnValue(const Table& table, const string& colName, const string& value);
         Table filerTableByDesignEntity(const Table& table, const string& colName, DesignEntity designEntity);
         long getIndex(vector<string> v, const string& K);
@@ -25,7 +25,7 @@ namespace QE {
     public:
         shared_ptr<DataRetriever> dataRetriever;
         Table getAllByDesignEntity(DesignEntity designEntity);
-        Table getTableByRelation(SuchThatClause suchThatClause, shared_ptr<vector<Declaration>> declarations);
+        Table getTableByRelation(SuchThatClause suchThatClause);
         explicit DataPreprocessor(shared_ptr<FakeDataRetriever> dataRetriever);
 
     };

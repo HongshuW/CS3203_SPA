@@ -52,17 +52,15 @@ namespace QE {
     }
 
     Table
-    DataPreprocessor::getTableByRelation(SuchThatClause suchThatClause, shared_ptr<vector<Declaration>> declarations) {
-        return this->getRelationTable(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType,
-                                      declarations);
+    DataPreprocessor::getTableByRelation(SuchThatClause suchThatClause) {
+        return this->getRelationTable(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType);
     }
 
     DataPreprocessor::DataPreprocessor(shared_ptr<FakeDataRetriever> dataRetriever) {
         this->dataRetriever = std::move(dataRetriever);
     }
 
-    Table DataPreprocessor::getRelationTable(Ref ref1, Ref ref2, RelationType relationType,
-                                             shared_ptr<vector<Declaration>> declarations) {
+    Table DataPreprocessor::getRelationTable(Ref ref1, Ref ref2, RelationType relationType) {
         //RefType can be synonym, integer, underscore or string
         RefType ref1Type = getRefType(ref1);
         RefType ref2Type = getRefType(ref2);
