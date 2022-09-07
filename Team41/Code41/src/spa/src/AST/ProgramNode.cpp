@@ -5,7 +5,7 @@
 #include "ProgramNode.h"
 
 ProgramNode::ProgramNode(std::vector<std::shared_ptr<ProcedureNode>> procedureList)
-    : procedureList(procedureList) {}
+        : procedureList(procedureList) {}
 
 vector<shared_ptr<ProcedureNode>> ProgramNode::getProcedureList() {
     return procedureList;

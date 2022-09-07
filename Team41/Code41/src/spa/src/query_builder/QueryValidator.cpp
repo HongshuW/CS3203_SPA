@@ -71,8 +71,8 @@ void QueryValidator::validateArgRefTypeSuchThatClause() {
         if (!validFirstArgTypes.count(arg1RefIndex) || !validSecondArgTypes.count(arg2RefIndex)) {
             throw PQLValidationException(
                     "Argument types of " +
-                            getStrFromRelationType(relationType) +
-                            " do not match the expected RefTypes");
+                    getStrFromRelationType(relationType) +
+                    " do not match the expected RefTypes");
         }
     }
 }

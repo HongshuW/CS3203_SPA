@@ -35,15 +35,15 @@ namespace QB {
 
     unordered_map<RelationType, pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>>
             relationTypesToSuchThatArgsSynonymTypeMap({
-        {RelationType::FOLLOWS, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
-        {RelationType::FOLLOWS_T, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
-        {RelationType::PARENT, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
-        {RelationType::PARENT_T, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
-        {RelationType::USES_S, make_pair(STMT_SYNONYMS, VARIABLE_SYNONYM)},
-        {RelationType::USES_P, make_pair(PROCEDURE_SYNONYM, VARIABLE_SYNONYM)},
-        {RelationType::MODIFIES_S, make_pair(STMT_SYNONYMS, VARIABLE_SYNONYM)},
-        {RelationType::MODIFIES_P, make_pair(PROCEDURE_SYNONYM, VARIABLE_SYNONYM)},
-    });
+                {RelationType::FOLLOWS, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
+                {RelationType::FOLLOWS_T, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
+                {RelationType::PARENT, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
+                {RelationType::PARENT_T, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
+                {RelationType::USES_S, make_pair(STMT_SYNONYMS, VARIABLE_SYNONYM)},
+                {RelationType::USES_P, make_pair(PROCEDURE_SYNONYM, VARIABLE_SYNONYM)},
+                {RelationType::MODIFIES_S, make_pair(STMT_SYNONYMS, VARIABLE_SYNONYM)},
+                {RelationType::MODIFIES_P, make_pair(PROCEDURE_SYNONYM, VARIABLE_SYNONYM)},
+                });
 
     unordered_map<RelationType, pair<RefTypeSet, RefTypeSet>> relationTypesToSuchThatArgsRefTypeMap({
         {RelationType::FOLLOWS, make_pair(stmtRefIndexSet, stmtRefIndexSet)},
@@ -54,7 +54,7 @@ namespace QB {
         {RelationType::USES_P, make_pair(entRefIndexSet, entRefIndexSet)},
         {RelationType::MODIFIES_S, make_pair(stmtRefIndexSet, entRefIndexSet)},
         {RelationType::MODIFIES_P, make_pair(entRefIndexSet, entRefIndexSet)},
-    });
+        });
 
     RelationType getRelationTypeFromStr(string& str) {
         try {

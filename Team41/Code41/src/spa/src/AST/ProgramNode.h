@@ -18,4 +18,3 @@ public:
 };
 
 #endif //SPA_PROGRAMNODE_H
-

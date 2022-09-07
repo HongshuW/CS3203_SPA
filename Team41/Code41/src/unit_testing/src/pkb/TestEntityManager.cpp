@@ -8,23 +8,16 @@
 using namespace std;
 
 TEST_CASE("Test Entity Manager") {
-    SECTION("Get Variables in a Table") {
-        Table * tablePtr = EntityManager::getVariables();
-        REQUIRE(tablePtr == &EntityManager::variableTable);
-    }
-
     SECTION("Save variables") {
-        list<string> variables;
-        variables.push_back("dummyVarA");
-        variables.push_back("dummyVarB");
-        int initialSize = EntityManager::variableTable.rows.size();
+        list<string> variables{"dummyVarA", "dummyVarB"};
+        int initialSize = (*EntityManager::getVariables()).rows.size();
         EntityManager::saveVariables(variables);
 
         // check header is set automatically
-        REQUIRE(EntityManager::variableTable.header[0] == "variable name");
+        REQUIRE((*EntityManager::getVariables()).header[0] == "$variable_name");
 
         // check variables are added
-        REQUIRE(EntityManager::variableTable.rows[initialSize][0] == "dummyVarA");
-        REQUIRE(EntityManager::variableTable.rows[initialSize + 1][0] == "dummyVarB");
+        REQUIRE((*EntityManager::getVariables()).rows[initialSize][0] == "dummyVarA");
+        REQUIRE((*EntityManager::getVariables()).rows[initialSize + 1][0] == "dummyVarB");
     }
 }

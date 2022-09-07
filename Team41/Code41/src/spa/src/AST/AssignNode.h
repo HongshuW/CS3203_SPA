@@ -24,4 +24,3 @@ public:
 };
 
 #endif //SPA_ASSIGNNODE_H
-

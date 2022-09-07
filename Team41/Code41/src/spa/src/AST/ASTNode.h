@@ -13,4 +13,3 @@ public:
 };
 
 #endif //SPA_ASTNODE_H
-

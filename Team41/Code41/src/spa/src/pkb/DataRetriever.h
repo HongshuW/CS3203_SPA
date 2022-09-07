@@ -6,11 +6,17 @@
 #define SPA_DATARETRIEVER_H
 
 #include "EntityManager.h"
+#include "query_builder/commons/RelationType.h"
+#include "RelationshipManager.h"
 #include "Table.h"
+
+
+using namespace QB;
 
 class DataRetriever {
 public:
     virtual Table getVariables();
+    virtual Table getTableByRelationType(RelationType relationType);
 
 };
 

@@ -1,6 +1,5 @@
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
-
 add_library(spa ${srcs} ${headers}
         src/query_builder/QueryBuilder.h
         src/query_builder/QueryBuilder.cpp
@@ -36,6 +35,8 @@ add_library(spa ${srcs} ${headers}
         src/pkb/Table.h
         src/pkb/EntityManager.cpp
         src/pkb/EntityManager.h
+        src/pkb/RelationshipManager.cpp
+        src/pkb/RelationshipManager.h
         src/query_evaluator/QueryEvaluator.cpp
         src/query_evaluator/QueryEvaluator.h
         src/query_evaluator/QueryResult.cpp
@@ -66,8 +67,6 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/Ident.cpp
         src/query_evaluator/DataPreprocessor.cpp
         src/query_evaluator/DataPreprocessor.h
-        src/query_evaluator/FakeDataRetriever.cpp
-        src/query_evaluator/FakeDataRetriever.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
         )

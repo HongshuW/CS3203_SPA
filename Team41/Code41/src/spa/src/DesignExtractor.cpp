@@ -6,7 +6,7 @@
 #include "pkb/DataModifier.h"
 
 DesignExtractor::DesignExtractor(ProgramNode programNode)
-    : programNode(programNode){
+        : programNode(programNode){
     programNode = programNode;
 }
 
@@ -25,11 +25,3 @@ void DesignExtractor::saveVariableToPKB() {
     list<string> varList = extractVariables();
     dataMod.saveVariables(varList);
 }
-
-
-
-
-
-
-
-

@@ -31,3 +31,21 @@ void Table::appendRow(vector<string> row) {
 void Table::renameHeader(vector<string> newHeader) {
     header = newHeader;
 }
+
+bool Table::isEqual(Table otherTable) {
+    if (header.size() != otherTable.header.size()) return false;
+    if (rows.size() != otherTable.rows.size()) return false;
+    for (int i = 0; i < otherTable.header.size(); ++i) {
+        if (otherTable.header[i] != header[i]) return false;
+    }
+    for (int i = 0; i < otherTable.rows.size(); ++i) {
+        auto expectedRow = otherTable.rows[i];
+        auto testResultRow = rows[i];
+        if (expectedRow.size() != testResultRow.size()) return false;
+        for (int j = 0; j < expectedRow.size(); ++j) {
+            if (expectedRow[j] != testResultRow[j]) return false;
+        }
+
+    }
+    return true;
+}
