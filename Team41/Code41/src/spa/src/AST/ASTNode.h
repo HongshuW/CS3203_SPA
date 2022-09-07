@@ -1,16 +1,7 @@
-//
-// Created by Tan Wei En on 2/9/22.
-//
-
 #include <string>
 
-#ifndef SPA_ASTNODE_H
-#define SPA_ASTNODE_H
-
-class ASTNode {
+class ASTNode
+{
 public:
-    virtual ~ASTNode() = default;
+	std::string stmtNo
 };
-
-#endif //SPA_ASTNODE_H
-
