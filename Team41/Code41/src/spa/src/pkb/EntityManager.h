@@ -11,7 +11,10 @@ using namespace std;
 
 class EntityManager {
 public:
+    static Table * getProcedures();
+    static Table * getStatements();
     static Table * getVariables();
+    static Table * getConstants();
     static void saveVariables(list<string> variables);
 
 private:
