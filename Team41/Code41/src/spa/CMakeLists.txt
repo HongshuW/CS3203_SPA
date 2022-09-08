@@ -78,7 +78,17 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/StatementTable.cpp
         src/pkb/table/StatementTable.h
         src/pkb/table/ConstantTable.cpp
-        src/pkb/table/ConstantTable.h src/pkb/table/RelationTable.cpp src/pkb/table/RelationTable.h src/pkb/table/FollowsTable.cpp src/pkb/table/FollowsTable.h src/pkb/table/ParentTable.cpp src/pkb/table/ParentTable.h src/pkb/table/ModifiesTable.cpp src/pkb/table/ModifiesTable.h src/pkb/table/UsesTable.cpp src/pkb/table/UsesTable.h)
+        src/pkb/table/ConstantTable.h
+        src/pkb/table/RelationTable.cpp
+        src/pkb/table/RelationTable.h
+        src/pkb/table/FollowsTable.cpp
+        src/pkb/table/FollowsTable.h
+        src/pkb/table/ParentTable.cpp
+        src/pkb/table/ParentTable.h
+        src/pkb/table/ModifiesTable.cpp
+        src/pkb/table/ModifiesTable.h
+        src/pkb/table/UsesTable.cpp
+        src/pkb/table/UsesTable.h)
 
 
 # this makes the headers accessible for other projects which uses spa lib
