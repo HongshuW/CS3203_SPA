@@ -9,8 +9,20 @@ void EntityManager::setHeader(Table * table, vector<string> header) {
     table->renameHeader(header);
 }
 
-Table * EntityManager::getVariables() {
+ProcedureTable * EntityManager::getProcedures() {
+    return &EntityManager::procedureTable;
+}
+
+StatementTable * EntityManager::getStatements() {
+    return &EntityManager::statementTable;
+}
+
+VariableTable * EntityManager::getVariables() {
     return &EntityManager::variableTable;
+}
+
+ConstantTable * EntityManager::getConstants() {
+    return &EntityManager::constantTable;
 }
 
 void EntityManager::saveVariables(list<string> variables) {

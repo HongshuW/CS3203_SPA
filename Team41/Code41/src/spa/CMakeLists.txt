@@ -69,7 +69,16 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/DataPreprocessor.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
-        src/pkb/table/EntityTable.cpp src/pkb/table/EntityTable.h src/pkb/table/RelationTable.cpp src/pkb/table/RelationTable.h src/pkb/table/VariableTable.cpp src/pkb/table/VariableTable.h src/pkb/table/ProcedureTable.cpp src/pkb/table/ProcedureTable.h src/pkb/table/StatementTable.cpp src/pkb/table/StatementTable.h src/pkb/table/ConstantTable.cpp src/pkb/table/ConstantTable.h)
+        src/pkb/table/EntityTable.cpp
+        src/pkb/table/EntityTable.h
+        src/pkb/table/VariableTable.cpp
+        src/pkb/table/VariableTable.h
+        src/pkb/table/ProcedureTable.cpp
+        src/pkb/table/ProcedureTable.h
+        src/pkb/table/StatementTable.cpp
+        src/pkb/table/StatementTable.h
+        src/pkb/table/ConstantTable.cpp
+        src/pkb/table/ConstantTable.h)
 
 
 # this makes the headers accessible for other projects which uses spa lib
