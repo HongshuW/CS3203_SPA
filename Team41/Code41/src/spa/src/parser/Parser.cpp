@@ -86,18 +86,21 @@ shared_ptr<ExpressionNode> Parser::parseExpression() {
 
 shared_ptr<TermNode> Parser::parseTerm() {
     // term: term ‘*’ factor | term ‘/’ factor | term ‘%’ factor | factor
+    auto result = make_shared<TermNode>();
     auto factor = parseFactor();
+    // result.setFactor -> factor
     while (currIdx < tokens.size()) {
         if (match("*") || match("/") || match("%")) {
             string op = pop();
             // what to do here?
             auto term = parseTerm();
-
-
+            // result.setTerm -> term
+            return result;
         } else {
             break;
         }
     }
+    return result;
 }
 
 
