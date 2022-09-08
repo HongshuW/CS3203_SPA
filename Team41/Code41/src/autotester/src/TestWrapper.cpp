@@ -49,6 +49,7 @@ void TestWrapper::parse(std::string filename) {
     shared_ptr<ProgramNode> programNode = parser.parse();
     DesignExtractor* designExtractor = new DesignExtractor(*programNode);
     designExtractor->saveVariableToPKB();
+
 }
 
 // method to evaluating a query

@@ -6,6 +6,4 @@
 
 using namespace AST;
 
-AST::CallNode::CallNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {
-    this ->setNodeType("call");
-}
+AST::CallNode::CallNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {}
