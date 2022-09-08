@@ -1,21 +1,16 @@
-////
-//// Created by Tan Wei En on 8/9/22.
-////
 //
-//#ifndef SPA_CALLNODE_H
-//#define SPA_CALLNODE_H
+// Created by Xingchen Lin on 8/9/22.
 //
-//#include "VariableNode.h"
-//
-//using namespace std;
-//
-//class CallNode : public ASTNode {
-//private:
-//    shared_ptr<VariableNode> variableNode;
-//public:
-//    CallNode(shared_ptr<VariableNode> variableNode);
-//    VariableNode getVariableNode();
-//
-//};
-//
-//#endif //SPA_CALLNODE_H
+
+#ifndef SPA_CALLNODE_H
+#define SPA_CALLNODE_H
+
+namespace AST {
+
+    class CallNode {
+
+    };
+
+} // AST
+
+#endif //SPA_CALLNODE_H
