@@ -6,4 +6,6 @@
 
 AST::AssignNode::AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<ExprNode> expressionNode) :
     variableNode(variableNode),
-    expressionNode(expressionNode) {};
+    expressionNode(expressionNode) {
+    this->setNodeType("assign");
+};

@@ -6,4 +6,6 @@
 
 using namespace AST;
 
-AST::PrintNode::PrintNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {};
+AST::PrintNode::PrintNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {
+    this ->setNodeType("print");
+};
