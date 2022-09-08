@@ -6,7 +6,7 @@
 #define SPA_RELATIONSHIPMANAGER_H
 
 #include <stdio.h>
-#include "Table.h"
+#include "pkb/table/Table.h"
 
 using namespace std;
 

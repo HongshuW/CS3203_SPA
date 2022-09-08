@@ -31,8 +31,8 @@ add_library(spa ${srcs} ${headers}
         src/pkb/DataModifier.h
         src/pkb/DataRetriever.cpp
         src/pkb/DataRetriever.h
-        src/pkb/Table.cpp
-        src/pkb/Table.h
+        src/pkb/table/Table.cpp
+        src/pkb/table/Table.h
         src/pkb/EntityManager.cpp
         src/pkb/EntityManager.h
         src/pkb/RelationshipManager.cpp
@@ -69,7 +69,7 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/DataPreprocessor.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
-        )
+        src/pkb/table/EntityTable.cpp src/pkb/table/EntityTable.h src/pkb/table/RelationTable.cpp src/pkb/table/RelationTable.h)
 
 
 # this makes the headers accessible for other projects which uses spa lib

@@ -5,7 +5,7 @@
 #include <list>
 #include <string>
 #include <vector>
-#include "Table.h"
+#include "pkb/table/Table.h"
 
 using namespace std;
 

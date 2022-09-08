@@ -6,7 +6,7 @@
 #define SPA_TABLECOMPARATOR_H
 
 
-#include "pkb/Table.h"
+#include "pkb/table/Table.h"
 
 class TableComparator {
 public:

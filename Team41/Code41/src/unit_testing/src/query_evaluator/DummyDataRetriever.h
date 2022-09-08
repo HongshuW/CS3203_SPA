@@ -6,7 +6,7 @@
 #define SPA_DUMMYDATARETRIEVER_H
 
 #include "pkb/DataRetriever.h"
-#include "pkb/Table.h"
+#include "pkb/table/Table.h"
 
 class DummyDataRetriever : public DataRetriever {
 public:

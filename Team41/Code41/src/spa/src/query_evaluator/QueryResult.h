@@ -4,7 +4,7 @@
 
 #ifndef SPA_QUERYRESULT_H
 #define SPA_QUERYRESULT_H
-#include "pkb/Table.h"
+#include "pkb/table/Table.h"
 #include <string>
 #include <vector>
 
