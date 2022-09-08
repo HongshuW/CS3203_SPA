@@ -12,9 +12,9 @@ using namespace std;
 
 class TermNode : public ASTNode {
 private:
-    shared_ptr<TermNode> termNode;
-    string op;
-    shared_ptr<FactorNode> factorNode;
+//    shared_ptr<TermNode> termNode;
+//    string op;
+//    shared_ptr<FactorNode> factorNode;
 public:
     TermNode();
 };

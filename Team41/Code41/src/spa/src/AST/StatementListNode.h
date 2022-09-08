@@ -8,8 +8,6 @@
 #ifndef SPA_STATEMENTLISTNODE_H
 #define SPA_STATEMENTLISTNODE_H
 
-#endif //SPA_STATEMENTLISTNODE_H
-
 using namespace std;
 
 class StatementListNode : public ASTNode {
@@ -19,3 +17,5 @@ public:
     StatementListNode(vector<shared_ptr<ASTNode>> statementList);
     vector<shared_ptr<ASTNode>> getStatementList();
 };
+
+#endif //SPA_STATEMENTLISTNODE_H

@@ -14,7 +14,7 @@ class ExpressionNode : public ASTNode {
 private:
     shared_ptr<ExpressionNode> expressionNode;
     string op;
-    shared_ptr<TermNode> termNode;
+//    shared_ptr<TermNode> termNode;
 };
 
 #endif //SPA_EXPRESSIONNODE_H
