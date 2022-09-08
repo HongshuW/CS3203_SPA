@@ -17,6 +17,8 @@ public:
     void saveStatements(list<vector<string>> statements);
     void saveVariables(list<string> variables);
     void saveConstants(list<string> constants);
+    // TODO: implement saveEntities to replace specific methods after Entity class is available
+    // void saveEntities(list<Entity> entities);
 
     // relations
     void saveFollows(string followedStatement, string followingStatement);
@@ -27,9 +29,12 @@ public:
     void saveUsesP(string userEntity, string usedEntity);
     void saveModifiesS(string modifierStatement, string modifiedEntity);
     void saveModifiesP(string modifierEntity, string modifiedEntity);
+    // TODO: implement saveRelation to replace specific methods after Relation class is available
+    // void saveRelation(Relation relation);
 
     // pattern
-//    void savePattern(AST_NODE pattern);
+    // TODO: implement savePattern after AST_NODE is available
+    // void savePattern(AST_NODE pattern);
 };
 
 #endif //SPA_DATAMODIFIER_H
