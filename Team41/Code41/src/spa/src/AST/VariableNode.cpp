@@ -9,4 +9,5 @@ using namespace AST;
 
 VariableNode::VariableNode(string variable)
         : variable(variable) {
+    this->setNodeType("variable");
 }

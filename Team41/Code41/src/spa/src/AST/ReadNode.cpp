@@ -6,4 +6,6 @@
 
 using namespace AST;
 
-AST::ReadNode::ReadNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {};
+AST::ReadNode::ReadNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {
+    this ->setNodeType("read");
+};

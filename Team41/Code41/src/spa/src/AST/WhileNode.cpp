@@ -5,4 +5,6 @@
 #include "WhileNode.h"
 
 AST::WhileNode::WhileNode(shared_ptr<CondExprNode> condExpr, vector<shared_ptr<StmtNode>> stmtList) :
-    condExpr(condExpr), stmtList(stmtList) {};
+    condExpr(condExpr), stmtList(stmtList) {
+    this ->setNodeType("while");
+};
