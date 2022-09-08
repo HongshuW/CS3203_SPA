@@ -8,12 +8,23 @@
 using namespace std;
 
 TEST_CASE("Test Data Retriever") {
-    SECTION("Get Variables in a Table") {
+    SECTION("Get Table by Design Entity") {
         DataRetriever dr;
-        Table actualVariableTable = dr.getVariables();
-        Table expectedVariableTable = *EntityManager::getVariables();
 
+        Table actualProcedureTable = dr.getTableByDesignEntity(DesignEntity::PROCEDURE);
+        Table actualStatementTable = dr.getTableByDesignEntity(DesignEntity::STMT);
+        Table actualVariableTable = dr.getTableByDesignEntity(DesignEntity::VARIABLE);
+        Table actualConstantTable = dr.getTableByDesignEntity(DesignEntity::CONSTANT);
+
+        Table expectedProcedureTable = *EntityManager::getProcedures();
+        Table expectedStatementTable = *EntityManager::getStatements();
+        Table expectedVariableTable = *EntityManager::getVariables();
+        Table expectedConstantTable = *EntityManager::getConstants();
+
+        REQUIRE(actualProcedureTable.isEqual(expectedProcedureTable));
+        REQUIRE(actualStatementTable.isEqual(expectedProcedureTable));
         REQUIRE(actualVariableTable.isEqual(expectedVariableTable));
+        REQUIRE(actualConstantTable.isEqual(expectedConstantTable));
     }
 
     SECTION("Get Table by Relation Type") {
