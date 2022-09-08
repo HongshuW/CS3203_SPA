@@ -51,16 +51,6 @@ add_library(spa ${srcs} ${headers}
         src/ast/ProcedureNode.h
         src/parser/Parser.cpp
         src/parser/Parser.h
-        src/ast/ASTNode.cpp
-        src/ast/ASTNode.h
-        src/ast/NumberNode.cpp
-        src/ast/NumberNode.h
-        src/ast/VariableNode.cpp
-        src/ast/VariableNode.h
-        src/ast/ProgramNode.cpp
-        src/ast/ProgramNode.h
-        src/ast/AssignNode.cpp
-        src/ast/AssignNode.h
         src/DesignExtractor.cpp
         src/DesignExtractor.h
         src/query_builder/commons/Ident.h
@@ -69,8 +59,31 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/DataPreprocessor.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
-        src/AST/StatementListNode.cpp src/AST/StatementListNode.h src/AST/ReadNode.cpp src/AST/ReadNode.h src/AST/PrintNode.cpp src/AST/PrintNode.h src/AST/CallNode.cpp src/AST/CallNode.h src/AST/ExpressionNode.cpp src/AST/ExpressionNode.h src/AST/TermNode.cpp src/AST/TermNode.h src/AST/FactorNode.cpp src/AST/FactorNode.h src/parser/Exceptions.h)
-
+        src/AST/ReadNode.cpp
+        src/AST/ReadNode.h
+        src/AST/PrintNode.cpp
+        src/AST/PrintNode.h
+        src/parser/Exceptions.h
+        src/AST/WhileNode.cpp
+        src/AST/WhileNode.h
+        src/AST/CallNode.cpp
+        src/AST/CallNode.h
+        src/AST/CondExprNode.cpp
+        src/AST/CondExprNode.h
+        src/AST/IfNode.cpp
+        src/AST/IfNode.h
+        src/AST/ExprNode.cpp
+        src/AST/ExprNode.h
+        src/AST/ASTNode.h
+        src/AST/VariableNode.cpp
+        src/AST/VariableNode.h
+        src/AST/ProgramNode.cpp
+        src/AST/ProgramNode.h
+        src/AST/AssignNode.cpp
+        src/AST/AssignNode.h
+        src/AST/ProcedureNode.cpp
+        src/AST/ProcedureNode.h
+        src/AST/StmtNode.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

@@ -5,11 +5,13 @@
 #ifndef SPA_EXPRNODE_H
 #define SPA_EXPRNODE_H
 
+#include "ASTNode.h"
+
 namespace AST {
 
-class ExprNode {
-
-};
+    class ExprNode : public ASTNode {
+        //TODO: to be implemented later
+    };
 
 } // AST
 

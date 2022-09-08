@@ -4,11 +4,6 @@
 
 #include "PrintNode.h"
 
-PrintNode::PrintNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {
-    this -> setNodeType("print");
-};
+using namespace AST;
 
-
-VariableNode PrintNode::getVariableNode() {
-    return *variableNode;
-}
+AST::PrintNode::PrintNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {};

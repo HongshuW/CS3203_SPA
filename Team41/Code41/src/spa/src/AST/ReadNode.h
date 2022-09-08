@@ -7,17 +7,19 @@
 
 #include "ASTNode.h"
 #include "VariableNode.h"
+#include "StmtNode.h"
 
 using namespace std;
+using namespace AST;
 
-class ReadNode : public ASTNode {
-private:
-    shared_ptr<VariableNode> variableNode;
+namespace AST {
+    class ReadNode : public StmtNode {
+    private:
+        shared_ptr<VariableNode> variableNode;
 
-public:
-    ReadNode(shared_ptr<VariableNode> variableNode);
-    VariableNode getVariableNode();
-
-};
+    public:
+        ReadNode(shared_ptr<VariableNode> variableNode);
+    };
+}
 
 #endif //SPA_READNODE_H

@@ -4,5 +4,6 @@
 
 #include "CallNode.h"
 
-namespace AST {
-} // AST
+using namespace AST;
+
+AST::CallNode::CallNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {}

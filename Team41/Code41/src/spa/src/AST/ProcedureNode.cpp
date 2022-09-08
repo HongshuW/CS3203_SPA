@@ -4,10 +4,7 @@
 
 #include "ProcedureNode.h"
 
-ProcedureNode::ProcedureNode(string procedureName, shared_ptr<StatementListNode> statementListNode) : procedureName(procedureName), statementListNode(statementListNode) {
-    this -> setNodeType("procedure");
-}
-
-StatementListNode ProcedureNode::getStatementListNode() {
-    return *statementListNode;
+ProcedureNode::ProcedureNode(string procedureName, vector<shared_ptr<StmtNode>> stmtList) :
+procedureName(procedureName),
+stmtList(stmtList) {
 }

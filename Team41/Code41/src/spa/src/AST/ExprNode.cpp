@@ -3,6 +3,3 @@
 //
 
 #include "ExprNode.h"
-
-namespace AST {
-} // AST

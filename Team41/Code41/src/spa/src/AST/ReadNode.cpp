@@ -4,11 +4,6 @@
 
 #include "ReadNode.h"
 
-ReadNode::ReadNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {
-    this -> setNodeType("read");
-};
+using namespace AST;
 
-
-VariableNode ReadNode::getVariableNode() {
-    return *variableNode;
-}
+AST::ReadNode::ReadNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {};

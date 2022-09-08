@@ -4,5 +4,5 @@
 
 #include "CondExprNode.h"
 
-namespace AST {
-} // AST
+using namespace AST;
+CondExprNode::CondExprNode(std::string left, std::string op, std::string right) : left(left), op(op), right(right) {}

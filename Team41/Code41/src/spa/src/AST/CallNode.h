@@ -5,10 +5,20 @@
 #ifndef SPA_CALLNODE_H
 #define SPA_CALLNODE_H
 
+#include <memory>
+#include "VariableNode.h"
+#include "ASTNode.h"
+#include "StmtNode.h"
+
+using namespace std;
+
 namespace AST {
 
-    class CallNode {
+    class CallNode : public StmtNode {
+    public:
+        shared_ptr<VariableNode> variableNode;
 
+        explicit CallNode(shared_ptr<VariableNode> variableNode);
     };
 
 } // AST
