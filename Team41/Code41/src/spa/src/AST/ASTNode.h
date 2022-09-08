@@ -2,19 +2,21 @@
 // Created by Tan Wei En on 2/9/22.
 //
 
-#include <string>
-#include <utility>
-
 #ifndef SPA_ASTNODE_H
 #define SPA_ASTNODE_H
 
-class ASTNode {
-public:
-    virtual ~ASTNode() = default;
-    std::string getNodeType() { return nodeType; };
-    void setNodeType(std::string type) {nodeType = std::move(type);}
-private:
-    std::string nodeType;
-};
+#include <memory>
+
+using namespace std;
+
+namespace AST {
+    class ASTNode {
+    public:
+        virtual ~ASTNode() = default;
+        //TODO: override == and print method
+//    virtual bool operator==(const ASTNode& node) const = 0;
+//    virtual ostream & print(std::ostream & os) const = 0;
+    };
+}
 
 #endif //SPA_ASTNODE_H

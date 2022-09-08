@@ -5,11 +5,8 @@
 #include "VariableNode.h"
 #include "iostream"
 
-VariableNode::VariableNode(std::string variable)
-        : variable(variable) {
-    this -> setNodeType("variable");
-}
+using namespace AST;
 
-std::string VariableNode::getVariable() {
-    return variable;
+VariableNode::VariableNode(string variable)
+        : variable(variable) {
 }

@@ -5,11 +5,12 @@
 #include <string>
 #include <iostream>
 #include "Tokenizer.h"
+#include "Exceptions.h"
 
 using namespace SourceParser;
 using namespace std;
 
-Tokenizer::Tokenizer(std::string source) : currIdx(0), source(source){};
+Tokenizer::Tokenizer(std::string source) : currIdx(0), source(source) {};
 
 char Tokenizer::peek() {
     char c;
@@ -46,7 +47,29 @@ void Tokenizer::processAlNum() {
     tokens.push_back(curr);
 }
 
-std::vector<std::string> Tokenizer::tokenize() {
+void Tokenizer::processSymbols() {
+    // maybe consider the case of && and ||
+    if (curr == "=") {
+        if (peek() == '=') {
+            curr += pop();
+        }
+    } else if (curr == ">") {
+        if (peek() == '=') {
+            curr += pop();
+        }
+    } else if (curr == "<") {
+        if (peek() == '=') {
+            curr += pop();
+        }
+    } else if (curr == "!") {
+        if (peek() == '=') {
+            curr += pop();
+        }
+    }
+    tokens.push_back(curr);
+}
+
+vector<string> Tokenizer::tokenize() {
     char next;
 
     while (currIdx < source.length()) {
@@ -62,10 +85,10 @@ std::vector<std::string> Tokenizer::tokenize() {
         } else if (next == '"') {
             processString();
         } else if (SYMBOL_SET.count(curr)) {
-            tokens.push_back(curr);
+            processSymbols();
         } else {
-            // throw error here, todo after sprint 0
-            cout << curr << endl;
+            throw SPTokenizeException("Unexpected token " +
+                                   std::string(1, next) + "\n");
         }
     }
     return tokens;

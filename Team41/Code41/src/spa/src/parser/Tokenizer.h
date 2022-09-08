@@ -10,17 +10,18 @@
 
 #endif //SPA_TOKENIZER_H
 
+// maybe include method to tokenise symbols
+
 namespace SourceParser {
     class Tokenizer {
     private:
-        // consider abstracting out this symbol set
-        // left in temporarily for sprint 0
-        const std::unordered_set<std::string> SYMBOL_SET = {"(", ")", ",", "{", "}", ";", "=", "+", "-"};
+        const std::unordered_set<std::string> SYMBOL_SET = {"(", ")", ",", "{", "}", ";", "=", "+", "-", ">", "<", "!"};
         unsigned int currIdx;
         std::string source;
         std::string curr;
         char peek();
         char pop();
+        void processSymbols();
         void processString();
         void processAlNum();
 

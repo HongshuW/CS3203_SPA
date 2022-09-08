@@ -2,17 +2,21 @@
 // Created by Tan Wei En on 2/9/22.
 //
 
-#include "ASTNode.h"
-
 #ifndef SPA_VARIABLENODE_H
 #define SPA_VARIABLENODE_H
 
-class VariableNode : public ASTNode {
-private:
-    std::string variable;
-public:
-    VariableNode(std::string variable);
-    std::string getVariable();
-};
+#include "ASTNode.h"
+#include <string>
+
+using namespace std;
+
+namespace AST {
+    class VariableNode : public ASTNode {
+    private:
+        string variable;
+    public:
+        VariableNode(string variable);
+    };
+}
 
 #endif //SPA_VARIABLENODE_H
