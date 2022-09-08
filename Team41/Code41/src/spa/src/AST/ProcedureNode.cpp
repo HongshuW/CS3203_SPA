@@ -7,5 +7,4 @@
 ProcedureNode::ProcedureNode(string procedureName, vector<shared_ptr<StmtNode>> stmtList) :
 procedureName(procedureName),
 stmtList(stmtList) {
-    this ->setNodeType("procedure");
 }
