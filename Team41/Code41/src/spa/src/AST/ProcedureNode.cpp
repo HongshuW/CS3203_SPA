@@ -4,10 +4,10 @@
 
 #include "ProcedureNode.h"
 
-ProcedureNode::ProcedureNode(string procedureName, shared_ptr<AssignNode> assignNode) : procedureName(procedureName), assignNode(assignNode) {
+ProcedureNode::ProcedureNode(string procedureName, shared_ptr<StatementListNode> statementListNode) : procedureName(procedureName), statementListNode(statementListNode) {
     this -> setNodeType("procedure");
 }
 
-AssignNode ProcedureNode::getAssignNode() {
-    return *assignNode;
+StatementListNode ProcedureNode::getStatementListNode() {
+    return *statementListNode;
 }

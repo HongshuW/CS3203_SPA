@@ -15,6 +15,8 @@ private:
     shared_ptr<TermNode> termNode;
     string op;
     shared_ptr<FactorNode> factorNode;
+public:
+    TermNode();
 };
 
 #endif //SPA_TERMNODE_H

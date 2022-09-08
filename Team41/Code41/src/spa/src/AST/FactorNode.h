@@ -12,9 +12,14 @@
 
 class FactorNode : public ASTNode {
 private:
-    shared_ptr<VariableNode> variableNode;
-    shared_ptr<NumberNode> numberNode;
-    shared_ptr<ExpressionNode> expressionNode;
+    shared_ptr<VariableNode> variableNode = nullptr;
+    shared_ptr<NumberNode> numberNode = nullptr
+    shared_ptr<ExpressionNode> expressionNode = nullptr;
+public:
+    FactorNode();
+    void setVariable(shared_ptr<VariableNode> variableNode);
+    void setNumber(shared_ptr<NumberNode> numberNode);
+    void setExpression(shared_ptr<ExpressionNode> expressionNode);
 };
 
 #endif //SPA_FACTORNODE_H

@@ -3,3 +3,6 @@
 //
 
 #include "FactorNode.h"
+
+FactorNode::FactorNode() {}
+

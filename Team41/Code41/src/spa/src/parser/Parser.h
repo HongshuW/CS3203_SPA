@@ -8,6 +8,11 @@
 #include "AST/VariableNode.h"
 #include "AST/ASTNode.h"
 #include "AST/ProgramNode.h"
+#include "AST/ExpressionNode.h"
+#include "AST/StatementListNode.h"
+#include "AST/PrintNode.h"
+#include "AST/ReadNode.h"
+
 
 #ifndef SPA_PARSER_H
 #define SPA_PARSER_H
@@ -27,13 +32,26 @@ namespace SourceParser {
         bool match(string s);
         bool expect(string s);
 
+        shared_ptr<StatementListNode> parseStatementList();
         shared_ptr<ProcedureNode> parseProcedure();
+
+        // statements
+        shared_ptr<AssignNode> parseAssign();
+        shared_ptr<PrintNode> parsePrint();
+        shared_ptr<ReadNode> parseRead();
+//        shared_ptr<CallNode> parseCall();
+//        shared_ptr<IfNode> parseIf();
+
+        // helpers
+        shared_ptr<ExpressionNode> parseExpression();
+        shared_ptr<TermNode> parseTerm();
+        shared_ptr<FactorNode> parseFactor();
+
         shared_ptr<VariableNode> parseVariable();
         shared_ptr<NumberNode> parseNumber();
-        shared_ptr<AssignNode> parseAssign();
 
     public:
         explicit Parser(std::vector<std::string> tokens);
-        shared_ptr<ProgramNode> parse();
+        shared_ptr<ProgramNode> parseProgram();
     };
 }

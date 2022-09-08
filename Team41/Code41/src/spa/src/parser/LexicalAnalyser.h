@@ -12,7 +12,7 @@
 namespace SourceParser {
     class LexicalAnalyser {
     public:
-        bool isValidName(std::string str);
-        bool isValidInteger(std::string str);
+        static bool isValidName(std::string str);
+        static bool isValidInteger(std::string str);
     };
 }

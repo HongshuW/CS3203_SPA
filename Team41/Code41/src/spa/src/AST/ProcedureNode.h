@@ -4,6 +4,7 @@
 
 #include "ASTNode.h"
 #include "AssignNode.h"
+#include "StatementListNode.h"
 
 #ifndef SPA_PROCEDURENODE_H
 #define SPA_PROCEDURENODE_H
@@ -14,10 +15,10 @@ class ProcedureNode : public ASTNode {
 private:
     string procedureName;
     // will change to statement list in the future
-    shared_ptr<AssignNode> assignNode;
+    shared_ptr<StatementListNode> statementListNode;
 public:
-    ProcedureNode(string procedureName, shared_ptr<AssignNode> assignNode);
-    AssignNode getAssignNode();
+    ProcedureNode(string procedureName, shared_ptr<StatementListNode> statementListNode);
+    StatementListNode getStatementListNode();
 };
 
 #endif //SPA_PROCEDURENODE_H

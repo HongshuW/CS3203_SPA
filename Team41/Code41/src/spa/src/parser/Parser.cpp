@@ -3,12 +3,16 @@
 //
 
 #include "Parser.h"
+#include "Exceptions.h"
 #include "iostream"
+#include "LexicalAnalyser.h"
 
 using namespace SourceParser;
 using namespace std;
 
-Parser::Parser(std::vector<std::string> tokens)
+// consider creating Token class instead of string for tokens.
+
+Parser::Parser(vector<string> tokens)
     : currIdx(0), tokens(tokens) {};
 
 string Parser::peek() {
@@ -31,7 +35,6 @@ string Parser::previous() {
 
 bool Parser::match(string s) {
     if (peek().compare(s) == 0) {
-        currIdx++;
         return true;
     }
     return false;
@@ -39,30 +42,29 @@ bool Parser::match(string s) {
 
 bool Parser::expect(string s) {
     if (match(s)) {
+        currIdx++;
         return true;
     }
-    // throw error here instead of returning false
-    return false;
+    throw SPParseException("Expect '" + s + "', got '" + peek() + "'.");
 }
 
 shared_ptr<ProcedureNode> Parser::parseProcedure() {
     expect("procedure");
-    std::string procedureName = pop();
+    string procedureName = pop();
     expect("{");
-    // todo change this to parseStatementList
-    auto Assign = parseAssign();
+    auto statementList = parseStatementList();
     expect("}");
 
-    return make_shared<ProcedureNode>(procedureName, Assign);
+    // include check to check if statementList is empty
+    return make_shared<ProcedureNode>(procedureName, statementList);
 }
 
 shared_ptr<AssignNode> Parser::parseAssign() {
     auto variable = parseVariable();
     expect("=");
-    // will change to expression in future
-    auto number = parseNumber();
+    auto expression = parseExpression();
     expect(";");
-    return make_shared<AssignNode>(move(variable), move(number));
+    return make_shared<AssignNode>(move(variable), move(expression));
 }
 
 shared_ptr<VariableNode> Parser::parseVariable() {
@@ -78,8 +80,48 @@ shared_ptr<NumberNode> Parser::parseNumber() {
     return result;
 }
 
-shared_ptr<ProgramNode> Parser::parse() {
-    std::vector<std::shared_ptr<ProcedureNode>> procedureList;
+shared_ptr<ExpressionNode> Parser::parseExpression() {
+    // expr: expr + term | expr - term | term
+}
+
+shared_ptr<TermNode> Parser::parseTerm() {
+    // term: term ‘*’ factor | term ‘/’ factor | term ‘%’ factor | factor
+    auto factor = parseFactor();
+    while (currIdx < tokens.size()) {
+        if (match("*") || match("/") || match("%")) {
+            string op = pop();
+            // what to do here?
+            auto term = parseTerm();
+
+
+        } else {
+            break;
+        }
+    }
+}
+
+
+// todo set the pointers of factorNode when returning
+shared_ptr<FactorNode> Parser::parseFactor() {
+    // factor: var_name | const_value | ‘(’ expr ‘)’
+    auto factorNode = make_shared<FactorNode>();
+    string next = peek();
+    if (match("(")) {
+        auto expression = parseExpression();
+        expect(")");
+        // set factorNode -> expression
+    } else if (LexicalAnalyser::isValidName(next)) {
+        auto variable = parseVariable();
+    } else if (LexicalAnalyser::isValidInteger(next)) {
+        auto number = parseNumber();
+    }
+
+    return factorNode;
+
+}
+
+shared_ptr<ProgramNode> Parser::parseProgram() {
+    vector<shared_ptr<ProcedureNode>> procedureList;
     while (currIdx < tokens.size()) {
         auto procedure = parseProcedure();
         procedureList.push_back(procedure);

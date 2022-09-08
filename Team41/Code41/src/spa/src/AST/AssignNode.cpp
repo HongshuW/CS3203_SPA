@@ -3,9 +3,8 @@
 //
 
 #include "AssignNode.h"
-#include "iostream"
 
-AssignNode::AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<NumberNode> numberNode) : variableNode(variableNode), numberNode(numberNode) {
+AssignNode::AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<ExpressionNode> expressionNode) : variableNode(variableNode), expressionNode(expressionNode) {
     this -> setNodeType("assign");
 };
 
@@ -14,6 +13,6 @@ VariableNode AssignNode::getVariableNode() {
     return *variableNode;
 }
 
-NumberNode AssignNode::getNumberNode() {
-    return *numberNode;
+ExpressionNode AssignNode::getExpressionNode() {
+    return *expressionNode;
 }
