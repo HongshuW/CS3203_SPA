@@ -43,6 +43,8 @@ add_executable(unit_testing ${srcs}
     src/parser/ExprNodeParser.cpp
     src/design_extractor/TestUsesSExtration.cpp
     src/design_extractor/DEUtils.cpp
+    src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.cpp
+    src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.h
     src/design_extractor/DEUtils.h)
 
 target_link_libraries(unit_testing spa)
