@@ -103,7 +103,7 @@ add_library(spa ${srcs} ${headers}
         src/AST/AssignNode.h
         src/AST/ProcedureNode.cpp
         src/AST/ProcedureNode.h
-        src/AST/StmtNode.h)
+        src/AST/StmtNode.h src/pkb/exception/KeyNotFoundException.cpp src/pkb/exception/KeyNotFoundException.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
