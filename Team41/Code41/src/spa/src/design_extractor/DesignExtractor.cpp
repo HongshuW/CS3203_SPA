@@ -4,8 +4,11 @@
 
 #include "DesignExtractor.h"
 #include "pkb/DataModifier.h"
+#include "AST/utils/ASTUtils.h"
 
-DesignExtractor::DesignExtractor(ProgramNode programNode)
+using namespace AST;
+using namespace DE;
+DesignExtractor::DesignExtractor(shared_ptr<ASTNode> programNode)
         : programNode(programNode){
     programNode = programNode;
 }
@@ -25,3 +28,5 @@ void DesignExtractor::saveVariableToPKB() {
     list<string> varList = extractVariables();
     dataMod.saveVariables(varList);
 }
+
+

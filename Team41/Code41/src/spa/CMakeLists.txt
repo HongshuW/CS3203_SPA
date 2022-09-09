@@ -51,8 +51,8 @@ add_library(spa ${srcs} ${headers}
         src/ast/ProcedureNode.h
         src/parser/Parser.cpp
         src/parser/Parser.h
-        src/DesignExtractor.cpp
-        src/DesignExtractor.h
+        src/design_extractor/DesignExtractor.cpp
+        src/design_extractor/DesignExtractor.h
         src/query_builder/commons/Ident.h
         src/query_builder/commons/Ident.cpp
         src/query_evaluator/DataPreprocessor.cpp
@@ -83,7 +83,7 @@ add_library(spa ${srcs} ${headers}
         src/AST/AssignNode.h
         src/AST/ProcedureNode.cpp
         src/AST/ProcedureNode.h
-        src/AST/StmtNode.h)
+        src/AST/StmtNode.h src/AST/utils/ASTUtils.cpp src/AST/utils/ASTUtils.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
