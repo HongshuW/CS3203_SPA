@@ -5,7 +5,7 @@
 #ifndef SPA_TABLEBUILDER_H
 #define SPA_TABLEBUILDER_H
 #include <vector>
-#include "pkb/Table.h"
+#include "pkb/table/Table.h"
 
 using namespace std;
 namespace TestQE {
