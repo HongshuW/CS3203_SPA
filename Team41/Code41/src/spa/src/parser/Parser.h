@@ -10,6 +10,8 @@
 #include "AST/ProgramNode.h"
 #include "AST/PrintNode.h"
 #include "AST/ReadNode.h"
+#include "AST/CallNode.h"
+#include "AST/IfNode.h"
 
 
 #ifndef SPA_PARSER_H
@@ -18,11 +20,12 @@
 #endif //SPA_PARSER_H
 
 using namespace std;
+using namespace AST;
 
 namespace SourceParser {
     class Parser {
     private:
-        vector<std::string> tokens;
+        vector<string> tokens;
         unsigned int currIdx;
         string peek();
         string previous();
@@ -36,8 +39,8 @@ namespace SourceParser {
         shared_ptr<AssignNode> parseAssign();
         shared_ptr<PrintNode> parsePrint();
         shared_ptr<ReadNode> parseRead();
-//        shared_ptr<CallNode> parseCall();
-//        shared_ptr<IfNode> parseIf();
+        shared_ptr<CallNode> parseCall();
+        shared_ptr<IfNode> parseIf();
 
         // helpers
 
