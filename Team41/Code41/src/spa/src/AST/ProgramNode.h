@@ -14,8 +14,8 @@ using namespace std;
 namespace AST {
     class ProgramNode : public ASTNode {
     private:
-        vector<shared_ptr<ProcedureNode>> procedureList;
     public:
+        vector<shared_ptr<ProcedureNode>> procedureList;
         explicit ProgramNode(vector<shared_ptr<ProcedureNode>> procedureList);
     };
 }
