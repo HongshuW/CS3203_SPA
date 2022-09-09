@@ -27,7 +27,7 @@ namespace AST {
         return nodeClassNameToType.at(nodeType);
     }
 
-    shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> ASTUtils::getNodePtrToLineNoMap(shared_ptr<ProcedureNode> root) {
+    shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> ASTUtils::getNodePtrToLineNumMap(shared_ptr<ProcedureNode> root) {
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> map = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
         getNodePtrToLineNoMapHelper(root, map, 1);
         return map;
