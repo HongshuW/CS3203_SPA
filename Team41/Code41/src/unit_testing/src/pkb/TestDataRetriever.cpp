@@ -4,6 +4,7 @@
 
 #include "catch.hpp"
 #include "pkb/DataRetriever.h"
+#include "pkb/exception/KeyNotFoundException.h"
 
 using namespace std;
 
@@ -56,5 +57,23 @@ TEST_CASE("Test Data Retriever") {
         REQUIRE(actualUsesPTable.isEqual(expectedUsesPTable));
         REQUIRE(actualModifiesSTable.isEqual(expectedModifiesSTable));
         REQUIRE(actualModifiesPTable.isEqual(expectedModifiesPTable));
+    }
+
+    SECTION ("Get Design Entity of Statement") {
+        DataRetriever dr;
+        // add valid rows to statement table
+        vector<string> r1{"1", "if"};
+        vector<string> r2{"2", "assign"};
+        EntityManager::getStatements()->appendRow(r1);
+        EntityManager::getStatements()->appendRow(r2);
+        // test valid rows
+        DesignEntity actualRow1DE = dr.getDesignEntityOfStmt(1);
+        DesignEntity actualRow2DE = dr.getDesignEntityOfStmt(2);
+        DesignEntity expectedRow1DE = DesignEntity::IF;
+        DesignEntity expectedRow2DE = DesignEntity::ASSIGN;
+        REQUIRE(actualRow1DE == expectedRow1DE);
+        REQUIRE(actualRow2DE == expectedRow2DE);
+        // test invalid keys
+        REQUIRE_THROWS(dr.getDesignEntityOfStmt(1000));
     }
 }
