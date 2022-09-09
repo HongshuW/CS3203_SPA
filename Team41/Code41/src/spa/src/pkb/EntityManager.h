@@ -24,7 +24,11 @@ public:
     static string getStmtType(string stmtNumber);
 
     // setters
+    static void saveProcedures(list<string> procedures);
+    static void saveStatements(list<vector<string>> statements);
     static void saveVariables(list<string> variables);
+    static void saveConstants(list<string> constants);
+
 
 private:
     static ProcedureTable procedureTable;

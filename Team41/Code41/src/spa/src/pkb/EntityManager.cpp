@@ -25,6 +25,18 @@ string EntityManager::getStmtType(string stmtNumber) {
     return statementTable.getStatementType(stmtNumber);
 }
 
+void EntityManager::saveProcedures(list<string> procedures) {
+    procedureTable.addValues(procedures);
+}
+
+void EntityManager::saveStatements(list<vector<string>> statements) {
+    statementTable.appendRows(statements);
+}
+
 void EntityManager::saveVariables(list<string> variables) {
     variableTable.addValues(variables);
+}
+
+void EntityManager::saveConstants(list<string> constants) {
+    constantTable.addValues(constants);
 }
