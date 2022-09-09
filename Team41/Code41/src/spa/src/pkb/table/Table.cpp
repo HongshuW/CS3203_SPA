@@ -39,7 +39,16 @@ void Table::appendRow(vector<string> row) {
     rows.push_back(row);
 }
 
+void Table::appendRows(list<vector<string>> rows) {
+    auto rowsIterator = rows.begin();
+    while (rowsIterator != rows.end()) {
+        appendRow(*rowsIterator);
+        advance(rowsIterator, 1);
+    }
+}
+
 void Table::addValues(list<string> values) {
+    // used in tables with one column only
     auto valuesIterator = values.begin();
     while (valuesIterator != values.end()) {
         vector<string> row;
