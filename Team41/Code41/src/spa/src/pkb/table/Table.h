@@ -18,6 +18,7 @@ public:
 
     // getters
     vector<string> getColumnByName(string columnName);
+    vector<string> getRowByPrimaryKey(string key);
 
     // setters
     void renameHeader(vector<string> newHeader);

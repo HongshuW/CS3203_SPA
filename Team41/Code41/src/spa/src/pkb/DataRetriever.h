@@ -19,6 +19,7 @@ public:
     virtual Table getVariables();
     virtual Table getTableByDesignEntity(DesignEntity designEntity);
     virtual Table getTableByRelationType(RelationType relationType);
+    virtual DesignEntity getDesignEntityOfStmt(int stmtNumber);
 
 };
 

@@ -24,6 +24,17 @@ vector<string> Table::getColumnByIndex(int index) {
     return output;
 }
 
+vector<string> Table::getRowByPrimaryKey(string key) {
+    // assume the first column is the primary key
+    int size = rows.size();
+    for (int i = 0; i < size; i++) {
+        if (rows[i][0] == key) {
+            return rows[i];
+        }
+    }
+    return vector<string>{};
+}
+
 void Table::appendRow(vector<string> row) {
     rows.push_back(row);
 }

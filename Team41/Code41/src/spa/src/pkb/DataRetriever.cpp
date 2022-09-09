@@ -47,3 +47,9 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
             return Table();
     }
 }
+
+DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {
+    string stmtNumberString = to_string(stmtNumber);
+    string type = EntityManager::getStmtType(stmtNumberString);
+    return getDesignEntity(type);
+}

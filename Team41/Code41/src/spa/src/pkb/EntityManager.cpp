@@ -5,10 +5,6 @@ StatementTable EntityManager::statementTable;
 VariableTable EntityManager::variableTable;
 ConstantTable EntityManager::constantTable;
 
-void EntityManager::setHeader(Table * table, vector<string> header) {
-    table->renameHeader(header);
-}
-
 ProcedureTable * EntityManager::getProcedures() {
     return &EntityManager::procedureTable;
 }
@@ -23,6 +19,10 @@ VariableTable * EntityManager::getVariables() {
 
 ConstantTable * EntityManager::getConstants() {
     return &EntityManager::constantTable;
+}
+
+string EntityManager::getStmtType(string stmtNumber) {
+    return statementTable.getStatementType(stmtNumber);
 }
 
 void EntityManager::saveVariables(list<string> variables) {

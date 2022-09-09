@@ -21,6 +21,8 @@ public:
     static VariableTable * getVariables();
     static ConstantTable * getConstants();
 
+    static string getStmtType(string stmtNumber);
+
     // setters
     static void saveVariables(list<string> variables);
 
@@ -29,6 +31,4 @@ private:
     static StatementTable statementTable;
     static VariableTable variableTable;
     static ConstantTable constantTable;
-
-    static void setHeader(Table * table, vector<string> header);
 };
