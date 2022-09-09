@@ -14,10 +14,8 @@ using namespace AST;
 
 namespace AST {
     class ReadNode : public StmtNode {
-    private:
-        shared_ptr<VariableNode> variableNode;
-
     public:
+        shared_ptr<VariableNode> variableNode;
         ReadNode(shared_ptr<VariableNode> variableNode);
     };
 }

@@ -13,11 +13,11 @@ using namespace std;
 
 namespace AST {
     class PrintNode : public StmtNode {
-    private:
-        shared_ptr<VariableNode> variableNode;
 
     public:
+        shared_ptr<VariableNode> variableNode;
         PrintNode(shared_ptr<VariableNode> variableNode);
+
     };
 }
 

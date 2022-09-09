@@ -15,11 +15,9 @@ namespace AST {
     class CondExprNode : public ASTNode {
     public:
         //TODO: to be implemented later using enum
-        string left;
-        string op;
-        string right;
+        string condExpr;
 
-        CondExprNode(string left, string op, string right);
+        CondExprNode(string condExpr);
     };
 
 } // AST

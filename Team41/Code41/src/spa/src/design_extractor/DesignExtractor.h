@@ -16,13 +16,16 @@ namespace DE {
     private:
         shared_ptr<ProgramNode> programNode;
         DataModifier dataModifier;
-        unordered_set<string> extractVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode);
+        void extractVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode,
+                                           shared_ptr<unordered_set<string>> set);
+        unordered_set<string> getVariablesFromExprString(string expr);
+        bool is_number(const std::string& s);
 
 
     public:
         explicit DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode);
 
-        std::list<string> extractVariables();
+        shared_ptr<unordered_set<string>> extractVariables();
         void saveVariableToPKB();
     };
 

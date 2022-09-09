@@ -12,9 +12,8 @@ using namespace std;
 
 namespace AST {
     class VariableNode : public ASTNode {
-    private:
-        string variable;
     public:
+        string variable;
         VariableNode(string variable);
     };
 }
