@@ -8,25 +8,26 @@
 
 using namespace AST;
 using namespace DE;
-DesignExtractor::DesignExtractor(shared_ptr<ASTNode> programNode)
-        : programNode(programNode){
-    programNode = programNode;
-}
+
 
 std::list<string> DesignExtractor::extractVariables() {
-//    std::vector<std::shared_ptr<ProcedureNode>> procedureList = programNode.getProcedureList();
-//    ProcedureNode procedureNode = *procedureList.front();
-//    AssignNode assignNode = procedureNode.getAssignNode();
-//    VariableNode variableNode = assignNode.getVariableNode();
-//    list<string> variableList;
-//    variableList.push_back(variableNode.getVariable());
-//    return variableList;
+    for (auto p: this->programNode->procedureList) {
+        this->extractVariablesFromProcedure(p);
+    }
+
 }
 
 void DesignExtractor::saveVariableToPKB() {
-    DataModifier dataMod = DataModifier();
     list<string> varList = extractVariables();
-    dataMod.saveVariables(varList);
+    this->dataModifier.saveVariables(varList);
+}
+
+DesignExtractor::DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode) : dataModifier(this->dataModifier), programNode(this->programNode) {
+
+}
+
+unordered_set DesignExtractor::extractVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode) {
+
 }
 
 

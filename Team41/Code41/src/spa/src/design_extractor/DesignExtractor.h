@@ -8,15 +8,19 @@
 #include <list>
 #include "AST/ProgramNode.h"
 #include <unordered_map>
+#include <unordered_set>
+#include "pkb/DataModifier.h"
 
 namespace DE {
     class DesignExtractor {
     private:
-        shared_ptr<ASTNode> programNode;
+        shared_ptr<ProgramNode> programNode;
+        DataModifier dataModifier;
+        unordered_set<string> extractVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode);
 
 
     public:
-        DesignExtractor(shared_ptr<ASTNode> programNode);
+        explicit DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode);
 
         std::list<string> extractVariables();
         void saveVariableToPKB();
