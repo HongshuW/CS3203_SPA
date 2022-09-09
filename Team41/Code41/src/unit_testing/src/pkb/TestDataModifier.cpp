@@ -5,6 +5,7 @@
 #include "catch.hpp"
 #include "pkb/DataModifier.h"
 #include "pkb/EntityManager.h"
+#include "pkb/RelationshipManager.h"
 
 using namespace std;
 
@@ -45,5 +46,25 @@ TEST_CASE("Test Data Modifier") {
         REQUIRE((*EntityManager::getStatements()).rows[initialSize][1] == "assign");
         REQUIRE((*EntityManager::getStatements()).rows[initialSize + 1][0] == "4");
         REQUIRE((*EntityManager::getStatements()).rows[initialSize + 1][1] == "if");
+    }
+
+    SECTION ("Save parentT") {
+        int initialSize = (*RelationshipManager::getParentT()).rows.size();
+        DataModifier dm;
+        dm.saveParentT("1", "2");
+        dm.saveParentT("1", "3");
+        dm.saveParentT("2", "3");
+
+        // check header is set automatically
+        REQUIRE((*RelationshipManager::getParentT()).header[0] == "$parent_statement");
+        REQUIRE((*RelationshipManager::getParentT()).header[1] == "$child_statement");
+
+        // check relationships are added
+        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize][0] == "1");
+        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize][1] == "2");
+        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 1][0] == "1");
+        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 1][1] == "3");
+        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 2][0] == "2");
+        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 2][1] == "3");
     }
 }
