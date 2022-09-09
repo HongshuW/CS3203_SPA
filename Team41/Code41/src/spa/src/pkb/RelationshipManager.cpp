@@ -4,52 +4,43 @@
 
 #include "RelationshipManager.h"
 
-Table RelationshipManager::followsTable;
-Table RelationshipManager::followsTTable;
-Table RelationshipManager::parentTable;
-Table RelationshipManager::parentTTable;
-Table RelationshipManager::usesSTable;
-Table RelationshipManager::usesPTable;
-Table RelationshipManager::modifiesSTable;
-Table RelationshipManager::modifiesPTable;
+FollowsTable RelationshipManager::followsTable;
+FollowsTable RelationshipManager::followsTTable;
+ParentTable RelationshipManager::parentTable;
+ParentTable RelationshipManager::parentTTable;
+UsesTable RelationshipManager::usesSTable;
+UsesTable RelationshipManager::usesPTable;
+ModifiesTable RelationshipManager::modifiesSTable;
+ModifiesTable RelationshipManager::modifiesPTable;
 
-vector<string> RelationshipManager::followsTableHeader{"$followed_statement", "$following_statement"};
-vector<string> RelationshipManager::followsTTableHeader{"$followed_statement", "$following_statement"};
-vector<string> RelationshipManager::parentTableHeader{"$parent_statement", "$child_statement"};
-vector<string> RelationshipManager::parentTTableHeader{"$parent_statement", "$child_statement"};
-vector<string> RelationshipManager::usesSTableHeader{"$user", "$used"};
-vector<string> RelationshipManager::usesPTableHeader{"$user", "$used"};
-vector<string> RelationshipManager::modifiesSTableHeader{"$modifier", "$modified"};
-vector<string> RelationshipManager::modifiesPTableHeader{"$modifier", "$modified"};
-
-Table * RelationshipManager::getFollows() {
+FollowsTable * RelationshipManager::getFollows() {
     return &RelationshipManager::followsTable;
 }
 
-Table * RelationshipManager::getFollowsT() {
+FollowsTable * RelationshipManager::getFollowsT() {
     return &RelationshipManager::followsTTable;
 }
 
-Table * RelationshipManager::getParent() {
+ParentTable * RelationshipManager::getParent() {
     return &RelationshipManager::parentTable;
 }
 
-Table * RelationshipManager::getParentT() {
+ParentTable * RelationshipManager::getParentT() {
     return &RelationshipManager::parentTTable;
 }
 
-Table * RelationshipManager::getUsesS() {
+UsesTable * RelationshipManager::getUsesS() {
     return &RelationshipManager::usesSTable;
 }
 
-Table * RelationshipManager::getUsesP() {
+UsesTable * RelationshipManager::getUsesP() {
     return &RelationshipManager::usesPTable;
 }
 
-Table * RelationshipManager::getModifiesS() {
+ModifiesTable * RelationshipManager::getModifiesS() {
     return &RelationshipManager::modifiesSTable;
 }
 
-Table * RelationshipManager::getModifiesP() {
+ModifiesTable * RelationshipManager::getModifiesP() {
     return &RelationshipManager::modifiesPTable;
 }

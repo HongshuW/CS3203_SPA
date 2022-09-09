@@ -9,7 +9,7 @@
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/commons/RelationType.h"
 #include "RelationshipManager.h"
-#include "Table.h"
+#include "pkb/table/Table.h"
 
 
 using namespace QB;

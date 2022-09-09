@@ -31,8 +31,8 @@ add_library(spa ${srcs} ${headers}
         src/pkb/DataModifier.h
         src/pkb/DataRetriever.cpp
         src/pkb/DataRetriever.h
-        src/pkb/Table.cpp
-        src/pkb/Table.h
+        src/pkb/table/Table.cpp
+        src/pkb/table/Table.h
         src/pkb/EntityManager.cpp
         src/pkb/EntityManager.h
         src/pkb/RelationshipManager.cpp
@@ -51,16 +51,6 @@ add_library(spa ${srcs} ${headers}
         src/ast/ProcedureNode.h
         src/parser/Parser.cpp
         src/parser/Parser.h
-        src/ast/ASTNode.cpp
-        src/ast/ASTNode.h
-        src/ast/NumberNode.cpp
-        src/ast/NumberNode.h
-        src/ast/VariableNode.cpp
-        src/ast/VariableNode.h
-        src/ast/ProgramNode.cpp
-        src/ast/ProgramNode.h
-        src/ast/AssignNode.cpp
-        src/ast/AssignNode.h
         src/DesignExtractor.cpp
         src/DesignExtractor.h
         src/query_builder/commons/Ident.h
@@ -69,8 +59,51 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/DataPreprocessor.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
-        )
-
+        src/pkb/table/EntityTable.cpp
+        src/pkb/table/EntityTable.h
+        src/pkb/table/VariableTable.cpp
+        src/pkb/table/VariableTable.h
+        src/pkb/table/ProcedureTable.cpp
+        src/pkb/table/ProcedureTable.h
+        src/pkb/table/StatementTable.cpp
+        src/pkb/table/StatementTable.h
+        src/pkb/table/ConstantTable.cpp
+        src/pkb/table/ConstantTable.h
+        src/pkb/table/RelationTable.cpp
+        src/pkb/table/RelationTable.h
+        src/pkb/table/FollowsTable.cpp
+        src/pkb/table/FollowsTable.h
+        src/pkb/table/ParentTable.cpp
+        src/pkb/table/ParentTable.h
+        src/pkb/table/ModifiesTable.cpp
+        src/pkb/table/ModifiesTable.h
+        src/pkb/table/UsesTable.cpp
+        src/pkb/table/UsesTable.h
+        src/AST/ReadNode.cpp
+        src/AST/ReadNode.h
+        src/AST/PrintNode.cpp
+        src/AST/PrintNode.h
+        src/parser/Exceptions.h
+        src/AST/WhileNode.cpp
+        src/AST/WhileNode.h
+        src/AST/CallNode.cpp
+        src/AST/CallNode.h
+        src/AST/CondExprNode.cpp
+        src/AST/CondExprNode.h
+        src/AST/IfNode.cpp
+        src/AST/IfNode.h
+        src/AST/ExprNode.cpp
+        src/AST/ExprNode.h
+        src/AST/ASTNode.h
+        src/AST/VariableNode.cpp
+        src/AST/VariableNode.h
+        src/AST/ProgramNode.cpp
+        src/AST/ProgramNode.h
+        src/AST/AssignNode.cpp
+        src/AST/AssignNode.h
+        src/AST/ProcedureNode.cpp
+        src/AST/ProcedureNode.h
+        src/AST/StmtNode.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

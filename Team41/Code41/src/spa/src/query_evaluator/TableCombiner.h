@@ -5,7 +5,7 @@
 #ifndef SPA_TABLECOMBINER_H
 #define SPA_TABLECOMBINER_H
 
-#include "pkb/Table.h"
+#include "pkb/table/Table.h"
 #include <unordered_map>
 namespace QE {
 

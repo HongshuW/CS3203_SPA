@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 #include <list>
-#include "pkb/Table.cpp"
+#include "pkb/table/Table.cpp"
 
 using namespace std;
 

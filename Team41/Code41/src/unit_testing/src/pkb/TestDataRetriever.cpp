@@ -22,7 +22,7 @@ TEST_CASE("Test Data Retriever") {
         Table expectedConstantTable = *EntityManager::getConstants();
 
         REQUIRE(actualProcedureTable.isEqual(expectedProcedureTable));
-        REQUIRE(actualStatementTable.isEqual(expectedProcedureTable));
+        REQUIRE(actualStatementTable.isEqual(expectedStatementTable));
         REQUIRE(actualVariableTable.isEqual(expectedVariableTable));
         REQUIRE(actualConstantTable.isEqual(expectedConstantTable));
     }

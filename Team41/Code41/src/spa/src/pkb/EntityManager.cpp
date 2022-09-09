@@ -1,40 +1,31 @@
 #include "EntityManager.h"
 
-Table EntityManager::procedureTable;
-Table EntityManager::statementTable;
-Table EntityManager::variableTable;
-Table EntityManager::constantTable;
-
-vector<string> EntityManager::procedureTableHeader{"$procedure_name"};
-vector<string> EntityManager::statementTableHeader{"$statement_number", "$statement_type"};
-vector<string> EntityManager::variableTableHeader{"$variable_name"};
-vector<string> EntityManager::constantTableHeader{"$constant_value"};
+ProcedureTable EntityManager::procedureTable;
+StatementTable EntityManager::statementTable;
+VariableTable EntityManager::variableTable;
+ConstantTable EntityManager::constantTable;
 
 void EntityManager::setHeader(Table * table, vector<string> header) {
     table->renameHeader(header);
 }
 
-Table * EntityManager::getProcedures() {
+ProcedureTable * EntityManager::getProcedures() {
     return &EntityManager::procedureTable;
 }
 
-Table * EntityManager::getStatements() {
+StatementTable * EntityManager::getStatements() {
     return &EntityManager::statementTable;
 }
 
-Table * EntityManager::getVariables() {
+VariableTable * EntityManager::getVariables() {
     return &EntityManager::variableTable;
 }
 
-Table * EntityManager::getConstants() {
+ConstantTable * EntityManager::getConstants() {
     return &EntityManager::constantTable;
 }
 
 void EntityManager::saveVariables(list<string> variables) {
-    // if variableTable hasn't been initialised, set header
-    if (variableTable.header.size() == 0) {
-        setHeader(&EntityManager::variableTable, EntityManager::variableTableHeader);
-    }
     auto variablesIterator = variables.begin();
     while (variablesIterator != variables.end()) {
         vector<string> row;
