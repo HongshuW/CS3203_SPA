@@ -6,11 +6,21 @@
 #define SPA_EXPRNODE_H
 
 #include "ASTNode.h"
+#include <string>
 
 namespace AST {
 
     class ExprNode : public ASTNode {
-        //TODO: to be implemented later
+        //TODO: implement a binary tree later
+    public:
+        string expr;
+
+        ExprNode(string expr);
+
+        bool operator==(const ASTNode& node) const {
+            ExprNode castedNode = dynamic_cast<const ExprNode&>(node);
+            return expr == castedNode.expr;
+        }
     };
 
 } // AST

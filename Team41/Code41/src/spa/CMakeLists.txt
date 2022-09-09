@@ -109,7 +109,8 @@ add_library(spa ${srcs} ${headers}
         src/AST/utils/ASTUtils.cpp
         src/AST/utils/ASTUtils.h
         src/parser/ASTBuilder.cpp
-        src/parser/ASTBuilder.h)
+        src/parser/ASTBuilder.h
+        src/utils/Utils.cpp src/utils/Utils.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

@@ -3,6 +3,8 @@
 //
 
 #include "ASTBuilder.h"
+#include "AST/ProgramNode.h"
+#include "parser/Parser.h"
 
 using namespace SourceParser;
 
@@ -17,6 +19,7 @@ shared_ptr<ASTNode> ASTBuilder::buildAST(std::string filename) {
     MyReadFile.close();
     Tokenizer tokenizer = Tokenizer(input);
     vector<string> tokens = tokenizer.tokenize();
-    shared_ptr<ASTNode> rootPtr = make_shared<ASTNode>();
+    Parser parser = Parser(tokens);
+    shared_ptr<ASTNode> rootPtr = parser.parse();
     return rootPtr;
 }

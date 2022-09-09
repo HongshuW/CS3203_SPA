@@ -1,6 +1,8 @@
 //
 // Created by Tan Wei En on 2/9/22.
 //
+#ifndef SPA_PARSER_H
+#define SPA_PARSER_H
 
 #include <vector>
 #include "AST/ProcedureNode.h"
@@ -11,13 +13,10 @@
 #include "AST/PrintNode.h"
 #include "AST/ReadNode.h"
 #include "AST/CallNode.h"
+#include "AST/WhileNode.h"
 #include "AST/IfNode.h"
-
-
-#ifndef SPA_PARSER_H
-#define SPA_PARSER_H
-
-#endif //SPA_PARSER_H
+#include "utils/Utils.h"
+#include <unordered_set>
 
 using namespace std;
 using namespace AST;
@@ -25,29 +24,43 @@ using namespace AST;
 namespace SourceParser {
     class Parser {
     private:
-        vector<string> tokens;
+        shared_ptr<ASTNode> root;
         unsigned int currIdx;
+        const unordered_set<std::string> allowedTokenForCondExpr = {
+                ">", ">=", "<", "<=", "==", "!=",
+                "!", "(", ")", "&&", "||"};
+        vector<string> tokens;
         string peek();
         string previous();
         string pop();
         bool match(string s);
         bool expect(string s);
 
-        shared_ptr<ProcedureNode> parseProcedure();
+        // procedure
+        shared_ptr<ProcedureNode> parseProcedureNode();
 
         // statements
-        shared_ptr<AssignNode> parseAssign();
-        shared_ptr<PrintNode> parsePrint();
-        shared_ptr<ReadNode> parseRead();
-        shared_ptr<CallNode> parseCall();
-        shared_ptr<IfNode> parseIf();
+        shared_ptr<AssignNode> parseAssignNode();
+        shared_ptr<PrintNode> parsePrintNode();
+        shared_ptr<ReadNode> parseReadNode();
+        shared_ptr<CallNode> parseCallNode();
+        shared_ptr<IfNode> parseIfNode();
+        shared_ptr<WhileNode> parseWhileNode();
 
-        // helpers
+        //! if, read, assign, print, while, call
+        shared_ptr<StmtNode> parseStatementNode();
+        vector<shared_ptr<StmtNode>> parseStatementList();
 
-        shared_ptr<VariableNode> parseVariable();
+        shared_ptr<VariableNode> parseVariableNode();
+        //!TODO: implement later
+        shared_ptr<ExprNode> parseExprNode();
+        shared_ptr<CondExprNode> parseCondExprNode();
 
     public:
         explicit Parser(std::vector<std::string> tokens);
-        shared_ptr<ProgramNode> parseProgram();
+        //! returns a ProgramNode at runtime
+        shared_ptr<ASTNode> parse();
     };
 }
+
+#endif //SPA_PARSER_H

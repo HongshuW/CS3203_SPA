@@ -14,11 +14,15 @@ using namespace AST;
 
 namespace AST {
     class ReadNode : public StmtNode {
-    private:
+    public:
         shared_ptr<VariableNode> variableNode;
 
-    public:
         ReadNode(shared_ptr<VariableNode> variableNode);
+
+        bool operator==(const ASTNode& node) const {
+            ReadNode castedNode = dynamic_cast<const ReadNode&>(node);
+            return *variableNode == *castedNode.variableNode;
+        }
     };
 }
 
