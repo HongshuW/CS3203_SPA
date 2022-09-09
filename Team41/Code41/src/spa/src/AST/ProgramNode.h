@@ -2,19 +2,22 @@
 // Created by Tan Wei En on 3/9/22.
 //
 
+#ifndef SPA_PROGRAMNODE_H
+#define SPA_PROGRAMNODE_H
+
 #include <vector>
 #include "ASTNode.h"
 #include "ProcedureNode.h"
 
-#ifndef SPA_PROGRAMNODE_H
-#define SPA_PROGRAMNODE_H
+using namespace std;
 
-class ProgramNode : public ASTNode {
-private:
-    std::vector<std::shared_ptr<ProcedureNode>> procedureList;
-public:
-    ProgramNode(std::vector<std::shared_ptr<ProcedureNode>> procedureList);
-    std::vector<std::shared_ptr<ProcedureNode>> getProcedureList();
-};
+namespace AST {
+    class ProgramNode : public ASTNode {
+    private:
+        vector<shared_ptr<ProcedureNode>> procedureList;
+    public:
+        explicit ProgramNode(vector<shared_ptr<ProcedureNode>> procedureList);
+    };
+}
 
 #endif //SPA_PROGRAMNODE_H
