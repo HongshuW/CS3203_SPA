@@ -6,39 +6,34 @@
 #define SPA_RELATIONSHIPMANAGER_H
 
 #include <stdio.h>
-#include "Table.h"
+#include "pkb/table/FollowsTable.h"
+#include "pkb/table/ModifiesTable.h"
+#include "pkb/table/ParentTable.h"
+#include "pkb/table/Table.h"
+#include "pkb/table/UsesTable.h"
 
 using namespace std;
 
 class RelationshipManager {
 public:
-    static Table * getFollows();
-    static Table * getFollowsT();
-    static Table * getParent();
-    static Table * getParentT();
-    static Table * getUsesS();
-    static Table * getUsesP();
-    static Table * getModifiesS();
-    static Table * getModifiesP();
+    static FollowsTable * getFollows();
+    static FollowsTable * getFollowsT();
+    static ParentTable * getParent();
+    static ParentTable * getParentT();
+    static UsesTable * getUsesS();
+    static UsesTable * getUsesP();
+    static ModifiesTable * getModifiesS();
+    static ModifiesTable * getModifiesP();
 
 private:
-    static Table followsTable;
-    static Table followsTTable;
-    static Table parentTable;
-    static Table parentTTable;
-    static Table usesSTable;
-    static Table usesPTable;
-    static Table modifiesSTable;
-    static Table modifiesPTable;
-
-    static vector<string> followsTableHeader;
-    static vector<string> followsTTableHeader;
-    static vector<string> parentTableHeader;
-    static vector<string> parentTTableHeader;
-    static vector<string> usesSTableHeader;
-    static vector<string> usesPTableHeader;
-    static vector<string> modifiesSTableHeader;
-    static vector<string> modifiesPTableHeader;
+    static FollowsTable followsTable;
+    static FollowsTable followsTTable;
+    static ParentTable parentTable;
+    static ParentTable parentTTable;
+    static UsesTable usesSTable;
+    static UsesTable usesPTable;
+    static ModifiesTable modifiesSTable;
+    static ModifiesTable modifiesPTable;
 };
 
 #endif //SPA_RELATIONSHIPMANAGER_H

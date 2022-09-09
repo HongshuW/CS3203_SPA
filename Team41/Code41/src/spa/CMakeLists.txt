@@ -31,8 +31,8 @@ add_library(spa ${srcs} ${headers}
         src/pkb/DataModifier.h
         src/pkb/DataRetriever.cpp
         src/pkb/DataRetriever.h
-        src/pkb/Table.cpp
-        src/pkb/Table.h
+        src/pkb/table/Table.cpp
+        src/pkb/table/Table.h
         src/pkb/EntityManager.cpp
         src/pkb/EntityManager.h
         src/pkb/RelationshipManager.cpp
@@ -59,6 +59,26 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/DataPreprocessor.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
+        src/pkb/table/EntityTable.cpp
+        src/pkb/table/EntityTable.h
+        src/pkb/table/VariableTable.cpp
+        src/pkb/table/VariableTable.h
+        src/pkb/table/ProcedureTable.cpp
+        src/pkb/table/ProcedureTable.h
+        src/pkb/table/StatementTable.cpp
+        src/pkb/table/StatementTable.h
+        src/pkb/table/ConstantTable.cpp
+        src/pkb/table/ConstantTable.h
+        src/pkb/table/RelationTable.cpp
+        src/pkb/table/RelationTable.h
+        src/pkb/table/FollowsTable.cpp
+        src/pkb/table/FollowsTable.h
+        src/pkb/table/ParentTable.cpp
+        src/pkb/table/ParentTable.h
+        src/pkb/table/ModifiesTable.cpp
+        src/pkb/table/ModifiesTable.h
+        src/pkb/table/UsesTable.cpp
+        src/pkb/table/UsesTable.h
         src/AST/ReadNode.cpp
         src/AST/ReadNode.h
         src/AST/PrintNode.cpp

@@ -5,25 +5,30 @@
 #include <list>
 #include <string>
 #include <vector>
-#include "Table.h"
+#include "pkb/table/ConstantTable.h"
+#include "pkb/table/Table.h"
+#include "pkb/table/ProcedureTable.h"
+#include "pkb/table/StatementTable.h"
+#include "pkb/table/VariableTable.h"
 
 using namespace std;
 
 class EntityManager {
 public:
-    static Table * getVariables();
+    // getters
+    static ProcedureTable * getProcedures();
+    static StatementTable * getStatements();
+    static VariableTable * getVariables();
+    static ConstantTable * getConstants();
+
+    // setters
     static void saveVariables(list<string> variables);
 
 private:
-    static Table procedureTable;
-    static Table statementTable;
-    static Table variableTable;
-    static Table constantTable;
-
-    static vector<string> procedureTableHeader;
-    static vector<string> statementTableHeader;
-    static vector<string> variableTableHeader;
-    static vector<string> constantTableHeader;
+    static ProcedureTable procedureTable;
+    static StatementTable statementTable;
+    static VariableTable variableTable;
+    static ConstantTable constantTable;
 
     static void setHeader(Table * table, vector<string> header);
 };

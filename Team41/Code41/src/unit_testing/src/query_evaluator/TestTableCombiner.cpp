@@ -2,7 +2,7 @@
 // Created by Nafour on 6/9/22.
 //
 #include "catch.hpp"
-#include "pkb/Table.h"
+#include "pkb/table/Table.h"
 #include "query_evaluator/TableCombiner.h"
 #include "TableComparator.h"
 #include "Dummies/TableBuilder.h"
