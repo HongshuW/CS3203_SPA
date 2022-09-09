@@ -8,7 +8,7 @@
 #include "query_evaluator/QueryResult.h"
 #include "parser/Parser.h"
 #include "parser/Tokenizer.h"
-#include "DesignExtractor.h"
+#include "design_extractor/DesignExtractor.h"
 #include "query_evaluator/DataPreprocessor.h"
 
 using namespace QB;

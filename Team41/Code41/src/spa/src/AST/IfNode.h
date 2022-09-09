@@ -22,6 +22,12 @@ namespace AST {
         vector<shared_ptr<StmtNode>> ifStmtList;
         vector<shared_ptr<StmtNode>> elseStmtList;
 
+        /**
+         *
+         * @param condExpr
+         * @param ifStmtList
+         * @param elseStmtList
+         */
         IfNode(shared_ptr<CondExprNode> condExpr, vector<shared_ptr<StmtNode>> ifStmtList, vector<shared_ptr<StmtNode>> elseStmtList);
     };
 
