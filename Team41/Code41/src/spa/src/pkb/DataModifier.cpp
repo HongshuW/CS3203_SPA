@@ -11,7 +11,7 @@
  * @param procedures a list of names of procedures
  */
 void DataModifier::saveProcedures(list<string> procedures) {
-    // TODO: save procedures to pkb
+    EntityManager::saveProcedures(procedures);
 }
 
 /**
@@ -20,7 +20,7 @@ void DataModifier::saveProcedures(list<string> procedures) {
  * @param statements a list of statements, each statement is represented as a vector<string>{<stmt_no>, <stmt_type>}
  */
 void DataModifier::saveStatements(list<vector<std::string>> statements) {
-    // TODO: save statements to pkb
+    EntityManager::saveStatements(statements);
 }
 
 /**
@@ -38,7 +38,7 @@ void DataModifier::saveVariables(list<string> variables) {
  * @param constants a list of strings representing constant values
  */
 void DataModifier::saveConstants(list<std::string> constants) {
-    // TODO: save constants to pkb
+    EntityManager::saveConstants(constants);
 }
 
 /**

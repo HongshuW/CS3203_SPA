@@ -62,13 +62,13 @@ TEST_CASE("Test Data Retriever") {
     SECTION ("Get Design Entity of Statement") {
         DataRetriever dr;
         // add valid rows to statement table
-        vector<string> r1{"1", "if"};
-        vector<string> r2{"2", "assign"};
+        vector<string> r1{"100", "if"};
+        vector<string> r2{"101", "assign"};
         EntityManager::getStatements()->appendRow(r1);
         EntityManager::getStatements()->appendRow(r2);
         // test valid rows
-        DesignEntity actualRow1DE = dr.getDesignEntityOfStmt(1);
-        DesignEntity actualRow2DE = dr.getDesignEntityOfStmt(2);
+        DesignEntity actualRow1DE = dr.getDesignEntityOfStmt(100);
+        DesignEntity actualRow2DE = dr.getDesignEntityOfStmt(101);
         DesignEntity expectedRow1DE = DesignEntity::IF;
         DesignEntity expectedRow2DE = DesignEntity::ASSIGN;
         REQUIRE(actualRow1DE == expectedRow1DE);
