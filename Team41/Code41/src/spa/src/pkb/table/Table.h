@@ -23,6 +23,7 @@ public:
     // setters
     void renameHeader(vector<string> newHeader);
     void appendRow(vector<string> row);
+    void addValues(list<string> values);
 
     bool isEqual(Table otherTable);
 

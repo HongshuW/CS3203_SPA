@@ -39,6 +39,16 @@ void Table::appendRow(vector<string> row) {
     rows.push_back(row);
 }
 
+void Table::addValues(list<string> values) {
+    auto valuesIterator = values.begin();
+    while (valuesIterator != values.end()) {
+        vector<string> row;
+        row.push_back(*valuesIterator);
+        appendRow(row);
+        advance(valuesIterator, 1);
+    }
+}
+
 void Table::renameHeader(vector<string> newHeader) {
     header = newHeader;
 }

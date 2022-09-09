@@ -26,11 +26,5 @@ string EntityManager::getStmtType(string stmtNumber) {
 }
 
 void EntityManager::saveVariables(list<string> variables) {
-    auto variablesIterator = variables.begin();
-    while (variablesIterator != variables.end()) {
-        vector<string> row;
-        row.push_back(*variablesIterator);
-        variableTable.appendRow(row);
-        advance(variablesIterator, 1);
-    }
+    variableTable.addValues(variables);
 }
