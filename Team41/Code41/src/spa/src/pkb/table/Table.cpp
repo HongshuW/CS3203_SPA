@@ -24,8 +24,38 @@ vector<string> Table::getColumnByIndex(int index) {
     return output;
 }
 
+vector<string> Table::getRowByPrimaryKey(string key) {
+    // assume the first column is the primary key
+    int size = rows.size();
+    for (int i = 0; i < size; i++) {
+        if (rows[i][0] == key) {
+            return rows[i];
+        }
+    }
+    return vector<string>{};
+}
+
 void Table::appendRow(vector<string> row) {
     rows.push_back(row);
+}
+
+void Table::appendRows(list<vector<string>> rows) {
+    auto rowsIterator = rows.begin();
+    while (rowsIterator != rows.end()) {
+        appendRow(*rowsIterator);
+        advance(rowsIterator, 1);
+    }
+}
+
+void Table::addValues(list<string> values) {
+    // used in tables with one column only
+    auto valuesIterator = values.begin();
+    while (valuesIterator != values.end()) {
+        vector<string> row;
+        row.push_back(*valuesIterator);
+        appendRow(row);
+        advance(valuesIterator, 1);
+    }
 }
 
 void Table::renameHeader(vector<string> newHeader) {

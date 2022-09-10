@@ -44,3 +44,35 @@ ModifiesTable * RelationshipManager::getModifiesS() {
 ModifiesTable * RelationshipManager::getModifiesP() {
     return &RelationshipManager::modifiesPTable;
 }
+
+void RelationshipManager::saveFollows(vector<string> follows) {
+    followsTable.appendRow(follows);
+}
+
+void RelationshipManager::saveFollowsT(vector<string> followsT) {
+    followsTTable.appendRow(followsT);
+}
+
+void RelationshipManager::saveParent(vector<string> parent) {
+    parentTable.appendRow(parent);
+}
+
+void RelationshipManager::saveParentT(vector<string> parentT) {
+    parentTTable.appendRow(parentT);
+}
+
+void RelationshipManager::saveUsesS(vector<string> usesS) {
+    usesSTable.appendRow(usesS);
+}
+
+void RelationshipManager::saveUsesP(vector<string> usesP) {
+    usesPTable.appendRow(usesP);
+}
+
+void RelationshipManager::saveModifiesS(vector<string> modifiesS) {
+    modifiesSTable.appendRow(modifiesS);
+}
+
+void RelationshipManager::saveModifiesP(vector<string> modifiesP) {
+    modifiesPTable.appendRow(modifiesP);
+}

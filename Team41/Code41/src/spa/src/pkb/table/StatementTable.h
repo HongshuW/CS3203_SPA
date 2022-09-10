@@ -10,6 +10,7 @@
 class StatementTable : public EntityTable {
 public:
     explicit StatementTable();
+    string getStatementType(string stmtNumber);
 };
 
 
