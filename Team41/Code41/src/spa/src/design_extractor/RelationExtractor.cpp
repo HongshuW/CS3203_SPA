@@ -7,8 +7,8 @@
 #include <queue>
 
 namespace DE {
-    unordered_map<int, vector<int>> RelationExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
-        unordered_map<int, vector<int>> parentRelations;
+    map<int, vector<int>> RelationExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
+        map<int, vector<int>> parentRelations;
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
         queue<shared_ptr<ASTNode>> queue;
         queue.push(rootPtr);
@@ -70,7 +70,7 @@ namespace DE {
 
     shared_ptr<list<vector<string>>> RelationExtractor::extractParent(shared_ptr<ProgramNode> rootPtr) {
         list<vector<string>> output;
-        unordered_map<int, vector<int>> parentRelations = extractParentHashmap(rootPtr);
+        map<int, vector<int>> parentRelations = extractParentHashmap(rootPtr);
         auto hashmapIterator = parentRelations.begin();
         while (hashmapIterator != parentRelations.end()) {
             string parent = to_string(hashmapIterator->first);
@@ -85,11 +85,33 @@ namespace DE {
         return make_shared<list<vector<string>>>(output);
     }
 
+//    void RelationExtractor::extractParentTDFS(shared_ptr<unordered_map<int,vector<int>>> parentRelations, int key,
+//                                              shared_ptr<list<vector<string>>> output) {
+//    }
+//
+//    shared_ptr<list<vector<string>>> RelationExtractor::extractParentT(shared_ptr<AST::ProgramNode> rootPtr) {
+//        list<vector<string>> output;
+//        map<int, vector<int>> parentRelations = extractParentHashmap(rootPtr);
+//        vector<string> ancestors;
+//        auto hashmapIterator = parentRelations.begin();
+//        while (hashmapIterator != parentRelations.end()) {
+//            string parent = to_string(hashmapIterator->first);
+//            vector<int> children = hashmapIterator->second;
+//            for (int child : children) {
+//                vector<string> row{parent, to_string(child)};
+//                output.push_back(row);
+//
+//            }
+//        }
+//    }
+
     list<vector<string>> RelationExtractor::extractRelation(
             shared_ptr<ProgramNode> rootPtr, RelationType relationType) {
         switch (relationType) {
             case RelationType::PARENT:
                 return *extractParent(rootPtr);
+//            case RelationType::PARENT_T:
+//                return *extractParentT(rootPtr);
             default:
                 list<vector<string>> emptyList;
                 return emptyList;

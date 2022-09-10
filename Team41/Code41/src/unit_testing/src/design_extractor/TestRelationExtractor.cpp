@@ -74,10 +74,10 @@ TEST_CASE("Test relation extractor") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
-        vector<string> expectedR1 = {"4", "5"};
-        vector<string> expectedR2 = {"4", "6"};
-        vector<string> expectedR3 = {"2", "3"};
-        vector<string> expectedR4 = {"2", "4"};
+        vector<string> expectedR1 = {"2", "3"};
+        vector<string> expectedR2 = {"2", "4"};
+        vector<string> expectedR3 = {"4", "5"};
+        vector<string> expectedR4 = {"4", "6"};
         list<vector<string>> expectedParentRelations{expectedR1, expectedR2, expectedR3, expectedR4};
         auto actualIterator = actualParentRelations->begin();
         auto expectedIterator = expectedParentRelations.begin();
