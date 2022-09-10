@@ -14,7 +14,6 @@ namespace AST {
     class VariableNode : public ASTNode {
     public:
         string variable;
-
         VariableNode(string variable);
 
         bool operator==(const ASTNode& node) const {

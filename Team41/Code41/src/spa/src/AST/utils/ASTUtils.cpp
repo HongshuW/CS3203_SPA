@@ -27,9 +27,13 @@ namespace AST {
         return nodeClassNameToType.at(nodeType);
     }
 
-    shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> ASTUtils::getNodePtrToLineNumMap(shared_ptr<ProcedureNode> root) {
+    shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> ASTUtils::getNodePtrToLineNumMap(shared_ptr<ProgramNode> root) {
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> map = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
-        getNodePtrToLineNoMapHelper(root, map, 1);
+        int curr_line_no = 1;
+        for (auto procedureNode: root->procedureList) {
+            curr_line_no = getNodePtrToLineNoMapHelper(procedureNode, map, curr_line_no);
+        }
+
         return map;
     }
 
