@@ -17,20 +17,16 @@ public:
     void saveStatements(list<vector<string>> statements);
     void saveVariables(list<string> variables);
     void saveConstants(list<string> constants);
-    // TODO: implement saveEntities to replace specific methods after Entity class is available
-    // void saveEntities(list<Entity> entities);
 
     // relations
-    void saveFollows(string followedStatement, string followingStatement);
-    void saveFollowsT(string followedStatement, string followingStatement);
-    void saveParent(string parentStatement, string childStatement);
-    void saveParentT(string parentStatement, string childStatement);
-    void saveUsesS(string userStatement, string usedEntity);
-    void saveUsesP(string userEntity, string usedEntity);
-    void saveModifiesS(string modifierStatement, string modifiedEntity);
-    void saveModifiesP(string modifierEntity, string modifiedEntity);
-    // TODO: implement saveRelation to replace specific methods after Relation class is available
-    // void saveRelation(Relation relation);
+    void saveFollows(vector<string> followsRelation);
+    void saveFollowsT(vector<string> followsTRelation);
+    void saveParent(vector<string> parentRelation);
+    void saveParentT(vector<string> parentTRelation);
+    void saveUsesS(vector<string> usesSRelation);
+    void saveUsesP(vector<string> usesPRelation);
+    void saveModifiesS(vector<string> modifiesSRelation);
+    void saveModifiesP(vector<string> modifiesPRelation);
 
     // pattern
     // TODO: implement savePattern after AST_NODE is available
