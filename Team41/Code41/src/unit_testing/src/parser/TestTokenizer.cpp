@@ -50,9 +50,6 @@ TEST_CASE ("Test Tokenizer") {
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
 
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         auto expected = std::vector<std::string>(
                 {"procedure", "testProcedure", "{", "x", "=", "1", ";", "}"});
 
@@ -73,9 +70,6 @@ TEST_CASE ("Test Tokenizer") {
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
 
         auto expected = std::vector<std::string>(
                 {"procedure", "firstProcedure", "{", "x", "=", "1", ";", "}", "procedure", "secondProcedure", "{", "y", "=", "2", ";", "}"});

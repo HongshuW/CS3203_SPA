@@ -12,10 +12,15 @@ using namespace std;
 
 namespace AST {
     class VariableNode : public ASTNode {
-    private:
-        string variable;
     public:
+        string variable;
+
         VariableNode(string variable);
+
+        bool operator==(const ASTNode& node) const {
+            VariableNode castedNode = dynamic_cast<const VariableNode&>(node);
+            return variable == castedNode.variable;
+        }
     };
 }
 

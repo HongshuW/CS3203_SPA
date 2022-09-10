@@ -21,14 +21,18 @@ public:
     static VariableTable * getVariables();
     static ConstantTable * getConstants();
 
+    static string getStmtType(string stmtNumber);
+
     // setters
+    static void saveProcedures(list<string> procedures);
+    static void saveStatements(list<vector<string>> statements);
     static void saveVariables(list<string> variables);
+    static void saveConstants(list<string> constants);
+
 
 private:
     static ProcedureTable procedureTable;
     static StatementTable statementTable;
     static VariableTable variableTable;
     static ConstantTable constantTable;
-
-    static void setHeader(Table * table, vector<string> header);
 };
