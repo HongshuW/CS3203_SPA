@@ -9,6 +9,7 @@
 #include <string>
 
 using namespace AST;
+using namespace std;
 
 namespace AST {
 
@@ -36,7 +37,6 @@ namespace AST {
             }
             return expr == castedNode.expr && *left == *castedNode.left && *right == *castedNode.right;
         }
-
     };
 
 } // AST

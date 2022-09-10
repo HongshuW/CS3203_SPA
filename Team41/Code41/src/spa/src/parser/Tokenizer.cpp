@@ -28,6 +28,12 @@ char Tokenizer::pop() {
     return c;
 }
 
+bool Tokenizer::match(char c) {
+    if (peek() == c) {
+        return true;
+    }
+    return false;
+}
 
 void Tokenizer::processString() {
     tokens.push_back("\"");
@@ -50,11 +56,11 @@ void Tokenizer::processAlNum() {
 void Tokenizer::processSymbols() {
     // maybe consider the case of && and ||
     if (curr == "=") {
-        if (peek() == '=') {
+        if (match('=')) {
             curr += pop();
         }
     } else if (curr == ">") {
-        if (peek() == '=') {
+        if (match('>')) {
             curr += pop();
         }
     } else if (curr == "<") {
@@ -62,7 +68,19 @@ void Tokenizer::processSymbols() {
             curr += pop();
         }
     } else if (curr == "!") {
-        if (peek() == '=') {
+        if (match('=')) {
+            curr += pop();
+        }
+    } else if (curr == "&") {
+        if (!match('&')) {
+            throw SPTokenizeException("Expect && but got &");
+        } else {
+            curr += pop();
+        }
+    } else if (curr == "|") {
+        if (!match('|')) {
+            throw SPTokenizeException("Expect || but got |");
+        } else {
             curr += pop();
         }
     }
@@ -88,7 +106,7 @@ vector<string> Tokenizer::tokenize() {
             processSymbols();
         } else {
             throw SPTokenizeException("Unexpected token " +
-                                   std::string(1, next) + "\n");
+                                      std::string(1, next) + "\n");
         }
     }
     return tokens;
