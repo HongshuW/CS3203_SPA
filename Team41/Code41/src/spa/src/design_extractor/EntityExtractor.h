@@ -13,7 +13,6 @@
 using namespace AST;
 using namespace std;
 namespace DE {
-
     class EntityExtractor {
         static unordered_set<string> getVariablesFromExprString(string expr);
         static shared_ptr<unordered_set<string>> extractVariables(shared_ptr<StmtNode> stmtNode);
@@ -23,7 +22,6 @@ namespace DE {
     public:
         static unordered_set<string> extractDesignEntity(shared_ptr<StmtNode> node, QB::DesignEntity designEntityType);
     };
-
 } // DE
 
 #endif //SPA_ENTITYEXTRACTOR_H
