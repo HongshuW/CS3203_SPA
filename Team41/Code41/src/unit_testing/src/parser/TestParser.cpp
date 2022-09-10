@@ -3,9 +3,9 @@
 //
 
 #include "catch.hpp"
-#include "iostream"
 
 #include "parser/Parser.h"
+#include "parser/Exceptions.h"
 
 using namespace SourceParser;
 using namespace std;
@@ -13,7 +13,7 @@ using namespace std;
 TEST_CASE("Test SP Parser") {
     SECTION("1 assign statement") {
         vector<std::string> tokens = vector<std::string>(
-                {"procedure", "testProcedure", "{", "x", "=", "x", "+", "1", ";", "}"});
+                {"procedure", "testPr0cedur3", "{", "x", "=", "x", "+", "1", ";", "}"});
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
 
@@ -22,7 +22,7 @@ TEST_CASE("Test SP Parser") {
                 make_shared<VariableNode>("x"),
                 make_shared<ExprNode>("x+1"));
         vector<shared_ptr<StmtNode>> stmtList = vector<shared_ptr<StmtNode>>({assignNode});
-        auto procedure = make_shared<ProcedureNode>("testProcedure", stmtList);
+        auto procedure = make_shared<ProcedureNode>("testPr0cedur3", stmtList);
         vector<shared_ptr<ProcedureNode>> procedureList = vector<std::shared_ptr<ProcedureNode>>(
                 {procedure});
         shared_ptr<ASTNode> expectedProgram = make_shared<ProgramNode>(procedureList);
@@ -31,7 +31,7 @@ TEST_CASE("Test SP Parser") {
 
     SECTION("1 read statement") {
         vector<std::string> tokens = vector<std::string>(
-                {"procedure", "testProcedure", "{", "read", "num1", ";", "}"});
+                {"procedure", "t12345", "{", "read", "num1", ";", "}"});
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
 
@@ -39,7 +39,7 @@ TEST_CASE("Test SP Parser") {
         auto readNode = make_shared<ReadNode>(
                 make_shared<VariableNode>("num1"));
         vector<shared_ptr<StmtNode>> stmtList = vector<shared_ptr<StmtNode>>({readNode});
-        auto procedure = make_shared<ProcedureNode>("testProcedure", stmtList);
+        auto procedure = make_shared<ProcedureNode>("t12345", stmtList);
         vector<shared_ptr<ProcedureNode>> procedureList = vector<std::shared_ptr<ProcedureNode>>(
                 {procedure});
         shared_ptr<ASTNode> expectedProgram = make_shared<ProgramNode>(procedureList);
@@ -89,5 +89,61 @@ TEST_CASE("Test SP Parser") {
                 {procedure});
         shared_ptr<ASTNode> expectedProgram = make_shared<ProgramNode>(procedureList);
         REQUIRE(*testProgram == *expectedProgram);
+    }
+
+    SECTION("Empty program, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Empty procedure, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid procedure name, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "pr@c3dur3", "{", "read", "num1", ";", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid if syntax, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "if", "(", "number", ">", "0", ")", "{", "read", "num1", ";","}", "else", "{", "read", "num2", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Empty statement in if loop, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "if", "(", "number", ">", "0", ")", "then", "{", "}", "else", "{", "read", "num2", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Empty statement in else loop, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "if", "(", "number", ">", "0", ")", "then", "{", "read", "num2",  ";", "}", "else", "{", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Empty statement in while loop, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "while", "(", "number", ">", "0", ")", "{", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Missing ; token, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "read", "x", "=", "1", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 }

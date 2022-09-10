@@ -105,8 +105,8 @@ TEST_CASE ("Test Tokenizer") {
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
 
-        for(int i = 0; i < tokens.size(); i++)
-            std::cout << tokens[i] << ' ';
+//        for(int i = 0; i < tokens.size(); i++)
+//            std::cout << tokens[i] << ' ';
 
         auto expected = std::vector<std::string>(
                 {"procedure", "testProcedure", "{", "x", "=", "0", ";", "if", "(", "x", "<=", "1", "||", "x", ">", "3", ")", "{", "x", "=", "1", ";", "}", "else", "{", "x", "=", "5", ";", "}", "}"});

@@ -4,7 +4,6 @@
 
 #include "Parser.h"
 #include "Exceptions.h"
-#include "iostream"
 
 using namespace SourceParser;
 using namespace std;
