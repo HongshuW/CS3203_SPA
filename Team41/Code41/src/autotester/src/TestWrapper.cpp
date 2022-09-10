@@ -6,6 +6,7 @@
 #include "query_evaluator/QueryEvaluator.h"
 #include "query_evaluator/QueryResultFormatter.h"
 #include "query_evaluator/QueryResult.h"
+#include "parser/ASTBuilder.h"
 #include "parser/Parser.h"
 #include "parser/Tokenizer.h"
 #include "design_extractor/DesignExtractor.h"
@@ -33,23 +34,10 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
     // call your parser to do the parsing
     // ...rest of your code...
-    std::string myText ;
-    std::ifstream MyReadFile(filename);
-    std::string input;
-    while (getline (MyReadFile, myText)) {
-        // Output the text from the file
-        input.append(myText);
-    }
-    MyReadFile.close();
-
-    // string input = "procedure Test { x = 1;}";
-    Tokenizer tokenizer = Tokenizer(input);
-    vector<string> tokens = tokenizer.tokenize();
-    Parser parser = Parser(tokens);
-    shared_ptr<ProgramNode> programNode = parser.parse();
-    DesignExtractor* designExtractor = new DesignExtractor(*programNode);
-    designExtractor->saveVariableToPKB();
-
+    auto astBuilder = ASTBuilder();
+    shared_ptr<ASTNode> programNode = astBuilder.buildAST(filename);
+//    DesignExtractor* designExtractor = new DesignExtractor(*programNode);
+//    designExtractor->saveVariableToPKB();
 }
 
 // method to evaluating a query

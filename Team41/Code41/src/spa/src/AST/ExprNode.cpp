@@ -3,3 +3,5 @@
 //
 
 #include "ExprNode.h"
+
+AST::ExprNode::ExprNode(string expr) : expr(expr) {}

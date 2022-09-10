@@ -9,6 +9,7 @@ namespace AST {
     class StmtNode : public ASTNode {
     public:
         virtual ~StmtNode() = default;
+        virtual bool operator==(const ASTNode& node) const = 0;
     };
 }
 
