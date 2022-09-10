@@ -70,16 +70,18 @@ TEST_CASE("Test SP Parser") {
     SECTION("1 if statement") {
         vector<std::string> tokens = vector<std::string>(
                 {"procedure", "testProcedure", "{", "if", "(", "number", ">", "0", ")", "then", "{",
-                 "read", "num1", ";", "}", "else", "{", "}", "}"});
+                 "read", "num1", ";", "}", "else", "{", "read", "num2", ";", "}", "}"});
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
 
         // simple program node
         auto readNode = make_shared<ReadNode>(
                 make_shared<VariableNode>("num1"));
+        auto readNodeElse = make_shared<ReadNode>(
+                make_shared<VariableNode>("num2"));
         auto condExpr = make_shared<CondExprNode>("number>0");
         auto stmtListIf = vector<shared_ptr<StmtNode>>({readNode});
-        auto stmtListElse = vector<shared_ptr<StmtNode>>();
+        auto stmtListElse = vector<shared_ptr<StmtNode>>({readNodeElse});
         auto ifNode = make_shared<IfNode>(condExpr, stmtListIf, stmtListElse);
         auto stmtListOuter = vector<shared_ptr<StmtNode>>({ifNode});
         auto procedure = make_shared<ProcedureNode>("testProcedure", stmtListOuter);
