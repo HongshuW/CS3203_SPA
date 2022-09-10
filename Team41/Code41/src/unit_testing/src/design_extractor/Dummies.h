@@ -13,7 +13,8 @@
 namespace TestDE {
 
     class Dummies {
-
+    public:
+        static shared_ptr<ProgramNode> getTestProgramNode(int idx);
     };
 
 
