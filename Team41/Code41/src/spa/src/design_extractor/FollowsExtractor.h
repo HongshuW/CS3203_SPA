@@ -14,8 +14,10 @@ public:
     static void extractFollows(shared_ptr<ProgramNode> programNode);
 private:
       static vector<vector<shared_ptr<StmtNode>>> extractFollowsFromProcedureNode(shared_ptr<ProcedureNode> procedureNode);
-//    static void extractFollowsFromStmtList(vector<shared_ptr<StmtNode>> stmtList );
-//    static void saveFollowsToPKB(vector<shared_ptr<StmtNode>> followsList);
+      static void extractFollowsFromStmtList(vector<vector<shared_ptr<StmtNode>>> listOfStmtList,
+                                             shared_ptr<ProgramNode> programNode);
+      static void saveFollowsToPKB(vector<shared_ptr<StmtNode>> stmtList,
+                                   shared_ptr<ProgramNode> programNode);
 };
 
 
