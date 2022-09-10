@@ -20,6 +20,17 @@ shared_ptr<list<vector<string>>> FollowsExtractor::extractFollows(shared_ptr<Pro
     return make_shared<list<vector<string>>>(output);
 }
 
+shared_ptr<list<vector<string>>> FollowsExtractor::extractFollowsStar(shared_ptr<AST::ProgramNode> programNode) {
+    vector<vector<shared_ptr<StmtNode>>> listOfStmtList = getListOfStmtList(programNode);
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> nodeToLineNoMap =
+            ASTUtils::getNodePtrToLineNumMap(programNode);
+    list<vector<string>> output;
+    for (auto stmtList : listOfStmtList) {
+        saveFollowsStarToOutput(stmtList, &output, nodeToLineNoMap);
+    }
+    return make_shared<list<vector<string>>>(output);
+}
+
 vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_ptr<ProgramNode> programNode) {
     vector<vector<shared_ptr<StmtNode>>> listOfStmtList;
     vector<shared_ptr<ProcedureNode>> procedureList = programNode -> procedureList;
@@ -85,3 +96,35 @@ void FollowsExtractor::saveFollowsToOutput(vector<shared_ptr<StmtNode>> stmtList
 }
 
 
+void FollowsExtractor::saveFollowsStarToOutput(vector<shared_ptr<StmtNode>> stmtList,
+                                           list<vector<string>> *output,
+                                           shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
+                                           nodeToLineNoMap) {
+    vector<int> stmtNoList;
+    if (stmtList.size() <= 1 ) {
+        return;
+    }
+    else {
+        for (auto stmtNode: stmtList) {
+            int stmtNo = nodeToLineNoMap->at(stmtNode);
+            stmtNoList.push_back(stmtNo);
+        }
+
+        std::sort(stmtNoList.begin(), stmtNoList.end());
+        deque<int> entryDeque;
+        for (int & i : stmtNoList){
+            entryDeque.push_back(i);
+        }
+
+        while(!entryDeque.empty()) {
+            int front = entryDeque.front();
+            entryDeque.pop_front();
+            for (auto &j: entryDeque) {
+                vector<string> followsEntry;
+                followsEntry.push_back(to_string(front));
+                followsEntry.push_back(to_string(j));
+                output ->push_back(followsEntry);
+            }
+        }
+    }
+}

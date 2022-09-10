@@ -92,6 +92,8 @@ namespace DE {
                 return *extractParent(rootPtr);
             case RelationType::FOLLOWS:
                 return *FollowsExtractor().extractFollows(rootPtr);
+            case RelationType::FOLLOWS_T:
+                return *FollowsExtractor().extractFollowsStar(rootPtr);
             default:
                 list<vector<string>> emptyList;
                 return emptyList;
