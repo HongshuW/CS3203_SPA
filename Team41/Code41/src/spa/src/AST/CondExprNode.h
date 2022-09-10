@@ -34,12 +34,14 @@ namespace AST {
         CondExprNode(shared_ptr<CondExprNode> condExprLHS, string op, shared_ptr<CondExprNode> condExprRHS);
 
         bool operator==(const ASTNode& node) const {
-            CondExprNode castedNode = dynamic_cast<const CondExprNode&>(node);
-            return condExpr == castedNode.condExpr &&
-                    *relExprNode == *castedNode.relExprNode &&
-                    *condExprLHS == *castedNode.condExprLHS &&
-                    *condExprRHS == *castedNode.condExprRHS &&
-                    op == castedNode.op;
+            auto castedNode = dynamic_cast<const CondExprNode*>(&node);
+
+            return castedNode != 0
+                   && (relExprNode == castedNode->relExprNode || *relExprNode == *castedNode->relExprNode)
+                   && (condExprLHS == castedNode->condExprLHS || *condExprLHS == *castedNode->condExprLHS)
+                   && (condExprRHS == castedNode->condExprRHS || *condExprRHS == *castedNode->condExprRHS)
+                   && op.compare(castedNode->op) == 0
+                   && condExpr.compare(castedNode->condExpr) == 0;
         }
 
     };

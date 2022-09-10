@@ -20,10 +20,12 @@ namespace AST {
         RelExprNode(shared_ptr<ExprNode> exprNodeLHS, string op, shared_ptr<ExprNode> exprNodeRHS);
 
         bool operator==(const ASTNode& node) const {
-            RelExprNode castedNode = dynamic_cast<const RelExprNode&>(node);
-            return op == castedNode.op
-                && *exprNodeLHS == *castedNode.exprNodeLHS
-                && *exprNodeRHS == *castedNode.exprNodeRHS;
+            auto castedNode = dynamic_cast<const RelExprNode*>(&node);
+
+            return castedNode != 0
+                   && (exprNodeLHS == castedNode->exprNodeLHS || *exprNodeLHS == *castedNode->exprNodeLHS)
+                   && (exprNodeRHS == castedNode->exprNodeRHS || *exprNodeRHS == *castedNode->exprNodeRHS)
+                   && op.compare(castedNode->op) == 0;
         }
 
     };

@@ -23,8 +23,9 @@ namespace AST {
         AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<ExprNode> expressionNode);
 
         bool operator==(const ASTNode& node) const {
-            AssignNode castedNode = dynamic_cast<const AssignNode&>(node);
-            return *variableNode == *castedNode.variableNode && *expressionNode == *castedNode.expressionNode;
+            auto castedNode = dynamic_cast<const AssignNode*>(&node);
+            return castedNode != 0 && *variableNode == *castedNode->variableNode
+                && *expressionNode == *castedNode->expressionNode;
         }
     };
 }

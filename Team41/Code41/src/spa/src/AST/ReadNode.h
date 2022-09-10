@@ -20,8 +20,8 @@ namespace AST {
         ReadNode(shared_ptr<VariableNode> variableNode);
 
         bool operator==(const ASTNode& node) const {
-            ReadNode castedNode = dynamic_cast<const ReadNode&>(node);
-            return *variableNode == *castedNode.variableNode;
+            auto castedNode = dynamic_cast<const ReadNode*>(&node);
+            return castedNode != 0 && *variableNode == *castedNode->variableNode;
         }
     };
 }

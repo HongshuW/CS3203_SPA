@@ -257,19 +257,33 @@ shared_ptr<ExprNode> Parser::parseExprNode() {
 }
 
 shared_ptr<CondExprNode> Parser::parseCondExprNode() {
-    //TODO: need to check for correct condition, e.g. unexpected token is not allowed
-    string condExpr = pop();
+    vector<string> condExpr;
     while (peek().compare(")") != 0) {
-        if (Utils::isValidName(peek()) ||
-                Utils::isValidNumber(peek()) ||
-            allowedTokenForCondExpr.count(peek())) {
-            condExpr += pop();
-        } else {
-            throw SPParseException("Invalid unexpected token in conditional expression: " + peek());
+        string curr = pop();
+        if (!Utils::isValidName(curr) && !Utils::isValidNumber(curr)) {
+            //! is a comparator operator, need to check for valid operator
+            if (Utils::VALID_TOKENS_COND_EXPR.count(curr) == 0) {
+                throw SPParseException("Expect a comparator operator, got: " + curr);
+            }
         }
+        condExpr.push_back(curr);
     }
-    shared_ptr<CondExprNode> condExprNode = make_shared<CondExprNode>(condExpr);
-    return condExprNode;
+
+    //! Check for valid parentheses
+    if (!Utils::isValidParentheses(condExpr)) {
+        throw SPParseException("Invalid parentheses detected");
+    }
+
+    CondExprParser condExprParser = CondExprParser(condExpr);
+    //! If the tree can be built without any errors,
+    //! there is not syntax error and we can safely
+    //! using the string representation of the conditional expression.
+    condExprParser.parse();
+    string condExprStr = "";
+    for (auto str : condExpr) {
+        condExprStr += str;
+    }
+    return make_shared<CondExprNode>(condExprStr);
 }
 
 shared_ptr<ASTNode> Parser::parse() {

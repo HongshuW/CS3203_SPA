@@ -146,4 +146,11 @@ TEST_CASE("Test SP Parser") {
         Parser parser = Parser(tokens);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
+//    SECTION("test exception") {
+//        vector<std::string> tokens = vector<std::string>(
+//                {"procedure", "testProcedure", "{", "while", "(", "number", "==", "0", ")", "{",
+//                 "read", "num1", ";", "}", "}"});
+//        Parser parser = Parser(tokens);
+//        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+//    }
 }

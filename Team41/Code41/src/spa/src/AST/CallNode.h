@@ -21,8 +21,8 @@ namespace AST {
         explicit CallNode(string programName);
 
         bool operator==(const ASTNode& node) const {
-            CallNode castedNode = dynamic_cast<const CallNode&>(node);
-            return procedureName == castedNode.procedureName;
+            auto castedNode = dynamic_cast<const CallNode*>(&node);
+            return castedNode != 0 && procedureName.compare(castedNode->procedureName) == 0;
         }
     };
 

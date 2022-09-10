@@ -17,6 +17,8 @@
 #include "AST/IfNode.h"
 #include "utils/Utils.h"
 #include "ExprNodeParser.h"
+#include "CondExprParser.h"
+#include "AST/RelExprNode.h"
 #include <unordered_set>
 
 using namespace std;
@@ -27,9 +29,6 @@ namespace SourceParser {
     private:
         shared_ptr<ASTNode> root;
         unsigned int currIdx;
-        const unordered_set<std::string> allowedTokenForCondExpr = {
-                ">", ">=", "<", "<=", "==", "!=",
-                "!", "(", ")", "&&", "||"};
         vector<string> tokens;
         string peek();
         string previous();
@@ -56,6 +55,7 @@ namespace SourceParser {
         //!TODO: implement later
         shared_ptr<ExprNode> parseExprNode();
         shared_ptr<CondExprNode> parseCondExprNode();
+        shared_ptr<RelExprNode> parseRelExprNode();
 
     public:
         explicit Parser(vector<string> tokens);
