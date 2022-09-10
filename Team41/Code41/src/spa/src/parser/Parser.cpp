@@ -245,6 +245,7 @@ shared_ptr<VariableNode> Parser::parseVariableNode() {
 
 shared_ptr<ExprNode> Parser::parseExprNode() {
     //TODO: store the string for now, will convert to a ASTNode in the future
+
     string expr = pop();
     while (peek().compare(";") != 0) {
         expr += pop();
