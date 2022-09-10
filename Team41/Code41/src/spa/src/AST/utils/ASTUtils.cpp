@@ -142,7 +142,7 @@ namespace AST {
                 break;
             }
             default: {
-                shared_ptr<StmtNode> otherStmtNode = dynamic_pointer_cast<IfNode>(node);
+                shared_ptr<StmtNode> otherStmtNode = dynamic_pointer_cast<StmtNode>(node);
                 map->insert({otherStmtNode, curr_line_no});
                 curr_line_no++;
                 break;

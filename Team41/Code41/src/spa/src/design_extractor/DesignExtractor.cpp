@@ -7,6 +7,7 @@
 #include "AST/utils/ASTUtils.h"
 #include <queue>
 #include "EntityExtractor.h"
+#include "RelationExtractor.h"
 
 using namespace AST;
 using namespace DE;
@@ -19,7 +20,11 @@ shared_ptr<unordered_set<string>> DesignExtractor::extractEntities(DesignEntity 
 
     }
     return result;
+}
 
+shared_ptr<list<vector<string>>> DesignExtractor::extractRelations(RelationType relationType) {
+    list<vector<string>> relationList = RelationExtractor::extractRelation(this->programNode, relationType);
+    return make_shared<list<vector<string>>>(relationList);
 }
 
 void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
@@ -51,6 +56,15 @@ void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
 
 
     this->dataModifier.saveVariables(entityResultList);
+}
+
+void DesignExtractor::saveParentToPKB() {
+    list<vector<string>> parentRelations = *this->extractRelations(RelationType::PARENT);
+    auto parentIterator = parentRelations.begin();
+    while (parentIterator != parentRelations.end()) {
+        this->dataModifier.saveParent(*parentIterator);
+        advance(parentIterator, 1);
+    }
 }
 
 DesignExtractor::DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode) : dataModifier(dataModifier), programNode(programNode) {
@@ -123,5 +137,7 @@ void DesignExtractor::run() {
     this->dataModifier.saveStatements(payload);
 
 
+
 }
+
 
