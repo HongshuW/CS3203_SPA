@@ -16,9 +16,7 @@ using namespace std;
 namespace DE {
     class RelationExtractor {
     private:
-        static unordered_map<int, vector<int>> parentRelations;
-
-        static void extractParentHashmap(shared_ptr<ProgramNode> rootPtr);
+        static unordered_map<int, vector<int>> extractParentHashmap(shared_ptr<ProgramNode> rootPtr);
         static shared_ptr<list<vector<string>>> extractParent(shared_ptr<ProgramNode> rootPtr);
 
     public:

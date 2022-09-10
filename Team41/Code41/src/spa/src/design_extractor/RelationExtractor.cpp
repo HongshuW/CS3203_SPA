@@ -7,9 +7,8 @@
 #include <queue>
 
 namespace DE {
-    unordered_map<int, vector<int>> parentRelations;
-
-    void RelationExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
+    unordered_map<int, vector<int>> RelationExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
+        unordered_map<int, vector<int>> parentRelations;
         unordered_map<shared_ptr<ASTNode>, int> stmtNumbers = *ASTUtils::getNodePtrToLineNumMap(rootPtr);
         queue<shared_ptr<ASTNode>> queue;
         queue.push(rootPtr);
@@ -67,9 +66,7 @@ namespace DE {
 
     shared_ptr<list<vector<string>>> RelationExtractor::extractParent(shared_ptr<ProgramNode> rootPtr) {
         list<vector<string>> output;
-        if (parentRelations.empty()) {
-            extractParentHashmap(rootPtr);
-        }
+        unordered_map<int, vector<int>> parentRelations = extractParentHashmap(rootPtr);
         auto hashmapIterator = parentRelations.begin();
         while (hashmapIterator != parentRelations.end()) {
             string parent = to_string(hashmapIterator->first);
