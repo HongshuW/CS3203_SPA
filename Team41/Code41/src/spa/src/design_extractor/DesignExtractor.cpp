@@ -16,10 +16,8 @@ shared_ptr<unordered_set<string>> DesignExtractor::extractEntities(DesignEntity 
     shared_ptr<unordered_set<string>> result = make_shared<unordered_set<string>>();
     for (auto p: this->programNode->procedureList) {
         this->extractEntitiesFromProcedure(p, result, designEntityType);
-
     }
     return result;
-
 }
 
 void DesignExtractor::saveVariableToPKB() {
@@ -35,6 +33,7 @@ void DesignExtractor::saveVariableToPKB() {
 DesignExtractor::DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode) : dataModifier(dataModifier), programNode(programNode) {
 
 }
+
 
 void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode,
                                                    shared_ptr<unordered_set<string>> set,

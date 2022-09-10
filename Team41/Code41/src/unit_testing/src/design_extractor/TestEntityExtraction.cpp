@@ -9,6 +9,7 @@
 #include "AST/utils/ASTUtils.h"
 #include <unordered_map>
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/FollowsExtractor.h"
 #include "pkb/DataModifier.h"
 #include "iostream"
 #include "Dummies.h"

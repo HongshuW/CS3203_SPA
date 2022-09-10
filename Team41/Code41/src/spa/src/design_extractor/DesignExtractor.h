@@ -24,14 +24,12 @@ namespace DE {
         unordered_set<string> getVariablesFromExprString(string expr);
         bool is_number(const std::string& s);
 
-
     public:
         explicit DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode);
-
         shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
+
         void saveVariableToPKB();
     };
-
 }
 
 #endif //SPA_DESIGNEXTRACTOR_H

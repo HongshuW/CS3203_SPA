@@ -115,7 +115,7 @@ add_library(spa ${srcs} ${headers}
         src/AST/utils/ASTUtils.h
         src/parser/ASTBuilder.cpp
         src/parser/ASTBuilder.h
-        src/utils/Utils.cpp src/utils/Utils.h)
+        src/utils/Utils.cpp src/utils/Utils.h src/design_extractor/FollowsExtractor.cpp src/design_extractor/FollowsExtractor.h)
 
 
 # this makes the headers accessible for other projects which uses spa lib
