@@ -22,6 +22,7 @@ namespace AST {
             PrintNode castedNode = dynamic_cast<const PrintNode&>(node);
             return *variableNode == *castedNode.variableNode;
         }
+
     };
 }
 

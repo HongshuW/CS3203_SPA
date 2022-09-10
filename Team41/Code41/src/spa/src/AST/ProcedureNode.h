@@ -16,7 +16,6 @@ namespace AST {
     class ProcedureNode : public ASTNode {
     public:
         string procedureName;
-    public:
         vector<shared_ptr<StmtNode>> stmtList;
 
         ProcedureNode(string procedureName, vector<shared_ptr<StmtNode>> stmtList);

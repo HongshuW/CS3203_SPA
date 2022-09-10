@@ -29,7 +29,7 @@ namespace AST {
         static int getNodePtrToLineNoMapHelper(shared_ptr<ASTNode> node, shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> map, int curr_line_no);
     public:
         static NodeType getNodeTypeByName(shared_ptr<ASTNode> node);
-        static shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> getNodePtrToLineNumMap(shared_ptr<ProcedureNode> root);
+        static shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> getNodePtrToLineNumMap(shared_ptr<ProgramNode> root);
     };
 
 } // AST

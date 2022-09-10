@@ -20,7 +20,7 @@ TEST_CASE("Test AST utils") {
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                programNode->procedureList[0]);
+                programNode);
         unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{};
         REQUIRE(*actual == expected);
     }
@@ -36,7 +36,7 @@ TEST_CASE("Test AST utils") {
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode, readNode}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                programNode->procedureList[0]);
+                programNode);
         unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{{printNode, 1}, {readNode, 2}};
         REQUIRE(*actual == expected);
     }
@@ -67,7 +67,7 @@ TEST_CASE("Test AST utils") {
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
 
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                programNode->procedureList[0]);
+                programNode);
         unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{{printNode, 1}, {readNode, 2}, {ifNode, 3}, {printNode2, 4} , {readNode2 , 5}, {readNode3, 6}};
         REQUIRE(*actual == expected);
     }
@@ -112,7 +112,7 @@ TEST_CASE("Test AST utils") {
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
 
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                programNode->procedureList[0]);
+                programNode);
         unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{
             {printNode, 1},
             {readNode, 2},
@@ -125,5 +125,55 @@ TEST_CASE("Test AST utils") {
             {readNode3, 9}
         };
         REQUIRE(*actual == expected);
+    }
+    SECTION("Test two procedure") {
+            /*
+             * procedure1 {
+             * 1 print x
+             * 2 read y
+             * }
+             */
+            shared_ptr<StmtNode> printNode_p1 = make_shared<PrintNode>(make_shared<VariableNode>("x"));
+            shared_ptr<StmtNode> readNode_p1 = make_shared<ReadNode>(make_shared<VariableNode>("y"));
+            shared_ptr<ProcedureNode> procedureNode_p1 = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode_p1, readNode_p1}));
+
+
+                /*
+             * procedure2 {
+             * 3 print x
+             * 4 read y
+             * 5 if (...) then {
+             * 6 print z} else {
+             * 7 read w}
+             * 8 read foo
+             * }
+             */
+            shared_ptr<StmtNode> printNode = make_shared<PrintNode>(make_shared<VariableNode>("x"));
+            shared_ptr<StmtNode> readNode = make_shared<ReadNode>(make_shared<VariableNode>("y"));
+
+            shared_ptr<CondExprNode> condExpr;
+            shared_ptr<StmtNode> printNode2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
+            shared_ptr<StmtNode> readNode2 = make_shared<ReadNode>(make_shared<VariableNode>("w"));
+            vector<shared_ptr<StmtNode>> ifStmtList = {printNode2};
+            vector<shared_ptr<StmtNode>> elseStmtList = {readNode2};
+            shared_ptr<StmtNode> ifNode = make_shared<IfNode>(condExpr, ifStmtList, elseStmtList);
+
+            shared_ptr<StmtNode> readNode3 = make_shared<ReadNode>(make_shared<VariableNode>("foo"));
+
+            shared_ptr<ProcedureNode> procedureNode2 = make_shared<ProcedureNode>(ProcedureNode("procedure2", {printNode, readNode, ifNode, readNode3}));
+
+
+            shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode_p1, procedureNode2}));
+            shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
+                    programNode);
+            unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{{printNode_p1, 1},
+                                                                                                        {readNode_p1, 2},
+                                                                                                        {printNode, 3},
+                                                                                                        {readNode, 4},
+                                                                                                        {ifNode, 5},
+                                                                                                        {printNode2, 6} ,
+                                                                                                        {readNode2 , 7},
+                                                                                                        {readNode3, 8}};
+            REQUIRE(*actual == expected);
     }
 }

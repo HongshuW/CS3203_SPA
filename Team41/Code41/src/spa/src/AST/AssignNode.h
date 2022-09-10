@@ -15,6 +15,7 @@ using namespace AST;
 
 namespace AST {
     class AssignNode : public StmtNode {
+
     public:
         shared_ptr<VariableNode> variableNode;
         shared_ptr<ExprNode> expressionNode;

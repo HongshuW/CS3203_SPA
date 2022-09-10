@@ -22,6 +22,7 @@ namespace AST {
             CondExprNode castedNode = dynamic_cast<const CondExprNode&>(node);
             return condExpr == castedNode.condExpr;
         }
+
     };
 
 } // AST

@@ -8,6 +8,7 @@
 #include "ASTNode.h"
 #include <string>
 
+
 namespace AST {
 
     class ExprNode : public ASTNode {
@@ -21,6 +22,7 @@ namespace AST {
             ExprNode castedNode = dynamic_cast<const ExprNode&>(node);
             return expr == castedNode.expr;
         }
+
     };
 
 } // AST

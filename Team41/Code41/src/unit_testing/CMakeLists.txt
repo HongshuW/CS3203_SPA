@@ -13,7 +13,6 @@ add_executable(unit_testing ${srcs}
     src/pkb/TestDataModifier.cpp
     src/query_evaluator/TestQueryEvaluator.cpp
     src/query_evaluator/TestQueryResultFormatter.cpp
-    src/design_extractor/TestVariableExtractor.cpp
     src/query_evaluator/Dummies/DummyQueryBuilder.cpp
     src/query_evaluator/Dummies/DummyQueryBuilder.h
     src/query_evaluator/TestDataPreprocessor.cpp
@@ -26,6 +25,10 @@ add_executable(unit_testing ${srcs}
     src/query_evaluator/DummyDataRetriever.h
     src/AST/utils/TestASTUtils.cpp
     src/parser/TestParser.cpp
-    src/pkb/TestRelationshipManager.cpp)
+    src/pkb/TestRelationshipManager.cpp
+    src/design_extractor/TestEntityExtraction.cpp
+    src/design_extractor/Dummies.cpp
+    src/design_extractor/Dummies.h)
+
 
 target_link_libraries(unit_testing spa)
