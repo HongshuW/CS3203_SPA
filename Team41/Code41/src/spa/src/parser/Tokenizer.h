@@ -12,18 +12,22 @@
 
 // maybe include method to tokenise symbols
 
+using namespace std;
+
 namespace SourceParser {
     class Tokenizer {
     private:
-        const std::unordered_set<std::string> SYMBOL_SET = {"(", ")", ",", "{", "}", ";", "=", "+", "-", ">", "<", "!"};
+        const unordered_set<string> SYMBOL_SET = {"(", ")", ",", "{", "}", ";", "=",
+                                                            "+", "-", ">", "<", "!", "*", "/", "%", "|", "&"};
         unsigned int currIdx;
-        std::string source;
-        std::string curr;
+        string source;
+        string curr;
         char peek();
         char pop();
         void processSymbols();
         void processString();
         void processAlNum();
+        bool match(char s);
 
     public:
         std::vector<std::string> tokens;
