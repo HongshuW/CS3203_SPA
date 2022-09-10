@@ -16,7 +16,7 @@ using namespace std;
 using namespace DE;
 
 TEST_CASE("Test relation extractor") {
-    SECTION("Parent: no relations") {
+    SECTION("Parent(*): no relations") {
         /*
         * procedure CASE1 {
         * 1 x = 1
@@ -31,7 +31,9 @@ TEST_CASE("Test relation extractor") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
+        shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
         REQUIRE(actualParentRelations->empty());
+        REQUIRE(actualParentTRelations->empty());
     }
 
     SECTION("Parent: has relations") {
@@ -73,6 +75,7 @@ TEST_CASE("Test relation extractor") {
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
+        // check parent relations
         shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
         vector<string> expectedR1 = {"2", "3"};
         vector<string> expectedR2 = {"2", "4"};
@@ -91,5 +94,24 @@ TEST_CASE("Test relation extractor") {
         }
         REQUIRE(actualIterator == actualParentRelations->end());
         REQUIRE(expectedIterator == expectedParentRelations.end());
+
+        // check parent* relations
+        shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
+        vector<string> expectedR5 = {"2", "5"};
+        vector<string> expectedR6 = {"2", "6"};
+        list<vector<string>> expectedParentTRelations{expectedR1, expectedR2, expectedR5, expectedR6, expectedR3, expectedR4};
+        auto actualParentTIterator = actualParentTRelations->begin();
+        auto expectedParentTIterator = expectedParentTRelations.begin();
+        while (actualParentTIterator != actualParentTRelations->end()
+        && expectedParentTIterator != expectedParentTRelations.end()) {
+            vector<string> a = *actualParentTIterator;
+            vector<string> e = *expectedParentTIterator;
+            REQUIRE(a[0] == e[0]);
+            REQUIRE(a[1] == e[1]);
+            advance(actualParentTIterator, 1);
+            advance(expectedParentTIterator, 1);
+        }
+        REQUIRE(actualParentTIterator == actualParentTRelations->end());
+        REQUIRE(expectedParentTIterator == expectedParentTRelations.end());
     }
 }
