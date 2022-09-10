@@ -14,9 +14,9 @@ using namespace AST;
 
 namespace AST {
     class ProcedureNode : public ASTNode {
-    private:
-        string procedureName;
+
     public:
+        string procedureName;
         vector<shared_ptr<StmtNode>> stmtList;
         ProcedureNode(string procedureName, vector<shared_ptr<StmtNode>> stmtList);
     };

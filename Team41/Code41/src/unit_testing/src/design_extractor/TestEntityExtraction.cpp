@@ -15,7 +15,7 @@
 
 using namespace std;
 using namespace DE;
-TEST_CASE("Test variable extraction") {
+TEST_CASE("Test entity extraction") {
     SECTION("no variable ") {
         /*
         * procedure1 {
@@ -25,45 +25,60 @@ TEST_CASE("Test variable extraction") {
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractVariables();
-        unordered_set<string> expected = unordered_set<string>{};
-        REQUIRE(expected == *actual);
+
+        auto variables_variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
+        unordered_set<string> variables_variables_expected = unordered_set<string>{};
+        REQUIRE(variables_variables_expected == *variables_variables_actual);
+
+        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
+        unordered_set<string> constants_expected = unordered_set<string>{};
+        REQUIRE(constants_expected == *constants_actual);
+
     }
     SECTION("simple variable extraction") {
         /*
         * procedure1 {
         * 1 print x
         * 2 read y
+        * 3 x = y + 1
         * }
         */
         shared_ptr<StmtNode> printNode = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<StmtNode> readNode = make_shared<ReadNode>(make_shared<VariableNode>("y"));
-        shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode, readNode}));
+        shared_ptr<StmtNode> assignNode = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("y + 1"));
+        shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode, readNode, assignNode}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractVariables();
-        unordered_set<string> expected = unordered_set<string>{"x", "y"};
-        REQUIRE(expected == *actual);
+
+        auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
+        unordered_set<string> variables_expected = unordered_set<string>{"x", "y"};
+        REQUIRE(variables_expected == *variables_actual);
+
+        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
+        unordered_set<string> constants_expected = unordered_set<string>{"1"};
+        REQUIRE(constants_expected == *constants_actual);
     }
     SECTION("variable extraction in nested stmts") {
         /*
      * procedure2 {
      * 1 print x
      * 2 read y
-     * 3 if (...) then {
-     * 4 print z} else {
-     * 5 read w}
-     * 6 read foo
+     * 3 if (bar == y + 112312341234) then {
+     * 4 x = y + 1
+     * 5 print z} else {
+     * 6 read w}
+     * 7 read fo0
      * }
      */
         shared_ptr<StmtNode> printNode = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<StmtNode> readNode = make_shared<ReadNode>(make_shared<VariableNode>("y"));
 
-        shared_ptr<CondExprNode> ifCondExpr = make_shared<CondExprNode>("bar == y + 1");
+        shared_ptr<CondExprNode> ifCondExpr = make_shared<CondExprNode>("bar == y + 112312341234");
         shared_ptr<StmtNode> printNode2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
         shared_ptr<StmtNode> readNode2 = make_shared<ReadNode>(make_shared<VariableNode>("w"));
-        vector<shared_ptr<StmtNode>> ifStmtList = {printNode2};
+        shared_ptr<StmtNode> assignNode = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("y + 1"));
+        vector<shared_ptr<StmtNode>> ifStmtList = {printNode2, assignNode};
         vector<shared_ptr<StmtNode>> elseStmtList = {readNode2};
         shared_ptr<StmtNode> ifNode = make_shared<IfNode>(ifCondExpr, ifStmtList, elseStmtList);
 
@@ -74,18 +89,22 @@ TEST_CASE("Test variable extraction") {
 
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode2);
-        auto actual = designExtractor.extractVariables();
-        unordered_set<string> expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar"};
-        REQUIRE(expected == *actual);
+        auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
+        unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar"};
+        REQUIRE(variables_expected == *variables_actual);
+
+        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
+        unordered_set<string> constants_expected = unordered_set<string>{"1", "112312341234"};
+        REQUIRE(constants_expected == *constants_actual);
     }
     SECTION("Test variable extraction in multiple nested stmts") {
         /*
          * procedure3 {
          * 1 print x
          * 2 read y
-         * 3 if (...) then {
+         * 3 if (bar == y + 1) then {
          * 4 print z
-         * 5 while (...) {
+         * 5 while ((baz == qux + 1) && (5 + 3 < quux) || haha) {
          * 6    read baz
          * 7    print bar
          *   }} else {
@@ -120,16 +139,21 @@ TEST_CASE("Test variable extraction") {
         shared_ptr<ProgramNode> programNode3 = make_shared<ProgramNode>(ProgramNode({procedureNode}));
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode3);
-        auto actual = designExtractor.extractVariables();
-        unordered_set<string> expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "baz", "qux", "quux", "haha"};
-        REQUIRE(expected == *actual);
+        auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
+        unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "baz", "qux", "quux", "haha"};
+        REQUIRE(variables_expected == *variables_actual);
+
+
+        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
+        unordered_set<string> constants_expected = unordered_set<string>{"1", "5", "3"};
+        REQUIRE(constants_expected == *constants_actual);
     }
     SECTION("Test multiple procedures") {
         /*
    * procedure1 {
    * 1 print x
    * 2 read y
-   * 3 if (...) then {
+   * 3 if (bar == y + 1) then {
    * 4 print z} else {
    * 5 read w}
    * 6 read foo
@@ -138,7 +162,7 @@ TEST_CASE("Test variable extraction") {
         shared_ptr<StmtNode> printNode = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<StmtNode> readNode = make_shared<ReadNode>(make_shared<VariableNode>("y"));
 
-        shared_ptr<CondExprNode> ifCondExpr = make_shared<CondExprNode>("bar == y + 1");
+        shared_ptr<CondExprNode> ifCondExpr = make_shared<CondExprNode>("bar == y * 1");
         shared_ptr<StmtNode> printNode2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
         shared_ptr<StmtNode> readNode2 = make_shared<ReadNode>(make_shared<VariableNode>("w"));
         vector<shared_ptr<StmtNode>> ifStmtList = {printNode2};
@@ -167,7 +191,7 @@ TEST_CASE("Test variable extraction") {
         shared_ptr<StmtNode> printNodeP2 = make_shared<PrintNode>(make_shared<VariableNode>("v1"));
         shared_ptr<StmtNode> readNodeP2 = make_shared<ReadNode>(make_shared<VariableNode>("v2"));
 
-        shared_ptr<CondExprNode> ifCondExprP2 = make_shared<CondExprNode>("bar == y + 1");
+        shared_ptr<CondExprNode> ifCondExprP2 = make_shared<CondExprNode>("bar == y + 100 / 20");
         shared_ptr<StmtNode> printNode2P2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
         shared_ptr<StmtNode> readNode2P2 = make_shared<ReadNode>(make_shared<VariableNode>("w"));
 
@@ -182,7 +206,7 @@ TEST_CASE("Test variable extraction") {
         vector<shared_ptr<StmtNode>> ifStmtListP2 = {printNode2P2, whileNodeP2};
         vector<shared_ptr<StmtNode>> elseStmtListP2 = {readNode2P2};
 
-        shared_ptr<CondExprNode> whileCondExprP2 = make_shared<CondExprNode>("(baz == qux + 1) && (5 + 3 < quux) || haha");
+        shared_ptr<CondExprNode> whileCondExprP2 = make_shared<CondExprNode>("(baz == qux + 1) && (5 + 3 <= quux) || haha => 4");
         shared_ptr<StmtNode> ifNodeP2 = make_shared<IfNode>(whileCondExprP2, ifStmtListP2, elseStmtListP2);
 
         shared_ptr<StmtNode> readNode3P2 = make_shared<ReadNode>(make_shared<VariableNode>("foo"));
@@ -192,10 +216,13 @@ TEST_CASE("Test variable extraction") {
         shared_ptr<ProgramNode> programNode3 = make_shared<ProgramNode>(ProgramNode({procedureNode1, procedureNode2}));
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode3);
-        auto actual = designExtractor.extractVariables();
-        unordered_set<string> expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "v1", "v2", "baz", "qux", "quux", "haha"};
-        designExtractor.saveVariableToPKB();
-        REQUIRE(expected == *actual);
+        auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
+        unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "v1", "v2", "baz", "qux", "quux", "haha"};
+        REQUIRE(variables_expected == *variables_actual);
+
+        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
+        unordered_set<string> constants_expected = unordered_set<string>{"1", "100", "20", "5", "3", "4"};
+        REQUIRE(constants_expected == *constants_actual);
 
     }
 

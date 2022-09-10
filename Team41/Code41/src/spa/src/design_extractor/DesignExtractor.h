@@ -10,14 +10,17 @@
 #include <unordered_map>
 #include <unordered_set>
 #include "pkb/DataModifier.h"
+#include "query_builder/commons/DesignEntity.h"
 
+using namespace QB;
 namespace DE {
     class DesignExtractor {
     private:
         shared_ptr<ProgramNode> programNode;
         DataModifier dataModifier;
-        void extractVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode,
-                                           shared_ptr<unordered_set<string>> set);
+        void
+        extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode, shared_ptr<unordered_set<string>> set,
+                                     DesignEntity designEntityType);
         unordered_set<string> getVariablesFromExprString(string expr);
         bool is_number(const std::string& s);
 
@@ -25,7 +28,7 @@ namespace DE {
     public:
         explicit DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode);
 
-        shared_ptr<unordered_set<string>> extractVariables();
+        shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
         void saveVariableToPKB();
     };
 

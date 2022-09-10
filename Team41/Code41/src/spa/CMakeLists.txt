@@ -103,7 +103,7 @@ add_library(spa ${srcs} ${headers}
         src/AST/AssignNode.h
         src/AST/ProcedureNode.cpp
         src/AST/ProcedureNode.h
-        src/AST/StmtNode.h src/AST/utils/ASTUtils.cpp src/AST/utils/ASTUtils.h)
+        src/AST/StmtNode.h src/AST/utils/ASTUtils.cpp src/AST/utils/ASTUtils.h src/design_extractor/EntityExtractor.cpp src/design_extractor/EntityExtractor.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

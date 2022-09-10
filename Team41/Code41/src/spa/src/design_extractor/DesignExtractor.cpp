@@ -6,15 +6,16 @@
 #include "pkb/DataModifier.h"
 #include "AST/utils/ASTUtils.h"
 #include <queue>
+#include "EntityExtractor.h"
 
 using namespace AST;
 using namespace DE;
 using namespace std;
 
-shared_ptr<unordered_set<string>> DesignExtractor::extractVariables() {
+shared_ptr<unordered_set<string>> DesignExtractor::extractEntities(DesignEntity designEntityType) {
     shared_ptr<unordered_set<string>> result = make_shared<unordered_set<string>>();
     for (auto p: this->programNode->procedureList) {
-        this->extractVariablesFromProcedure(p, result);
+        this->extractEntitiesFromProcedure(p, result, designEntityType);
 
     }
     return result;
@@ -22,7 +23,7 @@ shared_ptr<unordered_set<string>> DesignExtractor::extractVariables() {
 }
 
 void DesignExtractor::saveVariableToPKB() {
-    auto set = this->extractVariables();
+    auto set = this->extractEntities(DesignEntity::PROCEDURE);
     list<string> lst;
     auto it = lst.begin();
     for (const auto& elem: *set) {
@@ -35,8 +36,14 @@ DesignExtractor::DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNo
 
 }
 
-void DesignExtractor::extractVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode,
-                                                    shared_ptr<unordered_set<string>> set) {
+void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode,
+                                                   shared_ptr<unordered_set<string>> set,
+                                                   DesignEntity designEntityType) {
+    if (designEntityType == QB::DesignEntity::PROCEDURE) {
+        set->insert(procedureNode->procedureName);
+        return;
+    }
+
     queue<shared_ptr<StmtNode>> queue;
 
     for (auto stmtNode: procedureNode->stmtList) {
@@ -45,29 +52,15 @@ void DesignExtractor::extractVariablesFromProcedure(shared_ptr<ProcedureNode> pr
     while (!queue.empty()) {
         auto stmtNode = queue.front();
         queue.pop();
+        //extract entity from current node
+        unordered_set<string> entities = EntityExtractor::extractDesignEntity(stmtNode, designEntityType);
+        set->insert(entities.begin(), entities.end());
+
+        //bfs for child nodes
         NodeType nodeType = ASTUtils::getNodeTypeByName(stmtNode);
         switch (nodeType) {
-            case AST::PRINT_NODE: {
-                shared_ptr<PrintNode> printNode = dynamic_pointer_cast<PrintNode>(stmtNode);
-                set->insert(printNode->variableNode->variable);
-                break;
-            }
-            case AST::ASSIGN_NODE: {
-                shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(stmtNode);
-                set->insert(assignNode->variableNode->variable);
-                unordered_set<string> variables = getVariablesFromExprString(assignNode->expressionNode->expression);
-                set->insert(variables.begin(), variables.end());
-                break;
-            }
-            case AST::CALL_NODE: {
-                shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(stmtNode);
-                set->insert(callNode->variableNode->variable);
-                break;
-            }
             case AST::IF_NODE: {
                 shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-                unordered_set<string> variables = getVariablesFromExprString(ifNode->condExpr->condExpr);
-                set->insert(variables.begin(), variables.end());
                 for (auto childStmtNode: ifNode->ifStmtList) {
                     queue.push(childStmtNode);
                 }
@@ -76,15 +69,8 @@ void DesignExtractor::extractVariablesFromProcedure(shared_ptr<ProcedureNode> pr
                 }
                 break;
             }
-            case AST::READ_NODE:{
-                shared_ptr<ReadNode> readNode = dynamic_pointer_cast<ReadNode>(stmtNode);
-                set->insert(readNode->variableNode->variable);
-                break;
-            }
             case AST::WHILE_NODE: {
                 shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
-                unordered_set<string> variables = getVariablesFromExprString(whileNode->condExpr->condExpr);
-                set->insert(variables.begin(), variables.end());
                 for (auto childStmtNode: whileNode->stmtList) {
                     queue.push(childStmtNode);
                 }
@@ -94,6 +80,7 @@ void DesignExtractor::extractVariablesFromProcedure(shared_ptr<ProcedureNode> pr
                 break;
             }
         }
+
     }
 }
 
