@@ -57,12 +57,16 @@ void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
     this->dataModifier.saveVariables(entityResultList);
 }
 
-void DesignExtractor::saveParentToPKB() {
-    list<vector<string>> parentRelations = *this->extractRelations(RelationType::PARENT);
-    auto parentIterator = parentRelations.begin();
-    while (parentIterator != parentRelations.end()) {
-        this->dataModifier.saveParent(*parentIterator);
-        advance(parentIterator, 1);
+void DesignExtractor::saveRelationToPKB(RelationType relationType) {
+    list<vector<string>> relations = *this->extractRelations(relationType);
+    auto iterator = relations.begin();
+    while (iterator != relations.end()) {
+        if (relationType == RelationType::PARENT) {
+            this->dataModifier.saveParent(*iterator);
+        } else if (relationType == RelationType::PARENT_T) {
+            this->dataModifier.saveParentT(*iterator);
+        }
+        advance(iterator, 1);
     }
 }
 

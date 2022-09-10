@@ -4,8 +4,6 @@
 
 #include "Parser.h"
 #include "Exceptions.h"
-#include "iostream"
-#include "LexicalAnalyser.h"
 
 using namespace SourceParser;
 using namespace std;
@@ -64,10 +62,10 @@ vector<shared_ptr<StmtNode>> Parser::parseStatementList() {
             break;
         }
     }
-    //! Not too sure if we need this check
-//    if (statementList.size() == 0) {
-//        throw SPParseException("Statement list cannot be empty.");
-//    }
+
+    if (statementList.size() == 0) {
+        throw SPParseException("Statement list cannot be empty.");
+    }
     return statementList;
 }
 

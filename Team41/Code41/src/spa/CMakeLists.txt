@@ -45,8 +45,6 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/QueryResultFormatter.h
         src/parser/Tokenizer.cpp
         src/parser/Tokenizer.h
-        src/parser/LexicalAnalyser.cpp
-        src/parser/LexicalAnalyser.h
         src/ast/ProcedureNode.cpp
         src/ast/ProcedureNode.h
         src/parser/Parser.cpp
