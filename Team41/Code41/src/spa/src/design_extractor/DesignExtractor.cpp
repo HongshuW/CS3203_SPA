@@ -7,12 +7,11 @@
 #include "AST/utils/ASTUtils.h"
 #include <queue>
 #include "EntityExtractor.h"
+#include "RelationExtractor.h"
 
 using namespace AST;
 using namespace DE;
 using namespace std;
-
-unordered_map<int, vector<int>> parentRelations;
 
 shared_ptr<unordered_set<string>> DesignExtractor::extractEntities(DesignEntity designEntityType) {
     shared_ptr<unordered_set<string>> result = make_shared<unordered_set<string>>();
@@ -23,6 +22,11 @@ shared_ptr<unordered_set<string>> DesignExtractor::extractEntities(DesignEntity 
     return result;
 }
 
+shared_ptr<list<vector<string>>> DesignExtractor::extractRelations(RelationType relationType) {
+    list<vector<string>> relationList = RelationExtractor::extractRelation(this->programNode, relationType);
+    return make_shared<list<vector<string>>>(relationList);
+}
+
 void DesignExtractor::saveVariableToPKB() {
     auto set = this->extractEntities(DesignEntity::PROCEDURE);
     list<string> lst;
@@ -31,6 +35,15 @@ void DesignExtractor::saveVariableToPKB() {
         it = lst.insert(it, elem);
     }
     this->dataModifier.saveVariables(lst);
+}
+
+void DesignExtractor::saveParentToPKB() {
+    list<vector<string>> parentRelations = *this->extractRelations(RelationType::PARENT);
+    auto parentIterator = parentRelations.begin();
+    while (parentIterator != parentRelations.end()) {
+        this->dataModifier.saveParent(*parentIterator);
+        advance(parentIterator, 1);
+    }
 }
 
 DesignExtractor::DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode) : dataModifier(dataModifier), programNode(programNode) {
@@ -110,66 +123,4 @@ bool DesignExtractor::is_number(const std::string& s)
     std::string::const_iterator it = s.begin();
     while (it != s.end() && std::isdigit(*it)) ++it;
     return !s.empty() && it == s.end();
-}
-
-unordered_map<int, vector<int>> DesignExtractor::extractParentRelations() {
-    unordered_map<int, vector<int>> parentRelations;
-
-    // extract Parent and Parent* relations
-    ProgramNode root = *programNode;
-//    shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
-    queue<shared_ptr<ASTNode>> queue;
-    queue.push(make_shared<ProgramNode>(root));
-    while (!queue.empty()) {
-        shared_ptr<ASTNode> current = queue.front();
-        queue.pop();
-
-        NodeType nodeType = ASTUtils::getNodeTypeByName(current);
-        if (nodeType == NodeType::WHILE_NODE) {
-            shared_ptr<WhileNode> ptr = dynamic_pointer_cast<WhileNode>(current);
-            vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
-            for (shared_ptr<StmtNode> n: stmtList) {
-                queue.push(n);
-                // TODO: Find out statement numbers -> row{(*ptr).stmt_no, (*n).stmt_no}
-                pair<int, int> row{};
-                parentRelations.insert(row);
-            }
-        } else if (nodeType == NodeType::IF_NODE) {
-            shared_ptr<IfNode> ptr = dynamic_pointer_cast<IfNode>(current);
-            vector<shared_ptr<StmtNode>> ifStmtList = ptr->ifStmtList;
-            vector<shared_ptr<StmtNode>> elseStmtList = ptr->elseStmtList;
-            for (shared_ptr<StmtNode> n: ifStmtList) {
-                queue.push(n);
-                // TODO: Find out statement numbers -> row{(*ptr).stmt_no, (*n).stmt_no}
-                pair<int, int> row{};
-                parentRelations.insert(row);
-            }
-            for (shared_ptr<StmtNode> n: elseStmtList) {
-                queue.push(n);
-                // TODO: Find out statement numbers -> row{(*ptr).stmt_no, (*n).stmt_no}
-                pair<int, int> row{};
-                parentRelations.insert(row);
-            }
-        } else if (nodeType == NodeType::PROGRAM_NODE) {
-            // encounter a program node, check its procedures
-            shared_ptr<ProgramNode> ptr = dynamic_pointer_cast<ProgramNode>(current);
-            vector<shared_ptr<ProcedureNode>> procedureList = ptr->procedureList;
-            for (shared_ptr<ProcedureNode> n: procedureList) {
-                queue.push(n);
-            }
-        } else if (nodeType == NodeType::PROCEDURE_NODE) {
-            // encounter a procedure node, check its statements
-            shared_ptr<ProcedureNode> ptr = dynamic_pointer_cast<ProcedureNode>(current);
-            vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
-            for (shared_ptr<StmtNode> n: stmtList) {
-                queue.push(n);
-            }
-        }
-    }
-}
-
-void DesignExtractor::saveParentToPKB() {
-    if (parentRelations.empty()) {
-        parentRelations = extractParentRelations();
-    }
 }

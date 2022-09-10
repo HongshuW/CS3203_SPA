@@ -11,13 +11,13 @@
 #include <unordered_set>
 #include "pkb/DataModifier.h"
 #include "query_builder/commons/DesignEntity.h"
+#include "query_builder/commons/RelationType.h"
 
 using namespace QB;
 namespace DE {
     class DesignExtractor {
     private:
         shared_ptr<ProgramNode> programNode;
-        unordered_map<int, vector<int>> parentRelations;
         DataModifier dataModifier;
         void
         extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode, shared_ptr<unordered_set<string>> set,
@@ -28,8 +28,8 @@ namespace DE {
     public:
         explicit DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode);
 
-        unordered_map<int, vector<int>> extractParentRelations();
         shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
+        shared_ptr<list<vector<string>>> extractRelations(RelationType relationType);
         void saveVariableToPKB();
         void saveParentToPKB();
     };
