@@ -9,7 +9,7 @@
 namespace DE {
     unordered_map<int, vector<int>> RelationExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
         unordered_map<int, vector<int>> parentRelations;
-        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
+        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
         queue<shared_ptr<ASTNode>> queue;
         queue.push(rootPtr);
 
@@ -17,7 +17,7 @@ namespace DE {
             shared_ptr<ASTNode> current = queue.front();
             queue.pop();
 
-            NodeType nodeType = ASTUtils::getNodeTypeByName(current);
+            NodeType nodeType = ASTUtils::getNodeType(current);
             if (nodeType == NodeType::WHILE_NODE) {
                 shared_ptr<WhileNode> ptr = dynamic_pointer_cast<WhileNode>(current);
                 vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
