@@ -245,12 +245,17 @@ shared_ptr<VariableNode> Parser::parseVariableNode() {
 }
 
 shared_ptr<ExprNode> Parser::parseExprNode() {
-    //TODO: store the string for now, will convert to a ASTNode in the future
-    string expr = pop();
+    vector<string> expr;
+    expr.push_back(pop());
     while (peek().compare(";") != 0) {
-        expr += pop();
+        expr.push_back(pop());
     }
-    return make_shared<ExprNode>(expr);
+    if (expr.size() <= 0) {
+        throw SPParseException("The RHS of assign statement cannot be empty");
+    }
+    ExprNodeParser exprNodeParser = ExprNodeParser(expr);
+    shared_ptr<ExprNode> exprNode = exprNodeParser.parse();
+    return exprNode;
 }
 
 shared_ptr<CondExprNode> Parser::parseCondExprNode() {

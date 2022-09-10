@@ -16,6 +16,7 @@
 #include "AST/WhileNode.h"
 #include "AST/IfNode.h"
 #include "utils/Utils.h"
+#include "ExprNodeParser.h"
 #include <unordered_set>
 
 using namespace std;
@@ -57,7 +58,7 @@ namespace SourceParser {
         shared_ptr<CondExprNode> parseCondExprNode();
 
     public:
-        explicit Parser(std::vector<std::string> tokens);
+        explicit Parser(vector<string> tokens);
         //! returns a ProgramNode at runtime
         shared_ptr<ASTNode> parse();
     };
