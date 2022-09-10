@@ -53,6 +53,7 @@ vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_
 
 void FollowsExtractor::saveFollowsToPKB(vector<shared_ptr<StmtNode>> stmtList,
                                          shared_ptr<ProgramNode> programNode) {
+
     shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>  nodeToLineNoMap =
             ASTUtils::getNodePtrToLineNumMap(programNode);
     vector<int> stmtNoList;

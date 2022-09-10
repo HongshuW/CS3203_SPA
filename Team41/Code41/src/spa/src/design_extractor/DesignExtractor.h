@@ -24,7 +24,6 @@ namespace DE {
                                      DesignEntity designEntityType);
         void saveEntityToPKB(DesignEntity designEntity);
 
-
     public:
         explicit DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode);
         shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);

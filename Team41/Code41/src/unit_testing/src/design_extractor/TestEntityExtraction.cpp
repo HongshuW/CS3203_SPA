@@ -236,9 +236,12 @@ TEST_CASE("Test entity extraction") {
         auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
         unordered_set<string> constants_expected = unordered_set<string>{"1", "100", "20", "5", "3", "4"};
         REQUIRE(constants_expected == *constants_actual);
+<<<<<<< HEAD
 
         auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
         unordered_set<string> procedures_expected = unordered_set<string>{"procedure2", "procedure3"};
         REQUIRE(constants_expected == *constants_actual);
+=======
+>>>>>>> 1d3aba53714197bba8a183a16fb9e675ce3954ca
     }
 }
