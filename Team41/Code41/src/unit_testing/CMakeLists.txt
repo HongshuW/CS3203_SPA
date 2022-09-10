@@ -28,7 +28,7 @@ add_executable(unit_testing ${srcs}
     src/pkb/TestRelationshipManager.cpp
     src/design_extractor/TestEntityExtraction.cpp
     src/design_extractor/Dummies.cpp
-    src/design_extractor/Dummies.h)
+    src/design_extractor/Dummies.h src/design_extractor/TestFollowsExtraction.cpp)
 
 
 target_link_libraries(unit_testing spa)

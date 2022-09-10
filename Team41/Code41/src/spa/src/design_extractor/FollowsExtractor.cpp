@@ -7,17 +7,16 @@
 #include "AST/utils/ASTUtils.h"
 #include "pkb/DataModifier.h"
 
+using namespace std;
 
 void FollowsExtractor::extractFollows(shared_ptr<ProgramNode> programNode) {
-    vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-    for (auto procedureNode : procedureList) {
-        extractFollowsFromProcedureNode(procedureNode);
-    }
+    vector<vector<shared_ptr<StmtNode>>> listOfStmtList = getListOfStmtList(programNode);
 }
 
-vector<vector<shared_ptr<StmtNode>>>
-        FollowsExtractor::extractFollowsFromProcedureNode(shared_ptr<ProcedureNode> procedureNode) {
+vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_ptr<ProgramNode> programNode) {
     vector<vector<shared_ptr<StmtNode>>> listOfStmtList;
+    vector<shared_ptr<ProcedureNode>> procedureList = programNode -> procedureList;
+    shared_ptr<ProcedureNode> procedureNode = procedureList.at(0);
     queue<vector<shared_ptr<StmtNode>>> queue;
     queue.push(procedureNode->stmtList);
     while(!queue.empty()) {
@@ -33,12 +32,14 @@ vector<vector<shared_ptr<StmtNode>>>
                     vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
                     queue.push(ifStmtList);
                     queue.push(elseStmtList);
+                    break;
                 }
 
                 case AST::WHILE_NODE: {
                     shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
                     vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
                     queue.push(whileStmtList);
+                    break;
                 }
 
                 default:
@@ -50,15 +51,7 @@ vector<vector<shared_ptr<StmtNode>>>
     return listOfStmtList;
 }
 
-
-void FollowsExtractor::extractFollowsFromStmtList(vector<vector<shared_ptr<StmtNode>>> listOfStmtList,
-                                                  shared_ptr<ProgramNode> programNode) {
-    for (auto stmtList : listOfStmtList) {
-        saveFollowsToPKB(stmtList, programNode);
-    }
-}
-
-void FollowsExtractor::saveFollowsToPKB (vector<shared_ptr<StmtNode>> stmtList,
+void FollowsExtractor::saveFollowsToPKB(vector<shared_ptr<StmtNode>> stmtList,
                                          shared_ptr<ProgramNode> programNode) {
     shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> nodeToLineNoMap =
             ASTUtils::getNodePtrToLineNumMap(programNode);
@@ -78,6 +71,8 @@ void FollowsExtractor::saveFollowsToPKB (vector<shared_ptr<StmtNode>> stmtList,
         }
     }
 }
+
+
 
 
 
