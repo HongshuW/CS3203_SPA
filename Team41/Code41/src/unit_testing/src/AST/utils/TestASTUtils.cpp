@@ -22,10 +22,10 @@ TEST_CASE("Test AST utils") {
 
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
         shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
-        ASTUtils::getNodePtrToLineNumMap(
+        ASTUtils::getNodeLineMapping(
                 programNode, actual_nodeToLine, actual_lineToNode);
 
-        ASTUtils::getNodePtrToLineNumMap(
+        ASTUtils::getNodeLineMapping(
                 programNode, actual_nodeToLine, actual_lineToNode);
 
         unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{};
@@ -48,10 +48,10 @@ TEST_CASE("Test AST utils") {
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
         shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
-        ASTUtils::getNodePtrToLineNumMap(
+        ASTUtils::getNodeLineMapping(
                 programNode, actual_nodeToLine, actual_lineToNode);
 
-        ASTUtils::getNodePtrToLineNumMap(
+        ASTUtils::getNodeLineMapping(
                 programNode, actual_nodeToLine, actual_lineToNode);
         unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{{printNode, 1}, {readNode, 2}};
 
@@ -89,10 +89,10 @@ TEST_CASE("Test AST utils") {
 
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
         shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
-        ASTUtils::getNodePtrToLineNumMap(
+        ASTUtils::getNodeLineMapping(
                 programNode, actual_nodeToLine, actual_lineToNode);
 
-        ASTUtils::getNodePtrToLineNumMap(
+        ASTUtils::getNodeLineMapping(
                 programNode, actual_nodeToLine, actual_lineToNode);
         unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{{printNode, 1}, {readNode, 2}, {ifNode, 3}, {printNode2, 4} , {readNode2 , 5}, {readNode3, 6}};
         REQUIRE(*actual_nodeToLine == expected_nodeToLine);
@@ -142,10 +142,10 @@ TEST_CASE("Test AST utils") {
 
         shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
         shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
-        ASTUtils::getNodePtrToLineNumMap(
+        ASTUtils::getNodeLineMapping(
                 programNode, actual_nodeToLine, actual_lineToNode);
 
-        ASTUtils::getNodePtrToLineNumMap(
+        ASTUtils::getNodeLineMapping(
                 programNode, actual_nodeToLine, actual_lineToNode);
         unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{
             {printNode, 1},
@@ -212,8 +212,8 @@ TEST_CASE("Test AST utils") {
             shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode_p1, procedureNode2}));
             shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
             shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
-            ASTUtils::getNodePtrToLineNumMap(
-                    programNode, actual_nodeToLine, actual_lineToNode);
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
             unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{{printNode_p1, 1},
                                                                                                         {readNode_p1, 2},
                                                                                                         {printNode, 3},
