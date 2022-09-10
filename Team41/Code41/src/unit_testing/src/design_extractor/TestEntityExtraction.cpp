@@ -58,6 +58,10 @@ TEST_CASE("Test entity extraction") {
         auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
         unordered_set<string> constants_expected = unordered_set<string>{"1"};
         REQUIRE(constants_expected == *constants_actual);
+
+        auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
+        unordered_set<string> procedures_expected = unordered_set<string>{"procedure1"};
+        REQUIRE(constants_expected == *constants_actual);
     }
     SECTION("variable extraction in nested stmts") {
         /*
@@ -95,6 +99,10 @@ TEST_CASE("Test entity extraction") {
 
         auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
         unordered_set<string> constants_expected = unordered_set<string>{"1", "112312341234"};
+        REQUIRE(constants_expected == *constants_actual);
+
+        auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
+        unordered_set<string> procedures_expected = unordered_set<string>{"procedure2"};
         REQUIRE(constants_expected == *constants_actual);
     }
     SECTION("Test variable extraction in multiple nested stmts") {
@@ -146,6 +154,10 @@ TEST_CASE("Test entity extraction") {
 
         auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
         unordered_set<string> constants_expected = unordered_set<string>{"1", "5", "3"};
+        REQUIRE(constants_expected == *constants_actual);
+
+        auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
+        unordered_set<string> procedures_expected = unordered_set<string>{"procedure3"};
         REQUIRE(constants_expected == *constants_actual);
     }
     SECTION("Test multiple procedures") {
@@ -222,6 +234,10 @@ TEST_CASE("Test entity extraction") {
 
         auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
         unordered_set<string> constants_expected = unordered_set<string>{"1", "100", "20", "5", "3", "4"};
+        REQUIRE(constants_expected == *constants_actual);
+
+        auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
+        unordered_set<string> procedures_expected = unordered_set<string>{"procedure2", "procedure3"};
         REQUIRE(constants_expected == *constants_actual);
 
     }
