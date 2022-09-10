@@ -9,6 +9,9 @@
 
 using namespace AST;
 using namespace DE;
+
+unordered_map<int, vector<int>> parentRelations;
+
 DesignExtractor::DesignExtractor(shared_ptr<ASTNode> programNode)
         : programNode(programNode){
     programNode = programNode;
@@ -30,9 +33,8 @@ void DesignExtractor::saveVariableToPKB() {
     dataMod.saveVariables(varList);
 }
 
-void DesignExtractor::saveParentRelationsToPKB() {
-    list<vector<string>> parentRelations;
-    list<vector<string>> parentTRelations;
+unordered_map<int, vector<int>> DesignExtractor::extractParentRelations() {
+    unordered_map<int, vector<int>> parentRelations;
 
     // extract Parent and Parent* relations
     ASTNode root = *programNode;
@@ -50,8 +52,8 @@ void DesignExtractor::saveParentRelationsToPKB() {
             for (shared_ptr<StmtNode> n: stmtList) {
                 queue.push(n);
                 // TODO: Find out statement numbers -> row{(*ptr).stmt_no, (*n).stmt_no}
-                vector<string> row{};
-                parentRelations.push_back(row);
+                pair<int, int> row{};
+                parentRelations.insert(row);
             }
         } else if (nodeType == NodeType::IF_NODE) {
             shared_ptr<IfNode> ptr = dynamic_pointer_cast<IfNode>(current);
@@ -60,14 +62,14 @@ void DesignExtractor::saveParentRelationsToPKB() {
             for (shared_ptr<StmtNode> n: ifStmtList) {
                 queue.push(n);
                 // TODO: Find out statement numbers -> row{(*ptr).stmt_no, (*n).stmt_no}
-                vector<string> row{};
-                parentRelations.push_back(row);
+                pair<int, int> row{};
+                parentRelations.insert(row);
             }
             for (shared_ptr<StmtNode> n: elseStmtList) {
                 queue.push(n);
                 // TODO: Find out statement numbers -> row{(*ptr).stmt_no, (*n).stmt_no}
-                vector<string> row{};
-                parentRelations.push_back(row);
+                pair<int, int> row{};
+                parentRelations.insert(row);
             }
         } else if (nodeType == NodeType::PROGRAM_NODE) {
             // encounter a program node, check its procedures
@@ -84,21 +86,11 @@ void DesignExtractor::saveParentRelationsToPKB() {
                 queue.push(n);
             }
         }
-
     }
+}
 
-    // save relations to the PKB
-    DataModifier dataModifier = DataModifier();
-    auto parentIterator = parentRelations.begin();
-    while (parentIterator != parentRelations.end()) {
-        vector<string> row = *parentIterator;
-        dataModifier.saveParent(row[0], row[1]);
-        advance(parentIterator, 1);
-    }
-    auto parentTIterator = parentTRelations.begin();
-    while (parentTIterator != parentTRelations.end()) {
-        vector<string> row = *parentTIterator;
-        dataModifier.saveParentT(row[0], row[1]);
-        advance(parentTIterator, 1);
+void DesignExtractor::saveParentToPKB() {
+    if (parentRelations.empty()) {
+        parentRelations = extractParentRelations();
     }
 }

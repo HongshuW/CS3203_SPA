@@ -13,15 +13,15 @@ namespace DE {
     class DesignExtractor {
     private:
         shared_ptr<ASTNode> programNode;
-
+        unordered_map<int, vector<int>> parentRelations;
 
     public:
         DesignExtractor(shared_ptr<ASTNode> programNode);
 
         std::list<string> extractVariables();
+        unordered_map<int, vector<int>> extractParentRelations();
         void saveVariableToPKB();
-
-        void saveParentRelationsToPKB();
+        void saveParentToPKB();
     };
 
 }
