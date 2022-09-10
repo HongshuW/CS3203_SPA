@@ -55,7 +55,7 @@ list<vector<string>> expected = { {"1", "2"}, {"1", "3"}, {"2", "3"}};
 
         REQUIRE(isValid);
 }
-SECTION("Follow extraction in nested stmts") {
+SECTION("FollowStar extraction in nested stmts") {
 /*
 * procedure2 {
 * 1 print x
@@ -104,7 +104,7 @@ list<vector<string>> expected1 = { {"1", "2"}, {"1", "3"}, {"1", "7"}, {"2", "3"
 
         REQUIRE(isValid);
 }
-SECTION("Test variable extraction in multiple nested stmts") {
+SECTION("Test FollowStar extraction in multiple nested stmts") {
 /*
  * procedure3 {
  * 1 print x

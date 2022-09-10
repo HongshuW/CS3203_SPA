@@ -18,7 +18,7 @@ using namespace std;
 using namespace DE;
 
 TEST_CASE("Test Follows Extractor") {
-    SECTION("Simple follow extraction") {
+    SECTION("Simple follows extraction") {
         /*
         * procedure1 {
         * 1 print x
@@ -54,7 +54,7 @@ TEST_CASE("Test Follows Extractor") {
 
         REQUIRE(isValid);
     }
-    SECTION("Follow extraction in nested stmts") {
+    SECTION("Follows extraction in nested stmts") {
         /*
   * procedure2 {
   * 1 print x
@@ -102,7 +102,7 @@ TEST_CASE("Test Follows Extractor") {
 
         REQUIRE(isValid);
     }
-    SECTION("Test variable extraction in multiple nested stmts") {
+    SECTION("Test follows extraction in multiple nested stmts") {
         /*
          * procedure3 {
          * 1 print x
