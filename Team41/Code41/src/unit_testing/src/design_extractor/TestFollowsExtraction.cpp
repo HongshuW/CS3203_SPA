@@ -34,10 +34,26 @@ TEST_CASE("Test Follows Extractor") {
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode, readNode, assignNode}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
 
-        shared_ptr<list<vector<string>>> sl = FollowsExtractor().extractFollows(programNode);
-        REQUIRE(1==1); //OK
-    }
+        shared_ptr<list<vector<string>>> output = FollowsExtractor().extractFollows(programNode);
+        list<vector<string>>* actualOutput = output.get();
+        list<vector<string>> actualOutput1 = *actualOutput;
+        list<vector<string>> expected = { {"1", "2"}, {"2", "3"}};
 
+        bool isValid = true;
+        auto actualEntries = actualOutput1.begin();
+        auto expectedEntries = expected.begin();
+        while(actualEntries != actualOutput1.end() && expectedEntries != expected.end()) {
+            auto v1 = *actualEntries;
+            auto v2 = *expectedEntries;
+            if (v1 != v2) {
+                isValid = false;
+            }
+            actualEntries++;
+            expectedEntries++;
+        }
+
+        REQUIRE(isValid);
+    }
     SECTION("variable extraction in nested stmts") {
         /*
   * procedure2 {
