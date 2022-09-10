@@ -37,7 +37,7 @@ void TestWrapper::parse(std::string filename) {
     auto astBuilder = ASTBuilder();
     shared_ptr<ASTNode> programNode = astBuilder.buildAST(filename);
 //    DesignExtractor* designExtractor = new DesignExtractor(*programNode);
-//    designExtractor->saveVariableToPKB();
+//    designExtractor->saveEntityToPKB();
 }
 
 // method to evaluating a query
