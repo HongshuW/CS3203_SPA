@@ -111,6 +111,16 @@ void DesignExtractor::run() {
     }
 
     //save statements
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> nodeToLine = ASTUtils::getNodePtrToLineNumMap(programNode);
+    list<vector<string>> payload;
+    auto it = payload.begin();
+    for (std::pair<shared_ptr<StmtNode>, int> myPair : *nodeToLine)
+    {
+        shared_ptr<StmtNode> node = myPair.first;
+        vector<string> stmtPair = {to_string(myPair.second), getDesignEntityString(ASTUtils::getStmtNodeDesignEntity(node))};
+        it = payload.insert(it, stmtPair);
+    }
+    this->dataModifier.saveStatements(payload);
 
 
 }
