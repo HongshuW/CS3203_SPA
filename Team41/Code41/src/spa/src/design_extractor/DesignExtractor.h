@@ -20,6 +20,8 @@ namespace DE {
 
         std::list<string> extractVariables();
         void saveVariableToPKB();
+
+        void saveParentRelationsToPKB();
     };
 
 }
