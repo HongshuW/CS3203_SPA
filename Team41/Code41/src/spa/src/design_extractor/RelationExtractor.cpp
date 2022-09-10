@@ -9,7 +9,7 @@
 namespace DE {
     unordered_map<int, vector<int>> RelationExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
         unordered_map<int, vector<int>> parentRelations;
-        unordered_map<shared_ptr<ASTNode>, int> stmtNumbers = *ASTUtils::getNodePtrToLineNumMap(rootPtr);
+        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
         queue<shared_ptr<ASTNode>> queue;
         queue.push(rootPtr);
 
@@ -21,31 +21,33 @@ namespace DE {
             if (nodeType == NodeType::WHILE_NODE) {
                 shared_ptr<WhileNode> ptr = dynamic_pointer_cast<WhileNode>(current);
                 vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
+                int parent = stmtNumbers->at(ptr);
+                vector<int> children;
                 for (shared_ptr<StmtNode> n: stmtList) {
                     queue.push(n);
-                    int parent = stmtNumbers.at(ptr);
-                    int child = stmtNumbers.at(n);
-                    pair<int, int> row{parent, child};
-                    parentRelations.insert(row);
+                    int child = stmtNumbers->at(n);
+                    children.push_back(child);
                 }
+                pair<int, vector<int>> row{parent, children};
+                parentRelations.insert(row);
             } else if (nodeType == NodeType::IF_NODE) {
                 shared_ptr<IfNode> ptr = dynamic_pointer_cast<IfNode>(current);
                 vector<shared_ptr<StmtNode>> ifStmtList = ptr->ifStmtList;
                 vector<shared_ptr<StmtNode>> elseStmtList = ptr->elseStmtList;
+                int parent = stmtNumbers->at(ptr);
+                vector<int> children;
                 for (shared_ptr<StmtNode> n: ifStmtList) {
                     queue.push(n);
-                    int parent = stmtNumbers.at(ptr);
-                    int child = stmtNumbers.at(n);
-                    pair<int, int> row{parent, child};
-                    parentRelations.insert(row);
+                    int child = stmtNumbers->at(n);
+                    children.push_back(child);
                 }
                 for (shared_ptr<StmtNode> n: elseStmtList) {
                     queue.push(n);
-                    int parent = stmtNumbers.at(ptr);
-                    int child = stmtNumbers.at(n);
-                    pair<int, int> row{parent, child};
-                    parentRelations.insert(row);
+                    int child = stmtNumbers->at(n);
+                    children.push_back(child);
                 }
+                pair<int, vector<int>> row{parent, children};
+                parentRelations.insert(row);
             } else if (nodeType == NodeType::PROGRAM_NODE) {
                 // encounter a program node, check its procedures
                 shared_ptr<ProgramNode> ptr = dynamic_pointer_cast<ProgramNode>(current);
@@ -62,6 +64,8 @@ namespace DE {
                 }
             }
         }
+
+        return parentRelations;
     }
 
     shared_ptr<list<vector<string>>> RelationExtractor::extractParent(shared_ptr<ProgramNode> rootPtr) {
