@@ -7,6 +7,7 @@
 
 #include "AST/ProgramNode.h"
 #include <list>
+#include <map>
 #include "query_builder/commons/RelationType.h"
 #include <string>
 #include <vector>
@@ -16,8 +17,11 @@ using namespace std;
 namespace DE {
     class RelationExtractor {
     private:
-        static unordered_map<int, vector<int>> extractParentHashmap(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<map<int, vector<int>>> extractParentHashmap(shared_ptr<ProgramNode> rootPtr);
         static shared_ptr<list<vector<string>>> extractParent(shared_ptr<ProgramNode> rootPtr);
+        static void extractParentTDFS(shared_ptr<map<int, vector<int>>> parentRelations, int key,
+                                      shared_ptr<vector<string>> ancestors, shared_ptr<list<vector<string>>> output);
+        static shared_ptr<list<vector<string>>> extractParentT(shared_ptr<ProgramNode> rootPtr);
 
     public:
         static list<vector<string>> extractRelation(shared_ptr<ProgramNode> rootPtr, RelationType relationType);

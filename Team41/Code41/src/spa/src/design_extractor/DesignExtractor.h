@@ -31,7 +31,7 @@ namespace DE {
         shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
         void run();
         shared_ptr<list<vector<string>>> extractRelations(RelationType relationType);
-        void saveParentToPKB();
+        void saveRelationToPKB(RelationType relationType);
 
     };
 

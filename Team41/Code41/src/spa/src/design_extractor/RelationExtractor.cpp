@@ -7,8 +7,8 @@
 #include <queue>
 
 namespace DE {
-    unordered_map<int, vector<int>> RelationExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
-        unordered_map<int, vector<int>> parentRelations;
+    shared_ptr<map<int, vector<int>>> RelationExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
+        map<int, vector<int>> parentRelations;
         shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
         queue<shared_ptr<ASTNode>> queue;
         queue.push(rootPtr);
@@ -65,14 +65,14 @@ namespace DE {
             }
         }
 
-        return parentRelations;
+        return make_shared<map<int, vector<int>>>(parentRelations);
     }
 
     shared_ptr<list<vector<string>>> RelationExtractor::extractParent(shared_ptr<ProgramNode> rootPtr) {
         list<vector<string>> output;
-        unordered_map<int, vector<int>> parentRelations = extractParentHashmap(rootPtr);
-        auto hashmapIterator = parentRelations.begin();
-        while (hashmapIterator != parentRelations.end()) {
+        shared_ptr<map<int, vector<int>>> parentRelations = extractParentHashmap(rootPtr);
+        auto hashmapIterator = parentRelations->begin();
+        while (hashmapIterator != parentRelations->end()) {
             string parent = to_string(hashmapIterator->first);
             vector<int> children = hashmapIterator->second;
             for (int child : children) {
@@ -85,11 +85,53 @@ namespace DE {
         return make_shared<list<vector<string>>>(output);
     }
 
+    void RelationExtractor::extractParentTDFS(shared_ptr<map<int, vector<int>>> parentRelations, int key,
+                                              shared_ptr<vector<string>> ancestors,
+                                              shared_ptr<list<vector<string>>> output) {
+        if (parentRelations->find(key) == parentRelations->end()) {
+            return;
+        }
+        // add current stmt to ancestors
+        ancestors->push_back(to_string(key));
+        // pop current stmt's children
+        vector<int> children = parentRelations->find(key)->second;
+        parentRelations->erase(key);
+        for (string ancestor : *ancestors) {
+            for (int child : children) {
+                // add combinations to outputs
+                vector<string> row{ancestor, to_string(child)};
+                output->push_back(row);
+                // dfs
+                extractParentTDFS(parentRelations, child, ancestors, output);
+            }
+        }
+        // remove current stmt from ancestors
+        ancestors->pop_back();
+    }
+
+    shared_ptr<list<vector<string>>> RelationExtractor::extractParentT(shared_ptr<AST::ProgramNode> rootPtr) {
+        list<vector<string>> outputList;
+        shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>(outputList);
+        shared_ptr<map<int, vector<int>>> parentRelations = extractParentHashmap(rootPtr);
+        vector<string> ancestors;
+        shared_ptr<vector<string>> ancestorsPtr = make_shared<vector<string>>(ancestors);
+
+        while (!parentRelations->empty()) {
+            auto iterator = parentRelations->begin();
+            int key = iterator->first;
+            extractParentTDFS(parentRelations, key, ancestorsPtr, output);
+        }
+
+        return output;
+    }
+
     list<vector<string>> RelationExtractor::extractRelation(
             shared_ptr<ProgramNode> rootPtr, RelationType relationType) {
         switch (relationType) {
             case RelationType::PARENT:
                 return *extractParent(rootPtr);
+            case RelationType::PARENT_T:
+                return *extractParentT(rootPtr);
             default:
                 list<vector<string>> emptyList;
                 return emptyList;
