@@ -67,7 +67,6 @@ namespace DE {
 
         return parentRelations;
     }
-
     shared_ptr<list<vector<string>>> RelationExtractor::extractParent(shared_ptr<ProgramNode> rootPtr) {
         list<vector<string>> output;
         unordered_map<int, vector<int>> parentRelations = extractParentHashmap(rootPtr);

@@ -9,8 +9,15 @@
 
 using namespace std;
 
-void FollowsExtractor::extractFollows(shared_ptr<ProgramNode> programNode) {
+shared_ptr<list<vector<string>>> FollowsExtractor::extractFollows(shared_ptr<ProgramNode> programNode) {
     vector<vector<shared_ptr<StmtNode>>> listOfStmtList = getListOfStmtList(programNode);
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> nodeToLineNoMap =
+            ASTUtils::getNodePtrToLineNumMap(programNode);
+    list<vector<string>> output;
+    for (auto stmtList : listOfStmtList) {
+        saveFollowsToOutput(stmtList, &output, nodeToLineNoMap);
+    }
+    return make_shared<list<vector<string>>>(output);
 }
 
 vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_ptr<ProgramNode> programNode) {
@@ -51,28 +58,30 @@ vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_
     return listOfStmtList;
 }
 
-void FollowsExtractor::saveFollowsToPKB(vector<shared_ptr<StmtNode>> stmtList,
-                                         shared_ptr<ProgramNode> programNode) {
-
-    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>  nodeToLineNoMap =
-            ASTUtils::getNodePtrToLineNumMap(programNode);
-    vector<int> stmtNoList;
-    DataModifier dataModifier = DataModifier();
-    for (auto stmtNode : stmtList) {
-        int stmtNo = nodeToLineNoMap->at(stmtNode);
-        stmtNoList.push_back(stmtNo);
-    }
-    if (stmtNoList.size() > 1) {
-        std::sort(stmtNoList.begin(), stmtNoList.end());
-        for (int i = 0; i < stmtNoList.size() - 1; i++) {
-            string s1 = to_string(stmtNoList[i]);
-            string s2 = to_string(stmtNoList[i + 1]);
+void FollowsExtractor::saveFollowsToOutput(vector<shared_ptr<StmtNode>> stmtList,
+                                           list<vector<string>> *output,
+                                           shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
+                                           nodeToLineNoMap) {
+        vector<int> stmtNoList;
+        if (stmtList.size() <= 1 ) {
+            return;
         }
-    }
+        else {
+            for (auto stmtNode: stmtList) {
+                int stmtNo = nodeToLineNoMap->at(stmtNode);
+                stmtNoList.push_back(stmtNo);
+            }
+
+            std::sort(stmtNoList.begin(), stmtNoList.end());
+            for (int i = 0; i < stmtNoList.size() - 1; i++) {
+                vector<string> followsEntry;
+                string s1 = to_string(stmtNoList[i]);
+                string s2 = to_string(stmtNoList[i + 1]);
+                followsEntry.push_back(s1);
+                followsEntry.push_back(s2);
+                output->push_back(followsEntry);
+            }
+        }
 }
-
-
-
-
 
 

@@ -11,11 +11,12 @@ using namespace DE;
 
 class FollowsExtractor {
 public:
-    void extractFollows(shared_ptr<ProgramNode> programNode);
+    shared_ptr<list<vector<string>>> extractFollows(shared_ptr<ProgramNode> programNode);
     static vector<vector<shared_ptr<StmtNode>>> getListOfStmtList(shared_ptr<ProgramNode> programNode);
-    static void saveFollowsToPKB(vector<shared_ptr<StmtNode>> stmtList,
-                                 shared_ptr<ProgramNode> programNode);
-
+    static void saveFollowsToOutput(vector<shared_ptr<StmtNode>> stmtList,
+                             list<vector<string>>* output,
+                                    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
+                                    nodeToLineNoMap);
 };
 
 

@@ -31,6 +31,7 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/Dummies.h
     src/design_extractor/TestRelationExtractor.cpp
     src/pkb/TestRelationshipManager.cpp
-    src/parser/ExprNodeParser.cpp)
+    src/parser/ExprNodeParser.cpp
+    src/design_extractor/TestFollowsExtraction.cpp)
 
 target_link_libraries(unit_testing spa)

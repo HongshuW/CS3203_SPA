@@ -70,7 +70,6 @@ DesignExtractor::DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNo
 
 }
 
-
 void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode,
                                                    shared_ptr<unordered_set<string>> set,
                                                    DesignEntity designEntityType) {
