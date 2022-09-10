@@ -97,10 +97,8 @@ TEST_CASE("Test Follows Extractor") {
         shared_ptr<StmtNode> printNode4 = make_shared<PrintNode>(make_shared<VariableNode>("bar"));
         shared_ptr<StmtNode> readNode4 = make_shared<ReadNode>(make_shared<VariableNode>("baz"));
 
-
         vector<shared_ptr<StmtNode>> whileStmtList = {readNode4, printNode4};
         shared_ptr<StmtNode> whileNode = make_shared<WhileNode>(ifCondExpr, whileStmtList);
-
 
         vector<shared_ptr<StmtNode>> ifStmtList = {printNode2, whileNode};
         vector<shared_ptr<StmtNode>> elseStmtList = {readNode2};

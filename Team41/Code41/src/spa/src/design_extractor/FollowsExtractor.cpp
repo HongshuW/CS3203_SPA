@@ -24,7 +24,7 @@ vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_
         queue.pop();
         listOfStmtList.push_back(stmtList);
         for (auto stmtNode: stmtList) {
-            NodeType nodeType = ASTUtils::getNodeTypeByName(stmtNode);
+            NodeType nodeType = ASTUtils::getNodeType(stmtNode);
             switch (nodeType) {
                 case AST::IF_NODE: {
                     shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
@@ -53,7 +53,7 @@ vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_
 
 void FollowsExtractor::saveFollowsToPKB(vector<shared_ptr<StmtNode>> stmtList,
                                          shared_ptr<ProgramNode> programNode) {
-    shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> nodeToLineNoMap =
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>  nodeToLineNoMap =
             ASTUtils::getNodePtrToLineNumMap(programNode);
     vector<int> stmtNoList;
     DataModifier dataModifier = DataModifier();
@@ -66,8 +66,6 @@ void FollowsExtractor::saveFollowsToPKB(vector<shared_ptr<StmtNode>> stmtList,
         for (int i = 0; i < stmtNoList.size() - 1; i++) {
             string s1 = to_string(stmtNoList[i]);
             string s2 = to_string(stmtNoList[i + 1]);
-            dataModifier.saveFollows(s1, s2);
-            dataModifier.saveFollowsT(s1, s2);
         }
     }
 }
