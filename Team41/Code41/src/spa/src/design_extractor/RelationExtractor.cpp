@@ -4,6 +4,7 @@
 
 #include "AST/utils/ASTUtils.h"
 #include "RelationExtractor.h"
+#include "FollowsExtractor.h"
 #include <queue>
 
 namespace DE {
@@ -89,6 +90,8 @@ namespace DE {
         switch (relationType) {
             case RelationType::PARENT:
                 return *extractParent(rootPtr);
+            case RelationType::FOLLOWS:
+                return *FollowsExtractor().extractFollows(rootPtr);
             default:
                 list<vector<string>> emptyList;
                 return emptyList;

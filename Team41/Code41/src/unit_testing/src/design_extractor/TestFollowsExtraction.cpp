@@ -18,7 +18,7 @@ using namespace std;
 using namespace DE;
 
 TEST_CASE("Test Follows Extractor") {
-    SECTION("simple follow extraction") {
+    SECTION("Simple follow extraction") {
         /*
         * procedure1 {
         * 1 print x
@@ -54,7 +54,7 @@ TEST_CASE("Test Follows Extractor") {
 
         REQUIRE(isValid);
     }
-    SECTION("variable extraction in nested stmts") {
+    SECTION("Follow extraction in nested stmts") {
         /*
   * procedure2 {
   * 1 print x
@@ -82,7 +82,86 @@ TEST_CASE("Test Follows Extractor") {
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure2", {printNode, readNode, ifNode, readNode3}));
         shared_ptr<ProgramNode> programNode2 = make_shared<ProgramNode>(ProgramNode({procedureNode}));
 
-        vector<vector<shared_ptr<StmtNode>>> s2 = FollowsExtractor::getListOfStmtList(programNode2);
-        REQUIRE(1==1); //OK
+        shared_ptr<list<vector<string>>> output1 = FollowsExtractor().extractFollows(programNode2);
+        list<vector<string>>* actualOutput = output1.get();
+        list<vector<string>> actualOutput2 = *actualOutput;
+        list<vector<string>> expected1 = { {"1", "2"}, {"2", "3"}, {"3", "7"}, {"4", "5"}};
+
+        bool isValid = true;
+        auto actualEntries = actualOutput2.begin();
+        auto expectedEntries = expected1.begin();
+        while(actualEntries != actualOutput2.end() && expectedEntries != expected1.end()) {
+            auto v1 = *actualEntries;
+            auto v2 = *expectedEntries;
+            if (v1 != v2) {
+                isValid = false;
+            }
+            actualEntries++;
+            expectedEntries++;
+        }
+
+        REQUIRE(isValid);
+    }
+    SECTION("Test variable extraction in multiple nested stmts") {
+        /*
+         * procedure3 {
+         * 1 print x
+         * 2 read y
+         * 3 if (bar == y + 1) then {
+         * 4 print z
+         * 5 while ((baz == qux + 1) && (5 + 3 < quux) || haha) {
+         * 6    read baz
+         * 7    print bar
+         *   }} else {
+         * 8 read w}
+         * 9 read foo
+         * }
+         */
+
+        shared_ptr<StmtNode> printNode = make_shared<PrintNode>(make_shared<VariableNode>("x"));
+        shared_ptr<StmtNode> readNode = make_shared<ReadNode>(make_shared<VariableNode>("y"));
+
+        shared_ptr<CondExprNode> ifCondExpr = make_shared<CondExprNode>("bar == y + 1");
+        shared_ptr<StmtNode> printNode2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
+        shared_ptr<StmtNode> readNode2 = make_shared<ReadNode>(make_shared<VariableNode>("w"));
+
+        shared_ptr<StmtNode> printNode4 = make_shared<PrintNode>(make_shared<VariableNode>("bar"));
+        shared_ptr<StmtNode> readNode4 = make_shared<ReadNode>(make_shared<VariableNode>("baz"));
+
+
+        vector<shared_ptr<StmtNode>> whileStmtList = {readNode4, printNode4};
+        shared_ptr<StmtNode> whileNode = make_shared<WhileNode>(ifCondExpr, whileStmtList);
+
+
+        vector<shared_ptr<StmtNode>> ifStmtList = {printNode2, whileNode};
+        vector<shared_ptr<StmtNode>> elseStmtList = {readNode2};
+
+        shared_ptr<CondExprNode> whileCondExpr = make_shared<CondExprNode>("(baz == qux + 1) && (5 + 3 < quux) || haha");
+        shared_ptr<StmtNode> ifNode = make_shared<IfNode>(whileCondExpr, ifStmtList, elseStmtList);
+
+        shared_ptr<StmtNode> readNode3 = make_shared<ReadNode>(make_shared<VariableNode>("foo"));
+
+        shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure3", {printNode, readNode, ifNode, readNode3}));
+        shared_ptr<ProgramNode> programNode3 = make_shared<ProgramNode>(ProgramNode({procedureNode}));
+
+        shared_ptr<list<vector<string>>> output2 = FollowsExtractor().extractFollows(programNode3);
+        list<vector<string>>* actualOutput = output2.get();
+        list<vector<string>> actualOutput3 = *actualOutput;
+        list<vector<string>> expected2 = { {"1", "2"}, {"2", "3"}, {"3", "9"}, {"4", "5"}, {"6", "7"}};
+
+        bool isValid = true;
+        auto actualEntries = actualOutput3.begin();
+        auto expectedEntries = expected2.begin();
+        while(actualEntries != actualOutput3.end() && expectedEntries != expected2.end()) {
+            auto v1 = *actualEntries;
+            auto v2 = *expectedEntries;
+            if (v1 != v2) {
+                isValid = false;
+            }
+            actualEntries++;
+            expectedEntries++;
+        }
+
+        REQUIRE(isValid);
     }
 }
