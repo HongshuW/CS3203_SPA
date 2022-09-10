@@ -45,87 +45,71 @@ void DataModifier::saveConstants(list<std::string> constants) {
 /**
  * Saves a Follows relationship to the pkb.
  *
- * @param followedStatement a string representing the stmt_no of the followed statement
- * @param followingStatement a string representing the stmt_no of the following statement
+ * @param followsRelation vector<string>{followedStatement, followingStatement}
  */
-void DataModifier::saveFollows(string followedStatement, string followingStatement) {
-    vector<string> follows{followedStatement, followingStatement};
-    RelationshipManager::saveFollows(follows);
+void DataModifier::saveFollows(vector<string> followsRelation) {
+    RelationshipManager::saveFollows(followsRelation);
 }
 
 /**
  * Saves a Follows* relationship to the pkb.
  *
- * @param followedStatement a string representing the stmt_no of the followed statement
- * @param followingStatement a string representing the stmt_no of the following statement
+ * @param followsTRelation vector<string>{followedStatement, followingStatement}
  */
-void DataModifier::saveFollowsT(string followedStatement, string followingStatement) {
-    vector<string> followsT{followedStatement, followingStatement};
-    RelationshipManager::saveFollowsT(followsT);
+void DataModifier::saveFollowsT(vector<string> followsTRelation) {
+    RelationshipManager::saveFollowsT(followsTRelation);
 }
 
 /**
  * Saves a Parent relationship to the pkb.
  *
- * @param parentStatement a string representing the stmt_no of the parent statement
- * @param childStatement a string representing the stmt_no of the child statement
+ * @param parentRelation vector<string>{parentStatement, childStatement}
  */
-void DataModifier::saveParent(string parentStatement, string childStatement) {
-    vector<string> parent{parentStatement, childStatement};
-    RelationshipManager::saveParent(parent);
+void DataModifier::saveParent(vector<string> parentRelation) {
+    RelationshipManager::saveParent(parentRelation);
 }
 
 /**
  * Saves a Parent* relationship to the pkb.
  *
- * @param parentStatement a string representing the stmt_no of the parent statement
- * @param childStatement a string representing the stmt_no of the child statement
+ * @param parentTRelation vector<string>{parentStatement, childStatement}
  */
-void DataModifier::saveParentT(string parentStatement, string childStatement) {
-    vector<string> parentT{parentStatement, childStatement};
-    RelationshipManager::saveParentT(parentT);
+void DataModifier::saveParentT(vector<string> parentTRelation) {
+    RelationshipManager::saveParentT(parentTRelation);
 }
 
 /**
  * Saves a UsesS relationship to the pkb.
  *
- * @param userStatement a string representing the stmt_no of the statement in the UsesS relationship
- * @param usedEntity name of the used entity
+ * @param usesSRelation vector<string>{userStatement, usedEntity}
  */
-void DataModifier::saveUsesS(string userStatement, string usedEntity) {
-    vector<string> usesS{userStatement, usedEntity};
-    RelationshipManager::saveUsesS(usesS);
+void DataModifier::saveUsesS(vector<string> usesSRelation) {
+    RelationshipManager::saveUsesS(usesSRelation);
 }
 
 /**
  * Saves a UsesP relationship to the pkb.
  *
- * @param userStatement name of the entity that uses another entity in the UsesP relationship
- * @param usedEntity name of the used entity
+ * @param usesPRelation vector<string>{userStatement, usedEntity}
  */
-void DataModifier::saveUsesP(string userEntity, string usedEntity) {
-    vector<string> usesP{userEntity, usedEntity};
-    RelationshipManager::saveUsesP(usesP);
+void DataModifier::saveUsesP(vector<string> usesPRelation) {
+    RelationshipManager::saveUsesP(usesPRelation);
 }
 
 /**
  * Saves a ModifiesS relationship to the pkb.
  *
- * @param modifierStatement a string representing the stmt_no of the statement in the ModifiesS relationship
- * @param modifiedEntity name of the modified entity
+ * @param modifiesSRelation vector<string>{modifierStatement, modifiedEntity}
  */
-void DataModifier::saveModifiesS(string modifierStatement, string modifiedEntity) {
-    vector<string> modifiesS{modifierStatement, modifiedEntity};
-    RelationshipManager::saveModifiesS(modifiesS);
+void DataModifier::saveModifiesS(vector<string> modifiesSRelation) {
+    RelationshipManager::saveModifiesS(modifiesSRelation);
 }
 
 /**
  * Saves a ModifiesP relationship to the pkb.
  *
- * @param modifierStatement name of the entity that modifies another entity in the ModifiesP relationship
- * @param modifiedEntity name of the modified entity
+ * @param modifiesPRelation vector<string>{modifierStatement, modifiedEntity}
  */
-void DataModifier::saveModifiesP(string modifierEntity, string modifiedEntity) {
-    vector<string> modifiesP{modifierEntity, modifiedEntity};
-    RelationshipManager::saveModifiesP(modifiesP);
+void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
+    RelationshipManager::saveModifiesP(modifiesPRelation);
 }
