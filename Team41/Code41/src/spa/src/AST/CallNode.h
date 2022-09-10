@@ -16,9 +16,14 @@ namespace AST {
 
     class CallNode : public StmtNode {
     public:
-        shared_ptr<VariableNode> variableNode;
+        string procedureName;
 
-        explicit CallNode(shared_ptr<VariableNode> variableNode);
+        explicit CallNode(string programName);
+
+        bool operator==(const ASTNode& node) const {
+            CallNode castedNode = dynamic_cast<const CallNode&>(node);
+            return procedureName == castedNode.procedureName;
+        }
     };
 
 } // AST

@@ -18,9 +18,14 @@ namespace AST {
 
     public:
         shared_ptr<VariableNode> variableNode;
-        // only allow for numbers now ie x = 1;, will change to expression in future
         shared_ptr<ExprNode> expressionNode;
+
         AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<ExprNode> expressionNode);
+
+        bool operator==(const ASTNode& node) const {
+            AssignNode castedNode = dynamic_cast<const AssignNode&>(node);
+            return *variableNode == *castedNode.variableNode && *expressionNode == *castedNode.expressionNode;
+        }
     };
 }
 

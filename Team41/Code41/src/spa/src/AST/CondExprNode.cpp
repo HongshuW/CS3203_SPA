@@ -5,4 +5,6 @@
 #include "CondExprNode.h"
 
 using namespace AST;
-CondExprNode::CondExprNode(std::string condExpr) : condExpr(condExpr) {}
+
+CondExprNode::CondExprNode(string condExpr) : condExpr(condExpr) {}
+

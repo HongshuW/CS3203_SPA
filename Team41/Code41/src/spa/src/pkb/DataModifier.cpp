@@ -4,6 +4,7 @@
 
 #include "DataModifier.h"
 #include "EntityManager.h"
+#include "RelationshipManager.h"
 
 /**
  * Saves a list of procedures to the pkb.
@@ -11,7 +12,7 @@
  * @param procedures a list of names of procedures
  */
 void DataModifier::saveProcedures(list<string> procedures) {
-    // TODO: save procedures to pkb
+    EntityManager::saveProcedures(procedures);
 }
 
 /**
@@ -20,7 +21,7 @@ void DataModifier::saveProcedures(list<string> procedures) {
  * @param statements a list of statements, each statement is represented as a vector<string>{<stmt_no>, <stmt_type>}
  */
 void DataModifier::saveStatements(list<vector<std::string>> statements) {
-    // TODO: save statements to pkb
+    EntityManager::saveStatements(statements);
 }
 
 /**
@@ -38,7 +39,7 @@ void DataModifier::saveVariables(list<string> variables) {
  * @param constants a list of strings representing constant values
  */
 void DataModifier::saveConstants(list<std::string> constants) {
-    // TODO: save constants to pkb
+    EntityManager::saveConstants(constants);
 }
 
 /**
@@ -48,7 +49,8 @@ void DataModifier::saveConstants(list<std::string> constants) {
  * @param followingStatement a string representing the stmt_no of the following statement
  */
 void DataModifier::saveFollows(string followedStatement, string followingStatement) {
-    // TODO: save follows relationship to pkb
+    vector<string> follows{followedStatement, followingStatement};
+    RelationshipManager::saveFollows(follows);
 }
 
 /**
@@ -58,7 +60,8 @@ void DataModifier::saveFollows(string followedStatement, string followingStateme
  * @param followingStatement a string representing the stmt_no of the following statement
  */
 void DataModifier::saveFollowsT(string followedStatement, string followingStatement) {
-    // TODO: save follows* relationship to pkb
+    vector<string> followsT{followedStatement, followingStatement};
+    RelationshipManager::saveFollowsT(followsT);
 }
 
 /**
@@ -68,7 +71,8 @@ void DataModifier::saveFollowsT(string followedStatement, string followingStatem
  * @param childStatement a string representing the stmt_no of the child statement
  */
 void DataModifier::saveParent(string parentStatement, string childStatement) {
-    // TODO: save parent relationship to pkb
+    vector<string> parent{parentStatement, childStatement};
+    RelationshipManager::saveParent(parent);
 }
 
 /**
@@ -78,7 +82,8 @@ void DataModifier::saveParent(string parentStatement, string childStatement) {
  * @param childStatement a string representing the stmt_no of the child statement
  */
 void DataModifier::saveParentT(string parentStatement, string childStatement) {
-    // TODO: save parent* relationship to pkb
+    vector<string> parentT{parentStatement, childStatement};
+    RelationshipManager::saveParentT(parentT);
 }
 
 /**
@@ -88,7 +93,8 @@ void DataModifier::saveParentT(string parentStatement, string childStatement) {
  * @param usedEntity name of the used entity
  */
 void DataModifier::saveUsesS(string userStatement, string usedEntity) {
-    // TODO: save usesS relationship to pkb
+    vector<string> usesS{userStatement, usedEntity};
+    RelationshipManager::saveUsesS(usesS);
 }
 
 /**
@@ -98,7 +104,8 @@ void DataModifier::saveUsesS(string userStatement, string usedEntity) {
  * @param usedEntity name of the used entity
  */
 void DataModifier::saveUsesP(string userEntity, string usedEntity) {
-    // TODO: save usesP relationship to pkb
+    vector<string> usesP{userEntity, usedEntity};
+    RelationshipManager::saveUsesP(usesP);
 }
 
 /**
@@ -108,7 +115,8 @@ void DataModifier::saveUsesP(string userEntity, string usedEntity) {
  * @param modifiedEntity name of the modified entity
  */
 void DataModifier::saveModifiesS(string modifierStatement, string modifiedEntity) {
-    // TODO: save modifiesS relationship to pkb
+    vector<string> modifiesS{modifierStatement, modifiedEntity};
+    RelationshipManager::saveModifiesS(modifiesS);
 }
 
 /**
@@ -118,5 +126,6 @@ void DataModifier::saveModifiesS(string modifierStatement, string modifiedEntity
  * @param modifiedEntity name of the modified entity
  */
 void DataModifier::saveModifiesP(string modifierEntity, string modifiedEntity) {
-    // TODO: save modifiesP relationship to pkb
+    vector<string> modifiesP{modifierEntity, modifiedEntity};
+    RelationshipManager::saveModifiesP(modifiesP);
 }

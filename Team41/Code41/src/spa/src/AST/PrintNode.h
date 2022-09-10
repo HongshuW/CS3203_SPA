@@ -13,10 +13,15 @@ using namespace std;
 
 namespace AST {
     class PrintNode : public StmtNode {
-
     public:
         shared_ptr<VariableNode> variableNode;
+
         PrintNode(shared_ptr<VariableNode> variableNode);
+
+        bool operator==(const ASTNode& node) const {
+            PrintNode castedNode = dynamic_cast<const PrintNode&>(node);
+            return *variableNode == *castedNode.variableNode;
+        }
 
     };
 }

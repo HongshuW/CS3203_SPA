@@ -35,13 +35,8 @@ namespace DE {
             case AST::ASSIGN_NODE: {
                 shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(stmtNode);
                 set->insert(assignNode->variableNode->variable);
-                unordered_set<string> variables = getVariablesFromExprString(assignNode->expressionNode->expression);
+                unordered_set<string> variables = getVariablesFromExprString(assignNode->expressionNode->expr);
                 set->insert(variables.begin(), variables.end());
-                break;
-            }
-            case AST::CALL_NODE: {
-                shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(stmtNode);
-                set->insert(callNode->variableNode->variable);
                 break;
             }
             case AST::IF_NODE: {
@@ -76,7 +71,7 @@ namespace DE {
         switch (nodeType) {
             case AST::ASSIGN_NODE: {
                 shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(stmtNode);
-                unordered_set<string> constants = getConstantsFromExprString(assignNode->expressionNode->expression);
+                unordered_set<string> constants = getConstantsFromExprString(assignNode->expressionNode->expr);
                 set->insert(constants.begin(), constants.end());
                 break;
             }

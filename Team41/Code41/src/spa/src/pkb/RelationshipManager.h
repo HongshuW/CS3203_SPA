@@ -16,6 +16,7 @@ using namespace std;
 
 class RelationshipManager {
 public:
+    // getters
     static FollowsTable * getFollows();
     static FollowsTable * getFollowsT();
     static ParentTable * getParent();
@@ -24,6 +25,16 @@ public:
     static UsesTable * getUsesP();
     static ModifiesTable * getModifiesS();
     static ModifiesTable * getModifiesP();
+
+    // savers
+    static void saveFollows(vector<string> follows);
+    static void saveFollowsT(vector<string> followsT);
+    static void saveParent(vector<string> parent);
+    static void saveParentT(vector<string> parentT);
+    static void saveUsesS(vector<string> usesS);
+    static void saveUsesP(vector<string> usesP);
+    static void saveModifiesS(vector<string> modifiesS);
+    static void saveModifiesP(vector<string> modifiesP);
 
 private:
     static FollowsTable followsTable;

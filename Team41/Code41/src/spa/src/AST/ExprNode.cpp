@@ -3,8 +3,5 @@
 //
 
 #include "ExprNode.h"
-#include <string>
 
-AST::ExprNode::ExprNode(std::string expression) : expression(expression){
-
-}
+AST::ExprNode::ExprNode(string expr) : expr(expr) {}

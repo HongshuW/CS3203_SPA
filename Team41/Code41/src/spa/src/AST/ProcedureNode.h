@@ -14,11 +14,22 @@ using namespace AST;
 
 namespace AST {
     class ProcedureNode : public ASTNode {
-
     public:
         string procedureName;
         vector<shared_ptr<StmtNode>> stmtList;
+
         ProcedureNode(string procedureName, vector<shared_ptr<StmtNode>> stmtList);
+
+        bool operator==(const ASTNode& node) const {
+            ProcedureNode castedNode = dynamic_cast<const ProcedureNode&>(node);
+            bool isEqual = procedureName == castedNode.procedureName;
+            isEqual = isEqual && equal(
+                    begin(stmtList), end(stmtList),
+                    begin(castedNode.stmtList), end(castedNode.stmtList),
+                    [] (const shared_ptr<StmtNode> lhs, const shared_ptr<StmtNode> rhs)
+                    {return *lhs == *rhs; });
+            return isEqual;
+        }
     };
 }
 

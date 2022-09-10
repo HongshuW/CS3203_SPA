@@ -10,6 +10,21 @@ Table DataRetriever::getVariables() {
     return *EntityManager::getVariables();
 }
 
+Table DataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
+    switch (designEntity) {
+        case DesignEntity::PROCEDURE:
+            return *EntityManager::getProcedures();
+        case DesignEntity::STMT:
+            return *EntityManager::getStatements();
+        case DesignEntity::VARIABLE:
+            return *EntityManager::getVariables();
+        case DesignEntity::CONSTANT:
+            return *EntityManager::getConstants();
+        default:
+            return Table();
+    }
+}
+
 Table DataRetriever::getTableByRelationType(RelationType relationType) {
     switch (relationType) {
         case RelationType::FOLLOWS:
@@ -31,4 +46,10 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
         default:
             return Table();
     }
+}
+
+DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {
+    string stmtNumberString = to_string(stmtNumber);
+    string type = EntityManager::getStmtType(stmtNumberString);
+    return getDesignEntity(type);
 }

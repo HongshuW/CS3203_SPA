@@ -18,10 +18,13 @@ public:
 
     // getters
     vector<string> getColumnByName(string columnName);
+    vector<string> getRowByPrimaryKey(string key);
 
     // setters
     void renameHeader(vector<string> newHeader);
     void appendRow(vector<string> row);
+    void appendRows(list<vector<string>> rows);
+    void addValues(list<string> values);
 
     bool isEqual(Table otherTable);
 

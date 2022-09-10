@@ -15,6 +15,11 @@ namespace AST {
     public:
         string variable;
         VariableNode(string variable);
+
+        bool operator==(const ASTNode& node) const {
+            VariableNode castedNode = dynamic_cast<const VariableNode&>(node);
+            return variable == castedNode.variable;
+        }
     };
 }
 

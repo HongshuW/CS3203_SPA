@@ -14,10 +14,15 @@ namespace AST {
 
     class CondExprNode : public ASTNode {
     public:
-        //TODO: to be implemented later using enum
         string condExpr;
 
         CondExprNode(string condExpr);
+
+        bool operator==(const ASTNode& node) const {
+            CondExprNode castedNode = dynamic_cast<const CondExprNode&>(node);
+            return condExpr == castedNode.condExpr;
+        }
+
     };
 
 } // AST
