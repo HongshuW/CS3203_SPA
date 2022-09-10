@@ -19,10 +19,21 @@ TEST_CASE("Test AST utils") {
          */
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
-        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                programNode);
-        unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{};
-        REQUIRE(*actual == expected);
+
+        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
+        shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+
+        unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{};
+        REQUIRE(*actual_nodeToLine == expected_nodeToLine);
+
+
+        unordered_map<int, shared_ptr<ASTNode>> expected_lineToNode =  unordered_map<int, shared_ptr<ASTNode>>{};
+        REQUIRE(expected_lineToNode == *actual_lineToNode);
     }
     SECTION("Test line number map traversal without nesting") {
         /*
@@ -35,10 +46,20 @@ TEST_CASE("Test AST utils") {
         shared_ptr<StmtNode> readNode = make_shared<ReadNode>(make_shared<VariableNode>("y"));
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode, readNode}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
-        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                programNode);
-        unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{{printNode, 1}, {readNode, 2}};
-        REQUIRE(*actual == expected);
+        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
+        shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+        unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{{printNode, 1}, {readNode, 2}};
+
+
+        REQUIRE(*actual_nodeToLine == expected_nodeToLine);
+
+        unordered_map<int, shared_ptr<ASTNode>> expected_lineToNode =  unordered_map<int, shared_ptr<ASTNode>>{{1, printNode}, {2, readNode}};
+        REQUIRE(expected_lineToNode == *actual_lineToNode);
     }
     SECTION("Test line number map traversal with single nesting") {
         /*
@@ -66,10 +87,18 @@ TEST_CASE("Test AST utils") {
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure2", {printNode, readNode, ifNode, readNode3}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
 
-        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                programNode);
-        unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{{printNode, 1}, {readNode, 2}, {ifNode, 3}, {printNode2, 4} , {readNode2 , 5}, {readNode3, 6}};
-        REQUIRE(*actual == expected);
+        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
+        shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+        unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{{printNode, 1}, {readNode, 2}, {ifNode, 3}, {printNode2, 4} , {readNode2 , 5}, {readNode3, 6}};
+        REQUIRE(*actual_nodeToLine == expected_nodeToLine);
+
+        unordered_map<int, shared_ptr<ASTNode>> expected_lineToNode =  unordered_map<int, shared_ptr<ASTNode>>{{1, printNode}, {2, readNode}, {3, ifNode}, {4, printNode2}, {5, readNode2}, {6, readNode3}};
+        REQUIRE(expected_lineToNode == *actual_lineToNode);
     }
     SECTION("Test line number map traversal with double nesting") {
         /*
@@ -111,9 +140,14 @@ TEST_CASE("Test AST utils") {
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure3", {printNode, readNode, ifNode, readNode3}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
 
-        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                programNode);
-        unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{
+        shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
+        shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+        unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{
             {printNode, 1},
             {readNode, 2},
             {ifNode, 3},
@@ -124,7 +158,19 @@ TEST_CASE("Test AST utils") {
             {readNode2, 8},
             {readNode3, 9}
         };
-        REQUIRE(*actual == expected);
+        REQUIRE(*actual_nodeToLine == expected_nodeToLine);
+
+        unordered_map<int, shared_ptr<ASTNode>> expected_lineToNode =  unordered_map<int, shared_ptr<ASTNode>>{
+            {1, printNode},
+            {2, readNode},
+            {3, ifNode},
+            {4, printNode2},
+            {5, whileNode},
+            {6, readNode4},
+            {7, printNode4},
+            {8, readNode2},
+            {9, readNode3}};
+        REQUIRE(expected_lineToNode == *actual_lineToNode);
     }
     SECTION("Test two procedure") {
             /*
@@ -164,9 +210,11 @@ TEST_CASE("Test AST utils") {
 
 
             shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode_p1, procedureNode2}));
-            shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual = ASTUtils::getNodePtrToLineNumMap(
-                    programNode);
-            unordered_map<shared_ptr<ASTNode>, int> expected =  unordered_map<shared_ptr<ASTNode>, int>{{printNode_p1, 1},
+            shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> actual_nodeToLine = make_shared<unordered_map<shared_ptr<ASTNode>, int>>();
+            shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> actual_lineToNode = make_shared<unordered_map<int, shared_ptr<ASTNode>>>();
+        ASTUtils::getNodeLineMapping(
+                programNode, actual_nodeToLine, actual_lineToNode);
+            unordered_map<shared_ptr<ASTNode>, int> expected_nodeToLine =  unordered_map<shared_ptr<ASTNode>, int>{{printNode_p1, 1},
                                                                                                         {readNode_p1, 2},
                                                                                                         {printNode, 3},
                                                                                                         {readNode, 4},
@@ -174,6 +222,17 @@ TEST_CASE("Test AST utils") {
                                                                                                         {printNode2, 6} ,
                                                                                                         {readNode2 , 7},
                                                                                                         {readNode3, 8}};
-            REQUIRE(*actual == expected);
+            REQUIRE(*actual_nodeToLine == expected_nodeToLine);
+
+        unordered_map<int, shared_ptr<ASTNode>> expected_lineToNode =  unordered_map<int, shared_ptr<ASTNode>>{
+            {1, printNode_p1},
+            {2, readNode_p1},
+            {3, printNode},
+            {4, readNode},
+            {5, ifNode},
+            {6, printNode2},
+            {7, readNode2},
+            {8,readNode3}
+        };
     }
 }

@@ -25,7 +25,7 @@ namespace DE {
     shared_ptr<unordered_set<string>> EntityExtractor::extractVariables(shared_ptr<StmtNode> stmtNode) {
         shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
 
-        NodeType nodeType = ASTUtils::getNodeTypeByName(stmtNode);
+        NodeType nodeType = ASTUtils::getNodeType(stmtNode);
         switch (nodeType) {
             case AST::PRINT_NODE: {
                 shared_ptr<PrintNode> printNode = dynamic_pointer_cast<PrintNode>(stmtNode);
@@ -67,7 +67,7 @@ namespace DE {
     shared_ptr<unordered_set<string>> EntityExtractor::extractConstants(shared_ptr<StmtNode> stmtNode) {
         shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
 
-        NodeType nodeType = ASTUtils::getNodeTypeByName(stmtNode);
+        NodeType nodeType = ASTUtils::getNodeType(stmtNode);
         switch (nodeType) {
             case AST::ASSIGN_NODE: {
                 shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(stmtNode);
