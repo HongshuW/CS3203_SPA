@@ -51,9 +51,9 @@ TEST_CASE("Test Data Modifier") {
     SECTION ("Save parentT") {
         int initialSize = (*RelationshipManager::getParentT()).rows.size();
         DataModifier dm;
-        dm.saveParentT("1", "2");
-        dm.saveParentT("1", "3");
-        dm.saveParentT("2", "3");
+        dm.saveParentT(vector<string>{"1", "2"});
+        dm.saveParentT(vector<string>{"1", "3"});
+        dm.saveParentT(vector<string>{"2", "3"});
 
         // check header is set automatically
         REQUIRE((*RelationshipManager::getParentT()).header[0] == "$parent_statement");

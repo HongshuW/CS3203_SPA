@@ -17,10 +17,13 @@ TEST_CASE("Test SP Parser") {
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
 
-        // simple program node
+        auto exprNode = make_shared<ExprNode>("+");
+        exprNode->left = make_shared<ExprNode>("x");
+        exprNode->right = make_shared<ExprNode>("1");
+
         auto assignNode = make_shared<AssignNode>(
                 make_shared<VariableNode>("x"),
-                make_shared<ExprNode>("x+1"));
+                exprNode);
         vector<shared_ptr<StmtNode>> stmtList = vector<shared_ptr<StmtNode>>({assignNode});
         auto procedure = make_shared<ProcedureNode>("testPr0cedur3", stmtList);
         vector<shared_ptr<ProcedureNode>> procedureList = vector<std::shared_ptr<ProcedureNode>>(
@@ -35,7 +38,6 @@ TEST_CASE("Test SP Parser") {
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
 
-        // simple program node
         auto readNode = make_shared<ReadNode>(
                 make_shared<VariableNode>("num1"));
         vector<shared_ptr<StmtNode>> stmtList = vector<shared_ptr<StmtNode>>({readNode});
@@ -53,7 +55,6 @@ TEST_CASE("Test SP Parser") {
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
 
-        // simple program node
         auto readNode = make_shared<ReadNode>(
                 make_shared<VariableNode>("num1"));
         auto condExpr = make_shared<CondExprNode>("number>0");
@@ -74,7 +75,6 @@ TEST_CASE("Test SP Parser") {
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
 
-        // simple program node
         auto readNode = make_shared<ReadNode>(
                 make_shared<VariableNode>("num1"));
         auto readNodeElse = make_shared<ReadNode>(

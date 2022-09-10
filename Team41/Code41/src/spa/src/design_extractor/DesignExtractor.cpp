@@ -7,6 +7,7 @@
 #include "AST/utils/ASTUtils.h"
 #include <queue>
 #include "EntityExtractor.h"
+#include "RelationExtractor.h"
 
 using namespace AST;
 using namespace DE;
@@ -19,17 +20,55 @@ shared_ptr<unordered_set<string>> DesignExtractor::extractEntities(DesignEntity 
 
     }
     return result;
-
 }
 
-void DesignExtractor::saveVariableToPKB() {
-    auto set = this->extractEntities(DesignEntity::PROCEDURE);
-    list<string> lst;
-    auto it = lst.begin();
+shared_ptr<list<vector<string>>> DesignExtractor::extractRelations(RelationType relationType) {
+    list<vector<string>> relationList = RelationExtractor::extractRelation(this->programNode, relationType);
+    return make_shared<list<vector<string>>>(relationList);
+}
+
+void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
+    auto set = this->extractEntities(designEntity);
+    list<string> entityResultList;
+    auto it = entityResultList.begin();
     for (const auto& elem: *set) {
-        it = lst.insert(it, elem);
+        it = entityResultList.insert(it, elem);
     }
-    this->dataModifier.saveVariables(lst);
+
+    switch (designEntity) {
+        case QB::DesignEntity::VARIABLE: {
+            this->dataModifier.saveVariables(entityResultList);
+            break;
+        }
+        case QB::DesignEntity::CONSTANT: {
+            this->dataModifier.saveConstants(entityResultList);
+            break;
+        }
+        case QB::DesignEntity::PROCEDURE: {
+            this->dataModifier.saveProcedures(entityResultList);
+            break;
+        }
+        default: {
+            break;
+        }
+
+    }
+
+
+    this->dataModifier.saveVariables(entityResultList);
+}
+
+void DesignExtractor::saveRelationToPKB(RelationType relationType) {
+    list<vector<string>> relations = *this->extractRelations(relationType);
+    auto iterator = relations.begin();
+    while (iterator != relations.end()) {
+        if (relationType == RelationType::PARENT) {
+            this->dataModifier.saveParent(*iterator);
+        } else if (relationType == RelationType::PARENT_T) {
+            this->dataModifier.saveParentT(*iterator);
+        }
+        advance(iterator, 1);
+    }
 }
 
 DesignExtractor::DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode) : dataModifier(dataModifier), programNode(programNode) {
@@ -57,7 +96,7 @@ void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> pro
         set->insert(entities.begin(), entities.end());
 
         //bfs for child nodes
-        NodeType nodeType = ASTUtils::getNodeTypeByName(stmtNode);
+        NodeType nodeType = ASTUtils::getNodeType(stmtNode);
         switch (nodeType) {
             case AST::IF_NODE: {
                 shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
@@ -80,35 +119,29 @@ void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> pro
                 break;
             }
         }
-
     }
 }
 
-unordered_set<string> DesignExtractor::getVariablesFromExprString(string expr) {
-    unordered_set<string> ans;
-    unordered_set<char> ignored = {'*', '/', '%', '+', '-', '(', ')', ' ', '=', '<', '>', '!', '|', '&'};
-    string acc = "";
-    for (int i = 0 ; i < expr.length(); i++) {
-        if (ignored.find(expr[i]) == ignored.end()) { // char not in ignored
-            acc += expr[i];
-        } else {
-            if (!acc.empty() && !is_number(acc)) {
-                ans.insert(acc);
-            }
-            acc = "";
-        }
+void DesignExtractor::run() {
+    auto entitiesToSave = vector<DesignEntity>{DesignEntity::VARIABLE, DesignEntity::CONSTANT, DesignEntity::PROCEDURE};
+    for (auto designEntity: entitiesToSave) {
+        this->saveEntityToPKB(designEntity);
     }
-    if (!acc.empty() && !is_number(acc)) {
-        ans.insert(acc);
-    }
-    return ans;
-}
 
-bool DesignExtractor::is_number(const std::string& s)
-{
-    std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
+    //save statements
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> nodeToLine = ASTUtils::getNodePtrToLineNumMap(programNode);
+    list<vector<string>> payload;
+    auto it = payload.begin();
+    for (std::pair<shared_ptr<StmtNode>, int> myPair : *nodeToLine)
+    {
+        shared_ptr<StmtNode> node = myPair.first;
+        vector<string> stmtPair = {to_string(myPair.second), getDesignEntityString(ASTUtils::getStmtNodeDesignEntity(node))};
+        it = payload.insert(it, stmtPair);
+    }
+    this->dataModifier.saveStatements(payload);
+
+
+
 }
 
 

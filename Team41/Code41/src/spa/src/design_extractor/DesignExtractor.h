@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include "pkb/DataModifier.h"
 #include "query_builder/commons/DesignEntity.h"
+#include "query_builder/commons/RelationType.h"
 
 using namespace QB;
 namespace DE {
@@ -21,15 +22,17 @@ namespace DE {
         void
         extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode, shared_ptr<unordered_set<string>> set,
                                      DesignEntity designEntityType);
-        unordered_set<string> getVariablesFromExprString(string expr);
-        bool is_number(const std::string& s);
+        void saveEntityToPKB(DesignEntity designEntity);
+
 
 
     public:
         explicit DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode);
-
         shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
-        void saveVariableToPKB();
+        void run();
+        shared_ptr<list<vector<string>>> extractRelations(RelationType relationType);
+        void saveRelationToPKB(RelationType relationType);
+
     };
 
 }

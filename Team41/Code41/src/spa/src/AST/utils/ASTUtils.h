@@ -17,7 +17,9 @@
 
 #include <unordered_map>
 #include <unordered_set>
+#include "query_builder/commons/DesignEntity.h"
 
+using namespace QB;
 namespace AST {
     //
 // Created by Nafour on 9/9/22.
@@ -26,10 +28,13 @@ namespace AST {
     enum NodeType {ASSIGN_NODE, CALL_NODE, IF_NODE, PRINT_NODE, READ_NODE, WHILE_NODE, CONDEXPR_NODE, EXPR_NODE, PROCEDURE_NODE, PROGRAM_NODE, VARIABLE_NODE};
 
     class ASTUtils {
-        static int getNodePtrToLineNoMapHelper(shared_ptr<ASTNode> node, shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> map, int curr_line_no);
+        static int getNodeLineMappingHelper(shared_ptr<ASTNode> node, shared_ptr<unordered_map < shared_ptr<ASTNode>, int>> map, int curr_line_no, shared_ptr<unordered_map < int, shared_ptr<ASTNode>>> lineToNode);
+        static int getNodePtrToLineNoMapHelper(shared_ptr<ASTNode> node, shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> map, int curr_line_no);
     public:
-        static NodeType getNodeTypeByName(shared_ptr<ASTNode> node);
-        static shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> getNodePtrToLineNumMap(shared_ptr<ProgramNode> root);
+        static NodeType getNodeType(shared_ptr<ASTNode> node);
+        static void getNodeLineMapping(shared_ptr<ProgramNode> root, shared_ptr<unordered_map<shared_ptr < ASTNode>, int>> nodeToLine, shared_ptr<unordered_map<int, shared_ptr < ASTNode>>> lineToNode);
+        static shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> getNodePtrToLineNumMap(shared_ptr<ProgramNode> root);
+        static DesignEntity getStmtNodeDesignEntity(shared_ptr<StmtNode> node);
     };
 
 } // AST
