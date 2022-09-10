@@ -39,24 +39,46 @@ TEST_CASE("Test relation extractor") {
         * procedure CASE2 {
         * 1 x = 1
         * 2 while (x != 0) {
-        * 3     x = 0;
+        * 3     x = 0
+        * 4     if (x == 0) then {
+        * 5         y = 1
+        *       } else {
+        * 6         y = 0
+        *       }
         *   }
-        * 4 y = 2
+        * 7 y = 2
         * }
         */
+
+        // 1
         shared_ptr<AssignNode> assignX1 = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("1"));
+        // 3
         shared_ptr<AssignNode> assignX2 = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("0"));
-        vector<shared_ptr<StmtNode>> stmtLst{assignX2};
-        shared_ptr<WhileNode> whileNode = make_shared<WhileNode>(make_shared<CondExprNode>("x != 0"), stmtLst);
-        shared_ptr<AssignNode> assignY = make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("2"));
-        shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("CASE2", {assignX1, whileNode, assignX2, assignY}));
+        // 5
+        shared_ptr<AssignNode> assignY1 = make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("1"));
+        // 6
+        shared_ptr<AssignNode> assignY2 = make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("0"));
+        // 7
+        shared_ptr<AssignNode> assignY3 = make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("2"));
+        // 4
+        vector<shared_ptr<StmtNode>> ifStmtLst{assignY1};
+        vector<shared_ptr<StmtNode>> elseStmtLst{assignY2};
+        shared_ptr<IfNode> ifNode = make_shared<IfNode>(make_shared<CondExprNode>("x == 0"), ifStmtLst, elseStmtLst);
+        // 2
+        vector<shared_ptr<StmtNode>> whileStmtLst{assignX2, ifNode};
+        shared_ptr<WhileNode> whileNode = make_shared<WhileNode>(make_shared<CondExprNode>("x != 0"), whileStmtLst);
+        // procedure & program
+        shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("CASE2", {assignX1, whileNode, assignY3}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
-        vector<string> expectedR1 = {"2", "3"};
-        list<vector<string>> expectedParentRelations{expectedR1};
+        vector<string> expectedR1 = {"4", "5"};
+        vector<string> expectedR2 = {"4", "6"};
+        vector<string> expectedR3 = {"2", "3"};
+        vector<string> expectedR4 = {"2", "4"};
+        list<vector<string>> expectedParentRelations{expectedR1, expectedR2, expectedR3, expectedR4};
         auto actualIterator = actualParentRelations->begin();
         auto expectedIterator = expectedParentRelations.begin();
         while (actualIterator != actualParentRelations->end() && expectedIterator != expectedParentRelations.end()) {
