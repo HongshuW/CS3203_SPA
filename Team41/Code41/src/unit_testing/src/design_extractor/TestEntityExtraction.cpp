@@ -224,7 +224,5 @@ TEST_CASE("Test entity extraction") {
         auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
         unordered_set<string> constants_expected = unordered_set<string>{"1", "100", "20", "5", "3", "4"};
         REQUIRE(constants_expected == *constants_actual);
-
     }
-
 }

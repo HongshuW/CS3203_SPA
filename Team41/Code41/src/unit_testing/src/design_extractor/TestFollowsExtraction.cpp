@@ -113,6 +113,7 @@ TEST_CASE("Test Follows Extractor") {
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure3", {printNode, readNode, ifNode, readNode3}));
         shared_ptr<ProgramNode> programNode3 = make_shared<ProgramNode>(ProgramNode({procedureNode}));
 
-        
+        vector<vector<shared_ptr<StmtNode>>> s3 = FollowsExtractor::getListOfStmtList(programNode3);
+        REQUIRE(1==1); //OK
     }
 }
