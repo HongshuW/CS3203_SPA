@@ -46,7 +46,10 @@ TEST_CASE("Test entity extraction") {
         */
         shared_ptr<StmtNode> printNode = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<StmtNode> readNode = make_shared<ReadNode>(make_shared<VariableNode>("y"));
-        shared_ptr<StmtNode> assignNode = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("y + 1"));
+        auto expressionNode = make_shared<ExprNode>("+");
+        expressionNode->left = make_shared<ExprNode>("y");
+        expressionNode->right = make_shared<ExprNode>("1");
+        shared_ptr<StmtNode> assignNode = make_shared<AssignNode>(make_shared<VariableNode>("x"), expressionNode);
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode, readNode, assignNode}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
         DataModifier dataModifier = DataModifier();
@@ -70,10 +73,10 @@ TEST_CASE("Test entity extraction") {
      * 1 print x
      * 2 read y
      * 3 if (bar == y + 112312341234) then {
-     * 4 x = y + 1
+     * 4 x = y + 10 - z
      * 5 print z} else {
      * 6 read w}
-     * 7 read fo0
+     * 7 read foo
      * }
      */
         shared_ptr<StmtNode> printNode = make_shared<PrintNode>(make_shared<VariableNode>("x"));
@@ -82,7 +85,14 @@ TEST_CASE("Test entity extraction") {
         shared_ptr<CondExprNode> ifCondExpr = make_shared<CondExprNode>("bar == y + 112312341234");
         shared_ptr<StmtNode> printNode2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
         shared_ptr<StmtNode> readNode2 = make_shared<ReadNode>(make_shared<VariableNode>("w"));
-        shared_ptr<StmtNode> assignNode = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("y + 1"));
+
+        auto expressionNode = make_shared<ExprNode>("-");
+        expressionNode->left = make_shared<ExprNode>("+");
+        expressionNode->left->left = make_shared<ExprNode>("y");
+        expressionNode->left->right = make_shared<ExprNode>("10");
+        expressionNode->right = make_shared<ExprNode>("exprVar");
+
+        shared_ptr<StmtNode> assignNode = make_shared<AssignNode>(make_shared<VariableNode>("x"), expressionNode);
         vector<shared_ptr<StmtNode>> ifStmtList = {printNode2, assignNode};
         vector<shared_ptr<StmtNode>> elseStmtList = {readNode2};
         shared_ptr<StmtNode> ifNode = make_shared<IfNode>(ifCondExpr, ifStmtList, elseStmtList);
@@ -95,11 +105,11 @@ TEST_CASE("Test entity extraction") {
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode2);
         auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
-        unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar"};
+        unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "exprVar"};
         REQUIRE(variables_expected == *variables_actual);
 
         auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
-        unordered_set<string> constants_expected = unordered_set<string>{"1", "112312341234"};
+        unordered_set<string> constants_expected = unordered_set<string>{"10", "112312341234"};
         REQUIRE(constants_expected == *constants_actual);
 
         auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
