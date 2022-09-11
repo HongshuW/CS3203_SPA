@@ -18,11 +18,6 @@ using namespace std;
 namespace DE {
     class RelationExtractor {
     private:
-        static shared_ptr<map<int, vector<int>>> extractParentHashmap(shared_ptr<ProgramNode> rootPtr);
-        static shared_ptr<list<vector<string>>> extractParent(shared_ptr<ProgramNode> rootPtr);
-        static void extractParentTDFS(shared_ptr<map<int, vector<int>>> parentRelations, int key,
-                                      shared_ptr<vector<string>> ancestors, shared_ptr<list<vector<string>>> output);
-        static shared_ptr<list<vector<string>>> extractParentT(shared_ptr<ProgramNode> rootPtr);
         static void extractModifiesSDFS(shared_ptr<ASTNode> node,
                                         shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNoMap,
                                         shared_ptr<vector<string>> ancestors, shared_ptr<set<vector<string>>> output);
