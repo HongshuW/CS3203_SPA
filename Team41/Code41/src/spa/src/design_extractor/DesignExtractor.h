@@ -24,17 +24,13 @@ namespace DE {
                                      DesignEntity designEntityType);
         void saveEntityToPKB(DesignEntity designEntity);
 
-
-
     public:
         explicit DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode);
         shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
         void run();
         shared_ptr<list<vector<string>>> extractRelations(RelationType relationType);
         void saveRelationToPKB(RelationType relationType);
-
     };
-
 }
 
 #endif //SPA_DESIGNEXTRACTOR_H

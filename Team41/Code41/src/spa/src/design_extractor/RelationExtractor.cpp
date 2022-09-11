@@ -4,6 +4,7 @@
 
 #include "AST/utils/ASTUtils.h"
 #include "RelationExtractor.h"
+#include "FollowsExtractor.h"
 #include <queue>
 #include "utils/Utils.h"
 #include "ParentExtractor.h"
@@ -18,6 +19,12 @@ namespace DE {
             }
             case RelationType::PARENT_T: {
                 return *ParentExtractor::extractParentT(rootPtr);
+            }
+            case RelationType::FOLLOWS: {
+                return *FollowsExtractor().extractFollows(rootPtr);
+            }
+            case RelationType::FOLLOWS_T: {
+                return *FollowsExtractor().extractFollowsStar(rootPtr);
             }
             case RelationType::MODIFIES_S: {
                 return *ModifiesExtractor::extractModifiesS(rootPtr);

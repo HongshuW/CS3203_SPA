@@ -9,6 +9,7 @@
 #include "AST/utils/ASTUtils.h"
 #include <unordered_map>
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/FollowsExtractor.h"
 #include "pkb/DataModifier.h"
 #include "iostream"
 #include "Dummies.h"
@@ -210,10 +211,8 @@ TEST_CASE("Test entity extraction") {
         shared_ptr<StmtNode> printNode4P2 = make_shared<PrintNode>(make_shared<VariableNode>("bar"));
         shared_ptr<StmtNode> readNode4P2 = make_shared<ReadNode>(make_shared<VariableNode>("baz"));
 
-
         vector<shared_ptr<StmtNode>> whileStmtListP2 = {readNode4P2, printNode4P2};
         shared_ptr<StmtNode> whileNodeP2 = make_shared<WhileNode>(ifCondExprP2, whileStmtListP2);
-
 
         vector<shared_ptr<StmtNode>> ifStmtListP2 = {printNode2P2, whileNodeP2};
         vector<shared_ptr<StmtNode>> elseStmtListP2 = {readNode2P2};
@@ -239,7 +238,5 @@ TEST_CASE("Test entity extraction") {
         auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
         unordered_set<string> procedures_expected = unordered_set<string>{"procedure2", "procedure3"};
         REQUIRE(constants_expected == *constants_actual);
-
     }
-
 }
