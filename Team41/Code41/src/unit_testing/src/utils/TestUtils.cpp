@@ -8,7 +8,7 @@
 
 using namespace std;
 
-TEST_CASE("Test Utils") {
+TEST_CASE("Test QEUtils") {
     SECTION("x + 1") {
         vector<string> tokens = vector<string>(
                 {"x", "+", "1"});
