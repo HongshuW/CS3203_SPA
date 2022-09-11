@@ -31,12 +31,12 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/Dummies.h
     src/design_extractor/TestParentExtraction.cpp
     src/pkb/TestRelationshipManager.cpp
-    src/parser/ExprNodeParser.cpp
+        src/parser/TestExprNodeParser.cpp
     src/design_extractor/TestUsesSExtration.cpp
     src/design_extractor/DEUtils.cpp
     src/design_extractor/DEUtils.h
     src/design_extractor/TestModifiesSExtraction.cpp
-    src/parser/ExprNodeParser.cpp
-    src/parser/CondExprParser.cpp)
+        src/parser/TestExprNodeParser.cpp
+        src/parser/TestCondExprParser.cpp src/utils/TestUtils.cpp)
 
 target_link_libraries(unit_testing spa)

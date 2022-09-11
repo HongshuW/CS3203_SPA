@@ -103,6 +103,43 @@ TEST_CASE("Test SP CondExprNode Parser") {
         REQUIRE(*root == *expectedRoot);
     }
 
+    SECTION("((x == y) || (x <= 3)) && (z > 2)") {
+        vector<string> tokens = vector<string>(
+                {"(", "(", "x", "==", "y", ")", "||", "(", "x", "<=", "3", ")", ")", "&&", "(", "z", ">", "2", ")"});
+        CondExprParser parser = CondExprParser(tokens);
+        shared_ptr<CondExprNode> root = parser.parse();
+
+        // x == y
+        auto exprNodeLHS_1 = make_shared<ExprNode>("x");
+        auto exprNodeRHS_1 = make_shared<ExprNode>("y");
+        auto relExprNode_1 =
+                make_shared<RelExprNode>(exprNodeLHS_1, "==", exprNodeRHS_1);
+        auto condExprNodeLHS_1 = make_shared<CondExprNode>(relExprNode_1);
+
+        // x <=3
+        auto exprNodeLHS_2 = make_shared<ExprNode>("x");
+        auto exprNodeRHS_2 = make_shared<ExprNode>("3");
+        auto relExprNode_2 =
+                make_shared<RelExprNode>(exprNodeLHS_2, "<=", exprNodeRHS_2);
+        auto condExprNodeRHS_2 = make_shared<CondExprNode>(relExprNode_2);
+
+        // z > 2
+        auto exprNodeLHS_3 = make_shared<ExprNode>("z");
+        auto exprNodeRHS_3 = make_shared<ExprNode>("2");
+        auto relExprNode_3 =
+                make_shared<RelExprNode>(exprNodeLHS_3, ">", exprNodeRHS_3);
+
+        // (z > 2)
+        auto condExprNodeRHS = make_shared<CondExprNode>(relExprNode_3);
+        // ((x == y) || (x <= 3))
+        auto condExprNodeLHS =
+                make_shared<CondExprNode>(condExprNodeLHS_1, "||", condExprNodeRHS_2);
+
+        auto expectedRoot =
+                make_shared<CondExprNode>(condExprNodeLHS, "&&", condExprNodeRHS);
+        REQUIRE(*root == *expectedRoot);
+    }
+
     SECTION("(x + 1 == y) && (z > 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "x", "+", "1", "==", "y", ")", "&&", "(", "z", ">", "2", ")"});

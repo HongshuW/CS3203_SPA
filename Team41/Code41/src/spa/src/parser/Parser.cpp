@@ -121,7 +121,6 @@ shared_ptr<IfNode> Parser::parseIfNode() {
         throw SPParseException("Expect a conditional expression, got " + peek());
     }
 
-    expect(")");
     expect("then");
     expect("{");
     vector<shared_ptr<StmtNode>> ifStatementList = parseStatementList();
@@ -204,7 +203,6 @@ shared_ptr<WhileNode> Parser::parseWhileNode() {
 
     shared_ptr<CondExprNode> condExprNode = parseCondExprNode();
 
-    expect(")");
     expect("{");
     vector<shared_ptr<StmtNode>> statementList = parseStatementList();
     expect("}");
@@ -258,7 +256,7 @@ shared_ptr<ExprNode> Parser::parseExprNode() {
 
 shared_ptr<CondExprNode> Parser::parseCondExprNode() {
     vector<string> condExpr;
-    while (peek().compare(")") != 0) {
+    while (peek().compare("{") != 0 && peek().compare("then") != 0) {
         string curr = pop();
         if (!Utils::isValidName(curr) && !Utils::isValidNumber(curr)) {
             //! is a comparator operator, need to check for valid operator
@@ -267,6 +265,11 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode() {
             }
         }
         condExpr.push_back(curr);
+    }
+
+    //! remove the ending )
+    if (previous().compare(")") == 0) {
+        condExpr.pop_back();
     }
 
     //! Check for valid parentheses
