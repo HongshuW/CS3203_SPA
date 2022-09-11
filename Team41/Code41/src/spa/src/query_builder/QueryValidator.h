@@ -22,6 +22,11 @@ namespace QB {
         void validateUsesModifiesNoUnderscoreForFirstArg();
         void validateSynonymTypeSuchThatClause();
         void validateSuchThatClause();
+        void validateSynonymDeclaredPatternClause();
+        void validateArgRefTypePatternClause();
+        void validateArg1DesignEntityPatternClause();
+        void validateArg2DesignEntityPatternClause();
+        void validatePatternClause();
     public:
         //! Validate the Query object, throw Semantic Error if encounter
         shared_ptr<Query> query;

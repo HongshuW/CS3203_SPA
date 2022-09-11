@@ -5,7 +5,7 @@
 #include "catch.hpp"
 #include "iostream"
 #include "parser/Tokenizer.h"
-#include "parser/Exceptions.h"
+#include "parser/SPExceptions.h"
 
 using namespace SourceParser;
 using SourceParser::Tokenizer;

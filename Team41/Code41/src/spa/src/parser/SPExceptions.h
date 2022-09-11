@@ -2,8 +2,8 @@
 // Created by Tan Wei En on 8/9/22.
 //
 
-#ifndef SPA_EXCEPTIONS_H
-#define SPA_EXCEPTIONS_H
+#ifndef SPA_SPEXCEPTIONS_H
+#define SPA_SPEXCEPTIONS_H
 
 #pragma once
 #include <string>
@@ -42,4 +42,4 @@ namespace SourceParser {
     };
 }
 
-#endif //SPA_EXCEPTIONS_H
+#endif //SPA_SPEXCEPTIONS_H

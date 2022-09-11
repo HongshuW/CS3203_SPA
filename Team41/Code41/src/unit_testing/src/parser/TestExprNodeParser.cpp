@@ -4,9 +4,8 @@
 
 #include "catch.hpp"
 
-#include "parser/ExprNodeParser.h"
+#include "utils/ExprNodeParser.h"
 
-using namespace SourceParser;
 using namespace std;
 
 TEST_CASE("Test SP ExprNode Parser") {
