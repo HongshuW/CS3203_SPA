@@ -16,13 +16,14 @@ using namespace std;
 using namespace DE;
 
 TEST_CASE("Test relation extractor") {
-    SECTION("Parent(*): no relations") {
+    SECTION("CASE1") {
         /*
         * procedure CASE1 {
         * 1 x = 1
         * 2 y = 2
         * }
         */
+        // Build up AST
         shared_ptr<AssignNode> assignX = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("1"));
         shared_ptr<AssignNode> assignY = make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("2"));
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("CASE1", {assignX, assignY}));
@@ -30,13 +31,33 @@ TEST_CASE("Test relation extractor") {
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
+        // Test Parent(*)
         shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
         shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
         REQUIRE(actualParentRelations->empty());
         REQUIRE(actualParentTRelations->empty());
+
+        // Test ModifiesS
+        shared_ptr<list<vector<string>>> actualModifiesSRelations = designExtractor.extractRelations(RelationType::MODIFIES_S);
+        vector<string> expectedR1{"1", "x"};
+        vector<string> expectedR2{"2", "y"};
+        list<vector<string>> expectedModifiesSRelations{expectedR1, expectedR2};
+        auto actualModifiesSIterator = actualModifiesSRelations->begin();
+        auto expectedModifiesSIterator = expectedModifiesSRelations.begin();
+        while (actualModifiesSIterator != actualModifiesSRelations->end()
+        && expectedModifiesSIterator != expectedModifiesSRelations.end()) {
+            vector<string> a = *actualModifiesSIterator;
+            vector<string> e = *expectedModifiesSIterator;
+            REQUIRE(a[0] == e[0]);
+            REQUIRE(a[1] == e[1]);
+            advance(actualModifiesSIterator, 1);
+            advance(expectedModifiesSIterator, 1);
+        }
+        REQUIRE(actualModifiesSIterator == actualModifiesSRelations->end());
+        REQUIRE(expectedModifiesSIterator == expectedModifiesSRelations.end());
     }
 
-    SECTION("Parent: has relations") {
+    SECTION("CASE2") {
         /*
         * procedure CASE2 {
         * 1 x = 1
@@ -75,7 +96,7 @@ TEST_CASE("Test relation extractor") {
         DataModifier dataModifier = DataModifier();
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
-        // check parent relations
+        // Test Parent
         shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
         vector<string> expectedR1 = {"2", "3"};
         vector<string> expectedR2 = {"2", "4"};
@@ -95,7 +116,7 @@ TEST_CASE("Test relation extractor") {
         REQUIRE(actualIterator == actualParentRelations->end());
         REQUIRE(expectedIterator == expectedParentRelations.end());
 
-        // check parent* relations
+        // Test Parent*
         shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
         vector<string> expectedR5 = {"2", "5"};
         vector<string> expectedR6 = {"2", "6"};
@@ -113,5 +134,32 @@ TEST_CASE("Test relation extractor") {
         }
         REQUIRE(actualParentTIterator == actualParentTRelations->end());
         REQUIRE(expectedParentTIterator == expectedParentTRelations.end());
+
+        // Test ModifiesS
+        shared_ptr<list<vector<string>>> actualModifiesSRelations = designExtractor.extractRelations(RelationType::MODIFIES_S);
+        vector<string> expectedModifiesSR1{"1", "x"};
+        vector<string> expectedModifiesSR2{"2", "x"};
+        vector<string> expectedModifiesSR3{"2", "y"};
+        vector<string> expectedModifiesSR4{"3", "x"};
+        vector<string> expectedModifiesSR5{"4", "y"};
+        vector<string> expectedModifiesSR6{"5", "y"};
+        vector<string> expectedModifiesSR7{"6", "y"};
+        vector<string> expectedModifiesSR8{"7", "y"};
+        list<vector<string>> expectedModifiesSRelations{expectedModifiesSR1, expectedModifiesSR2, expectedModifiesSR3,
+                                                        expectedModifiesSR4, expectedModifiesSR5, expectedModifiesSR6,
+                                                        expectedModifiesSR7, expectedModifiesSR8};
+        auto actualModifiesSIterator = actualModifiesSRelations->begin();
+        auto expectedModifiesSIterator = expectedModifiesSRelations.begin();
+        while (actualModifiesSIterator != actualModifiesSRelations->end()
+        && expectedModifiesSIterator != expectedModifiesSRelations.end()) {
+            vector<string> a = *actualModifiesSIterator;
+            vector<string> e = *expectedModifiesSIterator;
+            REQUIRE(a[0] == e[0]);
+            REQUIRE(a[1] == e[1]);
+            advance(actualModifiesSIterator, 1);
+            advance(expectedModifiesSIterator, 1);
+        }
+        REQUIRE(actualModifiesSIterator == actualModifiesSRelations->end());
+        REQUIRE(expectedModifiesSIterator == expectedModifiesSRelations.end());
     }
 }
