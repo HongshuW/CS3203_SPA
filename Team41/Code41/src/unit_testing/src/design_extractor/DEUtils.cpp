@@ -24,4 +24,20 @@ namespace TestDE {
         }
         return true;
     }
+    bool DEUtils::isSamePattern(vector<pair<pair<int, string>, shared_ptr<AssignNode>>> actual,
+                                vector<pair<pair<int, string>, shared_ptr<AssignNode>>> expected) {
+        for (auto rowActual: actual) {
+            bool isFound = false;
+            for (auto rowExpected: expected) {
+                bool sameLine = rowActual.first.first == rowExpected.first.first;
+                bool sameVar = rowActual.first.second == rowExpected.first.second;
+                bool sameNode = rowActual.second == rowExpected.second;
+                if (sameLine && sameVar && sameNode) {
+                    isFound = true;
+                }
+            }
+            if (!isFound) return false;
+        }
+        return true;
+    }
 } // TestDE

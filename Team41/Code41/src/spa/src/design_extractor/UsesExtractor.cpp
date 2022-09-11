@@ -30,11 +30,12 @@ namespace DE {
 
         if (nodeType == AST::PROCEDURE_NODE) {
             shared_ptr<ProcedureNode> procedureNode1 = dynamic_pointer_cast<ProcedureNode>(node);
-
+            unordered_set<string> usedVarsProcedure = unordered_set<string>();
             for (auto stmtNode: procedureNode1->stmtList) {
-                extractUsesSHelper(stmtNode, result, stmtNumbers);
+                auto fromChild = extractUsesSHelper(stmtNode, result, stmtNumbers);
+                usedVarsProcedure.insert(fromChild.begin(), fromChild.end());
             }
-
+            return usedVarsProcedure;
         }
 
         switch (nodeType) {
