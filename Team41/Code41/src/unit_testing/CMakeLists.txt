@@ -30,6 +30,8 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/Dummies.cpp
     src/design_extractor/Dummies.h
     src/design_extractor/TestRelationExtractor.cpp
+    src/design_extractor/TestFollowsExtraction.cpp
+    src/design_extractor/TestFollowsStarExtraction.cpp
     src/pkb/TestRelationshipManager.cpp
     src/parser/ExprNodeParser.cpp src/design_extractor/TestUsesSExtration.cpp src/design_extractor/DEUtils.cpp src/design_extractor/DEUtils.h)
 

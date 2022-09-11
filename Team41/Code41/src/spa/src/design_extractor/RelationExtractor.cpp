@@ -251,10 +251,13 @@ namespace DE {
         switch (relationType) {
             case RelationType::PARENT: {
                 return *extractParent(rootPtr);
-            case RelationType::FOLLOWS:
+            }
+            case RelationType::FOLLOWS: {
                 return *FollowsExtractor().extractFollows(rootPtr);
-            case RelationType::FOLLOWS_T:
+            }
+            case RelationType::FOLLOWS_T: {
                 return *FollowsExtractor().extractFollowsStar(rootPtr);
+            }
             case RelationType::PARENT_T: {
                 return *extractParentT(rootPtr);
             }
