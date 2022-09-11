@@ -3,7 +3,7 @@
 //
 
 #include "query_builder/QueryTokenizer.h"
-#include "query_builder/Exceptions.h"
+#include "query_builder/exceptions/Exceptions.h"
 
 using QB::QueryTokenizer;
 using namespace std;

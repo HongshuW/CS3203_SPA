@@ -4,8 +4,6 @@
 
 #include "ExprNodeParser.h"
 
-using namespace SourceParser;
-
 ExprNodeParser::ExprNodeParser(vector<string>& tokens) : tokens(tokens), currIdx(0){};
 
 string ExprNodeParser::peek() { return tokens[currIdx]; }
@@ -86,8 +84,7 @@ shared_ptr<ExprNode> ExprNodeParser::parse() {
     }
 
     if (nodeStack->empty()) {
-        // throw error
-        throw SPParseException("The RHS of assign statement cannot be empty");
+        return nullptr;
     }
 
     return nodeStack->top();

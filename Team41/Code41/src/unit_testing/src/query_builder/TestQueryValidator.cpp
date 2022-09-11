@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 #include "query_builder/QueryBuilder.h"
-#include "query_builder/Exceptions.h"
+#include "query_builder/exceptions/Exceptions.h"
 
 using namespace QB;
 
@@ -270,6 +270,32 @@ TEST_CASE ("Test Query Validator") {
     SECTION ("Test correct second arg synonym in Modifies_P Clause (first arg is procedure synonym, "
              "second arg cannot be a stmt synonym") {
         std::string queryStr = "procedure p; stmt s; Select p such that Uses (p, s)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test undeclared synonym in Pattern Clause") {
+        std::string queryStr = "variable a; Select a pattern b (_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test invalid RefType of argument 2 in Pattern Clause") {
+        std::string queryStr = "assign a; procedure s; Select a such that Modifies (a, s) pattern a (1, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test invalid Design Entity type of argument 1 in Pattern Clause") {
+        std::string queryStr = "variable a; Select a pattern a (_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test invalid Design Entity type of argument 2 in Pattern Clause") {
+        // Validate if agr2 is a synonym, it must be declared as variable
+        std::string queryStr = "assign a; procedure s; while w; Select a such that Modifies (a, s) "
+                               "pattern a (w, _\"x\"_)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }

@@ -6,8 +6,8 @@
 #define SPA_CONDEXPRPARSER_H
 
 #include "AST/CondExprNode.h"
-#include "Exceptions.h"
-#include "ExprNodeParser.h"
+#include "SPExceptions.h"
+#include "utils/ExprNodeParser.h"
 #include "utils/Utils.h"
 #include <string>
 #include <vector>

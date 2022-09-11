@@ -4,7 +4,7 @@
 
 #include "Synonym.h"
 #include <regex>
-#include "query_builder/Exceptions.h"
+#include "query_builder/exceptions/Exceptions.h"
 
 using namespace QB;
 

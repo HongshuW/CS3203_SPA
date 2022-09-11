@@ -4,9 +4,9 @@
 
 #include "query_builder/QueryParser.h"
 #include "query_builder/commons/Synonym.h"
-#include "Exceptions.h"
 #include "query_builder/clauses/SelectClause.h"
 #include "query_builder/clauses/SuchThatClause.h"
+#include "query_builder/exceptions/Exceptions.h"
 
 using namespace QB;
 
@@ -79,7 +79,7 @@ void QueryParser::parseSelectClause() {
 }
 
 Ref QueryParser::parseRef() {
-    //! Can be synonym, _, integer, or string
+    //! Can be synonym, _, integer, or ident
     if (match("_")) {
         return Underscore();
     } else if (match("\"")) {
@@ -102,9 +102,11 @@ bool QueryParser::isDigit(const string &str) {
     return str.find_first_not_of("0123456789") == std::string::npos;
 }
 
-void QueryParser::parseSuchThatClause() {
+bool QueryParser::parseSuchThatClause() {
+    unsigned int savedIdx = currIdx;
     if (!match("such")) {
-        throw PQLParseException("Unexpected token '" + peek() + "'");
+        currIdx = savedIdx;
+        return false;
     }
 
     expect("that");
@@ -121,6 +123,54 @@ void QueryParser::parseSuchThatClause() {
     shared_ptr<SuchThatClause> suchThatClause =
         make_shared<SuchThatClause>(relationType, arg1, arg2, query->declarations);
     query->suchThatClauses->push_back(suchThatClause);
+    return true;
+}
+
+ExpressionSpec QueryParser::parseExpressionSpec() {
+    //TODO: need to convert "x+y+z" to vector of string in the future
+    vector<string> expr;
+    if (match("\"")) {
+        //! Full match
+        expr.push_back(pop());
+        expect("\"");
+        ExprNodeParser parser = ExprNodeParser(expr);
+        return ExpressionSpec(ExpressionSpecType::FULL_MATCH, parser.parse());
+    } else if (match("_")) {
+        if (peek().compare(")") == 0) {
+            //! Any match
+            return ExpressionSpec(ExpressionSpecType::ANY_MATCH);
+        } else {
+            //! Partial match
+            expect("\"");
+            expr.push_back(pop());
+            expect("\"");
+            expect("_");
+            ExprNodeParser parser = ExprNodeParser(expr);
+            return ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, parser.parse());
+        }
+    } else {
+        throw PQLParseException("Expect an expression, got " + peek());
+    }
+}
+
+bool QueryParser::parsePatternClause() {
+    unsigned int savedIdx = currIdx;
+    if (!match("pattern")) {
+        currIdx = savedIdx;
+        return false;
+    }
+
+    Synonym arg1 = Synonym(pop());
+    expect("(");
+    // can be synonym, _, ident
+    Ref arg2 = parseRef();
+    expect(",");
+    ExpressionSpec arg3 = parseExpressionSpec();
+    expect(")");
+
+    shared_ptr<PatternClause> patternClause = make_shared<PatternClause>(arg1, arg2, arg3);
+    query->patternClause = patternClause;
+    return true;
 }
 
 shared_ptr<Query> QueryParser::parse() {
@@ -135,9 +185,10 @@ shared_ptr<Query> QueryParser::parse() {
         parseSelectClause();
 
         while (currIdx < tokens.size()) {
-            parseSuchThatClause();
-            currIdx++;
+            if (parseSuchThatClause()) continue;
+            if (parsePatternClause()) continue;
             //! Throw syntax error accordingly
+            throw PQLParseException("Expect a such that or pattern clause, got " + peek());
         }
     }
     return query;

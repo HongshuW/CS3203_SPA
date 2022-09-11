@@ -5,7 +5,7 @@
 #include "catch.hpp"
 
 #include "parser/CondExprParser.h"
-#include "parser/Exceptions.h"
+#include "parser/SPExceptions.h"
 
 using namespace SourceParser;
 using namespace std;
