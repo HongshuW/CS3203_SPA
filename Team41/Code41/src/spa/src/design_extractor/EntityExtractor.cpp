@@ -3,7 +3,8 @@
 //
 
 #include "EntityExtractor.h"
-
+#include <queue>
+#include "utils/Utils.h"
 
 namespace DE {
     unordered_set<string>
@@ -35,7 +36,7 @@ namespace DE {
             case AST::ASSIGN_NODE: {
                 shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(stmtNode);
                 set->insert(assignNode->variableNode->variable);
-                unordered_set<string> variables = getVariablesFromExprString(assignNode->expressionNode->expr);
+                unordered_set<string> variables = getVariablesFromExprNode(assignNode->expressionNode);
                 set->insert(variables.begin(), variables.end());
                 break;
             }
@@ -71,7 +72,7 @@ namespace DE {
         switch (nodeType) {
             case AST::ASSIGN_NODE: {
                 shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(stmtNode);
-                unordered_set<string> constants = getConstantsFromExprString(assignNode->expressionNode->expr);
+                unordered_set<string> constants = getConstantsFromExprNode(assignNode->expressionNode);
                 set->insert(constants.begin(), constants.end());
                 break;
             }
@@ -140,5 +141,47 @@ namespace DE {
         std::string::const_iterator it = s.begin();
         while (it != s.end() && std::isdigit(*it)) ++it;
         return !s.empty() && it == s.end();
+    }
+
+    unordered_set<string> EntityExtractor::getVariablesFromExprNode(shared_ptr<ExprNode> exprNode) {
+        unordered_set<string> ans;
+        queue<shared_ptr<ExprNode>> queue;
+        queue.push(exprNode);
+
+        while (!queue.empty()) {
+            auto currNode = queue.front();
+            queue.pop();
+            if (Utils::isValidName(currNode->expr)) {
+                ans.insert(currNode->expr);
+            }
+            if (currNode->left) {
+                queue.push(currNode->left);
+            }
+            if (currNode->right) {
+                queue.push(currNode->right);
+            }
+        }
+        return ans;
+    }
+
+    unordered_set<string> EntityExtractor::getConstantsFromExprNode(shared_ptr<ExprNode> exprNode) {
+        unordered_set<string> ans;
+        queue<shared_ptr<ExprNode>> queue;
+        queue.push(exprNode);
+
+        while (!queue.empty()) {
+            auto currNode = queue.front();
+            queue.pop();
+            if (Utils::isValidNumber(currNode->expr)) {
+                ans.insert(currNode->expr);
+            }
+            if (currNode->left) {
+                queue.push(currNode->left);
+            }
+            if (currNode->right) {
+                queue.push(currNode->right);
+            }
+        }
+        return ans;
     }
 } // DE

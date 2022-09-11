@@ -8,7 +8,7 @@
 #include <queue>
 #include "EntityExtractor.h"
 #include "RelationExtractor.h"
-
+#include "PatternExtractor.h"
 using namespace AST;
 using namespace DE;
 using namespace std;
@@ -141,6 +141,10 @@ void DesignExtractor::run() {
 
 
 
+}
+
+vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::extractPatterns() {
+    return PatternExtractor::extractPattern(this->programNode);
 }
 
 

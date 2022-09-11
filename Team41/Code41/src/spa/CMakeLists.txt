@@ -5,7 +5,7 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/QueryBuilder.cpp
         src/query_builder/QueryTokenizer.h
         src/query_builder/QueryTokenizer.cpp
-        src/query_builder/Exceptions.h
+        src/query_builder/exceptions/Exceptions.h
         src/query_builder/commons/Query.h
         src/query_builder/commons/Query.cpp
         src/query_builder/commons/DesignEntity.h
@@ -81,7 +81,7 @@ add_library(spa ${srcs} ${headers}
         src/AST/ReadNode.h
         src/AST/PrintNode.cpp
         src/AST/PrintNode.h
-        src/parser/Exceptions.h
+        src/parser/SPExceptions.h
         src/AST/WhileNode.cpp
         src/AST/WhileNode.h
         src/AST/CallNode.cpp
@@ -117,8 +117,8 @@ add_library(spa ${srcs} ${headers}
         src/utils/Utils.h
         src/design_extractor/RelationExtractor.cpp
         src/design_extractor/RelationExtractor.h
-        src/parser/ExprNodeParser.cpp
-        src/parser/ExprNodeParser.h
+        src/utils/ExprNodeParser.cpp
+        src/utils/ExprNodeParser.h
         src/design_extractor/FollowsExtractor.cpp
         src/design_extractor/FollowsExtractor.h
         src/design_extractor/ParentExtractor.cpp
@@ -133,7 +133,20 @@ add_library(spa ${srcs} ${headers}
         src/parser/CondExprParser.h
         src/query_evaluator/Utils.cpp
         src/query_evaluator/Utils.h
-        )
+        src/utils/ExprNodeParser.h
+        src/AST/RelExprNode.cpp
+        src/AST/RelExprNode.h
+        src/utils/ExprNodeParser.h
+        src/AST/RelExprNode.cpp
+        src/AST/RelExprNode.h
+        src/parser/CondExprParser.cpp
+        src/parser/CondExprParser.h src/design_extractor/PatternExtractor.cpp 
+        src/design_extractor/PatternExtractor.h
+        src/parser/CondExprParser.h src/query_builder/clauses/PatternClause.cpp 
+        src/query_builder/clauses/PatternClause.h 
+        src/query_builder/commons/ExpressionSpec.cpp 
+        src/query_builder/commons/ExpressionSpec.h 
+        src/query_builder/commons/ExpressionSpecType.h)
 
 
 

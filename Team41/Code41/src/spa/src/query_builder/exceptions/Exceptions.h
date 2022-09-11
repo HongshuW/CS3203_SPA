@@ -2,7 +2,7 @@
 // Created by Xingchen Lin on 27/8/22.
 //
 
-#ifndef SPA_EXCEPTIONS_H
+#ifndef SPA_SPEXCEPTIONS_H
 #define SPA_EXCEPTIONS_H
 
 #pragma once
@@ -41,4 +41,4 @@ namespace QB {
     };
 }
 
-#endif //SPA_EXCEPTIONS_H
+#endif //SPA_SPEXCEPTIONS_H

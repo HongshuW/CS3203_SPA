@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 #include "query_builder/QueryTokenizer.h"
-#include "query_builder/Exceptions.h"
+#include "query_builder/exceptions/Exceptions.h"
 
 using namespace QB;
 

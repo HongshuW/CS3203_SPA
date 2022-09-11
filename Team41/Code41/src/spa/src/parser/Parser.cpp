@@ -3,7 +3,7 @@
 //
 
 #include "Parser.h"
-#include "Exceptions.h"
+#include "SPExceptions.h"
 
 using namespace SourceParser;
 using namespace std;
@@ -251,6 +251,10 @@ shared_ptr<ExprNode> Parser::parseExprNode() {
     }
     ExprNodeParser exprNodeParser = ExprNodeParser(expr);
     shared_ptr<ExprNode> exprNode = exprNodeParser.parse();
+    if (!exprNode) {
+        // throw error
+        throw SPParseException("The RHS of assign statement cannot be empty");
+    }
     return exprNode;
 }
 

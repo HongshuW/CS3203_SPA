@@ -7,8 +7,8 @@
 
 #include "query_builder/commons/Query.h"
 #include "query_builder/commons/Ref.h"
+#include "utils/ExprNodeParser.h"
 
-using namespace QB;
 using namespace std;
 
 namespace QB {
@@ -26,7 +26,9 @@ namespace QB {
         void parseSelectClause();
         Ref parseRef();
         bool isDigit(const string &str);
-        void parseSuchThatClause();
+        bool parseSuchThatClause();
+        bool parsePatternClause();
+        ExpressionSpec parseExpressionSpec();
 
     public:
         //! Parse tokens to Query object, throw Syntax Error if encounter

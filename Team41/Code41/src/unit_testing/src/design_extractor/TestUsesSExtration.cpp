@@ -2,11 +2,6 @@
 // Created by Nafour on 11/9/22.
 //
 #include "catch.hpp"
-#include "AST/PrintNode.h"
-#include "AST/ReadNode.h"
-#include "AST/IfNode.h"
-#include "AST/WhileNode.h"
-#include "AST/utils/ASTUtils.h"
 #include <unordered_map>
 #include "design_extractor/DesignExtractor.h"
 #include "pkb/DataModifier.h"

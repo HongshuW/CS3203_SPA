@@ -3,7 +3,7 @@
 //
 
 #include "Ref.h"
-#include "query_builder/Exceptions.h"
+#include "query_builder/exceptions/Exceptions.h"
 
 namespace QB {
     unordered_map<RefType, int> refTypeToIndexMap({
