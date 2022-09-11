@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include "Tokenizer.h"
-#include "Exceptions.h"
+#include "SPExceptions.h"
 
 using namespace SourceParser;
 using namespace std;

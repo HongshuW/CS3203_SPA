@@ -3,7 +3,7 @@
 //
 
 #include "RelationType.h"
-#include "query_builder/Exceptions.h"
+#include "query_builder/exceptions/Exceptions.h"
 #include "Ref.h"
 
 namespace QB {
