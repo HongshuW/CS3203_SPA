@@ -134,7 +134,7 @@ add_library(spa ${srcs} ${headers}
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
         src/parser/CondExprParser.cpp
-        src/parser/CondExprParser.h)
+        src/parser/CondExprParser.h src/design_extractor/PatternExtractor.cpp src/design_extractor/PatternExtractor.h)
 
 
 # this makes the headers accessible for other projects which uses spa lib
