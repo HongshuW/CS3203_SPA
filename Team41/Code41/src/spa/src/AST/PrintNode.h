@@ -19,8 +19,8 @@ namespace AST {
         PrintNode(shared_ptr<VariableNode> variableNode);
 
         bool operator==(const ASTNode& node) const {
-            PrintNode castedNode = dynamic_cast<const PrintNode&>(node);
-            return *variableNode == *castedNode.variableNode;
+            auto castedNode = dynamic_cast<const PrintNode*>(&node);
+            return castedNode != 0 && *variableNode == *castedNode->variableNode;
         }
 
     };

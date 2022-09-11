@@ -23,10 +23,6 @@ TEST_CASE ("Test Tokenizer") {
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         auto expected = std::vector<std::string>(
                 {"procedure", "testProcedure", "{", "x", "=", "1", ";", "}"});
 
@@ -40,22 +36,18 @@ TEST_CASE ("Test Tokenizer") {
     SECTION ("test basic source program with multiple statements") {
         std::string source = "procedure testProcedure {"
                              "x = 1;"
-                             "Print x;"
-                             "Read x;"
-                             "Call secondProcedure;"
+                             "print x;"
+                             "read x;"
+                             "call secondProcedure;"
                              "}";
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         auto expected = std::vector<std::string>(
                 {"procedure", "testProcedure", "{", "x", "=", "1", ";",
-                 "Print", "x", ";",
-                 "Read", "x", ";",
-                 "Call", "secondProcedure", ";",
+                 "print", "x", ";",
+                 "read", "x", ";",
+                 "call", "secondProcedure", ";",
                  "}"
                 });
 
@@ -69,7 +61,7 @@ TEST_CASE ("Test Tokenizer") {
     SECTION ("test source program with single condition if loop") {
         std::string source = "procedure testProcedure {"
                              "x = 0;"
-                             "if (x <= 1) {"
+                             "if (x <= 1) then {"
                              "x = 1;"
                              "} else {"
                              "x = 5;"
@@ -78,12 +70,9 @@ TEST_CASE ("Test Tokenizer") {
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         auto expected = std::vector<std::string>(
-                {"procedure", "testProcedure", "{", "x", "=", "0", ";", "if", "(", "x", "<=", "1", ")", "{", "x", "=", "1", ";", "}", "else", "{", "x", "=", "5", ";", "}", "}"});
+                {"procedure", "testProcedure", "{", "x", "=", "0", ";", "if", "(", "x", "<=", "1", ")",
+                 "then", "{", "x", "=", "1", ";", "}", "else", "{", "x", "=", "5", ";", "}", "}"});
 
         REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
                            end(expected),
@@ -95,7 +84,7 @@ TEST_CASE ("Test Tokenizer") {
     SECTION ("test source program with multiple condition if loop") {
         std::string source = "procedure testProcedure {"
                              "x = 0;"
-                             "if (x <= 1 || x > 3) {"
+                             "if (x <= 1 || x > 3) then {"
                              "x = 1;"
                              "} else {"
                              "x = 5;"
@@ -104,12 +93,9 @@ TEST_CASE ("Test Tokenizer") {
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         auto expected = std::vector<std::string>(
-                {"procedure", "testProcedure", "{", "x", "=", "0", ";", "if", "(", "x", "<=", "1", "||", "x", ">", "3", ")", "{", "x", "=", "1", ";", "}", "else", "{", "x", "=", "5", ";", "}", "}"});
+                {"procedure", "testProcedure", "{", "x", "=", "0", ";", "if", "(", "x", "<=", "1", "||",
+                 "x", ">", "3", ")", "then", "{", "x", "=", "1", ";", "}", "else", "{", "x", "=", "5", ";", "}", "}"});
 
         REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
                            end(expected),
@@ -128,10 +114,6 @@ TEST_CASE ("Test Tokenizer") {
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         auto expected = std::vector<std::string>(
                 {"procedure", "testProcedure", "{", "x", "=", "0", ";", "while", "(", "x", "<=", "100", ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
 
@@ -144,24 +126,20 @@ TEST_CASE ("Test Tokenizer") {
 
     SECTION ("test source program with multiple levels of nesting") {
         std::string source = "procedure testProcedure {"
-                             "if (x <= 100) {"
+                             "if (x <= 100) then {"
                              "while (x != 100) {"
                              "x = x + 1;"
                              "}"
                              "} else {"
-                             "Print x;"
+                             "print x;"
                              "}"
                              "}";
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         auto expected = std::vector<std::string>(
-                {"procedure", "testProcedure", "{", "if", "(", "x", "<=", "100", ")", "{",
-                 "while", "(", "x", "!=", "100", ")", "{", "x", "=", "x", "+", "1", ";", "}", "}", "else", "{", "Print", "x", ";", "}", "}"});
+                {"procedure", "testProcedure", "{", "if", "(", "x", "<=", "100", ")", "then", "{",
+                 "while", "(", "x", "!=", "100", ")", "{", "x", "=", "x", "+", "1", ";", "}", "}", "else", "{", "print", "x", ";", "}", "}"});
 
         REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
                            end(expected),
@@ -180,7 +158,6 @@ TEST_CASE ("Test Tokenizer") {
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
-
         auto expected = std::vector<std::string>(
                 {"procedure", "firstProcedure", "{", "x", "=", "1", ";", "}", "procedure", "secondProcedure", "{", "y", "=", "2", ";", "}"});
 
@@ -203,7 +180,7 @@ TEST_CASE ("Test Tokenizer") {
     SECTION ("Invalid condition in if loop, throw SPTokenizeException") {
         std::string source = "procedure testProcedure {"
                              "x = 0;"
-                             "if (x <= 1 & x > 3) {"
+                             "if (x <= 1 & x > 3) then {"
                              "x = 1;"
                              "} else {"
                              "x = 5;"
@@ -211,10 +188,6 @@ TEST_CASE ("Test Tokenizer") {
                              "}";
 
         Tokenizer tokenizer = Tokenizer(source);
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         REQUIRE_THROWS_AS(tokenizer.tokenize(), SPTokenizeException);
     }
 
@@ -229,10 +202,6 @@ TEST_CASE ("Test Tokenizer") {
                              "}";
 
         Tokenizer tokenizer = Tokenizer(source);
-
-//        for(int i = 0; i < tokens.size(); i++)
-//            std::cout << tokens[i] << ' ';
-
         REQUIRE_THROWS_AS(tokenizer.tokenize(), SPTokenizeException);
     }
 }

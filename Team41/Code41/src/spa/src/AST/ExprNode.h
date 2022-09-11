@@ -22,20 +22,12 @@ namespace AST {
         ExprNode(string expr);
 
         bool operator==(const ASTNode& node) const {
-            ExprNode castedNode = dynamic_cast<const ExprNode&>(node);
-            if (left == nullptr && castedNode.left == nullptr) {
-                return true;
-            }
-            if (right == nullptr && castedNode.right == nullptr) {
-                return true;
-            }
-            if (left == nullptr || castedNode.left == nullptr) {
-                return false;
-            }
-            if (right == nullptr || castedNode.right == nullptr) {
-                return false;
-            }
-            return expr == castedNode.expr && *left == *castedNode.left && *right == *castedNode.right;
+            auto castedNode = dynamic_cast<const ExprNode*>(&node);
+
+            return castedNode != 0
+                && (left == castedNode->left || *left == *castedNode->left)
+                && (right == castedNode->right || *right == *castedNode->right)
+                && expr.compare(castedNode->expr) == 0;
         }
     };
 
