@@ -3,7 +3,8 @@
 //
 
 #include "VariableTable.h"
+#include "../EntityManager.h"
 
 VariableTable::VariableTable() {
-    header = vector<string>{"$variable_name"};
+    header = vector<string>{EntityManager::VARIABLE_TABLE_COL1_NAME};
 }

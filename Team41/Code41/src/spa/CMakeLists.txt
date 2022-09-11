@@ -127,6 +127,12 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/ModifiesExtractor.h
         src/design_extractor/UsesExtractor.cpp
         src/design_extractor/UsesExtractor.h
+        src/AST/RelExprNode.cpp
+        src/AST/RelExprNode.h
+        src/parser/CondExprParser.cpp
+        src/parser/CondExprParser.h
+        src/query_evaluator/Utils.cpp
+        src/query_evaluator/Utils.h
         src/utils/ExprNodeParser.h
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
@@ -141,6 +147,7 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/ExpressionSpec.cpp 
         src/query_builder/commons/ExpressionSpec.h 
         src/query_builder/commons/ExpressionSpecType.h)
+
 
 
 

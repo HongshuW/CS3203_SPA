@@ -10,8 +10,9 @@
 
 class DummyDataRetriever : public DataRetriever {
 public:
-    Table getVariables() override;
     Table getTableByRelationType(QB::RelationType relationType) override;
+    Table getTableByDesignEntity(DesignEntity designEntity) override;
+    DesignEntity getDesignEntityOfStmt(int line_no) override;
     DummyDataRetriever();
 };
 

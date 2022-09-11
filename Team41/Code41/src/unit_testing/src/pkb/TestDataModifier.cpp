@@ -18,6 +18,7 @@ TEST_CASE("Test Data Modifier") {
         dm.saveVariables(variables);
 
         // check header is set automatically
+        auto expected = *EntityManager::getVariables();
         REQUIRE((*EntityManager::getVariables()).header[0] == "$variable_name");
 
         // check variables are added

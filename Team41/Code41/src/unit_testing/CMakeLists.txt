@@ -21,8 +21,8 @@ add_executable(unit_testing ${srcs}
     src/query_evaluator/TableComparator.h
     src/query_evaluator/Dummies/TableBuilder.cpp
     src/query_evaluator/Dummies/TableBuilder.h
-    src/query_evaluator/DummyDataRetriever.cpp
-    src/query_evaluator/DummyDataRetriever.h
+    src/query_evaluator/DummyDataRetrievers/DummyDataRetriever.cpp
+    src/query_evaluator/DummyDataRetrievers/DummyDataRetriever.h
     src/AST/utils/TestASTUtils.cpp
     src/parser/TestParser.cpp
     src/pkb/TestRelationshipManager.cpp
@@ -33,11 +33,20 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/TestFollowsStarExtraction.cpp
     src/design_extractor/TestParentExtraction.cpp
     src/pkb/TestRelationshipManager.cpp
-        src/parser/TestExprNodeParser.cpp
+    src/parser/TestExprNodeParser.cpp
     src/design_extractor/TestUsesSExtration.cpp
     src/design_extractor/DEUtils.cpp
     src/design_extractor/DEUtils.h
     src/design_extractor/TestModifiesSExtraction.cpp
+
+    src/parser/TestExprNodeParser.cpp
+    src/parser/TestCondExprParser.cpp src/utils/TestUtils.cpp
+    src/design_extractor/TestUsesSExtration.cpp
+    src/design_extractor/DEUtils.cpp
+    src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.cpp
+    src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.h
+    src/design_extractor/DEUtils.h src/query_evaluator/Dummies/DummyQueries.cpp
+        src/query_evaluator/Dummies/DummyQueries.h
         src/parser/TestExprNodeParser.cpp
         src/parser/TestCondExprParser.cpp src/utils/TestUtils.cpp src/design_extractor/TestPatternExtraction.cpp)
 

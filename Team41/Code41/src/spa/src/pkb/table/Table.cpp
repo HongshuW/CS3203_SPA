@@ -79,3 +79,11 @@ bool Table::isEqual(Table otherTable) {
     }
     return true;
 }
+
+bool Table::isHeaderEmpty() {
+    return this->header.size() == 0;
+}
+
+bool Table::isBodyEmpty() {
+    return this->rows.size() == 0;
+}

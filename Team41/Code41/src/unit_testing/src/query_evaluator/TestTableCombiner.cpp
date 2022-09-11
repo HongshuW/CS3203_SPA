@@ -11,6 +11,21 @@ using namespace QE;
 TEST_CASE("Test table combiner") {
     TableCombiner myTableCombiner = TableCombiner();
     TableComparator myTableComparator = TableComparator();
+    SECTION("A table joined with an empty table should be itself") {
+        string commonHeaderName = "v";
+        Table t1 = TestQE::TableBuilder()
+                .setHeaders(vector<string>{"$col1", commonHeaderName})
+                ->addRow({"1", "foo"})
+                ->addRow({"2", "bar"})
+                ->addRow({"3", "baz"})
+                ->addRow({"4", "corge"})
+                ->build();
+        Table empty = Table();
+        Table actual =myTableCombiner.joinTable(t1, empty);
+        Table expected = t1;
+        REQUIRE(actual.isEqual(expected));
+
+    }
     SECTION("Test two tables with one col each, and one common column") {
         string commonHeaderName = "v";
         Table t1 = Table();

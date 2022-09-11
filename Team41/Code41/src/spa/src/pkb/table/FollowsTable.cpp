@@ -3,7 +3,8 @@
 //
 
 #include "FollowsTable.h"
+#include "../EntityManager.h"
 
 FollowsTable::FollowsTable() {
-    header = vector<string>{"$followed_statement", "$following_statement"};
+    header = vector<string>{EntityManager::FOLLOWS_TABLE_COL1_NAME, EntityManager::FOLLOWS_TABLE_COL2_NAME};
 }

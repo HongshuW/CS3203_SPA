@@ -5,6 +5,7 @@
 #include "QueryEvaluator.h"
 #include "query_builder/commons/Query.h"
 #include "query_evaluator/QueryResult.h"
+#include "TableCombiner.h"
 
 using namespace QB;
 using namespace QE;
@@ -20,8 +21,8 @@ namespace QE {
                                                                               {DesignEntity::IF, "if"},
                                                                               {DesignEntity::ASSIGN, "assign"},
                                                                               {DesignEntity::VARIABLE, "$variable_name"},
-                                                                              {DesignEntity::CONSTANT, "constant"},
-                                                                              {DesignEntity::PROCEDURE, "procedure"}
+                                                                              {DesignEntity::CONSTANT, "$constant_value"},
+                                                                              {DesignEntity::PROCEDURE, "$procedure_name"}
                                                                       });
 }
 
@@ -34,7 +35,18 @@ QueryResult QueryEvaluator::evaluate(shared_ptr<Query> query) {
     if (query->suchThatClauses->empty()) {
         return this->evaluateNoConditionQuery(query);
     }
-    return QueryResult();
+    TableCombiner tableCombiner = TableCombiner();
+    Table resultTable = Table();
+    for (auto stClause: *query->suchThatClauses) {
+        Table intermediateTable = this->dataPreprocessor->getTableByRelation(*stClause);
+        if (intermediateTable.isBodyEmpty()) return QueryResult();
+        resultTable = tableCombiner.joinTable(resultTable, intermediateTable);
+    }
+    Synonym toBeSelected = query->selectClause->synonym;
+    QueryResult queryResult = QueryResult();
+    queryResult.colName = toBeSelected.synonym;
+    queryResult.table = resultTable;
+    return queryResult;
 }
 
 QueryResult QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query) {

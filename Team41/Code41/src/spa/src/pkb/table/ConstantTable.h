@@ -6,7 +6,6 @@
 #define SPA_CONSTANTTABLE_H
 
 #include "EntityTable.h"
-
 class ConstantTable : public EntityTable {
 public:
     explicit ConstantTable();

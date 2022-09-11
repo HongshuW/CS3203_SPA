@@ -3,7 +3,8 @@
 //
 
 #include "ProcedureTable.h"
+#include "../EntityManager.h"
 
 ProcedureTable::ProcedureTable() {
-    header = vector<string>{"$procedure_name"};
+    header = vector<string>{EntityManager::PROCEDURE_TABLE_COL1_NAME};
 }

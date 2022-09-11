@@ -3,7 +3,8 @@
 //
 
 #include "ConstantTable.h"
+#include "../EntityManager.h"
 
 ConstantTable::ConstantTable() {
-    header = vector<string>{"$constant_value"};
+    header = vector<string>{EntityManager::CONSTANT_TABLE_COL1_NAME};
 }
