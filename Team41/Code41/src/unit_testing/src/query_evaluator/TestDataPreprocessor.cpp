@@ -5,8 +5,10 @@
 #include "query_builder/clauses/SuchThatClause.h"
 #include "query_evaluator/DataPreprocessor.h"
 #include "DummyDataRetrievers/DummyDataRetriever.h"
+#include "DummyDataRetrievers/DummyDataRetriever2.h"
 #include "Dummies/TableBuilder.h"
-
+#include "query_evaluator/Utils.h"
+#include "Dummies/DummyQueries.h"
 TEST_CASE("Test Data Preprocessor") {
     //todo: replace fakeDR withh dummyDR
     shared_ptr<DummyDataRetriever> dummyDataRetriever = make_shared<DummyDataRetriever>();
@@ -54,7 +56,7 @@ TEST_CASE("Test Data Preprocessor") {
         SuchThatClause suchThatClause = SuchThatClause(QB::RelationType::FOLLOWS_T, Underscore(), syn2, declarations);
         Table actual = dataPreprocessor->getTableByRelation(suchThatClause);
 
-        Table expected = TestQE::TableBuilder().setHeaders({QE::getColNameByRefType(QB::RefType::UNDERSCORE), "a2"})
+        Table expected = TestQE::TableBuilder().setHeaders({QE::Utils::getColNameByRefType(QB::RefType::UNDERSCORE), "a2"})
                 ->addRow({"1","2"})
                 ->build();
         REQUIRE(actual.isEqual(expected) == true);
@@ -81,7 +83,7 @@ TEST_CASE("Test Data Preprocessor") {
         SuchThatClause suchThatClause = SuchThatClause(QB::RelationType::FOLLOWS_T, syn1, Underscore(), declarations);
         Table actual = dataPreprocessor->getTableByRelation(suchThatClause);
 
-        Table expected = TestQE::TableBuilder().setHeaders({"a", QE::getColNameByRefType(RefType::UNDERSCORE)})
+        Table expected = TestQE::TableBuilder().setHeaders({"a", QE::Utils::getColNameByRefType(RefType::UNDERSCORE)})
                 ->addRow({"1", "2"})
                 ->addRow({"2", "3"})
                 ->addRow({"1", "3"})
@@ -95,7 +97,7 @@ TEST_CASE("Test Data Preprocessor") {
         SuchThatClause suchThatClause = SuchThatClause(QB::RelationType::FOLLOWS_T, syn1, 3, declarations);
         Table actual = dataPreprocessor->getTableByRelation(suchThatClause);
 
-        Table expected = TestQE::TableBuilder().setHeaders({"a", QE::getColNameByRefType(RefType::INTEGER)})
+        Table expected = TestQE::TableBuilder().setHeaders({"a", QE::Utils::getColNameByRefType(RefType::INTEGER)})
                 ->addRow({"2", "3"})
                 ->addRow({"1", "3"})
                 ->build();
@@ -108,7 +110,7 @@ TEST_CASE("Test Data Preprocessor") {
         SuchThatClause suchThatClause = SuchThatClause(QB::RelationType::FOLLOWS_T, 1, syn2, declarations);
         Table actual = dataPreprocessor->getTableByRelation(suchThatClause);
 
-        Table expected = TestQE::TableBuilder().setHeaders({QE::getColNameByRefType(QB::RefType::INTEGER), "a2"})
+        Table expected = TestQE::TableBuilder().setHeaders({QE::Utils::getColNameByRefType(QB::RefType::INTEGER), "a2"})
                 ->addRow({"1","2"})
                 ->build();
         REQUIRE(actual.isEqual(expected) == true);
@@ -135,7 +137,7 @@ TEST_CASE("Test Data Preprocessor") {
         SuchThatClause suchThatClause = SuchThatClause(QB::RelationType::MODIFIES_S, syn1, Ident("dummyVarA"), declarations);
         Table actual = dataPreprocessor->getTableByRelation(suchThatClause);
 
-        Table expected = TestQE::TableBuilder().setHeaders({"a", QE::getColNameByRefType(QB::RefType::IDENT)})
+        Table expected = TestQE::TableBuilder().setHeaders({"a", QE::Utils::getColNameByRefType(QB::RefType::IDENT)})
                 ->addRow({"1","dummyVarA"})
                 ->build();
         REQUIRE(actual.isEqual(expected) == true);
@@ -145,10 +147,45 @@ TEST_CASE("Test Data Preprocessor") {
         SuchThatClause suchThatClause = SuchThatClause(QB::RelationType::MODIFIES_S, 2, Underscore(), declarations);
         Table actual = dataPreprocessor->getTableByRelation(suchThatClause);
 
-        Table expected = TestQE::TableBuilder().setHeaders({QE::getColNameByRefType(QB::RefType::INTEGER),
-                                                            QE::getColNameByRefType(QB::RefType::UNDERSCORE)})
+        Table expected = TestQE::TableBuilder().setHeaders({QE::Utils::getColNameByRefType(QB::RefType::INTEGER),
+                                                            QE::Utils::getColNameByRefType(QB::RefType::UNDERSCORE)})
                 ->addRow({"2","dummyVarB"})
                 ->build();
         REQUIRE(actual.isEqual(expected) == true);
+    }
+
+    shared_ptr<DummyDataRetriever2> dummyDataRetriever2 = make_shared<DummyDataRetriever2>();
+    shared_ptr<QE::DataPreprocessor> dataPreprocessor2 = make_shared<QE::DataPreprocessor>(QE::DataPreprocessor(dummyDataRetriever2));
+
+    SECTION("Test dummy retriever 2: assign a1, a2, get table such that follows(a1, a2)") {
+        auto dummySuchThat = TestQE::DummyQueries::getDummySuchThat(0);
+        Table actual = dataPreprocessor2->getTableByRelation(dummySuchThat);
+        REQUIRE(actual.isBodyEmpty());
+    }
+    SECTION("Test dummy retriever 2: while w, get table such that followsT(1, w)") {
+        auto dummySuchThat = TestQE::DummyQueries::getDummySuchThat(1);
+        Table actual = dataPreprocessor2->getTableByRelation(dummySuchThat);
+        Table expected = FollowsTable();
+        expected.renameHeader({QE::Utils::getColNameByRefType(QB::RefType::INTEGER), "w"});
+        expected.appendRow({"1", "3"});
+        REQUIRE(actual.isEqual(expected));
+    }
+    SECTION("Test dummy retriever 2: assign a, get table such that Parent(_, a)") {
+        auto dummySuchThat = TestQE::DummyQueries::getDummySuchThat(2);
+        Table actual = dataPreprocessor2->getTableByRelation(dummySuchThat);
+        Table expected = FollowsTable();
+        expected.renameHeader({QE::Utils::getColNameByRefType(QB::RefType::UNDERSCORE), "a"});
+        expected.appendRow({"3", "4"});
+        expected.appendRow({"3", "7"});
+        expected.appendRow({"5", "6"});
+        REQUIRE(actual.isEqual(expected));
+    }
+    SECTION("Test dummy retriever 2: assign a, get table such that Uses(a, 'y')") {
+        auto dummySuchThat = TestQE::DummyQueries::getDummySuchThat(3);
+        Table actual = dataPreprocessor2->getTableByRelation(dummySuchThat);
+        Table expected = UsesTable();
+        expected.renameHeader({"a", QE::Utils::getColNameByRefType(QB::RefType::IDENT)});
+        expected.appendRow({"7", "y"});
+        REQUIRE(actual.isEqual(expected));
     }
 }

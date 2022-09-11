@@ -10,7 +10,7 @@
 #include "DummyDataRetrievers/DummyDataRetriever.h"
 #include <memory>
 #include "Dummies/TableBuilder.h"
-
+#include "query_evaluator/Utils.h"
 using namespace std;
 using namespace QB;
 using QE::QueryEvaluator;
@@ -67,7 +67,7 @@ TEST_CASE("Test query evaluator") {
         QE::QueryResult actual = queryEvaluator.evaluate(query3);
         QE::QueryResult expected = QE::QueryResult();
         expected.colName = "v1";
-        expected.table = TableBuilder().setHeaders({QE::getColNameByRefType(QB::RefType::INTEGER), "v1"})
+        expected.table = TableBuilder().setHeaders({QE::Utils::getColNameByRefType(QB::RefType::INTEGER), "v1"})
                 ->addRow({"1", "dummyVarA"})
                 ->build();
         REQUIRE(actual.isEqual(expected) == true);
@@ -83,7 +83,7 @@ TEST_CASE("Test query evaluator") {
         QE::QueryResult actual = queryEvaluator.evaluate(query3);
         QE::QueryResult expected = QE::QueryResult();
         expected.colName = "v1";
-        expected.table = TableBuilder().setHeaders({QE::getColNameByRefType(QB::RefType::UNDERSCORE), "v1"})
+        expected.table = TableBuilder().setHeaders({QE::Utils::getColNameByRefType(QB::RefType::UNDERSCORE), "v1"})
                 ->addRow({"1", "dummyVarA"})
                 ->addRow({"2", "dummyVarB"})
                 ->build();
@@ -101,7 +101,7 @@ TEST_CASE("Test query evaluator") {
         QE::QueryResult expected = QE::QueryResult();
         expected.colName = "a";
         expected.table = TableBuilder().setHeaders({"a",
-                                                    QE::getColNameByRefType(QB::RefType::IDENT)})
+                                                    QE::Utils::getColNameByRefType(QB::RefType::IDENT)})
                 ->addRow({"1", "dummyVarA"})
                 ->build();
         REQUIRE(actual.isEqual(expected) == true);
@@ -118,7 +118,7 @@ TEST_CASE("Test query evaluator") {
         QE::QueryResult expected = QE::QueryResult();
         expected.colName = "a";
         expected.table = TableBuilder().setHeaders({"a",
-                                                    QE::getColNameByRefType(QB::RefType::UNDERSCORE)})
+                                                    QE::Utils::getColNameByRefType(QB::RefType::UNDERSCORE)})
                 ->addRow({"1", "2"})
                 ->addRow({"2", "3"})
                 ->build();
@@ -136,7 +136,7 @@ TEST_CASE("Test query evaluator") {
         QE::QueryResult expected = QE::QueryResult();
         expected.colName = "a";
         expected.table = TableBuilder().setHeaders({"a",
-                                                    QE::getColNameByRefType(QB::RefType::INTEGER)})
+                                                    QE::Utils::getColNameByRefType(QB::RefType::INTEGER)})
 
                 ->addRow({"2", "3"})
                 ->build();

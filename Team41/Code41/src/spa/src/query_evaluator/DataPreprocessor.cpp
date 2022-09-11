@@ -7,42 +7,18 @@
 #include <utility>
 #include <string>
 #include "query_builder/commons/DesignEntity.h"
-
+#include "Utils.h"
 using namespace std;
 using namespace QB;
 namespace QE {
-    unordered_map<RefType, string> refTypeToColNameMap({
-                                                               {RefType::INTEGER, "$integer_col"},
-                                                               {RefType::IDENT, "$ident_col"},
-                                                               {RefType::UNDERSCORE, "$underscore_col"}
-    });
-
-    string getColNameByRefType(RefType refType) {
-        return refTypeToColNameMap.at(refType);
-    }
-
     Table DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
-        switch (designEntity) {
-
-            case DesignEntity::STMT: {
-                return this->dataRetriever->getStmtsTable();
-            }
-            case DesignEntity::CONSTANT: {
-                return this->dataRetriever->getConstantsTable();
-            }
-            case DesignEntity::VARIABLE: {
-                return this->dataRetriever->getVariables();
-            }
-            case DesignEntity::PROCEDURE: {
-                //todo: implement get procedure
-                break;
-            }
-            //assign, call, print, if, while , read
-            default: {
-                return this->filerTableByDesignEntity(this->dataRetriever->getStmtsTable(), EntityManager::STATEMENT_TABLE_COL2_NAME, designEntity);
-            }
+        vector<DesignEntity> directlyAvailEntities = {DesignEntity::STMT, DesignEntity::CONSTANT, DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
+        if (count(directlyAvailEntities.begin(), directlyAvailEntities.end(), designEntity)) {
+            return this->dataRetriever->getTableByDesignEntity(designEntity);
         }
-        return Table();
+
+        //assign, call, print, if, while , read
+        return this->filerTableByDesignEntity(this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT), EntityManager::STATEMENT_TABLE_COL1_NAME, designEntity);
     }
 
     Table
@@ -60,8 +36,8 @@ namespace QE {
         //RefType can be synonym, integer, underscore or string
         RefType ref1Type = getRefType(ref1);
         RefType ref2Type = getRefType(ref2);
-        string col1Name = ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : refTypeToColNameMap.at(ref1Type);
-        string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : refTypeToColNameMap.at(ref2Type);
+        string col1Name = ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : Utils::getColNameByRefType(ref1Type);
+        string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : Utils::getColNameByRefType(ref2Type);
         Table relationTable = this->dataRetriever->getTableByRelationType(relationType);
         vector<string> newHeaders = vector<string>{col1Name, col2Name};
         relationTable.renameHeader(newHeaders);
@@ -101,112 +77,6 @@ namespace QE {
                 relationTable = this->filerTableByColumnValue(relationTable, col2Name, ident2.identStr);
                 break;
         }
-//        if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::SYNONYM) {
-//            //1
-//            //assuming the table has two cols
-//            Synonym syn1 = get<Synonym>(ref1);
-//            Synonym syn2 = get<Synonym>(ref2);
-//            relationTable = this->filerTableByDesignEntity(relationTable,
-//                                                           col1Name,
-//                                                           this->getDesignEntity(syn1,
-//                                                                                 declarations));
-//            relationTable = this->filerTableByDesignEntity(relationTable,
-//                                                           syn2.synonym,
-//                                                           this->getDesignEntity(syn2,
-//                                                                                 declarations));
-//
-//        } else if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::INTEGER) {
-//            //2
-//
-//            int ref2Val = get<int>(ref2);
-//            relationTable = this->filerTableByColumnValue(relationTable, QE::refTypeToColNameMap.at(ref2Type), to_string(ref2Val));
-//
-//        } else if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::IDENT) {
-//            //3
-//
-//            Ident ref2Val = get<Ident>(ref2);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", ref2Val.identStr);
-//
-//        } else if (ref1Type == RefType::SYNONYM && ref2Type == QB::RefType::UNDERSCORE) {
-//            //4
-//
-//        } else if (ref1Type == RefType::INTEGER && ref2Type == RefType::SYNONYM) {
-//            //5
-//
-//            int ref1Val = get<int>(ref1);
-//            relationTable = this->filerTableByColumnValue(relationTable, QE::refTypeToColNameMap.at(ref1Type), to_string(ref1Val));
-//
-//        } else if (ref1Type == RefType::INTEGER && ref2Type == RefType::INTEGER) {
-//            //6
-//
-//            int ref1Val = get<int>(ref1);
-//            int ref2Val = get<int>(ref2);
-//            relationTable = this->filerTableByColumnValue(relationTable, QE::refTypeToColNameMap.at(ref1Type), to_string(ref1Val));
-//            relationTable = this->filerTableByColumnValue(relationTable, QE::refTypeToColNameMap.at(ref2Type), to_string(ref2Val));
-//
-//        } else if (ref1Type == RefType::INTEGER && ref2Type == RefType::UNDERSCORE) {
-//            //7
-//
-//            int ref1Val = get<int>(ref1);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref1Val));
-//
-//        } else if (ref1Type == RefType::INTEGER && ref2Type == RefType::IDENT) {
-//            //8
-//
-//            int ref1Val = get<int>(ref1);
-//            Ident ref2Val = get<Ident>(ref2);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref1Val));
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", ref2Val.identStr);
-//
-//        } else if (ref1Type == RefType::IDENT && ref2Type == RefType::SYNONYM) {
-//            //9
-//
-//            Ident ref1Val = get<Ident>(ref1);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
-//
-//        } else if (ref1Type == RefType::IDENT && ref2Type == RefType::INTEGER) {
-//            //10
-//
-//            Ident ref1Val = get<Ident>(ref1);
-//            int ref2Val = get<int>(ref2);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
-//            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref2Val));
-//
-//        } else if (ref1Type == RefType::IDENT && ref2Type == RefType::UNDERSCORE) {
-//            //11
-//
-//            Ident ref1Val = get<Ident>(ref1);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
-//
-//        } else if (ref1Type == RefType::IDENT && ref2Type == RefType::IDENT) {
-//            //12
-//            Ident ref1Val = get<Ident>(ref1);
-//            Ident ref2Val = get<Ident>(ref2);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col_2", (ref2Val.identStr));
-//
-//        } else if (ref1Type == RefType::UNDERSCORE && ref2Type == RefType::SYNONYM) {
-//            //13
-//
-//
-//        } else if (ref1Type == RefType::UNDERSCORE && ref2Type == RefType::INTEGER) {
-//            //14
-//
-//            Ident ref1Val = get<Ident>(ref1);
-//            int ref2Val = get<int>(ref2);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref1Val.identStr));
-//            relationTable = this->filerTableByColumnValue(relationTable, "$integer_col", to_string(ref2Val));
-//
-//        } else if (ref1Type == RefType::UNDERSCORE && ref2Type == RefType::IDENT) {
-//            //15
-//            Ident ref2Val = get<Ident>(ref2);
-//            relationTable = this->filerTableByColumnValue(relationTable, "$string_col", (ref2Val.identStr));
-//
-//        } else if (ref1Type == RefType::UNDERSCORE && ref2Type == RefType::UNDERSCORE) {
-//            //16
-//
-//        }
-
         return relationTable;
     }
 
@@ -269,7 +139,8 @@ namespace QE {
                     if (!this->is_number(val)) {
                         cout << "Error: stmt line is not a number" << endl;
                     }
-                    if (designEntity == this->dataRetriever->getDesignEntityOfStmt(stoi(val))) {
+                    DesignEntity entityType = this->dataRetriever->getDesignEntityOfStmt(stoi(val));
+                    if (designEntity == entityType) {
                         filteredTable.appendRow(row);
                     }
                 }

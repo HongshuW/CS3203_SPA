@@ -8,12 +8,10 @@
 #include "pkb/DataRetriever.h"
 #include "pkb/table/Table.h"
 
-
 class DummyDataRetriever : public DataRetriever {
 public:
-    Table getVariables() override;
-    Table getStmtsTable() override;
     Table getTableByRelationType(QB::RelationType relationType) override;
+    Table getTableByDesignEntity(DesignEntity designEntity) override;
     DesignEntity getDesignEntityOfStmt(int line_no) override;
     DummyDataRetriever();
 };

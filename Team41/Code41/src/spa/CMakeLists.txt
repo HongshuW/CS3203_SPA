@@ -119,7 +119,6 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/RelationExtractor.h
         src/parser/ExprNodeParser.cpp
         src/parser/ExprNodeParser.h
-
         src/design_extractor/FollowsExtractor.cpp
         src/design_extractor/FollowsExtractor.h
         src/design_extractor/ParentExtractor.cpp
@@ -128,14 +127,13 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/ModifiesExtractor.h
         src/design_extractor/UsesExtractor.cpp
         src/design_extractor/UsesExtractor.h
-        src/parser/ExprNodeParser.h
-        src/AST/RelExprNode.cpp
-        src/AST/RelExprNode.h
-        src/parser/ExprNodeParser.h
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
         src/parser/CondExprParser.cpp
-        src/parser/CondExprParser.h)
+        src/parser/CondExprParser.h
+        src/query_evaluator/Utils.cpp
+        src/query_evaluator/Utils.h
+        )
 
 
 
