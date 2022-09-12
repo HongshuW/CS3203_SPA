@@ -12,7 +12,9 @@ bool PatternTable::isSubExpression(shared_ptr<ExprNode> pattern, shared_ptr<Expr
     if (!pattern->left && !pattern->right) {
         return isSameExpression(pattern, queriedPattern);
     }
-    return isSameExpression(pattern, queriedPattern) || isSubExpression(pattern->right, queriedPattern);
+    return isSameExpression(pattern, queriedPattern)
+        || isSubExpression(pattern->left, queriedPattern)
+        || isSubExpression(pattern->right, queriedPattern);
 }
 
 bool PatternTable::isSameExpression(shared_ptr<ExprNode> pattern, shared_ptr<ExprNode> queriedPattern) {
