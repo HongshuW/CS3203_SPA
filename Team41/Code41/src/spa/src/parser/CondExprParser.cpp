@@ -52,6 +52,11 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
         }
     } else {
         while (currIdx < tokens.size() && peek().compare(")") != 0) {
+            if (!Utils::isValidNumber(peek())
+                && !Utils::isValidName(peek())
+                && !Utils::isMathOperators(peek())) {
+                throw SPParseException("Expect a comparator operator, got: " + peek());
+            }
             expr.push_back(pop());
         }
     }
