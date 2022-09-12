@@ -10,7 +10,7 @@
 #include <iostream>
 #include <regex>
 #include <string>
-
+#include <ostream>
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/commons/Synonym.h"
 

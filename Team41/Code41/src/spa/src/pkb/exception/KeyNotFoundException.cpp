@@ -9,7 +9,7 @@ KeyNotFoundException::KeyNotFoundException(string columnName, string key) {
 }
 
 char * KeyNotFoundException::what() {
-    char output[message.size()];
+    char* output = new char[message.size()];
     strcpy(output, message.c_str());
     return output;
 }

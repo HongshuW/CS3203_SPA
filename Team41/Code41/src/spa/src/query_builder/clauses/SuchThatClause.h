@@ -11,7 +11,7 @@
 #include "query_builder/commons/Ref.h"
 #include "query_builder/commons/RelationType.h"
 #include "query_builder/commons/Declaration.h"
-
+#include <ostream>
 namespace QB {
     class SuchThatClause {
     private:

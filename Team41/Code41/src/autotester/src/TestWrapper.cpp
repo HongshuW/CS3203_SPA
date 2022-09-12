@@ -46,7 +46,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
     // ...code to evaluate query...
     try {
         auto queryObj = QueryBuilder().buildPQLQuery(query);
-        auto dataRetriever = make_shared<FakeDataRetriever>();
+        auto dataRetriever = make_shared<DataRetriever>();
         shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(DataPreprocessor(dataRetriever));
         auto queryResult = QueryEvaluator(dataPreprocessor).evaluate(queryObj);
         auto resultFormatter = QueryResultFormatter(queryResult);

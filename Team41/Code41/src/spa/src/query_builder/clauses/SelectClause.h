@@ -8,6 +8,7 @@
 #pragma once
 
 #include "query_builder/commons/Synonym.h"
+#include <ostream>
 
 namespace QB {
     class SelectClause {
