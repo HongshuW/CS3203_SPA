@@ -131,7 +131,11 @@ ExpressionSpec QueryParser::parseExpressionSpec() {
     vector<string> expr;
     if (match("\"")) {
         //! Full match
-        expr.push_back(pop());
+        ExprStringTokenizer tokenizer = ExprStringTokenizer(pop());
+        expr = tokenizer.tokenize();
+        if (expr.size() == 0) {
+            throw PQLParseException("Expression for assign statement cannot be empty");
+        }
         expect("\"");
         ExprNodeParser parser = ExprNodeParser(expr);
         return ExpressionSpec(ExpressionSpecType::FULL_MATCH, parser.parse());
@@ -142,7 +146,11 @@ ExpressionSpec QueryParser::parseExpressionSpec() {
         } else {
             //! Partial match
             expect("\"");
-            expr.push_back(pop());
+            ExprStringTokenizer tokenizer = ExprStringTokenizer(pop());
+            expr = tokenizer.tokenize();
+            if (expr.size() == 0) {
+                throw PQLParseException("Expression for assign statement cannot be empty");
+            }
             expect("\"");
             expect("_");
             ExprNodeParser parser = ExprNodeParser(expr);

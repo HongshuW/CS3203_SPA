@@ -8,6 +8,8 @@
 #include "query_builder/commons/Query.h"
 #include "query_builder/commons/Ref.h"
 #include "utils/ExprNodeParser.h"
+#include "utils/Utils.h"
+#include "query_builder/commons/ExprStringTokenizer.h"
 
 using namespace std;
 
