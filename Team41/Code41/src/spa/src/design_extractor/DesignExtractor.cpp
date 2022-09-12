@@ -61,10 +61,27 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
     list<vector<string>> relations = *this->extractRelations(relationType);
     auto iterator = relations.begin();
     while (iterator != relations.end()) {
-        if (relationType == RelationType::PARENT) {
-            this->dataModifier.saveParent(*iterator);
-        } else if (relationType == RelationType::PARENT_T) {
-            this->dataModifier.saveParentT(*iterator);
+        switch (relationType) {
+            case RelationType::PARENT: {
+                this->dataModifier.saveParent(*iterator);
+            }
+            case RelationType::PARENT_T: {
+                this->dataModifier.saveParentT(*iterator);
+            }
+            case RelationType::FOLLOWS: {
+                this->dataModifier.saveFollows(*iterator);
+            }
+            case RelationType::FOLLOWS_T: {
+                this->dataModifier.saveFollowsT(*iterator);
+            }
+            case RelationType::MODIFIES_S: {
+                this->dataModifier.saveModifiesS(*iterator);
+            }
+            case RelationType::USES_S: {
+                this->dataModifier.saveUsesS(*iterator);
+            }
+            default:
+                break;
         }
         advance(iterator, 1);
     }
