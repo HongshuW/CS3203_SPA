@@ -5,7 +5,7 @@
 #include "PatternTable.h"
 
 PatternTable::PatternTable() {
-    header = vector<string>{"$statement_number", "$statement_type", "$variable_name"};
+    header = vector<string>{"$statement_number", "$variable_name"};
 }
 
 bool PatternTable::isSubExpression(shared_ptr<ExprNode> pattern, shared_ptr<ExprNode> queriedPattern) {
@@ -24,25 +24,27 @@ shared_ptr<Table> PatternTable::getMatchedPatterns(ExpressionSpec expressionSpec
     shared_ptr<ExprNode> queriedPattern = expressionSpec.exprNode;
     int size = patternColumn.size();
     Table outputTable;
-    outputTable.header = vector<string>{"$statement_number", "$variable_name"};
+    outputTable.header = header;
     for (int i = 0; i < size; i++) {
         vector<string> metainfo = rows[i];
-        string stmtNo = metainfo[0];
-        string varName = metainfo[2];
-        vector<string> row{stmtNo, varName};
         shared_ptr<ExprNode> pattern = patternColumn[i];
         switch (expressionSpecType) {
             case ExpressionSpecType::ANY_MATCH:
-                outputTable.appendRow(row);
+                outputTable.appendRow(metainfo);
             case ExpressionSpecType::PARTIAL_MATCH:
                 if (isSubExpression(pattern, queriedPattern)) {
-                    outputTable.appendRow(row);
+                    outputTable.appendRow(metainfo);
                 }
             case ExpressionSpecType::FULL_MATCH:
                 if (isSameExpression(pattern, queriedPattern)) {
-                    outputTable.appendRow(row);
+                    outputTable.appendRow(metainfo);
                 }
         }
     }
     return make_shared<Table>(outputTable);
+}
+
+void PatternTable::addPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
+    appendRow(metainfo);
+    patternColumn.push_back(pattern);
 }

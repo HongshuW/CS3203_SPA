@@ -4,6 +4,7 @@
 
 #include "DataModifier.h"
 #include "EntityManager.h"
+#include "PatternManager.h"
 #include "RelationshipManager.h"
 
 /**
@@ -112,4 +113,14 @@ void DataModifier::saveModifiesS(vector<string> modifiesSRelation) {
  */
 void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
     RelationshipManager::saveModifiesP(modifiesPRelation);
+}
+
+/**
+ * Saves a Pattern to the pkb.
+ *
+ * @param metainfo vector<string>{statementNumber, variableName};
+ * @param pattern
+ */
+void DataModifier::savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
+    PatternManager::savePattern(metainfo, pattern);
 }

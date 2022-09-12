@@ -21,6 +21,7 @@ public:
 
     explicit PatternTable();
     shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);
+    void addPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
 };
 
 

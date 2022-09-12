@@ -15,6 +15,7 @@ public:
     // getter
     static shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);
     // setter
+    static void savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
 private:
     static PatternTable patternTable;
 };
