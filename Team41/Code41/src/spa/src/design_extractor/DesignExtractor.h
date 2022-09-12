@@ -31,6 +31,7 @@ namespace DE {
         shared_ptr<list<vector<string>>> extractRelations(RelationType relationType);
         void saveRelationToPKB(RelationType relationType);
         vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> extractPatterns();
+        void savePatternsToPKB();
     };
 }
 

@@ -5,6 +5,7 @@
 #ifndef SPA_DATAMODIFIER_H
 #define SPA_DATAMODIFIER_H
 
+#include "AST/ExprNode.h"
 #include <list>
 #include <string>
 
@@ -29,8 +30,7 @@ public:
     void saveModifiesP(vector<string> modifiesPRelation);
 
     // pattern
-    // TODO: implement savePattern after AST_NODE is available
-    // void savePattern(AST_NODE pattern);
+     void savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
 };
 
 #endif //SPA_DATAMODIFIER_H

@@ -5,6 +5,7 @@
 #include "DataRetriever.h"
 #include "RelationshipManager.h"
 #include "EntityManager.h"
+#include "PatternManager.h"
 
 Table DataRetriever::getVariables() {
     return *EntityManager::getVariables();
@@ -46,6 +47,10 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
         default:
             return Table();
     }
+}
+
+Table DataRetriever::getTableByPattern(ExpressionSpec expressionSpec) {
+    return *PatternManager::getMatchedPatterns(expressionSpec);
 }
 
 DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {

@@ -147,4 +147,14 @@ vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::ex
     return PatternExtractor::extractPattern(this->programNode);
 }
 
+void DesignExtractor::savePatternsToPKB() {
+    auto resultList = this->extractPatterns();
+    for (auto resultRow: resultList) {
+        string lineNumStr = to_string(resultRow.first.first);
+        string varName = resultRow.first.second;
+        auto exprNode = resultRow.second->expressionNode;
+        this->dataModifier.savePattern({lineNumStr, varName}, exprNode);
+    }
+}
+
 

@@ -146,7 +146,11 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/PatternClause.h 
         src/query_builder/commons/ExpressionSpec.cpp 
         src/query_builder/commons/ExpressionSpec.h 
-        src/query_builder/commons/ExpressionSpecType.h)
+        src/query_builder/commons/ExpressionSpecType.h
+        src/pkb/table/PatternTable.cpp
+        src/pkb/table/PatternTable.h
+        src/pkb/PatternManager.cpp
+        src/pkb/PatternManager.h)
 
 
 
