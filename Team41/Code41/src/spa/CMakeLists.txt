@@ -148,7 +148,7 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/ExpressionSpec.h 
         src/query_builder/commons/ExpressionSpecType.h
         src/pkb/table/PatternTable.cpp
-        src/pkb/table/ParentTable.h)
+        src/pkb/table/ParentTable.h src/pkb/PatternManager.cpp src/pkb/PatternManager.h)
 
 
 
