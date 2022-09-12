@@ -42,6 +42,13 @@ QueryResult QueryEvaluator::evaluate(shared_ptr<Query> query) {
         if (intermediateTable.isBodyEmpty()) return QueryResult();
         resultTable = tableCombiner.joinTable(resultTable, intermediateTable);
     }
+
+    //TODO: change pattern clause to plural clauses
+    if (query->patternClause) {
+        Table intermediateTable = this->dataPreprocessor->getTableByPattern(query->patternClause);
+        resultTable = tableCombiner.joinTable(resultTable, intermediateTable);
+    }
+
     Synonym toBeSelected = query->selectClause->synonym;
     QueryResult queryResult = QueryResult();
     queryResult.colName = toBeSelected.synonym;

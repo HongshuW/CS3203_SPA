@@ -9,24 +9,24 @@
 #include "pkb/DataRetriever.h"
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/clauses/SuchThatClause.h"
-
+#include "query_builder/clauses/PatternClause.h"
 using namespace std;
 using namespace QB;
 namespace QE {
 
     class DataPreprocessor {
-        Table getRelationTable(Ref ref1, Ref ref2, RelationType relationType,
-                               shared_ptr<vector<Declaration>> declarations);
+        Table getTableByRelationHelper(Ref ref1, Ref ref2, RelationType relationType,
+                                       shared_ptr<vector<Declaration>> declarations);
         Table filerTableByColumnValue(const Table& table, const string& colName, const string& value);
         Table filerTableByDesignEntity(const Table& table, const string& colName, DesignEntity designEntity);
-        long getIndex(vector<string> v, const string& K);
-        bool is_number(const std::string& s);
-        DesignEntity getDesignEntity(Synonym synonym, shared_ptr<vector<Declaration>> declarations);
+        long getColIndexByColName(vector<string> v, const string& K);
+        DesignEntity getDesignEntityOfSyn(Synonym synonym, shared_ptr<vector<Declaration>> declarations);
     public:
+        explicit DataPreprocessor(shared_ptr<DataRetriever> dataRetriever);
         shared_ptr<DataRetriever> dataRetriever;
         Table getAllByDesignEntity(DesignEntity designEntity);
         Table getTableByRelation(SuchThatClause suchThatClause);
-        explicit DataPreprocessor(shared_ptr<DataRetriever> dataRetriever);
+        Table getTableByPattern(shared_ptr<PatternClause> patternClause);
     };
 
 } // QE

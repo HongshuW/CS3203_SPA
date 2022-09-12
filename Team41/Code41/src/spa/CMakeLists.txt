@@ -131,8 +131,8 @@ add_library(spa ${srcs} ${headers}
         src/AST/RelExprNode.h
         src/parser/CondExprParser.cpp
         src/parser/CondExprParser.h
-        src/query_evaluator/Utils.cpp
-        src/query_evaluator/Utils.h
+        src/query_evaluator/QEUtils.cpp
+        src/query_evaluator/QEUtils.h
         src/utils/ExprNodeParser.h
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
