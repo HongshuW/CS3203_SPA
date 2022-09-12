@@ -6,14 +6,21 @@
 #define SPA_PATTERNTABLE_H
 
 #include "AST/ExprNode.h"
+#include "query_builder/commons/ExpressionSpecType.h"
 #include "Table.h"
 
+using namespace QB;
+
 class PatternTable : public Table {
+private:
+    bool isSubExpression(shared_ptr<ExprNode> pattern, shared_ptr<ExprNode> queriedPattern);
+    bool isSameExpression(shared_ptr<ExprNode> pattern, shared_ptr<ExprNode> queriedPattern);
 public:
     // header and rows only record meta information about a pattern, a pattern AST is stored as a pointer
     vector<shared_ptr<ExprNode>> patternColumn;
 
     explicit PatternTable();
+    shared_ptr<Table> getMatchedPatterns(ExpressionSpecType expressionSpecType, shared_ptr<ExprNode> queriedPattern);
 };
 
 
