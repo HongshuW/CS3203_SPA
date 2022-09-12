@@ -5,11 +5,15 @@
 #ifndef SPA_PATTERNMANAGER_H
 #define SPA_PATTERNMANAGER_H
 
+#include "query_builder/commons/ExpressionSpec.h"
 #include "table/PatternTable.h"
+
+using namespace QB;
 
 class PatternManager {
 public:
     // getter
+    static shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);
     // setter
 private:
     static PatternTable patternTable;

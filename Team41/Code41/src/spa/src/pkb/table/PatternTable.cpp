@@ -19,8 +19,9 @@ bool PatternTable::isSameExpression(shared_ptr<ExprNode> pattern, shared_ptr<Exp
     return *pattern == *queriedPattern;
 }
 
-shared_ptr<Table> PatternTable::getMatchedPatterns(
-        ExpressionSpecType expressionSpecType, shared_ptr<ExprNode> queriedPattern) {
+shared_ptr<Table> PatternTable::getMatchedPatterns(ExpressionSpec expressionSpec) {
+    ExpressionSpecType expressionSpecType = expressionSpec.expressionSpecType;
+    shared_ptr<ExprNode> queriedPattern = expressionSpec.exprNode;
     int size = patternColumn.size();
     Table outputTable;
     outputTable.header = vector<string>{"$statement_number", "$variable_name"};

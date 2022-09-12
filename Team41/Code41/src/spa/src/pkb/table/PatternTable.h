@@ -6,7 +6,7 @@
 #define SPA_PATTERNTABLE_H
 
 #include "AST/ExprNode.h"
-#include "query_builder/commons/ExpressionSpecType.h"
+#include "query_builder/commons/ExpressionSpec.h"
 #include "Table.h"
 
 using namespace QB;
@@ -20,7 +20,7 @@ public:
     vector<shared_ptr<ExprNode>> patternColumn;
 
     explicit PatternTable();
-    shared_ptr<Table> getMatchedPatterns(ExpressionSpecType expressionSpecType, shared_ptr<ExprNode> queriedPattern);
+    shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);
 };
 
 

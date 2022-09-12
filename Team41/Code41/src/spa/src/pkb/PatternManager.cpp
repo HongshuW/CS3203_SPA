@@ -6,3 +6,6 @@
 
 PatternTable PatternManager::patternTable = PatternTable();
 
+shared_ptr<Table> PatternManager::getMatchedPatterns(ExpressionSpec expressionSpec) {
+    return patternTable.getMatchedPatterns(expressionSpec);
+}
