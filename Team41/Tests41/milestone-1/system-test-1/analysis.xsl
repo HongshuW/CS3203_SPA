@@ -1,30 +1,30 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>autotester</name><parsing_time_taken>3.357000</parsing_time_taken>
+<name>autotester</name><parsing_time_taken>4.300000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="no such that and pattern clause, select procedure">1</id><querystr><![CDATA[procedure p; Select p]]></querystr>
 <stuans>printResults,computeCentroid,readPoint,main</stuans>
 <correct>main,readPoint,printResults,computeCentroid</correct>
-<time_taken>1.675000</time_taken>
+<time_taken>1.817000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="no such that and pattern clause, select variable">2</id><querystr><![CDATA[variable v; Select v]]></querystr>
 <stuans>normSq,cenY,cenX,count,y,x,flag</stuans>
 <correct>flag,count,cenX,cenY,x,y,normSq</correct>
-<time_taken>1.329000</time_taken>
+<time_taken>1.424000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="no such that and pattern clause, select read">3</id><querystr><![CDATA[read r; Select r]]></querystr>
 <stuans></stuans>
-<correct>8,9</correct>
-<time_taken>1.421000</time_taken>
+<correct>6,7</correct>
+<time_taken>1.258000</time_taken>
 <failed>
-<missing>8,9</missing>
+<missing>6,7</missing>
 <additional></additional>
 <summary>
 <expected>2</expected>
@@ -37,10 +37,10 @@
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="no such that and pattern clause, select print">4</id><querystr><![CDATA[print p; Select p]]></querystr>
 <stuans></stuans>
-<correct>33,34,35,36</correct>
-<time_taken>1.303000</time_taken>
+<correct>23,24,25,26</correct>
+<time_taken>1.297000</time_taken>
 <failed>
-<missing>33,34,35,36</missing>
+<missing>23,24,25,26</missing>
 <additional></additional>
 <summary>
 <expected>4</expected>
@@ -54,7 +54,7 @@
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="no such that and pattern clause, select assign">5</id><querystr><![CDATA[assign a; Select a]]></querystr>
 <stuans></stuans>
 <correct>2,13,14,15,18,19,20,24,26,27,29</correct>
-<time_taken>1.317000</time_taken>
+<time_taken>1.168000</time_taken>
 <failed>
 <missing>13,14,15,18,19,2,20,24,26,27,29</missing>
 <additional></additional>
@@ -70,16 +70,16 @@
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="no such that and pattern clause, select constant">6</id><querystr><![CDATA[constant c; Select c]]></querystr>
 <stuans>1,0</stuans>
 <correct>0,1</correct>
-<time_taken>1.351000</time_taken>
+<time_taken>1.371000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="no such that and pattern clause, select if">7</id><querystr><![CDATA[if i; Select i]]></querystr>
 <stuans></stuans>
-<correct>23</correct>
-<time_taken>1.485000</time_taken>
+<correct>18</correct>
+<time_taken>1.229000</time_taken>
 <failed>
-<missing>23</missing>
+<missing>18</missing>
 <additional></additional>
 <summary>
 <expected>1</expected>
@@ -92,10 +92,10 @@
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="no such that and pattern clause, select while">8</id><querystr><![CDATA[while w; Select w]]></querystr>
 <stuans></stuans>
-<correct>17</correct>
-<time_taken>1.521000</time_taken>
+<correct>13</correct>
+<time_taken>1.260000</time_taken>
 <failed>
-<missing>17</missing>
+<missing>13</missing>
 <additional></additional>
 <summary>
 <expected>1</expected>

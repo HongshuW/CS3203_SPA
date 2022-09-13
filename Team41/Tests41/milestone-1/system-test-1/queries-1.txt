@@ -11,12 +11,12 @@ flag, count, cenX, cenY, x, y, normSq
 3 - no such that and pattern clause, select read
 read r;
 Select r
-8, 9
+6, 7
 5000
 4 - no such that and pattern clause, select print
 print p;
 Select p
-33, 34, 35, 36
+23, 24, 25, 26
 5000
 5 - no such that and pattern clause, select assign
 assign a;
@@ -31,10 +31,10 @@ Select c
 7 - no such that and pattern clause, select if
 if i;
 Select i
-23
+18
 5000
 8 - no such that and pattern clause, select while
 while w;
 Select w
-17
+13
 5000
