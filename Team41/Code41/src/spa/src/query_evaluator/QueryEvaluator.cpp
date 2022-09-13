@@ -31,21 +31,24 @@ QueryEvaluator::QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor) {
 }
 
 QueryResult QueryEvaluator::evaluate(shared_ptr<Query> query) {
+    QueryResult dummyEmptyQueryResult = QueryResult();
 
-    if (query->suchThatClauses->empty()) {
+    if (query->suchThatClauses->empty() && !query->patternClause) {//no such that or pattern clause
         return this->evaluateNoConditionQuery(query);
     }
     TableCombiner tableCombiner = TableCombiner();
-    Table resultTable = Table();
+    Table resultTable;
+
     for (auto stClause: *query->suchThatClauses) {
         Table intermediateTable = this->dataPreprocessor->getTableByRelation(*stClause);
-        if (intermediateTable.isBodyEmpty()) return QueryResult();
+        if (intermediateTable.isBodyEmpty()) return dummyEmptyQueryResult;
         resultTable = tableCombiner.joinTable(resultTable, intermediateTable);
     }
 
     //TODO: change pattern clause to plural clauses
     if (query->patternClause) {
         Table intermediateTable = this->dataPreprocessor->getTableByPattern(query->patternClause);
+        if (intermediateTable.isBodyEmpty()) return dummyEmptyQueryResult;
         resultTable = tableCombiner.joinTable(resultTable, intermediateTable);
     }
 
