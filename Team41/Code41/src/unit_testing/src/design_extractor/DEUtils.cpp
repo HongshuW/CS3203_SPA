@@ -7,6 +7,7 @@
 using namespace std;
 namespace TestDE {
     bool DEUtils::containsSameElementPair(list<vector<string>> lst, vector<vector<string>> vec) {
+        if (lst.size() != vec.size()) return false;
         std::list<vector<string>>::iterator it;
         for (it = lst.begin(); it != lst.end(); ++it){
             bool found = false;
@@ -24,8 +25,10 @@ namespace TestDE {
         }
         return true;
     }
+
     bool DEUtils::isSamePattern(vector<pair<pair<int, string>, shared_ptr<AssignNode>>> actual,
                                 vector<pair<pair<int, string>, shared_ptr<AssignNode>>> expected) {
+        if (actual.size() != expected.size()) return false;
         for (auto rowActual: actual) {
             bool isFound = false;
             for (auto rowExpected: expected) {

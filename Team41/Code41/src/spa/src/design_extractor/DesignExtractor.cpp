@@ -50,11 +50,7 @@ void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
         default: {
             break;
         }
-
     }
-
-
-    this->dataModifier.saveVariables(entityResultList);
 }
 
 void DesignExtractor::saveRelationToPKB(RelationType relationType) {
@@ -139,12 +135,13 @@ void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> pro
 }
 
 void DesignExtractor::run() {
+    //save entities
     auto entitiesToSave = vector<DesignEntity>{DesignEntity::VARIABLE, DesignEntity::CONSTANT, DesignEntity::PROCEDURE};
     for (auto designEntity: entitiesToSave) {
         this->saveEntityToPKB(designEntity);
     }
 
-    //save statements
+    //save statement lines and types
     shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> nodeToLine = ASTUtils::getNodePtrToLineNumMap(programNode);
     list<vector<string>> payload;
     auto it = payload.begin();
@@ -156,8 +153,14 @@ void DesignExtractor::run() {
     }
     this->dataModifier.saveStatements(payload);
 
+    //save relations
+    auto relationsToSave = vector<RelationType>{RelationType::PARENT, RelationType::PARENT_T, RelationType::FOLLOWS_T, RelationType::FOLLOWS_T, RelationType::USES_S, RelationType::MODIFIES_S};
+    for (auto relationType: relationsToSave) {
+        this->saveRelationToPKB(relationType);
+    }
 
-
+    //save patterns
+    this->savePatternsToPKB();
 }
 
 vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::extractPatterns() {

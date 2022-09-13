@@ -3,7 +3,7 @@
 //
 
 #include "QueryResultFormatter.h"
-
+#include <unordered_set>
 #include <utility>
 #include <iostream>
 
@@ -14,6 +14,11 @@ namespace QE {
 
     vector<string> QueryResultFormatter::formatResult() {
         //todo: remove duplicates in the result
-        return this->queryResult.table.getColumnByName(this->queryResult.colName);
+        auto resultsWithDup =  this->queryResult.table.getColumnByName(this->queryResult.colName);
+        std::unordered_set<string> uniqueResultSet;
+        uniqueResultSet.insert(resultsWithDup.begin(), resultsWithDup.end());
+        vector<string> uniqueResultVec;
+        uniqueResultVec.insert(uniqueResultVec.end(), uniqueResultSet.begin(), uniqueResultSet.end());
+        return uniqueResultVec;
     }
 } // QE

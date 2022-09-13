@@ -35,9 +35,10 @@ void TestWrapper::parse(std::string filename) {
     // call your parser to do the parsing
     // ...rest of your code...
     auto astBuilder = ASTBuilder();
-    shared_ptr<ASTNode> programNode = astBuilder.buildAST(filename);
-//    DesignExtractor* designExtractor = new DesignExtractor(*programNode);
-//    designExtractor->saveEntityToPKB();
+    shared_ptr<ProgramNode> programNode = astBuilder.buildAST(filename);
+    DataModifier dataModifier = DataModifier();
+    DE::DesignExtractor designExtractor = DE::DesignExtractor(dataModifier, programNode);
+    designExtractor.run();
 }
 
 // method to evaluating a query
