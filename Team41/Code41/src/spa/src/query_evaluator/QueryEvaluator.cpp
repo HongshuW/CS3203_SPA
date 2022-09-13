@@ -36,20 +36,22 @@ QueryResult QueryEvaluator::evaluate(shared_ptr<Query> query) {
     if (query->suchThatClauses->empty() && !query->patternClause) {//no such that or pattern clause
         return this->evaluateNoConditionQuery(query);
     }
-    TableCombiner tableCombiner = TableCombiner();
-    Table resultTable;
+    Table selectedEntityTable = this->evaluateNoConditionQuery(query).table;
+    selectedEntityTable.renameHeader({query->selectClause->synonym.synonym});
 
+    TableCombiner tableCombiner = TableCombiner();
+    Table resultTable = selectedEntityTable;
     for (auto stClause: *query->suchThatClauses) {
         Table intermediateTable = this->dataPreprocessor->getTableByRelation(*stClause);
-        if (intermediateTable.isBodyEmpty()) return dummyEmptyQueryResult;
-        resultTable = tableCombiner.joinTable(resultTable, intermediateTable);
+        if (intermediateTable.isBodyEmpty()) return QueryResult();
+        resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
+
     }
 
     //TODO: change pattern clause to plural clauses
     if (query->patternClause) {
         Table intermediateTable = this->dataPreprocessor->getTableByPattern(query->patternClause);
-        if (intermediateTable.isBodyEmpty()) return dummyEmptyQueryResult;
-        resultTable = tableCombiner.joinTable(resultTable, intermediateTable);
+        resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
     }
 
     Synonym toBeSelected = query->selectClause->synonym;

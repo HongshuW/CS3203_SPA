@@ -134,6 +134,9 @@ namespace QE {
                     //todo: implement procedure filter
                     return table;
                 }
+                case DesignEntity::STMT: {
+                    return table;
+                }
                 default: {//stmt types
                     if (!Utils::isValidNumber(val)) {
                         cout << "Error: stmt line is not a number" << endl;
