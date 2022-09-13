@@ -18,15 +18,16 @@ TEST_CASE("Test Data Modifier") {
 
         DataModifier dm;
         dm.saveVariables(variables);
+        VariableTable variableTable = *EntityManager::getVariables();
 
         // check header is set automatically
         auto expected = *EntityManager::getVariables();
-        REQUIRE((*EntityManager::getVariables()).header[0] == "$variable_name");
+        REQUIRE(variableTable.header[0] == "$variable_name");
 
         // check variables are added
-        REQUIRE((*EntityManager::getVariables()).rows[initialSize][0] == "dummyVarX");
-        REQUIRE((*EntityManager::getVariables()).rows[initialSize + 1][0] == "dummyVarY");
-        REQUIRE((*EntityManager::getVariables()).rows[initialSize + 2][0] == "dummyVarZ");
+        REQUIRE(variableTable.rows[initialSize][0] == "dummyVarX");
+        REQUIRE(variableTable.rows[initialSize + 1][0] == "dummyVarY");
+        REQUIRE(variableTable.rows[initialSize + 2][0] == "dummyVarZ");
     }
 
     SECTION ("Save statements") {
@@ -39,16 +40,17 @@ TEST_CASE("Test Data Modifier") {
 
         DataModifier dm;
         dm.saveStatements(statements);
+        StatementTable statementTable = *EntityManager::getStatements();
 
         // check header is set automatically
-        REQUIRE((*EntityManager::getStatements()).header[0] == "$statement_number");
-        REQUIRE((*EntityManager::getStatements()).header[1] == "$statement_type");
+        REQUIRE(statementTable.header[0] == "$statement_number");
+        REQUIRE(statementTable.header[1] == "$statement_type");
 
         // check statements are added
-        REQUIRE((*EntityManager::getStatements()).rows[initialSize][0] == "3");
-        REQUIRE((*EntityManager::getStatements()).rows[initialSize][1] == "assign");
-        REQUIRE((*EntityManager::getStatements()).rows[initialSize + 1][0] == "4");
-        REQUIRE((*EntityManager::getStatements()).rows[initialSize + 1][1] == "if");
+        REQUIRE(statementTable.rows[initialSize][0] == "3");
+        REQUIRE(statementTable.rows[initialSize][1] == "assign");
+        REQUIRE(statementTable.rows[initialSize + 1][0] == "4");
+        REQUIRE(statementTable.rows[initialSize + 1][1] == "if");
     }
 
     SECTION ("Save parentT") {
@@ -57,18 +59,19 @@ TEST_CASE("Test Data Modifier") {
         dm.saveParentT(vector<string>{"1", "2"});
         dm.saveParentT(vector<string>{"1", "3"});
         dm.saveParentT(vector<string>{"2", "3"});
+        ParentTable parentTTable = *RelationshipManager::getParentT();
 
         // check header is set automatically
-        REQUIRE((*RelationshipManager::getParentT()).header[0] == "$parent_statement");
-        REQUIRE((*RelationshipManager::getParentT()).header[1] == "$child_statement");
+        REQUIRE(parentTTable.header[0] == "$parent_statement");
+        REQUIRE(parentTTable.header[1] == "$child_statement");
 
         // check relationships are added
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize][0] == "1");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize][1] == "2");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 1][0] == "1");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 1][1] == "3");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 2][0] == "2");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 2][1] == "3");
+        REQUIRE(parentTTable.rows[initialSize][0] == "1");
+        REQUIRE(parentTTable.rows[initialSize][1] == "2");
+        REQUIRE(parentTTable.rows[initialSize + 1][0] == "1");
+        REQUIRE(parentTTable.rows[initialSize + 1][1] == "3");
+        REQUIRE(parentTTable.rows[initialSize + 2][0] == "2");
+        REQUIRE(parentTTable.rows[initialSize + 2][1] == "3");
     }
 
     SECTION ("Save pattern") {
@@ -81,14 +84,15 @@ TEST_CASE("Test Data Modifier") {
         pattern->left = left;
         pattern->right = right;
         dm.savePattern(metainfo, pattern);
+        PatternTable patternTable = *PatternManager::getPatterns();
 
         // check header is set automatically
-        REQUIRE((*PatternManager::getPatterns()).header[0] == "$statement_number");
-        REQUIRE((*PatternManager::getPatterns()).header[1] == "$variable_name");
+        REQUIRE(patternTable.header[0] == "$statement_number");
+        REQUIRE(patternTable.header[1] == "$variable_name");
 
         // check pattern is added
-        REQUIRE((*PatternManager::getPatterns()).rows[initialSize][0] == "1");
-        REQUIRE((*PatternManager::getPatterns()).rows[initialSize][1] == "x");
-        REQUIRE((*PatternManager::getPatterns()).patternColumn[0] == pattern);
+        REQUIRE(patternTable.rows[initialSize][0] == "1");
+        REQUIRE(patternTable.rows[initialSize][1] == "x");
+        REQUIRE(patternTable.patternColumn[0] == pattern);
     }
 }

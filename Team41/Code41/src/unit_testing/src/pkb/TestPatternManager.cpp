@@ -8,47 +8,58 @@
 using namespace std;
 
 TEST_CASE("Test Pattern Manager") {
-    SECTION ("Save pattern") {
-        vector<string> metainfo{"1", "x"};
-        shared_ptr<ExprNode> left = make_shared<ExprNode>(ExprNode("x"));
-        shared_ptr<ExprNode> right = make_shared<ExprNode>(ExprNode("1"));
-        shared_ptr<ExprNode> pattern = make_shared<ExprNode>(ExprNode("+"));
-        pattern->left = left;
-        pattern->right = right;
-        PatternManager::savePattern(metainfo, pattern);
+    PatternTable * patternTable = PatternManager::getPatterns();
+    *patternTable = PatternTable();
 
-        shared_ptr<ExprNode> mismatchedPattern = make_shared<ExprNode>(ExprNode("y"));
+    SECTION ("Test getMatchedPatterns") {
+        // pattern 1: x = x + 1;
+        vector<string> p1Metainfo{"1", "x"};
+        shared_ptr<ExprNode> p1Left = make_shared<ExprNode>(ExprNode("x"));
+        shared_ptr<ExprNode> p1Right = make_shared<ExprNode>(ExprNode("1"));
+        shared_ptr<ExprNode> pattern1 = make_shared<ExprNode>(ExprNode("+"));
+        pattern1->left = p1Left;
+        pattern1->right = p1Right;
+        PatternManager::savePattern(p1Metainfo, pattern1);
 
-        // test FULL_MATCH
-        ExpressionSpec fullMatch = ExpressionSpec(ExpressionSpecType::FULL_MATCH, pattern);
-        ExpressionSpec fullMatchLeft = ExpressionSpec(ExpressionSpecType::FULL_MATCH, left);
+        // pattern 2: y = y + (x + 1);
+        vector<string> p2Metainfo{"2", "y"};
+        shared_ptr<ExprNode> p2Left = make_shared<ExprNode>(ExprNode("y"));
+        shared_ptr<ExprNode> p2RLeft = make_shared<ExprNode>(ExprNode("x"));
+        shared_ptr<ExprNode> p2RRight = make_shared<ExprNode>(ExprNode("1"));
+        shared_ptr<ExprNode> p2Right = make_shared<ExprNode>(ExprNode("+"));
+        p2Right->left = p2RLeft;
+        p2Right->right = p2RRight;
+        shared_ptr<ExprNode> pattern2 = make_shared<ExprNode>(ExprNode("+"));
+        pattern2->left = p2Left;
+        pattern2->right = p2Right;
+        PatternManager::savePattern(p2Metainfo, pattern2);
+
+        // a pattern that is never added
+        shared_ptr<ExprNode> mismatchedPattern = make_shared<ExprNode>(ExprNode("a"));
+
+        // Test FULL_MATCH: pattern1
+        ExpressionSpec fullMatch = ExpressionSpec(ExpressionSpecType::FULL_MATCH, pattern1);
         shared_ptr<Table> fullMatchTable = PatternManager::getMatchedPatterns(fullMatch);
-        shared_ptr<Table> fullMatchLeftTable = PatternManager::getMatchedPatterns(fullMatchLeft);
+        REQUIRE(fullMatchTable->rows.size() == 1);
         REQUIRE(fullMatchTable->rows[0][0] == "1");
         REQUIRE(fullMatchTable->rows[0][1] == "x");
-        REQUIRE(fullMatchLeftTable->rows.empty());
 
-        // test PARTIAL_MATCH
-        ExpressionSpec partialMatchLeft = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, left);
-        ExpressionSpec partialMatchRight = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, right);
-        ExpressionSpec partialMatch = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, pattern);
-        ExpressionSpec partialMismatch = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, mismatchedPattern);
-        shared_ptr<Table> partialMatchLeftTable = PatternManager::getMatchedPatterns(partialMatchLeft);
-        shared_ptr<Table> partialMatchRightTable = PatternManager::getMatchedPatterns(partialMatchRight);
+        // Test PARTIAL_MATCH: pattern1
+        ExpressionSpec partialMatch = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, pattern1);
         shared_ptr<Table> partialMatchTable = PatternManager::getMatchedPatterns(partialMatch);
-        shared_ptr<Table> partialMismatchTable = PatternManager::getMatchedPatterns(partialMismatch);
-        REQUIRE(partialMatchLeftTable->rows[0][0] == "1");
-        REQUIRE(partialMatchLeftTable->rows[0][1] == "x");
-        REQUIRE(partialMatchRightTable->rows[0][0] == "1");
-        REQUIRE(partialMatchRightTable->rows[0][1] == "x");
+        REQUIRE(partialMatchTable->rows.size() == 2);
         REQUIRE(partialMatchTable->rows[0][0] == "1");
         REQUIRE(partialMatchTable->rows[0][1] == "x");
-        REQUIRE(partialMismatchTable->rows.empty());
+        REQUIRE(partialMatchTable->rows[1][0] == "2");
+        REQUIRE(partialMatchTable->rows[1][1] == "y");
 
-        // test wildcard
+        // wildcard
         ExpressionSpec anyMatch = ExpressionSpec(ExpressionSpecType::ANY_MATCH);
         shared_ptr<Table> anyMatchTable = PatternManager::getMatchedPatterns(anyMatch);
+        REQUIRE(anyMatchTable->rows.size() == 2);
         REQUIRE(anyMatchTable->rows[0][0] == "1");
         REQUIRE(anyMatchTable->rows[0][1] == "x");
+        REQUIRE(anyMatchTable->rows[1][0] == "2");
+        REQUIRE(anyMatchTable->rows[1][1] == "y");
     }
 }
