@@ -1,0 +1,40 @@
+1 - no such that and pattern clause, select procedure
+procedure p;
+Select p
+main, readPoint, printResults, computeCentroid
+5000
+2 - no such that and pattern clause, select variable
+variable v;
+Select v
+flag, count, cenX, cenY, x, y, normSq
+5000
+3 - no such that and pattern clause, select read
+read r;
+Select r
+6, 7
+5000
+4 - no such that and pattern clause, select print
+print p;
+Select p
+23, 24, 25, 26
+5000
+5 - no such that and pattern clause, select assign
+assign a;
+Select a
+2, 13, 14, 15, 18, 19,20, 24, 26, 27, 29
+5000
+6 - no such that and pattern clause, select constant
+constant c;
+Select c
+0, 1
+5000
+7 - no such that and pattern clause, select if
+if i;
+Select i
+18
+5000
+8 - no such that and pattern clause, select while
+while w;
+Select w
+13
+5000
