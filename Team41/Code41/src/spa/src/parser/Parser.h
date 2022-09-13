@@ -60,7 +60,7 @@ namespace SourceParser {
     public:
         explicit Parser(vector<string> tokens);
         //! returns a ProgramNode at runtime
-        shared_ptr<ASTNode> parse();
+        shared_ptr<ProgramNode> parse();
     };
 }
 

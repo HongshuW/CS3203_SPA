@@ -8,7 +8,7 @@
 #ifndef SPA_TOKENIZER_H
 #define SPA_TOKENIZER_H
 
-#endif //SPA_TOKENIZER_H
+
 
 // maybe include method to tokenise symbols
 
@@ -36,3 +36,5 @@ namespace SourceParser {
 
     };
 }
+
+#endif //SPA_TOKENIZER_H

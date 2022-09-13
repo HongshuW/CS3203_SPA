@@ -9,7 +9,7 @@
 #include <memory>
 #include <fstream>
 #include <sstream>
-#include "AST/ASTNode.h"
+#include "AST/ProgramNode.h"
 #include "Tokenizer.h"
 
 using namespace std;
@@ -24,7 +24,7 @@ namespace SourceParser {
          * @param string filename.
          * @return a shared pointer to the root node of the AST tree
          */
-        shared_ptr<ASTNode> buildAST (string filename);
+        shared_ptr<ProgramNode> buildAST (string filename);
     };
 }
 

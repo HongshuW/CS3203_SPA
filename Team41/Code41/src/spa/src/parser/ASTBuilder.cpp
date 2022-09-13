@@ -8,7 +8,7 @@
 
 using namespace SourceParser;
 
-shared_ptr<ASTNode> ASTBuilder::buildAST(std::string filename) {
+shared_ptr<ProgramNode> ASTBuilder::buildAST(std::string filename) {
     std::string str;
     std::ifstream MyReadFile(filename);
     std::string input;
@@ -20,6 +20,6 @@ shared_ptr<ASTNode> ASTBuilder::buildAST(std::string filename) {
     Tokenizer tokenizer = Tokenizer(input);
     vector<string> tokens = tokenizer.tokenize();
     Parser parser = Parser(tokens);
-    shared_ptr<ASTNode> rootPtr = parser.parse();
+    shared_ptr<ProgramNode> rootPtr = parser.parse();
     return rootPtr;
 }

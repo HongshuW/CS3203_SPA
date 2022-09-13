@@ -293,7 +293,7 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode() {
     return make_shared<CondExprNode>(condExprStr);
 }
 
-shared_ptr<ASTNode> Parser::parse() {
+shared_ptr<ProgramNode> Parser::parse() {
     vector<shared_ptr<ProcedureNode>> procedureList;
     while (currIdx < tokens.size()) {
         //! process each procedure recursively and add to the list
@@ -303,6 +303,6 @@ shared_ptr<ASTNode> Parser::parse() {
     if (procedureList.size() == 0) {
         throw SPParseException("No procedure found.");
     }
-    shared_ptr<ASTNode> root = make_shared<ProgramNode>(procedureList);
+    shared_ptr<ProgramNode> root = make_shared<ProgramNode>(procedureList);
     return root;
 }

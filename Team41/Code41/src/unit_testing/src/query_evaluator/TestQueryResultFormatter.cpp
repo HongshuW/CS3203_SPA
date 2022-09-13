@@ -5,6 +5,7 @@
 #include <vector>
 #include "catch.hpp"
 #include "query_evaluator/QueryResultFormatter.h"
+#include "QETestUtils.h"
 
 using namespace QE;
 TEST_CASE("Test query result formatter") {
@@ -24,13 +25,7 @@ TEST_CASE("Test query result formatter") {
         QueryResultFormatter queryResultFormatter = QueryResultFormatter(queryResult);
         vector<string> ans = queryResultFormatter.formatResult();
         auto expected = expectedTable.getColumnByName("variable name");
-        REQUIRE(ans.size() == queryResult.table.rows.size());
-
-        int i = 0;
-        for (const string& expectedVarName : expected) {
-            REQUIRE(ans[i] == expectedVarName);
-            i++;
-        }
+        REQUIRE(QETest::QETestUtils::containsSameElement(ans, expected));
 
     }
 }
