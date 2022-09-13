@@ -1,0 +1,64 @@
+1
+procedure p;
+Select p
+main, readPoint, printResults, computeCentroid
+5000
+2
+variable v;
+Select v
+flag, count, cenX, cenY, x, y, normSq
+5000
+3
+stmt s;
+Select s such that Follows* (6, s)
+7, 8, 9
+5000
+4
+variable v;
+Select v such that Modifies (6, v)
+count
+5000
+5
+variable v;
+Select v such that Uses (14, v)
+cenX, cenY
+5000
+6
+variable v; procedure p;
+Select p such that  Modifies (p, "x")
+main, computeCentroid, readPoint
+5000
+7
+assign a; while w;
+Select a such that Parent* (w, a)
+6, 7, 8
+5000
+8
+stmt s;
+Select s such that Parent (s, 7)
+5
+5000
+9
+assign a;
+Select a pattern a ( _ , "count + 1")
+6
+5000
+10
+assign a;
+Select a pattern a ( "normSq" , _"cenX * cenX"_)
+14
+5000
+11
+assign a; while w;
+Select w such that Parent* (w, a) pattern a ("count", _)
+5
+5000
+12
+assign a; variable v;
+Select a such that Uses (a, v) pattern a (v, _)
+6, 7, 8, 12, 13
+13
+assign a;
+Select a pattern a ("x", _) such that Uses (a, "x")
+6
+5000
