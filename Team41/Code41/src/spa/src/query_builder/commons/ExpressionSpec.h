@@ -11,6 +11,7 @@
 #include "AST/ExprNode.h"
 #include "string"
 #include "regex"
+#include <ostream>
 
 using namespace std;
 using namespace QB;

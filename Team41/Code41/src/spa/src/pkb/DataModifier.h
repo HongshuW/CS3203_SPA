@@ -8,7 +8,7 @@
 #include "AST/ExprNode.h"
 #include <list>
 #include <string>
-
+#include <vector>
 using namespace std;
 
 class DataModifier {
