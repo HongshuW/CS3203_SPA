@@ -211,6 +211,22 @@ void QueryValidator::validateArg2DesignEntityPatternClause() {
     }
 }
 
+void QueryValidator::validateSynonymInExprDeclaredPatternClause(shared_ptr<ExprNode> node) {
+    //! Traverse the ExprNode tree to check if the synonym is declared
+    if (!node) return;
+
+    if (Utils::isValidName(node->expr)) {
+        shared_ptr<vector<Declaration>> declarations = query->declarations;
+        Synonym syn = Synonym(node->expr);
+        if (!Declaration::findDeclaration(syn, declarations)) {
+            throw PQLValidationException(
+                    "Synonym: " + node->expr + " is not defined for expression in Pattern Clause");
+        }
+    }
+    validateSynonymInExprDeclaredPatternClause(node->left);
+    validateSynonymInExprDeclaredPatternClause(node->right);
+}
+
 void QueryValidator::validatePatternClause() {
     //! Validate synonym for arg1 and arg2 are declared
     validateSynonymDeclaredPatternClause();
@@ -220,6 +236,8 @@ void QueryValidator::validatePatternClause() {
     validateArg1DesignEntityPatternClause();
     //! Validate if agr2 is a synonym, it must be declared as variable
     validateArg2DesignEntityPatternClause();
+    //! Validate synonym in arg3 (expression) are declared
+    validateSynonymInExprDeclaredPatternClause(query->patternClause->arg3.exprNode);
 }
 
 void QueryValidator::validateQuery() {

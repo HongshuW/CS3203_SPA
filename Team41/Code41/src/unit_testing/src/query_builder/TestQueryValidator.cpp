@@ -299,4 +299,10 @@ TEST_CASE ("Test Query Validator") {
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
+
+    SECTION ("Test synonym not declared in expression of Pattern Clause") {
+        std::string queryStr = "variable a; Select a pattern a (_, _\"y\"_)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
 }

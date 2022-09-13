@@ -356,14 +356,15 @@ TEST_CASE ("Test Query Parser") {
                                        make_shared<ExprNode>("y"))));
     }
 
-    SECTION ("assign a; variable v; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")") {
-        std::string queryStr = "assign a; variable v; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")";
+    SECTION ("assign a; variable v, y; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")") {
+        std::string queryStr = "assign a; variable v, y; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query->declarations->size() == 2);
+        REQUIRE(query->declarations->size() == 3);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
-                        Declaration(DesignEntity::VARIABLE, Synonym("v"))});
+                        Declaration(DesignEntity::VARIABLE, Synonym("v")),
+                        Declaration(DesignEntity::VARIABLE, Synonym("y"))});
         REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("v")));
         REQUIRE(query->suchThatClauses->size() == 1);
