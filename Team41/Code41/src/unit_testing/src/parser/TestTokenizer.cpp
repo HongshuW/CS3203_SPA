@@ -18,13 +18,13 @@ using namespace std;
 TEST_CASE ("Test Tokenizer") {
     SECTION ("test basic source program with one statement") {
         std::string source = "procedure testProcedure {"
-                             "x = 1;"
+                             "123x = 1;"
                              "}";
 
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
         auto expected = std::vector<std::string>(
-                {"procedure", "testProcedure", "{", "x", "=", "1", ";", "}"});
+                {"procedure", "testProcedure", "{", "123x", "=", "1", ";", "}"});
 
         REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
                            end(expected),

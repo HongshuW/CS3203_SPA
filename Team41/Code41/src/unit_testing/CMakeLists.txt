@@ -48,6 +48,14 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/DEUtils.h src/query_evaluator/Dummies/DummyQueries.cpp
         src/query_evaluator/Dummies/DummyQueries.h
         src/parser/TestExprNodeParser.cpp
-        src/parser/TestCondExprParser.cpp src/utils/TestUtils.cpp src/design_extractor/TestPatternExtraction.cpp src/query_evaluator/QETestUtils.cpp src/query_evaluator/QETestUtils.h)
+        src/parser/TestCondExprParser.cpp
+        src/utils/TestUtils.cpp
+        src/design_extractor/TestPatternExtraction.cpp
+        src/query_evaluator/QETestUtils.cpp
+        src/query_evaluator/QETestUtils.h
+        src/parser/TestCondExprParser.cpp
+        src/utils/TestUtils.cpp
+        src/design_extractor/TestPatternExtraction.cpp
+        src/query_builder/TestExprStringTokenizer.cpp)
 
 target_link_libraries(unit_testing spa)

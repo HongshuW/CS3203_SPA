@@ -268,14 +268,80 @@ TEST_CASE ("Test Query Parser") {
                         ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
     }
 
-    SECTION ("assign a; variable v; Select a such that Uses (a, \"x\") pattern a (v, _\"y\"_)") {
-        std::string queryStr = "assign a; variable v; Select a such that Uses (a, \"x\") pattern a (v, _\"y\"_)";
+    SECTION ("assign a; variable x;  Select a pattern a (_, \"x + 1\")") {
+        std::string queryStr = "assign a; variable x; Select a pattern a (_, \"x + 1\")";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
-                        Declaration(DesignEntity::VARIABLE, Synonym("v"))});
+                        Declaration(DesignEntity::VARIABLE, Synonym("x"))});
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(Synonym("a")));
+        shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
+        exprNode->left = make_shared<ExprNode>("x");
+        exprNode->right = make_shared<ExprNode>("1");
+        REQUIRE(*(query->patternClause) ==
+                PatternClause(
+                        Synonym("a"),
+                        Underscore(),
+                        ExpressionSpec(ExpressionSpecType::FULL_MATCH,
+                                       exprNode)));
+    }
+
+    SECTION ("assign a; Select a pattern a (_, \"(2 + 1)\")") {
+        std::string queryStr = "assign a; Select a pattern a (_, \"(2 + 1)\")";
+        auto query = QueryBuilder().buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::ASSIGN, Synonym("a"))});
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(Synonym("a")));
+        shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
+        exprNode->left = make_shared<ExprNode>("2");
+        exprNode->right = make_shared<ExprNode>("1");
+        REQUIRE(*(query->patternClause) ==
+                PatternClause(
+                        Synonym("a"),
+                        Underscore(),
+                        ExpressionSpec(ExpressionSpecType::FULL_MATCH,
+                                       exprNode)));
+    }
+
+    SECTION ("assign a; variable x; Select a pattern a (_, _\"(x + 1) * 3\"_)") {
+        std::string queryStr = "assign a; variable x; Select a pattern a (_, _\"(x + 1) * 3\"_)";
+        auto query = QueryBuilder().buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 2);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::ASSIGN, Synonym("a")),
+                        Declaration(DesignEntity::VARIABLE, Synonym("x"))});
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(Synonym("a")));
+        shared_ptr<ExprNode> exprNodeLeft = make_shared<ExprNode>("+");
+        exprNodeLeft->left = make_shared<ExprNode>("x");
+        exprNodeLeft->right = make_shared<ExprNode>("1");
+        shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("*");
+        exprNode->left = exprNodeLeft;
+        exprNode->right = make_shared<ExprNode>("3");
+        REQUIRE(*(query->patternClause) ==
+                PatternClause(
+                        Synonym("a"),
+                        Underscore(),
+                        ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
+                                       exprNode)));
+    }
+
+    SECTION ("assign a; variable v, y; Select a such that Uses (a, \"x\") pattern a (v, _\"y\"_)") {
+        std::string queryStr = "assign a; variable v, y; Select a such that Uses (a, \"x\") pattern a (v, _\"y\"_)";
+        auto query = QueryBuilder().buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 3);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::ASSIGN, Synonym("a")),
+                        Declaration(DesignEntity::VARIABLE, Synonym("v")),
+                        Declaration(DesignEntity::VARIABLE, Synonym("y"))});
         REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("a")));
         REQUIRE(query->suchThatClauses->size() == 1);
@@ -290,14 +356,15 @@ TEST_CASE ("Test Query Parser") {
                                        make_shared<ExprNode>("y"))));
     }
 
-    SECTION ("assign a; variable v; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")") {
-        std::string queryStr = "assign a; variable v; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")";
+    SECTION ("assign a; variable v, y; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")") {
+        std::string queryStr = "assign a; variable v, y; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
-        REQUIRE(query->declarations->size() == 2);
+        REQUIRE(query->declarations->size() == 3);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
-                        Declaration(DesignEntity::VARIABLE, Synonym("v"))});
+                        Declaration(DesignEntity::VARIABLE, Synonym("v")),
+                        Declaration(DesignEntity::VARIABLE, Synonym("y"))});
         REQUIRE(*(query->selectClause) ==
                 SelectClause(Synonym("v")));
         REQUIRE(query->suchThatClauses->size() == 1);

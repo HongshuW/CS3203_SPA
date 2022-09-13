@@ -217,10 +217,19 @@ TEST_CASE("Test SP Parser") {
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 
-    SECTION("Invalid condition; Invalid parentheses") {
+    SECTION("Invalid parentheses, throw SPParserException") {
         vector<std::string> tokens = vector<std::string>(
                 {"procedure", "testProcedure", "{", "while", "(", "!", "(", "(", "number", ">", "0", ")", ")", "{",
                  "read", "num1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+
+    SECTION("Invalid synonym name, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "while", "(", "!", "(", "(", "number", ">", "0", ")", ")", "{",
+                 "read", "12num1", ";", "}", "}"});
         Parser parser = Parser(tokens);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
