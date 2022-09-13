@@ -66,8 +66,10 @@ QueryResult QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query) {
     Synonym synonym = selectClause->synonym;
     DesignEntity designEntity = getDesignEntity(synonym, query);
     Table table = this->dataPreprocessor->getAllByDesignEntity(designEntity);
+
+    table.renameHeader({query->selectClause->synonym.synonym});
     QueryResult queryResult = QueryResult(table);
-    queryResult.colName = getDesignEntityColName(designEntity);
+    queryResult.colName = query->selectClause->synonym.synonym;
     return queryResult;
 }
 
