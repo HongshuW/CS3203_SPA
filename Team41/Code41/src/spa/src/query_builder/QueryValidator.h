@@ -8,7 +8,6 @@
 #pragma once
 
 #include "query_builder/commons/Query.h"
-#include "utils/Utils.h"
 #include <unordered_set>
 
 using namespace std;
@@ -27,7 +26,6 @@ namespace QB {
         void validateArgRefTypePatternClause();
         void validateArg1DesignEntityPatternClause();
         void validateArg2DesignEntityPatternClause();
-        void validateSynonymInExprDeclaredPatternClause(shared_ptr<ExprNode> node);
         void validatePatternClause();
     public:
         //! Validate the Query object, throw Semantic Error if encounter
