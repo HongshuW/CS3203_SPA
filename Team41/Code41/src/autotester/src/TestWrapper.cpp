@@ -58,15 +58,15 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
     } catch (const PQLTokenizeException& e) {
         string errorMessage = "SyntaxError";
 //      errorMessage += e.what();
-        results.push_back(errorMessage);
+//        results.push_back(errorMessage);
     } catch (const PQLParseException& e) {
         string errorMessage = "SyntaxError";
 //      errorMessage += e.what();
-        results.push_back(errorMessage);
+//        results.push_back(errorMessage);
     } catch (const PQLValidationException& e) {
         string errorMessage = "SemanticError";
 //      errorMessage += e.what();
-        results.push_back(errorMessage);
+//        results.push_back(errorMessage);
     }
 
     // store the answers to the query in the results list (it is initially empty)

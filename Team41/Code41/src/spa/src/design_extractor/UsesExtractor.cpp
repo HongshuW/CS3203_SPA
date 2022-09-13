@@ -5,6 +5,7 @@
 #include "UsesExtractor.h"
 #include "AST/utils/ASTUtils.h"
 #include "utils/Utils.h"
+#include "EntityExtractor.h"
 
 namespace DE {
     shared_ptr<list<vector<string>>> UsesExtractor::extractUsesS(shared_ptr<ProgramNode> rootPtr) {
@@ -90,7 +91,7 @@ namespace DE {
             }
             case AST::ASSIGN_NODE: {
                 shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(node);
-                auto variables = Utils::getVariablesFromExprString(assignNode->expressionNode->expr);
+                auto variables = EntityExtractor::getVariablesFromExprNode(assignNode->expressionNode);
                 for (const auto& var: variables) {
                     int stmtNum = stmtNumbers->at(assignNode);
                     result->insert(result->begin(), {to_string(stmtNum), var});

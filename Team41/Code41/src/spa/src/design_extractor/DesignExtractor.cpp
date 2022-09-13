@@ -160,7 +160,7 @@ void DesignExtractor::run() {
     this->dataModifier.saveStatements(payload);
 
     //save relations
-    auto relationsToSave = vector<RelationType>{RelationType::PARENT, RelationType::PARENT_T, RelationType::FOLLOWS_T, RelationType::FOLLOWS_T, RelationType::USES_S, RelationType::MODIFIES_S};
+    auto relationsToSave = vector<RelationType>{RelationType::PARENT, RelationType::PARENT_T, RelationType::FOLLOWS, RelationType::FOLLOWS_T, RelationType::USES_S, RelationType::MODIFIES_S};
     for (auto relationType: relationsToSave) {
         this->saveRelationToPKB(relationType);
     }
