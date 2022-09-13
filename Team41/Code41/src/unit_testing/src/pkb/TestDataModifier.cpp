@@ -8,7 +8,6 @@
 #include "pkb/EntityManager.h"
 #include "pkb/PatternManager.h"
 #include "pkb/RelationshipManager.h"
-#include "query_builder/commons/ExpressionSpec.h"
 
 using namespace std;
 
@@ -19,15 +18,16 @@ TEST_CASE("Test Data Modifier") {
 
         DataModifier dm;
         dm.saveVariables(variables);
+        VariableTable variableTable = *EntityManager::getVariables();
 
         // check header is set automatically
         auto expected = *EntityManager::getVariables();
-        REQUIRE((*EntityManager::getVariables()).header[0] == "$variable_name");
+        REQUIRE(variableTable.header[0] == "$variable_name");
 
         // check variables are added
-        REQUIRE((*EntityManager::getVariables()).rows[initialSize][0] == "dummyVarX");
-        REQUIRE((*EntityManager::getVariables()).rows[initialSize + 1][0] == "dummyVarY");
-        REQUIRE((*EntityManager::getVariables()).rows[initialSize + 2][0] == "dummyVarZ");
+        REQUIRE(variableTable.rows[initialSize][0] == "dummyVarX");
+        REQUIRE(variableTable.rows[initialSize + 1][0] == "dummyVarY");
+        REQUIRE(variableTable.rows[initialSize + 2][0] == "dummyVarZ");
     }
 
     SECTION ("Save statements") {
@@ -40,16 +40,17 @@ TEST_CASE("Test Data Modifier") {
 
         DataModifier dm;
         dm.saveStatements(statements);
+        StatementTable statementTable = *EntityManager::getStatements();
 
         // check header is set automatically
-        REQUIRE((*EntityManager::getStatements()).header[0] == "$statement_number");
-        REQUIRE((*EntityManager::getStatements()).header[1] == "$statement_type");
+        REQUIRE(statementTable.header[0] == "$statement_number");
+        REQUIRE(statementTable.header[1] == "$statement_type");
 
         // check statements are added
-        REQUIRE((*EntityManager::getStatements()).rows[initialSize][0] == "3");
-        REQUIRE((*EntityManager::getStatements()).rows[initialSize][1] == "assign");
-        REQUIRE((*EntityManager::getStatements()).rows[initialSize + 1][0] == "4");
-        REQUIRE((*EntityManager::getStatements()).rows[initialSize + 1][1] == "if");
+        REQUIRE(statementTable.rows[initialSize][0] == "3");
+        REQUIRE(statementTable.rows[initialSize][1] == "assign");
+        REQUIRE(statementTable.rows[initialSize + 1][0] == "4");
+        REQUIRE(statementTable.rows[initialSize + 1][1] == "if");
     }
 
     SECTION ("Save parentT") {
@@ -58,21 +59,23 @@ TEST_CASE("Test Data Modifier") {
         dm.saveParentT(vector<string>{"1", "2"});
         dm.saveParentT(vector<string>{"1", "3"});
         dm.saveParentT(vector<string>{"2", "3"});
+        ParentTable parentTTable = *RelationshipManager::getParentT();
 
         // check header is set automatically
-        REQUIRE((*RelationshipManager::getParentT()).header[0] == "$parent_statement");
-        REQUIRE((*RelationshipManager::getParentT()).header[1] == "$child_statement");
+        REQUIRE(parentTTable.header[0] == "$parent_statement");
+        REQUIRE(parentTTable.header[1] == "$child_statement");
 
         // check relationships are added
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize][0] == "1");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize][1] == "2");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 1][0] == "1");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 1][1] == "3");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 2][0] == "2");
-        REQUIRE((*RelationshipManager::getParentT()).rows[initialSize + 2][1] == "3");
+        REQUIRE(parentTTable.rows[initialSize][0] == "1");
+        REQUIRE(parentTTable.rows[initialSize][1] == "2");
+        REQUIRE(parentTTable.rows[initialSize + 1][0] == "1");
+        REQUIRE(parentTTable.rows[initialSize + 1][1] == "3");
+        REQUIRE(parentTTable.rows[initialSize + 2][0] == "2");
+        REQUIRE(parentTTable.rows[initialSize + 2][1] == "3");
     }
 
     SECTION ("Save pattern") {
+        int initialSize = (*PatternManager::getPatterns()).rows.size();
         DataModifier dm;
         vector<string> metainfo{"1", "x"};
         shared_ptr<ExprNode> left = make_shared<ExprNode>(ExprNode("x"));
@@ -81,39 +84,15 @@ TEST_CASE("Test Data Modifier") {
         pattern->left = left;
         pattern->right = right;
         dm.savePattern(metainfo, pattern);
+        PatternTable patternTable = *PatternManager::getPatterns();
 
-        shared_ptr<ExprNode> mismatchedPattern = make_shared<ExprNode>(ExprNode("y"));
+        // check header is set automatically
+        REQUIRE(patternTable.header[0] == "$statement_number");
+        REQUIRE(patternTable.header[1] == "$variable_name");
 
-        // test FULL_MATCH
-        ExpressionSpec fullMatch = ExpressionSpec(ExpressionSpecType::FULL_MATCH, pattern);
-        ExpressionSpec fullMatchLeft = ExpressionSpec(ExpressionSpecType::FULL_MATCH, left);
-        shared_ptr<Table> fullMatchTable = PatternManager::getMatchedPatterns(fullMatch);
-        shared_ptr<Table> fullMatchLeftTable = PatternManager::getMatchedPatterns(fullMatchLeft);
-        REQUIRE(fullMatchTable->rows[0][0] == "1");
-        REQUIRE(fullMatchTable->rows[0][1] == "x");
-        REQUIRE(fullMatchLeftTable->rows.empty());
-
-        // test PARTIAL_MATCH
-        ExpressionSpec partialMatchLeft = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, left);
-        ExpressionSpec partialMatchRight = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, right);
-        ExpressionSpec partialMatch = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, pattern);
-        ExpressionSpec partialMismatch = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, mismatchedPattern);
-        shared_ptr<Table> partialMatchLeftTable = PatternManager::getMatchedPatterns(partialMatchLeft);
-        shared_ptr<Table> partialMatchRightTable = PatternManager::getMatchedPatterns(partialMatchRight);
-        shared_ptr<Table> partialMatchTable = PatternManager::getMatchedPatterns(partialMatch);
-        shared_ptr<Table> partialMismatchTable = PatternManager::getMatchedPatterns(partialMismatch);
-        REQUIRE(partialMatchLeftTable->rows[0][0] == "1");
-        REQUIRE(partialMatchLeftTable->rows[0][1] == "x");
-        REQUIRE(partialMatchRightTable->rows[0][0] == "1");
-        REQUIRE(partialMatchRightTable->rows[0][1] == "x");
-        REQUIRE(partialMatchTable->rows[0][0] == "1");
-        REQUIRE(partialMatchTable->rows[0][1] == "x");
-        REQUIRE(partialMismatchTable->rows.empty());
-
-        // test wildcard
-        ExpressionSpec anyMatch = ExpressionSpec(ExpressionSpecType::ANY_MATCH);
-        shared_ptr<Table> anyMatchTable = PatternManager::getMatchedPatterns(anyMatch);
-        REQUIRE(anyMatchTable->rows[0][0] == "1");
-        REQUIRE(anyMatchTable->rows[0][1] == "x");
+        // check pattern is added
+        REQUIRE(patternTable.rows[initialSize][0] == "1");
+        REQUIRE(patternTable.rows[initialSize][1] == "x");
+        REQUIRE(patternTable.patternColumn[0] == pattern);
     }
 }

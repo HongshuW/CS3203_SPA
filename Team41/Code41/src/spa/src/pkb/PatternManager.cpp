@@ -10,6 +10,10 @@ shared_ptr<Table> PatternManager::getMatchedPatterns(ExpressionSpec expressionSp
     return patternTable.getMatchedPatterns(expressionSpec);
 }
 
+PatternTable * PatternManager::getPatterns() {
+    return &PatternManager::patternTable;
+}
+
 void PatternManager::savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
     patternTable.addPattern(metainfo, pattern);
 }

@@ -14,6 +14,7 @@ class PatternManager {
 public:
     // getter
     static shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);
+    static PatternTable * getPatterns();
     // setter
     static void savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
 private:
