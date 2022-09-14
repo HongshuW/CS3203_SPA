@@ -68,17 +68,17 @@ shared_ptr<map<int, vector<int>>> ParentExtractor::extractParentHashmap(shared_p
 }
 
 void ParentExtractor::extractParentTDFS(shared_ptr<map<int, vector<int>>> parentRelations, int key,
-                                          shared_ptr<vector<string>> ancestors,
+                                          vector<string> ancestors,
                                           shared_ptr<list<vector<string>>> output) {
-    if (parentRelations->find(key) == parentRelations->end()) {
+    if (parentRelations->count(key) == 0) {
         return;
     }
     // add current stmt to ancestors
-    ancestors->push_back(to_string(key));
+    ancestors.push_back(to_string(key));
     // pop current stmt's children
-    vector<int> children = parentRelations->find(key)->second;
+    vector<int> children = parentRelations->at(key);
     parentRelations->erase(key);
-    for (string ancestor : *ancestors) {
+    for (string ancestor : ancestors) {
         for (int child : children) {
             // add combinations to outputs
             vector<string> row{ancestor, to_string(child)};
@@ -87,8 +87,6 @@ void ParentExtractor::extractParentTDFS(shared_ptr<map<int, vector<int>>> parent
             extractParentTDFS(parentRelations, child, ancestors, output);
         }
     }
-    // remove current stmt from ancestors
-    ancestors->pop_back();
 }
 
 shared_ptr<list<vector<string>>> ParentExtractor::extractParent(shared_ptr<ProgramNode> rootPtr) {
@@ -113,12 +111,11 @@ shared_ptr<list<vector<string>>> ParentExtractor::extractParentT(shared_ptr<AST:
     shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>(outputList);
     shared_ptr<map<int, vector<int>>> parentRelations = extractParentHashmap(rootPtr);
     vector<string> ancestors;
-    shared_ptr<vector<string>> ancestorsPtr = make_shared<vector<string>>(ancestors);
 
     while (!parentRelations->empty()) {
         auto iterator = parentRelations->begin();
         int key = iterator->first;
-        extractParentTDFS(parentRelations, key, ancestorsPtr, output);
+        extractParentTDFS(parentRelations, key, ancestors, output);
     }
 
     return output;
