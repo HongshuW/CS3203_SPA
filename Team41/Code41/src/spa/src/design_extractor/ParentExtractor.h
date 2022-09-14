@@ -14,7 +14,7 @@ namespace DE {
     private:
         static shared_ptr<map<int, vector<int>>> extractParentHashmap(shared_ptr<ProgramNode> rootPtr);
         static void extractParentTDFS(shared_ptr<map<int, vector<int>>> parentRelations, int key,
-                                      shared_ptr<vector<string>> ancestors, shared_ptr<list<vector<string>>> output);
+                                      vector<string> ancestors, shared_ptr<list<vector<string>>> output);
 
     public:
         static shared_ptr<list<vector<string>>> extractParent(shared_ptr<ProgramNode> rootPtr);
