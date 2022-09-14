@@ -1,0 +1,36 @@
+procedure deepNesting {
+    read x1;
+    if (x1 == 0) then {
+        count = 0;
+        while (x1 > 5) {
+            x5 = x1 + 10;
+            while (x5 < 100) {
+                x7 = x5 * x1;
+                print x7;
+                x9 = x7 * x7 + (x5 + x1) * 2;
+                while (x9 < 50) {
+                    print x9;
+                    x1 = x1 - x9;
+                    while (x1 < 100) {
+                        if (x1 < 50) then {
+                            while (x1 < 50) {
+                                x1 = x1 + 1;
+                            }
+                            x1 = x1 * 2;
+                        } else {
+                            x16 = x1;
+                            while (x16 > 50) {
+                                print x16;
+                                x16 = x16 - 1;
+                            }
+                        }
+                        x1 = ((x1 + x5) / x7) * x9;
+                    }
+
+                }
+            }
+        }
+    } else {
+        x1 = 0;
+    }
+}
