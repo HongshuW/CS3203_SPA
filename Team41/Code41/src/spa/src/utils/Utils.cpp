@@ -11,7 +11,7 @@ const unordered_set<string> Utils::BRACKETS = {"(", ")"};
 const unordered_set<string> Utils::MATH_OPERATORS = {"+", "-", "*", "/", "%"};
 const unordered_set<string> Utils::allowedTokenForRelExprNode = {">", ">=", "<", "<=", "==", "!="};
 const unordered_set<string> Utils::VALID_TOKENS_COND_EXPR = {">", ">=", "<", "<=", "==", "!=", "!",
-                                                             "+", "-", "*", "/", "(", ")", "&&", "||"};
+                                                             "+", "-", "*", "/", "(", ")", "&&", "||", "%"};
 const unordered_set<string> Utils::CONNECTORS_SYMBOLS = {"&&", "||"};
 
 bool Utils::isValidName(string str) {

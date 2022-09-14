@@ -52,7 +52,7 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
                     && !Utils::isValidName(peek())
                     && !Utils::isMathOperators(peek())
                     && !Utils::isBracket(peek())) {
-                throw SPParseException("Expect a comparator operator, got: " + peek());
+                throw SPParseException("Expect a comparator operator in conditional expression, got: " + peek());
             }
             expr.push_back(pop());
         }
@@ -62,7 +62,7 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
                 && !Utils::isValidName(peek())
                 && !Utils::isMathOperators(peek())
                 && !Utils::isBracket(peek())) {
-                throw SPParseException("Expect a comparator operator, got: " + peek());
+                throw SPParseException("Expect a comparator operator in conditional expression, got: " + peek());
             }
             if (peek().compare("(") == 0) leftBracketCount++;
             expr.push_back(pop());
@@ -90,7 +90,7 @@ shared_ptr<RelExprNode> CondExprParser::parseRelExprNode() {
     shared_ptr<ExprNode> exprNodeLHS = parseExprNodeForRelExpr("left");
     string op = peek();
     if (Utils::allowedTokenForRelExprNode.count(peek()) == 0) {
-        throw SPParseException("Expect a comparator operator, got: " + op);
+        throw SPParseException("Expect a comparator operator in conditional expression, got: " + op);
     }
     currIdx++;
     shared_ptr<ExprNode> exprNodeRHS = parseExprNodeForRelExpr("right");
