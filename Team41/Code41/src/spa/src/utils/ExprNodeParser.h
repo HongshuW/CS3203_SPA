@@ -25,7 +25,8 @@ private:
     bool match(string s);
     bool equals(string s1, string s2);
     int getPriority(string s);
-    void buildTree(string opt, shared_ptr<stack<shared_ptr<ExprNode>>> opd);
+    //! bool to indicate whether we are able to build the tree
+    bool buildTree(string opt, shared_ptr<stack<shared_ptr<ExprNode>>> opd);
 
 public:
     ExprNodeParser(vector<string>& tokens);

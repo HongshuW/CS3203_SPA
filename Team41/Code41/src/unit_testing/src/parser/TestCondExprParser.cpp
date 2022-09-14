@@ -15,7 +15,8 @@ TEST_CASE("Test SP CondExprNode Parser") {
     SECTION("x == 1") {
         vector<string> tokens = vector<string>(
                 {"x", "==", "1"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         shared_ptr<CondExprNode> root = parser.parse();
 
         auto exprNodeLHS = make_shared<ExprNode>("x");
@@ -28,7 +29,8 @@ TEST_CASE("Test SP CondExprNode Parser") {
     SECTION("x != y") {
         vector<string> tokens = vector<string>(
                 {"x", "!=", "y"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         shared_ptr<CondExprNode> root = parser.parse();
 
         auto exprNodeLHS = make_shared<ExprNode>("x");
@@ -41,7 +43,8 @@ TEST_CASE("Test SP CondExprNode Parser") {
     SECTION("x <= y") {
         vector<string> tokens = vector<string>(
                 {"x", "<=", "y"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         shared_ptr<CondExprNode> root = parser.parse();
 
         auto exprNodeLHS = make_shared<ExprNode>("x");
@@ -54,7 +57,8 @@ TEST_CASE("Test SP CondExprNode Parser") {
     SECTION("!(x == y)") {
         vector<string> tokens = vector<string>(
                 {"!", "(", "x", "==", "y", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         shared_ptr<CondExprNode> root = parser.parse();
 
         auto exprNodeLHS = make_shared<ExprNode>("x");
@@ -68,7 +72,8 @@ TEST_CASE("Test SP CondExprNode Parser") {
     SECTION("!(x + 1 <= y)") {
         vector<string> tokens = vector<string>(
                 {"!", "(", "x", "+", "1", "<=", "y", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         shared_ptr<CondExprNode> root = parser.parse();
 
         auto exprNodeLHS = make_shared<ExprNode>("+");
@@ -81,16 +86,17 @@ TEST_CASE("Test SP CondExprNode Parser") {
         REQUIRE(*root == *expectedRoot);
     }
 
-    SECTION("(x == y) && (z > 2)") {
+    SECTION("(x != y) && (z > 2)") {
         vector<string> tokens = vector<string>(
-                {"(", "x", "==", "y", ")", "&&", "(", "z", ">", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+                {"(", "x", "!=", "y", ")", "&&", "(", "z", ">", "2", ")"});
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         shared_ptr<CondExprNode> root = parser.parse();
 
         auto exprNodeLHS = make_shared<ExprNode>("x");
         auto exprNodeRHS = make_shared<ExprNode>("y");
         auto relExprNode =
-                make_shared<RelExprNode>(exprNodeLHS, "==", exprNodeRHS);
+                make_shared<RelExprNode>(exprNodeLHS, "!=", exprNodeRHS);
         auto condExprNodeLHS = make_shared<CondExprNode>(relExprNode);
 
         auto exprNodeLHS_2 = make_shared<ExprNode>("z");
@@ -106,7 +112,8 @@ TEST_CASE("Test SP CondExprNode Parser") {
     SECTION("((x == y) || (x <= 3)) && (z > 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "(", "x", "==", "y", ")", "||", "(", "x", "<=", "3", ")", ")", "&&", "(", "z", ">", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         shared_ptr<CondExprNode> root = parser.parse();
 
         // x == y
@@ -143,7 +150,8 @@ TEST_CASE("Test SP CondExprNode Parser") {
     SECTION("(x + 1 == y) && (z > 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "x", "+", "1", "==", "y", ")", "&&", "(", "z", ">", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         shared_ptr<CondExprNode> root = parser.parse();
 
         auto exprNodeLHS = make_shared<ExprNode>("+");
@@ -164,53 +172,77 @@ TEST_CASE("Test SP CondExprNode Parser") {
         REQUIRE(*root == *expectedRoot);
     }
 
+    SECTION("((a == b) && (!(c % 2 == 0))) || (d < e)") {
+        vector<string> tokens = vector<string>(
+                { "(", "(", "a", "==", "b",")", "&&", "(", "!", "(","c", "%","2", "==", "0", ")",")",
+                  ")", "||", "(", "d", "<", "e", ")"});
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
+        REQUIRE_NOTHROW(parser.parse());
+    }
+
+    SECTION("(4 / x - y) != 2") {
+        vector<string> tokens = vector<string>(
+                { "(", "4", "/", "x", "-", "y", ")", "!=","2"});
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
+        REQUIRE_NOTHROW(parser.parse());
+    }
+
     //! Test for invalid inputs
     SECTION("(x == y && (z > 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "x", "==", "y", "&&", "(", "z", ">", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 
     SECTION("(x == y) $$ (z > 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "x", "==", "y", ")", "$$", "(", "z", ">", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 
     SECTION("x $$ 1") {
         vector<string> tokens = vector<string>(
                 {"x", "&&", "1"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 
     SECTION("(x &= y) || (z > 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "x", "&=", "y", ")", "||", "(", "z", ">", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 
     SECTION("(x == y || (z > 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "x", "==", "y", "||", "(", "z", ">", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 
     SECTION("(x == y) || (z ^& 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "x", "==", "y", "||", "(", "z", "^&", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 
     SECTION("(x == y || z > 2)") {
         vector<string> tokens = vector<string>(
                 {"(", "x", "==", "y", "||", "z", ">", "2", ")"});
-        CondExprParser parser = CondExprParser(tokens);
+        bool isConnected = true;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
 }
