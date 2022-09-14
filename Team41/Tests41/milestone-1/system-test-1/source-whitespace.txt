@@ -1,0 +1,39 @@
+                           procedure                           whitespace              {
+                read             x1;
+    while                      (x1        <=          50         )                      {
+
+
+
+
+
+
+
+
+        x1   =   x1                       + 2                    ;
+
+                      }
+
+
+
+                                                     call      noWhitespace;
+
+                        print                             x1;
+
+
+        }
+
+
+
+
+
+
+
+
+
+procedure noWhitespace {
+    print x1;
+    x7 = 100;
+}
+
+
+
