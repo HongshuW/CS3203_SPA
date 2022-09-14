@@ -1,0 +1,105 @@
+1 - valid - no clause, select procedures
+procedure p;
+Select p
+simpleProcedure
+5000
+2 - valid - no clause, select assign
+assign a;
+Select a
+3, 6, 7, 8, 9
+5000
+3 - valid - no clause, select print
+print p;
+Select p
+5, 10
+5000
+4 - valid - no clause, select constant
+constant c;
+Select c
+10, 3, 50, 2, 0
+5000
+5 - valid - no clause, select if
+if i;
+Select i
+4
+5000
+6 - valid - no clause, select while
+while wh;
+Select wh
+2
+5000
+7 - valid - no clause, weird name, select procedure
+procedure procedure;
+Select procedure
+simpleProcedure
+5000
+8 - valid - no clause, weird name, select variable
+variable procedure;
+Select procedure
+x1, x3, x6, x7, x8, x9
+5000
+9 - valid - no clause, weird name, select statement
+stmt Select;
+Select Select
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+10 - valid - no clause, alphanumeric name, select print
+print pr1nt;
+Select pr1nt
+5, 10
+5000
+11 - valid - no clause, alphanumeric name, select assign
+assign a551gn;
+Select a551gn
+3, 6, 7, 8, 9
+5000
+12 - invalid syntax - no clause, name starts with digit
+assign a551gn;
+Select 4551gn
+none
+5000
+13 - invalid syntax - no clause, name contains invalid character
+variable v@r
+Select v@r
+none
+5000
+14 - invalid syntax - no clause, name starts with invalid character
+if _;
+Select _
+none
+5000
+15 - invalid syntax - no clause, missing ;
+if i
+Select i
+none
+5000
+16 - invalid syntax - no clause, extra ; in declaration
+while wh;;
+Select wh
+none
+5000
+17 - invalid syntax - no clause, extra ; in select
+constant c
+Select c;
+none
+5000
+18 - invalid syntax - no clause, capital letter in declaration
+While wh;
+Select wh
+none
+5000
+19 - invalid syntax - no clause, no capital letter in select
+constant c
+select c;
+none
+5000
+20 - invalid syntax - no clause, capital letter in declaration
+assIGN assign;
+Select assign
+none
+5000
+21 - invalid syntax - no clause, additional capital letter in select
+constant c
+SElect c;
+none
+5000
