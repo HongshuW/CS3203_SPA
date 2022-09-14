@@ -104,14 +104,14 @@ Select s such that Follows(a, 3)
 none
 5000
 22 - valid follows - two assign, select statement
-assign a a2;
+assign a, a2;
 Select s such that Follows(a, a2)
 none
 5000
 23 - valid follows - two assign, select statement
-assign a a2;
+assign a, a2;
 Select a such that Follows(a, a2)
-none
+8
 5000
 24 - valid follows - two numbers out of bounds, select statement
 stmt s;
@@ -134,14 +134,14 @@ Select s such that Follows*(s, s)
 none
 5000
 28 - valid follows* - follows* clause, select statement
-stmt s s2;
+stmt s, s2;
 Select s such that Follows*(s, s2)
-none
+1, 2, 3, 4, 8, 9
 5000
 29 - valid follows* - follows* clause, select statement
-stmt s s2;
+stmt s, s2;
 Select s2 such that Follows*(s, s2)
-none
+2, 4, 7, 8, 9, 10
 5000
 30 - valid follows* - follows* clause, select statement
 stmt s;
