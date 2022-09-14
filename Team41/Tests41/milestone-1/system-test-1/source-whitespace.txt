@@ -5,11 +5,24 @@
 
 
 
+x3 = x1 *                   2                     + (10 * 3)                  ;
+
+if (x3                <          10)             then   {
+print x3;
+}                  else {
 
 
 
 
-        x1   =   x1                       + 2                    ;
+
+
+
+                                                            x6 = 0;
+}
+
+
+
+        x7   =   x1                       + 2                    ;
 
                       }
 
@@ -32,7 +45,7 @@
 
 procedure noWhitespace {
     print x1;
-    x7 = 100;
+    x11 = 100;
 }
 
 
