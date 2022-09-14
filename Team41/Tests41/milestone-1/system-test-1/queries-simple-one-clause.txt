@@ -16,12 +16,12 @@ none
 4 - valid follows - two statements, select statement should return true but does not??
 stmt s, s2;
 Select s such that Follows(s, s2)
-1, 2, 3, 4, 8, 9, 11, 12
+1, 2, 3, 4, 8, 9
 5000
 5 - valid follows - two statements, select statement
 stmt s, s2;
 Select s2 such that Follows(s, s2)
-2, 4, 7, 8, 9, 10, 12, 13
+2, 4, 7, 8, 9, 10
 5000
 6 - valid follows - two numbers, select statement
 stmt s;
