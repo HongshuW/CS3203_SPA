@@ -60,7 +60,7 @@ void Tokenizer::processSymbols() {
             curr += pop();
         }
     } else if (curr == ">") {
-        if (match('>')) {
+        if (match('=')) {
             curr += pop();
         }
     } else if (curr == "<") {

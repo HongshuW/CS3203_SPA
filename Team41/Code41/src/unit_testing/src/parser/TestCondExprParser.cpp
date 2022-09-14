@@ -205,6 +205,14 @@ TEST_CASE("Test SP CondExprNode Parser") {
         REQUIRE_NOTHROW(parser.parse());
     }
 
+    SECTION("(x % 2) != 0") {
+        vector<string> tokens = vector<string>(
+                {"(", "x", "%", "2", ")", "!=", "0"});
+        bool isConnected = false;
+        CondExprParser parser = CondExprParser(tokens, isConnected);
+        REQUIRE_NOTHROW(parser.parse());
+    }
+
     //! Test for invalid inputs
     SECTION("(x == y && (z > 2)") {
         vector<string> tokens = vector<string>(
