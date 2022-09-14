@@ -8,10 +8,11 @@
 const std::regex NAME_REGEX = std::regex("[a-zA-Z](\\d|[a-zA-Z])*");
 
 const unordered_set<string> Utils::BRACKETS = {"(", ")"};
-const unordered_set<string> Utils::MATH_OPERATORS = {"+", "-", "*", "/"};
+const unordered_set<string> Utils::MATH_OPERATORS = {"+", "-", "*", "/", "%"};
 const unordered_set<string> Utils::allowedTokenForRelExprNode = {">", ">=", "<", "<=", "==", "!="};
 const unordered_set<string> Utils::VALID_TOKENS_COND_EXPR = {">", ">=", "<", "<=", "==", "!=", "!",
                                                              "+", "-", "*", "/", "(", ")", "&&", "||"};
+const unordered_set<string> Utils::CONNECTORS_SYMBOLS = {"&&", "||"};
 
 bool Utils::isValidName(string str) {
     return regex_match(str, NAME_REGEX);
@@ -66,4 +67,8 @@ bool Utils::isValidParentheses(vector<string>& tokens) {
 
 bool Utils::isEvenNumber(int num) {
     return num % 2 == 0;
+}
+
+bool Utils::isConnector(string str) {
+    return Utils::CONNECTORS_SYMBOLS.count(str) > 0;
 }

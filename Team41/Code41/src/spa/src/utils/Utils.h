@@ -18,6 +18,7 @@ public:
     const static unordered_set<string> MATH_OPERATORS;
     const static unordered_set<string> allowedTokenForRelExprNode;
     const static unordered_set<string> VALID_TOKENS_COND_EXPR;
+    const static unordered_set<string> CONNECTORS_SYMBOLS;
 
     static bool isValidName(string str);
     static bool isValidNumber(string str);
@@ -26,6 +27,7 @@ public:
     static bool isBracket(string str);
     static bool isValidParentheses(vector<string>& tokens);
     static bool isEvenNumber(int num);
+    static bool isConnector(string str);
 };
 
 #endif //SPA_UTILSSS_H

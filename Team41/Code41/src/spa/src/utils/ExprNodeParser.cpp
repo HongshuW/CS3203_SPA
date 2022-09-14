@@ -40,13 +40,16 @@ int ExprNodeParser::getPriority(string s) {
     }
 }
 
-void ExprNodeParser::buildTree(const string opt, shared_ptr<stack<shared_ptr<ExprNode>>> opd) {
-    shared_ptr<ExprNode> root = make_shared<ExprNode>(opt);
-    root->right = opd->top();
-    opd->pop();
-    root->left = opd->top();
-    opd->pop();
-    opd->push(root);
+bool ExprNodeParser::buildTree(const string operatorStack, shared_ptr<stack<shared_ptr<ExprNode>>> nodeStack) {
+    shared_ptr<ExprNode> root = make_shared<ExprNode>(operatorStack);
+    if (nodeStack->empty()) return false;
+    root->right = nodeStack->top();
+    nodeStack->pop();
+    if (nodeStack->empty()) return false;
+    root->left = nodeStack->top();
+    nodeStack->pop();
+    nodeStack->push(root);
+    return true;
 }
 
 shared_ptr<ExprNode> ExprNodeParser::parse() {
@@ -79,7 +82,9 @@ shared_ptr<ExprNode> ExprNodeParser::parse() {
     }
 
     while (!operatorStack->empty()) {
-        buildTree(operatorStack->top(), nodeStack);
+        if (!buildTree(operatorStack->top(), nodeStack)) {
+            return nullptr;
+        }
         operatorStack->pop();
     }
 

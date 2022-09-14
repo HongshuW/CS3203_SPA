@@ -260,6 +260,7 @@ shared_ptr<ExprNode> Parser::parseExprNode() {
 
 shared_ptr<CondExprNode> Parser::parseCondExprNode() {
     vector<string> condExpr;
+    bool isConnected = false;
     while (peek().compare("{") != 0 && peek().compare("then") != 0) {
         string curr = pop();
         if (!Utils::isValidName(curr) && !Utils::isValidNumber(curr)) {
@@ -267,6 +268,10 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode() {
             if (Utils::VALID_TOKENS_COND_EXPR.count(curr) == 0) {
                 throw SPParseException("Expect a comparator operator, got: " + curr);
             }
+        }
+        //! Check for the presence of && and ||
+        if (Utils::isConnector(curr)) {
+            isConnected = true;
         }
         condExpr.push_back(curr);
     }
@@ -281,7 +286,7 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode() {
         throw SPParseException("Invalid parentheses detected");
     }
 
-    CondExprParser condExprParser = CondExprParser(condExpr);
+    CondExprParser condExprParser = CondExprParser(condExpr, isConnected);
     //! If the tree can be built without any errors,
     //! there is not syntax error and we can safely
     //! using the string representation of the conditional expression.

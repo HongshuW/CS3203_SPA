@@ -22,6 +22,8 @@ namespace SourceParser {
         shared_ptr<CondExprNode> root;
         vector<string> tokens;
         unsigned int currIdx;
+        //! isConnected == true indicates that && or || is present in the expression
+        bool isConnected;
 
         string peek();
         string pop();
@@ -33,7 +35,7 @@ namespace SourceParser {
         shared_ptr<RelExprNode> parseRelExprNode();
 
     public:
-        CondExprParser(vector<string>& tokens);
+        CondExprParser(vector<string>& tokens, bool isConnected);
         shared_ptr<CondExprNode> parse();
     };
 

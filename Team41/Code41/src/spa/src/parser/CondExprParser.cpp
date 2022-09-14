@@ -6,7 +6,8 @@
 
 using namespace SourceParser;
 
-CondExprParser::CondExprParser(vector<string>& tokens) : tokens(tokens), currIdx(0) {};
+CondExprParser::CondExprParser(vector<string>& tokens, bool isConnected) : isConnected(isConnected),
+tokens(tokens), currIdx(0) {};
 
 string CondExprParser::peek() { return tokens[currIdx]; }
 
@@ -45,7 +46,8 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
         while (currIdx < tokens.size() && Utils::allowedTokenForRelExprNode.count(peek()) == 0) {
             if (!Utils::isValidNumber(peek())
                     && !Utils::isValidName(peek())
-                    && !Utils::isMathOperators(peek())) {
+                    && !Utils::isMathOperators(peek())
+                    && !Utils::isBracket(peek())) {
                 throw SPParseException("Expect a comparator operator, got: " + peek());
             }
             expr.push_back(pop());
@@ -54,7 +56,8 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
         while (currIdx < tokens.size() && peek().compare(")") != 0) {
             if (!Utils::isValidNumber(peek())
                 && !Utils::isValidName(peek())
-                && !Utils::isMathOperators(peek())) {
+                && !Utils::isMathOperators(peek())
+                && !Utils::isBracket(peek())) {
                 throw SPParseException("Expect a comparator operator, got: " + peek());
             }
             expr.push_back(pop());
@@ -66,6 +69,10 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
     }
     ExprNodeParser exprNodeParser = ExprNodeParser(expr);
     shared_ptr<ExprNode> exprNode = exprNodeParser.parse();
+    //! if exprNode == nullptr, we are able to build the exprTree
+    if (!exprNode) {
+        throw SPParseException("Invalid expression for conditional expression");
+    }
     return exprNode;
 }
 
@@ -82,14 +89,13 @@ shared_ptr<RelExprNode> CondExprParser::parseRelExprNode() {
 }
 
 shared_ptr<CondExprNode> CondExprParser::parse() {
-    if (peek().compare("!") == 0) {
+    if (match("!")) {
         //! !(condExpr)
-        currIdx++;
         expect("(");
         shared_ptr<CondExprNode> condExprNode = parse();
         expect(")");
         return make_shared<CondExprNode>(condExprNode);
-    } else if (peek().compare("(") == 0) {
+    } else if (peek().compare("(") == 0 && isConnected) {
         //! (condExpr) && (condExpr)
         //! (condExpr) || (condExpr)
         expect("(");
