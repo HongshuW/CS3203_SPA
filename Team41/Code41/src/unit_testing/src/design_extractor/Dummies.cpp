@@ -144,10 +144,37 @@ namespace TestDE {
         vector<shared_ptr<StmtNode>> whileStmtLst_p5{assignNode2_p5, ifNode_p5};
         shared_ptr<WhileNode> whileNode_p5 = make_shared<WhileNode>(make_shared<CondExprNode>("x != 0"), whileStmtLst_p5);
         // procedure & program
-        shared_ptr<ProcedureNode> procedureNode5 = make_shared<ProcedureNode>(ProcedureNode("CASE2", {assignNode1_p5, whileNode_p5, assignNode5_p5}));
+        shared_ptr<ProcedureNode> procedureNode5 = make_shared<ProcedureNode>(ProcedureNode("procedure5", {assignNode1_p5, whileNode_p5, assignNode5_p5}));
         shared_ptr<ProgramNode> programNode5 = make_shared<ProgramNode>(ProgramNode({procedureNode5}));
 
-        vector<shared_ptr<ProgramNode>> programNodes = vector<shared_ptr<ProgramNode>>{programNode1, programNode2, programNode3, programNode4, programNode5};
+        /*
+        * procedure6 {
+        * 1 x = 1
+        * 2 while (x != 0) {
+        * 3     x = 0
+        * 4     if (x == 0) then {
+        * 5         y = 1
+        *       } else {
+        * 6         y = 0
+        *       }
+        *   }
+        * 7 y = 2
+        * 8 while (y != 0) {
+        * 9     y = 0
+        *   }
+        * }
+        */
+
+        // 9
+        shared_ptr<AssignNode> assignNode1_p6 = make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("0"));
+        // 8
+        vector<shared_ptr<StmtNode>> whileStmtLst_p6{assignNode1_p6};
+        shared_ptr<WhileNode> whileNode_p6 = make_shared<WhileNode>(make_shared<CondExprNode>("y != 0"), whileStmtLst_p6);
+        // procedure & program
+        shared_ptr<ProcedureNode> procedureNode6 = make_shared<ProcedureNode>(ProcedureNode("procedure6", {assignNode1_p5, whileNode_p5, assignNode5_p5, whileNode_p6}));
+        shared_ptr<ProgramNode> programNode6 = make_shared<ProgramNode>(ProgramNode({procedureNode6}));
+
+        vector<shared_ptr<ProgramNode>> programNodes = vector<shared_ptr<ProgramNode>>{programNode1, programNode2, programNode3, programNode4, programNode5, programNode6};
 
         return programNodes[idx];
     }
