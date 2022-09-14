@@ -41,6 +41,10 @@ bool CondExprParser::expect(string s) {
 
 shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
     vector<string> expr;
+    //! We need to insert the correct number of right brackets at the end
+    unsigned int leftBracketCount = 0;
+    if (peek().compare("(") == 0) leftBracketCount++;
+
     expr.push_back(pop());
     if (direction == "left") {
         while (currIdx < tokens.size() && Utils::allowedTokenForRelExprNode.count(peek()) == 0) {
@@ -60,7 +64,13 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
                 && !Utils::isBracket(peek())) {
                 throw SPParseException("Expect a comparator operator, got: " + peek());
             }
+            if (peek().compare("(") == 0) leftBracketCount++;
             expr.push_back(pop());
+        }
+
+        while (leftBracketCount > 0) {
+            expr.push_back(")");
+            leftBracketCount--;
         }
     }
 
