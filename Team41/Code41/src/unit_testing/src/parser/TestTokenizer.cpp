@@ -33,6 +33,23 @@ TEST_CASE ("Test Tokenizer") {
                            }));
     }
 
+    SECTION ("test basic source program with one statement") {
+        std::string source = "procedure testProcedure {"
+                             "123x >= 1;"
+                             "}";
+
+        Tokenizer tokenizer = Tokenizer(source);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"procedure", "testProcedure", "{", "123x", ">=", "1", ";", "}"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
     SECTION ("test basic source program with multiple statements") {
         std::string source = "procedure testProcedure {"
                              "x = 1;"
