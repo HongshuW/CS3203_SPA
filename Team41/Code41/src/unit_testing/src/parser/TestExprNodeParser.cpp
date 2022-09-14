@@ -21,6 +21,18 @@ TEST_CASE("Test SP ExprNode Parser") {
         REQUIRE(*root == *expectedRoot);
     }
 
+    SECTION("z % 2") {
+        vector<string> tokens = vector<string>(
+                {"z", "%", "2"});
+        ExprNodeParser parser = ExprNodeParser(tokens);
+        shared_ptr<ExprNode> root = parser.parse();
+
+        auto expectedRoot = make_shared<ExprNode>("%");
+        expectedRoot->left = make_shared<ExprNode>("z");
+        expectedRoot->right = make_shared<ExprNode>("2");
+        REQUIRE(*root == *expectedRoot);
+    }
+
     SECTION("x * y") {
         vector<string> tokens = vector<string>(
                 {"x", "*", "y"});
@@ -78,22 +90,22 @@ TEST_CASE("Test SP ExprNode Parser") {
         REQUIRE(*root == *expectedRoot);
     }
 
-    SECTION("(x + z) * 5") {
+    SECTION("(x + z) % 5") {
         vector<string> tokens = vector<string>(
-                {"(", "x", "+", "z", ")", "*", "5"});
+                {"(", "x", "+", "z", ")", "%", "5"});
         ExprNodeParser parser = ExprNodeParser(tokens);
         shared_ptr<ExprNode> root = parser.parse();
 
         auto leftChild= make_shared<ExprNode>("+");
         leftChild->left = make_shared<ExprNode>("x");
         leftChild->right = make_shared<ExprNode>("z");
-        auto expectedRoot = make_shared<ExprNode>("*");
+        auto expectedRoot = make_shared<ExprNode>("%");
         expectedRoot->left = leftChild;
         expectedRoot->right = make_shared<ExprNode>("5");
         REQUIRE(*root == *expectedRoot);
     }
 
-    SECTION("2 * x / (y + 7) / (1 + z)") {
+    SECTION("2 * x - (y + 7) / (1 + z)") {
         vector<string> tokens = vector<string>(
                 {"2","*","x","-","(","y","+","7",")","/","(","1","+","z",")"});
         ExprNodeParser parser = ExprNodeParser(tokens);
