@@ -36,7 +36,7 @@ none
 8 - valid follows - two numbers, select statement
 stmt s;
 Select s such that Follows(2, 8)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
 9 - valid follows - two numbers, select statement
 stmt s;
@@ -51,7 +51,7 @@ none
 11 - valid follows - one number one assign, select statement
 stmt s; assign a;
 Select s such that Follows(8, a)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
 12 - valid follows - one number one assign, select assign
 stmt s; assign a;
@@ -63,107 +63,182 @@ stmt s; assign a;
 Select a such that Follows(1, a)
 none
 5000
-14 - valid follows - one number one call, select scall
+14 - valid follows - one number one call, select call
 stmt s; call c;
 Select c such that Follows(1, c)
 none
 5000
-15 - valid follows - one number one read, select read
+15 - valid follows - one number one print, select print
+stmt s; print p;
+Select c such that Follows(1, p)
+none
+5000
+16 - valid follows - one number one read, select read
 stmt s; read r;
 Select r such that Follows(1, r)
 none
 5000
-16 - invalid follows - one number one procedure, select procedure
+17 - invalid follows - one number one procedure, select procedure
 stmt s; procedure p;
 Select p such that Follows(1, p)
 none
 5000
-17 - valid follows - one number one if, select if
+18 - valid follows - one number one if, select if
 stmt s; if i;
 Select i such that Follows(1, i)
 none
 5000
-18 - valid follows - one number one while, select while
+19 - valid follows - one number one while, select while
 stmt s; while w;
 Select w such that Follows(1, w)
 2
 5000
-19 - invalid follows - one number one variable, select variable
+20 - invalid follows - one number one variable, select variable
 stmt s; variable v;
 Select s such that Follows(1, v)
 none
 5000
-20 - valid follows - one number one assign, select statement
+21 - valid follows - one number one assign, select statement
 stmt s; assign a;
 Select s such that Follows(a, 4)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-21 - valid follows - one number one assign, select statement
+22 - valid follows - one number one assign, select statement
 stmt s; assign a;
 Select s such that Follows(a, 3)
 none
 5000
-22 - valid follows - two assign, select statement
+23 - valid follows - two assign, select statement
 assign a, a2;
 Select s such that Follows(a, a2)
 none
 5000
-23 - valid follows - two assign, select statement
+24 - valid follows - two assign, select statement
 assign a, a2;
 Select a such that Follows(a, a2)
 8
 5000
-24 - valid follows - two numbers out of bounds, select statement
+25 - valid follows - two numbers out of bounds, select statement
 stmt s;
 Select s such that Follows(4, 100)
 none
 5000
-25 - valid follows - follows* clause, select statement
+26 - valid follows - follows* clause, select statement
 stmt s;
 Select s such that Follows*(2, s)
 8, 9, 10
 5000
-26 - valid follows* - follows* clause, select statement
+27 - valid follows* - one statement one number, select statement [start of follows*]
 stmt s;
 Select s such that Follows*(s, 4)
 3
 5000
-27 - valid follows* - follows* clause, select statement
+28 - valid follows* - two statements, select statement
 stmt s;
 Select s such that Follows*(s, s)
 none
 5000
-28 - valid follows* - follows* clause, select statement
+29 - valid follows* - two statements, select statement
 stmt s, s2;
 Select s such that Follows*(s, s2)
 1, 2, 3, 4, 8, 9
 5000
-29 - valid follows* - follows* clause, select statement
+30 - valid follows* - two statements, select statement
 stmt s, s2;
 Select s2 such that Follows*(s, s2)
 2, 4, 7, 8, 9, 10
 5000
-30 - valid follows* - follows* clause, select statement
+31 - valid follows* - two numbers, select statement
 stmt s;
 Select s such that Follows*(4, 4)
 none
 5000
-31 - valid follows* - follows* clause, select statement
+32 - valid follows* - two numbers select statement
 stmt s;
 Select s such that Follows*(2, 9)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-32 - valid follows* - follows* clause, select statement
+33 - valid follows* - two numbers, select statement
 stmt s;
 Select s such that Follows*(2, 8)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-33 - valid follows* - follows* clause, select statement
+34 - valid follows* - two numbers, select statement
 stmt s;
 Select s such that Follows*(8, 2)
 none
 5000
-34 - valid follows* - follows* clause, select statement out of bounds
+35 - valid follows* - one number one assign, select statement
+stmt s; assign a;
+Select s such that Follows*(8, a)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+36 - valid follows* - one number one assign, select assign
+stmt s; assign a;
+Select a such that Follows*(8, a)
+9
+5000
+37 - valid follows* - one number one assign, select assign
+stmt s; assign a;
+Select a such that Follows*(1, a)
+8, 9
+5000
+38 - valid follows* - one number one call, select call
+stmt s; call c;
+Select c such that Follows*(1, c)
+none
+5000
+39 - valid follows* - one number one print, select print
+stmt s; print p;
+Select p such that Follows*(1, p)
+10
+5000
+40 - valid follows* - one number one read, select read
+stmt s; read r;
+Select r such that Follows*(1, r)
+none
+5000
+41 - invalid follows* - one number one procedure, select procedure
+stmt s; procedure p;
+Select p such that Follows*(1, p)
+none
+5000
+42 - valid follows* - one number one if, select if
+stmt s; if i;
+Select i such that Follows*(1, i)
+none
+5000
+43 - valid follows* - one number one while, select while
+stmt s; while w;
+Select w such that Follows*(1, w)
+2
+5000
+44 - invalid follows* - one number one variable, select variable
+stmt s; variable v;
+Select s such that Follows*(1, v)
+none
+5000
+45 - valid follows* - one number one assign, select statement
+stmt s; assign a;
+Select s such that Follows*(a, 4)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+46 - valid follows* - one number one assign, select statement
+stmt s; assign a;
+Select s such that Follows*(a, 3)
+none
+5000
+47 - valid follows* - two assign, select statement
+assign a, a2;
+Select s such that Follows*(a, a2)
+none
+5000
+48 - valid follows* - two assign, select statement
+assign a, a2;
+Select a such that Follows*(a, a2)
+3, 8
+5000
+49 - valid follows* - follows* clause, select statement out of bounds
 stmt s;
 Select s such that Follows*(4, 100)
 none

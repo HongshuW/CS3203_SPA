@@ -14,11 +14,3 @@ procedure simpleProcedure {
     print x1;
 }
 
-procedure simpleProcedure2 {
-    print x1;
-    x12 = 100;
-    x13 = x12 + x1;
-}
-
-
-
