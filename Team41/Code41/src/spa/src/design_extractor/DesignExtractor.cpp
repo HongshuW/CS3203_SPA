@@ -60,21 +60,27 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
         switch (relationType) {
             case RelationType::PARENT: {
                 this->dataModifier.saveParent(*iterator);
+                break;
             }
             case RelationType::PARENT_T: {
                 this->dataModifier.saveParentT(*iterator);
+                break;
             }
             case RelationType::FOLLOWS: {
                 this->dataModifier.saveFollows(*iterator);
+                break;
             }
             case RelationType::FOLLOWS_T: {
                 this->dataModifier.saveFollowsT(*iterator);
+                break;
             }
             case RelationType::MODIFIES_S: {
                 this->dataModifier.saveModifiesS(*iterator);
+                break;
             }
             case RelationType::USES_S: {
                 this->dataModifier.saveUsesS(*iterator);
+                break;
             }
             default:
                 break;
@@ -154,7 +160,7 @@ void DesignExtractor::run() {
     this->dataModifier.saveStatements(payload);
 
     //save relations
-    auto relationsToSave = vector<RelationType>{RelationType::PARENT, RelationType::PARENT_T, RelationType::FOLLOWS_T, RelationType::FOLLOWS_T, RelationType::USES_S, RelationType::MODIFIES_S};
+    auto relationsToSave = vector<RelationType>{RelationType::PARENT, RelationType::PARENT_T, RelationType::FOLLOWS, RelationType::FOLLOWS_T, RelationType::USES_S, RelationType::MODIFIES_S};
     for (auto relationType: relationsToSave) {
         this->saveRelationToPKB(relationType);
     }

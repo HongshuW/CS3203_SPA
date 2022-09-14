@@ -31,6 +31,11 @@ namespace QE {
         RefType ref2Type = getRefType(ref2);
         string col1Name = ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : QEUtils::getColNameByRefType(ref1Type);
         string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : QEUtils::getColNameByRefType(ref2Type);
+
+        if (col1Name == col2Name) {
+            col2Name = col2Name + "_2";
+        }
+
         Table relationTable = this->dataRetriever->getTableByRelationType(relationType);
         vector<string> newHeaders = vector<string>{col1Name, col2Name};
         relationTable.renameHeader(newHeaders);
@@ -58,6 +63,15 @@ namespace QE {
                 Synonym syn2 = get<Synonym>(ref2);
                 relationTable = this->filerTableByDesignEntity(relationTable,col2Name,
                                                                this->getDesignEntityOfSyn(syn2, declarations));
+
+                //Same synonym such as: stmt s; variable v; Select v such that Follows(s, s)
+                if (ref1Type == QB::RefType::SYNONYM) {
+                    Synonym syn1 = get<Synonym>(ref1);
+                    if (syn1 == syn2) {
+                        return Table();
+                    }
+                }
+
                 break;
             }
             case RefType::UNDERSCORE:
@@ -132,6 +146,9 @@ namespace QE {
                 }
                 case DesignEntity::PROCEDURE: {
                     //todo: implement procedure filter
+                    return table;
+                }
+                case DesignEntity::STMT: {
                     return table;
                 }
                 default: {//stmt types
