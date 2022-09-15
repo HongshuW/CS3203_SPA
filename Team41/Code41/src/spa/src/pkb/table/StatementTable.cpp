@@ -4,10 +4,10 @@
 
 #include "../exception/KeyNotFoundException.h"
 #include "StatementTable.h"
-#include "../EntityManager.h"
+#include "../PKBStorage.h"
 
 StatementTable::StatementTable() {
-    header = vector<string>{EntityManager::STATEMENT_TABLE_COL1_NAME, EntityManager::STATEMENT_TABLE_COL2_NAME};
+    header = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::STATEMENT_TABLE_COL2_NAME};
 }
 
 string StatementTable::getStatementType(string stmtNumber) {

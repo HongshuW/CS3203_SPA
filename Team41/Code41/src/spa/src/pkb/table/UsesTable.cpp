@@ -3,8 +3,8 @@
 //
 
 #include "UsesTable.h"
-#include "../EntityManager.h"
+#include "../PKBStorage.h"
 
 UsesTable::UsesTable() {
-    header = vector<string>{EntityManager::USES_TABLE_COL1_NAME, EntityManager::USES_TABLE_COL2_NAME};
+    header = vector<string>{PKBStorage::USES_TABLE_COL1_NAME, PKBStorage::USES_TABLE_COL2_NAME};
 }

@@ -3,9 +3,10 @@
 //
 
 #include "DataModifier.h"
-#include "EntityManager.h"
-#include "PatternManager.h"
-#include "RelationshipManager.h"
+
+DataModifier::DataModifier(shared_ptr<PKBStorage> pkbStorage) {
+    this->pkbStorage = pkbStorage;
+}
 
 /**
  * Saves a list of procedures to the pkb.
@@ -13,7 +14,7 @@
  * @param procedures a list of names of procedures
  */
 void DataModifier::saveProcedures(list<string> procedures) {
-    EntityManager::saveProcedures(procedures);
+    pkbStorage->saveProcedures(procedures);
 }
 
 /**
@@ -22,7 +23,7 @@ void DataModifier::saveProcedures(list<string> procedures) {
  * @param statements a list of statements, each statement is represented as a vector<string>{<stmt_no>, <stmt_type>}
  */
 void DataModifier::saveStatements(list<vector<std::string>> statements) {
-    EntityManager::saveStatements(statements);
+    pkbStorage->saveStatements(statements);
 }
 
 /**
@@ -31,7 +32,7 @@ void DataModifier::saveStatements(list<vector<std::string>> statements) {
  * @param variables a list of names of variables
  */
 void DataModifier::saveVariables(list<string> variables) {
-    EntityManager::saveVariables(variables);
+    pkbStorage->saveVariables(variables);
 }
 
 /**
@@ -40,7 +41,7 @@ void DataModifier::saveVariables(list<string> variables) {
  * @param constants a list of strings representing constant values
  */
 void DataModifier::saveConstants(list<std::string> constants) {
-    EntityManager::saveConstants(constants);
+    pkbStorage->saveConstants(constants);
 }
 
 /**
@@ -49,7 +50,7 @@ void DataModifier::saveConstants(list<std::string> constants) {
  * @param followsRelation vector<string>{followedStatement, followingStatement}
  */
 void DataModifier::saveFollows(vector<string> followsRelation) {
-    RelationshipManager::saveFollows(followsRelation);
+    pkbStorage->saveFollows(followsRelation);
 }
 
 /**
@@ -58,7 +59,7 @@ void DataModifier::saveFollows(vector<string> followsRelation) {
  * @param followsTRelation vector<string>{followedStatement, followingStatement}
  */
 void DataModifier::saveFollowsT(vector<string> followsTRelation) {
-    RelationshipManager::saveFollowsT(followsTRelation);
+    pkbStorage->saveFollowsT(followsTRelation);
 }
 
 /**
@@ -67,7 +68,7 @@ void DataModifier::saveFollowsT(vector<string> followsTRelation) {
  * @param parentRelation vector<string>{parentStatement, childStatement}
  */
 void DataModifier::saveParent(vector<string> parentRelation) {
-    RelationshipManager::saveParent(parentRelation);
+    pkbStorage->saveParent(parentRelation);
 }
 
 /**
@@ -76,7 +77,7 @@ void DataModifier::saveParent(vector<string> parentRelation) {
  * @param parentTRelation vector<string>{parentStatement, childStatement}
  */
 void DataModifier::saveParentT(vector<string> parentTRelation) {
-    RelationshipManager::saveParentT(parentTRelation);
+    pkbStorage->saveParentT(parentTRelation);
 }
 
 /**
@@ -85,7 +86,7 @@ void DataModifier::saveParentT(vector<string> parentTRelation) {
  * @param usesSRelation vector<string>{userStatement, usedEntity}
  */
 void DataModifier::saveUsesS(vector<string> usesSRelation) {
-    RelationshipManager::saveUsesS(usesSRelation);
+    pkbStorage->saveUsesS(usesSRelation);
 }
 
 /**
@@ -94,7 +95,7 @@ void DataModifier::saveUsesS(vector<string> usesSRelation) {
  * @param usesPRelation vector<string>{userStatement, usedEntity}
  */
 void DataModifier::saveUsesP(vector<string> usesPRelation) {
-    RelationshipManager::saveUsesP(usesPRelation);
+    pkbStorage->saveUsesP(usesPRelation);
 }
 
 /**
@@ -103,7 +104,7 @@ void DataModifier::saveUsesP(vector<string> usesPRelation) {
  * @param modifiesSRelation vector<string>{modifierStatement, modifiedEntity}
  */
 void DataModifier::saveModifiesS(vector<string> modifiesSRelation) {
-    RelationshipManager::saveModifiesS(modifiesSRelation);
+    pkbStorage->saveModifiesS(modifiesSRelation);
 }
 
 /**
@@ -112,7 +113,7 @@ void DataModifier::saveModifiesS(vector<string> modifiesSRelation) {
  * @param modifiesPRelation vector<string>{modifierStatement, modifiedEntity}
  */
 void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
-    RelationshipManager::saveModifiesP(modifiesPRelation);
+    pkbStorage->saveModifiesP(modifiesPRelation);
 }
 
 /**
@@ -122,5 +123,5 @@ void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
  * @param pattern
  */
 void DataModifier::savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
-    PatternManager::savePattern(metainfo, pattern);
+    pkbStorage->savePattern(metainfo, pattern);
 }

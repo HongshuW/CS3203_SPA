@@ -3,10 +3,10 @@
 //
 
 #include "PatternTable.h"
-#include <iostream>
+#include "../PKBStorage.h"
 
 PatternTable::PatternTable() {
-    header = vector<string>{"$statement_number", "$variable_name"};
+    header = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::VARIABLE_TABLE_COL1_NAME};
 }
 
 bool PatternTable::isSubExpression(shared_ptr<ExprNode> pattern, shared_ptr<ExprNode> queriedPattern) {

@@ -3,8 +3,8 @@
 //
 
 #include "FollowsTable.h"
-#include "../EntityManager.h"
+#include "../PKBStorage.h"
 
 FollowsTable::FollowsTable() {
-    header = vector<string>{EntityManager::FOLLOWS_TABLE_COL1_NAME, EntityManager::FOLLOWS_TABLE_COL2_NAME};
+    header = vector<string>{PKBStorage::FOLLOWS_TABLE_COL1_NAME, PKBStorage::FOLLOWS_TABLE_COL2_NAME};
 }

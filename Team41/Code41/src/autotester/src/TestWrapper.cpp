@@ -28,6 +28,7 @@ volatile bool AbstractWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
     // create any objects here as instance variables of this class
     // as well as any initialization required for your spa program
+    this->pkbStorage = PKBStorage();
 }
 
 // method for parsing the SIMPLE source
@@ -36,7 +37,7 @@ void TestWrapper::parse(std::string filename) {
     // ...rest of your code...
     auto astBuilder = ASTBuilder();
     shared_ptr<ProgramNode> programNode = astBuilder.buildAST(filename);
-    DataModifier dataModifier = DataModifier();
+    DataModifier dataModifier = DataModifier(make_shared<PKBStorage>(this->pkbStorage));
     DE::DesignExtractor designExtractor = DE::DesignExtractor(dataModifier, programNode);
     designExtractor.run();
 }
@@ -47,7 +48,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
     // ...code to evaluate query...
     try {
         auto queryObj = QueryBuilder().buildPQLQuery(query);
-        auto dataRetriever = make_shared<DataRetriever>();
+        auto dataRetriever = make_shared<DataRetriever>(DataRetriever(make_shared<PKBStorage>(this->pkbStorage)));
         shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(DataPreprocessor(dataRetriever));
         auto queryResult = QueryEvaluator(dataPreprocessor).evaluate(queryObj);
         auto resultFormatter = QueryResultFormatter(queryResult);

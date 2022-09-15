@@ -28,7 +28,7 @@ class PKBStorage {
 public:
     explicit PKBStorage();
 
-    // constants of entity tables
+    // Column Names
     static string STATEMENT_TABLE_COL1_NAME;
     static string STATEMENT_TABLE_COL2_NAME;
     static string VARIABLE_TABLE_COL1_NAME;
@@ -42,6 +42,7 @@ public:
     static string MODIFIES_TABLE_COL2_NAME;
     static string FOLLOWS_TABLE_COL1_NAME;
     static string FOLLOWS_TABLE_COL2_NAME;
+
     // getters of entities
     ProcedureTable * getProcedures();
     StatementTable * getStatements();

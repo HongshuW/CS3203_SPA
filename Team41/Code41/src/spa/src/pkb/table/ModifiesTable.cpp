@@ -3,8 +3,8 @@
 //
 
 #include "ModifiesTable.h"
-#include "../EntityManager.h"
+#include "../PKBStorage.h"
 
 ModifiesTable::ModifiesTable() {
-    header = vector<string>{EntityManager::MODIFIES_TABLE_COL1_NAME,EntityManager::MODIFIES_TABLE_COL2_NAME};
+    header = vector<string>{PKBStorage::MODIFIES_TABLE_COL1_NAME,PKBStorage::MODIFIES_TABLE_COL2_NAME};
 }

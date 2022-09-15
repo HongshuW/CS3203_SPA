@@ -7,15 +7,19 @@
 
 #include "pkb/DataModifier.h"
 #include "pkb/DataRetriever.h"
+#include "pkb/PKBStorage.h"
 #include <memory>
 
 
 class SPAManager {
     //! Entry point of the program, each program should have one SPAManager
 private:
+    PKBStorage pkbStorage;
     shared_ptr<DataModifier> dataModifier;
     shared_ptr<DataRetriever> dataRetriever;
 public:
+    explicit SPAManager();
+
     //! To parse source program
     void parse(string& filename);
     //! To evaluate query

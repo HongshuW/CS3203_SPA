@@ -4,6 +4,10 @@
 
 #include "SPAManager.h"
 
+SPAManager::SPAManager() {
+    this->pkbStorage = PKBStorage();
+}
+
 void SPAManager::parse(string &filename) {
 
 }
