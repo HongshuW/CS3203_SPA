@@ -153,7 +153,11 @@ add_library(spa ${srcs} ${headers}
         src/pkb/PatternManager.h
         src/query_builder/commons/ExpressionSpecType.h
         src/query_builder/commons/ExprStringTokenizer.cpp
-        src/query_builder/commons/ExprStringTokenizer.h src/spa_manager/SPAManager.cpp src/spa_manager/SPAManager.h)
+        src/query_builder/commons/ExprStringTokenizer.h
+        src/spa_manager/SPAManager.cpp
+        src/spa_manager/SPAManager.h
+        src/pkb/PKBStorage.cpp
+        src/pkb/PKBStorage.h)
 
 
 
