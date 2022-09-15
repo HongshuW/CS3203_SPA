@@ -88,97 +88,117 @@ assign a;
 Select a such that Uses(a, "x1")
 3, 7, 8, 9
 5000
-19 - valid uses - one print one variable - select print [print]
+19 - invalid uses - one read one variable - select read [read]
+read r; variable v;
+Select r such that Uses(r, v)
+none
+5000
+20 - valid uses - one read one variable - select variable
+read r; variable v;
+Select v such that Uses(r, v)
+none
+5000
+21 - valid uses - one read one _ - select read
+read r;
+Select r such that Uses(r, _)
+none
+5000
+22 - valid uses - one read one IDENT - select read
+read r;
+Select r such that Uses(r, "x2")
+none
+5000
+23 - valid uses - one print one variable - select print [print]
 print p; variable v;
 Select p such that Uses(p, v)
 5, 10
 5000
-20 - valid uses - one print one variable - select variable
+24 - valid uses - one print one variable - select variable
 print p; variable v;
 Select v such that Uses(p, v)
 x1, x3
 5000
-21 - valid uses - one print one _ - select print
+25 - valid uses - one print one _ - select print
 print p;
 Select p such that Uses(p, _)
 5, 10
 5000
-22 - valid uses - one print one IDENT - select print
+26 - valid uses - one print one IDENT - select print
 print p;
 Select p such that Uses(p, "x2")
 none
 5000
-23 - valid uses - one while one variable - select while [while]
+27 - valid uses - one while one variable - select while [while]
 while w; variable v;
 Select w such that Uses(w, v)
 2
 5000
-24 - valid uses - one while one variable - select variable
+28 - valid uses - one while one variable - select variable
 while w; variable v;
 Select v such that Uses(w, v)
 x1, x3
 5000
-25 - valid uses - one while one _ - select while
+29 - valid uses - one while one _ - select while
 while w;
 Select w such that Uses(w, _)
 2
 5000
-26 - valid uses - one while one IDENT - select while
+30 - valid uses - one while one IDENT - select while
 while w;
 Select w such that Uses(w, "x2")
 none
 5000
-27 - valid uses - one if one variable - select if [if]
+31 - valid uses - one if one variable - select if [if]
 if i; variable v;
 Select i such that Uses(i, v)
 4
 5000
-28 - valid uses - one if one variable - select variable
+32 - valid uses - one if one variable - select variable
 if i; variable v;
 Select v such that Uses(i, v)
 x3
 5000
-29 - valid uses - one if one _ - select if
+33 - valid uses - one if one _ - select if
 if i;
 Select i such that Uses(i, _)
 4
 5000
-30 - valid uses - one if one IDENT - select if
+34 - valid uses - one if one IDENT - select if
 if i;
 Select i such that Uses(i, "x1")
 none
 5000
-31 - invalid uses - two variable - select first variable
+35 - invalid uses - two variable - select first variable
 variable v, v1;
 Select v such that Uses(v, v1)
 none
 5000
-32 - invalid uses - two variable - select second variable
+36 - invalid uses - two variable - select second variable
 variable v, v1;
 Select v1 such that Uses(v, v1)
 none
 5000
-33 - invalid uses - two variable - select statement
+37 - invalid uses - two variable - select statement
 variable v, v1; stmt s;
 Select s such that Uses(v, v1)
 none
 5000
-34 - invalid uses - two variable - select variable
+38 - invalid uses - two variable - select variable
 variable v;
 Select v such that Uses(v, v)
 none
 5000
-35 - invalid uses - two variable - select statement
+39 - invalid uses - two variable - select statement
 variable v; stmt s;
 Select s such that Uses(v, v)
 none
 5000
-36 - invalid uses - one variable one _ - select variable
+40 - invalid uses - one variable one _ - select variable
 variable v;
 Select v such that Uses(v, _)
 none
 5000
-37 - invalid uses - one variable one IDENT - select statement
+41 - invalid uses - one variable one IDENT - select statement
 variable v; stmt s;
 Select s such that Uses(v, "x1")
 none
