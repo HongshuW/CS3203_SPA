@@ -14,14 +14,6 @@ using namespace DE;
 
 TEST_CASE("Test pattern extraction")
 {
-
-    SECTION("test empty procedure") {
-        auto programNode = TestDE::Dummies::getTestProgramNode(0);
-        DataModifier dataModifier = DataModifier();
-        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractPatterns();
-        REQUIRE(actual.empty());
-    }
     SECTION("test non-nested procedure") {
         /*
       * procedure2 {
@@ -41,7 +33,8 @@ TEST_CASE("Test pattern extraction")
         shared_ptr<ProcedureNode> procedureNode2 = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode_2, readNode_2, assignNode_2}));
         shared_ptr<ProgramNode> programNode2 = make_shared<ProgramNode>(ProgramNode({procedureNode2}));
 
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode2);
         auto actual = designExtractor.extractPatterns();
 
@@ -91,7 +84,8 @@ TEST_CASE("Test pattern extraction")
         shared_ptr<ProcedureNode> procedureNode3 = make_shared<ProcedureNode>(ProcedureNode("procedure2", {printNode_p3, readNode_p3, ifNode_p3, assignNode3_p3}));
         shared_ptr<ProgramNode> programNode3 = make_shared<ProgramNode>(ProgramNode({procedureNode3}));
 
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode3);
         auto actual = designExtractor.extractPatterns();
 
@@ -140,7 +134,8 @@ TEST_CASE("Test pattern extraction")
         shared_ptr<ProcedureNode> procedureNode5 = make_shared<ProcedureNode>(ProcedureNode("CASE2", {assignNode1_p5, whileNode_p5, assignNode5_p5}));
         shared_ptr<ProgramNode> programNode5 = make_shared<ProgramNode>(ProgramNode({procedureNode5}));
 
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode5);
         auto actual = designExtractor.extractPatterns();
 

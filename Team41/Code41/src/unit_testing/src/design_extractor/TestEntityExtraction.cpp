@@ -17,25 +17,6 @@
 using namespace std;
 using namespace DE;
 TEST_CASE("Test entity extraction") {
-    SECTION("no variable ") {
-        /*
-        * procedure1 {
-        * }
-        */
-        shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {}));
-        shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
-        DataModifier dataModifier = DataModifier();
-        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-
-        auto variables_variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
-        unordered_set<string> variables_variables_expected = unordered_set<string>{};
-        REQUIRE(variables_variables_expected == *variables_variables_actual);
-
-        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
-        unordered_set<string> constants_expected = unordered_set<string>{};
-        REQUIRE(constants_expected == *constants_actual);
-
-    }
     SECTION("simple variable extraction") {
         /*
         * procedure1 {
@@ -52,7 +33,8 @@ TEST_CASE("Test entity extraction") {
         shared_ptr<StmtNode> assignNode = make_shared<AssignNode>(make_shared<VariableNode>("x"), expressionNode);
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode, readNode, assignNode}));
         shared_ptr<ProgramNode> programNode = make_shared<ProgramNode>(ProgramNode({procedureNode}));
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
@@ -102,7 +84,8 @@ TEST_CASE("Test entity extraction") {
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure2", {printNode, readNode, ifNode, readNode3}));
         shared_ptr<ProgramNode> programNode2 = make_shared<ProgramNode>(ProgramNode({procedureNode}));
 
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode2);
         auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
         unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "exprVar"};
@@ -156,7 +139,8 @@ TEST_CASE("Test entity extraction") {
 
         shared_ptr<ProcedureNode> procedureNode = make_shared<ProcedureNode>(ProcedureNode("procedure3", {printNode, readNode, ifNode, readNode3}));
         shared_ptr<ProgramNode> programNode3 = make_shared<ProgramNode>(ProgramNode({procedureNode}));
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode3);
         auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
         unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "baz", "qux", "quux", "haha"};
@@ -235,8 +219,9 @@ TEST_CASE("Test entity extraction") {
         shared_ptr<ProcedureNode> procedureNode2 = make_shared<ProcedureNode>(ProcedureNode("procedure3", {printNodeP2, readNodeP2, ifNodeP2, readNode3P2}));
 
         shared_ptr<ProgramNode> programNode3 = make_shared<ProgramNode>(ProgramNode({procedureNode1, procedureNode2}));
-        DataModifier dataModifier = DataModifier();
-        DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode3);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode3);
         auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
         unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "v1", "v2", "baz", "qux", "quux", "haha"};
         REQUIRE(variables_expected == *variables_actual);

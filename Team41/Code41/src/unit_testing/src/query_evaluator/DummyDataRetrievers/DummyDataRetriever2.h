@@ -27,7 +27,7 @@ public:
      Table getTableByDesignEntity(DesignEntity designEntity) override;
      Table getTableByRelationType(RelationType relationType) override;
      DesignEntity getDesignEntityOfStmt(int stmtNumber) override;
-     explicit DummyDataRetriever2();
+     explicit DummyDataRetriever2(shared_ptr<PKBStorage> pkbStorage);
 };
 
 

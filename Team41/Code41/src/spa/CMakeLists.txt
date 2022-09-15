@@ -33,10 +33,6 @@ add_library(spa ${srcs} ${headers}
         src/pkb/DataRetriever.h
         src/pkb/table/Table.cpp
         src/pkb/table/Table.h
-        src/pkb/EntityManager.cpp
-        src/pkb/EntityManager.h
-        src/pkb/RelationshipManager.cpp
-        src/pkb/RelationshipManager.h
         src/query_evaluator/QueryEvaluator.cpp
         src/query_evaluator/QueryEvaluator.h
         src/query_evaluator/QueryResult.cpp
@@ -149,11 +145,13 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/ExpressionSpecType.h
         src/pkb/table/PatternTable.cpp
         src/pkb/table/PatternTable.h
-        src/pkb/PatternManager.cpp
-        src/pkb/PatternManager.h
         src/query_builder/commons/ExpressionSpecType.h
         src/query_builder/commons/ExprStringTokenizer.cpp
-        src/query_builder/commons/ExprStringTokenizer.h src/spa_manager/SPAManager.cpp src/spa_manager/SPAManager.h)
+        src/query_builder/commons/ExprStringTokenizer.h
+        src/spa_manager/SPAManager.cpp
+        src/spa_manager/SPAManager.h
+        src/pkb/PKBStorage.cpp
+        src/pkb/PKBStorage.h)
 
 
 

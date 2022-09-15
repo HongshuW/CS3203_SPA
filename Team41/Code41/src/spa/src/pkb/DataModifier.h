@@ -9,10 +9,14 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "PKBStorage.h"
+
 using namespace std;
 
 class DataModifier {
 public:
+    explicit DataModifier(shared_ptr<PKBStorage> pkbStorage);
+
     // entities
     void saveProcedures(list<string> procedures);
     void saveStatements(list<vector<string>> statements);
@@ -31,6 +35,9 @@ public:
 
     // pattern
      void savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
+
+private:
+    shared_ptr<PKBStorage> pkbStorage;
 };
 
 #endif //SPA_DATAMODIFIER_H

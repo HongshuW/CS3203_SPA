@@ -3,7 +3,7 @@
 //
 
 #include "DummyDataRetriever.h"
-#include "pkb/EntityManager.h"
+#include "pkb/PKBStorage.h"
 /*
  * procedure p1 {
  * 1 dummyVarA = 1;
@@ -52,7 +52,7 @@ Table DummyDataRetriever::getTableByRelationType(RelationType relationType) {
     return relationTable;
 }
 
-DummyDataRetriever::DummyDataRetriever() {
+DummyDataRetriever::DummyDataRetriever(shared_ptr<PKBStorage> pkbStorage) : DataRetriever(pkbStorage) {
 
 }
 
@@ -87,7 +87,7 @@ Table DummyDataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
         }
         case QB::DesignEntity::STMT: {
             Table stmtTable = Table();
-            stmtTable.renameHeader({EntityManager::STATEMENT_TABLE_COL1_NAME, EntityManager::STATEMENT_TABLE_COL2_NAME});
+            stmtTable.renameHeader({PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::STATEMENT_TABLE_COL2_NAME});
             stmtTable.appendRow({"1", "assign"});
             stmtTable.appendRow({"2", "assign"});
             stmtTable.appendRow({"3", "print"});

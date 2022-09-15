@@ -16,7 +16,8 @@ using namespace TestDE;
 TEST_CASE("Test Parent and Parent* Extraction") {
     SECTION("procedure 5") {
         auto programNode = TestDE::Dummies::getTestProgramNode(4);
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         // Test Parent
@@ -40,7 +41,8 @@ TEST_CASE("Test Parent and Parent* Extraction") {
 
     SECTION("procedure 6") {
         auto programNode = TestDE::Dummies::getTestProgramNode(5);
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         // Test Parent

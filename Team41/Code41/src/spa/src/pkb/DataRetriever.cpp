@@ -3,24 +3,25 @@
 //
 
 #include "DataRetriever.h"
-#include "RelationshipManager.h"
-#include "EntityManager.h"
-#include "PatternManager.h"
+
+DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage) {
+    this->pkbStorage = pkbStorage;
+}
 
 Table DataRetriever::getVariables() {
-    return *EntityManager::getVariables();
+    return *pkbStorage->getVariables();
 }
 
 Table DataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
     switch (designEntity) {
         case DesignEntity::PROCEDURE:
-            return *EntityManager::getProcedures();
+            return *pkbStorage->getProcedures();
         case DesignEntity::STMT:
-            return *EntityManager::getStatements();
+            return *pkbStorage->getStatements();
         case DesignEntity::VARIABLE:
-            return *EntityManager::getVariables();
+            return *pkbStorage->getVariables();
         case DesignEntity::CONSTANT:
-            return *EntityManager::getConstants();
+            return *pkbStorage->getConstants();
         default:
             return Table();
     }
@@ -29,32 +30,32 @@ Table DataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
 Table DataRetriever::getTableByRelationType(RelationType relationType) {
     switch (relationType) {
         case RelationType::FOLLOWS:
-            return *RelationshipManager::getFollows();
+            return *pkbStorage->getFollows();
         case RelationType::FOLLOWS_T:
-            return *RelationshipManager::getFollowsT();
+            return *pkbStorage->getFollowsT();
         case RelationType::PARENT:
-            return *RelationshipManager::getParent();
+            return *pkbStorage->getParent();
         case RelationType::PARENT_T:
-            return *RelationshipManager::getParentT();
+            return *pkbStorage->getParentT();
         case RelationType::MODIFIES_S:
-            return *RelationshipManager::getModifiesS();
+            return *pkbStorage->getModifiesS();
         case RelationType::MODIFIES_P:
-            return *RelationshipManager::getModifiesP();
+            return *pkbStorage->getModifiesP();
         case RelationType::USES_S:
-            return *RelationshipManager::getUsesS();
+            return *pkbStorage->getUsesS();
         case RelationType::USES_P:
-            return *RelationshipManager::getUsesP();
+            return *pkbStorage->getUsesP();
         default:
             return Table();
     }
 }
 
 Table DataRetriever::getTableByPattern(ExpressionSpec expressionSpec) {
-    return *PatternManager::getMatchedPatterns(expressionSpec);
+    return *pkbStorage->getMatchedPatterns(expressionSpec);
 }
 
 DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {
     string stmtNumberString = to_string(stmtNumber);
-    string type = EntityManager::getStmtType(stmtNumberString);
+    string type = pkbStorage->getStmtType(stmtNumberString);
     return getDesignEntity(type);
 }
