@@ -30,9 +30,9 @@ bool ExprNodeParser::equals(string s1, string s2) {
 }
 
 int ExprNodeParser::getPriority(string s) {
-    if (equals("*", s) || equals("/", s)) {
+    if (equals("*", s) || equals("/", s) || equals("%", s)) {
         return 2;
-    } else if (equals("-", s) || equals("+", s) || equals("%", s)) {
+    } else if (equals("-", s) || equals("+", s)) {
         return 1;
     } else {
         // "(" or digit or synonym
