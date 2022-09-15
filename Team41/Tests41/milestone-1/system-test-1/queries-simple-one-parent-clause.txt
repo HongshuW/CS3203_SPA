@@ -38,12 +38,12 @@ stmt s;
 Select s such that Parent(2, 8)
 none
 5000
-10 - valid parent - two numbers, select statement
+9 - valid parent - two numbers, select statement
 stmt s;
 Select s such that Parent(4, 2)
 none
 5000
-25 - valid parent - two numbers out of bounds, select statement returns false
+10 - valid parent - two numbers out of bounds, select statement returns false
 stmt s;
 Select s such that Parent(4, 100)
 none
@@ -58,67 +58,67 @@ stmt s; assign a;
 Select a such that Parent(2, a)
 3, 7
 5000
-12 - valid parent - one number one assign, select assign
+13 - valid parent - one number one assign, select assign
 stmt s; assign a;
 Select a such that Parent(4, a)
 6
 5000
-13 - valid parent - one number one assign, select assign
+14 - valid parent - one number one assign, select assign
 stmt s; assign a;
 Select a such that Parent(2, a)
 3, 7
 5000
-14 - valid parent - one number one call, select call
+15 - valid parent - one number one call, select call
 stmt s; call c;
 Select c such that Parent(2, c)
 none
 5000
-15 - valid parent - one number one print, select print
+16 - valid parent - one number one print, select print
 stmt s; print p;
 Select c such that Parent(2, p)
 none
 5000
-16 - valid parent - one number one read, select read
+17 - valid parent - one number one read, select read
 stmt s; read r;
 Select r such that Parent(2, r)
 none
 5000
-17 - invalid parent - one number one procedure, select procedure
+18 - invalid parent - one number one procedure, select procedure
 stmt s; procedure p;
 Select p such that Parent(2, p)
 none
 5000
-18 - valid parent - one number one if, select if
+19 - valid parent - one number one if, select if
 stmt s; if i;
 Select i such that Parent(2, i)
 4
 5000
-19 - valid parent - one number one while, select while
+20 - valid parent - one number one while, select while
 stmt s; while w;
 Select w such that Parent(2, w)
 none
 5000
-20 - invalid parent - one number one variable, select variable
+21 - invalid parent - one number one variable, select variable
 stmt s; variable v;
 Select s such that Parent(2, v)
 none
 5000
-21 - valid parent - one number one assign, select statement
+22 - valid parent - one number one assign, select statement
 stmt s; assign a;
 Select s such that Parent(a, 4)
 none
 5000
-22 - valid parent - one number one assign, select statement
+23 - valid parent - one number one assign, select statement
 stmt s; assign a;
 Select s such that Parent(a, 3)
 none
 5000
-23 - valid parent - two assign, select statement
+24 - valid parent - two assign, select statement
 assign a, a2;
 Select s such that Parent(a, a2)
 none
 5000
-24 - valid parent - two assign, select statement
+25 - valid parent - two assign, select statement
 assign a, a2;
 Select a such that Parent(a, a2)
 none
@@ -128,43 +128,148 @@ stmt s;
 Select s such that Parent(2, "x7")
 none
 5000
-26 - invalid parent - entRef
+27 - invalid parent - entRef
 stmt s;
 Select s such that Parent(s, "x7")
 none
 5000
-26 - invalid parent - entRef
+28 - invalid parent - entRef
 stmt s;
 Select s such that Parent("x8", s)
 none
 5000
-26 - invalid parent - entRef
+29 - invalid parent - entRef
 stmt s;
 Select s such that Parent("x7", 4)
 none
 5000
-1 - valid parent - one statement one _, select statement
+30 - valid parent - one statement one _, select statement
 stmt s;
 Select s such that Parent(s, _)
 2, 4
 5000
-1 - valid parent - one statement one _, select statement
+31 - valid parent - one statement one _, select statement
 stmt s;
 Select s such that Parent(_, s)
 3, 4, 5, 6, 7
 5000
-2 - valid parent - one number one _, select statement
+32 - valid parent - one number one _, select statement
 stmt s;
 Select s such that Parent(_, 4)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-2 - valid parent - one number one _, select statement
+33 - valid parent - one number one _, select statement
 stmt s;
 Select s such that Parent(2, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-2 - valid parent - two _, select statement
+34 - valid parent - two _, select statement
 stmt s;
 Select s such that Parent(_, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+35 - valid parent* - parent* clause, select statement [start of parent*]
+stmt s;
+Select s such that Parent*(2, s)
+3, 4, 5, 6, 7
+5000
+36 - valid parent* - one statement one number, select statement
+stmt s;
+Select s such that Parent*(s, 4)
+2
+5000
+37 - valid parent* - one statement one number, select statement
+stmt s;
+Select s such that Parent*(s, 6)
+2, 4
+5000
+38 - valid parent* - two statements, select statement
+stmt s;
+Select s such that Parent*(s, s)
+none
+5000
+39 - valid parent* - two statements, select statement
+stmt s, s2;
+Select s such that Parent*(s, s2)
+2, 4
+5000
+40 - valid parent* - two statements, select statement
+stmt s, s2;
+Select s2 such that Parent*(s, s2)
+3, 4, 5, 6, 7
+5000
+41 - valid parent* - two numbers, select statement
+stmt s;
+Select s such that Parent*(4, 4)
+none
+5000
+42 - valid parent* - two numbers select statement
+stmt s;
+Select s such that Parent*(2, 6)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+43 - valid parent* - two numbers, select statement
+stmt s;
+Select s such that Parent*(2, 4)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+44 - valid parent* - two numbers, select statement
+stmt s;
+Select s such that Parent*(4, 2)
+none
+5000
+45 - valid parent* - parent* clause, select statement out of bounds
+stmt s;
+Select s such that Parent*(4, 100)
+none
+5000
+46 - valid parent* - one number one assign, select statement
+stmt s; assign a;
+Select s such that Parent*(8, a)
+none
+5000
+47 - valid parent* - one number one assign, select assign
+stmt s; assign a;
+Select a such that Parent*(2, a)
+3, 6, 7
+5000
+48 - valid parent* - one number one assign, select assign
+stmt s; assign a;
+Select s such that Parent*(2, a)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+49 - valid parent* - one number one call, select call
+stmt s; call c;
+Select c such that Parent*(2, c)
+none
+5000
+50 - valid parent* - one number one print, select print
+stmt s; print p;
+Select p such that Parent*(2, p)
+5
+5000
+51 - valid parent* - one number one read, select read
+stmt s; read r;
+Select r such that Parent*(2, r)
+none
+5000
+52 - invalid parent* - one number one procedure, select procedure
+stmt s; procedure p;
+Select p such that Parent*(2, p)
+none
+5000
+53 - valid parent* - one number one if, select if
+stmt s; if i;
+Select i such that Parent*(2, i)
+4
+5000
+54 - valid parent* - one number one while, select while
+stmt s; while w;
+Select w such that Parent*(2, w)
+none
+5000
+55 - invalid parent* - one number one variable, select variable
+stmt s; variable v;
+Select s such that Parent*(2, v)
+none
 5000
