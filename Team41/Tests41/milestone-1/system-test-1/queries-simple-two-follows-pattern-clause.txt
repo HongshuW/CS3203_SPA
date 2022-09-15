@@ -1,0 +1,77 @@
+1 - valid follows - one number one statement - select statement - valid wildcard pattern
+assign a; stmt s;
+Select s such that Follows(2, s) pattern a(v, _)
+8
+5000
+
+2 - valid follows* - one number one statement - select statement - valid LHS wildcard + RHS exact pattern
+assign a; stmt s;
+Select s such that Follows*(2, s) pattern a(v, "x1 * 2")
+8
+5000
+
+3 - valid follows* - one number one statement - select statement - valid LHS wildcard + RHS exact pattern
+assign a; stmt s;
+Select s such that Follows*(2, s) pattern a(v, "shalala")
+none
+5000
+
+4 - valid follows - one number one statement - valid LHS wildcard + RHS sub-expression pattern
+assign a; stmt s;
+Select s such that Follows(8, s) pattern a(_, _"x1 / 2"_)
+9
+5000
+
+5 - valid follows - one number one statement - valid LHS wildcard + RHS sub-expression pattern
+assign a; stmt s;
+Select s such that Follows(9, s) pattern a(_, _"pineapple + tart"_)
+none
+5000
+
+6 - invalid follows - two same statement - select statement - valid wildcard pattern
+assign a; stmt s;
+Select s such that Follows(s, s) pattern a(v, _)
+none
+5000
+
+7 - invalid follows* - two same variable - select statement - valid LHS wildcard + RHS sub-expression pattern
+assign a; stmt s; variable v;
+Select s such that Follows*(v, v) pattern a(_, _"x + 1"_)
+SyntaxError
+5000
+
+8 - valid follows - one number one statement - select statement - undeclared assignment
+stmt s;
+Select s such that Follows(8, s) pattern a(v, _)
+SyntaxError
+5000
+
+9 - valid follows* - one number one statement - select statement - undeclared assignment
+stmt s;
+Select s such that Follows*(5, s) pattern a(s, _)
+SyntaxError
+5000
+
+10 - valid follows - one number one statement - select statement - invalid pattern 
+assign a; stmt s; print prxnt;
+Select s such that Follows(8, s) pattern a(prxnt, _)
+SyntaxError
+5000
+
+11 - valid follows* - one number one statement - select statement - invalid pattern
+assign a; stmt s;
+Select s such that Follows*(5, s) pattern a(s, _)
+SyntaxError
+5000
+
+12 - invalid follows - both same statement - select statement - invalid pattern 
+assign a; stmt s;
+Select s such that Follows(s, s) pattern a(s, s)
+SyntaxError
+5000
+
+13 - invalid follows* - one variable one statement - select variable - invalid pattern
+assign a; stmt s; variable v;
+Select v such that Follows*(v, s) pattern a(s, s)
+SyntaxError
+5000

@@ -1,0 +1,82 @@
+1 - valid parent - one number one statement, select statement - valid wildcard pattern
+stmt s; assign a; variable v;
+Select s such that Parent(2, s) pattern a(v, _)
+3, 4, 7
+5000
+
+2 - valid parent - one statement one number, select statement - valid wildcard pattern
+assign a; stmt s; variable v;
+Select s such that Parent(s, 4) pattern a(v, _)
+2
+5000
+
+3 - valid parent - one number one assign, select assign - valid sub-expression pattern
+assign a;
+Select a such that Parent(2, a) pattern a(_, _"2 + 10 * 3"_)
+3
+5000
+
+4 - valid parent* - one number one assign, select assign - valid sub-expression pattern
+assign a;
+Select a such that Parent*(2, a) pattern a(_, _"10 * 3"_)
+3
+5000
+
+5 - valid parent* - one number one assign, select assign - valid sub-expression pattern
+assign a;
+Select a such that Parent*(2, a) pattern a(_, _"abc"_)
+none
+5000
+
+6 - valid parent* - one number one assign, select statement - valid wildcard pattern
+stmt s; assign a;
+Select s such that Parent*(2, a) pattern a("x7", _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+7 - valid parent - one _ one statement , select assign - valid exact pattern
+stmt s; assign a;
+Select s such that Parent(_, s) pattern a(_, "x1 + 2")
+2
+5000
+
+8 - valid parent - one _ one statement , select assign - valid exact pattern
+stmt s; assign a;
+Select s such that Parent(_, s) pattern a(_, "zzzzz")
+none
+5000
+
+9 - valid parent - one statement one _, select statement - invalid pattern
+stmt s; assign a;
+Select s such that Parent(s, _) pattern a (s, s)
+SyntaxError
+5000
+
+10 - valid parent* - one statement one _, select statement - sematically invalid pattern
+stmt s; assign a;
+Select s such that Parent*(s, _) pattern a (_, _)
+SemanticError
+5000
+
+11 - invalid parent* - one number one entRef - invalid pattern
+stmt s; assign a;
+Select s such that Parent*(2, "x7") pattern a (s, s)
+SyntaxError
+5000
+
+12 - invalid parent -  one number one entRef - invalid pattern
+stmt s; assign a;
+Select s such that Parent(2, "x7") pattern a (s, ???)
+SyntaxError
+5000
+
+13 - valid parent - one statement one number, select statement - valid wildcard pattern
+stmt s; assign a;
+Select s such that Parent(s, 4) pattern a(v, _)
+2
+5000
+
+14 - valid parent* - one statement one number, select another statement - valid wilcard pattern
+stmt s, s1; assign a;
+Select s1 such that Parent*(s, 4) pattern a(v, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
