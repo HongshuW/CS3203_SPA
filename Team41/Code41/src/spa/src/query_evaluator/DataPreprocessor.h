@@ -21,9 +21,10 @@ namespace QE {
         Table filerTableByDesignEntity(const Table& table, const string& colName, DesignEntity designEntity);
         long getColIndexByColName(vector<string> v, const string& K);
         DesignEntity getDesignEntityOfSyn(Synonym synonym, shared_ptr<vector<Declaration>> declarations);
+        shared_ptr<DataRetriever> dataRetriever;
+
     public:
         explicit DataPreprocessor(shared_ptr<DataRetriever> dataRetriever);
-        shared_ptr<DataRetriever> dataRetriever;
         Table getAllByDesignEntity(DesignEntity designEntity);
         Table getTableByRelation(SuchThatClause suchThatClause);
         Table getTableByPattern(shared_ptr<PatternClause> patternClause);
