@@ -32,7 +32,12 @@ TEST_CASE("Test pattern extraction")
       */
         shared_ptr<StmtNode> printNode_2 = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<StmtNode> readNode_2 = make_shared<ReadNode>(make_shared<VariableNode>("y"));
-        shared_ptr<AssignNode> assignNode_2 = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("y + 1"));
+
+        shared_ptr<ExprNode> exprNode_2 = make_shared<ExprNode>("+");
+        exprNode_2->left = make_shared<ExprNode>("y");
+        exprNode_2->right = make_shared<ExprNode>("1");
+
+        shared_ptr<AssignNode> assignNode_2 = make_shared<AssignNode>(make_shared<VariableNode>("x"), exprNode_2);
         shared_ptr<ProcedureNode> procedureNode2 = make_shared<ProcedureNode>(ProcedureNode("procedure1", {printNode_2, readNode_2, assignNode_2}));
         shared_ptr<ProgramNode> programNode2 = make_shared<ProgramNode>(ProgramNode({procedureNode2}));
 
@@ -62,13 +67,26 @@ TEST_CASE("Test pattern extraction")
 
         shared_ptr<CondExprNode> ifCondExpr_p3 = make_shared<CondExprNode>("bar == y + 112312341234");
         shared_ptr<StmtNode> printNode2_p3 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
-        shared_ptr<AssignNode> assignNode2_p3 = make_shared<AssignNode>(make_shared<VariableNode>("w"), make_shared<ExprNode>("x + 3"));
-        shared_ptr<AssignNode> assignNode_p3 = make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("y + 1"));
+
+        shared_ptr<ExprNode> exprNode_1 = make_shared<ExprNode>("+");
+        exprNode_1->left = make_shared<ExprNode>("x");
+        exprNode_1->right = make_shared<ExprNode>("3");
+
+        shared_ptr<ExprNode> exprNode_2 = make_shared<ExprNode>("+");
+        exprNode_2->left = make_shared<ExprNode>("y");
+        exprNode_2->right = make_shared<ExprNode>("1");
+
+        shared_ptr<AssignNode> assignNode2_p3 = make_shared<AssignNode>(make_shared<VariableNode>("w"), exprNode_1);
+        shared_ptr<AssignNode> assignNode_p3 = make_shared<AssignNode>(make_shared<VariableNode>("x"), exprNode_2);
         vector<shared_ptr<StmtNode>> ifStmtList_p3 = {assignNode_p3, printNode2_p3};
         vector<shared_ptr<StmtNode>> elseStmtList_p3 = {assignNode2_p3};
         shared_ptr<StmtNode> ifNode_p3 = make_shared<IfNode>(ifCondExpr_p3, ifStmtList_p3, elseStmtList_p3);
 
-        shared_ptr<AssignNode> assignNode3_p3 = make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("w + 1"));
+        shared_ptr<ExprNode> exprNode_3 = make_shared<ExprNode>("+");
+        exprNode_3->left = make_shared<ExprNode>("w");
+        exprNode_3->right = make_shared<ExprNode>("1");
+
+        shared_ptr<AssignNode> assignNode3_p3 = make_shared<AssignNode>(make_shared<VariableNode>("y"), exprNode_3);
 
         shared_ptr<ProcedureNode> procedureNode3 = make_shared<ProcedureNode>(ProcedureNode("procedure2", {printNode_p3, readNode_p3, ifNode_p3, assignNode3_p3}));
         shared_ptr<ProgramNode> programNode3 = make_shared<ProgramNode>(ProgramNode({procedureNode3}));
