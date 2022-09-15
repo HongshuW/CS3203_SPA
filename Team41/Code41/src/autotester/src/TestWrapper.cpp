@@ -28,48 +28,25 @@ volatile bool AbstractWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
     // create any objects here as instance variables of this class
     // as well as any initialization required for your spa program
-    this->pkbStorage = PKBStorage();
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
     // call your parser to do the parsing
     // ...rest of your code...
-    auto astBuilder = ASTBuilder();
-    shared_ptr<ProgramNode> programNode = astBuilder.buildAST(filename);
-    DataModifier dataModifier = DataModifier(make_shared<PKBStorage>(this->pkbStorage));
-    DE::DesignExtractor designExtractor = DE::DesignExtractor(dataModifier, programNode);
-    designExtractor.run();
+    shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+    spaManager = make_shared<SPAManager>(pkbStorage);
+    spaManager->parse(filename);
 }
 
 // method to evaluating a query
 void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
     // ...code to evaluate query...
-    try {
-        auto queryObj = QueryBuilder().buildPQLQuery(query);
-        auto dataRetriever = make_shared<DataRetriever>(DataRetriever(make_shared<PKBStorage>(this->pkbStorage)));
-        shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(DataPreprocessor(dataRetriever));
-        auto queryResult = QueryEvaluator(dataPreprocessor).evaluate(queryObj);
-        auto resultFormatter = QueryResultFormatter(queryResult);
-        auto ans = resultFormatter.formatResult();
-        for (const auto& element: ans) {
-            results.push_back(element);
-        }
-    } catch (const PQLTokenizeException& e) {
-        string errorMessage = "SyntaxError";
-//      errorMessage += e.what();
-//        results.push_back(errorMessage);
-    } catch (const PQLParseException& e) {
-        string errorMessage = "SyntaxError";
-//      errorMessage += e.what();
-//        results.push_back(errorMessage);
-    } catch (const PQLValidationException& e) {
-        string errorMessage = "SemanticError";
-//      errorMessage += e.what();
-//        results.push_back(errorMessage);
+    vector<string> queryResults = spaManager->evaluate(query);
+    for (const auto& result: queryResults) {
+        results.push_back(result);
     }
-
     // store the answers to the query in the results list (it is initially empty)
     // each result must be a string.
 }

@@ -8,17 +8,29 @@
 #include "pkb/DataModifier.h"
 #include "pkb/DataRetriever.h"
 #include "pkb/PKBStorage.h"
+#include "design_extractor/DesignExtractor.h"
+#include "parser/ASTBuilder.h"
+#include "parser/SPExceptions.h"
+#include "query_builder/QueryBuilder.h"
+#include "query_builder/exceptions/Exceptions.h"
+#include "query_evaluator/DataPreprocessor.h"
+#include "query_evaluator/QueryEvaluator.h"
+#include "query_evaluator/QueryResultFormatter.h"
 #include <memory>
+#include <stdlib.h>
 
+using namespace SourceParser;
+using namespace DE;
+using namespace QE;
 
 class SPAManager {
     //! Entry point of the program, each program should have one SPAManager
 private:
-    PKBStorage pkbStorage;
+    shared_ptr<PKBStorage> pkbStorage;
     shared_ptr<DataModifier> dataModifier;
     shared_ptr<DataRetriever> dataRetriever;
 public:
-    explicit SPAManager();
+    explicit SPAManager(shared_ptr<PKBStorage> pkbStorage);
 
     //! To parse source program
     void parse(string& filename);

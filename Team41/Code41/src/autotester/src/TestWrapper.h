@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include "spa_manager/SPAManager.h"
 
 // include your other headers here
 #include "AbstractWrapper.h"
@@ -24,7 +25,7 @@ public:
     virtual void evaluate(std::string query, std::list<std::string>& results);
 
 private:
-    PKBStorage pkbStorage;
+    shared_ptr<SPAManager> spaManager;
 };
 
 #endif
