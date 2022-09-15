@@ -22,7 +22,8 @@ using namespace DE;
 TEST_CASE("Test FollowsStar Extractor") {
     SECTION("test empty procedure") {
         auto programNode = TestDE::Dummies::getTestProgramNode(0);
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::FOLLOWS_T);
         REQUIRE(actual->empty());
@@ -30,7 +31,8 @@ TEST_CASE("Test FollowsStar Extractor") {
 
     SECTION("test non-nested procedure") {
         auto programNode = TestDE::Dummies::getTestProgramNode(1);
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::FOLLOWS_T);
         vector<vector<string>> expected = {{"1", "2"}, {"1", "3"}, {"2", "3"}};
@@ -41,7 +43,8 @@ TEST_CASE("Test FollowsStar Extractor") {
 
     SECTION("test singly-nested procedure") {
         auto programNode = TestDE::Dummies::getTestProgramNode(2);
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::FOLLOWS_T);
         vector<vector<string>> expected = { {"1", "2"}, {"1", "3"}, {"1", "7"}, {"2", "3"}, {"2", "7"},
@@ -53,7 +56,8 @@ TEST_CASE("Test FollowsStar Extractor") {
 
     SECTION("test doubly-nested procedure") {
         auto programNode = TestDE::Dummies::getTestProgramNode(3);
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::FOLLOWS_T);
         vector<vector<string>> expected = { {"1", "2"}, {"1", "3"}, {"1", "9"}, {"2", "3"}, {"2", "9"},

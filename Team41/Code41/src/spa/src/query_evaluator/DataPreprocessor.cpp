@@ -96,7 +96,7 @@ namespace QE {
         }
 
         //assign, call, print, if, while , read
-        return this->filerTableByDesignEntity(this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT), EntityManager::STATEMENT_TABLE_COL1_NAME, designEntity);
+        return this->filerTableByDesignEntity(this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT), PKBStorage::STATEMENT_TABLE_COL1_NAME, designEntity);
     }
 
     Table DataPreprocessor::getTableByPattern(shared_ptr<PatternClause> patternClause) {

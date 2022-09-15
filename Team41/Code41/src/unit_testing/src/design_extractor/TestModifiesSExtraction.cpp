@@ -8,6 +8,7 @@
 #include "Dummies.h"
 #include <unordered_map>
 #include "pkb/DataModifier.h"
+#include "pkb/PKBStorage.h"
 
 using namespace std;
 using namespace DE;
@@ -15,7 +16,8 @@ using namespace DE;
 TEST_CASE("Test ModifiesS Extraction") {
     SECTION("procedure 5") {
         auto programNode = TestDE::Dummies::getTestProgramNode(4);
-        DataModifier dataModifier = DataModifier();
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         // Test ModifiesS

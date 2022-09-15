@@ -9,11 +9,13 @@
 #include "pkb/table/Table.h"
 
 class DummyDataRetriever : public DataRetriever {
+    shared_ptr<PKBStorage> pkbStorage;
+
 public:
     Table getTableByRelationType(QB::RelationType relationType) override;
     Table getTableByDesignEntity(DesignEntity designEntity) override;
     DesignEntity getDesignEntityOfStmt(int line_no) override;
-    DummyDataRetriever();
+    DummyDataRetriever(shared_ptr<PKBStorage> pkbStorage);
 };
 
 

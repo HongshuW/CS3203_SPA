@@ -28,7 +28,7 @@ PKBStorage::PKBStorage() {
     followsTable = FollowsTable();
     followsTTable = FollowsTable();
     parentTable = ParentTable();
-    parentTable = ParentTable();
+    parentTTable = ParentTable();
     usesSTable = UsesTable();
     usesPTable = UsesTable();
     modifiesSTable = ModifiesTable();

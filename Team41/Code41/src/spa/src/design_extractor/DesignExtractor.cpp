@@ -36,15 +36,15 @@ void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
 
     switch (designEntity) {
         case QB::DesignEntity::VARIABLE: {
-            this->dataModifier.saveVariables(entityResultList);
+            this->dataModifier->saveVariables(entityResultList);
             break;
         }
         case QB::DesignEntity::CONSTANT: {
-            this->dataModifier.saveConstants(entityResultList);
+            this->dataModifier->saveConstants(entityResultList);
             break;
         }
         case QB::DesignEntity::PROCEDURE: {
-            this->dataModifier.saveProcedures(entityResultList);
+            this->dataModifier->saveProcedures(entityResultList);
             break;
         }
         default: {
@@ -59,27 +59,27 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
     while (iterator != relations.end()) {
         switch (relationType) {
             case RelationType::PARENT: {
-                this->dataModifier.saveParent(*iterator);
+                this->dataModifier->saveParent(*iterator);
                 break;
             }
             case RelationType::PARENT_T: {
-                this->dataModifier.saveParentT(*iterator);
+                this->dataModifier->saveParentT(*iterator);
                 break;
             }
             case RelationType::FOLLOWS: {
-                this->dataModifier.saveFollows(*iterator);
+                this->dataModifier->saveFollows(*iterator);
                 break;
             }
             case RelationType::FOLLOWS_T: {
-                this->dataModifier.saveFollowsT(*iterator);
+                this->dataModifier->saveFollowsT(*iterator);
                 break;
             }
             case RelationType::MODIFIES_S: {
-                this->dataModifier.saveModifiesS(*iterator);
+                this->dataModifier->saveModifiesS(*iterator);
                 break;
             }
             case RelationType::USES_S: {
-                this->dataModifier.saveUsesS(*iterator);
+                this->dataModifier->saveUsesS(*iterator);
                 break;
             }
             default:
@@ -89,7 +89,8 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
     }
 }
 
-DesignExtractor::DesignExtractor(DataModifier, shared_ptr<ProgramNode> programNode) : dataModifier(dataModifier), programNode(programNode) {
+DesignExtractor::DesignExtractor(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
+        : dataModifier(dataModifier), programNode(programNode) {
 
 }
 
@@ -157,7 +158,7 @@ void DesignExtractor::run() {
         vector<string> stmtPair = {to_string(myPair.second), getDesignEntityString(ASTUtils::getStmtNodeDesignEntity(node))};
         it = payload.insert(it, stmtPair);
     }
-    this->dataModifier.saveStatements(payload);
+    this->dataModifier->saveStatements(payload);
 
     //save relations
     auto relationsToSave = vector<RelationType>{RelationType::PARENT, RelationType::PARENT_T, RelationType::FOLLOWS, RelationType::FOLLOWS_T, RelationType::USES_S, RelationType::MODIFIES_S};
@@ -179,7 +180,7 @@ void DesignExtractor::savePatternsToPKB() {
         string lineNumStr = to_string(resultRow.first.first);
         string varName = resultRow.first.second;
         auto exprNode = resultRow.second->expressionNode;
-        this->dataModifier.savePattern({lineNumStr, varName}, exprNode);
+        this->dataModifier->savePattern({lineNumStr, varName}, exprNode);
     }
 }
 

@@ -139,6 +139,6 @@ DesignEntity DummyDataRetriever2::getDesignEntityOfStmt(int stmtNumber) {
     return de;
 }
 
-DummyDataRetriever2::DummyDataRetriever2() {
+DummyDataRetriever2::DummyDataRetriever2(shared_ptr<PKBStorage> pkbStorage) : DataRetriever(pkbStorage) {
 
 }

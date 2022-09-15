@@ -10,8 +10,8 @@
 #include "query_evaluator/QEUtils.h"
 #include "Dummies/DummyQueries.h"
 TEST_CASE("Test Data Preprocessor") {
-    //todo: replace fakeDR withh dummyDR
-    shared_ptr<DummyDataRetriever> dummyDataRetriever = make_shared<DummyDataRetriever>();
+    shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+    shared_ptr<DummyDataRetriever> dummyDataRetriever = make_shared<DummyDataRetriever>(pkbStorage);
     shared_ptr<QE::DataPreprocessor> dataPreprocessor = make_shared<QE::DataPreprocessor>(QE::DataPreprocessor(dummyDataRetriever));
 /*
  * procedure p1 {
@@ -153,8 +153,8 @@ TEST_CASE("Test Data Preprocessor") {
                 ->build();
         REQUIRE(actual.isEqual(expected) == true);
     }
-
-    shared_ptr<DummyDataRetriever2> dummyDataRetriever2 = make_shared<DummyDataRetriever2>();
+    shared_ptr<PKBStorage> pkbStorage2 = make_shared<PKBStorage>();
+    shared_ptr<DummyDataRetriever2> dummyDataRetriever2 = make_shared<DummyDataRetriever2>(pkbStorage2);
     shared_ptr<QE::DataPreprocessor> dataPreprocessor2 = make_shared<QE::DataPreprocessor>(QE::DataPreprocessor(dummyDataRetriever2));
 
     SECTION("Test dummy retriever 2: assign a1, a2, get table such that follows(a1, a2)") {
