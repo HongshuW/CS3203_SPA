@@ -16,6 +16,9 @@ query_suffix=-clause.txt
 output_prefix=deep-nesting-
 output_suffix=-clause-out.xml
 
+#check if the directory exist and make one if not
+ [ ! -d "../m1-out/" ] && mkdir ../m1-out
+
 types=("no" "one-follows" "one-parent" "one-uses" "one-pattern" "one-modifies")
 
 for type in "${types[@]}"
