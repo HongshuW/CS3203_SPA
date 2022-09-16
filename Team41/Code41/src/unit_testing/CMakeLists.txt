@@ -8,8 +8,7 @@ add_executable(unit_testing ${srcs}
     src/parser/TestTokenizer.cpp
     src/parser/TestParser.cpp
     src/pkb/TestTable.cpp
-    src/pkb/TestEntityManager.cpp
-    src/pkb/TestDataRetriever.cpp
+        src/pkb/TestDataRetriever.cpp
     src/pkb/TestDataModifier.cpp
         src/query_evaluator/TestQueryResultFormatter.cpp
     src/query_evaluator/Dummies/DummyQueryBuilder.cpp
@@ -24,15 +23,13 @@ add_executable(unit_testing ${srcs}
     src/query_evaluator/DummyDataRetrievers/DummyDataRetriever.h
     src/AST/utils/TestASTUtils.cpp
     src/parser/TestParser.cpp
-    src/pkb/TestRelationshipManager.cpp
-    src/design_extractor/TestEntityExtraction.cpp
+        src/design_extractor/TestEntityExtraction.cpp
     src/design_extractor/Dummies.cpp
     src/design_extractor/Dummies.h
     src/design_extractor/TestFollowsExtraction.cpp
     src/design_extractor/TestFollowsStarExtraction.cpp
     src/design_extractor/TestParentExtraction.cpp
-    src/pkb/TestRelationshipManager.cpp
-    src/parser/TestExprNodeParser.cpp
+        src/parser/TestExprNodeParser.cpp
     src/design_extractor/TestUsesSExtration.cpp
     src/design_extractor/DEUtils.cpp
     src/design_extractor/DEUtils.h
@@ -55,6 +52,6 @@ add_executable(unit_testing ${srcs}
         src/parser/TestCondExprParser.cpp
         src/utils/TestUtils.cpp
         src/design_extractor/TestPatternExtraction.cpp
-        src/query_builder/TestExprStringTokenizer.cpp src/pkb/TestPatternManager.cpp)
+        src/query_builder/TestExprStringTokenizer.cpp src/pkb/TestPKBStorage.cpp)
 
 target_link_libraries(unit_testing spa)
