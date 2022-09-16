@@ -1,5 +1,6 @@
 
-procedure             simpleProcedure
+procedure
+              simpleProcedure
 
 {
             read
