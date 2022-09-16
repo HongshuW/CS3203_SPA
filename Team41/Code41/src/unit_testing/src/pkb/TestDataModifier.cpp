@@ -15,6 +15,7 @@ TEST_CASE("Test Data Modifier") {
     SECTION ("Save variables") {
         list<string> variables{"dummyVarX", "dummyVarY", "dummyVarZ"};
 
+        int initialSize = pkbStorage->getVariables()->rows.size();
         dataModifier.saveVariables(variables);
         VariableTable * variableTable = pkbStorage->getVariables();
 
@@ -22,9 +23,9 @@ TEST_CASE("Test Data Modifier") {
         REQUIRE(variableTable->header[0] == "$variable_name");
 
         // check variables are added
-        REQUIRE(variableTable->rows[0][0] == "dummyVarX");
-        REQUIRE(variableTable->rows[1][0] == "dummyVarY");
-        REQUIRE(variableTable->rows[2][0] == "dummyVarZ");
+        REQUIRE(variableTable->rows[initialSize][0] == "dummyVarX");
+        REQUIRE(variableTable->rows[initialSize + 1][0] == "dummyVarY");
+        REQUIRE(variableTable->rows[initialSize + 2][0] == "dummyVarZ");
     }
 
     SECTION ("Save statements") {
@@ -34,6 +35,7 @@ TEST_CASE("Test Data Modifier") {
         statements.push_back(s1);
         statements.push_back(s2);
 
+        int initialSize = pkbStorage->getStatements()->rows.size();
         dataModifier.saveStatements(statements);
         StatementTable * statementTable = pkbStorage->getStatements();
 
@@ -42,10 +44,10 @@ TEST_CASE("Test Data Modifier") {
         REQUIRE(statementTable->header[1] == "$statement_type");
 
         // check statements are added
-        REQUIRE(statementTable->rows[0][0] == "3");
-        REQUIRE(statementTable->rows[0][1] == "assign");
-        REQUIRE(statementTable->rows[1][0] == "4");
-        REQUIRE(statementTable->rows[1][1] == "if");
+        REQUIRE(statementTable->rows[initialSize][0] == "3");
+        REQUIRE(statementTable->rows[initialSize][1] == "assign");
+        REQUIRE(statementTable->rows[initialSize + 1][0] == "4");
+        REQUIRE(statementTable->rows[initialSize + 1][1] == "if");
     }
 
     SECTION ("Save parentT") {
