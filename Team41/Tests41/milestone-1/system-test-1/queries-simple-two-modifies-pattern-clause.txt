@@ -3,67 +3,56 @@ assign a; variable v;
 Select v such that Modifies(a, v) pattern a (v, _)
 x3, x6, x7, x8, x9
 5000
-
 2 - valid modifies - one assign one variable - select assign - valid LHS wildcard + RHS sub-expression pattern
 assign a; variable v;
 Select a such that Modifies(a, v) pattern a (_, _"x1 / 2"_)
 9
 5000
-
 3 - valid modifies - one assign one variable - select assign - valid LHS wildcard + RHS sub-expression pattern
 assign a; variable v;
 Select a such that Modifies(a, v) pattern a (_, _"strawberry + shortcake"_)
 none
 5000
-
 4 - valid modifies - one assign one IDENT - select assign - valid LHS constant variable + RHS wildcard pattern
 assign a;
 Select a such that Modifies(a, "x6") pattern a ("x6", _)
 6
 5000
-
 5 - valid modifies - one assign one _ - select assign - valid LHS wildcard + RHS exact match pattern
 assign a;
 Select a such that Modifies(a, _) pattern a (_, "x1 + 2")
 7
 5000
-
 6 - valid modifies - one assign one _ - select assign - valid LHS wildcard + RHS exact match pattern
 assign a;
 Select a such that Modifies(a, _) pattern a (_, "lalala")
 none
 5000
-
 7 - valid modifies - one assign one IDENT - select assign - invalid pattern
 assign a; variable v;
 Select a such that Modifies(a, "x6") pattern a(v, v)
 SyntaxError
 5000
-
 8 - invalid modifies - two variable - select first variable - vaild wildcard pattern
 variable v, v1; assign a;
 Select v such that Modifies(v, v1) pattern a (v, _)
 SyntaxError
 5000
-
 9 - invalid modifies - two variable - select second variable - valid LHS constant variable + RHS wildcard pattern
 variable v, v1; assign a;
 Select v1 such that Modifies(v, v1) pattern a ("x6", _)
 SyntaxError
 5000
-
 10 - invalid modifies - one variable one IDENT - select statement - sematically invalid pattern
-variable v; stmt s;
+variable v; stmt s; assign a;
 Select s such that Modifies(v, "x1") pattern a (_, _)
 SemanticError
 5000
-
 11 - valid modifies - one read one variable - select variable - valid pattern
 read r; variable v; assign a;
 Select v such that Modifies(r, v) pattern a(v, _)
 none
 5000
-
 12 - valid modifies - one number one _ - select statement - valid pattern
 stmt s; assign a; variable v;
 Select s such that Modifies(7, _) pattern a(v, _)
