@@ -14,8 +14,10 @@ void SPAManager::parse(string &filename) {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         designExtractor.run();
     } catch (const SPTokenizeException& e) {
+        throw e;
         exit(EXIT_FAILURE);
     } catch (const SPParseException& e) {
+        throw e;
         exit(EXIT_FAILURE);
     }
 }

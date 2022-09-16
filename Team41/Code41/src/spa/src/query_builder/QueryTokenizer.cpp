@@ -47,7 +47,9 @@ void QueryTokenizer::processString() {
     tokens.push_back("\"");
     curr = "";
     while (peek() != '"') {
-        curr += pop();
+        char c = pop();
+        if (isspace(c)) continue;
+        curr += c;
     }
     tokens.push_back(curr);
     tokens.push_back("\"");
