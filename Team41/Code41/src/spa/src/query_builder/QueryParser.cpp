@@ -127,7 +127,6 @@ bool QueryParser::parseSuchThatClause() {
 }
 
 ExpressionSpec QueryParser::parseExpressionSpec() {
-    //TODO: need to convert "x+y+z" to vector of string in the future
     vector<string> expr;
     if (match("\"")) {
         //! Full match

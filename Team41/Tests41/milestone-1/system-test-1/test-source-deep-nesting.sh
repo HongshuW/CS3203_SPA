@@ -8,19 +8,18 @@ filesPath=./
 # where do you want the output to be located, remember to put analysis.xsl under this path
 outputPath=../m1-out/
 
-source=source-simple.txt
+source=source-deep-nesting.txt
 
-query_prefix=queries-simple-
+query_prefix=queries-deep-nesting-
 query_suffix=-clause.txt
 
-output_prefix=simle-
+output_prefix=deep-nesting-
 output_suffix=-clause-out.xml
 
 #check if the directory exist and make one if not
-[ ! -d "../m1-out/" ] && mkdir ../m1-out
+ [ ! -d "../m1-out/" ] && mkdir ../m1-out
 
-types=("no" "one-follows" "one-parent" "one-uses" "two-follows-pattern"
-"two-modifies-pattern" "two-parent-pattern" "two-uses-pattern")
+types=("no" "one-follows" "one-parent" "one-uses" "one-pattern" "one-modifies")
 
 for type in "${types[@]}"
 do
