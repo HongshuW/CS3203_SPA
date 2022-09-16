@@ -50,11 +50,11 @@ none
 5000
 9 - valid modifies - one procedure one _ - select procedure
 procedure p;
-Select s such that Modifies(p, _)
+Select p such that Modifies(p, _)
 none
 5000
 10 - valid modifies - one procedure one IDENT - select statement
-procedure p;
+procedure p; stmt s;
 Select s such that Modifies(p, "x1")
 none
 5000
@@ -118,22 +118,22 @@ read r;
 Select r such that Modifies(r, "x2")
 none
 5000
-23 - invalid modifies - one print one variable - select print [print]
+23 - valid modifies but always returns false - one print one variable - select print [print]
 print p; variable v;
 Select p such that Modifies(p, v)
 none
 5000
-24 - invalid modifies - one print one variable - select variable
+24 - valid modifies but always returns false - one print one variable - select variable
 print p; variable v;
 Select v such that Modifies(p, v)
 none
 5000
-25 - invalid modifies - one print one _ - select print
+25 - valid modifies but always returns false - one print one _ - select print
 print p;
 Select p such that Modifies(p, _)
 none
 5000
-26 - invalid modifies - one print one IDENT - select print
+26 - valid modifies but always returns false - one print one IDENT - select print
 print p;
 Select p such that Modifies(p, "x2")
 none
@@ -181,35 +181,35 @@ none
 35 - invalid modifies - two variable - select first variable
 variable v, v1;
 Select v such that Modifies(v, v1)
-none
+SemanticError
 5000
 36 - invalid modifies - two variable - select second variable
 variable v, v1;
 Select v1 such that Modifies(v, v1)
-none
+SemanticError
 5000
 37 - invalid modifies - two variable - select statement
 variable v, v1; stmt s;
 Select s such that Modifies(v, v1)
-none
+SemanticError
 5000
 38 - invalid modifies - two variable - select variable
 variable v;
 Select v such that Modifies(v, v)
-none
+SemanticError
 5000
 39 - invalid modifies - two variable - select statement
 variable v; stmt s;
 Select s such that Modifies(v, v)
-none
+SemanticError
 5000
 40 - invalid modifies - one variable one _ - select variable
 variable v;
 Select v such that Modifies(v, _)
-none
+SemanticError
 5000
 41 - invalid modifies - one variable one IDENT - select statement
 variable v; stmt s;
 Select s such that Modifies(v, "x1")
-none
+SemanticError
 5000

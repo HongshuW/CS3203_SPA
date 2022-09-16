@@ -44,12 +44,12 @@ Select v such that Uses(p, v)
 none
 5000
 9 - valid uses - one procedure one _ - select procedure
-procedure p;
+procedure p; stmt s;
 Select s such that Uses(p, _)
 none
 5000
 10 - valid uses - one procedure one IDENT - select statement
-procedure p;
+procedure p; stmt s;
 Select s such that Uses(p, "x1")
 none
 5000
@@ -176,35 +176,35 @@ Select i such that Uses(i, "x1")
 35 - invalid uses - two variable - select first variable
 variable v, v1;
 Select v such that Uses(v, v1)
-none
+SemanticError
 5000
 36 - invalid uses - two variable - select second variable
 variable v, v1;
 Select v1 such that Uses(v, v1)
-none
+SemanticError
 5000
 37 - invalid uses - two variable - select statement
 variable v, v1; stmt s;
 Select s such that Uses(v, v1)
-none
+SemanticError
 5000
 38 - invalid uses - two variable - select variable
 variable v;
 Select v such that Uses(v, v)
-none
+SemanticError
 5000
 39 - invalid uses - two variable - select statement
 variable v; stmt s;
 Select s such that Uses(v, v)
-none
+SemanticError
 5000
 40 - invalid uses - one variable one _ - select variable
 variable v;
 Select v such that Uses(v, _)
-none
+SemanticError
 5000
 41 - invalid uses - one variable one IDENT - select statement
 variable v; stmt s;
 Select s such that Uses(v, "x1")
-none
+SemanticError
 5000

@@ -16,7 +16,8 @@ query_suffix=-clause.txt
 output_prefix=simle-
 output_suffix=-clause-out.xml
 
-types=("no" "one-follows" "one-parent" "one-uses")
+types=("no")
+#types=("no" "one-follows" "one-parent" "one-uses" "one-modifies")
 
 for type in "${types[@]}"
 do
@@ -24,7 +25,7 @@ do
 done
 
 #open browser to view result, can comment out
-cd $outputPath
-open http://localhost:8000
-python -m http.server 8000
+#cd $outputPath
+#open http://localhost:8000
+#python -m http.server 8000
 

@@ -56,50 +56,50 @@ Select a551gn
 12 - invalid syntax - no clause, name starts with digit
 assign a551gn;
 Select 4551gn
-none
+SyntaxError
 5000
 13 - invalid syntax - no clause, name contains invalid character
 variable v@r
 Select v@r
-none
+SyntaxError
 5000
 14 - invalid syntax - no clause, name starts with invalid character
 if _;
 Select _
-none
+SyntaxError
 5000
 15 - invalid syntax - no clause, missing ;
 if i
 Select i
-none
+SyntaxError
 5000
 16 - invalid syntax - no clause, extra ; in declaration
 while wh;;
 Select wh
-none
+SyntaxError
 5000
 17 - invalid syntax - no clause, extra ; in select
 constant c
 Select c;
-none
+SyntaxError
 5000
 18 - invalid syntax - no clause, capital letter in declaration
 While wh;
 Select wh
-none
+SyntaxError
 5000
 19 - invalid syntax - no clause, no capital letter in select
 constant c
 select c;
-none
+SyntaxError
 5000
 20 - invalid syntax - no clause, capital letter in declaration
 assIGN assign;
 Select assign
-none
+SyntaxError
 5000
 21 - invalid syntax - no clause, additional capital letter in select
 constant c
 SElect c;
-none
+SyntaxError
 5000

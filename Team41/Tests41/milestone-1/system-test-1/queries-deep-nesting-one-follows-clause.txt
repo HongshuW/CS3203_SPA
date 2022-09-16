@@ -75,7 +75,7 @@ none
 5000
 16 - valid follows - one number one print, select print
 stmt s; print p;
-Select c such that Follows(1, p)
+Select p such that Follows(1, p)
 none
 5000
 17 - valid follows - one number one read, select read
@@ -86,7 +86,7 @@ none
 18 - invalid follows - one number one procedure, select procedure
 stmt s; procedure p;
 Select p such that Follows(1, p)
-none
+SemanticError
 5000
 19 - valid follows - one number one if, select if
 stmt s; if i;
@@ -101,7 +101,7 @@ Select w such that Follows(6, w)
 21 - invalid follows - one number one variable, select variable
 stmt s; variable v;
 Select s such that Follows(1, v)
-none
+SemanticError
 5000
 22 - valid follows - one number one assign, select statement
 stmt s; assign a;
@@ -126,22 +126,22 @@ Select a such that Follows(a, a2)
 26 - invalid follows - entRef
 stmt s;
 Select s such that Follows(2, "x7")
-none
+SemanticError
 5000
 27 - invalid follows - entRef
 stmt s;
 Select s such that Follows(s, "x7")
-none
+SemanticError
 5000
 28 - invalid follows - entRef
 stmt s;
 Select s such that Follows("x8", s)
-none
+SemanticError
 5000
 29 - invalid follows - entRef
 stmt s;
 Select s such that Follows("x7", 4)
-none
+SemanticError
 5000
 30 - valid follows - one statement one _, select statement
 stmt s;
@@ -251,7 +251,7 @@ none
 51 - invalid follows* - one number one procedure, select procedure
 stmt s; procedure p;
 Select p such that Follows*(1, p)
-none
+SemanticError
 5000
 52 - valid follows* - one number one if, select if
 stmt s; if i;
@@ -266,7 +266,7 @@ none
 54 - invalid follows* - one number one variable, select variable
 stmt s; variable v;
 Select s such that Follows*(1, v)
-none
+SemanticError
 5000
 55 - valid follows* - one number one assign, select statement
 stmt s; assign a;
@@ -279,9 +279,9 @@ Select s such that Follows*(a, 3)
 none
 5000
 57 - valid follows* - two assign, select statement
-assign a, a2;
+assign a, a2; stmt s;
 Select s such that Follows*(a, a2)
-none
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 58 - valid follows* - two assign, select statement
 assign a, a2;
@@ -291,22 +291,22 @@ Select a such that Follows*(a, a2)
 59 - invalid follows* - entRef
 stmt s;
 Select s such that Follows*(2, "x7")
-none
+SemanticError
 5000
 60 - invalid follows* - entRef
 stmt s;
 Select s such that Follows*(s, "x7")
-none
+SemanticError
 5000
 61 - invalid follows* - entRef
 stmt s;
 Select s such that Follows*("x8", s)
-none
+SemanticError
 5000
 62 - invalid follows* - entRef
 stmt s;
 Select s such that Follows*("x7", 4)
-none
+SemanticError
 5000
 63 - valid follows* - one statement one _, select statement
 stmt s;

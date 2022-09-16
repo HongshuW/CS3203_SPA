@@ -3,10 +3,10 @@ assign a; variable v;
 Select a pattern a(v, _)
 5, 6, 9, 17, 19, 20, 24, 25, 27, 28
 5000
-2 - valid pattern - LHS variable RHS IDEN - select assign
+2 - invalid pattern - LHS variable RHS IDEN - select assign
 assign a; variable v;
 Select a pattern a(v, "x1 != 25")
-none
+SyntaxError
 5000
 3 - valid pattern - LHS variable RHS IDEN - select assign
 assign a; variable v;

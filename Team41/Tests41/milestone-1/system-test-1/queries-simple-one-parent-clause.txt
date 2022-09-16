@@ -75,7 +75,7 @@ none
 5000
 16 - valid parent - one number one print, select print
 stmt s; print p;
-Select c such that Parent(2, p)
+Select p such that Parent(2, p)
 none
 5000
 17 - valid parent - one number one read, select read
@@ -86,7 +86,7 @@ none
 18 - invalid parent - one number one procedure, select procedure
 stmt s; procedure p;
 Select p such that Parent(2, p)
-none
+SemanticError
 5000
 19 - valid parent - one number one if, select if
 stmt s; if i;
@@ -101,7 +101,7 @@ none
 21 - invalid parent - one number one variable, select variable
 stmt s; variable v;
 Select s such that Parent(2, v)
-none
+SemanticError
 5000
 22 - valid parent - one number one assign, select statement
 stmt s; assign a;
@@ -114,7 +114,7 @@ Select s such that Parent(a, 3)
 none
 5000
 24 - valid parent - two assign, select statement
-assign a, a2;
+assign a, a2; stmt s;
 Select s such that Parent(a, a2)
 none
 5000
@@ -126,22 +126,22 @@ none
 26 - invalid parent - entRef
 stmt s;
 Select s such that Parent(2, "x7")
-none
+SemanticError
 5000
 27 - invalid parent - entRef
 stmt s;
 Select s such that Parent(s, "x7")
-none
+SemanticError
 5000
 28 - invalid parent - entRef
 stmt s;
 Select s such that Parent("x8", s)
-none
+SemanticError
 5000
 29 - invalid parent - entRef
 stmt s;
 Select s such that Parent("x7", 4)
-none
+SemanticError
 5000
 30 - valid parent - one statement one _, select statement
 stmt s;
@@ -256,7 +256,7 @@ none
 52 - invalid parent* - one number one procedure, select procedure
 stmt s; procedure p;
 Select p such that Parent*(2, p)
-none
+SemanticError
 5000
 53 - valid parent* - one number one if, select if
 stmt s; if i;
@@ -271,7 +271,7 @@ none
 55 - invalid parent* - one number one variable, select variable
 stmt s; variable v;
 Select s such that Parent*(2, v)
-none
+SemanticError
 5000
 56 - valid parent* - one number one assign, select statement
 stmt s; assign a;
@@ -284,7 +284,7 @@ Select s such that Parent*(a, 3)
 none
 5000
 58 - valid parent* - two assign, select statement
-assign a, a2;
+assign a, a2; stmt s;
 Select s such that Parent*(a, a2)
 none
 5000
@@ -296,22 +296,22 @@ none
 60 - invalid parent* - entRef
 stmt s;
 Select s such that Parent*(2, "x7")
-none
+SemanticError
 5000
 61 - invalid parent* - entRef
 stmt s;
 Select s such that Parent*(s, "x7")
-none
+SemanticError
 5000
 62 - invalid parent* - entRef
 stmt s;
 Select s such that Parent*("x8", s)
-none
+SemanticError
 5000
 63 - invalid parent* - entRef
 stmt s;
 Select s such that Parent*("x7", 4)
-none
+SemanticError
 5000
 64 - valid parent* - one statement one _, select statement
 stmt s;
