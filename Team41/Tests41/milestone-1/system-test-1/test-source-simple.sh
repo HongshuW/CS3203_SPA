@@ -16,6 +16,9 @@ query_suffix=-clause.txt
 output_prefix=simle-
 output_suffix=-clause-out.xml
 
+#check if the directory exist and make one if not
+[ ! -d "../m1-out/" ] && mkdir ../m1-out
+
 types=("no")
 #types=("no" "one-follows" "one-parent" "one-uses" "one-modifies")
 
