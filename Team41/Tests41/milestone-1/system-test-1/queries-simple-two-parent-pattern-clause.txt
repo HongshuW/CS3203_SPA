@@ -28,13 +28,13 @@ stmt s; assign a;
 Select s such that Parent*(2, a) pattern a("x7", _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 7 - valid parent - one _ one statement , select assign - valid exact pattern
-stmt s; assign a;
-Select s such that Parent(_, s) pattern a(_, "x1 + 2")
-2
+assign a;
+Select a such that Parent(_, a) pattern a(_, "x1 + 2")
+7
 5000
-8 - valid parent - one _ one statement , select assign - valid exact pattern
-stmt s; assign a;
-Select s such that Parent(_, s) pattern a(_, "zzzzz")
+8 - valid parent - one _ one assign , select assign - valid exact pattern
+assign a;
+Select a such that Parent(_, a) pattern a(_, "zzzzz")
 none
 5000
 9 - valid parent - one statement one _, select statement - invalid pattern
@@ -47,12 +47,12 @@ stmt s; assign a;
 Select s such that Parent*(s, _) pattern a (_, _)
 SemanticError
 5000
-11 - invalid parent* - one number one entRef - invalid pattern
+11 - invalid parent* - one number one entRef - select statement - invalid pattern
 stmt s; assign a;
 Select s such that Parent*(2, "x7") pattern a (s, s)
 SemanticError
 5000
-12 - invalid parent -  one number one entRef - invalid pattern
+12 - invalid parent -  one number one entRef - select statement - invalid pattern
 stmt s; assign a;
 Select s such that Parent(2, "x7") pattern a (s, ???)
 SemanticError

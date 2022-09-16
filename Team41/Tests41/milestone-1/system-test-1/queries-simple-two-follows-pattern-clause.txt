@@ -13,12 +13,12 @@ assign a; stmt s; variable v;
 Select s such that Follows*(2, s) pattern a(v, "shalala")
 none
 5000
-4 - valid follows - one number one statement - valid LHS wildcard + RHS sub-expression pattern
+4 - valid follows - one number one statement - select statement - valid LHS wildcard + RHS sub-expression pattern
 assign a; stmt s;
 Select s such that Follows(8, s) pattern a(_, _"x1 / 2"_)
 9
 5000
-5 - valid follows - one number one statement - valid LHS wildcard + RHS sub-expression pattern
+5 - valid follows - one number one statement - select statement - valid LHS wildcard + RHS sub-expression pattern
 assign a; stmt s;
 Select s such that Follows(9, s) pattern a(_, _"pineapple + tart"_)
 10
