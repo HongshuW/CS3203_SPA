@@ -26,7 +26,7 @@ Select s such that Follows(9, s) pattern a(_, _"pineapple + tart"_)
 6 - invalid follows - two same statement - select variable - valid wildcard pattern
 assign a; stmt s; variable v;
 Select v such that Follows(s, s) pattern a(v, _)
-none
+x3, x6, x7, x8, x9
 5000
 7 - invalid follows* - two same variable - select statement - valid LHS wildcard + RHS sub-expression pattern
 assign a; stmt s; variable v;
