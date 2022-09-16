@@ -11,7 +11,7 @@ Select s such that Parent(s, 4) pattern a(v, _)
 3 - valid parent - one number one assign, select assign - valid sub-expression pattern
 assign a;
 Select a such that Parent(2, a) pattern a(_, _"2 + 10 * 3"_)
-3
+none
 5000
 4 - valid parent* - one number one assign, select assign - valid sub-expression pattern
 assign a;
@@ -27,6 +27,7 @@ none
 stmt s; assign a;
 Select s such that Parent*(2, a) pattern a("x7", _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
 7 - valid parent - one _ one statement , select assign - valid exact pattern
 assign a;
 Select a such that Parent(_, a) pattern a(_, "x1 + 2")
@@ -40,22 +41,22 @@ none
 9 - valid parent - one statement one _, select statement - invalid pattern
 stmt s;
 Select s such that Parent(s, _) pattern s (s, s)
-SemanticError
+SyntaxError
 5000
 10 - valid parent* - one statement one _, select statement - sematically invalid pattern
 stmt s; assign a;
 Select s such that Parent*(s, _) pattern a (_, _)
-SemanticError
+2, 4
 5000
 11 - invalid parent* - one number one entRef - select statement - invalid pattern
 stmt s; assign a;
 Select s such that Parent*(2, "x7") pattern a (s, s)
-SemanticError
+SyntaxError
 5000
 12 - invalid parent -  one number one entRef - select statement - invalid pattern
 stmt s; assign a;
 Select s such that Parent(2, "x7") pattern a (s, ???)
-SemanticError
+SyntaxError
 5000
 13 - valid parent - one statement one number, select statement - valid wildcard pattern
 stmt s; assign a; variable v;

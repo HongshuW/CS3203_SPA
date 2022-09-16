@@ -35,13 +35,13 @@ vector<string> SPAManager::evaluate(string& query) {
         }
     } catch (const PQLTokenizeException& e) {
         string errorMessage = "SyntaxError";
-//        results.push_back(errorMessage);
+        results.push_back(errorMessage);
     } catch (const PQLParseException& e) {
         string errorMessage = "SyntaxError";
-//        results.push_back(errorMessage);
+        results.push_back(errorMessage);
     } catch (const PQLValidationException& e) {
         string errorMessage = "SemanticError";
-//        results.push_back(errorMessage);
+        results.push_back(errorMessage);
     }
     return results;
 }

@@ -16,7 +16,8 @@ query_suffix=-clause.txt
 output_prefix=simle-
 output_suffix=-clause-out.xml
 
-types=("no" "one-follows" "one-parent" "one-uses")
+types=("no" "one-follows" "one-parent" "one-uses" "two-follows-pattern"
+"two-modifies-pattern" "two-parent-pattern" "two-uses-pattern")
 
 for type in "${types[@]}"
 do
