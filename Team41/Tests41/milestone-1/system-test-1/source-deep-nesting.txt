@@ -27,16 +27,17 @@ procedure deepNesting {
                             while (x21 < x20) {
                                 print x22;
                             }
-                            x23 = 100;
+                            call x23;
+                            x24 = 100;
                         }
                     }
                 }
             } else {
-                x24 = 10;
-                print x25;
+                x25 = 10;
+                print x26;
             }
-            x26 = x2 - x1 + 10 / 2;
+            x27 = x2 - x1 + 10 / 2;
         }
-        x27 = x18 / 2;
+        x28 = x18 / 2;
     }
 }
