@@ -1,7 +1,7 @@
 1 - valid modifies - one number one variable - select statement [number]
 stmt s; variable v;
 Select s such that Modifies(6, v)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 2 - valid modifies - one statement one variable - select variable
 variable v;
@@ -11,22 +11,22 @@ x6
 2 - valid modifies - one statement one variable - select variable in while loop
 variable v;
 Select v such that Modifies(1, v)
-x5, x6, x9, x14, x17, x19, x20, x23, x24, x26, x27
+x5, x6, x9, x14, x17, x19, x20, x24, x25, x27, x28
 5000
 3 - valid modifies - one statement one _ - select statement
 stmt s;
 Select s such that Modifies(5, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 4 - valid modifies - one statement one _ - select statement
 stmt s;
 Select s such that Modifies(1, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 5 - valid modifies - one statement one _ - select statement
 stmt s;
 Select s such that Modifies(4, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 6 - valid modifies - one statement one IDENT - select statement
 stmt s; variable v;
@@ -61,17 +61,17 @@ none
 11 - valid modifies - one statement one variable - select statement [statement]
 stmt s; variable v;
 Select s such that Modifies(s, v)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 19, 20, 23, 24, 26, 27
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 19, 20, 24, 25, 27, 28
 5000
 12 - valid modifies - one statement one variable - select variable
 stmt s; variable v;
 Select v such that Modifies(s, v)
-x5, x6, x9, x14, x17, x19, x20, x23, x24, x26, x27
+x5, x6, x9, x14, x17, x19, x20, x24, x25, x27, x28
 5000
 13 - valid modifies - one statement one _ - select statement
 stmt s;
 Select s such that Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 19, 20, 23, 24, 26, 27
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 19, 20, 24, 25, 27, 28
 5000
 14 - valid modifies - one statement one IDENT - select statement
 stmt s; variable v;
@@ -81,17 +81,17 @@ none
 15 - valid modifies - one assign one variable - select variable [assign]
 assign a; variable v;
 Select v such that Modifies(a, v)
-x5, x6, x9, x17, x19, x20, x23, x24, x26, x27
+x5, x6, x9, x17, x19, x20, x24, x25, x27, x28
 5000
 16 - valid modifies - one assign one _ - select assign
 assign a; variable v;
 Select a such that Modifies(a, v)
-5, 6, 9, 17, 19, 20, 23, 24, 26, 27
+5, 6, 9, 17, 19, 20, 24, 25, 27, 28
 5000
 17 - valid modifies - one assign one _ - select assign
 assign a;
 Select a such that Modifies(a, _)
-5, 6, 9, 17, 19, 20, 23, 24, 26, 27
+5, 6, 9, 17, 19, 20, 24, 25, 27, 28
 5000
 18 - valid modifies - one assign one IDENT - select assign
 assign a;
@@ -146,7 +146,7 @@ Select w such that Modifies(w, v)
 28 - valid modifies - one while one variable - select variable
 while w; variable v;
 Select v such that Modifies(w, v)
-x5, x6, x9, x14, x17, x19, x20, x23, x24, x26, x27
+x5, x6, x9, x14, x17, x19, x20, x24, x25, x27, x28
 5000
 29 - valid modifies - one while one _ - select while
 while w;
@@ -166,7 +166,7 @@ Select i such that Modifies(i, v)
 32 - valid modifies - one if one variable - select variable
 if i; variable v;
 Select v such that Modifies(i, v)
-x5, x6, x9, x14, x17, x19, x20, x23, x24
+x5, x6, x9, x14, x17, x19, x20, x24, x25
 5000
 33 - valid modifies - one if one _ - select if
 if i;
