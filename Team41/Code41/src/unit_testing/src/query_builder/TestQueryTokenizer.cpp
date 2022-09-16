@@ -188,7 +188,7 @@ TEST_CASE ("Test Query Tokenizer") {
         auto tokens = tokenizer.tokenize();
         auto expected = std::vector<std::string>(
                 {"assign", "a", ";", "Select", "a", "pattern", "a",
-                 "(", "_", ",", "_", "\"", "x + 1", "\"", "_", ")"});
+                 "(", "_", ",", "_", "\"", "x+1", "\"", "_", ")"});
 
         REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
                            end(expected),
@@ -252,7 +252,7 @@ TEST_CASE ("Test Query Tokenizer") {
         auto tokens = tokenizer.tokenize();
         auto expected = std::vector<std::string>(
                 {"assign", "a", ";", "variable", "v", ";", "Select", "v", "such", "that", "Uses", "(",
-                 "a", ",", "v", ")", "pattern", "a", "(", "v", ",", "_", "\"", "x + y / 3", "\"", "_", ")"});
+                 "a", ",", "v", ")", "pattern", "a", "(", "v", ",", "_", "\"", "x+y/3", "\"", "_", ")"});
 
         REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
                            end(expected),
