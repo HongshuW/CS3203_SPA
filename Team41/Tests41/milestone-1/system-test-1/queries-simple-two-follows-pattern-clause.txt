@@ -34,12 +34,12 @@ Select s such that Follows*(v, v) pattern a(_, _"x + 1"_)
 SyntaxError
 5000
 8 - valid follows - one number one statement - select statement - undeclared assignment
-stmt s; variable v; assign a;
+stmt s; variable v;
 Select s such that Follows(8, s) pattern a(v, _)
 SyntaxError
 5000
 9 - valid follows* - one number one statement - select statement - undeclared assignment
-stmt s; assign a;
+stmt s;
 Select s such that Follows*(5, s) pattern a(s, _)
 SyntaxError
 5000
