@@ -1,0 +1,105 @@
+1 - valid - no clause, select procedures
+procedure p;
+Select p
+deepNesting
+5000
+2 - valid - no clause, select assign
+assign a;
+Select a
+5, 6, 9, 17, 19, 20, 23, 24, 26, 27
+5000
+3 - valid - no clause, select print
+print p;
+Select p
+11, 13, 18, 22, 25
+5000
+4 - valid - no clause, select constant
+constant c;
+Select c
+0, 1, 2, 5, 10, 25, 50, 100
+5000
+5 - valid - no clause, select if
+if i;
+Select i
+3, 10
+5000
+6 - valid - no clause, select while
+while wh;
+Select wh
+1, 2, 4, 7, 8, 12, 15, 16, 21
+5000
+7 - valid - no clause, weird name, select procedure
+procedure procedure;
+Select procedure
+deepNesting
+5000
+8 - valid - no clause, weird name, select variable
+variable procedure;
+Select procedure
+x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, x24, x25, x26, x27
+5000
+9 - valid - no clause, weird name, select statement
+stmt Select;
+Select Select
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+5000
+10 - valid - no clause, alphanumeric name, select print
+print pr1nt;
+Select pr1nt
+11, 13, 18, 20, 22, 25
+5000
+11 - valid - no clause, alphanumeric name, select assign
+assign a551gn;
+Select a551gn
+5, 6, 9, 17, 19, 20, 23, 24, 26, 27
+5000
+12 - invalid syntax - no clause, name starts with digit
+assign a551gn;
+Select 4551gn
+none
+5000
+13 - invalid syntax - no clause, name contains invalid character
+variable v@r
+Select v@r
+none
+5000
+14 - invalid syntax - no clause, name starts with invalid character
+if _;
+Select _
+none
+5000
+15 - invalid syntax - no clause, missing ;
+if i
+Select i
+none
+5000
+16 - invalid syntax - no clause, extra ; in declaration
+while wh;;
+Select wh
+none
+5000
+17 - invalid syntax - no clause, extra ; in select
+constant c
+Select c;
+none
+5000
+18 - invalid syntax - no clause, capital letter in declaration
+While wh;
+Select wh
+none
+5000
+19 - invalid syntax - no clause, no capital letter in select
+constant c
+select c;
+none
+5000
+20 - invalid syntax - no clause, capital letter in declaration
+assIGN assign;
+Select assign
+none
+5000
+21 - invalid syntax - no clause, additional capital letter in select
+constant c
+SElect c;
+none
+5000
