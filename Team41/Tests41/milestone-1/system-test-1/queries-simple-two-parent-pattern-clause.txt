@@ -70,5 +70,5 @@ Select s1 such that Parent*(s, 4) pattern a(v, _)
 15 - valid parent - one statement one number, select variable - valid wildcard pattern
 stmt s; assign a; variable v;
 Select v such that Parent(s, 4) pattern a(v, _)
-none
+x3, x6, x7, x8, x9
 5000
