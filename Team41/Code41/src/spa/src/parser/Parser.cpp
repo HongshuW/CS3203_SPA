@@ -15,12 +15,18 @@ Parser::Parser(vector<string> tokens)
 
 string Parser::peek() { return tokens[currIdx]; }
 
+string Parser::peekNext() { return tokens[currIdx + 1]; }
+
 string Parser::previous() { return tokens[currIdx - 1]; }
 
 string Parser::pop() {
     string currToken = peek();
     currIdx++;
     return currToken;
+}
+
+bool Parser::equals(string s1, string s2) {
+    return s1.compare(s2) == 0;
 }
 
 bool Parser::match(string s) {
@@ -261,7 +267,7 @@ shared_ptr<ExprNode> Parser::parseExprNode() {
 shared_ptr<CondExprNode> Parser::parseCondExprNode() {
     vector<string> condExpr;
     bool isConnected = false;
-    while (peek().compare("{") != 0 && peek().compare("then") != 0) {
+    while (!(equals(peek(), ")") && (equals(peekNext(), "then") || equals(peekNext(), "{")))) {
         string curr = pop();
         if (!Utils::isValidName(curr) && !Utils::isValidNumber(curr)) {
             //! is a comparator operator, need to check for valid operator
@@ -277,9 +283,10 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode() {
     }
 
     //! remove the ending )
-    if (previous().compare(")") == 0) {
-        condExpr.pop_back();
-    }
+//    if (previous().compare(")") == 0) {
+//        condExpr.pop_back();
+//    }
+    pop();
 
     //! Check for valid parentheses
     if (!Utils::isValidParentheses(condExpr)) {
