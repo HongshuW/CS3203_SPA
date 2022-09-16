@@ -31,17 +31,17 @@ none
 7 - valid modifies - one assign one IDENT - select assign - invalid pattern
 assign a; variable v;
 Select a such that Modifies(a, "x6") pattern a(v, v)
-SyntaxError
+SemanticError
 5000
 8 - invalid modifies - two variable - select first variable - vaild wildcard pattern
 variable v, v1; assign a;
 Select v such that Modifies(v, v1) pattern a (v, _)
-SyntaxError
+SemanticError
 5000
 9 - invalid modifies - two variable - select second variable - valid LHS constant variable + RHS wildcard pattern
 variable v, v1; assign a;
 Select v1 such that Modifies(v, v1) pattern a ("x6", _)
-SyntaxError
+SemanticError
 5000
 10 - invalid modifies - one variable one IDENT - select statement - sematically invalid pattern
 variable v; stmt s; assign a;

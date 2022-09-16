@@ -76,10 +76,10 @@ SemanticError
 16 - invalid uses - both same variables - select variable - valid pattern
 assign a; variable v;
 Select v such that Uses(v, v) pattern a (v, _)
-SyntaxError
+SemanticError
 5000
 17 - invalid uses - one variable one IDENT - select statement - invalid pattern
 variable v; stmt s; assign a;
 Select s such that Uses(v, "x1") pattern a (s, s)
-SyntaxError
+SemanticError
 5000

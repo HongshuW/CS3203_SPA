@@ -38,9 +38,9 @@ Select s such that Parent(_, s) pattern a(_, "zzzzz")
 none
 5000
 9 - valid parent - one statement one _, select statement - invalid pattern
-stmt s; assign a;
-Select s such that Parent(s, _) pattern a (s, s)
-SyntaxError
+stmt s;
+Select s such that Parent(s, _) pattern s (s, s)
+SemanticError
 5000
 10 - valid parent* - one statement one _, select statement - sematically invalid pattern
 stmt s; assign a;
@@ -50,12 +50,12 @@ SemanticError
 11 - invalid parent* - one number one entRef - invalid pattern
 stmt s; assign a;
 Select s such that Parent*(2, "x7") pattern a (s, s)
-SyntaxError
+SemanticError
 5000
 12 - invalid parent -  one number one entRef - invalid pattern
 stmt s; assign a;
 Select s such that Parent(2, "x7") pattern a (s, ???)
-SyntaxError
+SemanticError
 5000
 13 - valid parent - one statement one number, select statement - valid wildcard pattern
 stmt s; assign a; variable v;
@@ -66,4 +66,9 @@ Select s such that Parent(s, 4) pattern a(v, _)
 stmt s, s1; assign a; variable v;
 Select s1 such that Parent*(s, 4) pattern a(v, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+15 - valid parent - one statement one number, select variable - valid wildcard pattern
+stmt s; assign a; variable v;
+Select v such that Parent(s, 4) pattern a(v, _)
+none
 5000
