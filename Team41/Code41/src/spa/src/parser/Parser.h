@@ -31,10 +31,12 @@ namespace SourceParser {
         unsigned int currIdx;
         vector<string> tokens;
         string peek();
+        string peekNext();
         string previous();
         string pop();
         bool match(string s);
         bool expect(string s);
+        bool equals(string s1, string s2);
 
         // procedure
         shared_ptr<ProcedureNode> parseProcedureNode();
@@ -50,7 +52,6 @@ namespace SourceParser {
         //! if, read, assign, print, while, call
         shared_ptr<StmtNode> parseStatementNode();
         vector<shared_ptr<StmtNode>> parseStatementList();
-
         shared_ptr<VariableNode> parseVariableNode();
         //!TODO: implement later
         shared_ptr<ExprNode> parseExprNode();

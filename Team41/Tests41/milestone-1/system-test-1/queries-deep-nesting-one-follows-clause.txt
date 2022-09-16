@@ -1,12 +1,12 @@
 1 - valid follows - one statement one number, select statement
 stmt s;
-Select s such that Follows(2, s)
-8
+Select s such that Follows(10, s)
+19
 5000
 2 - valid follows - one statement one number, select statement
 stmt s;
-Select s such that Follows(s, 4)
-3
+Select s such that Follows(s, 6)
+5
 5000
 3 - valid follows - two statements, select statement returns false
 stmt s;
@@ -16,12 +16,12 @@ none
 4 - valid follows - two statements, select statement
 stmt s, s2;
 Select s such that Follows(s, s2)
-1, 2, 3, 4, 8, 9
+2, 3, 5, 6, 9, 10, 13, 14, 17, 19, 20, 21, 23, 25
 5000
 5 - valid follows - two statements, select statement
 stmt s, s2;
 Select s2 such that Follows(s, s2)
-2, 4, 7, 8, 9, 10
+6, 7, 10, 14, 15, 18, 19, 20, 21, 23, 24, 26, 27, 28
 5000
 6 - valid follows - two numbers, select statement
 stmt s;
@@ -30,13 +30,13 @@ none
 5000
 7 - valid follows - two numbers, select statement
 stmt s;
-Select s such that Follows(2, 4)
+Select s such that Follows(1, 4)
 none
 5000
 8 - valid follows - two numbers, select statement
 stmt s;
-Select s such that Follows(2, 8)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows(10, 19)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 9 - valid follows - two numbers, select statement
 stmt s;
@@ -55,13 +55,13 @@ none
 5000
 12 - valid follows - one number one assign, select statement
 stmt s; assign a;
-Select s such that Follows(8, a)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows(9, a)
+none
 5000
 13 - valid follows - one number one assign, select assign
 stmt s; assign a;
-Select a such that Follows(8, a)
-9
+Select a such that Follows(10, a)
+19
 5000
 14 - valid follows - one number one assign, select assign
 stmt s; assign a;
@@ -95,8 +95,8 @@ none
 5000
 20 - valid follows - one number one while, select while
 stmt s; while w;
-Select w such that Follows(1, w)
-2
+Select w such that Follows(6, w)
+7
 5000
 21 - invalid follows - one number one variable, select variable
 stmt s; variable v;
@@ -105,23 +105,23 @@ SemanticError
 5000
 22 - valid follows - one number one assign, select statement
 stmt s; assign a;
-Select s such that Follows(a, 4)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows(a, 20)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 23 - valid follows - one number one assign, select statement
 stmt s; assign a;
-Select s such that Follows(a, 3)
+Select s such that Follows(a, 5)
 none
 5000
 24 - valid follows - two assign, select statement
 stmt s; assign a, a2;
 Select s such that Follows(a, a2)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 25 - valid follows - two assign, select statement
 assign a, a2;
 Select a such that Follows(a, a2)
-8
+5, 19
 5000
 26 - invalid follows - entRef
 stmt s;
@@ -146,37 +146,37 @@ SemanticError
 30 - valid follows - one statement one _, select statement
 stmt s;
 Select s such that Follows(s, _)
-1, 2, 3, 4, 8, 9
+2, 3, 5, 6, 9, 10, 13, 14, 17, 19, 20, 21, 23, 25
 5000
 31 - valid follows - one statement one _, select statement
 stmt s;
 Select s such that Follows(_, s)
-2, 4, 7, 8, 9, 10
+6, 7, 10, 14, 15, 18, 19, 20, 21, 23, 24, 26, 27, 28
 5000
 32 - valid follows - one number one _, select statement
 stmt s;
 Select s such that Follows(_, 4)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+none
 5000
 33 - valid follows - one number one _, select statement
 stmt s;
 Select s such that Follows(2, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 34 - valid follows - two _, select statement
 stmt s;
 Select s such that Follows(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 35 - valid follows* - follows* clause, select statement [start of follows*]
 stmt s;
-Select s such that Follows*(2, s)
-8, 9, 10
+Select s such that Follows*(10, s)
+19, 20, 21, 23, 24
 5000
 36 - valid follows* - one statement one number, select statement
 stmt s;
-Select s such that Follows*(s, 4)
-3
+Select s such that Follows*(s, 21)
+9, 10, 19, 20
 5000
 37 - valid follows* - two statements, select statement
 stmt s;
@@ -186,12 +186,12 @@ none
 38 - valid follows* - two statements, select statement
 stmt s, s2;
 Select s such that Follows*(s, s2)
-1, 2, 3, 4, 8, 9
+2, 3, 5, 6, 9, 10, 13, 14, 17, 19, 20, 21, 23, 25
 5000
 39 - valid follows* - two statements, select statement
 stmt s, s2;
 Select s2 such that Follows*(s, s2)
-2, 4, 7, 8, 9, 10
+6, 7, 10, 14, 15, 18, 19, 20, 21, 23, 24, 26, 27, 28
 5000
 40 - valid follows* - two numbers, select statement
 stmt s;
@@ -200,13 +200,13 @@ none
 5000
 41 - valid follows* - two numbers select statement
 stmt s;
-Select s such that Follows*(2, 9)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows*(10, 19)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 42 - valid follows* - two numbers, select statement
 stmt s;
-Select s such that Follows*(2, 8)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows*(9, 20)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 43 - valid follows* - two numbers, select statement
 stmt s;
@@ -220,18 +220,18 @@ none
 5000
 45 - valid follows* - one number one assign, select statement
 stmt s; assign a;
-Select s such that Follows*(8, a)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows*(10, a)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 46 - valid follows* - one number one assign, select assign
 stmt s; assign a;
-Select a such that Follows*(8, a)
-9
+Select a such that Follows*(10, a)
+19, 20, 24
 5000
 47 - valid follows* - one number one assign, select assign
 stmt s; assign a;
-Select a such that Follows*(1, a)
-8, 9
+Select a such that Follows*(9, a)
+19, 20, 24
 5000
 48 - valid follows* - one number one call, select call
 stmt s; call c;
@@ -241,7 +241,7 @@ none
 49 - valid follows* - one number one print, select print
 stmt s; print p;
 Select p such that Follows*(1, p)
-10
+none
 5000
 50 - valid follows* - one number one read, select read
 stmt s; read r;
@@ -261,7 +261,7 @@ none
 53 - valid follows* - one number one while, select while
 stmt s; while w;
 Select w such that Follows*(1, w)
-2
+none
 5000
 54 - invalid follows* - one number one variable, select variable
 stmt s; variable v;
@@ -270,8 +270,8 @@ SemanticError
 5000
 55 - valid follows* - one number one assign, select statement
 stmt s; assign a;
-Select s such that Follows*(a, 4)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows*(a, 6)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 56 - valid follows* - one number one assign, select statement
 stmt s; assign a;
@@ -279,14 +279,14 @@ Select s such that Follows*(a, 3)
 none
 5000
 57 - valid follows* - two assign, select statement
-assign a, a2;
+assign a, a2; stmt s;
 Select s such that Follows*(a, a2)
-SemanticError
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 58 - valid follows* - two assign, select statement
 assign a, a2;
 Select a such that Follows*(a, a2)
-3, 8
+5, 9, 19, 20
 5000
 59 - invalid follows* - entRef
 stmt s;
@@ -311,25 +311,25 @@ SemanticError
 63 - valid follows* - one statement one _, select statement
 stmt s;
 Select s such that Follows*(s, _)
-1, 2, 3, 4, 8, 9
+2, 3, 5, 6, 9, 10, 13, 14, 17, 19, 20, 21, 23, 25
 5000
 64 - valid follows* - one statement one _, select statement
 stmt s;
 Select s such that Follows*(_, s)
-2, 4, 7, 8, 9, 10
+6, 7, 10, 14, 15, 18, 19, 20, 21, 23, 24, 26, 27, 28
 5000
 65 - valid follows* - one number one _, select statement
 stmt s;
-Select s such that Follows*(_, 4)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows*(_, 20)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 66 - valid follows* - one number one _, select statement
 stmt s;
-Select s such that Follows*(2, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s such that Follows*(9, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 67 - valid follows* - two _, select statement
 stmt s;
 Select s such that Follows*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000

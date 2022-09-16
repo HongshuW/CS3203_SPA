@@ -14,8 +14,10 @@ void SPAManager::parse(string &filename) {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         designExtractor.run();
     } catch (const SPTokenizeException& e) {
+        throw e;
         exit(EXIT_FAILURE);
     } catch (const SPParseException& e) {
+        throw e;
         exit(EXIT_FAILURE);
     }
 }
@@ -35,13 +37,13 @@ vector<string> SPAManager::evaluate(string& query) {
         }
     } catch (const PQLTokenizeException& e) {
         string errorMessage = "SyntaxError";
-//        results.push_back(errorMessage);
+        results.push_back(errorMessage);
     } catch (const PQLParseException& e) {
         string errorMessage = "SyntaxError";
-//        results.push_back(errorMessage);
+        results.push_back(errorMessage);
     } catch (const PQLValidationException& e) {
         string errorMessage = "SemanticError";
-//        results.push_back(errorMessage);
+        results.push_back(errorMessage);
     }
     return results;
 }
