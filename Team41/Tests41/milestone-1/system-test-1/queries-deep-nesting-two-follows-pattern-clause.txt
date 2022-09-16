@@ -1,0 +1,60 @@
+1 - valid follows - one statement one number - select statement - valid wildcard pattern 
+stmt s; assign a;
+Select s such that Follows(10, s) pattern a(v, _)
+SemanticError
+5000
+2 - valid followsT - one statement one number, select statement - valid wildcard pattern 
+stmt s; assign a;
+Select s such that Follows*(s, 6) pattern a(v, _)
+SemanticError
+5000
+3 - valid follows - one number one statement - select assignment - valid wildcard pattern 
+stmt s; assign a; variable v;
+Select a such that Follows(10, s) pattern a(v, _)
+5, 6, 9, 17, 19, 20, 24, 25, 27, 28
+5000
+4 - valid followsT - one number one statement - select assignment - valid wildcard pattern 
+stmt s; assign a; variable v;
+Select a such that Follows*(10, s) pattern a(v, _)
+5, 6, 9, 17, 19, 20, 24, 25, 27, 28
+5000
+5 - valid follows - one number one statement - select assignment - valid sub-expression pattern 
+assign a; variable v;
+Select a such that Follows(10, a) pattern a(v, _"x19"_)
+19
+5000
+6 - valid follows - one number one statement - select assignment - valid exact pattern 
+assign a; variable v;
+Select a such that Follows(10, a) pattern a(v, "x19 * x19")
+19
+5000
+7 - valid followsT - one number one statement - select assignment - valid sub-expression pattern 
+stmt s; assign a; variable v;
+Select a such that Follows*(10, a) pattern a(v, _"x9 + x9"_)
+20
+5000
+8 - invalid follows - two assignments - select assignment - valid sub-expression pattern 
+stmt s; assign a; variable v;
+Select a such that Follows*(a, a) pattern a(v, _"x9 + x8"_)
+none
+5000
+9 - invalid followsT - two assignments - select assignment - invalid pattern 
+assign a;
+Select a such that Follows*(a, a) pattern a(a, a)
+SyntaxError
+5000
+10 - valid follows - one number one statement - select assignment - invalid sub-expression pattern 
+stmt s; assign a; variable v;
+Select a such that Follows(20, a) pattern a(v, _"????"_)
+SyntaxError
+5000
+11 - valid followsT - one number one statement - select assignment - invalid pattern
+stmt s; assign a; variable v;
+Select a such that Follows*(20, a) pattern s(_, _)
+SemanticError
+5000
+12 - valid follows - one number one statement - select assignment - invalid pattern
+stmt s; assign a; variable v;
+Select a such that Follows(20, a) pattern a(_, ???!!!)
+SyntaxError
+5000
