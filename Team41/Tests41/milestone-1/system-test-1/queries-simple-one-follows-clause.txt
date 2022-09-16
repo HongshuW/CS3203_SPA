@@ -114,9 +114,9 @@ Select s such that Follows(a, 3)
 none
 5000
 24 - valid follows - two assign, select statement
-assign a, a2;
+stmt s; assign a, a2;
 Select s such that Follows(a, a2)
-none
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
 25 - valid follows - two assign, select statement
 assign a, a2;
