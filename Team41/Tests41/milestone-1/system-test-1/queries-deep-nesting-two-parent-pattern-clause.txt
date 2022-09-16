@@ -16,7 +16,7 @@ Select a such that Parent(4, a) pattern a(v, _"5"_)
 4 - valid parent - one number one assign, select assign - valid exact pattern 
 assign a; variable v;
 Select a such that Parent(2, a) pattern a(v, "x18 / 2")
-27
+none
 5000
 5 - valid parent* - one number one assign - select assign - valid wildcard pattern
 stmt s; assign a; variable v;
@@ -31,7 +31,7 @@ Select a such that Parent*(4, a) pattern a(v, _"x9 + x9"_)
 7 - valid parent* - one number one assign, select assign - valid exact pattern
 stmt s; assign a; variable v;
 Select a such that Parent*(4, a) pattern a(v, "10")
-24
+none
 5000
 8 - valid parent* - one number one assign, select assign - LHS constant RHS wildcard
 stmt s; assign a; variable v;

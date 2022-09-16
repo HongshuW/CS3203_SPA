@@ -6,17 +6,17 @@ Select s such that Uses(8, v) pattern a(v, _)
 2 - valid uses - one statement one variable - select variable - valid wildcard pattern
 assign a; variable v; 
 Select v such that Uses(3, v) pattern a(v, _)
-x6, x9, x19
+x5, x6, x9, x19, x20
 5000 
 3 - valid uses - one statement one IDENT - select assign - valid exact match
 assign a; variable v;
 Select a such that Uses(a, "x1") pattern a(v, "5 * 5 + x1")
-5
+none
 5000
 4 - valid uses - one assign one variable - select variable - valid sub-expression match
 assign a; variable v;
 Select v such that Uses(a, v) pattern a (v, _"x5 * 2 + x4"_)
-x6
+none
 5000
 5 - valid uses - one assign one variable - select assign - valid LHS constant RHS wildcard match
 assign a; variable v;
@@ -26,7 +26,7 @@ Select a such that Uses(a, v) pattern a ("x27", _)
 6 - valid uses - one assign one variable - select assign - valid LHS constant RHS sub-expression match
 assign a; variable v;
 Select a such that Uses(a, v) pattern a ("x20", _"x9 * 2"_)
-20
+none
 5000
 7 - valid uses - one assign one variable - select assign - valid LHS constant RHS sub-expression match
 assign a; variable v;
