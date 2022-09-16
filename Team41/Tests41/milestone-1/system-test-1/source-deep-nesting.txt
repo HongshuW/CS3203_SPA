@@ -1,36 +1,42 @@
 procedure deepNesting {
-    read x1;
-    if (x1 == 0) then {
-        count = 0;
-        while (x1 > 5) {
-            x5 = x1 + 10;
-            while (x5 < 100) {
-                x7 = x5 * x1;
-                print x7;
-                x9 = x7 * x7 + (x5 + x1) * 2;
-                while (x9 < 50) {
-                    print x9;
-                    x1 = x1 - x9;
-                    while (x1 < 100) {
-                        if (x1 < 50) then {
-                            while (x1 < 50) {
-                                x1 = x1 + 1;
+    while (((x1 < 50) && (x1 >= 0)) || (x1 != 25)) {
+        while (x2 < x1) {
+            if (x3 != 0) then {
+                while ((x4 > x1) && (x4 >= x2))  {
+                    x5 = 5 * (5 + x1);
+                    x6 = x6 + x5 * 2 + x4;
+                    while (x7 >= 0) {
+                        while (x8 >= 0) {
+                            x9 = x9 + 1;
+                            if (x10 <= x9) then {
+                                print x11;
+                            } else {
+                                while (x12 < x10) {
+                                    print x13;
+                                    read x14;
+                                    while ((((x15 < x13) || (x11 < x10)) || (x1 < x2)) && (x1 > 0)) {
+                                        while (100 >= x16) {
+                                            x17 = x14 - 1;
+                                            print x18;
+                                        }
+                                    }
+                                }
                             }
-                            x1 = x1 * 2;
-                        } else {
-                            x16 = x1;
-                            while (x16 > 50) {
-                                print x16;
-                                x16 = x16 - 1;
+                            x19 = x19 * x19;
+                            x20 = (x9 + x9) * 2;
+                            while (x21 < x20) {
+                                print x22;
                             }
+                            x23 = 100;
                         }
-                        x1 = ((x1 + x5) / x7) * x9;
                     }
-
                 }
+            } else {
+                x24 = 10;
+                print x25;
             }
+            x26 = x2 - x1 + 10 / 2;
         }
-    } else {
-        x1 = 0;
+        x27 = x18 / 2;
     }
 }

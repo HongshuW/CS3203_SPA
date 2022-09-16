@@ -54,7 +54,6 @@ void Tokenizer::processAlNum() {
 }
 
 void Tokenizer::processSymbols() {
-    // maybe consider the case of && and ||
     if (curr == "=") {
         if (match('=')) {
             curr += pop();
