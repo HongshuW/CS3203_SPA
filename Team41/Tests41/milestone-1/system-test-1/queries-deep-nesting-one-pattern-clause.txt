@@ -1,72 +1,77 @@
 1 - valid pattern - LHS variable RHS _ - select assign [LHS variable]
 assign a; variable v;
 Select a pattern a(v, _)
-3, 6, 7, 8, 9
+5, 6, 9, 17, 19, 20, 24, 25, 27, 28
 5000
-2 - valid pattern - LHS variable RHS IDEN - select assign
+2 - invalid pattern - LHS variable RHS IDEN - select assign
 assign a; variable v;
-Select a pattern a(v, "x1")
-none
+Select a pattern a(v, "x1 != 25")
+SyntaxError
 5000
 3 - valid pattern - LHS variable RHS IDEN - select assign
 assign a; variable v;
-Select a pattern a(v, "x1 * 2")
-8
+Select a pattern a(v, "5 * (5 + x1)")
+5
 5000
 4 - valid pattern - LHS variable RHS IDEN - select assign
 assign a; variable v;
-Select a pattern a(v, "x1 * 2 + (10 * 3)")
-3
+Select a pattern a(v, "5 * (((((5 + x1)))))")
+5
 5000
 5 - valid pattern - LHS variable RHS IDEN - select statement
 assign a; variable v; stmt s;
 Select s pattern a(v, "x1 * 2 + (10 * 3)")
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+none
 5000
 6 - valid pattern - LHS variable RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a(v, _"x1 * 2"_)
-3, 8
+Select a pattern a(v, _"x5 * 2"_)
+6
 5000
 7 - valid pattern - LHS variable RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a(v, _"x1 * 2 + 10"_)
+Select a pattern a(v, _"x5 * 2 + 4"_)
 none
+5000
+7 - valid pattern - LHS variable RHS _IDEN_ - select assign
+assign a; variable v;
+Select a pattern a(v, _"x6 + x5 * 2"_)
+6
 5000
 8 - valid pattern - LHS variable RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a(v, _"x1 / 2"_)
-9
+Select a pattern a(v, _"x9 + x9"_)
+20
 5000
 9 - valid pattern - LHS variable RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a(v, _"x8 + x1 / 2"_)
-9
+Select a pattern a(v, _"x9 * 2"_)
+none
 5000
 10 - valid pattern - LHS variable RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a(v, _"(x8 + x1) / 2"_)
-none
+Select a pattern a(v, _"((((x9) + (x9))))"_)
+20
 5000
 11 - valid pattern - LHS variable RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a(v, _"x8 + (x1 / 2)"_)
-9
+Select a pattern a(v, _"x14 - 1"_)
+17
 5000
 12 - valid pattern - LHS variable RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a(v, _"(x8 + (x1 / 2)) / 2"_)
-9
+Select a pattern a(v, _"x1 + 10"_)
+none
 5000
 13 - valid pattern - LHS variable RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a(v, _"2 + 3"_)
-none
+Select a pattern a(v, _"10 / 2"_)
+27
 5000
 14 - valid pattern - LHS IDEN RHS _ - select assign [LHS IDEN]
 assign a; variable v;
-Select a pattern a("x3", _)
-3
+Select a pattern a("x27", _)
+27
 5000
 15 - valid pattern - LHS IDEN RHS _ - select assign
 assign a; variable v;
@@ -80,22 +85,22 @@ none
 5000
 17 - valid pattern - LHS IDEN RHS IDEN - select assign
 assign a;
-Select a pattern a("x3", "x1 + 2")
+Select a pattern a("x5", "5 + x1")
 none
 5000
 18 - valid pattern - LHS IDEN RHS IDEN - select assign
 assign a;
-Select a pattern a("x8", "x1")
+Select a pattern a("x19", "x19")
 none
 5000
 19 - valid pattern - LHS IDEN RHS IDEN - select assign
 assign a;
-Select a pattern a("x8", "x1 + 2")
+Select a pattern a("call", "x23")
 none
 5000
 20 - valid pattern - LHS IDEN RHS IDEN - select assign
 assign a;
-Select a pattern a("x6", "0")
+Select a pattern a("x6", "x6 + x5 * 2 + x4")
 6
 5000
 21 - valid pattern - LHS IDEN RHS IDEN - select assign
@@ -105,23 +110,23 @@ none
 5000
 22 - valid pattern - LHS IDEN RHS _IDEN_ - select assign
 assign a;
-Select a pattern a("x3", _"x1 * 2"_)
-3
+Select a pattern a("x6", _"x5 * 2"_)
+6
 5000
 23 - valid pattern - LHS IDEN RHS _IDEN_ - select assign
 assign a; variable v;
-Select a pattern a("x3", _"x1 * 2 + 10"_)
+Select a pattern a("x6", _"x6 + x5"_)
 none
 5000
 24 - valid pattern - LHS _ RHS _ - select assign [LHS _]
 assign a; variable v;
 Select a pattern a(_, _)
-3, 6, 7, 8, 9
+5, 6, 9, 17, 19, 20, 24, 25, 27, 28
 5000
 25 - valid pattern - LHS _ RHS IDEN - select assign
 assign a;
-Select a pattern a(_, "x1 + 2")
-7
+Select a pattern a(_, "x14 - 1")
+17
 5000
 26 - valid pattern - LHS _ RHS IDEN - select assign
 assign a;
@@ -130,23 +135,23 @@ none
 5000
 27 - valid pattern - LHS _ RHS IDEN - select assign
 assign a;
-Select a pattern a(_, "x1 * 2")
-8
+Select a pattern a(_, "x9 + 1")
+9
 5000
 28 - valid pattern - LHS _ RHS IDEN - select assign
 assign a;
-Select a pattern a(_, "0")
-6
+Select a pattern a(_, "100")
+24
 5000
 29 - valid pattern - LHS _ RHS IDEN - select statement
 assign a; stmt s;
-Select s pattern a(_, "x1 * 2 + (10 * 3)")
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+Select s pattern a(_, "x6 + x5 * 2 + x4")
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 5000
 30 - valid pattern - LHS _ RHS _IDEN_ - select assign
 assign a;
-Select a pattern a(_, _"x1 * 2"_)
-3, 8
+Select a pattern a(_, _"x1"_)
+5, 27
 5000
 31 - valid pattern - LHS _ RHS _IDEN_ - select assign
 assign a; variable v;
