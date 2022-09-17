@@ -1,0 +1,60 @@
+1 - valid parent - two statements - select statement - valid wildcard pattern 
+stmt s, s2; assign a; variable v;
+Select s such that Parent(s, s2) pattern a(v, _)
+1, 2, 3, 4, 7, 8, 10, 12, 15, 16, 21
+5000
+2 - valid parent - one number one assign - select assign - valid wildcard pattern 
+assign a; variable v;
+Select a such that Parent(4, a) pattern a(v, _)
+5, 6
+5000
+3 - valid parent - one number one assign - select assign - valid sub-expression pattern 
+assign a; variable v;
+Select a such that Parent(4, a) pattern a(v, _"5"_)
+5
+5000
+4 - valid parent - one number one assign, select assign - valid exact pattern 
+assign a; variable v;
+Select a such that Parent(2, a) pattern a(v, "x18 / 2")
+none
+5000
+5 - valid parent* - one number one assign - select assign - valid wildcard pattern
+stmt s; assign a; variable v;
+Select a such that Parent*(4, a) pattern a(v, _)
+5, 6, 9, 17, 19, 20, 24
+5000
+6 - valid parent* - one number one assign - select assign - valid sub-expression pattern
+stmt s; assign a; variable v;
+Select a such that Parent*(4, a) pattern a(v, _"x9 + x9"_)
+20
+5000
+7 - valid parent* - one number one assign, select assign - valid exact pattern
+stmt s; assign a; variable v;
+Select a such that Parent*(4, a) pattern a(v, "10")
+none
+5000
+8 - valid parent* - one number one assign, select assign - LHS constant RHS wildcard
+stmt s; assign a; variable v;
+Select a such that Parent*(4, a) pattern a("x19", _)
+19
+5000
+9 - valid parent* - one number one assign, select assign - LHS constant RHS sub-expression pattern
+stmt s; assign a; variable v;
+Select a such that Parent*(4, a) pattern a("x20", _"x900 + x900"_)
+none
+5000
+10 - valid parent - one number one assign, select assign - invalid pattern 
+assign a; variable v;
+Select a such that Parent(2, a) pattern a(v, "???")
+SyntaxError
+5000
+11 - invalid parent - one number one assign, select assign - valid pattern 
+assign a; variable v;
+Select a such that Parent(3456, a) pattern a(v, "x3 + 1")
+none
+5000
+12 - invalid parent* - one number one assign, select assign - valid pattern 
+assign a; variable v;
+Select a such that Parent*(3456, superman) pattern a(v, "x1 + 1")
+SemanticError
+5000
