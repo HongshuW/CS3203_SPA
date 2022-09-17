@@ -126,22 +126,22 @@ none
 26 - invalid parent - entRef
 stmt s;
 Select s such that Parent(2, "x7")
-SemanticError
+SyntaxError
 5000
 27 - invalid parent - entRef
 stmt s;
 Select s such that Parent(s, "x7")
-SemanticError
+SyntaxError
 5000
 28 - invalid parent - entRef
 stmt s;
 Select s such that Parent("x8", s)
-SemanticError
+SyntaxError
 5000
 29 - invalid parent - entRef
 stmt s;
 Select s such that Parent("x7", 4)
-SemanticError
+SyntaxError
 5000
 30 - valid parent - one statement one _, select statement
 stmt s;
@@ -296,22 +296,22 @@ none
 60 - invalid parent* - entRef
 stmt s;
 Select s such that Parent*(2, "x7")
-SemanticError
+SyntaxError
 5000
 61 - invalid parent* - entRef
 stmt s;
 Select s such that Parent*(s, "x7")
-SemanticError
+SyntaxError
 5000
 62 - invalid parent* - entRef
 stmt s;
 Select s such that Parent*("x8", s)
-SemanticError
+SyntaxError
 5000
 63 - invalid parent* - entRef
 stmt s;
 Select s such that Parent*("x7", 4)
-SemanticError
+SyntaxError
 5000
 64 - valid parent* - one statement one _, select statement
 stmt s;
