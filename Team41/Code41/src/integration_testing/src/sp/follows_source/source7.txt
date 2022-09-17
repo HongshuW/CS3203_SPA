@@ -1,0 +1,13 @@
+procedure testProcedure {
+            z = 3;
+            if (x <= 100) then {
+            while (x != 100) {
+            x = x + 1;
+            y = x + 3;
+            }
+            } else {
+            print x;
+            z = a + 3;
+            }
+            z = 5;
+            }
