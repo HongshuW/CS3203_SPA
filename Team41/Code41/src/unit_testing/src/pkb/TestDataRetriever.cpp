@@ -75,4 +75,14 @@ TEST_CASE("Test Data Retriever") {
         // test invalid keys
         REQUIRE_THROWS(dataRetriever.getDesignEntityOfStmt(1000));
     }
+
+    SECTION ("Get Table by Pattern") {
+        ExpressionSpec expressionSpec = ExpressionSpec(ExpressionSpecType::ANY_MATCH);
+        Table actualPatternResults = dataRetriever.getTableByPattern(expressionSpec);
+        Table expectedPatternResults = *(pkbStorage->getMatchedPatterns(expressionSpec));
+        Table expectedPatternTable = *(pkbStorage->getPatterns());
+        REQUIRE(actualPatternResults.isEqual(expectedPatternResults));
+        // the results of any match should be the same as the whole pattern table
+        REQUIRE(actualPatternResults.isEqual(expectedPatternTable));
+    }
 }

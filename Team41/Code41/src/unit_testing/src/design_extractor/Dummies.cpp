@@ -37,16 +37,16 @@ namespace TestDE {
         shared_ptr<ProgramNode> programNode2 = make_shared<ProgramNode>(ProgramNode({procedureNode2}));
 
 
-
-
-            /*
+      /*
        * procedure3 {
        * 1 print x
        * 2 read y
        * 3 if (bar == y + 112312341234) then {
-       * 4 x = y + 1
-       * 5 print z} else {
-       * 6 read w}
+       * 4     x = y + 1
+       * 5     print z
+       *   } else {
+       * 6     read w
+       *   }
        * 7 read fo0
        * }
        */
