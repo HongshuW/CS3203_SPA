@@ -126,22 +126,22 @@ Select a such that Follows(a, a2)
 26 - invalid follows - entRef
 stmt s;
 Select s such that Follows(2, "x7")
-SemanticError
+SyntaxError
 5000
 27 - invalid follows - entRef
 stmt s;
 Select s such that Follows(s, "x7")
-SemanticError
+SyntaxError
 5000
 28 - invalid follows - entRef
 stmt s;
 Select s such that Follows("x8", s)
-SemanticError
+SyntaxError
 5000
 29 - invalid follows - entRef
 stmt s;
 Select s such that Follows("x7", 4)
-SemanticError
+SyntaxError
 5000
 30 - valid follows - one statement one _, select statement
 stmt s;

@@ -11,12 +11,12 @@ x5, x6, x9, x17, x19, x20, x24, x25, x27, x28
 3 - valid modifies - one statement one variable - select assign - valid sub-expression pattern
 stmt s; variable v; assign a;
 Select a such that Modifies(s, v) pattern a(v, _"x9 * 2"_)
-20
+none
 5000
 4 - valid modifies - one assign one variable - select assign - valid exact pattern
 assign a; variable v;
 Select v such that Modifies(a, v) pattern a(v, "10")
-x24, x25
+x25
 5000
 5 - invalid modifies - one assign one variable - select assign - valid exact pattern
 assign a; variable v;
