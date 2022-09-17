@@ -30,7 +30,7 @@ none
 5000
 7 - valid uses - one assign one variable - select assign - valid LHS constant RHS sub-expression match
 assign a; variable v;
-Select a such that Uses(a, v) pattern a ("x200", _"x900 * 2200"_)
+Select a such that Uses(a, v) pattern a (v, _"x900"_)
 none
 5000
 8 - valid uses - one print one variable - select variable - invalid pattern
