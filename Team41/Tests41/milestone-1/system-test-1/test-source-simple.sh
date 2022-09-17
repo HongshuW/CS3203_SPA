@@ -19,7 +19,7 @@ output_suffix=-clause-out.xml
 #check if the directory exist and make one if not
 [ ! -d "../m1-out/" ] && mkdir ../m1-out
 
-types=("no" "one-follows" "one-parent" "one-uses" "two-follows-pattern"
+types=("no" "one-follows" "one-parent" "one-uses" "one-pattern" "one-modifies" "two-follows-pattern"
 "two-modifies-pattern" "two-parent-pattern" "two-uses-pattern")
 
 for type in "${types[@]}"

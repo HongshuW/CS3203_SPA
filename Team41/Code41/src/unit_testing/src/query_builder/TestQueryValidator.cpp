@@ -60,101 +60,101 @@ TEST_CASE ("Test Query Validator") {
     SECTION ("Test wrong first arg RefType in Follows Clause, first arg cannot be Ident") {
         std::string queryStr = "stmt v; Select v such that Follows (\"main\", v)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong first arg RefType in Follows* Clause, first arg cannot be Ident") {
         std::string queryStr = "stmt v; Select v such that Follows* (\"west\", v)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Follows Clause, first second cannot be Ident") {
         std::string queryStr = "stmt v; Select v such that Follows (v, \"main\")";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Follows* Clause, second arg cannot be Ident") {
         std::string queryStr = "stmt v; Select v such that Follows* (v, \"west\")";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong first arg RefType in Parent Clause, first arg cannot be Ident") {
         std::string queryStr = "if i; Select i such that Parent (\"main\", i)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong first arg RefType in Parent* Clause, first arg cannot be Ident") {
         std::string queryStr = "if i; Select i such that Parent* (\"main\", i)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Parent Clause, second arg cannot be Ident") {
         std::string queryStr = "if i; Select i such that Parent (i, \"main\")";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Parent* Clause, second arg cannot be Ident") {
         std::string queryStr = "if i; Select i such that Parent* (i, \"main\")";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Uses_S Clause (first arg is Integer), second arg cannot be Integer") {
         std::string queryStr = "variable v; Select v such that Uses (1, 2)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Uses_S Clause (first arg is non-procedure synonym, "
              "second arg cannot be Integer") {
         std::string queryStr = "variable v; Select v such that Uses (v, 2)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Uses_P Clause (first arg is Ident), second arg cannot be Integer") {
         std::string queryStr = "variable v; Select v such that Uses (\"main\", 2)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Uses_P Clause (first arg is procedure synonym), "
              "second arg cannot be Integer") {
         std::string queryStr = "procedure p; Select p such that Uses (p, 2)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Uses_S Clause (first arg is Integer), second arg cannot be Integer") {
         std::string queryStr = "variable v; Select v such that Uses (1, 2)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Uses_S Clause (first arg is non-procedure synonym, "
              "second arg cannot be Integer") {
         std::string queryStr = "variable v; Select v such that Uses (v, 2)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Uses_P Clause (first arg is Ident), second arg cannot be Integer") {
         std::string queryStr = "variable v; Select v such that Uses (\"main\", 2)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong second arg RefType in Uses_P Clause (first arg is procedure synonym), "
              "second arg cannot be Integer") {
         std::string queryStr = "procedure p; Select p such that Uses (p, 2)";
         auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
     SECTION ("Test wrong first arg synonym type in Follows Clause, first arg cannot be procedure synonym") {

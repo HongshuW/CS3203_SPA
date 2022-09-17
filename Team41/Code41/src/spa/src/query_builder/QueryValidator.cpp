@@ -69,7 +69,7 @@ void QueryValidator::validateArgRefTypeSuchThatClause() {
         RefTypeSet validSecondArgTypes = validArgsTypes.second;
 
         if (!validFirstArgTypes.count(arg1RefIndex) || !validSecondArgTypes.count(arg2RefIndex)) {
-            throw PQLValidationException(
+            throw PQLParseException(
                     "Argument types of " +
                     getStrFromRelationType(relationType) +
                     " do not match the expected RefTypes");
@@ -149,6 +149,7 @@ void QueryValidator::validateSuchThatClause() {
     validateUsesModifiesNoUnderscoreForFirstArg();
     //! Validate the correct RefType for such that clause
     //! e.g. Follows : (stmtRef, stmtRef), UsesS : (stmtRef, entRef)
+    //! Should throw syntax error not semantic error
     validateArgRefTypeSuchThatClause();
     //! Validate the correct synonym types for such that clause
     validateSynonymTypeSuchThatClause();
@@ -179,7 +180,7 @@ void QueryValidator::validateArgRefTypePatternClause() {
     int arg2RefIndex = patternClause->arg2.index();
 
     if (!entRefIndexSet.count(arg2RefIndex)) {
-        throw PQLValidationException(
+        throw PQLParseException(
                 "Second argument of Pattern Clause cannot be Integer");
     }
 }
@@ -215,6 +216,7 @@ void QueryValidator::validatePatternClause() {
     //! Validate synonym for arg1 and arg2 are declared
     validateSynonymDeclaredPatternClause();
     //! Validate the correct RefType for pattern clause arg2
+    //! Should throw syntax error not semantic error
     validateArgRefTypePatternClause();
     //! Validate arg1 for pattern clause is declared as assign
     validateArg1DesignEntityPatternClause();
