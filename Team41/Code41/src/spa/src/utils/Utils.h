@@ -16,7 +16,7 @@ class Utils {
 public:
     const static unordered_set<string> BRACKETS;
     const static unordered_set<string> MATH_OPERATORS;
-    const static unordered_set<string> allowedTokenForRelExprNode;
+    const static unordered_set<string> VALID_TOKENS_REL_EXPR;
     const static unordered_set<string> VALID_TOKENS_COND_EXPR;
     const static unordered_set<string> CONNECTORS_SYMBOLS;
 
@@ -26,7 +26,6 @@ public:
     static bool isMathOperators(string str);
     static bool isBracket(string str);
     static bool isValidParentheses(vector<string>& tokens);
-    static bool isEvenNumber(int num);
     static bool isConnector(string str);
 };
 

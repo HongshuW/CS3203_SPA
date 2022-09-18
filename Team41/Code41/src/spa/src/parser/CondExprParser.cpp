@@ -47,7 +47,7 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
 
     expr.push_back(pop());
     if (direction == "left") {
-        while (currIdx < tokens.size() && Utils::allowedTokenForRelExprNode.count(peek()) == 0) {
+        while (currIdx < tokens.size() && Utils::VALID_TOKENS_REL_EXPR.count(peek()) == 0) {
             if (!Utils::isValidNumber(peek())
                     && !Utils::isValidName(peek())
                     && !Utils::isMathOperators(peek())
@@ -89,7 +89,7 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
 shared_ptr<RelExprNode> CondExprParser::parseRelExprNode() {
     shared_ptr<ExprNode> exprNodeLHS = parseExprNodeForRelExpr("left");
     string op = peek();
-    if (Utils::allowedTokenForRelExprNode.count(peek()) == 0) {
+    if (Utils::VALID_TOKENS_REL_EXPR.count(peek()) == 0) {
         throw SPParseException("Expect a comparator operator in conditional expression, got: " + op);
     }
     currIdx++;

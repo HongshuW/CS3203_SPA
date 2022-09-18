@@ -7,14 +7,8 @@
 
 using namespace QB;
 
-const std::regex IDENT_REGEX = std::regex("[a-zA-Z](\\d|[a-zA-Z])*");
-
 Ident::Ident(string identStr) : identStr(identStr) {
-    if (!Ident::isValidIdent(identStr)) {
+    if (!Utils::isValidName(identStr)) {
         throw PQLParseException("Invalid ident, unexpected token: " + identStr);
     }
-}
-
-bool Ident::isValidIdent(std::string str) {
-    return std::regex_match(str, IDENT_REGEX);
 }

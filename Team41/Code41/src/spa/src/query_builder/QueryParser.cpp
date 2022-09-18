@@ -87,19 +87,15 @@ Ref QueryParser::parseRef() {
         expect("\"");
         Ident ident = Ident(identStr);
         return ident;
-    } else if (isDigit(peek())) {
+    } else if (Utils::isValidNumber(peek())) {
         return std::stoi(pop());
-    } else if (Synonym::isValidSynonym(peek())) {
+    } else if (Utils::isValidName(peek())) {
         string synonymStr = pop();
         Synonym synonym = Synonym(synonymStr);
         return synonym;
     } else {
         throw PQLParseException("Expecting a Ref, got " + peek());
     }
-}
-
-bool QueryParser::isDigit(const string &str) {
-    return str.find_first_not_of("0123456789") == std::string::npos;
 }
 
 bool QueryParser::parseSuchThatClause() {

@@ -10,13 +10,13 @@
 #include <iostream>
 #include <optional>
 #include <regex>
+#include "utils/Utils.h"
 
 namespace QB {
     class Synonym {
     public:
         std::string synonym;
         explicit Synonym(std::string synonym);
-        static bool isValidSynonym(std::string str);
 
         bool operator==(const Synonym& synonym1) const { return synonym == synonym1.synonym; }
 
