@@ -8,14 +8,8 @@
 
 using namespace QB;
 
-const std::regex SYNONYM_REGEX = std::regex("[a-zA-Z](\\d|[a-zA-Z])*");
-
-bool Synonym::isValidSynonym(std::string str) {
-    return std::regex_match(str, SYNONYM_REGEX);
-}
-
-Synonym::Synonym(std::string synonym) : synonym(synonym) {
-    if (!Synonym::isValidSynonym(synonym)) {
+Synonym::Synonym(string synonym) : synonym(synonym) {
+    if (!Utils::isValidName(synonym)) {
         throw PQLParseException("Invalid synonym, unexpected token: " + synonym);
     }
 }

@@ -27,7 +27,6 @@ namespace QB {
         bool parseDeclarations();
         void parseSelectClause();
         Ref parseRef();
-        bool isDigit(const string &str);
         bool parseSuchThatClause();
         bool parsePatternClause();
         ExpressionSpec parseExpressionSpec();

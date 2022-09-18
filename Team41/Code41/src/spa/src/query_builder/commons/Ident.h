@@ -10,6 +10,7 @@
 #include <iostream>
 #include <optional>
 #include <regex>
+#include "utils/Utils.h"
 
 using namespace std;
 
@@ -18,8 +19,6 @@ namespace QB {
     public:
         string identStr;
         Ident(string identStr);
-
-        static bool isValidIdent(std::string identStr);
 
         bool operator==(const Ident& ident1) const { return identStr == ident1.identStr; }
 
