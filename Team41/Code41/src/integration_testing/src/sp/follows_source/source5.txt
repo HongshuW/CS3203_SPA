@@ -1,0 +1,10 @@
+procedure testProcedure {
+            x = 0;
+            if (x <= 1) then {
+            x = 1;
+            y = 3;
+            z = y + x;
+            } else {
+            x = 5;
+            }
+            }

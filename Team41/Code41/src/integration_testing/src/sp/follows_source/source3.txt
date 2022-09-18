@@ -1,0 +1,8 @@
+procedure testProcedure {
+            x = 0;
+            if (x <= 1) then {
+            x = 1;
+            } else {
+            x = 5;
+            }
+            }

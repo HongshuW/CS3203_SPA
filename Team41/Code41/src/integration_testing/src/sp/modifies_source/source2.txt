@@ -1,0 +1,7 @@
+procedure testProcedure {
+            print x;
+            x = y + z;
+            z = y + 4;
+            a = y + 4;
+            c = y + 4;
+            }
