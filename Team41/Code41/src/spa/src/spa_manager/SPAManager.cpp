@@ -17,6 +17,8 @@ void SPAManager::parse(string &filename) {
         exit(EXIT_SUCCESS);
     } catch (const SPParseException& e) {
         exit(EXIT_SUCCESS);
+    } catch (std::exception& e) {
+        exit(EXIT_SUCCESS);
     }
 }
 
@@ -41,6 +43,9 @@ vector<string> SPAManager::evaluate(string& query) {
         results.push_back(errorMessage);
     } catch (const PQLValidationException& e) {
         string errorMessage = "SemanticError";
+        results.push_back(errorMessage);
+    } catch (std::exception& e) {
+        string errorMessage = "SyntaxError";
         results.push_back(errorMessage);
     }
     return results;
