@@ -325,6 +325,38 @@ TEST_CASE ("Test Query Tokenizer") {
                            }));
     }
 
+    SECTION ("assign a1, a2; Select <a1, a2> such that Affects (a1, a2)") {
+        std::string query = "assign a1, a2; Select <a1, a2> such that Affects (a1, a2)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"assign", "a1", ",", "a2", ";", "Select", "<", "a1", ",", "a2", ">", "such", "that",
+                 "Affects", "(", "a1", ",", "a2", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("assign a1, a2; Select <a1.stmt#, a2> such that Affects (a1, a2)") {
+        std::string query = "assign a1, a2; Select <a1.stmt#, a2> such that Affects (a1, a2)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"assign", "a1", ",", "a2", ";", "Select", "<", "a1", ".", "stmt#", ",", "a2", ">", "such", "that",
+                 "Affects", "(", "a1", ",", "a2", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
     SECTION ("Test unexpected tokens") {
         std::string query = "stmt s& Select s such that Follows* (a, 6)";
         QueryTokenizer tokenizer = QueryTokenizer(query);

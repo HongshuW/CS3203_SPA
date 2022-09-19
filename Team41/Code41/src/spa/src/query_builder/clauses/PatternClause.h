@@ -16,7 +16,7 @@ namespace QB {
     class PatternClause {
     public:
         //! pattern arg1(arg2, arg3)
-        Synonym arg1; // must be ASSIGN
+        Synonym arg1; // must be ASSIGN, IF, WHILE
         Ref arg2; // entRef -> synonym, _, ident
         ExpressionSpec arg3;
 
