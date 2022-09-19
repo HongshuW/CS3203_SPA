@@ -8,18 +8,18 @@ filesPath=./
 # where do you want the output to be located, remember to put analysis.xsl under this path
 outputPath=../m1-out/
 
-source=source-long-pattern.txt
+source=deep_nesting_source.txt
 
-query_prefix=queries-
-query_suffix=-clause.txt
+query_prefix=deep_nesting_
+query_suffix=_clause_queries.txt
 
-output_prefix=
-output_suffix=-clause-out.xml
+output_prefix=deep_nesting_
+output_suffix=_clause_out.xml
 
 #check if the directory exist and make one if not
-[ ! -d "../m1-out/" ] && mkdir ../m1-out
+ [ ! -d "../m1-out/" ] && mkdir ../m1-out
 
-types=("long-pattern")
+types=("no" "one_follows" "one_parent" "one_uses" "one_modifies" "one_pattern" "two_follows_pattern" "two_modifies_pattern" "two_parent_pattern" "two_uses_pattern")
 
 for type in "${types[@]}"
 do
@@ -30,3 +30,4 @@ done
 cd $outputPath
 open http://localhost:8000
 python -m http.server 8000
+

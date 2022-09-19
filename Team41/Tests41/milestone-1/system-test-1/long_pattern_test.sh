@@ -1,5 +1,5 @@
 #!/bin/bash
-# before first execution: chmod 777 test-source-simple.sh to set execution permission
+# before first execution: chmod 777 
 # remember to build the latest autotester before execution
 # paths to edit
 autotester=../../../Code41/cmake-build-release/src/autotester/autotester
@@ -8,19 +8,18 @@ filesPath=./
 # where do you want the output to be located, remember to put analysis.xsl under this path
 outputPath=../m1-out/
 
-source=source-simple.txt
+source=long_pattern_source.txt
 
-query_prefix=queries-simple-
-query_suffix=-clause.txt
+query_prefix=
+query_suffix=_clause_queries.txt
 
-output_prefix=simle-
-output_suffix=-clause-out.xml
+output_prefix=
+output_suffix=_clause_out.xml
 
 #check if the directory exist and make one if not
 [ ! -d "../m1-out/" ] && mkdir ../m1-out
 
-types=("no" "one-follows" "one-parent" "one-uses" "one-pattern" "one-modifies" "two-follows-pattern"
-"two-modifies-pattern" "two-parent-pattern" "two-uses-pattern")
+types=("long_pattern")
 
 for type in "${types[@]}"
 do
@@ -31,4 +30,3 @@ done
 cd $outputPath
 open http://localhost:8000
 python -m http.server 8000
-
