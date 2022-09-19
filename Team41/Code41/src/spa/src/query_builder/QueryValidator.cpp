@@ -168,58 +168,64 @@ void QueryValidator::validateSuchThatClause() {
 }
 
 void QueryValidator::validateSynonymDeclaredPatternClause() {
-    //! Validation for agr1
-    shared_ptr<PatternClause> patternClause = query->patternClause;
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClause;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-    if (!Declaration::findDeclaration(patternClause->arg1, declarations)) {
-        throw PQLValidationException(
-                "Synonym: " + patternClause->arg1.synonym + " is not defined for Pattern Clause first argument");
-    }
+    for (auto patternClause : *patternClauses) {
+        //! Validation for agr1
+        if (!Declaration::findDeclaration(patternClause->arg1, declarations)) {
+            throw PQLValidationException(
+                    "Synonym: " + patternClause->arg1.synonym + " is not defined for Pattern Clause first argument");
+        }
 
-    //! Validation for agr2 (if arg2 is a Synonym)
-    auto arg2 = get_if<Synonym>(&patternClause->arg2);
-    if (arg2 && !Declaration::findDeclaration(*arg2, declarations)) {
-        throw PQLValidationException(
-                "Synonym: " + arg2->synonym + " is not defined for Pattern Clause second argument");
+        //! Validation for agr2 (if arg2 is a Synonym)
+        auto arg2 = get_if<Synonym>(&patternClause->arg2);
+        if (arg2 && !Declaration::findDeclaration(*arg2, declarations)) {
+            throw PQLValidationException(
+                    "Synonym: " + arg2->synonym + " is not defined for Pattern Clause second argument");
+        }
     }
 }
 
 void QueryValidator::validateArgRefTypePatternClause() {
     //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
-    shared_ptr<PatternClause> patternClause = query->patternClause;
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClause;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-
-    int arg2RefIndex = patternClause->arg2.index();
-
-    if (!entRefIndexSet.count(arg2RefIndex)) {
-        throw PQLParseException(
-                "Second argument of Pattern Clause cannot be Integer");
+    for (auto patternClause : *patternClauses) {
+        int arg2RefIndex = patternClause->arg2.index();
+        if (!entRefIndexSet.count(arg2RefIndex)) {
+            throw PQLParseException(
+                    "Second argument of Pattern Clause cannot be Integer");
+        }
     }
 }
 
 void QueryValidator::validateArg1DesignEntityPatternClause() {
     //! Validate arg1 for pattern clause is declared as assign, if or while
-    shared_ptr<PatternClause> patternClause = query->patternClause;
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClause;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-    auto declaration = Declaration::findDeclaration(patternClause->arg1, declarations);
-    if (declaration && ALLOW_SYNONYM_PATTERN.count(declaration->getDesignEntity())) {
-        throw PQLValidationException(
-                "Expect pattern clause arg1 to be declared as assign, got " +
-                getDesignEntityString(declaration->getDesignEntity()));
+    for (auto patternClause : *patternClauses) {
+        auto declaration = Declaration::findDeclaration(patternClause->arg1, declarations);
+        if (declaration && ALLOW_SYNONYM_PATTERN.count(declaration->getDesignEntity())) {
+            throw PQLValidationException(
+                    "Expect pattern clause arg1 to be declared as assign, got " +
+                    getDesignEntityString(declaration->getDesignEntity()));
+        }
     }
 }
 
 void QueryValidator::validateArg2DesignEntityPatternClause() {
     //! Validate if agr2 is a synonym, it must be declared as variable
-    shared_ptr<PatternClause> patternClause = query->patternClause;
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClause;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-    auto arg2 = get_if<Synonym>(&patternClause->arg2);
-    if (arg2) {
-        auto declaration = Declaration::findDeclaration(*arg2, declarations);
-        if (declaration && declaration->getDesignEntity() != DesignEntity::VARIABLE) {
-            throw PQLValidationException(
-                    "Expect pattern clause arg2 to be declared as variable, got " +
-                    getDesignEntityString(declaration->getDesignEntity()));
+    for (auto patternClause : *patternClauses) {
+        auto arg2 = get_if<Synonym>(&patternClause->arg2);
+        if (arg2) {
+            auto declaration = Declaration::findDeclaration(*arg2, declarations);
+            if (declaration && declaration->getDesignEntity() != DesignEntity::VARIABLE) {
+                throw PQLValidationException(
+                        "Expect pattern clause arg2 to be declared as variable, got " +
+                        getDesignEntityString(declaration->getDesignEntity()));
+            }
         }
     }
 }
@@ -244,7 +250,5 @@ void QueryValidator::validateQuery() {
     //! Validation for such that clause
     validateSuchThatClause();
     //! Validation for pattern clause
-    if (query->patternClause) {
-        validatePatternClause();
-    }
+    validatePatternClause();
 }
