@@ -8,7 +8,7 @@
 using QB::QueryTokenizer;
 using namespace std;
 
-QueryTokenizer::QueryTokenizer(std::string query) : currIdx(0), query(query){};
+QueryTokenizer::QueryTokenizer(string query) : currIdx(0), query(query){};
 
 char QueryTokenizer::peek() {
     char c;

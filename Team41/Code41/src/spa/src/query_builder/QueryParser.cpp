@@ -145,15 +145,7 @@ Ref QueryParser::parseRef() {
     }
 }
 
-bool QueryParser::parseSuchThatClause() {
-    unsigned int savedIdx = currIdx;
-    if (!match("such")) {
-        currIdx = savedIdx;
-        return false;
-    }
-
-    expect("that");
-
+void QueryParser::parseSuchThatClause() {
     string relationTypeStr = pop();
     RelationType relationType = getRelationTypeFromStr(relationTypeStr);
 
@@ -166,6 +158,15 @@ bool QueryParser::parseSuchThatClause() {
     shared_ptr<SuchThatClause> suchThatClause =
         make_shared<SuchThatClause>(relationType, arg1, arg2, query->declarations);
     query->suchThatClauses->push_back(suchThatClause);
+}
+
+bool QueryParser::parseSuchThat() {
+    if (!match("such")) return false;
+    expect("that");
+    parseSuchThatClause();
+    while(match("and")) {
+        parseSuchThatClause();
+    }
     return true;
 }
 
@@ -203,13 +204,7 @@ ExpressionSpec QueryParser::parseExpressionSpec() {
     }
 }
 
-bool QueryParser::parsePatternClause() {
-    unsigned int savedIdx = currIdx;
-    if (!match("pattern")) {
-        currIdx = savedIdx;
-        return false;
-    }
-
+void QueryParser::parsePatternClause() {
     Synonym arg1 = Synonym(pop());
     expect("(");
     // can be synonym, _, ident
@@ -220,6 +215,14 @@ bool QueryParser::parsePatternClause() {
 
     shared_ptr<PatternClause> patternClause = make_shared<PatternClause>(arg1, arg2, arg3);
     query->patternClause = patternClause;
+}
+
+bool QueryParser::parsePattern() {
+    if (!match("pattern")) return false;
+    parsePatternClause();
+    while(match("and")) {
+        parsePatternClause();
+    }
     return true;
 }
 
@@ -235,8 +238,8 @@ shared_ptr<Query> QueryParser::parse() {
         parseSelectClause();
 
         while (currIdx < tokens.size()) {
-            if (parseSuchThatClause()) continue;
-            if (parsePatternClause()) continue;
+            if (parseSuchThat()) continue;
+            if (parsePattern()) continue;
             //! Throw syntax error accordingly
             throw PQLParseException("Expect a such that or pattern clause, got " + peek());
         }
