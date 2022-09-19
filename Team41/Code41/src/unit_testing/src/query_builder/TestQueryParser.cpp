@@ -331,7 +331,7 @@ TEST_CASE ("Test Query Parser") {
         returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
-        REQUIRE(*(query->patternClause) ==
+        REQUIRE(*(query->patternClauses) ==
                 PatternClause(
                         Synonym("a"),
                         Ident("test"),
@@ -349,7 +349,7 @@ TEST_CASE ("Test Query Parser") {
         returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
-        REQUIRE(*(query->patternClause) ==
+        REQUIRE(*(query->patternClauses) ==
                 PatternClause(
                         Synonym("a"),
                         Underscore(),
@@ -371,7 +371,7 @@ TEST_CASE ("Test Query Parser") {
         shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
         exprNode->left = make_shared<ExprNode>("x");
         exprNode->right = make_shared<ExprNode>("1");
-        REQUIRE(*(query->patternClause) ==
+        REQUIRE(*(query->patternClauses) ==
                 PatternClause(
                         Synonym("a"),
                         Underscore(),
@@ -393,7 +393,7 @@ TEST_CASE ("Test Query Parser") {
         shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
         exprNode->left = make_shared<ExprNode>("2");
         exprNode->right = make_shared<ExprNode>("1");
-        REQUIRE(*(query->patternClause) ==
+        REQUIRE(*(query->patternClauses) ==
                 PatternClause(
                         Synonym("a"),
                         Underscore(),
@@ -419,7 +419,7 @@ TEST_CASE ("Test Query Parser") {
         shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("*");
         exprNode->left = exprNodeLeft;
         exprNode->right = make_shared<ExprNode>("3");
-        REQUIRE(*(query->patternClause) ==
+        REQUIRE(*(query->patternClauses) ==
                 PatternClause(
                         Synonym("a"),
                         Underscore(),
@@ -444,7 +444,7 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
                                query->declarations));
-        REQUIRE(*(query->patternClause) ==
+        REQUIRE(*(query->patternClauses) ==
                 PatternClause(
                         Synonym("a"),
                         Synonym("v"),
@@ -468,7 +468,7 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
                                query->declarations));
-        REQUIRE(*(query->patternClause) ==
+        REQUIRE(*(query->patternClauses) ==
                 PatternClause(
                         Synonym("a"),
                         Synonym("v"),

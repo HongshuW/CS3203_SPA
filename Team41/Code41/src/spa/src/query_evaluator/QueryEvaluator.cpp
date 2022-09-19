@@ -33,7 +33,7 @@ QueryEvaluator::QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor) {
 QueryResult QueryEvaluator::evaluate(shared_ptr<Query> query) {
     QueryResult dummyEmptyQueryResult = QueryResult();
 
-    if (query->suchThatClauses->empty() && !query->patternClause) {//no such that or pattern clause
+    if (query->suchThatClauses->empty() && !query->patternClauses) {//no such that or pattern clause
         return this->evaluateNoConditionQuery(query);
     }
     Table selectedEntityTable = this->evaluateNoConditionQuery(query).table;
@@ -49,8 +49,8 @@ QueryResult QueryEvaluator::evaluate(shared_ptr<Query> query) {
     }
 
     //TODO: change pattern clause to plural clauses
-    if (query->patternClause) {
-        Table intermediateTable = this->dataPreprocessor->getTableByPattern(query->patternClause);
+    if (query->patternClauses) {
+        Table intermediateTable = this->dataPreprocessor->getTableByPattern(query->patternClauses);
         resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
     }
 

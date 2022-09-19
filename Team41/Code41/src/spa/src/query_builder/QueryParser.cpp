@@ -234,7 +234,7 @@ void QueryParser::parsePatternClause() {
         throw PQLParseException(getDesignEntityString(de) + " is not supported for Pattern Clause");
     }
     expect(")");
-    query->patternClause = patternClause;
+    query->patternClauses->push_back(patternClause);
 }
 
 bool QueryParser::parsePattern() {
@@ -242,6 +242,18 @@ bool QueryParser::parsePattern() {
     parsePatternClause();
     while(match("and")) {
         parsePatternClause();
+    }
+    return true;
+}
+
+void QueryParser::parseWithClause() {
+}
+
+bool QueryParser::parseWith() {
+    if (!match("with")) return false;
+    parseWithClause();
+    while(match("and")) {
+        parseWithClause();
     }
     return true;
 }
@@ -260,6 +272,7 @@ shared_ptr<Query> QueryParser::parse() {
         while (currIdx < tokens.size()) {
             if (parseSuchThat()) continue;
             if (parsePattern()) continue;
+            if (parseWith()) continue;
             //! Throw syntax error accordingly
             throw PQLParseException("Expect a such that or pattern clause, got " + peek());
         }
