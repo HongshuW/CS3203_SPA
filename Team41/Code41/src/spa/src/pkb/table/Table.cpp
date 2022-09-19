@@ -35,6 +35,17 @@ vector<string> Table::getRowByPrimaryKey(string key) {
     return vector<string>{};
 }
 
+shared_ptr<unordered_set<string>> Table::getValuesByKey(string key, int keyColumnNumber, int valueColumnNumber) {
+    int size = rows.size();
+    shared_ptr<unordered_set<string>> output = make_shared<unordered_set<string>>(unordered_set<string>{});
+    for (int i = 0; i < size; i++) {
+        if (rows[i][keyColumnNumber] == key) {
+            output->insert(rows[i][valueColumnNumber]);
+        }
+    }
+    return output;
+}
+
 void Table::appendRow(vector<string> row) {
     rows.push_back(row);
 }

@@ -22,6 +22,9 @@ public:
     virtual Table getTableByRelationType(RelationType relationType);
     virtual Table getTableByPattern(ExpressionSpec expressionSpec);
     virtual DesignEntity getDesignEntityOfStmt(int stmtNumber);
+    unordered_set<string> getFollowingStatements(int followedStatement);
+    unordered_set<string> getChildrenStatements(int parentStatement);
+    unordered_set<string> getModifiedVariables(int modifierStatement);
 
 private:
     shared_ptr<PKBStorage> pkbStorage;

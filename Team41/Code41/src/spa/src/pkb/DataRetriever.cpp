@@ -71,3 +71,18 @@ DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {
     string type = pkbStorage->getStmtType(stmtNumberString);
     return getDesignEntity(type);
 }
+
+unordered_set<string> DataRetriever::getFollowingStatements(int followedStatement) {
+    string stmtNumberString = to_string(followedStatement);
+    return *pkbStorage->getFollowingStatements(stmtNumberString);
+}
+
+unordered_set<string> DataRetriever::getChildrenStatements(int parentStatement) {
+    string stmtNumberString = to_string(parentStatement);
+    return *pkbStorage->getChildrenStatements(stmtNumberString);
+}
+
+unordered_set<string> DataRetriever::getModifiedVariables(int modifierStatement) {
+    string stmtNumberString = to_string(modifierStatement);
+    return *pkbStorage->getModifiedVariables(stmtNumberString);
+}

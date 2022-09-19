@@ -78,6 +78,9 @@ public:
     NextTable * getNextT();
     AffectsTable * getAffects();
     AffectsTable * getAffectsT();
+    shared_ptr<unordered_set<string>> getFollowingStatements(string followedStatement);
+    shared_ptr<unordered_set<string>> getChildrenStatements(string parentStatement);
+    shared_ptr<unordered_set<string>> getModifiedVariables(string modifierStatement);
     // setters of relations
     void saveFollows(vector<string> follows);
     void saveFollowsT(vector<string> followsT);
