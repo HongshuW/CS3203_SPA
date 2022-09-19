@@ -1,5 +1,5 @@
 #!/bin/bash
-# before first execution: chmod 777 test-source-simple.sh to set execution permission
+# before first execution: chmod 777 
 # remember to build the latest autotester before execution
 # paths to edit
 autotester=../../../Code41/cmake-build-release/src/autotester/autotester
@@ -8,18 +8,19 @@ filesPath=./
 # where do you want the output to be located, remember to put analysis.xsl under this path
 outputPath=../m1-out/
 
-source=source-deep-nesting.txt
+source=simple_source.txt
 
-query_prefix=queries-deep-nesting-
-query_suffix=-clause.txt
+query_prefix=simple_
+query_suffix=_clause_queries.txt
 
-output_prefix=deep-nesting-
-output_suffix=-clause-out.xml
+output_prefix=simle_
+output_suffix=_clause_out.xml
 
 #check if the directory exist and make one if not
- [ ! -d "../m1-out/" ] && mkdir ../m1-out
+[ ! -d "../m1-out/" ] && mkdir ../m1-out
 
-types=("no" "one-follows" "one-parent" "one-uses" "one-modifies" "one-pattern" "two-follows-pattern" "two-modifies-pattern" "two-parent-pattern" "two-uses-pattern")
+types=("no" "one_follows" "one_parent" "one_uses" "one_pattern" "one_modifies" "two_follows_pattern"
+"two_modifies_pattern" "two_parent_pattern" "two_uses_pattern")
 
 for type in "${types[@]}"
 do
