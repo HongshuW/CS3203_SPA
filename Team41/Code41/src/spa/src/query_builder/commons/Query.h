@@ -24,7 +24,7 @@ namespace QB {
         shared_ptr<vector<Declaration>> declarations;
         shared_ptr<SelectClause> selectClause;
         shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses;
-        shared_ptr<vector<shared_ptr<PatternClause>>> patternClause;
+        shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses;
 
         Query();
 
@@ -40,7 +40,7 @@ namespace QB {
                 os << clause << " ";
             }
 
-            os << "; " << query.patternClause;
+            os << "; " << query.patternClauses;
 
             return os;
         }

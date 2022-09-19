@@ -168,7 +168,7 @@ void QueryValidator::validateSuchThatClause() {
 }
 
 void QueryValidator::validateSynonymDeclaredPatternClause() {
-    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClause;
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
     for (auto patternClause : *patternClauses) {
         //! Validation for agr1
@@ -188,7 +188,7 @@ void QueryValidator::validateSynonymDeclaredPatternClause() {
 
 void QueryValidator::validateArgRefTypePatternClause() {
     //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
-    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClause;
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
     for (auto patternClause : *patternClauses) {
         int arg2RefIndex = patternClause->arg2.index();
@@ -201,7 +201,7 @@ void QueryValidator::validateArgRefTypePatternClause() {
 
 void QueryValidator::validateArg1DesignEntityPatternClause() {
     //! Validate arg1 for pattern clause is declared as assign, if or while
-    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClause;
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
     for (auto patternClause : *patternClauses) {
         auto declaration = Declaration::findDeclaration(patternClause->arg1, declarations);
@@ -215,7 +215,7 @@ void QueryValidator::validateArg1DesignEntityPatternClause() {
 
 void QueryValidator::validateArg2DesignEntityPatternClause() {
     //! Validate if agr2 is a synonym, it must be declared as variable
-    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClause;
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
     for (auto patternClause : *patternClauses) {
         auto arg2 = get_if<Synonym>(&patternClause->arg2);
