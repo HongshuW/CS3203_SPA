@@ -18,8 +18,11 @@ namespace QB {
         //! pattern arg1(arg2, arg3)
         Synonym arg1; // must be ASSIGN, IF, WHILE
         Ref arg2; // entRef -> synonym, _, ident
-        ExpressionSpec arg3;
+        optional<ExpressionSpec> arg3;
 
+        //! For while and if
+        PatternClause(Synonym arg1, Ref arg2);
+        //! For assign
         PatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
 
         bool operator==(const PatternClause& patternClause) const {

@@ -206,14 +206,34 @@ ExpressionSpec QueryParser::parseExpressionSpec() {
 
 void QueryParser::parsePatternClause() {
     Synonym arg1 = Synonym(pop());
+    auto declaration = Declaration::findDeclaration(arg1, query->declarations);
+    if (!declaration) {
+        throw PQLValidationException("Synonym " + arg1.synonym + " is not declared for Pattern Clause");
+    }
     expect("(");
-    // can be synonym, _, ident
-    Ref arg2 = parseRef();
-    expect(",");
-    ExpressionSpec arg3 = parseExpressionSpec();
+    shared_ptr<PatternClause> patternClause;
+    DesignEntity de = declaration->getDesignEntity();
+    if (de == DesignEntity::ASSIGN) {
+        Ref arg2 = parseRef();
+        expect(",");
+        ExpressionSpec arg3 = parseExpressionSpec();
+        patternClause = make_shared<PatternClause>(arg1, arg2, arg3);
+    } else if (de == DesignEntity::IF) {
+        Ref arg2 = parseRef();
+        expect(",");
+        expect("_");
+        expect(",");
+        expect("_");
+        patternClause = make_shared<PatternClause>(arg1, arg2);
+    } else if (de == DesignEntity::WHILE) {
+        Ref arg2 = parseRef();
+        expect(",");
+        expect("_");
+        patternClause = make_shared<PatternClause>(arg1, arg2);
+    } else {
+        throw PQLParseException(getDesignEntityString(de) + " is not supported for Pattern Clause");
+    }
     expect(")");
-
-    shared_ptr<PatternClause> patternClause = make_shared<PatternClause>(arg1, arg2, arg3);
     query->patternClause = patternClause;
 }
 
