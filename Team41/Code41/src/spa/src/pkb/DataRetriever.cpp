@@ -45,6 +45,18 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
             return *pkbStorage->getUsesS();
         case RelationType::USES_P:
             return *pkbStorage->getUsesP();
+        case RelationType::CALLS:
+            return *pkbStorage->getCalls();
+        case RelationType::CALLS_T:
+            return *pkbStorage->getCallsT();
+        case RelationType::NEXT:
+            return *pkbStorage->getNext();
+        case RelationType::NEXT_T:
+            return *pkbStorage->getNextT();
+        case RelationType::AFFECTS:
+            return *pkbStorage->getAffects();
+        case RelationType::AFFECTS_T:
+            return *pkbStorage->getAffectsT();
         default:
             return Table();
     }

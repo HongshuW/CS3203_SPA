@@ -117,6 +117,60 @@ void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
 }
 
 /**
+ * Saves a Calls relationship to the pkb.
+ *
+ * @param callsRelation vector<string>{callingProcedure, calledProcedure}
+ */
+void DataModifier::saveCalls(vector<string> callsRelation) {
+    pkbStorage->saveCalls(callsRelation);
+}
+
+/**
+ * Saves a Calls* relationship to the pkb.
+ *
+ * @param callsTRelation vector<string>{callingProcedure, calledProcedure}
+ */
+void DataModifier::saveCallsT(vector<string> callsTRelation) {
+    pkbStorage->saveCallsT(callsTRelation);
+}
+
+/**
+ * Saves a Next relationship to the pkb.
+ *
+ * @param nextRelation vector<string>{precedingStatement, ensuingStatement}
+ */
+void DataModifier::saveNext(vector<string> nextRelation) {
+    pkbStorage->saveNext(nextRelation);
+}
+
+/**
+ * Saves a Next* relationship to the pkb.
+ *
+ * @param nextTRelation vector<string>{precedingStatement, ensuingStatement}
+ */
+void DataModifier::saveNextT(vector<string> nextTRelation) {
+    pkbStorage->saveNextT(nextTRelation);
+}
+
+/**
+ * Saves an Affects relationship to the pkb.
+ *
+ * @param affectsRelation vector<string>{affectingStatement, affectedStatement}
+ */
+void DataModifier::saveAffects(vector<string> affectsRelation) {
+    pkbStorage->saveAffects(affectsRelation);
+}
+
+/**
+ * Saves an Affects* relationship to the pkb.
+ *
+ * @param affectsTRelation vector<string>{affectingStatement, affectedStatement}
+ */
+void DataModifier::saveAffectsT(vector<string> affectsTRelation) {
+    pkbStorage->saveAffectsT(affectsTRelation);
+}
+
+/**
  * Saves a Pattern to the pkb.
  *
  * @param metainfo vector<string>{statementNumber, variableName};

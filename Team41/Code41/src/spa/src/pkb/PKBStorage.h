@@ -9,18 +9,20 @@
 #include <list>
 #include <string>
 #include <vector>
-#include "pkb/table/ConstantTable.h"
-#include "pkb/table/Table.h"
-#include "pkb/table/ProcedureTable.h"
-#include "pkb/table/StatementTable.h"
-#include "pkb/table/VariableTable.h"
-#include "pkb/table/FollowsTable.h"
-#include "pkb/table/ModifiesTable.h"
-#include "pkb/table/ParentTable.h"
-#include "pkb/table/Table.h"
-#include "pkb/table/UsesTable.h"
 #include "query_builder/commons/ExpressionSpec.h"
+#include "table/AffectsTable.h"
+#include "table/CallsTable.h"
+#include "table/ConstantTable.h"
+#include "table/FollowsTable.h"
+#include "table/ModifiesTable.h"
+#include "table/NextTable.h"
+#include "table/ParentTable.h"
 #include "table/PatternTable.h"
+#include "table/ProcedureTable.h"
+#include "table/StatementTable.h"
+#include "table/Table.h"
+#include "table/UsesTable.h"
+#include "table/VariableTable.h"
 
 using namespace std;
 
@@ -29,19 +31,25 @@ public:
     explicit PKBStorage();
 
     // Column Names
+    static string PROCEDURE_TABLE_COL1_NAME;
     static string STATEMENT_TABLE_COL1_NAME;
     static string STATEMENT_TABLE_COL2_NAME;
     static string VARIABLE_TABLE_COL1_NAME;
     static string CONSTANT_TABLE_COL1_NAME;
     static string USES_TABLE_COL1_NAME;
     static string USES_TABLE_COL2_NAME;
-    static string PROCEDURE_TABLE_COL1_NAME;
     static string PARENT_TABLE_COL1_NAME;
     static string PARENT_TABLE_COL2_NAME;
     static string MODIFIES_TABLE_COL1_NAME;
     static string MODIFIES_TABLE_COL2_NAME;
     static string FOLLOWS_TABLE_COL1_NAME;
     static string FOLLOWS_TABLE_COL2_NAME;
+    static string CALLS_TABLE_COL1_NAME;
+    static string CALLS_TABLE_COL2_NAME;
+    static string NEXT_TABLE_COL1_NAME;
+    static string NEXT_TABLE_COL2_NAME;
+    static string AFFECTS_TABLE_COL1_NAME;
+    static string AFFECTS_TABLE_COL2_NAME;
 
     // getters of entities
     ProcedureTable * getProcedures();
@@ -64,6 +72,12 @@ public:
     UsesTable * getUsesP();
     ModifiesTable * getModifiesS();
     ModifiesTable * getModifiesP();
+    CallsTable * getCalls();
+    CallsTable * getCallsT();
+    NextTable * getNext();
+    NextTable * getNextT();
+    AffectsTable * getAffects();
+    AffectsTable * getAffectsT();
     // setters of relations
     void saveFollows(vector<string> follows);
     void saveFollowsT(vector<string> followsT);
@@ -73,6 +87,12 @@ public:
     void saveUsesP(vector<string> usesP);
     void saveModifiesS(vector<string> modifiesS);
     void saveModifiesP(vector<string> modifiesP);
+    void saveCalls(vector<string> calls);
+    void saveCallsT(vector<string> callsT);
+    void saveNext(vector<string> next);
+    void saveNextT(vector<string> nextT);
+    void saveAffects(vector<string> affects);
+    void saveAffectsT(vector<string> affectsT);
 
     // getters of patterns
     shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);
@@ -95,6 +115,12 @@ private:
     UsesTable usesPTable;
     ModifiesTable modifiesSTable;
     ModifiesTable modifiesPTable;
+    CallsTable callsTable;
+    CallsTable callsTTable;
+    NextTable nextTable;
+    NextTable nextTTable;
+    AffectsTable affectsTable;
+    AffectsTable affectsTTable;
     // Pattern Tables
     PatternTable patternTable;
 };
