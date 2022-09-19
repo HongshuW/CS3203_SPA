@@ -28,7 +28,13 @@ namespace QB {
         MODIFIES_P,
         USES,
         USES_S,
-        USES_P
+        USES_P,
+        CALLS,
+        CALLS_T,
+        NEXT,
+        NEXT_T,
+        AFFECTS,
+        AFFECTS_T
     };
 
     RelationType getRelationTypeFromStr(string& str);

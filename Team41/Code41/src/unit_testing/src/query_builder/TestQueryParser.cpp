@@ -236,6 +236,54 @@ TEST_CASE ("Test Query Parser") {
                                query->declarations));
     }
 
+    SECTION ("procedure p; Select p such that Calls* (p, _)") {
+        std::string queryStr = "procedure p; Select p such that Calls* (p, _)";
+        auto query = QueryBuilder().buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::PROCEDURE, Synonym("p"))});
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(Synonym("p")));
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::CALLS_T);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
+                SuchThatClause(RelationType::CALLS_T, Synonym("p"), Underscore(),
+                               query->declarations));
+    }
+
+    SECTION ("while w; Select w such that Next (w, 2)") {
+        std::string queryStr = "while w; Select w such that Next (w, 2)";
+        auto query = QueryBuilder().buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::WHILE, Synonym("w"))});
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(Synonym("w")));
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::NEXT);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
+                SuchThatClause(RelationType::NEXT, Synonym("w"), 2,
+                               query->declarations));
+    }
+
+    SECTION ("while w; Select w such that Affects* (_, w)") {
+        std::string queryStr = "while w; Select w such that Affects* (_, w)";
+        auto query = QueryBuilder().buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::WHILE, Synonym("w"))});
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(Synonym("w")));
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::AFFECTS_T);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
+                SuchThatClause(RelationType::AFFECTS_T, Underscore(), Synonym("w"),
+                               query->declarations));
+    }
+
     SECTION ("assign a; Select a pattern a (\"test\", _)") {
         std::string queryStr = "assign a; Select a pattern a (\"test\", _)";
         auto query = QueryBuilder().buildPQLQuery(queryStr);
