@@ -27,8 +27,10 @@ namespace QB {
         bool parseDeclarations();
         void parseSelectClause();
         Ref parseRef();
-        bool parseSuchThatClause();
-        bool parsePatternClause();
+        void parseSuchThatClause();
+        bool parseSuchThat();
+        bool parsePattern();
+        void parsePatternClause();
         ExpressionSpec parseExpressionSpec();
         void parseBooleanSelectClause();
         Elem parseTupleSelectClause();
