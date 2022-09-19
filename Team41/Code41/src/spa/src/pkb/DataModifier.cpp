@@ -121,8 +121,8 @@ void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
  *
  * @param callsRelation vector<string>{callingProcedure, calledProcedure}
  */
-void DataModifier::saveCallsTable(vector<string> callsRelation) {
-    pkbStorage->saveCallsTable(callsRelation);
+void DataModifier::saveCalls(vector<string> callsRelation) {
+    pkbStorage->saveCalls(callsRelation);
 }
 
 /**
@@ -130,8 +130,8 @@ void DataModifier::saveCallsTable(vector<string> callsRelation) {
  *
  * @param callsTRelation vector<string>{callingProcedure, calledProcedure}
  */
-void DataModifier::saveCallsTTable(vector<string> callsTRelation) {
-    pkbStorage->saveCallsTTable(callsTRelation);
+void DataModifier::saveCallsT(vector<string> callsTRelation) {
+    pkbStorage->saveCallsT(callsTRelation);
 }
 
 /**
@@ -139,8 +139,8 @@ void DataModifier::saveCallsTTable(vector<string> callsTRelation) {
  *
  * @param nextRelation vector<string>{precedingStatement, ensuingStatement}
  */
-void DataModifier::saveNextTable(vector<string> nextRelation) {
-    pkbStorage->saveNextTable(nextRelation);
+void DataModifier::saveNext(vector<string> nextRelation) {
+    pkbStorage->saveNext(nextRelation);
 }
 
 /**
@@ -148,8 +148,8 @@ void DataModifier::saveNextTable(vector<string> nextRelation) {
  *
  * @param nextTRelation vector<string>{precedingStatement, ensuingStatement}
  */
-void DataModifier::saveNextTTable(vector<string> nextTRelation) {
-    pkbStorage->saveNextTTable(nextTRelation);
+void DataModifier::saveNextT(vector<string> nextTRelation) {
+    pkbStorage->saveNextT(nextTRelation);
 }
 
 /**
@@ -157,8 +157,8 @@ void DataModifier::saveNextTTable(vector<string> nextTRelation) {
  *
  * @param affectsRelation vector<string>{affectingStatement, affectedStatement}
  */
-void DataModifier::saveAffectsTable(vector<string> affectsRelation) {
-    pkbStorage->saveAffectsTable(affectsRelation);
+void DataModifier::saveAffects(vector<string> affectsRelation) {
+    pkbStorage->saveAffects(affectsRelation);
 }
 
 /**
@@ -166,8 +166,8 @@ void DataModifier::saveAffectsTable(vector<string> affectsRelation) {
  *
  * @param affectsTRelation vector<string>{affectingStatement, affectedStatement}
  */
-void DataModifier::saveAffectsTTable(vector<string> affectsTRelation) {
-    pkbStorage->saveAffectsTTable(affectsTRelation);
+void DataModifier::saveAffectsT(vector<string> affectsTRelation) {
+    pkbStorage->saveAffectsT(affectsTRelation);
 }
 
 /**

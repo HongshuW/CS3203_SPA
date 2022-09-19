@@ -117,27 +117,27 @@ ModifiesTable * PKBStorage::getModifiesP() {
     return &modifiesPTable;
 }
 
-CallsTable * PKBStorage::getCallsTable() {
+CallsTable * PKBStorage::getCalls() {
     return &callsTable;
 }
 
-CallsTable * PKBStorage::getCallsTTable() {
+CallsTable * PKBStorage::getCallsT() {
     return &callsTTable;
 }
 
-NextTable * PKBStorage::getNextTable() {
+NextTable * PKBStorage::getNext() {
     return &nextTable;
 }
 
-NextTable * PKBStorage::getNextTTable() {
+NextTable * PKBStorage::getNextT() {
     return &nextTTable;
 }
 
-AffectsTable * PKBStorage::getAffectsTable() {
+AffectsTable * PKBStorage::getAffects() {
     return &affectsTable;
 }
 
-AffectsTable * PKBStorage::getAffectsTTable() {
+AffectsTable * PKBStorage::getAffectsT() {
     return &affectsTTable;
 }
 
@@ -173,27 +173,27 @@ void PKBStorage::saveModifiesP(vector<string> modifiesP) {
     modifiesPTable.appendRow(modifiesP);
 }
 
-void PKBStorage::saveCallsTable(vector<string> calls) {
+void PKBStorage::saveCalls(vector<string> calls) {
     callsTable.appendRow(calls);
 }
 
-void PKBStorage::saveCallsTTable(vector<string> callsT) {
+void PKBStorage::saveCallsT(vector<string> callsT) {
     callsTTable.appendRow(callsT);
 }
 
-void PKBStorage::saveNextTable(vector<string> next) {
+void PKBStorage::saveNext(vector<string> next) {
     nextTable.appendRow(next);
 }
 
-void PKBStorage::saveNextTTable(vector<string> nextT) {
+void PKBStorage::saveNextT(vector<string> nextT) {
     nextTTable.appendRow(nextT);
 }
 
-void PKBStorage::saveAffectsTable(vector<string> affects) {
+void PKBStorage::saveAffects(vector<string> affects) {
     affectsTable.appendRow(affects);
 }
 
-void PKBStorage::saveAffectsTTable(vector<string> affectsT) {
+void PKBStorage::saveAffectsT(vector<string> affectsT) {
     affectsTTable.appendRow(affectsT);
 }
 

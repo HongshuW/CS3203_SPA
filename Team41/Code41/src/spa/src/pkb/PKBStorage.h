@@ -72,12 +72,12 @@ public:
     UsesTable * getUsesP();
     ModifiesTable * getModifiesS();
     ModifiesTable * getModifiesP();
-    CallsTable * getCallsTable();
-    CallsTable * getCallsTTable();
-    NextTable * getNextTable();
-    NextTable * getNextTTable();
-    AffectsTable * getAffectsTable();
-    AffectsTable * getAffectsTTable();
+    CallsTable * getCalls();
+    CallsTable * getCallsT();
+    NextTable * getNext();
+    NextTable * getNextT();
+    AffectsTable * getAffects();
+    AffectsTable * getAffectsT();
     // setters of relations
     void saveFollows(vector<string> follows);
     void saveFollowsT(vector<string> followsT);
@@ -87,12 +87,12 @@ public:
     void saveUsesP(vector<string> usesP);
     void saveModifiesS(vector<string> modifiesS);
     void saveModifiesP(vector<string> modifiesP);
-    void saveCallsTable(vector<string> calls);
-    void saveCallsTTable(vector<string> callsT);
-    void saveNextTable(vector<string> next);
-    void saveNextTTable(vector<string> nextT);
-    void saveAffectsTable(vector<string> affects);
-    void saveAffectsTTable(vector<string> affectsT);
+    void saveCalls(vector<string> calls);
+    void saveCallsT(vector<string> callsT);
+    void saveNext(vector<string> next);
+    void saveNextT(vector<string> nextT);
+    void saveAffects(vector<string> affects);
+    void saveAffectsT(vector<string> affectsT);
 
     // getters of patterns
     shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);

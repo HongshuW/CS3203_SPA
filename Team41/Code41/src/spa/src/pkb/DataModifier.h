@@ -32,12 +32,12 @@ public:
     void saveUsesP(vector<string> usesPRelation);
     void saveModifiesS(vector<string> modifiesSRelation);
     void saveModifiesP(vector<string> modifiesPRelation);
-    void saveCallsTable(vector<string> callsRelation);
-    void saveCallsTTable(vector<string> callsTRelation);
-    void saveNextTable(vector<string> nextRelation);
-    void saveNextTTable(vector<string> nextTRelation);
-    void saveAffectsTable(vector<string> affectsRelation);
-    void saveAffectsTTable(vector<string> affectsTRelation);
+    void saveCalls(vector<string> callsRelation);
+    void saveCallsT(vector<string> callsTRelation);
+    void saveNext(vector<string> nextRelation);
+    void saveNextT(vector<string> nextTRelation);
+    void saveAffects(vector<string> affectsRelation);
+    void saveAffectsT(vector<string> affectsTRelation);
 
     // pattern
      void savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
