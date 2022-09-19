@@ -151,7 +151,7 @@ add_library(spa ${srcs} ${headers}
         src/spa_manager/SPAManager.cpp
         src/spa_manager/SPAManager.h
         src/pkb/PKBStorage.cpp
-        src/pkb/PKBStorage.h)
+        src/pkb/PKBStorage.h src/pkb/table/CallsTable.cpp src/pkb/table/CallsTable.h src/pkb/table/NextTable.cpp src/pkb/table/NextTable.h src/pkb/table/AffectsTable.cpp src/pkb/table/AffectsTable.h)
 
 
 

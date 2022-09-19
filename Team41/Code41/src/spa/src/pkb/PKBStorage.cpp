@@ -4,19 +4,25 @@
 
 #include "PKBStorage.h"
 
+string PKBStorage:: PROCEDURE_TABLE_COL1_NAME = "$procedure_name";
 string PKBStorage:: STATEMENT_TABLE_COL1_NAME = "$statement_number";
 string PKBStorage:: STATEMENT_TABLE_COL2_NAME ="$statement_type";
 string PKBStorage:: VARIABLE_TABLE_COL1_NAME = "$variable_name";
 string PKBStorage:: CONSTANT_TABLE_COL1_NAME = "$constant_value";
 string PKBStorage:: USES_TABLE_COL1_NAME = "$user";
 string PKBStorage:: USES_TABLE_COL2_NAME = "$used";
-string PKBStorage:: PROCEDURE_TABLE_COL1_NAME = "$procedure_name";
 string PKBStorage:: PARENT_TABLE_COL1_NAME = "$parent_statement";
 string PKBStorage:: PARENT_TABLE_COL2_NAME = "$child_statement";
 string PKBStorage:: MODIFIES_TABLE_COL1_NAME = "$modifier";
 string PKBStorage:: MODIFIES_TABLE_COL2_NAME = "$modified";
 string PKBStorage:: FOLLOWS_TABLE_COL1_NAME = "$followed_statement";
 string PKBStorage:: FOLLOWS_TABLE_COL2_NAME = "$following_statement";
+string PKBStorage:: CALLS_TABLE_COL1_NAME = "$calling_procedure";
+string PKBStorage:: CALLS_TABLE_COL2_NAME = "$called_procedure";
+string PKBStorage:: NEXT_TABLE_COL1_NAME = "$preceding_statement";
+string PKBStorage:: NEXT_TABLE_COL2_NAME = "$ensuing_statement";
+string PKBStorage:: AFFECTS_TABLE_COL1_NAME = "$affecting_statement";
+string PKBStorage:: AFFECTS_TABLE_COL2_NAME = "$affected_statement";
 
 PKBStorage::PKBStorage() {
     // Entity Tables
@@ -33,6 +39,12 @@ PKBStorage::PKBStorage() {
     usesPTable = UsesTable();
     modifiesSTable = ModifiesTable();
     modifiesPTable = ModifiesTable();
+    callsTable = CallsTable();
+    callsTTable = CallsTable();
+    nextTable = NextTable();
+    nextTTable = NextTable();
+    affectsTable = AffectsTable();
+    affectsTTable = AffectsTable();
     // Pattern Tables
     patternTable = PatternTable();
 }
@@ -105,6 +117,30 @@ ModifiesTable * PKBStorage::getModifiesP() {
     return &modifiesPTable;
 }
 
+CallsTable * PKBStorage::getCallsTable() {
+    return &callsTable;
+}
+
+CallsTable * PKBStorage::getCallsTTable() {
+    return &callsTTable;
+}
+
+NextTable * PKBStorage::getNextTable() {
+    return &nextTable;
+}
+
+NextTable * PKBStorage::getNextTTable() {
+    return &nextTTable;
+}
+
+AffectsTable * PKBStorage::getAffectsTable() {
+    return &affectsTable;
+}
+
+AffectsTable * PKBStorage::getAffectsTTable() {
+    return &affectsTTable;
+}
+
 void PKBStorage::saveFollows(vector<string> follows) {
     followsTable.appendRow(follows);
 }
@@ -135,6 +171,30 @@ void PKBStorage::saveModifiesS(vector<string> modifiesS) {
 
 void PKBStorage::saveModifiesP(vector<string> modifiesP) {
     modifiesPTable.appendRow(modifiesP);
+}
+
+void PKBStorage::saveCallsTable(vector<string> calls) {
+    callsTable.appendRow(calls);
+}
+
+void PKBStorage::saveCallsTTable(vector<string> callsT) {
+    callsTTable.appendRow(callsT);
+}
+
+void PKBStorage::saveNextTable(vector<string> next) {
+    nextTable.appendRow(next);
+}
+
+void PKBStorage::saveNextTTable(vector<string> nextT) {
+    nextTTable.appendRow(nextT);
+}
+
+void PKBStorage::saveAffectsTable(vector<string> affects) {
+    affectsTable.appendRow(affects);
+}
+
+void PKBStorage::saveAffectsTTable(vector<string> affectsT) {
+    affectsTTable.appendRow(affectsT);
 }
 
 shared_ptr<Table> PKBStorage::getMatchedPatterns(ExpressionSpec expressionSpec) {
