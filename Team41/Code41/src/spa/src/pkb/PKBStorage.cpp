@@ -141,6 +141,18 @@ AffectsTable * PKBStorage::getAffectsT() {
     return &affectsTTable;
 }
 
+shared_ptr<unordered_set<string>> PKBStorage::getFollowingStatements(string followedStatement) {
+    return followsTable.getValuesByKey(followedStatement);
+}
+
+shared_ptr<unordered_set<string>> PKBStorage::getChildrenStatements(string parentStatement) {
+    return parentTable.getValuesByKey(parentStatement);
+}
+
+shared_ptr<unordered_set<string>> PKBStorage::getModifiedVariables(string modifierStatement) {
+    return modifiesSTable.getValuesByKey(modifierStatement);
+}
+
 void PKBStorage::saveFollows(vector<string> follows) {
     followsTable.appendRow(follows);
 }
