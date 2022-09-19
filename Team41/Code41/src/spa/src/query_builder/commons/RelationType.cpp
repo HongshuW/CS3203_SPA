@@ -17,7 +17,13 @@ namespace QB {
         {RelationType::MODIFIES_P, "Modifies_P"},
         {RelationType::USES, "Uses"},
         {RelationType::USES_S, "Uses_S"},
-        {RelationType::USES_P, "Uses_P"}
+        {RelationType::USES_P, "Uses_P"},
+        {RelationType::CALLS, "Calls"},
+        {RelationType::CALLS_T, "Calls*"},
+        {RelationType::NEXT, "Next"},
+        {RelationType::NEXT_T, "Next*"},
+        {RelationType::AFFECTS, "Affects"},
+        {RelationType::AFFECTS_T, "Affects*"}
     });
 
     unordered_map<string, RelationType> stringToRelationTypeMap({
@@ -30,7 +36,13 @@ namespace QB {
         {"Modifies_P", RelationType::MODIFIES_P},
         {"Uses", RelationType::USES},
         {"Uses_S", RelationType::USES_S},
-        {"Uses_P", RelationType::USES_P}
+        {"Uses_P", RelationType::USES_P},
+        {"Calls", RelationType::CALLS},
+        {"Calls*", RelationType::CALLS_T},
+        {"Next", RelationType::NEXT},
+        {"Next*", RelationType::NEXT_T},
+        {"Affects", RelationType::AFFECTS},
+        {"Affects*", RelationType::AFFECTS_T}
     });
 
     unordered_map<RelationType, pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>>
@@ -43,6 +55,12 @@ namespace QB {
                 {RelationType::USES_P, make_pair(PROCEDURE_SYNONYM, VARIABLE_SYNONYM)},
                 {RelationType::MODIFIES_S, make_pair(STMT_SYNONYMS, VARIABLE_SYNONYM)},
                 {RelationType::MODIFIES_P, make_pair(PROCEDURE_SYNONYM, VARIABLE_SYNONYM)},
+                {RelationType::CALLS, make_pair(PROCEDURE_SYNONYM, PROCEDURE_SYNONYM)},
+                {RelationType::CALLS_T, make_pair(PROCEDURE_SYNONYM, PROCEDURE_SYNONYM)},
+                {RelationType::NEXT, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
+                {RelationType::NEXT_T, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
+                {RelationType::AFFECTS, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)},
+                {RelationType::AFFECTS_T, make_pair(STMT_SYNONYMS, STMT_SYNONYMS)}
                 });
 
     unordered_map<RelationType, pair<RefTypeSet, RefTypeSet>> relationTypesToSuchThatArgsRefTypeMap({
@@ -54,6 +72,12 @@ namespace QB {
         {RelationType::USES_P, make_pair(entRefIndexSet, entRefIndexSet)},
         {RelationType::MODIFIES_S, make_pair(stmtRefIndexSet, entRefIndexSet)},
         {RelationType::MODIFIES_P, make_pair(entRefIndexSet, entRefIndexSet)},
+        {RelationType::CALLS, make_pair(entRefIndexSet, entRefIndexSet)},
+        {RelationType::CALLS_T, make_pair(entRefIndexSet, entRefIndexSet)},
+        {RelationType::NEXT, make_pair(stmtRefIndexSet, stmtRefIndexSet)},
+        {RelationType::NEXT_T, make_pair(stmtRefIndexSet, stmtRefIndexSet)},
+        {RelationType::AFFECTS, make_pair(stmtRefIndexSet, stmtRefIndexSet)},
+        {RelationType::AFFECTS_T, make_pair(stmtRefIndexSet, stmtRefIndexSet)}
         });
 
     RelationType getRelationTypeFromStr(string& str) {
