@@ -198,11 +198,11 @@ void QueryValidator::validateArgRefTypePatternClause() {
 }
 
 void QueryValidator::validateArg1DesignEntityPatternClause() {
-    //! Validate arg1 for pattern clause is declared as assign
+    //! Validate arg1 for pattern clause is declared as assign, if or while
     shared_ptr<PatternClause> patternClause = query->patternClause;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
     auto declaration = Declaration::findDeclaration(patternClause->arg1, declarations);
-    if (declaration && declaration->getDesignEntity() != DesignEntity::ASSIGN) {
+    if (declaration && ALLOW_SYNONYM_PATTERN.count(declaration->getDesignEntity())) {
         throw PQLValidationException(
                 "Expect pattern clause arg1 to be declared as assign, got " +
                 getDesignEntityString(declaration->getDesignEntity()));
