@@ -26,10 +26,22 @@ void QueryValidator::validateNoDuplicateDeclarations() {
 void QueryValidator::validateSynonymDeclaredSelectClause() {
     //! Validate that synonym is declared for Select Clause
     shared_ptr<SelectClause> selectClause = query->selectClause;
+    //! If select BOOLEAN, no need to check for this condition
+    if (selectClause->isBoolean()) return;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-    if (!Declaration::findDeclaration(selectClause->synonym, declarations)) {
-        throw PQLValidationException(
-                "Synonym: " + selectClause->synonym.synonym + " is not defined for Select Clause");
+    for (auto elem : *selectClause->returnResults) {
+        auto synonym = get_if<Synonym>(&elem);
+        auto attrRef = get_if<AttrRef>(&elem);
+
+        if (synonym && !Declaration::findDeclaration(*synonym, declarations)) {
+            throw PQLValidationException(
+                    "Synonym: " + synonym->synonym + " is not defined for Select Clause");
+        }
+
+        if (attrRef && !Declaration::findDeclaration(attrRef->synonym, declarations)) {
+            throw PQLValidationException(
+                    "Synonym: " + attrRef->synonym.synonym + " is not defined for Select Clause");
+        }
     }
 }
 

@@ -21,8 +21,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::VARIABLE, Synonym("v1"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("v1"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("v1")));
+                SelectClause(ReturnType::TUPLE, returnResults));
     }
 
     SECTION ("stmt a, b, c; Select a") {
@@ -34,8 +36,10 @@ TEST_CASE ("Test Query Parser") {
                         Declaration(DesignEntity::STMT, Synonym("a")),
                         Declaration(DesignEntity::STMT, Synonym("b")),
                         Declaration(DesignEntity::STMT, Synonym("c"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
     }
 
     SECTION ("assign a; while w; Select a") {
@@ -46,8 +50,10 @@ TEST_CASE ("Test Query Parser") {
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
                         Declaration(DesignEntity::WHILE, Synonym("w"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
     }
 
     SECTION ("stmt s; Select s such that Parent (s, 12)") {
@@ -57,8 +63,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("s"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("s")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::PARENT, Synonym("s"), 12,
@@ -72,8 +80,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::PARENT_T, Underscore(), Synonym("a"),
@@ -87,8 +97,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("s"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("s")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::FOLLOWS, 6, Synonym("s"),
@@ -102,8 +114,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("s"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("s")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::FOLLOWS_T, Synonym("s"), 6,
@@ -117,8 +131,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("s"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("s")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::FOLLOWS_T, Synonym("s"), Underscore(),
@@ -132,8 +148,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
@@ -147,8 +165,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::VARIABLE, Synonym("v"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("v"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("v")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_P);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -163,8 +183,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::VARIABLE, Synonym("v"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("v"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("v")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_S);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -179,8 +201,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::STMT, Synonym("s"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("s"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("s")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_S);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -195,8 +219,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::PROCEDURE, Synonym("p"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("p"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("p")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_P);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -211,8 +237,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::USES_S);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -227,8 +255,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::PROCEDURE, Synonym("p"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("p"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("p")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::USES_P);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -243,8 +273,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::PROCEDURE, Synonym("p"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("p"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("p")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::CALLS_T);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -259,8 +291,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::WHILE, Synonym("w"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("w"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("w")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::NEXT);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -275,8 +309,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::WHILE, Synonym("w"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("w"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("w")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::AFFECTS_T);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
@@ -291,8 +327,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(*(query->patternClause) ==
                 PatternClause(
                         Synonym("a"),
@@ -307,8 +345,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(*(query->patternClause) ==
                 PatternClause(
                         Synonym("a"),
@@ -324,8 +364,10 @@ TEST_CASE ("Test Query Parser") {
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
                         Declaration(DesignEntity::VARIABLE, Synonym("x"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
         exprNode->left = make_shared<ExprNode>("x");
         exprNode->right = make_shared<ExprNode>("1");
@@ -344,8 +386,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
         exprNode->left = make_shared<ExprNode>("2");
         exprNode->right = make_shared<ExprNode>("1");
@@ -365,8 +409,10 @@ TEST_CASE ("Test Query Parser") {
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
                         Declaration(DesignEntity::VARIABLE, Synonym("x"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         shared_ptr<ExprNode> exprNodeLeft = make_shared<ExprNode>("+");
         exprNodeLeft->left = make_shared<ExprNode>("x");
         exprNodeLeft->right = make_shared<ExprNode>("1");
@@ -390,8 +436,10 @@ TEST_CASE ("Test Query Parser") {
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
                         Declaration(DesignEntity::VARIABLE, Synonym("v")),
                         Declaration(DesignEntity::VARIABLE, Synonym("y"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("a")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
@@ -412,8 +460,10 @@ TEST_CASE ("Test Query Parser") {
                 std::vector<Declaration>{
                         Declaration(DesignEntity::ASSIGN, Synonym("a")),
                         Declaration(DesignEntity::VARIABLE, Synonym("v"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
-                SelectClause(Synonym("v")));
+                SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),

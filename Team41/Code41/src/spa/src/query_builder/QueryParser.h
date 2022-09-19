@@ -30,6 +30,8 @@ namespace QB {
         bool parseSuchThatClause();
         bool parsePatternClause();
         ExpressionSpec parseExpressionSpec();
+        void parseBooleanSelectClause();
+        Elem parseTupleSelectClause();
 
     public:
         //! Parse tokens to Query object, throw Syntax Error if encounter

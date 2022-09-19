@@ -16,7 +16,7 @@ using namespace std;
 namespace QB {
     class QueryTokenizer {
     private:
-        const unordered_set<string> SYMBOL_SET = {"(", ")", ",", "_", ";"};
+        const unordered_set<string> SYMBOL_SET = {"(", ")", ",", "_", ";", "<", ">", ".", "="};
         const unordered_set<string>  CLAUSE_SET_WITH_T = {"Follows", "Parent", "Calls", "Next", "Affects"};
         unsigned int currIdx;
         string query;

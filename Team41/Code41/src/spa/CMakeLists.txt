@@ -157,7 +157,10 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/NextTable.cpp
         src/pkb/table/NextTable.h
         src/pkb/table/AffectsTable.cpp
-        src/pkb/table/AffectsTable.h)
+        src/pkb/table/AffectsTable.h
+        src/pkb/PKBStorage.h
+        src/query_builder/commons/AttrRef.cpp
+        src/query_builder/commons/AttrRef.h)
 
 
 

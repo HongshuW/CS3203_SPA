@@ -70,12 +70,59 @@ bool QueryParser::parseDeclarations() {
     return true;
 }
 
-void QueryParser::parseSelectClause() {
-    std::string synonymStr = pop();
-    //! Throw syntax error if synonym is invalid
+void QueryParser::parseBooleanSelectClause() {
+    //! If BOOLEAN is declared as a synonym in a PQL query, this declaration takes precedence
+    shared_ptr<SelectClause> selectClause;
+    shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+    Synonym syn = Synonym("BOOLEAN");
+    if (!Declaration::findDeclaration(syn, query->declarations)) {
+        //! BOOLEAN is not declared as a synonym, this is a BOOLEAN type
+        selectClause = make_shared<SelectClause>(ReturnType::BOOLEAN);
+        query->selectClause = selectClause;
+    }
+}
+
+Elem QueryParser::parseTupleSelectClause() {
+    string synonymStr = pop();
     Synonym synonym = Synonym(synonymStr);
-    shared_ptr<SelectClause> selectClause = make_shared<SelectClause>(synonym);
-    query->selectClause = selectClause;
+    if (match(".")) {
+        //! AttrRef
+        string attrNameStr = pop();
+        AttrName attrName = AttrRef::getAttrNameFromStr(attrNameStr);
+        AttrRef attrRef = AttrRef(synonym, attrName);
+        return attrRef;
+    } else {
+        //! Synonym
+        return synonym;
+    }
+}
+
+void QueryParser::parseSelectClause() {
+    //! For BOOLEAN
+    if (match("BOOLEAN")) {
+        parseBooleanSelectClause();
+        return;
+    }
+
+    shared_ptr<SelectClause> selectClause;
+    shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+    //! For Tuple
+    if (match("<")) {
+        while (!match(">")) {
+            Elem elem = parseTupleSelectClause();
+            returnResults->push_back(elem);
+            selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
+            query->selectClause = selectClause;
+            if (match(">")) return;
+            expect(",");
+        }
+    } else {
+        //! For Single Synonym
+        Elem elem = parseTupleSelectClause();
+        returnResults->push_back(elem);
+        selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
+        query->selectClause = selectClause;
+    }
 }
 
 Ref QueryParser::parseRef() {
