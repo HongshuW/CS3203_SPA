@@ -299,4 +299,76 @@ TEST_CASE ("Test Query Validator") {
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
+
+    SECTION ("Test correct args RefType in Calls Clause") {
+        std::string queryStr = "procedure p; Select p such that Calls (\"main\", p)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
+    }
+
+    SECTION ("Test wrong first arg RefType in Calls Clause, first arg cannot be Integer") {
+        std::string queryStr = "procedure p; Select p such that Calls (1, p)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Test wrong second arg RefType in Calls* Clause, second arg cannot be Integer") {
+        std::string queryStr = "procedure p; Select p such that Calls* (p, 4)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Test correct args RefType in Next Clause") {
+        std::string queryStr = "assign a; Select a such that Next (a, 3)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
+    }
+
+    SECTION ("Test wrong first arg RefType in Next Clause, first arg cannot be Ident") {
+        std::string queryStr = "assign a; Select a such that Next (\"main\", a)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Test wrong second arg RefType in Calls* Clause, second arg cannot be Ident") {
+        std::string queryStr = "while w; Select w such that Next* (w, \"test\")";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Test correct args RefType in Affects* Clause") {
+        std::string queryStr = "assign a; Select a such that Next (a, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
+    }
+
+    SECTION ("Test wrong first arg RefType in Affects Clause, first arg cannot be Ident") {
+        std::string queryStr = "assign a; Select a such that Affects (\"main\", a)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Test wrong second arg RefType in Affects* Clause, second arg cannot be Ident") {
+        std::string queryStr = "while w; Select w such that Affects* (w, \"test\")";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Test invalid Design Entity type of argument 1 in Calls Clause, first arg must be procedure") {
+        std::string queryStr = "procedure p; assign a; Select p such that Calls* (a, p)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test invalid Design Entity type of argument 1 in Affects* Clause, first arg cannot be procedure") {
+        std::string queryStr = "procedure p; assign a; Select p such that Affects* (p, a)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test invalid Design Entity type of argument 2 in Next* Clause, second arg cannot be variable") {
+        std::string queryStr = "variable v; assign a; Select p such that Next* (a, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
 }

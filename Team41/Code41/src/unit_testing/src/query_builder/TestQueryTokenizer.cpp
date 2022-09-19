@@ -261,6 +261,70 @@ TEST_CASE ("Test Query Tokenizer") {
                            }));
     }
 
+    SECTION ("procedure p, p2; Select p such that Calls (p, p2)") {
+        std::string query = "procedure p, p2; Select p such that Calls (p, p2)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"procedure", "p", ",", "p2", ";", "Select", "p", "such", "that", "Calls", "(", "p", ",",
+                 "p2", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("procedure p; Select p such that Calls* (_, p)") {
+        std::string query = "procedure p; Select p such that Calls* (_, p)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"procedure", "p", ";", "Select", "p", "such", "that", "Calls*", "(", "_", ",",
+                 "p", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("while w; if i; Select w such that Next* (w, i)") {
+        std::string query = "while w; if i; Select w such that Next* (w, i)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"while", "w", ";", "if", "i", ";", "Select", "w", "such", "that", "Next*", "(", "w", ",",
+                 "i", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("while w; if i; Select w such that Affects* (w, 2)") {
+        std::string query = "while w; if i; Select w such that Affects* (w, 2)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"while", "w", ";", "if", "i", ";", "Select", "w", "such", "that", "Affects*", "(", "w", ",",
+                 "2", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
     SECTION ("Test unexpected tokens") {
         std::string query = "stmt s& Select s such that Follows* (a, 6)";
         QueryTokenizer tokenizer = QueryTokenizer(query);
