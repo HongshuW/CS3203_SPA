@@ -30,7 +30,7 @@ vector<string> SPAManager::evaluate(string& query) {
                 DataRetriever(pkbStorage));
         shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(DataPreprocessor(dataRetriever));
         auto queryResult = QueryEvaluator(dataPreprocessor).evaluate(queryObj);
-        auto resultFormatter = QueryResultFormatter(queryResult);
+        auto resultFormatter = QueryResultFormatter(make_shared<QueryResult>(queryResult), dataRetriever);
         auto ans = resultFormatter.formatResult();
         for (const auto& element: ans) {
             results.push_back(element);

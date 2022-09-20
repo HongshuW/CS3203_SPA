@@ -10,14 +10,15 @@
 namespace QE {
 
     class QueryResultFormatter {
-        shared_ptr<QueryResult> queryResult;
+        QueryResult queryResult;
+        shared_ptr<QueryResult> queryResult1;
         shared_ptr<DataRetriever> dataRetriever;
         vector<string> handleBooleanResult();
         vector<string> handleTupleResult();
 
     public:
-
-        explicit QueryResultFormatter(shared_ptr<QueryResult> queryResult, shared_ptr<DataRetriever> dataRetriever);
+        explicit QueryResultFormatter(QueryResult);
+        explicit QueryResultFormatter(shared_ptr<QueryResult> queryResult1, shared_ptr<DataRetriever> dataRetriever);
         vector<string> formatResult();
     };
 

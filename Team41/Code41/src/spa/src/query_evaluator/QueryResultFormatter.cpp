@@ -22,32 +22,29 @@ namespace QE {
         } else {
             return handleTupleResult();
         }
-
-
-        auto resultsWithDup =  this->queryResult->table.getColumnByName(this->queryResult.colName);
-
-        std::unordered_set<string> uniqueResultSet;
-        uniqueResultSet.insert(resultsWithDup.begin(), resultsWithDup.end());
-
-        uniqueResultVec.insert(uniqueResultVec.end(), uniqueResultSet.begin(), uniqueResultSet.end());
-        return uniqueResultVec;
     }
 
-    QueryResultFormatter::QueryResultFormatter(shared_ptr<QueryResult> queryResult,
+    QueryResultFormatter::QueryResultFormatter(shared_ptr<QueryResult> queryResult1,
                                                shared_ptr<DataRetriever> dataRetriever):
-                                               queryResult(queryResult), dataRetriever(dataRetriever) {
+                                               queryResult1(queryResult1), dataRetriever(dataRetriever) {
+
+    }
+
+    QueryResultFormatter::QueryResultFormatter(QueryResult queryResult):
+            queryResult(queryResult) {
 
     }
 
     vector<string> QueryResultFormatter::handleBooleanResult() {
         vector<string> uniqueResultVec;
-        shared_ptr<QueryBooleanResult> queryBooleanResult = dynamic_pointer_cast<QueryBooleanResult>(queryResult);
-        uniqueResultVec.insert(uniqueResultVec.begin(), queryBooleanResult->boolVal ? "TRUE" : "FALSE");
+        //todo: implement handle result
+//        shared_ptr<QueryBooleanResult> queryBooleanResult = dynamic_pointer_cast<QueryBooleanResult>(queryResult);
+//        uniqueResultVec.insert(uniqueResultVec.begin(), queryBooleanResult->boolVal ? "TRUE" : "FALSE");
         return uniqueResultVec;
     }
 
     vector<string> QueryResultFormatter::handleTupleResult() {
-        shared_ptr<QueryTupleResult> queryTupleResult = dynamic_pointer_cast<QueryTupleResult>(queryResult);
+        //shared_ptr<QueryTupleResult> queryTupleResult = dynamic_pointer_cast<QueryTupleResult>(queryResult);
 
 
 
