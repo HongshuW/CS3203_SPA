@@ -20,7 +20,8 @@ public:
     virtual Table getVariables();
     virtual Table getTableByDesignEntity(DesignEntity designEntity);
     virtual Table getTableByRelationType(RelationType relationType);
-    virtual Table getTableByPattern(ExpressionSpec expressionSpec);
+    virtual Table getTableByExprPattern(ExpressionSpec expressionSpec);
+    Table getTableByCondExprPattern(DesignEntity designEntity);
     virtual DesignEntity getDesignEntityOfStmt(int stmtNumber);
     unordered_set<string> getFollowingStatements(int followedStatement);
     unordered_set<string> getChildrenStatements(int parentStatement);
