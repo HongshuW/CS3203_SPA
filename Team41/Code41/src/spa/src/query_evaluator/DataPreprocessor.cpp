@@ -102,7 +102,7 @@ namespace QE {
     Table DataPreprocessor::getTableByPattern(shared_ptr<PatternClause> patternClause) {
 
         //table of stmtNo, varname
-        Table resultTable = this->dataRetriever->getTableByPattern(patternClause->arg3);
+        Table resultTable = this->dataRetriever->getTableByExprPattern(patternClause->arg3);
 
         //process result table: rename headers + filter
         string col1Name = patternClause->arg1.synonym; //arg1 must be an assign synonym

@@ -62,17 +62,19 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
     }
 }
 
-Table DataRetriever::getTableByPattern(ExpressionSpec expressionSpec) {
-    // TODO: Generalise this method
-    string type = "";
-    if (type == "assign") {
-        return *pkbStorage->getMatchedAssignPatterns(expressionSpec);
-    } else if (type == "while") {
-        return *pkbStorage->getWhilePatterns();
-    } else if (type == "if") {
-        return *pkbStorage->getIfPatterns();
-    }
+Table DataRetriever::getTableByExprPattern(ExpressionSpec expressionSpec) {
     return *pkbStorage->getMatchedAssignPatterns(expressionSpec);
+}
+
+Table DataRetriever::getTableByCondExprPattern(DesignEntity designEntity) {
+    switch (designEntity) {
+        case DesignEntity::WHILE:
+            return *pkbStorage->getWhilePatterns();
+        case DesignEntity::IF:
+            return *pkbStorage->getIfPatterns();
+        default:
+            return Table();
+    }
 }
 
 DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {

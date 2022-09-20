@@ -78,7 +78,7 @@ TEST_CASE("Test Data Retriever") {
 
     SECTION ("Get Table by Assign Pattern") {
         ExpressionSpec expressionSpec = ExpressionSpec(ExpressionSpecType::ANY_MATCH);
-        Table actualPatternResults = dataRetriever.getTableByPattern(expressionSpec);
+        Table actualPatternResults = dataRetriever.getTableByExprPattern(expressionSpec);
         Table expectedPatternResults = *(pkbStorage->getMatchedAssignPatterns(expressionSpec));
         Table expectedPatternTable = *(pkbStorage->getAssignPatterns());
         REQUIRE(actualPatternResults.isEqual(expectedPatternResults));
