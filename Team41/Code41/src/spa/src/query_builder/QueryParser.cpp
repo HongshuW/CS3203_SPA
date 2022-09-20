@@ -23,8 +23,12 @@ string QueryParser::pop() {
     return currToken;
 }
 
+bool QueryParser::isWithinBound() {
+    return currIdx < tokens.size();
+}
+
 bool QueryParser::match(string s) {
-    if (peek().compare(s) == 0) {
+    if (isWithinBound() && peek().compare(s) == 0) {
         currIdx++;
         return true;
     }
@@ -286,8 +290,8 @@ bool QueryParser::parseWith() {
 }
 
 shared_ptr<Query> QueryParser::parse() {
-    while (currIdx < tokens.size()) {
-        while (currIdx < tokens.size()) {
+    while (isWithinBound()) {
+        while (isWithinBound()) {
             if (!parseDeclarations()) break;
         }
 
@@ -296,7 +300,7 @@ shared_ptr<Query> QueryParser::parse() {
 
         parseSelectClause();
 
-        while (currIdx < tokens.size()) {
+        while (isWithinBound()) {
             if (parseSuchThat()) continue;
             if (parsePattern()) continue;
             if (parseWith()) continue;
