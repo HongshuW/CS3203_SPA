@@ -9,6 +9,7 @@
 
 #include "query_builder/commons/Ref.h"
 #include "query_builder/commons/ExpressionSpec.h"
+#include "query_builder/commons/DesignEntity.h"
 
 using namespace QB;
 
@@ -16,17 +17,19 @@ namespace QB {
     class PatternClause {
     public:
         //! pattern arg1(arg2, arg3)
-        Synonym arg1; // must be ASSIGN, IF, WHILE
+        DesignEntity patternType; // must be ASSIGN, IF, WHILE
+        Synonym arg1; // must be declared as ASSIGN, IF, WHILE
         Ref arg2; // entRef -> synonym, _, ident
         optional<ExpressionSpec> arg3;
 
         //! For while and if
-        PatternClause(Synonym arg1, Ref arg2);
+        PatternClause(DesignEntity patternType, Synonym arg1, Ref arg2);
         //! For assign
-        PatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
+        PatternClause(DesignEntity patternType, Synonym arg1, Ref arg2, ExpressionSpec arg3);
 
         bool operator==(const PatternClause& patternClause) const {
-            return arg1 == patternClause.arg1 && arg2 == patternClause.arg2 && arg3 == patternClause.arg3;
+            return patternType == patternClause.patternType &&
+                arg1 == patternClause.arg1 && arg2 == patternClause.arg2 && arg3 == patternClause.arg3;
         }
 
         // For printing
