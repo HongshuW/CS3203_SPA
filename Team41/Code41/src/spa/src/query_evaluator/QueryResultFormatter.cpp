@@ -21,4 +21,8 @@ namespace QE {
         uniqueResultVec.insert(uniqueResultVec.end(), uniqueResultSet.begin(), uniqueResultSet.end());
         return uniqueResultVec;
     }
+
+    QueryResultFormatter::QueryResultFormatter(QueryResult queryResult, shared_ptr<DataRetriever> dataRetriever):queryResult(queryResult), dataRetriever(dataRetriever) {
+
+    }
 } // QE

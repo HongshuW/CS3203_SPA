@@ -102,7 +102,11 @@ namespace QE {
     Table DataPreprocessor::getTableByPattern(shared_ptr<PatternClause> patternClause) {
 
         //table of stmtNo, varname
-        Table resultTable = this->dataRetriever->getTableByPattern(patternClause->arg3);
+        //todo: check for optional argument exprSpec
+        auto exprSpecOpt = patternClause->arg3;
+        auto exprSpec = std::move(*exprSpecOpt);
+        Table resultTable = this->dataRetriever->getTableByPattern(exprSpec);
+
 
         //process result table: rename headers + filter
         string col1Name = patternClause->arg1.synonym; //arg1 must be an assign synonym

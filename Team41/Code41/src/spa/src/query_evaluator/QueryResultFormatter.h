@@ -6,13 +6,15 @@
 #define SPA_QUERYRESULTFORMATTER_H
 
 #include "QueryResult.h"
-
+#include "pkb/DataRetriever.h"
 namespace QE {
 
     class QueryResultFormatter {
         QueryResult queryResult;
+        shared_ptr<DataRetriever> dataRetriever;
     public:
         explicit QueryResultFormatter(QueryResult queryResult);
+        explicit QueryResultFormatter(QueryResult queryResult, shared_ptr<DataRetriever> dataRetriever);
         vector<string> formatResult();
     };
 
