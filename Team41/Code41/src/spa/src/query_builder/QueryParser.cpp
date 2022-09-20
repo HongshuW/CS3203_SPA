@@ -217,19 +217,19 @@ void QueryParser::parsePatternClause() {
         Ref arg2 = parseRef();
         expect(",");
         ExpressionSpec arg3 = parseExpressionSpec();
-        patternClause = make_shared<PatternClause>(arg1, arg2, arg3);
+        patternClause = make_shared<PatternClause>(DesignEntity::ASSIGN, arg1, arg2, arg3);
     } else if (de == DesignEntity::IF) {
         Ref arg2 = parseRef();
         expect(",");
         expect("_");
         expect(",");
         expect("_");
-        patternClause = make_shared<PatternClause>(arg1, arg2);
+        patternClause = make_shared<PatternClause>(DesignEntity::IF, arg1, arg2);
     } else if (de == DesignEntity::WHILE) {
         Ref arg2 = parseRef();
         expect(",");
         expect("_");
-        patternClause = make_shared<PatternClause>(arg1, arg2);
+        patternClause = make_shared<PatternClause>(DesignEntity::WHILE, arg1, arg2);
     } else {
         throw PQLParseException(getDesignEntityString(de) + " is not supported for Pattern Clause");
     }

@@ -236,8 +236,9 @@ void QueryValidator::validatePatternClause() {
     //! Validate the correct RefType for pattern clause arg2
     //! Should throw syntax error not semantic error
     validateArgRefTypePatternClause();
-    //! Validate arg1 for pattern clause is declared as assign
-    validateArg1DesignEntityPatternClause();
+    //! Validate arg1 for pattern clause is declared as assign, if or while
+    // already check this in Query Parser
+    // validateArg1DesignEntityPatternClause();
     //! Validate if agr2 is a synonym, it must be declared as variable
     validateArg2DesignEntityPatternClause();
 }
