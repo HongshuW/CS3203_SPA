@@ -69,15 +69,15 @@ TEST_CASE("Test Data Modifier") {
         REQUIRE(parentTTable->rows[2][1] == "3");
     }
 
-    SECTION ("Save pattern") {
+    SECTION ("Save assign pattern") {
         vector<string> metainfo{"1", "x"};
         shared_ptr<ExprNode> left = make_shared<ExprNode>(ExprNode("x"));
         shared_ptr<ExprNode> right = make_shared<ExprNode>(ExprNode("1"));
         shared_ptr<ExprNode> pattern = make_shared<ExprNode>(ExprNode("+"));
         pattern->left = left;
         pattern->right = right;
-        dataModifier.savePattern(metainfo, pattern);
-        PatternTable * patternTable = pkbStorage->getPatterns();
+        dataModifier.saveAssignPattern(metainfo, pattern);
+        PatternTable * patternTable = pkbStorage->getAssignPatterns();
 
         // check header is set automatically
         REQUIRE(patternTable->header[0] == "$statement_number");

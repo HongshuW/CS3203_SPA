@@ -40,7 +40,9 @@ public:
     void saveAffectsT(vector<string> affectsTRelation);
 
     // pattern
-     void savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
+    void saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
+    void saveWhilePattern(vector<string> whilePattern);
+    void saveIfPattern(vector<string> ifPattern);
 
 private:
     shared_ptr<PKBStorage> pkbStorage;

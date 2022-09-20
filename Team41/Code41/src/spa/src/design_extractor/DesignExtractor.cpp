@@ -175,12 +175,13 @@ vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::ex
 }
 
 void DesignExtractor::savePatternsToPKB() {
+    // TODO: generalise this method
     auto resultList = this->extractPatterns();
     for (auto resultRow: resultList) {
         string lineNumStr = to_string(resultRow.first.first);
         string varName = resultRow.first.second;
         auto exprNode = resultRow.second->expressionNode;
-        this->dataModifier->savePattern({lineNumStr, varName}, exprNode);
+        this->dataModifier->saveAssignPattern({lineNumStr, varName}, exprNode);
     }
 }
 

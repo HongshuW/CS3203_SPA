@@ -63,7 +63,16 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
 }
 
 Table DataRetriever::getTableByPattern(ExpressionSpec expressionSpec) {
-    return *pkbStorage->getMatchedPatterns(expressionSpec);
+    // TODO: Generalise this method
+    string type = "";
+    if (type == "assign") {
+        return *pkbStorage->getMatchedAssignPatterns(expressionSpec);
+    } else if (type == "while") {
+        return *pkbStorage->getWhilePatterns();
+    } else if (type == "if") {
+        return *pkbStorage->getIfPatterns();
+    }
+    return *pkbStorage->getMatchedAssignPatterns(expressionSpec);
 }
 
 DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {

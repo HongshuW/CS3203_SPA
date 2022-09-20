@@ -61,7 +61,9 @@ TEST_CASE("Test PKBStorage") {
         REQUIRE(pkbStorage->getParent()->rows[initialSize + 1][1] == "3");
     }
 
-    PatternTable * patternTable = pkbStorage->getPatterns();
+    // Testing of assign patterns
+
+    PatternTable * patternTable = pkbStorage->getAssignPatterns();
     *patternTable = PatternTable();
 
     // pattern 1: x = x + 1;
@@ -71,7 +73,7 @@ TEST_CASE("Test PKBStorage") {
     shared_ptr<ExprNode> pattern1 = make_shared<ExprNode>(ExprNode("+"));
     pattern1->left = p1Left;
     pattern1->right = p1Right;
-    pkbStorage->savePattern(p1Metainfo, pattern1);
+    pkbStorage->saveAssignPattern(p1Metainfo, pattern1);
 
     // pattern 2: y = y + (x + 1);
     vector<string> p2Metainfo{"2", "y"};
@@ -84,14 +86,14 @@ TEST_CASE("Test PKBStorage") {
     shared_ptr<ExprNode> pattern2 = make_shared<ExprNode>(ExprNode("+"));
     pattern2->left = p2Left;
     pattern2->right = p2Right;
-    pkbStorage->savePattern(p2Metainfo, pattern2);
+    pkbStorage->saveAssignPattern(p2Metainfo, pattern2);
 
     // a pattern that is never added
     shared_ptr<ExprNode> mismatchedPattern = make_shared<ExprNode>(ExprNode("a"));
 
     SECTION ("Test FULL_MATCH: pattern1 (positive)") {
         ExpressionSpec fullMatch = ExpressionSpec(ExpressionSpecType::FULL_MATCH, pattern1);
-        shared_ptr<Table> fullMatchTable = pkbStorage->getMatchedPatterns(fullMatch);
+        shared_ptr<Table> fullMatchTable = pkbStorage->getMatchedAssignPatterns(fullMatch);
         REQUIRE(fullMatchTable->rows.size() == 1);
         REQUIRE(fullMatchTable->rows[0][0] == "1");
         REQUIRE(fullMatchTable->rows[0][1] == "x");
@@ -99,13 +101,13 @@ TEST_CASE("Test PKBStorage") {
 
     SECTION ("Test FULL_MATCH: mismatchedPattern (negative)") {
         ExpressionSpec fullMatch = ExpressionSpec(ExpressionSpecType::FULL_MATCH, mismatchedPattern);
-        shared_ptr<Table> fullMatchTable = pkbStorage->getMatchedPatterns(fullMatch);
+        shared_ptr<Table> fullMatchTable = pkbStorage->getMatchedAssignPatterns(fullMatch);
         REQUIRE(fullMatchTable->rows.empty());
     }
 
     SECTION ("Test PARTIAL_MATCH: pattern1 (positive)") {
         ExpressionSpec partialMatch = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, pattern1);
-        shared_ptr<Table> partialMatchTable = pkbStorage->getMatchedPatterns(partialMatch);
+        shared_ptr<Table> partialMatchTable = pkbStorage->getMatchedAssignPatterns(partialMatch);
         REQUIRE(partialMatchTable->rows.size() == 2);
         REQUIRE(partialMatchTable->rows[0][0] == "1");
         REQUIRE(partialMatchTable->rows[0][1] == "x");
@@ -115,13 +117,13 @@ TEST_CASE("Test PKBStorage") {
 
     SECTION ("Test PARTIAL_MATCH: mismatchedPattern (negative)") {
         ExpressionSpec partialMatch = ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, mismatchedPattern);
-        shared_ptr<Table> partialMatchTable = pkbStorage->getMatchedPatterns(partialMatch);
+        shared_ptr<Table> partialMatchTable = pkbStorage->getMatchedAssignPatterns(partialMatch);
         REQUIRE(partialMatchTable->rows.empty());
     }
 
     SECTION ("Test wildcard (positive)") {
         ExpressionSpec anyMatch = ExpressionSpec(ExpressionSpecType::ANY_MATCH);
-        shared_ptr<Table> anyMatchTable = pkbStorage->getMatchedPatterns(anyMatch);
+        shared_ptr<Table> anyMatchTable = pkbStorage->getMatchedAssignPatterns(anyMatch);
         REQUIRE(anyMatchTable->rows.size() == 2);
         REQUIRE(anyMatchTable->rows[0][0] == "1");
         REQUIRE(anyMatchTable->rows[0][1] == "x");
