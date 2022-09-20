@@ -102,16 +102,22 @@ namespace QE {
     Table DataPreprocessor::getTableByPattern(shared_ptr<PatternClause> patternClause) {
 
         //table of stmtNo, varname
-
-        //todo: check for optional argument exprSpec
-        auto exprSpecOpt = patternClause->arg3;
-        auto exprSpec = std::move(*exprSpecOpt);
-        Table resultTable = this->dataRetriever->getTableByExprPattern(exprSpec);
-
-
+        Table resultTable;
+        switch (patternClause->patternType) {
+            case QB::DesignEntity::ASSIGN: {
+                auto exprSpecOpt = patternClause->arg3;
+                auto exprSpec = std::move(*exprSpecOpt);
+                resultTable = this->dataRetriever->getTableByExprPattern(exprSpec);
+                break;
+            }
+            default : {
+                resultTable = this->dataRetriever->getTableByCondExprPattern(patternClause->patternType);
+                break;
+            }
+        }
 
         //process result table: rename headers + filter
-        string col1Name = patternClause->arg1.synonym; //arg1 must be an assign synonym
+        string col1Name = patternClause->arg1.synonym; //arg1 must be ASSIGN, IF, WHILE synonym
         Ref ref2 = patternClause->arg2;
         RefType ref2Type = getRefType(ref2); //arg2 can be syn, _ or ident
         string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(patternClause->arg2).synonym : QEUtils::getColNameByRefType(ref2Type);
@@ -121,6 +127,7 @@ namespace QE {
             Ident ident2 = get<Ident>(ref2);
             resultTable = this->filerTableByColumnValue(resultTable, col2Name, ident2.identStr);
         }
+
         return resultTable;
     }
 
