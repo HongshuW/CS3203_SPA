@@ -286,12 +286,6 @@ TEST_CASE ("Test Query Validator") {
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test invalid Design Entity type of argument 1 in Pattern Clause") {
-        std::string queryStr = "variable a; Select a pattern a (_, _)";
-        auto queryBuilder = QueryBuilder();
-        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
-    }
-
     SECTION ("Test invalid Design Entity type of argument 2 in Pattern Clause") {
         // Validate if agr2 is a synonym, it must be declared as variable
         std::string queryStr = "assign a; procedure s; while w; Select a such that Modifies (a, s) "

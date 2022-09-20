@@ -23,6 +23,7 @@ namespace QB {
         string peek();
         string previous();
         string pop();
+        bool isWithinBound();
         bool expect(string s);
         bool match(string s);
         bool parseDeclarations();

@@ -5,7 +5,7 @@
 #ifndef SPA_QUERYBOOLEANRESULT_H
 #define SPA_QUERYBOOLEANRESULT_H
 
-#include "QueryResult.h";
+#include "QueryResult.h"
 
 namespace QE {
 
