@@ -242,6 +242,17 @@ void QueryValidator::validatePatternClause() {
     validateArg2DesignEntityPatternClause();
 }
 
+void QueryValidator::validateSameWithRefWithClause() {
+    //! Two WithRef comparison must be of the same type
+    shared_ptr<vector<shared_ptr<WithClause>>> withClauses = query->withClauses;
+    for (auto withClause : *withClauses) {
+        if (!withClause->isSameWithRefType()) {
+            throw PQLValidationException(
+                    "Two WithRef are different, no comparison can be made");
+        }
+    }
+}
+
 void QueryValidator::validateQuery() {
     //! Validation for declaration
     validateNoDuplicateDeclarations();
@@ -251,4 +262,6 @@ void QueryValidator::validateQuery() {
     validateSuchThatClause();
     //! Validation for pattern clause
     validatePatternClause();
+    //! Validation for with clause
+    validateSameWithRefWithClause();
 }

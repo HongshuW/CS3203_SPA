@@ -27,6 +27,7 @@ namespace QB {
         void validateArg1DesignEntityPatternClause();
         void validateArg2DesignEntityPatternClause();
         void validatePatternClause();
+        void validateSameWithRefWithClause();
     public:
         //! Validate the Query object, throw Semantic Error if encounter
         shared_ptr<Query> query;
