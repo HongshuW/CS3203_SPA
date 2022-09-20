@@ -246,7 +246,34 @@ bool QueryParser::parsePattern() {
     return true;
 }
 
+WithRef QueryParser::parseWithRef() {
+    //! Can be ident, integer, or AttrRef
+    if (Utils::isValidNumber(peek())) {
+        return std::stoi(pop());
+    } else if (match("\"")) {
+        string identStr = pop();
+        expect("\"");
+        Ident ident = Ident(identStr);
+        return ident;
+    } else if (Utils::isValidName(peek())) {
+        string synonymStr = pop();
+        Synonym synonym = Synonym(synonymStr);
+        expect(".");
+        string attrNameStr = pop();
+        AttrName attrName = AttrRef::getAttrNameFromStr(attrNameStr);
+        AttrRef attrRef = AttrRef(synonym, attrName);
+        return attrRef;
+    } else {
+        throw PQLParseException("Expecting a WithRef, got " + peek());
+    }
+}
+
 void QueryParser::parseWithClause() {
+    WithRef lhs = parseWithRef();
+    expect("=");
+    WithRef rhs = parseWithRef();
+    shared_ptr<WithClause> withClause = make_shared<WithClause>(lhs, rhs);
+    query->withClauses->push_back(withClause);
 }
 
 bool QueryParser::parseWith() {

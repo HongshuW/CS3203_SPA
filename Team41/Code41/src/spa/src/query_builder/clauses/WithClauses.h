@@ -11,14 +11,16 @@
 namespace QB {
     using WithRef = variant<Ident, int, AttrRef>;
 
-    class WithClauses {
+    class WithClause {
     public:
         WithRef lhs;
         WithRef rhs;
 
-        WithClauses(WithRef lhs, WithRef rhs);
+        WithClause(WithRef lhs, WithRef rhs);
 
-        bool operator==(const WithClauses& withClauses) const {
+        bool isSameWithRefType();
+
+        bool operator==(const WithClause& withClauses) const {
             return lhs == withClauses.lhs && rhs == withClauses.rhs;
         }
 

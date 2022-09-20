@@ -4,4 +4,10 @@
 
 #include "WithClauses.h"
 
-WithClauses::WithClauses(WithRef lhs, WithRef rhs) : lhs(lhs), rhs(rhs){}
+#include <utility>
+
+WithClause::WithClause(WithRef lhs, WithRef rhs) : lhs(std::move(lhs)), rhs(std::move(rhs)){}
+
+bool WithClause::isSameWithRefType() {
+    return lhs.index() == rhs.index();
+}
