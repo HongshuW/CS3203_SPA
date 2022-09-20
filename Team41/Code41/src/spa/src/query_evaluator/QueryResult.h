@@ -20,7 +20,7 @@ namespace QE {
         explicit QueryResult(Table table);
         QueryResult();
         bool isEmpty();
-        bool isEqual(QueryResult otherQueryResult);
+        virtual bool isEqual(QueryResult otherQueryResult);
 
     };
 

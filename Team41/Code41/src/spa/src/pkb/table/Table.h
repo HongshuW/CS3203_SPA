@@ -21,6 +21,7 @@ public:
     vector<string> getColumnByName(string columnName);
     vector<string> getRowByPrimaryKey(string key);
     shared_ptr<unordered_set<string>> getValuesByKey(string key, int keyColumnNumber = 0, int valueColumnNumber = 1);
+    bool hasCol(string colName);
 
     // setters
     void renameHeader(vector<string> newHeader);

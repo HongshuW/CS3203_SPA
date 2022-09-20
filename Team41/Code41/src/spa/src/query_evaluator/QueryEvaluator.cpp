@@ -89,7 +89,7 @@ QueryResult QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query) {
 //
 //    table.renameHeader({query->selectClause->synonym.synonym});
 
-    //todo: change data retrieving of entities to query result formatter.
+
     QueryTupleResult queryResult = QueryTupleResult(returnTuple);
     return queryResult;
 }

@@ -10,9 +10,10 @@
 namespace QE {
 
     class QueryBooleanResult : public QueryResult {
-        bool boolVal;
+
 
     public:
+        bool boolVal;
         explicit QueryBooleanResult(bool boolVal);
 
     };

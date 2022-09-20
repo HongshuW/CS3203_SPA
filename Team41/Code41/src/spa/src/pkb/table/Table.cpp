@@ -46,6 +46,10 @@ shared_ptr<unordered_set<string>> Table::getValuesByKey(string key, int keyColum
     return output;
 }
 
+bool Table::hasCol(std::string colName) {
+    return std::count(header.begin(), header.end(), colName);
+}
+
 void Table::appendRow(vector<string> row) {
     rows.push_back(row);
 }
