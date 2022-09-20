@@ -160,7 +160,7 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/AffectsTable.h
         src/pkb/PKBStorage.h
         src/query_builder/commons/AttrRef.cpp
-        src/query_builder/commons/AttrRef.h src/query_builder/clauses/WithClauses.cpp src/query_builder/clauses/WithClauses.h)
+        src/query_builder/commons/AttrRef.h src/query_builder/clauses/WithClauses.cpp src/query_builder/clauses/WithClauses.h src/query_evaluator/QueryBooleanResult.cpp src/query_evaluator/QueryBooleanResult.h src/query_evaluator/QueryTupleResult.cpp src/query_evaluator/QueryTupleResult.h)
 
 
 
