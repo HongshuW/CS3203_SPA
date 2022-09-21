@@ -17,50 +17,61 @@ shared_ptr<map<int, vector<int>>> ParentExtractor::extractParentHashmap(shared_p
         queue.pop();
 
         NodeType nodeType = ASTUtils::getNodeType(current);
-        if (nodeType == NodeType::WHILE_NODE) {
-            shared_ptr<WhileNode> ptr = dynamic_pointer_cast<WhileNode>(current);
-            vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
-            int parent = stmtNumbers->at(ptr);
-            vector<int> children;
-            for (shared_ptr<StmtNode> n: stmtList) {
-                queue.push(n);
-                int child = stmtNumbers->at(n);
-                children.push_back(child);
+        switch(nodeType) {
+            case AST::WHILE_NODE: {
+                shared_ptr<WhileNode> ptr = dynamic_pointer_cast<WhileNode>(current);
+                vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
+                int parent = stmtNumbers->at(ptr);
+                vector<int> children;
+                for (shared_ptr<StmtNode> n: stmtList) {
+                    queue.push(n);
+                    int child = stmtNumbers->at(n);
+                    children.push_back(child);
+                }
+                pair<int, vector<int>> row{parent, children};
+                parentRelations.insert(row);
+                break;
             }
-            pair<int, vector<int>> row{parent, children};
-            parentRelations.insert(row);
-        } else if (nodeType == NodeType::IF_NODE) {
-            shared_ptr<IfNode> ptr = dynamic_pointer_cast<IfNode>(current);
-            vector<shared_ptr<StmtNode>> ifStmtList = ptr->ifStmtList;
-            vector<shared_ptr<StmtNode>> elseStmtList = ptr->elseStmtList;
-            int parent = stmtNumbers->at(ptr);
-            vector<int> children;
-            for (shared_ptr<StmtNode> n: ifStmtList) {
-                queue.push(n);
-                int child = stmtNumbers->at(n);
-                children.push_back(child);
+            case AST::IF_NODE: {
+                shared_ptr<IfNode> ptr = dynamic_pointer_cast<IfNode>(current);
+                vector<shared_ptr<StmtNode>> ifStmtList = ptr->ifStmtList;
+                vector<shared_ptr<StmtNode>> elseStmtList = ptr->elseStmtList;
+                int parent = stmtNumbers->at(ptr);
+                vector<int> children;
+                for (shared_ptr<StmtNode> n: ifStmtList) {
+                    queue.push(n);
+                    int child = stmtNumbers->at(n);
+                    children.push_back(child);
+                }
+                for (shared_ptr<StmtNode> n: elseStmtList) {
+                    queue.push(n);
+                    int child = stmtNumbers->at(n);
+                    children.push_back(child);
+                }
+                pair<int, vector<int>> row{parent, children};
+                parentRelations.insert(row);
+                break;
             }
-            for (shared_ptr<StmtNode> n: elseStmtList) {
-                queue.push(n);
-                int child = stmtNumbers->at(n);
-                children.push_back(child);
+            case AST::PROGRAM_NODE: {
+                // encounter a program node, check its procedures
+                shared_ptr<ProgramNode> ptr = dynamic_pointer_cast<ProgramNode>(current);
+                vector<shared_ptr<ProcedureNode>> procedureList = ptr->procedureList;
+                for (shared_ptr<ProcedureNode> n: procedureList) {
+                    queue.push(n);
+                }
+                break;
             }
-            pair<int, vector<int>> row{parent, children};
-            parentRelations.insert(row);
-        } else if (nodeType == NodeType::PROGRAM_NODE) {
-            // encounter a program node, check its procedures
-            shared_ptr<ProgramNode> ptr = dynamic_pointer_cast<ProgramNode>(current);
-            vector<shared_ptr<ProcedureNode>> procedureList = ptr->procedureList;
-            for (shared_ptr<ProcedureNode> n: procedureList) {
-                queue.push(n);
+            case AST::PROCEDURE_NODE: {
+                // encounter a procedure node, check its statements
+                shared_ptr<ProcedureNode> ptr = dynamic_pointer_cast<ProcedureNode>(current);
+                vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
+                for (shared_ptr<StmtNode> n: stmtList) {
+                    queue.push(n);
+                }
+                break;
             }
-        } else if (nodeType == NodeType::PROCEDURE_NODE) {
-            // encounter a procedure node, check its statements
-            shared_ptr<ProcedureNode> ptr = dynamic_pointer_cast<ProcedureNode>(current);
-            vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
-            for (shared_ptr<StmtNode> n: stmtList) {
-                queue.push(n);
-            }
+            default:
+                break;
         }
     }
 

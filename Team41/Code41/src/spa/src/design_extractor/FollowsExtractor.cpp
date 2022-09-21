@@ -52,14 +52,12 @@ vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_
                         queue.push(elseStmtList);
                         break;
                     }
-
                     case AST::WHILE_NODE: {
                         shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
                         vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
                         queue.push(whileStmtList);
                         break;
                     }
-
                     default:
                         break;
                 }
