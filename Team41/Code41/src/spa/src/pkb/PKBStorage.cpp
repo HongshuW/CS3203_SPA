@@ -46,7 +46,9 @@ PKBStorage::PKBStorage() {
     affectsTable = AffectsTable();
     affectsTTable = AffectsTable();
     // Pattern Tables
-    patternTable = PatternTable();
+    assignPatternTable = PatternTable();
+    whilePatternTable = PatternTable();
+    ifPatternTable = PatternTable();
 }
 
 ProcedureTable * PKBStorage::getProcedures() {
@@ -209,14 +211,30 @@ void PKBStorage::saveAffectsT(vector<string> affectsT) {
     affectsTTable.appendRow(affectsT);
 }
 
-shared_ptr<Table> PKBStorage::getMatchedPatterns(ExpressionSpec expressionSpec) {
-    return patternTable.getMatchedPatterns(expressionSpec);
+shared_ptr<Table> PKBStorage::getMatchedAssignPatterns(ExpressionSpec expressionSpec) {
+    return assignPatternTable.getMatchedPatterns(expressionSpec);
 }
 
-PatternTable * PKBStorage::getPatterns() {
-    return &patternTable;
+PatternTable * PKBStorage::getAssignPatterns() {
+    return &assignPatternTable;
 }
 
-void PKBStorage::savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
-    patternTable.addPattern(metainfo, pattern);
+PatternTable * PKBStorage::getWhilePatterns() {
+    return &whilePatternTable;
+}
+
+PatternTable * PKBStorage::getIfPatterns() {
+    return &ifPatternTable;
+}
+
+void PKBStorage::saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
+    assignPatternTable.addPattern(metainfo, pattern);
+}
+
+void PKBStorage::saveWhilePattern(vector<string> metainfo) {
+    whilePatternTable.appendRow(metainfo);
+}
+
+void PKBStorage::saveIfPattern(vector<string> metainfo) {
+    ifPatternTable.appendRow(metainfo);
 }

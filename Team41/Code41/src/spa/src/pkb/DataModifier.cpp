@@ -176,6 +176,14 @@ void DataModifier::saveAffectsT(vector<string> affectsTRelation) {
  * @param metainfo vector<string>{statementNumber, variableName};
  * @param pattern
  */
-void DataModifier::savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
-    pkbStorage->savePattern(metainfo, pattern);
+void DataModifier::saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
+    pkbStorage->saveAssignPattern(metainfo, pattern);
+}
+
+void DataModifier::saveWhilePattern(vector<string> whilePattern) {
+    pkbStorage->saveWhilePattern(whilePattern);
+}
+
+void DataModifier::saveIfPattern(vector<string> ifPattern) {
+    pkbStorage->saveIfPattern(ifPattern);
 }

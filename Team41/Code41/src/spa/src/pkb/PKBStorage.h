@@ -98,10 +98,14 @@ public:
     void saveAffectsT(vector<string> affectsT);
 
     // getters of patterns
-    shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);
-    PatternTable * getPatterns();
+    shared_ptr<Table> getMatchedAssignPatterns(ExpressionSpec expressionSpec);
+    PatternTable * getAssignPatterns();
+    PatternTable * getWhilePatterns();
+    PatternTable * getIfPatterns();
     // setters of patterns
-    void savePattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
+    void saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
+    void saveWhilePattern(vector<string> metainfo);
+    void saveIfPattern(vector<string> metainfo);
 
 private:
     // Entity Tables
@@ -125,7 +129,9 @@ private:
     AffectsTable affectsTable;
     AffectsTable affectsTTable;
     // Pattern Tables
-    PatternTable patternTable;
+    PatternTable assignPatternTable;
+    PatternTable whilePatternTable;
+    PatternTable ifPatternTable;
 };
 
 

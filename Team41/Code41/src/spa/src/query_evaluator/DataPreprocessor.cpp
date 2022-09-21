@@ -107,7 +107,6 @@ namespace QE {
         auto exprSpec = std::move(*exprSpecOpt);
         Table resultTable = this->dataRetriever->getTableByPattern(exprSpec);
 
-
         //process result table: rename headers + filter
         string col1Name = patternClause->arg1.synonym; //arg1 must be an assign synonym
         Ref ref2 = patternClause->arg2;

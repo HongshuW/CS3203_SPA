@@ -62,8 +62,19 @@ Table DataRetriever::getTableByRelationType(RelationType relationType) {
     }
 }
 
-Table DataRetriever::getTableByPattern(ExpressionSpec expressionSpec) {
-    return *pkbStorage->getMatchedPatterns(expressionSpec);
+Table DataRetriever::getTableByExprPattern(ExpressionSpec expressionSpec) {
+    return *pkbStorage->getMatchedAssignPatterns(expressionSpec);
+}
+
+Table DataRetriever::getTableByCondExprPattern(DesignEntity designEntity) {
+    switch (designEntity) {
+        case DesignEntity::WHILE:
+            return *pkbStorage->getWhilePatterns();
+        case DesignEntity::IF:
+            return *pkbStorage->getIfPatterns();
+        default:
+            return Table();
+    }
 }
 
 DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {
