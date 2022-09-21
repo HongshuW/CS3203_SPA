@@ -32,6 +32,19 @@ namespace QB {
         {"procedure", DesignEntity::PROCEDURE}
     });
 
+    unordered_map<DesignEntity, unordered_set<AttrName>> designEntityToAttrNameMap({
+        {DesignEntity::STMT, {AttrName::STMT_NUMBER}},
+        {DesignEntity::READ, {AttrName::STMT_NUMBER, AttrName::VAR_NAME}},
+        {DesignEntity::PRINT, {AttrName::STMT_NUMBER, AttrName::VAR_NAME}},
+        {DesignEntity::CALL, {AttrName::STMT_NUMBER, AttrName::PROC_NAME}},
+        {DesignEntity::WHILE, {AttrName::STMT_NUMBER}},
+        {DesignEntity::IF, {AttrName::STMT_NUMBER}},
+        {DesignEntity::ASSIGN, {AttrName::STMT_NUMBER}},
+        {DesignEntity::VARIABLE, {AttrName::VAR_NAME}},
+        {DesignEntity::CONSTANT, {AttrName::VALUE}},
+        {DesignEntity::PROCEDURE, {AttrName::PROC_NAME}}
+    });
+
     DesignEntity getDesignEntity(std::string& str) {
         try {
             return stringToDesignEntityMap.at(str);
@@ -52,5 +65,9 @@ namespace QB {
             str += ", ";
         }
         return str;
+    }
+
+    unordered_set<AttrName> getAllowedAttrNameSetFromDesignEntity(DesignEntity designEntity) {
+        return designEntityToAttrNameMap.at(designEntity);
     }
 }
