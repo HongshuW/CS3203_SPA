@@ -49,6 +49,7 @@ void QueryValidator::validateDesignEntityAttrNamePairSelectClause() {
     shared_ptr<SelectClause> selectClause = query->selectClause;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
     shared_ptr<vector<Elem>> elemList = selectClause->returnResults;
+    if (selectClause->isBoolean()) return;
     for (auto &elem : *elemList) {
         auto attrRef = get_if<AttrRef>(&elem);
         //! Only need to check if it is a AttrRef

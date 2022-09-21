@@ -105,7 +105,7 @@ namespace QE {
         //todo: check for optional argument exprSpec
         auto exprSpecOpt = patternClause->arg3;
         auto exprSpec = std::move(*exprSpecOpt);
-        Table resultTable = this->dataRetriever->getTableByPattern(exprSpec);
+        Table resultTable = this->dataRetriever->getTableByExprPattern(exprSpec);
 
         //process result table: rename headers + filter
         string col1Name = patternClause->arg1.synonym; //arg1 must be an assign synonym
