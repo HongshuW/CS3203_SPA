@@ -21,6 +21,11 @@ namespace QB {
         STMT_NUMBER // 'stmt#'
     };
 
+    enum class WithComparingType {
+        NAME,
+        INTEGER,
+    };
+
     class AttrRef {
     public:
         Synonym synonym;
@@ -28,7 +33,11 @@ namespace QB {
         AttrRef(Synonym synonym, AttrName attrName);
 
         static AttrName getAttrNameFromStr(string& str);
+
         string getStrOfAttrName();
+        static string getStrFromAttrName(AttrName& attrName);
+        static WithComparingType getWithComparingTypeFromAttrName(AttrName& attrName);
+
 
         bool operator==(const AttrRef& attrRef1) const {
             return synonym == attrRef1.synonym && attrName == attrRef1.attrName;

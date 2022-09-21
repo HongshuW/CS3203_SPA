@@ -6,19 +6,17 @@
 #define SPA_WITHCLAUSES_H
 
 #include "query_builder/commons/Ident.h"
-#include "query_builder/commons/AttrRef.h"
+#include "query_builder/commons/WithRef.h"
+#include "query_builder/commons/WithRef.h"
+using namespace QB;
 
 namespace QB {
 
-    enum WithRefType {IDENT, INT, ATTR_REF};
-    using WithRef = variant<Ident, int, AttrRef>;
 
     class WithClause {
     public:
         WithRef lhs;
         WithRef rhs;
-
-        WithClause(WithRef lhs, WithRef rhs);
 
         WithRefType lhsType();
         WithRefType rhsType();
@@ -27,8 +25,7 @@ namespace QB {
         static const int WITHREF_INT_IDX = 1;
         static const int WITHREF_ATTR_REF_IDX = 2;
 
-
-        bool isSameWithRefType();
+        WithClause(WithRef lhs, WithRef rhs) : lhs(lhs), rhs(rhs) {}
 
         bool operator==(const WithClause& withClauses) const {
             return lhs == withClauses.lhs && rhs == withClauses.rhs;

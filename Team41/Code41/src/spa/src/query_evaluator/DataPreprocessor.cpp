@@ -10,6 +10,7 @@
 #include "QEUtils.h"
 #include "utils/Utils.h"
 #include "TableCombiner.h"
+#include "query_builder/commons/WithRef.h"
 using namespace std;
 using namespace QB;
 namespace QE {
@@ -242,7 +243,7 @@ namespace QE {
 
     Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause,  shared_ptr<vector<Declaration>> declarations) {
 
-        bool hasSynonym = withClause->lhsType() == QB::ATTR_REF || withClause->rhsType() == QB::ATTR_REF;
+        bool hasSynonym = withClause->lhsType() == WithRefType::ATTR_REF || withClause->rhsType() == WithRefType::ATTR_REF;
         if (!hasSynonym) return Table();
         vector<WithRef> withRefs = {withClause->lhs, withClause->rhs};
         Table resultTable = Table();
@@ -250,7 +251,7 @@ namespace QE {
         int colOffSet = 0;
         for (auto withRef: withRefs) {
             WithRefType withRefType = WithClause::getWithRefType(withRef.index());
-            if (withRefType != ATTR_REF) continue;
+            if (withRefType != WithRefType::ATTR_REF) continue;
             AttrRef attrRef = get<WithClause::WITHREF_ATTR_REF_IDX>(withRef);
             DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym, declarations);
             bool processingNeeded = std::count(notDirectlyAvailDEs.begin(), notDirectlyAvailDEs.end(), designEntity)

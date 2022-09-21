@@ -3,21 +3,13 @@
 //
 
 #include "WithClauses.h"
-
 #include <utility>
 namespace QB {
-    unordered_map<int, WithRefType> indexToWithRefType({{0, IDENT},
-                                                        {1, INT},
-                                                        {2, ATTR_REF}});
+    unordered_map<int, WithRefType> indexToWithRefType({{0, WithRefType::IDENT},
+                                                        {1, WithRefType::INTEGER},
+                                                        {2, WithRefType::ATTR_REF}});
 
 
-}
-
-
-WithClause::WithClause(WithRef lhs, WithRef rhs) : lhs(std::move(lhs)), rhs(std::move(rhs)){}
-
-bool WithClause::isSameWithRefType() {
-    return lhs.index() == rhs.index();
 }
 
 WithRefType WithClause::lhsType() {
@@ -31,3 +23,4 @@ WithRefType WithClause::rhsType() {
 WithRefType WithClause::getWithRefType(int idx) {
     return indexToWithRefType.at(idx);
 }
+

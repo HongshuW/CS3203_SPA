@@ -286,7 +286,7 @@ TEST_CASE ("Test Query Validator") {
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test invalid Design Entity lhsType of argument 2 in Pattern Clause") {
+    SECTION ("Test invalid Design Entity type of argument 2 in Pattern Clause") {
         // Validate if agr2 is a synonym, it must be declared as variable
         std::string queryStr = "assign a; procedure s; while w; Select a such that Modifies (a, s) "
                                "pattern a (w, _\"x\"_)";
@@ -362,6 +362,36 @@ TEST_CASE ("Test Query Validator") {
 
     SECTION ("Test invalid Design Entity lhsType of argument 2 in Next* Clause, second arg cannot be variable") {
         std::string queryStr = "variable v; assign a; Select p such that Next* (a, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test undeclared AttrRef in Select Clause") {
+        std::string queryStr = "assign a; Select <a, v.value> pattern a (_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test undeclared synonym in Pattern Clause") {
+        std::string queryStr = "assign a; Select a pattern a (_, _) and w (_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test incorrect DesignEntity and AttrName pair in Select Clause") {
+        std::string queryStr = "assign a1, a2; Select <a1.procName, a2> such that Affects (a1, a2)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test incorrect DesignEntity and AttrName pair in With Clause") {
+        std::string queryStr = "assign a1, a2; Select <a1, a2> such that Affects (a1, a2) with a1.value = 2";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test different WithRef for lhs and rhs in With Clause") {
+        std::string queryStr = "procedure p; Select p with p.procName = 2";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }

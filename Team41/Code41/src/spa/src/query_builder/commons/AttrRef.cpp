@@ -20,6 +20,12 @@ unordered_map<string, AttrName> stringToAttrNameMap({
     {"stmt#", AttrName::STMT_NUMBER}
 });
 
+unordered_map<AttrName, WithComparingType> attrNameToWithComparingType({
+    {AttrName::PROC_NAME, WithComparingType::NAME},
+    {AttrName::VAR_NAME, WithComparingType::NAME},
+    {AttrName::VALUE, WithComparingType::INTEGER},
+    {AttrName::STMT_NUMBER, WithComparingType::INTEGER}
+});
 
 AttrName AttrRef::getAttrNameFromStr(string& str) {
     try {
@@ -32,3 +38,12 @@ AttrName AttrRef::getAttrNameFromStr(string& str) {
 string AttrRef::getStrOfAttrName() {
     return attrNameToStringMap.at(this->attrName);
 }
+
+string AttrRef::getStrFromAttrName(AttrName& attrName) {
+    return attrNameToStringMap.at(attrName);
+}
+
+WithComparingType AttrRef::getWithComparingTypeFromAttrName(AttrName& attrName) {
+    return attrNameToWithComparingType.at(attrName);
+}
+

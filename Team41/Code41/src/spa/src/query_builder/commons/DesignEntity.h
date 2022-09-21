@@ -11,6 +11,7 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include "AttrRef.h"
 
 using namespace std;
 
@@ -48,9 +49,21 @@ namespace QB {
             DesignEntity::WHILE
     };
 
+    const unordered_set<DesignEntity> CONSTANT_SYNONYM = {
+            DesignEntity::CONSTANT
+    };
+
+    const unordered_set<DesignEntity> SYNONYMS_WITH_NAME = {
+            DesignEntity::PROCEDURE, DesignEntity::CALL,
+            DesignEntity::VARIABLE, DesignEntity::READ,
+            DesignEntity::PRINT
+    };
+
+
     DesignEntity getDesignEntity(string&);
     string getDesignEntityString(DesignEntity);
     string getDesignEntitySetString(unordered_set<DesignEntity> set);
+    unordered_set<AttrName> getAllowedAttrNameSetFromDesignEntity(DesignEntity designEntity);
 
 }  // namespace QE
 

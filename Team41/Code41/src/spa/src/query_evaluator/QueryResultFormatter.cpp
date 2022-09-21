@@ -58,8 +58,6 @@ namespace QE {
                 }
             }
         }
-
-
         return vector<string>();
     }
 } // QE

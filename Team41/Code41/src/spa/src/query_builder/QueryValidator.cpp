@@ -40,9 +40,39 @@ void QueryValidator::validateSynonymDeclaredSelectClause() {
 
         if (attrRef && !Declaration::findDeclaration(attrRef->synonym, declarations)) {
             throw PQLValidationException(
-                    "Synonym: " + attrRef->synonym.synonym + " is not defined for Select Clause");
+                    "AttrRef: " + attrRef->synonym.synonym + " is not defined for Select Clause");
         }
     }
+}
+
+void QueryValidator::validateDesignEntityAttrNamePairSelectClause() {
+    shared_ptr<SelectClause> selectClause = query->selectClause;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
+    shared_ptr<vector<Elem>> elemList = selectClause->returnResults;
+    if (selectClause->isBoolean()) return;
+    for (auto &elem : *elemList) {
+        auto attrRef = get_if<AttrRef>(&elem);
+        //! Only need to check if it is a AttrRef
+        if (attrRef) {
+            auto declaration = Declaration::findDeclaration(attrRef->synonym, declarations);
+            if (!declaration) {
+                throw PQLValidationException(attrRef->synonym.synonym + " is not declared for Select Clause");
+            }
+            unordered_set<AttrName> allowedAttrNameSet =
+                    getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
+            if (!allowedAttrNameSet.count(attrRef->attrName)) {
+                throw PQLValidationException(getDesignEntityString(declaration->getDesignEntity()) +
+                                             "." + AttrRef::getStrFromAttrName(attrRef->attrName) +
+                                             " is not valid for Select Clause");
+            }
+        }
+    }
+}
+
+void QueryValidator::validateSelectClause() {
+    validateSynonymDeclaredSelectClause();
+    //! Validate the correct match of design entity and AttrName in select clause
+    validateDesignEntityAttrNamePairSelectClause();
 }
 
 void QueryValidator::validateSynonymDeclaredSuchThatClause() {
@@ -205,7 +235,7 @@ void QueryValidator::validateArg1DesignEntityPatternClause() {
     shared_ptr<vector<Declaration>> declarations = query->declarations;
     for (auto patternClause : *patternClauses) {
         auto declaration = Declaration::findDeclaration(patternClause->arg1, declarations);
-        if (declaration && ALLOW_SYNONYM_PATTERN.count(declaration->getDesignEntity())) {
+        if (declaration && !ALLOW_SYNONYM_PATTERN.count(declaration->getDesignEntity())) {
             throw PQLValidationException(
                     "Expect pattern clause arg1 to be declared as assign, got " +
                     getDesignEntityString(declaration->getDesignEntity()));
@@ -243,26 +273,102 @@ void QueryValidator::validatePatternClause() {
     validateArg2DesignEntityPatternClause();
 }
 
+
+void QueryValidator::validateDesignEntityAttrNamePairWithClause() {
+    shared_ptr<vector<shared_ptr<WithClause>>> withClauses = query->withClauses;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
+    for (auto withClause : *withClauses) {
+        WithRef withRefLHS = withClause->lhs;
+        auto lhs = get_if<AttrRef>(&withRefLHS);
+        //! Only need to check if it is a AttrRef
+        if (lhs) {
+            auto declaration = Declaration::findDeclaration(lhs->synonym, declarations);
+            if (!declaration) {
+                throw PQLValidationException(lhs->synonym.synonym + " is not declared for With Clause");
+            }
+            unordered_set<AttrName> allowedAttrNameSet =
+                    getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
+            if (!allowedAttrNameSet.count(lhs->attrName)) {
+                throw PQLValidationException(getDesignEntityString(declaration->getDesignEntity()) +
+                    "." + AttrRef::getStrFromAttrName(lhs->attrName) +
+                    " is not valid for With Clause");
+            }
+        }
+
+        WithRef withRefRHS = withClause->rhs;
+        auto rhs = get_if<AttrRef>(&withRefRHS);
+        //! Only need to check if it is a AttrRef
+        if (rhs) {
+            auto declaration = Declaration::findDeclaration(rhs->synonym, declarations);
+            if (!declaration) {
+                throw PQLValidationException(lhs->synonym.synonym + " is not declared for With Clause");
+            }
+            unordered_set<AttrName> allowedAttrNameSet =
+                    getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
+            if (!allowedAttrNameSet.count(rhs->attrName)) {
+                throw PQLValidationException(getDesignEntityString(declaration->getDesignEntity()) +
+                                             "." + AttrRef::getStrFromAttrName(rhs->attrName) +
+                                             " is not valid for With Clause");
+            }
+        }
+    }
+}
+
 void QueryValidator::validateSameWithRefWithClause() {
-    //! Two WithRef comparison must be of the same lhsType
+    //! Two WithRef comparison must be of the same type, both NAME, or both INTEGER
+    //! WithRef can be Ident, int or AttrRef
     shared_ptr<vector<shared_ptr<WithClause>>> withClauses = query->withClauses;
     for (auto withClause : *withClauses) {
-        if (!withClause->isSameWithRefType()) {
+        WithRef withRefLHS = withClause->lhs;
+        WithRefType withRefTypeLHS = getWithRefTypeFromIndex(withRefLHS.index());
+        //! Default value
+        WithComparingType withComparingTypeLHS = WithComparingType::NAME;
+        if (withRefTypeLHS == WithRefType::IDENT) {
+            withComparingTypeLHS = WithComparingType::NAME;
+        } else if (withRefTypeLHS == WithRefType::INTEGER) {
+            withComparingTypeLHS = WithComparingType::INTEGER;
+        } else if (withRefTypeLHS == WithRefType::ATTR_REF) {
+            auto lhs = get_if<AttrRef>(&withRefLHS);
+            withComparingTypeLHS = AttrRef::getWithComparingTypeFromAttrName(lhs->attrName);
+        }
+
+        WithRef withRefRHS = withClause->rhs;
+        WithRefType withRefTypeRHS = getWithRefTypeFromIndex(withRefRHS.index());
+        //! Default value
+        WithComparingType withComparingTypeRHS = WithComparingType::NAME;
+        if (withRefTypeRHS == WithRefType::IDENT) {
+            withComparingTypeRHS = WithComparingType::NAME;
+        } else if (withRefTypeRHS == WithRefType::INTEGER) {
+            withComparingTypeRHS = WithComparingType::INTEGER;
+        } else if (withRefTypeRHS == WithRefType::ATTR_REF) {
+            auto rhs = get_if<AttrRef>(&withRefRHS);
+            withComparingTypeRHS = AttrRef::getWithComparingTypeFromAttrName(rhs->attrName);
+        }
+
+        if (withComparingTypeLHS != withComparingTypeRHS) {
             throw PQLValidationException(
                     "Two WithRef are different, no comparison can be made");
         }
     }
 }
 
+
+void QueryValidator::validateWithClause() {
+    //! Validate the correct match of design entity and AttrName in with clause
+    validateDesignEntityAttrNamePairWithClause();
+    //! Two WithRef comparison must be of the same type, both NAME, or both INTEGER
+    validateSameWithRefWithClause();
+}
+
 void QueryValidator::validateQuery() {
     //! Validation for declaration
     validateNoDuplicateDeclarations();
     //! Validation for select clause
-    validateSynonymDeclaredSelectClause();
+    validateSelectClause();
     //! Validation for such that clause
     validateSuchThatClause();
     //! Validation for pattern clause
     validatePatternClause();
     //! Validation for with clause
-    validateSameWithRefWithClause();
+    validateWithClause();
 }
