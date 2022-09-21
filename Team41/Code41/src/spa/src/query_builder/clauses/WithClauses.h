@@ -9,6 +9,8 @@
 #include "query_builder/commons/AttrRef.h"
 
 namespace QB {
+
+    enum WithRefType {IDENT, INT, ATTR_REF};
     using WithRef = variant<Ident, int, AttrRef>;
 
     class WithClause {
@@ -17,6 +19,14 @@ namespace QB {
         WithRef rhs;
 
         WithClause(WithRef lhs, WithRef rhs);
+
+        WithRefType lhsType();
+        WithRefType rhsType();
+        static WithRefType getWithRefType(int idx);
+        static const int WITHREF_IDENT_IDX = 0;
+        static const int WITHREF_INT_IDX = 1;
+        static const int WITHREF_ATTR_REF_IDX = 2;
+
 
         bool isSameWithRefType();
 

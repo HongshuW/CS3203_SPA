@@ -1,4 +1,4 @@
-<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<?xml-stylesheet lhsType="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
 <name>AutoTester</name><parsing_time_taken>0.000000</parsing_time_taken>

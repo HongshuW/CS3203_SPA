@@ -119,7 +119,7 @@ void QueryValidator::validateSynonymTypeSuchThatClause() {
         auto arg2 = get_if<Synonym>(&suchThat->arg2);
 
         if (arg1) {
-            //! arg1 is a synonym, need to check for the correct DesignEntity type
+            //! arg1 is a synonym, need to check for the correct DesignEntity lhsType
             auto declaration = Declaration::findDeclaration(*arg1, declarations);
             auto designEntity = declaration->getDesignEntity();
             if (!validFirstArgSynonymTypes.count(designEntity)) {
@@ -136,7 +136,7 @@ void QueryValidator::validateSynonymTypeSuchThatClause() {
         }
 
         if (arg2) {
-            //! arg2 is a synonym, need to check for the correct DesignEntity type
+            //! arg2 is a synonym, need to check for the correct DesignEntity lhsType
             auto declaration = Declaration::findDeclaration(*arg2, declarations);
             auto designEntity = declaration->getDesignEntity();
             if (!validSecondArgSynonymTypes.count(designEntity)) {
@@ -244,7 +244,7 @@ void QueryValidator::validatePatternClause() {
 }
 
 void QueryValidator::validateSameWithRefWithClause() {
-    //! Two WithRef comparison must be of the same type
+    //! Two WithRef comparison must be of the same lhsType
     shared_ptr<vector<shared_ptr<WithClause>>> withClauses = query->withClauses;
     for (auto withClause : *withClauses) {
         if (!withClause->isSameWithRefType()) {

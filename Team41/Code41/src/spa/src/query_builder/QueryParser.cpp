@@ -80,7 +80,7 @@ void QueryParser::parseBooleanSelectClause() {
     shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
     Synonym syn = Synonym("BOOLEAN");
     if (!Declaration::findDeclaration(syn, query->declarations)) {
-        //! BOOLEAN is not declared as a synonym, this is a BOOLEAN type
+        //! BOOLEAN is not declared as a synonym, this is a BOOLEAN lhsType
         selectClause = make_shared<SelectClause>(ReturnType::BOOLEAN);
         query->selectClause = selectClause;
     }

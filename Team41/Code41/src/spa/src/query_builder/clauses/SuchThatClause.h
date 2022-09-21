@@ -15,7 +15,7 @@
 namespace QB {
     class SuchThatClause {
     private:
-        //! Update specific relationship type for Modifies (Modifies_S / Modifies_P) Clause
+        //! Update specific relationship lhsType for Modifies (Modifies_S / Modifies_P) Clause
         //! and Uses Clause (Uses_S, Uses_P)
         void updateSpecificModifiesUsesClause();
     public:

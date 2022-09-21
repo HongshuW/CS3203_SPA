@@ -162,7 +162,7 @@ namespace Catch {
 //
 // Therefore, `CATCH_INTERNAL_IGNORE_BUT_WARN` is not implemented.
 #  if !defined(__ibmxl__) && !defined(__CUDACC__)
-#    define CATCH_INTERNAL_IGNORE_BUT_WARN(...) (void)__builtin_constant_p(__VA_ARGS__) /* NOLINT(cppcoreguidelines-pro-type-vararg, hicpp-vararg) */
+#    define CATCH_INTERNAL_IGNORE_BUT_WARN(...) (void)__builtin_constant_p(__VA_ARGS__) /* NOLINT(cppcoreguidelines-pro-lhsType-vararg, hicpp-vararg) */
 #  endif
 
 #    define CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS \
@@ -453,7 +453,7 @@ namespace Catch {
 #if defined(CATCH_CONFIG_DISABLE_EXCEPTIONS)
 #define CATCH_TRY if ((true))
 #define CATCH_CATCH_ALL if ((false))
-#define CATCH_CATCH_ANON(type) if ((false))
+#define CATCH_CATCH_ANON(lhsType) if ((false))
 #else
 #define CATCH_TRY try
 #define CATCH_CATCH_ALL catch (...)
@@ -946,7 +946,7 @@ namespace Catch {
 #else
     // Keep ::type here because we still support C++11
     template <typename Func, typename... U>
-    using FunctionReturnType = typename std::remove_reference<typename std::remove_cv<typename std::result_of<Func(U...)>::type>::type>::type;
+    using FunctionReturnType = typename std::remove_reference<typename std::remove_cv<typename std::result_of<Func(U...)>::type>::type>::lhsType;
 #endif
 
 } // namespace Catch
@@ -2193,7 +2193,7 @@ namespace Catch { \
 #pragma warning(disable:4389) // '==' : signed/unsigned mismatch
 #pragma warning(disable:4018) // more "signed/unsigned mismatch"
 #pragma warning(disable:4312) // Converting int to T* using reinterpret_cast (issue on x64 platform)
-#pragma warning(disable:4180) // qualifier applied to function type has no meaning
+#pragma warning(disable:4180) // qualifier applied to function lhsType has no meaning
 #pragma warning(disable:4800) // Forcing result to true or false
 #endif
 
@@ -3514,7 +3514,7 @@ public:
 } // namespace Generic
 
     // The following functions create the actual matcher objects.
-    // The user has to explicitly specify type to the function, because
+    // The user has to explicitly specify lhsType to the function, because
     // inferring std::function<bool(T const&)> is hard (but possible) and
     // requires a lot of TMP.
     template<typename T>
@@ -4055,7 +4055,7 @@ namespace Generators {
         return values<std::tuple<Ts...>>( tuples );
     }
 
-    // Tag type to signal that a generator sequence should convert arguments to a specific type
+    // Tag type to signal that a generator sequence should convert arguments to a specific lhsType
     template <typename T>
     struct as {};
 
@@ -4079,9 +4079,9 @@ namespace Generators {
     auto acquireGeneratorTracker( StringRef generatorName, SourceLineInfo const& lineInfo ) -> IGeneratorTracker&;
 
     template<typename L>
-    // Note: The type after -> is weird, because VS2015 cannot parse
+    // Note: The lhsType after -> is weird, because VS2015 cannot parse
     //       the expression used in the typedef inside, when it is in
-    //       return type. Yeah.
+    //       return lhsType. Yeah.
     auto generate( StringRef generatorName, SourceLineInfo const& lineInfo, L const& generatorExpression ) -> decltype(std::declval<decltype(generatorExpression())>().get()) {
         using UnderlyingType = typename decltype(generatorExpression())::type;
 
@@ -4404,7 +4404,7 @@ namespace Catch {
 
 namespace Catch {
 
-    // An optional type
+    // An optional lhsType
     template<typename T>
     class Option {
     public:
@@ -6554,7 +6554,7 @@ namespace Catch {
             struct CompleteType<void> { struct type {}; };
 
             template <typename T>
-            using CompleteType_t = typename CompleteType<T>::type;
+            using CompleteType_t = typename CompleteType<T>::lhsType;
 
             template <typename Result>
             struct CompleteInvoker {
@@ -8804,7 +8804,7 @@ inline auto Column::operator + (Column const& other) -> Columns {
 namespace Catch { namespace clara {
 namespace detail {
 
-    // Traits for extracting arg and return type of lambdas (for single argument lambdas)
+    // Traits for extracting arg and return lhsType of lambdas (for single argument lambdas)
     template<typename L>
     struct UnaryLambdaTraits : UnaryLambdaTraits<decltype( &L::operator() )> {};
 
@@ -9074,7 +9074,7 @@ namespace detail {
         ss << source;
         ss >> target;
         if( ss.fail() )
-            return ParserResult::runtimeError( "Unable to convert '" + source + "' to destination type" );
+            return ParserResult::runtimeError( "Unable to convert '" + source + "' to destination lhsType" );
         else
             return ParserResult::ok( ParseResultType::Matched );
     }
@@ -9672,7 +9672,7 @@ using detail::Help;
 // enum of result types from a parse
 using detail::ParseResultType;
 
-// Result type for parser operation
+// Result lhsType for parser operation
 using detail::ParserResult;
 
 }} // namespace Catch::clara
@@ -13311,7 +13311,7 @@ namespace Catch {
             }
 
             // On older platforms, returning std::unique_ptr<ListeningReporter>
-            // when the return type is std::unique_ptr<IStreamingReporter>
+            // when the return lhsType is std::unique_ptr<IStreamingReporter>
             // doesn't compile without a std::move call. However, this causes
             // a warning on newer platforms. Thus, we have to work around
             // it a bit and downcast the pointer manually.
@@ -15723,7 +15723,7 @@ namespace {
     }
 
     void XmlWriter::writeStylesheetRef( std::string const& url ) {
-        m_os << "<?xml-stylesheet type=\"text/xsl\" href=\"" << url << "\"?>\n";
+        m_os << "<?xml-stylesheet lhsType=\"text/xsl\" href=\"" << url << "\"?>\n";
     }
 
     XmlWriter& XmlWriter::writeBlankLine() {
@@ -17047,7 +17047,7 @@ namespace Catch {
             XmlWriter::ScopedElement e = xml.scopedElement( elementName );
 
             xml.writeAttribute( "message", result.getExpression() );
-            xml.writeAttribute( "type", result.getTestMacroName() );
+            xml.writeAttribute( "lhsType", result.getTestMacroName() );
 
             ReusableStringStream rss;
             if (stats.totals.assertions.total() > 0) {
@@ -17347,7 +17347,7 @@ namespace Catch {
         if( result.hasExpression() ) {
             m_xml.startElement( "Expression" )
                 .writeAttribute( "success", result.succeeded() )
-                .writeAttribute( "type", result.getTestMacroName() );
+                .writeAttribute( "lhsType", result.getTestMacroName() );
 
             writeSourceInfo( result.getSourceInfo() );
 
@@ -17357,7 +17357,7 @@ namespace Catch {
                 .writeText( result.getExpandedExpression() );
         }
 
-        // And... Print a result applicable to each result type.
+        // And... Print a result applicable to each result lhsType.
         switch( result.getResultType() ) {
             case ResultWas::ThrewException:
                 m_xml.startElement( "Exception" );

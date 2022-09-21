@@ -32,6 +32,8 @@ namespace QB {
 
         bool isBoolean();
         bool isTuple();
+        static const int ELEM_SYN_IDX = 0;
+        static const int ELEM_ATTR_REF_IDX = 1;
 
         bool operator==(const SelectClause& selectClause1) const {
             return returnType == selectClause1.returnType &&

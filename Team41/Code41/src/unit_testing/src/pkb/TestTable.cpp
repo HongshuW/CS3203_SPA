@@ -34,7 +34,7 @@ TEST_CASE("Test Table") {
     }
 
     SECTION("Get Column by Column Name") {
-        vector<string> header{"stmt number", "stmt type"};
+        vector<string> header{"stmt number", "stmt lhsType"};
         vector<vector<string>> rows;
         vector<string> row1{"1", "assign"};
         vector<string> row2{"2", "while"};
@@ -55,7 +55,7 @@ TEST_CASE("Test Table") {
         REQUIRE(stmtNoColumn[2] == "3");
 
         // check statement number column
-        vector<string> stmtTypeColumn = stmtTable.getColumnByName("stmt type");
+        vector<string> stmtTypeColumn = stmtTable.getColumnByName("stmt lhsType");
         REQUIRE(stmtTypeColumn[0] == "assign");
         REQUIRE(stmtTypeColumn[1] == "while");
         REQUIRE(stmtTypeColumn[2] == "read");
@@ -96,5 +96,18 @@ TEST_CASE("Test Table") {
         variableTable.renameHeader(newHeader);
 
         REQUIRE(variableTable.header[0] == "variable Table");
+    }
+
+    SECTION("drop header") {
+        Table table = Table();
+        table.header = {"keep", "drop"};
+        table.rows = {{"k1", "d1"}, {"k2", "d2"}, {"k3", "d3"}};
+
+        Table actual = table.dropCol(1);
+        Table expected = Table();
+        expected.header = {"keep"};
+        expected.rows = {{"k1"}, {"k2"}, {"k3"}};
+
+        REQUIRE(actual.isEqual(expected));
     }
 }

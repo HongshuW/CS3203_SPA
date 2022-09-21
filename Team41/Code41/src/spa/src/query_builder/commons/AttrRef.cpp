@@ -28,3 +28,7 @@ AttrName AttrRef::getAttrNameFromStr(string& str) {
         throw PQLParseException("Cannot find the AttrRef called " + str);
     }
 }
+
+string AttrRef::getStrOfAttrName() {
+    return attrNameToStringMap.at(this->attrName);
+}

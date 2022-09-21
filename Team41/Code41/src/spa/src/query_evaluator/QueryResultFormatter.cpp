@@ -18,6 +18,7 @@ namespace QE {
         vector<string> uniqueResultVec;
 
         if (typeid(queryResult).name() == typeid(QueryBooleanResult).name()) {
+
             return handleBooleanResult();
         } else {
             return handleTupleResult();
@@ -37,15 +38,26 @@ namespace QE {
 
     vector<string> QueryResultFormatter::handleBooleanResult() {
         vector<string> uniqueResultVec;
-        //todo: implement handle result
-//        shared_ptr<QueryBooleanResult> queryBooleanResult = dynamic_pointer_cast<QueryBooleanResult>(queryResult);
-//        uniqueResultVec.insert(uniqueResultVec.begin(), queryBooleanResult->boolVal ? "TRUE" : "FALSE");
+        shared_ptr<QueryBooleanResult> queryBooleanResult = dynamic_pointer_cast<QueryBooleanResult>(queryResult1);
+        uniqueResultVec.insert(uniqueResultVec.begin(), queryBooleanResult->boolVal ? "TRUE" : "FALSE");
         return uniqueResultVec;
     }
 
     vector<string> QueryResultFormatter::handleTupleResult() {
-        //shared_ptr<QueryTupleResult> queryTupleResult = dynamic_pointer_cast<QueryTupleResult>(queryResult);
+        shared_ptr<QueryTupleResult> queryTupleResult = dynamic_pointer_cast<QueryTupleResult>(queryResult1);
 
+        for(auto elem: *queryTupleResult->returnTuple) {
+            int index = elem.index();
+            int SYNONYM_INDEX = 0;
+            int ATTR_REF_INDEX = 1;
+            if (index == SYNONYM_INDEX) {
+                Synonym synonym = std::get<Synonym>(elem);
+                if (!queryTupleResult->table.hasCol(synonym.synonym)) {
+                    TableCombiner tableCombiner = TableCombiner();
+
+                }
+            }
+        }
 
 
         return vector<string>();
