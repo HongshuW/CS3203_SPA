@@ -96,6 +96,21 @@ TEST_CASE("Test FollowsStar Extractor") {
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
 
+    SECTION("test doubly-nested + doubly-nested procedures") {
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        auto programNode = TestDE::Dummies::getTestProgramNode(8);
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::FOLLOWS_T);
+        vector<vector<string>> expected = { {"1", "2"}, {"1", "3"}, {"1", "9"},
+                                            {"2", "3"}, {"2", "9"}, {"3", "9"},
+                                            {"4", "5"}, {"6", "7"}, {"10", "11"},
+                                            {"10", "16"}, {"11", "16"}, {"12", "13"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
     SECTION("test singly-nested + doubly-nested + doubly-nested procedures") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         auto programNode = TestDE::Dummies::getTestProgramNode(9);
