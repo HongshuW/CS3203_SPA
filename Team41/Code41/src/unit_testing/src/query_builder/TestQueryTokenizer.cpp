@@ -357,6 +357,72 @@ TEST_CASE ("Test Query Tokenizer") {
                            }));
     }
 
+    SECTION ("Select BOOLEAN such that Next* (2, 9)") {
+        std::string query = "Select BOOLEAN such that Next* (2, 9)";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"Select", "BOOLEAN", "such", "that", "Next*", "(", "2", ",", "9", ")"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("procedure p; variable v; Select p with p.procName = v.varName") {
+        std::string query = "procedure p; variable v; Select p with p.procName = v.varName";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"procedure", "p", ";", "variable", "v", ";", "Select", "p", "with", "p", ".", "procName", "=",
+                 "v", ".", "varName"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("stmt s; constant c; Select s with s.stmt# = c.value") {
+        std::string query = "stmt s; constant c; Select s with s.stmt# = c.value";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"stmt", "s", ";", "constant", "c", ";", "Select", "s", "with", "s", ".", "stmt#", "=",
+                 "c", ".", "value"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
+    SECTION ("assign a; while w; stmt s; Select a such that Parent* (w, a) and Next* (60, s) pattern a(\"x\", _)"
+             "with a.stmt# = s.stmt#") {
+        std::string query = "assign a; while w; stmt s; Select a such that Parent* (w, a) and Next* (60, s) "
+                            "pattern a(\"x\", _) with a.stmt# = s.stmt#";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"assign", "a", ";", "while", "w", ";", "stmt", "s", ";", "Select", "a", "such", "that", "Parent*",
+                 "(", "w", ",", "a", ")", "and", "Next*", "(", "60", ",", "s", ")", "pattern", "a", "(", "\"", "x",
+                 "\"", ",", "_", ")", "with", "a", ".", "stmt#", "=", "s", ".", "stmt#"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
     SECTION ("Test unexpected tokens") {
         std::string query = "stmt s& Select s such that Follows* (a, 6)";
         QueryTokenizer tokenizer = QueryTokenizer(query);

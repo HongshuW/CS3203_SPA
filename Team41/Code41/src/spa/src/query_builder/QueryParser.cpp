@@ -82,8 +82,11 @@ void QueryParser::parseBooleanSelectClause() {
     if (!Declaration::findDeclaration(syn, query->declarations)) {
         //! BOOLEAN is not declared as a synonym, this is a BOOLEAN type
         selectClause = make_shared<SelectClause>(ReturnType::BOOLEAN);
-        query->selectClause = selectClause;
+    } else {
+        returnResults->push_back(syn);
+        selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
     }
+    query->selectClause = selectClause;
 }
 
 Elem QueryParser::parseTupleSelectClause() {

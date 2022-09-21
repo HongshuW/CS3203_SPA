@@ -17,7 +17,9 @@ namespace QB {
     class QueryValidator {
     private:
         void validateNoDuplicateDeclarations();
+        void validateSelectClause();
         void validateSynonymDeclaredSelectClause();
+        void validateDesignEntityAttrNamePairSelectClause();
         void validateSynonymDeclaredSuchThatClause();
         void validateArgRefTypeSuchThatClause();
         void validateUsesModifiesNoUnderscoreForFirstArg();

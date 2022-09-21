@@ -5,8 +5,6 @@
 #include "catch.hpp"
 
 #include "query_builder/QueryBuilder.h"
-#include "query_builder/QueryTokenizer.h"
-#include "query_builder/QueryParser.h"
 #include "query_builder/clauses/SelectClause.h"
 #include "query_builder/clauses/SuchThatClause.h"
 #include "query_builder/commons/Ref.h"
@@ -489,6 +487,143 @@ TEST_CASE ("Test Query Parser") {
                                        make_shared<ExprNode>("y"))));
     }
 
+    SECTION ("assign a1, a2; Select <a1.stmt#, a2> such that Affects (a1, a2)") {
+        std::string queryStr = "assign a1, a2; Select <a1.stmt#, a2> such that Affects (a1, a2)";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 2);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::ASSIGN, Synonym("a1")),
+                        Declaration(DesignEntity::ASSIGN, Synonym("a2"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(AttrRef(Synonym("a1"), AttrName::STMT_NUMBER));
+        returnResults->push_back(Synonym("a2"));
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
+                SuchThatClause(RelationType::AFFECTS, Synonym("a1"), Synonym("a2"),
+                               query->declarations));
+    }
+
+    SECTION ("Select BOOLEAN such that Next* (2, 9)") {
+        std::string queryStr = "Select BOOLEAN such that Next* (2, 9)";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::BOOLEAN));
+        REQUIRE(query->suchThatClauses->size() == 1);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
+                SuchThatClause(RelationType::NEXT_T, 2, 9,
+                               query->declarations));
+    }
+
+    SECTION ("Select BOOLEAN such that Next* (2, 9) and Next (9, 10)") {
+        std::string queryStr = "Select BOOLEAN such that Next* (2, 9) and Next (9, 10)";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::BOOLEAN));
+        REQUIRE(query->suchThatClauses->size() == 2);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
+                SuchThatClause(RelationType::NEXT_T, 2, 9,
+                               query->declarations));
+        REQUIRE(*(query->suchThatClauses)->at(1) ==
+                SuchThatClause(RelationType::NEXT, 9, 10,
+                               query->declarations));
+    }
+
+    SECTION ("procedure p; variable v; Select p with p.procName = v.varName") {
+        std::string queryStr = "procedure p; variable v; Select p with p.procName = v.varName";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 2);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::PROCEDURE, Synonym("p")),
+                        Declaration(DesignEntity::VARIABLE, Synonym("v"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("p"));
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(query->withClauses->size() == 1);
+        AttrRef lhs = AttrRef(Synonym("p"), AttrName::PROC_NAME);
+        AttrRef rhs = AttrRef(Synonym("v"), AttrName::VAR_NAME);
+        REQUIRE(*(query->withClauses)->at(0) ==
+                WithClause(lhs, rhs));
+    }
+
+    SECTION ("stmt s; constant c; Select s with s.stmt# = c.value") {
+        std::string queryStr = "stmt s; constant c; Select s with s.stmt# = c.value";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 2);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::STMT, Synonym("s")),
+                        Declaration(DesignEntity::CONSTANT, Synonym("c"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("s"));
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(query->withClauses->size() == 1);
+        AttrRef lhs = AttrRef(Synonym("s"), AttrName::STMT_NUMBER);
+        AttrRef rhs = AttrRef(Synonym("c"), AttrName::VALUE);
+        REQUIRE(*(query->withClauses)->at(0) ==
+                WithClause(lhs, rhs));
+    }
+
+    SECTION ("stmt BOOLEAN; constant c; Select <BOOLEAN> with BOOLEAN.stmt# = c.value") {
+        std::string queryStr = "stmt BOOLEAN; constant c; Select BOOLEAN with BOOLEAN.stmt# = c.value";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 2);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::STMT, Synonym("BOOLEAN")),
+                        Declaration(DesignEntity::CONSTANT, Synonym("c"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("BOOLEAN"));
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(query->withClauses->size() == 1);
+        AttrRef lhs = AttrRef(Synonym("BOOLEAN"), AttrName::STMT_NUMBER);
+        AttrRef rhs = AttrRef(Synonym("c"), AttrName::VALUE);
+        REQUIRE(*(query->withClauses)->at(0) ==
+                WithClause(lhs, rhs));
+    }
+
+    SECTION ("assign a; while w; stmt s; Select <a, w> such that Parent* (w, a) and Next* (60, s) pattern w(\"x\", _)"
+             "with a.stmt# = s.stmt#") {
+        std::string queryStr = "assign a; while w; stmt s; Select <a, w> such that Parent* (w, a) and Next* (60, s) "
+                            "pattern w(\"x\", _) with a.stmt# = s.stmt#";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 3);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::ASSIGN, Synonym("a")),
+                        Declaration(DesignEntity::WHILE, Synonym("w")),
+                        Declaration(DesignEntity::STMT, Synonym("s"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("a"));
+        returnResults->push_back(Synonym("w"));
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(query->suchThatClauses->size() == 2);
+        REQUIRE(*(query->suchThatClauses)->at(0) ==
+                SuchThatClause(RelationType::PARENT_T, Synonym("w"), Synonym("a"),
+                               query->declarations));
+        REQUIRE(*(query->suchThatClauses)->at(1) ==
+                SuchThatClause(RelationType::NEXT_T, 60, Synonym("s"),
+                               query->declarations));
+        REQUIRE(query->patternClauses->size() == 1);
+        REQUIRE(*(query->patternClauses->at(0)) ==
+                PatternClause(
+                        DesignEntity::WHILE,
+                        Synonym("w"),
+                        Ident("x")));
+        REQUIRE(query->withClauses->size() == 1);
+        AttrRef lhs = AttrRef(Synonym("a"), AttrName::STMT_NUMBER);
+        AttrRef rhs = AttrRef(Synonym("s"), AttrName::STMT_NUMBER);
+        REQUIRE(*(query->withClauses)->at(0) ==
+                WithClause(lhs, rhs));
+    }
+
     SECTION ("'select' is not defined, throw PQLParseException") {
         std::string queryStr = "variable v; select v";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
@@ -556,6 +691,16 @@ TEST_CASE ("Test Query Parser") {
 
     SECTION ("Invalid Design Entity type of argument 1 in Pattern Clause, throw PQLParseException") {
         std::string queryStr = "variable a; Select a pattern a (_, _)";
+        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Invalid tuple syntax, throw PQLParseException") {
+        std::string queryStr = "variable a; Select <a pattern a (_, _)";
+        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Invalid 'and' connector, throw PQLParseException") {
+        std::string queryStr = "if i; Select BOOLEAN such that Follows (9, 10) and pattern i (2, _, _)";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
     }
 }

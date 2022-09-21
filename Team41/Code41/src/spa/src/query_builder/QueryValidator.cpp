@@ -40,9 +40,38 @@ void QueryValidator::validateSynonymDeclaredSelectClause() {
 
         if (attrRef && !Declaration::findDeclaration(attrRef->synonym, declarations)) {
             throw PQLValidationException(
-                    "Synonym: " + attrRef->synonym.synonym + " is not defined for Select Clause");
+                    "AttrRef: " + attrRef->synonym.synonym + " is not defined for Select Clause");
         }
     }
+}
+
+void QueryValidator::validateDesignEntityAttrNamePairSelectClause() {
+    shared_ptr<SelectClause> selectClause = query->selectClause;
+    shared_ptr<vector<Declaration>> declarations = query->declarations;
+    shared_ptr<vector<Elem>> elemList = selectClause->returnResults;
+    for (auto &elem : *elemList) {
+        auto attrRef = get_if<AttrRef>(&elem);
+        //! Only need to check if it is a AttrRef
+        if (attrRef) {
+            auto declaration = Declaration::findDeclaration(attrRef->synonym, declarations);
+            if (!declaration) {
+                throw PQLValidationException(attrRef->synonym.synonym + " is not declared for Select Clause");
+            }
+            unordered_set<AttrName> allowedAttrNameSet =
+                    getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
+            if (!allowedAttrNameSet.count(attrRef->attrName)) {
+                throw PQLValidationException(getDesignEntityString(declaration->getDesignEntity()) +
+                                             "." + AttrRef::getStrFromAttrName(attrRef->attrName) +
+                                             " is not valid for Select Clause");
+            }
+        }
+    }
+}
+
+void QueryValidator::validateSelectClause() {
+    validateSynonymDeclaredSelectClause();
+    //! Validate the correct match of design entity and AttrName in select clause
+    validateDesignEntityAttrNamePairSelectClause();
 }
 
 void QueryValidator::validateSynonymDeclaredSuchThatClause() {
@@ -332,7 +361,7 @@ void QueryValidator::validateQuery() {
     //! Validation for declaration
     validateNoDuplicateDeclarations();
     //! Validation for select clause
-    validateSynonymDeclaredSelectClause();
+    validateSelectClause();
     //! Validation for such that clause
     validateSuchThatClause();
     //! Validation for pattern clause
