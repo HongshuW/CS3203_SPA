@@ -15,6 +15,16 @@ vector<string> Table::getColumnByName(string columnName) {
     return emptyVector;
 }
 
+int Table::getColIdxByName(string colName) {
+    int numOfColumns = header.size();
+    for (int i = 0; i < numOfColumns; i++) {
+        if (header[i] == colName) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 vector<string> Table::getColumnByIndex(int index) {
     vector<string> output;
     int size = rows.size();
@@ -46,6 +56,10 @@ shared_ptr<unordered_set<string>> Table::getValuesByKey(string key, int keyColum
     return output;
 }
 
+bool Table::hasCol(std::string colName) {
+    return std::count(header.begin(), header.end(), colName);
+}
+
 void Table::appendRow(vector<string> row) {
     rows.push_back(row);
 }
@@ -71,6 +85,34 @@ void Table::addValues(list<string> values) {
 
 void Table::renameHeader(vector<string> newHeader) {
     header = newHeader;
+}
+
+
+
+
+Table Table::dropCol(int colIdx) {
+    if (colIdx >= this->header.size()) return Table();
+    Table droppedTable = Table();
+    droppedTable.header = {};
+    droppedTable.rows = {};
+
+    for (int i = 0; i < this->header.size(); ++i) {
+        if (i != colIdx) {
+            droppedTable.header.insert(droppedTable.header.begin(), this->header[i]);
+        }
+    }
+
+    for (int i = 0; i < this->rows.size(); ++i) {
+        vector<string> droppedRow;
+        for (int j = 0; j < this->rows[i].size(); j++) {
+            if (j != colIdx) {
+                droppedRow.insert(droppedRow.begin(), this->rows[i][j]);
+            }
+        }
+        droppedTable.appendRow(droppedRow);
+    }
+
+    return droppedTable;
 }
 
 bool Table::isEqual(Table otherTable) {

@@ -7,14 +7,22 @@
 
 #include "QueryResult.h"
 #include "pkb/DataRetriever.h"
+#include "query_builder/commons/Declaration.h"
+
+
 namespace QE {
 
     class QueryResultFormatter {
         QueryResult queryResult;
+        shared_ptr<QueryResult> queryResult1;
         shared_ptr<DataRetriever> dataRetriever;
+        vector<string> handleBooleanResult();
+        vector<string> handleTupleResult();
+
     public:
-        explicit QueryResultFormatter(QueryResult queryResult);
-        explicit QueryResultFormatter(QueryResult queryResult, shared_ptr<DataRetriever> dataRetriever);
+        explicit QueryResultFormatter(QueryResult);
+        explicit QueryResultFormatter(shared_ptr<QueryResult> queryResult1, shared_ptr<DataRetriever> dataRetriever);
+
         vector<string> formatResult();
     };
 

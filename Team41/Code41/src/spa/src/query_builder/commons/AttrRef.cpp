@@ -35,6 +35,10 @@ AttrName AttrRef::getAttrNameFromStr(string& str) {
     }
 }
 
+string AttrRef::getStrOfAttrName() {
+    return attrNameToStringMap.at(this->attrName);
+}
+
 string AttrRef::getStrFromAttrName(AttrName& attrName) {
     return attrNameToStringMap.at(attrName);
 }
@@ -42,3 +46,4 @@ string AttrRef::getStrFromAttrName(AttrName& attrName) {
 WithComparingType AttrRef::getWithComparingTypeFromAttrName(AttrName& attrName) {
     return attrNameToWithComparingType.at(attrName);
 }
+

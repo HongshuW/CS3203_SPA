@@ -157,43 +157,43 @@ TEST_CASE ("Test Query Validator") {
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Test wrong first arg synonym type in Follows Clause, first arg cannot be procedure synonym") {
+    SECTION ("Test wrong first arg synonym lhsType in Follows Clause, first arg cannot be procedure synonym") {
         std::string queryStr = "procedure p; Select p such that Follows (p, _)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test wrong second arg synonym type in Follows Clause, second arg cannot be variable synonym") {
+    SECTION ("Test wrong second arg synonym lhsType in Follows Clause, second arg cannot be variable synonym") {
         std::string queryStr = "variable x; if i; Select x such that Follows (i, x)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test wrong first arg synonym type in Follows* Clause, first arg cannot be procedure synonym") {
+    SECTION ("Test wrong first arg synonym lhsType in Follows* Clause, first arg cannot be procedure synonym") {
         std::string queryStr = "procedure p; Select p such that Follows* (p, _)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test wrong first arg synonym type in Follows* Clause, first arg cannot be variable synonym") {
+    SECTION ("Test wrong first arg synonym lhsType in Follows* Clause, first arg cannot be variable synonym") {
         std::string queryStr = "variable v; Select v such that Follows* (v, _)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test wrong first arg synonym type in Parent Clause, first arg cannot be procedure synonym") {
+    SECTION ("Test wrong first arg synonym lhsType in Parent Clause, first arg cannot be procedure synonym") {
         std::string queryStr = "procedure p; Select p such that Parent (p, _)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test wrong first arg synonym type in Parent Clause, first arg cannot be variable synonym") {
+    SECTION ("Test wrong first arg synonym lhsType in Parent Clause, first arg cannot be variable synonym") {
         std::string queryStr = "variable v; Select v such that Parent (v, _)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test wrong second arg synonym type in Parent* Clause, second arg cannot be procedure synonym") {
+    SECTION ("Test wrong second arg synonym lhsType in Parent* Clause, second arg cannot be procedure synonym") {
         std::string queryStr = "procedure p; if i; Select p such that Parent* (i, p)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
@@ -348,19 +348,19 @@ TEST_CASE ("Test Query Validator") {
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Test invalid Design Entity type of argument 1 in Calls Clause, first arg must be procedure") {
+    SECTION ("Test invalid Design Entity lhsType of argument 1 in Calls Clause, first arg must be procedure") {
         std::string queryStr = "procedure p; assign a; Select p such that Calls* (a, p)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test invalid Design Entity type of argument 1 in Affects* Clause, first arg cannot be procedure") {
+    SECTION ("Test invalid Design Entity lhsType of argument 1 in Affects* Clause, first arg cannot be procedure") {
         std::string queryStr = "procedure p; assign a; Select p such that Affects* (p, a)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test invalid Design Entity type of argument 2 in Next* Clause, second arg cannot be variable") {
+    SECTION ("Test invalid Design Entity lhsType of argument 2 in Next* Clause, second arg cannot be variable") {
         std::string queryStr = "variable v; assign a; Select p such that Next* (a, v)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);

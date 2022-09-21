@@ -7,7 +7,9 @@
 #include "iostream"
 using namespace std;
 namespace QE {
-    Table TableCombiner::crossProduct(const Table &t1, const Table &t2) {
+    Table TableCombiner::crossProduct(Table t1, Table t2) {
+        if (t1.isHeaderEmpty()) return t2;
+        if (t2.isHeaderEmpty()) return t1;
         Table productTable = Table();
         productTable.header.insert(productTable.header.end(), t1.header.begin(), t1.header.end());
         productTable.header.insert(productTable.header.end(), t2.header.begin(), t2.header.end());

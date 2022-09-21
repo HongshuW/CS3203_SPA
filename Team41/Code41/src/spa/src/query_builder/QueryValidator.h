@@ -33,6 +33,7 @@ namespace QB {
         void validateDesignEntityAttrNamePairWithClause();
         void validateSameWithRefWithClause();
         void validateWithClause();
+
     public:
         //! Validate the Query object, throw Semantic Error if encounter
         shared_ptr<Query> query;

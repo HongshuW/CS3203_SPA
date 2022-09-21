@@ -33,8 +33,11 @@ namespace QB {
         AttrRef(Synonym synonym, AttrName attrName);
 
         static AttrName getAttrNameFromStr(string& str);
+
+        string getStrOfAttrName();
         static string getStrFromAttrName(AttrName& attrName);
         static WithComparingType getWithComparingTypeFromAttrName(AttrName& attrName);
+
 
         bool operator==(const AttrRef& attrRef1) const {
             return synonym == attrRef1.synonym && attrName == attrRef1.attrName;

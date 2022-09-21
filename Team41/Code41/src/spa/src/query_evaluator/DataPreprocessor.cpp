@@ -9,10 +9,15 @@
 #include "query_builder/commons/DesignEntity.h"
 #include "QEUtils.h"
 #include "utils/Utils.h"
-
+#include "TableCombiner.h"
+#include "query_builder/commons/WithRef.h"
 using namespace std;
 using namespace QB;
 namespace QE {
+
+    vector<DesignEntity> notDirectlyAvailDEs = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
+    vector<AttrName> notDirectlyAvailAttrs = {AttrName::PROC_NAME, AttrName::VAR_NAME};
+    vector<DesignEntity> stmtEntities = {DesignEntity::STMT, DesignEntity::READ, DesignEntity::PRINT, DesignEntity::CALL, DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN};
 
     DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever) {
         this->dataRetriever = std::move(dataRetriever);
@@ -92,23 +97,40 @@ namespace QE {
     Table DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
         vector<DesignEntity> directlyAvailEntities = {DesignEntity::STMT, DesignEntity::CONSTANT, DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
         if (count(directlyAvailEntities.begin(), directlyAvailEntities.end(), designEntity)) {
-            return this->dataRetriever->getTableByDesignEntity(designEntity);
+            Table resultTable = this->dataRetriever->getTableByDesignEntity(designEntity);
+            for (int i = 1; i < resultTable.header.size(); i++) {
+                resultTable = resultTable.dropCol(i);
+            }
+            return resultTable;
         }
 
         //assign, call, print, if, while , read
-        return this->filerTableByDesignEntity(this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT), PKBStorage::STATEMENT_TABLE_COL1_NAME, designEntity);
+        Table resultTable = this->filerTableByDesignEntity(this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT), PKBStorage::STATEMENT_TABLE_COL1_NAME, designEntity);
+        for (int i = 1; i < resultTable.header.size(); i++) {
+            resultTable = resultTable.dropCol(i);
+        }
+        return resultTable;
     }
 
     Table DataPreprocessor::getTableByPattern(shared_ptr<PatternClause> patternClause) {
 
         //table of stmtNo, varname
-        //todo: check for optional argument exprSpec
-        auto exprSpecOpt = patternClause->arg3;
-        auto exprSpec = std::move(*exprSpecOpt);
-        Table resultTable = this->dataRetriever->getTableByExprPattern(exprSpec);
+        Table resultTable;
+        switch (patternClause->patternType) {
+            case QB::DesignEntity::ASSIGN: {
+                auto exprSpecOpt = patternClause->arg3;
+                auto exprSpec = std::move(*exprSpecOpt);
+                resultTable = this->dataRetriever->getTableByExprPattern(exprSpec);
+                break;
+            }
+            default : {
+                resultTable = this->dataRetriever->getTableByCondExprPattern(patternClause->patternType);
+                break;
+            }
+        }
 
         //process result table: rename headers + filter
-        string col1Name = patternClause->arg1.synonym; //arg1 must be an assign synonym
+        string col1Name = patternClause->arg1.synonym; //arg1 must be ASSIGN, IF, WHILE synonym
         Ref ref2 = patternClause->arg2;
         RefType ref2Type = getRefType(ref2); //arg2 can be syn, _ or ident
         string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(patternClause->arg2).synonym : QEUtils::getColNameByRefType(ref2Type);
@@ -118,6 +140,7 @@ namespace QE {
             Ident ident2 = get<Ident>(ref2);
             resultTable = this->filerTableByColumnValue(resultTable, col2Name, ident2.identStr);
         }
+
         return resultTable;
     }
 
@@ -195,6 +218,91 @@ namespace QE {
             }
         }
         return static_cast<DesignEntity>(NULL);
+    }
+
+    vector<int> DataPreprocessor::getStmtNumsByDesignEntity(DesignEntity designEntity) {
+        Table table = this->getAllByDesignEntity(designEntity);
+        int STMT_NO_COL_IDX = 0;
+        auto stmtNums = table.getColumnByName(table.header[STMT_NO_COL_IDX]);
+        vector<int> ans;
+        for (const auto& string: stmtNums) {
+            ans.push_back(stoi(string));
+        }
+        return ans;
+    }
+
+    vector<string> DataPreprocessor::getEntityNames(DesignEntity designEntity) {
+        vector<DesignEntity> directlyAvailEntities = {DesignEntity::CONSTANT, DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
+        if (count(directlyAvailEntities.begin(), directlyAvailEntities.end(), designEntity)) {
+            int ENTITY_NAME_COL_IDX = 0;
+            auto table = this->dataRetriever->getTableByDesignEntity(designEntity);
+            return table.getColumnByName(table.header[ENTITY_NAME_COL_IDX]);
+        }
+        return vector<string>();
+    }
+
+    Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause,  shared_ptr<vector<Declaration>> declarations) {
+
+        bool hasSynonym = withClause->lhsType() == WithRefType::ATTR_REF || withClause->rhsType() == WithRefType::ATTR_REF;
+        if (!hasSynonym) return Table();
+        vector<WithRef> withRefs = {withClause->lhs, withClause->rhs};
+        Table resultTable = Table();
+        vector<int> comparedCols = {};
+        int colOffSet = 0;
+        for (auto withRef: withRefs) {
+            WithRefType withRefType = WithClause::getWithRefType(withRef.index());
+            if (withRefType != WithRefType::ATTR_REF) continue;
+            AttrRef attrRef = get<WithClause::WITHREF_ATTR_REF_IDX>(withRef);
+            DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym, declarations);
+            bool processingNeeded = std::count(notDirectlyAvailDEs.begin(), notDirectlyAvailDEs.end(), designEntity)
+                                    && std::count(notDirectlyAvailAttrs.begin(), notDirectlyAvailAttrs.end(), attrRef.attrName);
+
+            if (!processingNeeded) {
+
+                Table table = getAllByDesignEntity(designEntity);
+                if (table.isBodyEmpty()) return Table();
+                const int DROP_COL_FROM = 1;
+                for (int i = DROP_COL_FROM; i < table.header.size(); i++) {
+                    table = table.dropCol(i);
+                }
+                table.renameHeader({attrRef.synonym.synonym});
+                resultTable = TableCombiner().crossProduct(table, resultTable);
+                comparedCols.push_back(colOffSet);
+                colOffSet += (int) table.header.size();
+            } else {
+                //todo: query from pkb
+                const int TABLE_HEADER_SIZE = 2;
+                const int ATTR_NAME_COL_INX = 1;
+
+                Table dummyPKBTable; //get results
+                string attrName;
+                attrName.append("$");
+                attrName.append(attrRef.synonym.synonym);
+                attrName.append(".");
+                attrName.append(attrRef.getStrOfAttrName());
+                dummyPKBTable.renameHeader({attrRef.synonym.synonym, attrName});
+                resultTable = TableCombiner().crossProduct(dummyPKBTable, resultTable);
+                comparedCols.push_back(colOffSet + ATTR_NAME_COL_INX);
+                colOffSet += (int) TABLE_HEADER_SIZE;
+            }
+        }
+        resultTable = filterTableByColValueEquality(resultTable, comparedCols);
+        return resultTable;
+    }
+
+    Table DataPreprocessor::filterTableByColValueEquality(Table table, vector<int> comparedCols) {
+        Table filteredTable = table;
+
+        filteredTable.renameHeader(table.header);
+        for (auto row: table.rows) {
+            unordered_set<string> set;
+            for (int colIdx: comparedCols) {
+                set.insert(row[colIdx]);
+            }
+            if (set.size() > 1) continue;
+            filteredTable.appendRow(row);
+        }
+        return filteredTable;
     }
 
 

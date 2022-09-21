@@ -29,6 +29,7 @@ Table DummyDataRetriever::getTableByRelationType(RelationType relationType) {
         }
         case QB::RelationType::USES_S: {
             relationTable.appendRow({"2", "dummyVarA"});
+            relationTable.appendRow({"3", "dummyVarA"});
             break;
         }
         case QB::RelationType::MODIFIES_S: {
@@ -55,6 +56,7 @@ Table DummyDataRetriever::getTableByRelationType(RelationType relationType) {
 DummyDataRetriever::DummyDataRetriever(shared_ptr<PKBStorage> pkbStorage) : DataRetriever(pkbStorage) {
 
 }
+
 
 DesignEntity DummyDataRetriever::getDesignEntityOfStmt(int line_no) {
     switch (line_no) {
@@ -93,10 +95,26 @@ Table DummyDataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
             stmtTable.appendRow({"3", "print"});
             return stmtTable;
         }
+        case QB::DesignEntity::CONSTANT: {
+            ConstantTable constantTable = ConstantTable();
+            constantTable.appendRow({"1"});
+            return constantTable;
+        }
         default: {
             break;
         }
     }
     return DataRetriever::getTableByDesignEntity(designEntity);
+}
+
+Table DummyDataRetriever::getTableByExprPattern(ExpressionSpec expressionSpec) {
+    if (expressionSpec.expressionSpecType == QB::ExpressionSpecType::ANY_MATCH) {
+       Table table = Table();
+       table.renameHeader({PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::VARIABLE_TABLE_COL1_NAME});
+       table.appendRow({"1", "dummyVarA"});
+       table.appendRow({"2", "dummyVarB"});
+       return table;
+    }
+    return DataRetriever::getTableByExprPattern(expressionSpec);
 }
 

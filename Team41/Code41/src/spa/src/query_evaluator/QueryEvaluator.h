@@ -19,11 +19,21 @@ namespace QE {
         shared_ptr<DataPreprocessor> dataPreprocessor;
         DesignEntity getDesignEntity(Synonym synonym, shared_ptr<Query> query);
         string getDesignEntityColName(DesignEntity entity);
-        QueryResult evaluateNoConditionQuery(shared_ptr<Query> query);
+        vector<string> evaluateNoConditionQuery(shared_ptr<Query> query);
+        std::string join(std::vector<std::string> const &strings, std::string delim);
+        vector<string> removeDup(vector<string> vec);
+        bool doesConditionExist(shared_ptr<Query> query, WithClause withClause);
+        std::vector<std::string> intersection(std::vector<std::string> v1,
+                                              std::vector<std::string> v2);
+        std::vector<int> intersection(std::vector<int> v1,
+                                                      std::vector<int> v2);
+        vector<string> formatConditionalQueryResult(Table resultTable, shared_ptr<vector<Elem>> tuple, shared_ptr<Query> query);
+        vector<string> getAttributeValuesOfCol(Table resultTable, AttrRef attrRef, shared_ptr<Query> query);
+
 
     public:
         explicit QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor);
-        QueryResult evaluate(shared_ptr<Query> query);
+        vector<string> evaluate(shared_ptr<Query> query);
 
 
 

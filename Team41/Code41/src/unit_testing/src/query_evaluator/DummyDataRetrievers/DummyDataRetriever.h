@@ -14,8 +14,10 @@ class DummyDataRetriever : public DataRetriever {
 public:
     Table getTableByRelationType(QB::RelationType relationType) override;
     Table getTableByDesignEntity(DesignEntity designEntity) override;
+    Table getTableByExprPattern(ExpressionSpec expressionSpec) override;
     DesignEntity getDesignEntityOfStmt(int line_no) override;
-    DummyDataRetriever(shared_ptr<PKBStorage> pkbStorage);
+    explicit DummyDataRetriever(shared_ptr<PKBStorage> pkbStorage);
+    explicit DummyDataRetriever();
 };
 
 
