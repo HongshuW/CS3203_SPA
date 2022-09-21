@@ -34,34 +34,35 @@ shared_ptr<list<vector<string>>> FollowsExtractor::extractFollowsStar(shared_ptr
 vector<vector<shared_ptr<StmtNode>>> FollowsExtractor::getListOfStmtList(shared_ptr<ProgramNode> programNode) {
     vector<vector<shared_ptr<StmtNode>>> listOfStmtList;
     vector<shared_ptr<ProcedureNode>> procedureList = programNode -> procedureList;
-    shared_ptr<ProcedureNode> procedureNode = procedureList.at(0);
-    queue<vector<shared_ptr<StmtNode>>> queue;
-    queue.push(procedureNode->stmtList);
-    while(!queue.empty()) {
-        auto stmtList = queue.front();
-        queue.pop();
-        listOfStmtList.push_back(stmtList);
-        for (auto stmtNode: stmtList) {
-            NodeType nodeType = ASTUtils::getNodeType(stmtNode);
-            switch (nodeType) {
-                case AST::IF_NODE: {
-                    shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-                    vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
-                    vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
-                    queue.push(ifStmtList);
-                    queue.push(elseStmtList);
-                    break;
-                }
+    for (auto procedureNode: procedureList) {
+        queue<vector<shared_ptr<StmtNode>>> queue;
+        queue.push(procedureNode->stmtList);
+        while(!queue.empty()) {
+            auto stmtList = queue.front();
+            queue.pop();
+            listOfStmtList.push_back(stmtList);
+            for (auto stmtNode: stmtList) {
+                NodeType nodeType = ASTUtils::getNodeType(stmtNode);
+                switch (nodeType) {
+                    case AST::IF_NODE: {
+                        shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+                        vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
+                        vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
+                        queue.push(ifStmtList);
+                        queue.push(elseStmtList);
+                        break;
+                    }
 
-                case AST::WHILE_NODE: {
-                    shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
-                    vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
-                    queue.push(whileStmtList);
-                    break;
-                }
+                    case AST::WHILE_NODE: {
+                        shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
+                        vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
+                        queue.push(whileStmtList);
+                        break;
+                    }
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
         }
     }
