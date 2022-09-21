@@ -23,8 +23,12 @@ string QueryParser::pop() {
     return currToken;
 }
 
+bool QueryParser::isWithinBound() {
+    return currIdx < tokens.size();
+}
+
 bool QueryParser::match(string s) {
-    if (peek().compare(s) == 0) {
+    if (isWithinBound() && peek().compare(s) == 0) {
         currIdx++;
         return true;
     }
@@ -70,12 +74,62 @@ bool QueryParser::parseDeclarations() {
     return true;
 }
 
-void QueryParser::parseSelectClause() {
-    std::string synonymStr = pop();
-    //! Throw syntax error if synonym is invalid
-    Synonym synonym = Synonym(synonymStr);
-    shared_ptr<SelectClause> selectClause = make_shared<SelectClause>(synonym);
+void QueryParser::parseBooleanSelectClause() {
+    //! If BOOLEAN is declared as a synonym in a PQL query, this declaration takes precedence
+    shared_ptr<SelectClause> selectClause;
+    shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+    Synonym syn = Synonym("BOOLEAN");
+    if (!Declaration::findDeclaration(syn, query->declarations)) {
+        //! BOOLEAN is not declared as a synonym, this is a BOOLEAN type
+        selectClause = make_shared<SelectClause>(ReturnType::BOOLEAN);
+    } else {
+        returnResults->push_back(syn);
+        selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
+    }
     query->selectClause = selectClause;
+}
+
+Elem QueryParser::parseTupleSelectClause() {
+    string synonymStr = pop();
+    Synonym synonym = Synonym(synonymStr);
+    if (match(".")) {
+        //! AttrRef
+        string attrNameStr = pop();
+        AttrName attrName = AttrRef::getAttrNameFromStr(attrNameStr);
+        AttrRef attrRef = AttrRef(synonym, attrName);
+        return attrRef;
+    } else {
+        //! Synonym
+        return synonym;
+    }
+}
+
+void QueryParser::parseSelectClause() {
+    //! For BOOLEAN
+    if (match("BOOLEAN")) {
+        parseBooleanSelectClause();
+        return;
+    }
+
+    shared_ptr<SelectClause> selectClause;
+    shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+    //! For Tuple
+    if (match("<")) {
+        while (!match(">")) {
+            Elem elem = parseTupleSelectClause();
+            returnResults->push_back(elem);
+            selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
+            query->selectClause = selectClause;
+            if (match(">")) return;
+            expect(",");
+        }
+    } else {
+        //! For Single Synonym
+        Elem elem = parseTupleSelectClause();
+        returnResults->push_back(elem);
+        selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
+        query->selectClause = selectClause;
+    }
 }
 
 Ref QueryParser::parseRef() {
@@ -98,15 +152,7 @@ Ref QueryParser::parseRef() {
     }
 }
 
-bool QueryParser::parseSuchThatClause() {
-    unsigned int savedIdx = currIdx;
-    if (!match("such")) {
-        currIdx = savedIdx;
-        return false;
-    }
-
-    expect("that");
-
+void QueryParser::parseSuchThatClause() {
     string relationTypeStr = pop();
     RelationType relationType = getRelationTypeFromStr(relationTypeStr);
 
@@ -119,6 +165,15 @@ bool QueryParser::parseSuchThatClause() {
     shared_ptr<SuchThatClause> suchThatClause =
         make_shared<SuchThatClause>(relationType, arg1, arg2, query->declarations);
     query->suchThatClauses->push_back(suchThatClause);
+}
+
+bool QueryParser::parseSuchThat() {
+    if (!match("such")) return false;
+    expect("that");
+    parseSuchThatClause();
+    while(match("and")) {
+        parseSuchThatClause();
+    }
     return true;
 }
 
@@ -156,29 +211,90 @@ ExpressionSpec QueryParser::parseExpressionSpec() {
     }
 }
 
-bool QueryParser::parsePatternClause() {
-    unsigned int savedIdx = currIdx;
-    if (!match("pattern")) {
-        currIdx = savedIdx;
-        return false;
-    }
-
+void QueryParser::parsePatternClause() {
     Synonym arg1 = Synonym(pop());
+    auto declaration = Declaration::findDeclaration(arg1, query->declarations);
+    if (!declaration) {
+        throw PQLValidationException("Synonym " + arg1.synonym + " is not declared for Pattern Clause");
+    }
     expect("(");
-    // can be synonym, _, ident
-    Ref arg2 = parseRef();
-    expect(",");
-    ExpressionSpec arg3 = parseExpressionSpec();
+    shared_ptr<PatternClause> patternClause;
+    DesignEntity de = declaration->getDesignEntity();
+    if (de == DesignEntity::ASSIGN) {
+        Ref arg2 = parseRef();
+        expect(",");
+        ExpressionSpec arg3 = parseExpressionSpec();
+        patternClause = make_shared<PatternClause>(DesignEntity::ASSIGN, arg1, arg2, arg3);
+    } else if (de == DesignEntity::IF) {
+        Ref arg2 = parseRef();
+        expect(",");
+        expect("_");
+        expect(",");
+        expect("_");
+        patternClause = make_shared<PatternClause>(DesignEntity::IF, arg1, arg2);
+    } else if (de == DesignEntity::WHILE) {
+        Ref arg2 = parseRef();
+        expect(",");
+        expect("_");
+        patternClause = make_shared<PatternClause>(DesignEntity::WHILE, arg1, arg2);
+    } else {
+        throw PQLParseException(getDesignEntityString(de) + " is not supported for Pattern Clause");
+    }
     expect(")");
+    query->patternClauses->push_back(patternClause);
+}
 
-    shared_ptr<PatternClause> patternClause = make_shared<PatternClause>(arg1, arg2, arg3);
-    query->patternClause = patternClause;
+bool QueryParser::parsePattern() {
+    if (!match("pattern")) return false;
+    parsePatternClause();
+    while(match("and")) {
+        parsePatternClause();
+    }
+    return true;
+}
+
+WithRef QueryParser::parseWithRef() {
+    //! Can be ident, integer, or AttrRef
+    if (Utils::isValidNumber(peek())) {
+        return std::stoi(pop());
+    } else if (match("\"")) {
+        string identStr = pop();
+        expect("\"");
+        Ident ident = Ident(identStr);
+        return ident;
+    } else if (Utils::isValidName(peek())) {
+        string synonymStr = pop();
+        Synonym synonym = Synonym(synonymStr);
+        expect(".");
+        string attrNameStr = pop();
+        AttrName attrName = AttrRef::getAttrNameFromStr(attrNameStr);
+        AttrRef attrRef = AttrRef(synonym, attrName);
+        return attrRef;
+    } else {
+        throw PQLParseException("Expecting a WithRef, got " + peek());
+    }
+}
+
+void QueryParser::parseWithClause() {
+    WithRef lhs = parseWithRef();
+    expect("=");
+    WithRef rhs = parseWithRef();
+    shared_ptr<WithClause> withClause = make_shared<WithClause>(lhs, rhs);
+    query->withClauses->push_back(withClause);
+}
+
+bool QueryParser::parseWith() {
+    if (!match("with")) return false;
+    parseWithClause();
+    while(match("and")) {
+        parseWithClause();
+    }
     return true;
 }
 
 shared_ptr<Query> QueryParser::parse() {
-    while (currIdx < tokens.size()) {
-        while (currIdx < tokens.size()) {
+    while (isWithinBound()) {
+        while (isWithinBound()) {
             if (!parseDeclarations()) break;
         }
 
@@ -187,9 +303,10 @@ shared_ptr<Query> QueryParser::parse() {
 
         parseSelectClause();
 
-        while (currIdx < tokens.size()) {
-            if (parseSuchThatClause()) continue;
-            if (parsePatternClause()) continue;
+        while (isWithinBound()) {
+            if (parseSuchThat()) continue;
+            if (parsePattern()) continue;
+            if (parseWith()) continue;
             //! Throw syntax error accordingly
             throw PQLParseException("Expect a such that or pattern clause, got " + peek());
         }

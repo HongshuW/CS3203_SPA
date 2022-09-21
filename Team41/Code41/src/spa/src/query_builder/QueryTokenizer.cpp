@@ -8,7 +8,7 @@
 using QB::QueryTokenizer;
 using namespace std;
 
-QueryTokenizer::QueryTokenizer(std::string query) : currIdx(0), query(query){};
+QueryTokenizer::QueryTokenizer(string query) : currIdx(0), query(query){};
 
 char QueryTokenizer::peek() {
     char c;
@@ -28,6 +28,9 @@ char QueryTokenizer::pop() {
 
 void QueryTokenizer::processIdent() {
     while (isalnum(peek())) {
+        curr += pop();
+    }
+    if (curr == "stmt" && peek() == '#') {
         curr += pop();
     }
     if (CLAUSE_SET_WITH_T.count(curr) && peek() == '*') {

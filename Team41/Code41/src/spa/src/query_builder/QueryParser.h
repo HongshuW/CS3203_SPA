@@ -10,6 +10,7 @@
 #include "utils/ExprNodeParser.h"
 #include "utils/Utils.h"
 #include "query_builder/commons/ExprStringTokenizer.h"
+#include "query_builder/clauses/WithClauses.h"
 
 using namespace std;
 
@@ -22,14 +23,22 @@ namespace QB {
         string peek();
         string previous();
         string pop();
+        bool isWithinBound();
         bool expect(string s);
         bool match(string s);
         bool parseDeclarations();
         void parseSelectClause();
         Ref parseRef();
-        bool parseSuchThatClause();
-        bool parsePatternClause();
+        void parseSuchThatClause();
+        bool parseSuchThat();
+        bool parsePattern();
+        void parsePatternClause();
         ExpressionSpec parseExpressionSpec();
+        void parseBooleanSelectClause();
+        Elem parseTupleSelectClause();
+        void parseWithClause();
+        bool parseWith();
+        WithRef parseWithRef();
 
     public:
         //! Parse tokens to Query object, throw Syntax Error if encounter

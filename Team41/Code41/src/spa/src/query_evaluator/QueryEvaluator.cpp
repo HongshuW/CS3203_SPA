@@ -6,7 +6,8 @@
 #include "query_builder/commons/Query.h"
 #include "query_evaluator/QueryResult.h"
 #include "TableCombiner.h"
-
+#include "QueryBooleanResult.h"
+#include "QueryTupleResult.h"
 using namespace QB;
 using namespace QE;
 
@@ -33,43 +34,63 @@ QueryEvaluator::QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor) {
 QueryResult QueryEvaluator::evaluate(shared_ptr<Query> query) {
     QueryResult dummyEmptyQueryResult = QueryResult();
 
-    if (query->suchThatClauses->empty() && !query->patternClause) {//no such that or pattern clause
+    if (query->suchThatClauses->empty() && !query->patternClauses) {//no such that or pattern clause
         return this->evaluateNoConditionQuery(query);
     }
-    Table selectedEntityTable = this->evaluateNoConditionQuery(query).table;
-    selectedEntityTable.renameHeader({query->selectClause->synonym.synonym});
+//    Table selectedEntityTable = this->evaluateNoConditionQuery(query).table;
+//    selectedEntityTable.renameHeader({query->selectClause->synonym.synonym});
 
     TableCombiner tableCombiner = TableCombiner();
-    Table resultTable = selectedEntityTable;
+    Table resultTable;
     for (auto stClause: *query->suchThatClauses) {
         Table intermediateTable = this->dataPreprocessor->getTableByRelation(*stClause);
-        if (intermediateTable.isBodyEmpty()) return QueryResult();
+        if (intermediateTable.isBodyEmpty()) {
+            if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return QueryBooleanResult(false);
+            return QueryTupleResult({});
+        };
         resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
 
     }
 
-    //TODO: change pattern clause to plural clauses
-    if (query->patternClause) {
-        Table intermediateTable = this->dataPreprocessor->getTableByPattern(query->patternClause);
-        resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
+    if (query->patternClauses) {
+        for (auto patternClause: *query->patternClauses) {
+            Table intermediateTable = this->dataPreprocessor->getTableByPattern(patternClause);
+            if (intermediateTable.isBodyEmpty()) {
+                if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return QueryBooleanResult(false);
+                return QueryTupleResult({});
+            };
+            resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
+        }
     }
 
-    Synonym toBeSelected = query->selectClause->synonym;
-    QueryResult queryResult = QueryResult();
-    queryResult.colName = toBeSelected.synonym;
+    shared_ptr<vector<Elem>> returnTuple = query->selectClause->returnResults;
+    QueryTupleResult queryResult = QueryTupleResult(returnTuple);
     queryResult.table = resultTable;
+//    Synonym toBeSelected = query->selectClause->synonym;
+//    QueryResult queryResult = QueryResult();
+//    queryResult.colName = toBeSelected.synonym;
+//    queryResult.table = resultTable;
     return queryResult;
 }
 
 QueryResult QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query) {
     shared_ptr<SelectClause> selectClause = query->selectClause;
-    Synonym synonym = selectClause->synonym;
-    DesignEntity designEntity = getDesignEntity(synonym, query);
-    Table table = this->dataPreprocessor->getAllByDesignEntity(designEntity);
 
-    table.renameHeader({query->selectClause->synonym.synonym});
-    QueryResult queryResult = QueryResult(table);
-    queryResult.colName = query->selectClause->synonym.synonym;
+    if (selectClause->isBoolean()) {
+        return QueryBooleanResult(true);
+    }
+
+    shared_ptr<vector<Elem>> returnTuple = selectClause->returnResults;
+
+//
+//    Synonym synonym = selectClause->synonym;
+//    DesignEntity designEntity = getDesignEntity(synonym, query);
+//    Table table = this->dataPreprocessor->getAllByDesignEntity(designEntity);
+//
+//    table.renameHeader({query->selectClause->synonym.synonym});
+
+    //todo: change data retrieving of entities to query result formatter.
+    QueryTupleResult queryResult = QueryTupleResult(returnTuple);
     return queryResult;
 }
 

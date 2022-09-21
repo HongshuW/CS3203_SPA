@@ -4,4 +4,10 @@
 
 #include "PatternClause.h"
 
-PatternClause::PatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3) : arg1(arg1), arg2(arg2), arg3(arg3) {}
+#include <utility>
+
+PatternClause::PatternClause(DesignEntity patternType, Synonym arg1, Ref arg2, ExpressionSpec arg3) :
+        patternType(patternType), arg1(std::move(arg1)), arg2(std::move(arg2)), arg3(arg3) {};
+
+PatternClause::PatternClause(DesignEntity patternType, Synonym arg1, Ref arg2) :
+        patternType(patternType), arg1(std::move(arg1)), arg2(std::move(arg2)) {};

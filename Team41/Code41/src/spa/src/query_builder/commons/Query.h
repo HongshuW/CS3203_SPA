@@ -11,6 +11,7 @@
 #include "query_builder/clauses/SuchThatClause.h"
 #include "query_builder/clauses/SelectClause.h"
 #include "query_builder/clauses/PatternClause.h"
+#include "query_builder/clauses/WithClauses.h"
 #include "DesignEntity.h"
 #include "Synonym.h"
 #include "Declaration.h"
@@ -24,7 +25,8 @@ namespace QB {
         shared_ptr<vector<Declaration>> declarations;
         shared_ptr<SelectClause> selectClause;
         shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses;
-        shared_ptr<PatternClause> patternClause;
+        shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses;
+        shared_ptr<vector<shared_ptr<WithClause>>> withClauses;
 
         Query();
 
@@ -40,7 +42,13 @@ namespace QB {
                 os << clause << " ";
             }
 
-            os << "; " << query.patternClause;
+            for (const auto& clause : *(query.patternClauses)) {
+                os << clause << " ";
+            }
+
+            for (const auto& clause : *(query.withClauses)) {
+                os << clause << " ";
+            }
 
             return os;
         }
