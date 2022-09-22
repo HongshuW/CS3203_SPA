@@ -174,7 +174,32 @@ namespace TestDE {
         shared_ptr<ProcedureNode> procedureNode6 = make_shared<ProcedureNode>(ProcedureNode("procedure6", {assignNode1_p5, whileNode_p5, assignNode5_p5, whileNode_p6}));
         shared_ptr<ProgramNode> programNode6 = make_shared<ProgramNode>(ProgramNode({procedureNode6}));
 
-        vector<shared_ptr<ProgramNode>> programNodes = vector<shared_ptr<ProgramNode>>{programNode1, programNode2, programNode3, programNode4, programNode5, programNode6};
+
+        //multiple procedures
+
+        // 2 procedures only
+        // proc 2 + 3 -> non-nested + singly-nested
+        shared_ptr<ProgramNode> programNode7 = make_shared<ProgramNode>(ProgramNode(
+                {procedureNode2, procedureNode3}));
+
+        // proc 3 + 4 -> singly-nested + doubly-nested
+        shared_ptr<ProgramNode> programNode8 = make_shared<ProgramNode>(ProgramNode(
+                {procedureNode3, procedureNode4}));
+
+        // proc 4 + 5 -> doubly-nested + doubly-nested
+        shared_ptr<ProgramNode> programNode9 = make_shared<ProgramNode>(ProgramNode(
+                {procedureNode4, procedureNode5}));
+
+        // 3 procedures only
+        // proc 2 + 3 + 4 -> non-nested + singly-nested + doubly-nested
+        shared_ptr<ProgramNode> programNode10 = make_shared<ProgramNode>(ProgramNode(
+                {procedureNode2, procedureNode3, procedureNode4}));
+
+        vector<shared_ptr<ProgramNode>> programNodes = vector<shared_ptr<ProgramNode>>{programNode1, programNode2,
+                                                                                       programNode3, programNode4,
+                                                                                       programNode5, programNode6,
+                                                                                       programNode7, programNode8,
+                                                                                       programNode9, programNode10};
 
         return programNodes[idx];
     }

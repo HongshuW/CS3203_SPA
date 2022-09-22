@@ -11,52 +11,64 @@ void ModifiesExtractor::extractModifiesSDFS(shared_ptr<ASTNode> node,
                                             shared_ptr<vector<string>> ancestors,
                                             shared_ptr<set<vector<string>>> output) {
     NodeType nodeType = ASTUtils::getNodeType(node);
-    if (nodeType == NodeType::ASSIGN_NODE) {
-        // add all {ancestor, variable} pairs to output
-        shared_ptr<AssignNode> ptr = dynamic_pointer_cast<AssignNode>(node);
-        int stmtNo = stmtNoMap->at(ptr);
-        ancestors->push_back(to_string(stmtNo));
-        for (string ancestor : *ancestors) {
-            vector<string> row{ancestor, ptr->variableNode->variable};
-            output->insert(row);
+
+    switch(nodeType) {
+        case AST::ASSIGN_NODE: {
+            // add all {ancestor, variable} pairs to output
+            shared_ptr<AssignNode> ptr = dynamic_pointer_cast<AssignNode>(node);
+            int stmtNo = stmtNoMap->at(ptr);
+            ancestors->push_back(to_string(stmtNo));
+            for (string ancestor : *ancestors) {
+                vector<string> row{ancestor, ptr->variableNode->variable};
+                output->insert(row);
+            }
+            // remove current node from ancestors list
+            ancestors->pop_back();
+            break;
         }
-        // remove current node from ancestors list
-        ancestors->pop_back();
-    } else if (nodeType == NodeType::READ_NODE) {
-        // add all {ancestor, variable} pairs to output
-        shared_ptr<ReadNode> ptr = dynamic_pointer_cast<ReadNode>(node);
-        int stmtNo = stmtNoMap->at(ptr);
-        ancestors->push_back(to_string(stmtNo));
-        for (string ancestor : *ancestors) {
-            vector<string> row{ancestor, ptr->variableNode->variable};
-            output->insert(row);
+        case AST::READ_NODE: {
+            // add all {ancestor, variable} pairs to output
+            shared_ptr<ReadNode> ptr = dynamic_pointer_cast<ReadNode>(node);
+            int stmtNo = stmtNoMap->at(ptr);
+            ancestors->push_back(to_string(stmtNo));
+            for (string ancestor : *ancestors) {
+                vector<string> row{ancestor, ptr->variableNode->variable};
+                output->insert(row);
+            }
+            // remove current node from ancestors list
+            ancestors->pop_back();
+            break;
         }
-        // remove current node from ancestors list
-        ancestors->pop_back();
-    } else if (nodeType == NodeType::WHILE_NODE) {
-        shared_ptr<WhileNode> ptr = dynamic_pointer_cast<WhileNode>(node);
-        int stmtNo = stmtNoMap->at(ptr);
-        ancestors->push_back(to_string(stmtNo));
-        vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
-        for (shared_ptr<StmtNode> n: stmtList) {
-            extractModifiesSDFS(n, stmtNoMap, ancestors, output);
+        case AST::WHILE_NODE: {
+            shared_ptr<WhileNode> ptr = dynamic_pointer_cast<WhileNode>(node);
+            int stmtNo = stmtNoMap->at(ptr);
+            ancestors->push_back(to_string(stmtNo));
+            vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
+            for (shared_ptr<StmtNode> n: stmtList) {
+                extractModifiesSDFS(n, stmtNoMap, ancestors, output);
+            }
+            // remove current node from ancestors list
+            ancestors->pop_back();
+            break;
         }
-        // remove current node from ancestors list
-        ancestors->pop_back();
-    } else if (nodeType == NodeType::IF_NODE) {
-        shared_ptr<IfNode> ptr = dynamic_pointer_cast<IfNode>(node);
-        int stmtNo = stmtNoMap->at(ptr);
-        ancestors->push_back(to_string(stmtNo));
-        vector<shared_ptr<StmtNode>> ifStmtList = ptr->ifStmtList;
-        vector<shared_ptr<StmtNode>> elseStmtList = ptr->elseStmtList;
-        for (shared_ptr<StmtNode> n: ifStmtList) {
-            extractModifiesSDFS(n, stmtNoMap, ancestors, output);
+        case AST::IF_NODE: {
+            shared_ptr<IfNode> ptr = dynamic_pointer_cast<IfNode>(node);
+            int stmtNo = stmtNoMap->at(ptr);
+            ancestors->push_back(to_string(stmtNo));
+            vector<shared_ptr<StmtNode>> ifStmtList = ptr->ifStmtList;
+            vector<shared_ptr<StmtNode>> elseStmtList = ptr->elseStmtList;
+            for (shared_ptr<StmtNode> n: ifStmtList) {
+                extractModifiesSDFS(n, stmtNoMap, ancestors, output);
+            }
+            for (shared_ptr<StmtNode> n: elseStmtList) {
+                extractModifiesSDFS(n, stmtNoMap, ancestors, output);
+            }
+            // remove current node from ancestors list
+            ancestors->pop_back();
+            break;
         }
-        for (shared_ptr<StmtNode> n: elseStmtList) {
-            extractModifiesSDFS(n, stmtNoMap, ancestors, output);
-        }
-        // remove current node from ancestors list
-        ancestors->pop_back();
+        default:
+            break;
     }
 }
 
