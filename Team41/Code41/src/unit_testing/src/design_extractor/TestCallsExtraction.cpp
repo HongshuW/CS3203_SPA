@@ -61,7 +61,7 @@ TEST_CASE("Test Call Extractor") {
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
 
-    SECTION("Test CallStar In Doubly-Nested Procedure") {
+    SECTION("Test Call In Doubly-Nested Procedure") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         auto programNode = TestDE::Dummies::getTestProgramNode(13);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
