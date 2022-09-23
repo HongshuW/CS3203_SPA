@@ -42,6 +42,9 @@ namespace DE {
             case RelationType::CALLS: {
                 return *CallsExtractor::extractCalls(rootPtr);
             }
+            case RelationType::CALLS_T: {
+                return *CallsExtractor::extractCallsStar(rootPtr);
+            }
             default: {
                 list<vector<string>> emptyList;
                 return emptyList;
