@@ -29,8 +29,14 @@ namespace DE {
             case RelationType::MODIFIES_S: {
                 return *ModifiesExtractor::extractModifiesS(rootPtr);
             }
+            case RelationType::MODIFIES_P: {
+                return *ModifiesExtractor::extractModifiesP(rootPtr);
+            }
             case RelationType::USES_S: {
                 return *UsesExtractor::extractUsesS(rootPtr);
+            }
+            case RelationType::USES_P: {
+                return *UsesExtractor::extractUsesP(rootPtr);
             }
             default: {
                 list<vector<string>> emptyList;

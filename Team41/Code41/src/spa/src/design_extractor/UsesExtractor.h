@@ -16,6 +16,8 @@ namespace DE {
     class UsesExtractor {
     public:
         static shared_ptr<list<vector<string>>> extractUsesS(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<list<vector<string>>> extractUsesP(shared_ptr<ProgramNode> rootPtr);
+
     private:
         static unordered_set<string> extractUsesSHelper(shared_ptr<ASTNode> node, shared_ptr<vector<vector<string>>> result, shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers);
     };

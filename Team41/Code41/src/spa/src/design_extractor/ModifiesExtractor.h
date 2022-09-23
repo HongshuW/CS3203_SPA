@@ -18,6 +18,7 @@ namespace DE {
 
     public:
         static shared_ptr<list<vector<string>>> extractModifiesS(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<list<vector<string>>> extractModifiesP(shared_ptr<ProgramNode> rootPtr);
     };
 }
 
