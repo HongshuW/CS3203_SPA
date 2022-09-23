@@ -116,13 +116,15 @@ namespace DE {
             shared_ptr<vector<vector<string>>> result = make_shared<vector<vector<string>>>();
             extractUsesSHelper(procedureNode, result, stmtNumbers);
             string procedureName = procedureNode -> procedureName;
-            //save Uses relation from each procedure in result
-            auto it = ans->begin();
+            unordered_set<string> variableList;
             for (auto pair: *result) {
+                variableList.insert(pair[1]);
+            }
+            for (auto entry: variableList) {
                 vector<string> usePEntry;
                 usePEntry.push_back(procedureName);
-                usePEntry.push_back(pair[1]);
-                it = ans->insert(it, usePEntry);
+                usePEntry.push_back(entry);
+                ans->push_back(usePEntry);
             }
         }
         return ans;

@@ -20,8 +20,7 @@ TEST_CASE("Test UsesP Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::USES_P);
         vector<vector<string>> expected = { {"procedure1", "x"}, {"procedure1", "y"}, {"procedure2", "x"},
-                                            {"procedure2", "bar"}, {"procedure2", "y"}, {"procedure2", "z"},
-                                            {"procedure2", "y"}, {"procedure2", "z"},};
+                                            {"procedure2", "bar"}, {"procedure2", "y"}, {"procedure2", "z"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -34,13 +33,10 @@ TEST_CASE("Test UsesP Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::USES_P);
         vector<vector<string>> expected = { {"procedure2", "x"}, {"procedure2", "bar"}, {"procedure2", "z"},
-                                            {"procedure2", "y"}, {"procedure2", "y"},
-                                            {"procedure2", "z"}, {"procedure3", "x"}, {"procedure3", "bar"},
-                                            {"procedure3", "qux"}, {"procedure3", "haha"}, {"procedure3", "quux"},
-                                            {"procedure3", "baz"},
-                                            {"procedure3", "y"}, {"procedure3", "z"}, {"procedure3", "z"},
-                                            {"procedure3", "baz"}, {"procedure3", "quux"},
-                                            {"procedure3", "haha"}, {"procedure3", "qux"}, {"procedure3", "bar"},
+                                            {"procedure2", "y"},
+                                            {"procedure3", "x"}, {"procedure3", "qux"},
+                                            {"procedure3", "haha"}, {"procedure3", "quux"},
+                                            {"procedure3", "baz"}, {"procedure3", "y"}, {"procedure3", "z"},
                                             {"procedure3", "bar"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
@@ -54,13 +50,11 @@ TEST_CASE("Test UsesP Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::USES_P);
         vector<vector<string>> expected = { {"procedure3", "x"}, {"procedure3", "bar"},
-                                            {"procedure3", "qux"}, {"procedure3", "haha"},
+                                            {"procedure3", "qux"},
                                             {"procedure3", "quux"},
                                             {"procedure3", "baz"}, {"procedure3", "y"}, {"procedure3", "z"},
-                                            {"procedure3", "z"}, {"procedure3", "baz"},
-                                            {"procedure3", "quux"}, {"procedure3", "haha"},
-                                            {"procedure3", "qux"}, {"procedure3", "bar"}, {"procedure3", "bar"},
-                                            {"procedure5", "x"}, {"procedure5", "x"}};
+                                            {"procedure3", "haha"},
+                                            {"procedure5", "x"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -74,13 +68,10 @@ TEST_CASE("Test UsesP Extraction") {
         auto actual = designExtractor.extractRelations(QB::RelationType::USES_P);
         vector<vector<string>> expected = {{"procedure1",  "x"}, {"procedure1",  "y"},
                                            {"procedure2",  "x"}, {"procedure2",  "bar"}, {"procedure2",  "y"},
-                                           {"procedure2",  "z"}, {"procedure2", "y"}, {"procedure2", "z"},
+                                           {"procedure2",  "z"},
                                            {"procedure3", "x"}, {"procedure3", "bar"}, {"procedure3", "qux"},
                                            {"procedure3", "haha"}, {"procedure3", "quux"}, {"procedure3", "baz"},
-                                           {"procedure3", "y"}, {"procedure3", "z"}, {"procedure3", "z"},
-                                           {"procedure3", "baz"}, {"procedure3", "quux"}, {"procedure3", "haha"},
-                                           {"procedure3", "qux"},
-                                           {"procedure3", "bar"}, {"procedure3", "bar"}};
+                                           {"procedure3", "y"}, {"procedure3", "z"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
