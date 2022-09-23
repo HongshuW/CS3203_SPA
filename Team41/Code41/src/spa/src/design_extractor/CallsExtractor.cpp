@@ -63,8 +63,9 @@ unordered_map<string, vector<shared_ptr<CallNode>>> CallsExtractor::getCallNodes
                 }
             }
         }
-        mapCallNodesToProcedures.insert(make_pair(name, listOfCallNodes));
+        if(!listOfCallNodes.empty()) {
+            mapCallNodesToProcedures.insert(make_pair(name, listOfCallNodes));
+        }
     }
-
     return mapCallNodesToProcedures;
 }
