@@ -24,6 +24,38 @@ shared_ptr<list<vector<string>>> CallsExtractor::extractCalls(shared_ptr<Program
     return make_shared<list<vector<string>>>(output);
 }
 
+shared_ptr<list<vector<string>>> CallsExtractor::extractCallsStar(shared_ptr<ProgramNode> programNode) {
+    list<vector<string>> output;
+    auto mappedCallNodesToProcedures = getCallNodesFromProcedure(programNode);
+    for (auto& it: mappedCallNodesToProcedures) {
+        string name = it.first;
+        vector<shared_ptr<CallNode>> listOfCallNodes = it.second;
+        unordered_set<string> reachableCallNodeNames;
+        for(auto callNode: listOfCallNodes) {
+            queue <shared_ptr<CallNode>> queue;
+            queue.push(callNode);
+            while(!queue.empty()) {
+                auto callNodeEntry = queue.front();
+                queue.pop();
+                reachableCallNodeNames.insert(callNodeEntry->procedureName);
+                if(mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+                   auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
+                   for (auto n: otherCallNodes) {
+                       queue.push(n);
+                   }
+                }
+            }
+        }
+        for (auto nodeNames: reachableCallNodeNames) {
+            vector<string> callsEntry;
+            callsEntry.push_back(name);
+            callsEntry.push_back(nodeNames);
+            output.push_back(callsEntry);
+        }
+    }
+    return make_shared<list<vector<string>>>(output);
+}
+
 unordered_map<string, vector<shared_ptr<CallNode>>> CallsExtractor::getCallNodesFromProcedure(shared_ptr<ProgramNode> programNode) {
     auto listOfCallNodesFromProcedures = list<vector<shared_ptr<CallNode>>>();
     auto mapCallNodesToProcedures = unordered_map<string, vector<shared_ptr<CallNode>>>();
