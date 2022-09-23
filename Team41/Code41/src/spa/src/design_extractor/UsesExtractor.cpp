@@ -108,6 +108,23 @@ namespace DE {
     }
 
     shared_ptr<list<vector<string>>> UsesExtractor::extractUsesP(shared_ptr<ProgramNode> rootPtr) {
-        return extractUsesS(rootPtr);
+        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
+        shared_ptr<vector<vector<vector<string>>>> resultOfProcedures = make_shared<vector<vector<vector<string>>>>();
+        shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
+
+        for (auto procedureNode: rootPtr->procedureList) {
+            shared_ptr<vector<vector<string>>> result = make_shared<vector<vector<string>>>();
+            extractUsesSHelper(procedureNode, result, stmtNumbers);
+            string procedureName = procedureNode -> procedureName;
+            //save Uses relation from each procedure in result
+            auto it = ans->begin();
+            for (auto pair: *result) {
+                vector<string> usePEntry;
+                usePEntry.push_back(procedureName);
+                usePEntry.push_back(pair[1]);
+                it = ans->insert(it, usePEntry);
+            }
+        }
+        return ans;
     }
 } // DE
