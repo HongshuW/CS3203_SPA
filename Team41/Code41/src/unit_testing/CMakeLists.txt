@@ -52,6 +52,6 @@ add_executable(unit_testing ${srcs}
         src/parser/TestCondExprParser.cpp
         src/utils/TestUtils.cpp
         src/design_extractor/TestPatternExtraction.cpp
-        src/query_builder/TestExprStringTokenizer.cpp src/pkb/TestPKBStorage.cpp src/query_evaluator/TestQueryEvaluator.cpp src/design_extractor/TestCallsExtraction.cpp src/design_extractor/TestCallsStarExtraction.cpp)
+        src/query_builder/TestExprStringTokenizer.cpp src/pkb/TestPKBStorage.cpp src/query_evaluator/TestQueryEvaluator.cpp src/design_extractor/TestCallsExtraction.cpp src/design_extractor/TestCallsStarExtraction.cpp src/design_extractor/TestModifiesPExtraction.cpp)
 
 target_link_libraries(unit_testing spa)
