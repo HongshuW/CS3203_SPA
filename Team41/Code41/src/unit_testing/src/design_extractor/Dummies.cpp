@@ -284,9 +284,10 @@ namespace TestDE {
        * procedure3 {
        * 6 print y
        * 7 call procedure4
+       * 8 call procedure6
        * }
        * procedure4 {
-       * 7 print z
+       * 9 print z
        * }
        */
 
@@ -313,9 +314,11 @@ namespace TestDE {
 
         shared_ptr<StmtNode> printNode_13_1 = make_shared<PrintNode>(make_shared<VariableNode>("y"));
         shared_ptr<StmtNode> callNode_13_1_1 = make_shared<CallNode>("procedure4");
+        shared_ptr<StmtNode> callNode_13_1_2 = make_shared<CallNode>("procedure6");
         shared_ptr<ProcedureNode> procedureNode13_1 = make_shared<ProcedureNode>(ProcedureNode("procedure3",
                                                                                                {printNode_13_1,
-                                                                                                callNode_13_1_1}));
+                                                                                                callNode_13_1_1,
+                                                                                                callNode_13_1_2}));
 
         shared_ptr<StmtNode> printNode_13_2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
         shared_ptr<ProcedureNode> procedureNode13_2 = make_shared<ProcedureNode>(ProcedureNode("procedure4",
