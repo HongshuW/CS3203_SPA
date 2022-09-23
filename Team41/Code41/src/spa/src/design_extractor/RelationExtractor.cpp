@@ -10,6 +10,7 @@
 #include "ParentExtractor.h"
 #include "ModifiesExtractor.h"
 #include "UsesExtractor.h"
+#include "CallsExtractor.h"
 namespace DE {
     list<vector<string>> RelationExtractor::extractRelation(
             shared_ptr<ProgramNode> rootPtr, RelationType relationType) {
@@ -37,6 +38,9 @@ namespace DE {
             }
             case RelationType::USES_P: {
                 return *UsesExtractor::extractUsesP(rootPtr);
+            }
+            case RelationType::CALLS: {
+                return *CallsExtractor::extractCalls(rootPtr);
             }
             default: {
                 list<vector<string>> emptyList;
