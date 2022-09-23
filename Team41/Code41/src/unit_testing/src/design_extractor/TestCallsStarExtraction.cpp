@@ -3,7 +3,6 @@
 //
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
-#include "design_extractor/FollowsExtractor.h"
 #include "AST/PrintNode.h"
 #include "AST/ReadNode.h"
 #include "AST/IfNode.h"
@@ -11,7 +10,6 @@
 #include "AST/utils/ASTUtils.h"
 #include <unordered_map>
 #include "pkb/DataModifier.h"
-#include "iostream"
 #include "Dummies.h"
 #include "DEUtils.h"
 

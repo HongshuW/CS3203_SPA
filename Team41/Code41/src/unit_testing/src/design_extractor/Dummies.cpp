@@ -47,7 +47,7 @@ namespace TestDE {
        *   } else {
        * 6     read w
        *   }
-       * 7 read fo0
+       * 7 read foo
        * }
        */
         shared_ptr<StmtNode> printNode_p3 = make_shared<PrintNode>(make_shared<VariableNode>("x"));
