@@ -48,4 +48,28 @@ TEST_CASE("Test Call Extractor") {
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
+
+    SECTION("Test Call In Singly-Nested Procedure") {
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        auto programNode = TestDE::Dummies::getTestProgramNode(12);
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
+        vector<vector<string>> expected = {{"procedure2", "procedure3"}, {"procedure2", "procedure4"},
+                                           {"procedure3", "procedure4"}};
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
+    SECTION("Test Call In Doubly-Nested Procedure") {
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        auto programNode = TestDE::Dummies::getTestProgramNode(13);
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
+        vector<vector<string>> expected = {{"procedure2", "procedure3"}, {"procedure2", "procedure4"},
+                                           {"procedure3", "procedure5"}, {"procedure4", "procedure6"}};
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
 }
