@@ -27,4 +27,25 @@ TEST_CASE("Test Call Extractor") {
         auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
         REQUIRE(actual->empty());
     }
+    SECTION("Test Call One Procedure") {
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        auto programNode = TestDE::Dummies::getTestProgramNode(10);
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
+        vector<vector<string>> expected = {{"procedure2", "procedure3"}};
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+    SECTION("Test Two Procedures Call The Same Procedures") {
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        auto programNode = TestDE::Dummies::getTestProgramNode(11);
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
+        vector<vector<string>> expected = {{"procedure2", "procedure3"}, {"procedure2", "procedure4"},
+                                           {"procedure3", "procedure4"}};
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
 }
