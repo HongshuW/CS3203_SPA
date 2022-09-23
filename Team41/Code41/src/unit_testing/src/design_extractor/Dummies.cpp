@@ -213,13 +213,13 @@ namespace TestDE {
         shared_ptr<ExprNode> exprNode_11 = make_shared<ExprNode>("+");
         exprNode_11->left = make_shared<ExprNode>("y");
         exprNode_11->right = make_shared<ExprNode>("1");
-
         shared_ptr<StmtNode> assignNode_11 = make_shared<AssignNode>(make_shared<VariableNode>("x"),
                 exprNode_11);
         shared_ptr<ProcedureNode> procedureNode11 = make_shared<ProcedureNode>(ProcedureNode("procedure2",
                                                                                              {printNode_11,
                                                                                               callNode_11,
                                                                                               assignNode_11}));
+
         shared_ptr<StmtNode> printNode_11_1 = make_shared<PrintNode>(make_shared<VariableNode>("y"));
         shared_ptr<ProcedureNode> procedureNode11_1 = make_shared<ProcedureNode>(ProcedureNode("procedure3",
                                                                                                {printNode_11_1}));
@@ -262,10 +262,10 @@ namespace TestDE {
         shared_ptr<ProcedureNode> procedureNode12_1 = make_shared<ProcedureNode>(ProcedureNode("procedure3",
                                                                                             {printNode_12_1,
                                                                                              callNode_12_1_1}));
-
         shared_ptr<StmtNode> printNode_12_2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
         shared_ptr<ProcedureNode> procedureNode12_2 = make_shared<ProcedureNode>(ProcedureNode("procedure4",
                                                                                                {printNode_12_2}));
+
         shared_ptr<ProgramNode> programNode12 = make_shared<ProgramNode>(ProgramNode({procedureNode12,
                                                                                       procedureNode12_1,
                                                                                       procedureNode12_2}));
