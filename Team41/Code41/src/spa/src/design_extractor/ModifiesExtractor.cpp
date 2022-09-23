@@ -138,3 +138,7 @@ shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesS(shared_ptr<
     return output;
 }
 
+shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesP(shared_ptr<ProgramNode> rootPtr) {
+    return extractModifiesS(rootPtr);
+}
+

@@ -26,7 +26,10 @@ namespace DE {
         return ans;
     }
 
-    unordered_set<string> UsesExtractor::extractUsesSHelper(shared_ptr<ASTNode> node, shared_ptr<vector<vector<string>>> result, shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers) {
+    unordered_set<string> UsesExtractor::extractUsesSHelper(shared_ptr<ASTNode> node,
+                                                            shared_ptr<vector<vector<string>>> result,
+                                                            shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
+                                                            stmtNumbers) {
         NodeType nodeType = ASTUtils::getNodeType(node);
 
         if (nodeType == AST::PROCEDURE_NODE) {
@@ -102,5 +105,9 @@ namespace DE {
                 return unordered_set<string>();
             }
         }
+    }
+
+    shared_ptr<list<vector<string>>> UsesExtractor::extractUsesP(shared_ptr<ProgramNode> rootPtr) {
+        return extractUsesS(rootPtr);
     }
 } // DE
