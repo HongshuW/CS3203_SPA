@@ -8,6 +8,7 @@
 #include "Ident.h"
 #include "AttrRef.h"
 #include <unordered_map>
+#include <variant>
 
 namespace QB {
     enum class WithRefType {

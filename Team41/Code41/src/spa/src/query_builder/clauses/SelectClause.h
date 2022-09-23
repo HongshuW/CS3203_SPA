@@ -10,7 +10,10 @@
 #include "query_builder/commons/Synonym.h"
 #include "query_builder/commons/AttrRef.h"
 #include <ostream>
+#include <variant>
+#include <vector>
 
+using namespace std;
 namespace QB {
     enum class ReturnType {
         TUPLE,
