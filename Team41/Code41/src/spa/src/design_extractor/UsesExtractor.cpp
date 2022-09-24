@@ -201,7 +201,6 @@ namespace DE {
 
         auto mappedReachableCallNodesToProcedures = unordered_map<string, vector<shared_ptr<CallNode>>>();
         for (auto pair: mappedCallNodesToProcedures){
-            string procedureName = pair.first;
             vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
             for(auto callNode: listOfCallNodes) {
                 int stmtNo = stmtNumbers->at(callNode);

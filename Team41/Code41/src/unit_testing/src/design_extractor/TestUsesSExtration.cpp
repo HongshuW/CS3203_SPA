@@ -68,4 +68,16 @@ TEST_CASE("Test Uses_S Extraction") {
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
+
+    SECTION("test non-nested procedure with calls") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(10);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::USES_S);
+        vector<vector<string>> expected = {{"1", "x"}, {"2", "dah"}, {"3", "y"}, {"4", "dah"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
 }
