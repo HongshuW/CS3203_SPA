@@ -96,7 +96,7 @@ TEST_CASE("Test UsesP Extraction") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::USES_P);
-        vector<vector<string>> expected = {{"procedure2", "x"}, {"procedure2", "y"}, {"procedure2", "y"},
+        vector<vector<string>> expected = {{"procedure2", "x"}, {"procedure2", "y"},
                                            {"procedure2", "a"}, {"procedure2", "b"}, {"procedure2", "z"},
                                            {"procedure3", "y"}, {"procedure3", "z"}, {"procedure3", "a"},
                                            {"procedure3", "b"}, {"procedure4", "z"}, {"procedure4", "a"},

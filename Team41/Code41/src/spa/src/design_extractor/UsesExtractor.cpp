@@ -144,55 +144,51 @@ namespace DE {
 
     shared_ptr<list<vector<string>>> UsesExtractor::extractUsesP(shared_ptr<ProgramNode> rootPtr) {
         shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
-        auto map = mapProceduresToUsedVariables(rootPtr);
-        for (auto pair: map){
-            string procedureName = pair.first;
-            unordered_set<string> variableList = pair.second;
-            for (auto var: variableList) {
-                vector<string> usePEntry;
-                usePEntry.push_back(procedureName);
-                usePEntry.push_back(var);
-                ans->push_back(usePEntry);
-            }
-        }
-        insertCallsForUseP(rootPtr, ans);
-        return ans;
-    }
-
-    void UsesExtractor::insertCallsForUseP(shared_ptr<AST::ProgramNode> rootPtr,
-                                           shared_ptr<list<vector<std::string>>> ans) {
         auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
         auto mappedCallNodesToProcedures = getCallNodesFromProcedure(rootPtr);
-        for (auto pair: mappedCallNodesToProcedures) {
-            string procedureName = pair.first;
-            vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
+        for (auto pair: mappedProceduresToUsedVar) {
             unordered_set<string> uniqueVarList;
-            for (auto callNode: listOfCallNodes) {
-                queue<shared_ptr<CallNode>> queue;
-                queue.push(callNode);
-                while (!queue.empty()) {
-                    auto callNodeEntry = queue.front();
-                    queue.pop();
-                    auto varList = mappedProceduresToUsedVar.at(callNodeEntry->procedureName);
-                    for (auto var: varList) {
-                        uniqueVarList.insert(var);
-                    }
+            string procedureName = pair.first;
+            auto currentUsedVarList = pair.second;
+            for (auto v: currentUsedVarList) {
+                uniqueVarList.insert(v);
+            }
 
-                    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-                        auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
-                        for (auto n: otherCallNodes) {
-                            queue.push(n);
+            // if the procedures has call nodes, handle them
+            if (mappedCallNodesToProcedures.count(procedureName) != 0) {
+                auto callNodes = mappedCallNodesToProcedures.at(procedureName);
+                for(auto node: callNodes) {
+                    queue<shared_ptr<CallNode>> queue;
+                    queue.push(node);
+                    while(!queue.empty()) {
+                        auto callNodeEntry = queue.front();
+                        queue.pop();
+                        auto usedVarList =
+                                mappedProceduresToUsedVar.at(callNodeEntry -> procedureName);
+                        for (auto v: usedVarList) {
+                            uniqueVarList.insert(v);
+                        }
+
+                        if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+                            auto otherCallNodes =
+                                    mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
+                            for (auto n: otherCallNodes) {
+                                queue.push(n);
+                            }
                         }
                     }
                 }
             }
-            for (auto var: uniqueVarList) {
-                vector<string>usePCallEntry;
-                usePCallEntry.push_back(procedureName);
-                usePCallEntry.push_back(var);
-                ans -> push_back(usePCallEntry);
+
+            for (auto v : uniqueVarList) {
+                vector<string> usePEntry;
+                usePEntry.push_back(procedureName);
+                usePEntry.push_back(v);
+                ans->push_back(usePEntry);
             }
         }
+
+        return ans;
     }
 
     unordered_map<string, unordered_set<string>>
@@ -263,8 +259,5 @@ namespace DE {
         }
         return mapCallNodesToProcedures;
     }
-
-
-
 
 } // DE
