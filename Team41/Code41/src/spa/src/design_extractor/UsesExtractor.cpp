@@ -24,6 +24,7 @@ namespace DE {
                 it = ans->insert(it, pair);
             }
         }
+        insertUseCalls(rootPtr, ans);
         return ans;
     }
 
@@ -196,16 +197,34 @@ namespace DE {
     void UsesExtractor::insertUseCalls(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans) {
         auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
         auto mappedCallNodesToProcedures = getCallNodesFromProcedure(rootPtr);
+        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
 
-        auto mappedReachableCallNodesToProcedures = unordered_map<string, unordered_set<string>>();
+        auto mappedReachableCallNodesToProcedures = unordered_map<string, vector<shared_ptr<CallNode>>>();
         for (auto pair: mappedCallNodesToProcedures){
-            unordered_set<string> reachableCallNodeNames;
             string procedureName = pair.first;
             vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
             for(auto callNode: listOfCallNodes) {
-                queue <shared_ptr<CallNode>> queue;
+                int stmtNo = stmtNumbers->at(callNode);
+                queue<shared_ptr<CallNode>> queue;
                 queue.push(callNode);
-                
+                while(!queue.empty()) {
+                    auto callNodeEntry = queue.front();
+                    queue.pop();
+                    auto varList = mappedProceduresToUsedVar.at(callNodeEntry->procedureName);
+                    for (auto var: varList) {
+                        vector<string> useCallEntry;
+                        useCallEntry.push_back(to_string(stmtNo));
+                        useCallEntry.push_back(var);
+                        ans -> push_back(useCallEntry);
+                    }
+
+                    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+                        auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
+                        for (auto n: otherCallNodes) {
+                            queue.push(n);
+                        }
+                    }
+                }
             }
         }
     }
