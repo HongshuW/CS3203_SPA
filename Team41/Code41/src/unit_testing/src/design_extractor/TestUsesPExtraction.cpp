@@ -76,4 +76,35 @@ TEST_CASE("Test UsesP Extraction") {
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
+
+    SECTION("test non-nested procedure with single call") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(10);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::USES_P);
+        vector<vector<string>> expected = {{"procedure2", "x"}, {"procedure2", "dah"},
+                                           {"procedure2", "y"}, {"procedure3", "dah"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
+    SECTION("test non-nested procedure with multiple calls") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(11);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::USES_P);
+        vector<vector<string>> expected = {{"procedure2", "x"}, {"procedure2", "y"}, {"procedure2", "y"},
+                                           {"procedure2", "a"}, {"procedure2", "b"}, {"procedure2", "z"},
+                                           {"procedure3", "y"}, {"procedure3", "z"}, {"procedure3", "a"},
+                                           {"procedure3", "b"}, {"procedure4", "z"}, {"procedure4", "a"},
+                                           {"procedure4", "b"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
+
 }

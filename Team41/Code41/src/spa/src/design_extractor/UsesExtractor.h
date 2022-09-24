@@ -28,7 +28,8 @@ namespace DE {
                 mapProceduresToUsedVariables(shared_ptr<ProgramNode> rootPtr);
         static unordered_map<string, vector<shared_ptr<CallNode>>>
                 getCallNodesFromProcedure(shared_ptr<ProgramNode> rootPtr);
-        static void insertUseCalls(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans);
+        static void insertCallsForUseS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans);
+        static void insertCallsForUseP(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans);
     };
 
 } // DE

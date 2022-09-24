@@ -24,7 +24,7 @@ namespace DE {
                 it = ans->insert(it, pair);
             }
         }
-        insertUseCalls(rootPtr, ans);
+        insertCallsForUseS(rootPtr, ans);
         return ans;
     }
 
@@ -109,6 +109,39 @@ namespace DE {
         }
     }
 
+    void UsesExtractor::insertCallsForUseS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans) {
+        auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
+        auto mappedCallNodesToProcedures = getCallNodesFromProcedure(rootPtr);
+        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
+
+        for (auto pair: mappedCallNodesToProcedures){
+            vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
+            for(auto callNode: listOfCallNodes) {
+                int stmtNo = stmtNumbers->at(callNode);
+                queue<shared_ptr<CallNode>> queue;
+                queue.push(callNode);
+                while(!queue.empty()) {
+                    auto callNodeEntry = queue.front();
+                    queue.pop();
+                    auto varList = mappedProceduresToUsedVar.at(callNodeEntry->procedureName);
+                    for (auto var: varList) {
+                        vector<string> useCallEntry;
+                        useCallEntry.push_back(to_string(stmtNo));
+                        useCallEntry.push_back(var);
+                        ans -> push_back(useCallEntry);
+                    }
+
+                    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+                        auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
+                        for (auto n: otherCallNodes) {
+                            queue.push(n);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     shared_ptr<list<vector<string>>> UsesExtractor::extractUsesP(shared_ptr<ProgramNode> rootPtr) {
         shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
         auto map = mapProceduresToUsedVariables(rootPtr);
@@ -122,7 +155,44 @@ namespace DE {
                 ans->push_back(usePEntry);
             }
         }
+        insertCallsForUseP(rootPtr, ans);
         return ans;
+    }
+
+    void UsesExtractor::insertCallsForUseP(shared_ptr<AST::ProgramNode> rootPtr,
+                                           shared_ptr<list<vector<std::string>>> ans) {
+        auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
+        auto mappedCallNodesToProcedures = getCallNodesFromProcedure(rootPtr);
+        for (auto pair: mappedCallNodesToProcedures) {
+            string procedureName = pair.first;
+            vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
+            unordered_set<string> uniqueVarList;
+            for (auto callNode: listOfCallNodes) {
+                queue<shared_ptr<CallNode>> queue;
+                queue.push(callNode);
+                while (!queue.empty()) {
+                    auto callNodeEntry = queue.front();
+                    queue.pop();
+                    auto varList = mappedProceduresToUsedVar.at(callNodeEntry->procedureName);
+                    for (auto var: varList) {
+                        uniqueVarList.insert(var);
+                    }
+
+                    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+                        auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
+                        for (auto n: otherCallNodes) {
+                            queue.push(n);
+                        }
+                    }
+                }
+            }
+            for (auto var: uniqueVarList) {
+                vector<string>usePCallEntry;
+                usePCallEntry.push_back(procedureName);
+                usePCallEntry.push_back(var);
+                ans -> push_back(usePCallEntry);
+            }
+        }
     }
 
     unordered_map<string, unordered_set<string>>
@@ -194,39 +264,7 @@ namespace DE {
         return mapCallNodesToProcedures;
     }
 
-    void UsesExtractor::insertUseCalls(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans) {
-        auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
-        auto mappedCallNodesToProcedures = getCallNodesFromProcedure(rootPtr);
-        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
 
-        auto mappedReachableCallNodesToProcedures = unordered_map<string, vector<shared_ptr<CallNode>>>();
-        for (auto pair: mappedCallNodesToProcedures){
-            vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
-            for(auto callNode: listOfCallNodes) {
-                int stmtNo = stmtNumbers->at(callNode);
-                queue<shared_ptr<CallNode>> queue;
-                queue.push(callNode);
-                while(!queue.empty()) {
-                    auto callNodeEntry = queue.front();
-                    queue.pop();
-                    auto varList = mappedProceduresToUsedVar.at(callNodeEntry->procedureName);
-                    for (auto var: varList) {
-                        vector<string> useCallEntry;
-                        useCallEntry.push_back(to_string(stmtNo));
-                        useCallEntry.push_back(var);
-                        ans -> push_back(useCallEntry);
-                    }
-
-                    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-                        auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
-                        for (auto n: otherCallNodes) {
-                            queue.push(n);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
 
 } // DE
