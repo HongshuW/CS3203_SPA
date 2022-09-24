@@ -205,7 +205,8 @@ namespace TestDE {
        * 3 x = y + 1
        * }
        * procedure3 {
-       * 4 print y
+       * 4 print dah
+       * 5 read z
        * }
        */
         shared_ptr<StmtNode> printNode_11 = make_shared<PrintNode>(make_shared<VariableNode>("x"));
@@ -220,9 +221,11 @@ namespace TestDE {
                                                                                               callNode_11,
                                                                                               assignNode_11}));
 
-        shared_ptr<StmtNode> printNode_11_1 = make_shared<PrintNode>(make_shared<VariableNode>("y"));
+        shared_ptr<StmtNode> printNode_11_1 = make_shared<PrintNode>(make_shared<VariableNode>("dah"));
+        shared_ptr<ReadNode> readNode_11_1 = make_shared<ReadNode>(make_shared<VariableNode>("z"));
         shared_ptr<ProcedureNode> procedureNode11_1 = make_shared<ProcedureNode>(ProcedureNode("procedure3",
-                                                                                               {printNode_11_1}));
+                                                                                               {printNode_11_1,
+                                                                                                readNode_11_1}));
         shared_ptr<ProgramNode> programNode11 = make_shared<ProgramNode>(ProgramNode({procedureNode11,
                                                                                       procedureNode11_1}));
 
