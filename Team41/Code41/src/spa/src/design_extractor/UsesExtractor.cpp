@@ -5,6 +5,7 @@
 #include "UsesExtractor.h"
 #include "AST/utils/ASTUtils.h"
 #include "utils/Utils.h"
+#include "queue"
 #include "EntityExtractor.h"
 
 namespace DE {
@@ -108,9 +109,27 @@ namespace DE {
     }
 
     shared_ptr<list<vector<string>>> UsesExtractor::extractUsesP(shared_ptr<ProgramNode> rootPtr) {
+        shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
+        auto map = mapProceduresToUsedVariables(rootPtr);
+        for (auto pair: map){
+            string procedureName = pair.first;
+            unordered_set<string> variableList = pair.second;
+            for (auto var: variableList) {
+                vector<string> usePEntry;
+                usePEntry.push_back(procedureName);
+                usePEntry.push_back(var);
+                ans->push_back(usePEntry);
+            }
+        }
+        return ans;
+    }
+
+    unordered_map<string, unordered_set<string>>
+            UsesExtractor::mapProceduresToUsedVariables(shared_ptr<ProgramNode> rootPtr) {
         shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
         shared_ptr<vector<vector<vector<string>>>> resultOfProcedures = make_shared<vector<vector<vector<string>>>>();
         shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
+        auto map = unordered_map<string, unordered_set<string>>();
 
         for (auto procedureNode: rootPtr->procedureList) {
             shared_ptr<vector<vector<string>>> result = make_shared<vector<vector<string>>>();
@@ -120,13 +139,76 @@ namespace DE {
             for (auto pair: *result) {
                 variableList.insert(pair[1]);
             }
-            for (auto entry: variableList) {
-                vector<string> usePEntry;
-                usePEntry.push_back(procedureName);
-                usePEntry.push_back(entry);
-                ans->push_back(usePEntry);
+            map.insert(make_pair(procedureName, variableList));
+        }
+
+        return map;
+    }
+
+    unordered_map<string, vector<shared_ptr<CallNode>>>
+            UsesExtractor::getCallNodesFromProcedure(shared_ptr<ProgramNode> rootPtr) {
+        auto listOfCallNodesFromProcedures = list<vector<shared_ptr<CallNode>>>();
+        auto mapCallNodesToProcedures = unordered_map<string, vector<shared_ptr<CallNode>>>();
+        vector<shared_ptr<ProcedureNode>> procedureList = rootPtr -> procedureList;
+
+        for (auto procedureNode: procedureList) {
+            string name = procedureNode->procedureName;
+            auto listOfCallNodes = vector<shared_ptr<CallNode>>();
+            queue<vector<shared_ptr<StmtNode>>> queue;
+            queue.push(procedureNode->stmtList);
+            while(!queue.empty()) {
+                auto stmtList = queue.front();
+                queue.pop();
+                for (auto stmtNode: stmtList) {
+                    NodeType nodeType = ASTUtils::getNodeType(stmtNode);
+                    switch (nodeType) {
+                        case AST::CALL_NODE: {
+                            shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(stmtNode);
+                            listOfCallNodes.push_back(callNode);
+                            break;
+                        }
+                        case AST::IF_NODE: {
+                            shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+                            vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
+                            vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
+                            queue.push(ifStmtList);
+                            queue.push(elseStmtList);
+                            break;
+                        }
+                        case AST::WHILE_NODE: {
+                            shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
+                            vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
+                            queue.push(whileStmtList);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+            if(!listOfCallNodes.empty()) {
+                mapCallNodesToProcedures.insert(make_pair(name, listOfCallNodes));
             }
         }
-        return ans;
+        return mapCallNodesToProcedures;
     }
+
+    void UsesExtractor::insertUseCalls(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans) {
+        auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
+        auto mappedCallNodesToProcedures = getCallNodesFromProcedure(rootPtr);
+
+        auto mappedReachableCallNodesToProcedures = unordered_map<string, unordered_set<string>>();
+        for (auto pair: mappedCallNodesToProcedures){
+            unordered_set<string> reachableCallNodeNames;
+            string procedureName = pair.first;
+            vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
+            for(auto callNode: listOfCallNodes) {
+                queue <shared_ptr<CallNode>> queue;
+                queue.push(callNode);
+                
+            }
+        }
+    }
+
+
 } // DE

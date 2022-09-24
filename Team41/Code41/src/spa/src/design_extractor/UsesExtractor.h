@@ -7,9 +7,11 @@
 
 #include <string>
 #include "AST/ProgramNode.h"
+#include "AST/CallNode.h"
 #include "unordered_set"
 #include "list"
 #include "unordered_map"
+
 
 namespace DE {
 
@@ -19,7 +21,14 @@ namespace DE {
         static shared_ptr<list<vector<string>>> extractUsesP(shared_ptr<ProgramNode> rootPtr);
 
     private:
-        static unordered_set<string> extractUsesSHelper(shared_ptr<ASTNode> node, shared_ptr<vector<vector<string>>> result, shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers);
+        static unordered_set<string> extractUsesSHelper(shared_ptr<ASTNode> node,
+                                                        shared_ptr<vector<vector<string>>> result,
+                                                        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers);
+        static unordered_map<string, unordered_set<string>>
+                mapProceduresToUsedVariables(shared_ptr<ProgramNode> rootPtr);
+        static unordered_map<string, vector<shared_ptr<CallNode>>>
+                getCallNodesFromProcedure(shared_ptr<ProgramNode> rootPtr);
+        static void insertUseCalls(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans);
     };
 
 } // DE
