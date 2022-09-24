@@ -97,7 +97,7 @@ TEST_CASE("Test Uses_S Extraction") {
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
 
-    SECTION("test nested procedure with multiple calls") {
+    SECTION("test nested procedures with multiple calls") {
         auto programNode = TestDE::Dummies::getTestProgramNode(12);
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
@@ -109,6 +109,24 @@ TEST_CASE("Test Uses_S Extraction") {
                                            {"6", "y"}, {"7", "y"}, {"8", "z"},
                                            {"9", "def"}, {"9", "xyz"}, {"10", "z"},
                                            {"11", "xyz"}, {"11", "def"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
+    SECTION("test doubly-nested procedures with multiple calls") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(13);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::USES_S);
+        vector<vector<string>> expected = {{"1", "x"}, {"2", "a"}, {"2", "x"},
+                                           {"3", "x"}, {"4", "y"}, {"4", "b"},
+                                           {"4", "asdf"}, {"5", "z"}, {"5", "xxx"},
+                                           {"5", "vvv"}, {"6", "y"}, {"7", "y"},
+                                           {"8", "b"}, {"9", "asdf"}, {"10", "z"}, {"11", "xxx"},
+                                           {"11", "vvv"}, {"12", "asdf"},
+                                           {"13", "vvv"}, {"13", "xxx"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
