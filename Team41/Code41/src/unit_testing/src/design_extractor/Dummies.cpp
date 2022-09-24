@@ -287,33 +287,38 @@ namespace TestDE {
        * 1 print x
        * 2 if (x == 0) then {
        * 3   call procedure3
+       * 4   print qwerty
        *   } else {
-       * 4   call procedure4
+       * 5   call procedure4
        *   }
-       * 5 x = y + 1
+       * 6 x = y + 1
        * }
        * procedure3 {
-       * 6 print y
-       * 7 call procedure4
-       * 8 call procedure6
+       * 7 print y
+       * 8 call procedure4
+       * 9 call procedure6
        * }
        * procedure4 {
-       * 9 print z
+       * 10 print z
+       * }
+       * procedure6 {
+       * 11 abc = xyz + def
        * }
        */
 
         shared_ptr<StmtNode> printNode_13 = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<ExprNode> exprNode_13 = make_shared<ExprNode>("+");
-        exprNode_12->left = make_shared<ExprNode>("y");
-        exprNode_12->right = make_shared<ExprNode>("1");
+        exprNode_13->left = make_shared<ExprNode>("y");
+        exprNode_13->right = make_shared<ExprNode>("1");
         shared_ptr<StmtNode> assignNode_13 = make_shared<AssignNode>(make_shared<VariableNode>("x"),
-                                                                     exprNode_12);
+                                                                     exprNode_13);
 
         shared_ptr<StmtNode> callNode_13 = make_shared<CallNode>("procedure3");
         shared_ptr<StmtNode> callNode_13_1 = make_shared<CallNode>("procedure4");
         shared_ptr<CondExprNode> ifCondExpr_p13 = make_shared<CondExprNode>("x == 0");
+        shared_ptr<StmtNode> printNode_13_01 = make_shared<PrintNode>(make_shared<VariableNode>("qwerty"));
 
-        vector<shared_ptr<StmtNode>> ifStmtLst_p13{callNode_13};
+        vector<shared_ptr<StmtNode>> ifStmtLst_p13{callNode_13, printNode_13_01};
         vector<shared_ptr<StmtNode>> elseStmtLst_p13{callNode_13_1};
         shared_ptr<IfNode> ifNode_p13 = make_shared<IfNode>(ifCondExpr_p13,
                 ifStmtLst_p13, elseStmtLst_p13);
@@ -335,9 +340,23 @@ namespace TestDE {
         shared_ptr<ProcedureNode> procedureNode13_2 = make_shared<ProcedureNode>(ProcedureNode("procedure4",
                                                                                                {printNode_13_2}));
 
+
+        shared_ptr<ExprNode> exprNode_13_3 = make_shared<ExprNode>("+");
+        exprNode_13_3->left = make_shared<ExprNode>("xyz");
+        exprNode_13_3->right = make_shared<ExprNode>("def");
+        shared_ptr<StmtNode> assignNode_13_3 = make_shared<AssignNode>(make_shared<VariableNode>("abc"),
+                                                                     exprNode_13_3);
+
+        shared_ptr<ProcedureNode> procedureNode13_3 = make_shared<ProcedureNode>(ProcedureNode("procedure6",
+                                                                                               {assignNode_13_3}));
+
+
+
+
         shared_ptr<ProgramNode> programNode13 = make_shared<ProgramNode>(ProgramNode({procedureNode13,
                                                                                       procedureNode13_1,
-                                                                                      procedureNode13_2}));
+                                                                                      procedureNode13_2,
+                                                                                      procedureNode13_3}));
         // 14
         /*
        * procedure2 {
