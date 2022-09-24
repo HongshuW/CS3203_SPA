@@ -243,6 +243,7 @@ namespace TestDE {
        * }
        * procedure4 {
        * 7 print z
+       * 8 c = a + b
        * }
        */
 
@@ -265,9 +266,16 @@ namespace TestDE {
         shared_ptr<ProcedureNode> procedureNode12_1 = make_shared<ProcedureNode>(ProcedureNode("procedure3",
                                                                                             {printNode_12_1,
                                                                                              callNode_12_1_1}));
+
+        shared_ptr<ExprNode> exprNode_12_2 = make_shared<ExprNode>("+");
+        exprNode_12_2 -> left = make_shared<ExprNode>("a");
+        exprNode_12_2 -> right = make_shared<ExprNode>("b");
+        shared_ptr<StmtNode> assignNode_12_2 = make_shared<AssignNode>(make_shared<VariableNode>("c"),
+                                                                     exprNode_12_2);
         shared_ptr<StmtNode> printNode_12_2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
         shared_ptr<ProcedureNode> procedureNode12_2 = make_shared<ProcedureNode>(ProcedureNode("procedure4",
-                                                                                               {printNode_12_2}));
+                                                                                               {printNode_12_2,
+                                                                                                assignNode_12_2}));
 
         shared_ptr<ProgramNode> programNode12 = make_shared<ProgramNode>(ProgramNode({procedureNode12,
                                                                                       procedureNode12_1,
@@ -357,8 +365,8 @@ namespace TestDE {
 
         shared_ptr<StmtNode> printNode_14 = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<ExprNode> exprNode_14 = make_shared<ExprNode>("+");
-        exprNode_12->left = make_shared<ExprNode>("y");
-        exprNode_12->right = make_shared<ExprNode>("1");
+        exprNode_14->left = make_shared<ExprNode>("y");
+        exprNode_14->right = make_shared<ExprNode>("1");
         shared_ptr<StmtNode> assignNode_14 = make_shared<AssignNode>(make_shared<VariableNode>("x"),
                                                                      exprNode_12);
 
