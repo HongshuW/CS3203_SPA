@@ -141,6 +141,4 @@ TEST_CASE("Test UsesP Extraction") {
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
-
-
 }
