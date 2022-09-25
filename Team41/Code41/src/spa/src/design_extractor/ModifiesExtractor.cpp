@@ -173,7 +173,52 @@ void ModifiesExtractor::insertCallsForModifiesS(shared_ptr<ProgramNode> rootPtr,
 }
 
 shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesP(shared_ptr<ProgramNode> rootPtr) {
-    return extractModifiesS(rootPtr);
+    shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
+    auto mappedProceduresToModifiedVar = mapProceduresToModifiedVariables(rootPtr);
+    auto mappedCallNodesToProcedures = getCallNodesFromProcedures(rootPtr);
+    for (auto pair: mappedProceduresToModifiedVar) {
+        unordered_set<string> uniqueVarList;
+        string procedureName = pair.first;
+        auto currentUsedVarList = pair.second;
+        for (auto v: currentUsedVarList) {
+            uniqueVarList.insert(v);
+        }
+
+        // if the procedures has call nodes, handle them
+        if (mappedCallNodesToProcedures.count(procedureName) != 0) {
+            auto callNodes = mappedCallNodesToProcedures.at(procedureName);
+            for(auto node: callNodes) {
+                queue<shared_ptr<CallNode>> queue;
+                queue.push(node);
+                while(!queue.empty()) {
+                    auto callNodeEntry = queue.front();
+                    queue.pop();
+                    auto usedVarList =
+                            mappedProceduresToModifiedVar.at(callNodeEntry -> procedureName);
+                    for (auto v: usedVarList) {
+                        uniqueVarList.insert(v);
+                    }
+
+                    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+                        auto otherCallNodes =
+                                mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
+                        for (auto n: otherCallNodes) {
+                            queue.push(n);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (auto v : uniqueVarList) {
+            vector<string> modifiesPEntry;
+            modifiesPEntry.push_back(procedureName);
+            modifiesPEntry.push_back(v);
+            ans->push_back(modifiesPEntry);
+        }
+    }
+
+    return ans;
 }
 
 unordered_map<string, vector<shared_ptr<CallNode>>> ModifiesExtractor::getCallNodesFromProcedures(
