@@ -90,8 +90,8 @@ TEST_CASE("Test Uses_S Extraction") {
         vector<vector<string>> expected = {{"1", "x"}, {"2", "y"}, {"2", "z"},
                                            {"2", "a"}, {"2", "b"}, {"3", "z"},
                                            {"3", "a"}, {"3", "b"}, {"4", "y"},
-                                           {"5", "y"}, {"6", "z"}, {"6", "a"},
-                                           {"6", "b"}, {"7", "z"}, {"8", "a"}, {"8", "b"}};
+                                           {"5", "y"}, {"7", "z"}, {"7", "a"},
+                                           {"7", "b"}, {"8", "z"}, {"9", "a"}, {"9", "b"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -124,9 +124,9 @@ TEST_CASE("Test Uses_S Extraction") {
                                            {"3", "x"}, {"4", "y"}, {"4", "b"},
                                            {"4", "asdf"}, {"5", "z"}, {"5", "xxx"},
                                            {"5", "vvv"}, {"6", "y"}, {"7", "y"},
-                                           {"8", "b"}, {"9", "asdf"}, {"10", "z"}, {"11", "xxx"},
-                                           {"11", "vvv"}, {"12", "asdf"},
-                                           {"13", "vvv"}, {"13", "xxx"}};
+                                           {"8", "b"}, {"9", "asdf"}, {"11", "z"}, {"12", "xxx"},
+                                           {"12", "vvv"}, {"14", "asdf"},
+                                           {"15", "vvv"}, {"15", "xxx"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));

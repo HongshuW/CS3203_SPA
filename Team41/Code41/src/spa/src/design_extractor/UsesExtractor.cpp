@@ -214,7 +214,6 @@ namespace DE {
 
     unordered_map<string, vector<shared_ptr<CallNode>>>
             UsesExtractor::getCallNodesFromProcedure(shared_ptr<ProgramNode> rootPtr) {
-        auto listOfCallNodesFromProcedures = list<vector<shared_ptr<CallNode>>>();
         auto mapCallNodesToProcedures = unordered_map<string, vector<shared_ptr<CallNode>>>();
         vector<shared_ptr<ProcedureNode>> procedureList = rootPtr -> procedureList;
 

@@ -239,11 +239,12 @@ namespace TestDE {
        * }
        * procedure3 {
        * 5 print y
-       * 6 call procedure4
+       * 6 read adda
+       * 7 call procedure4
        * }
        * procedure4 {
-       * 7 print z
-       * 8 c = a + b
+       * 8 print z
+       * 9 c = a + b
        * }
        */
 
@@ -262,9 +263,12 @@ namespace TestDE {
                                                                                               assignNode_12}));
 
         shared_ptr<StmtNode> printNode_12_1 = make_shared<PrintNode>(make_shared<VariableNode>("y"));
+        shared_ptr<StmtNode> readNode_12_1 = make_shared<ReadNode>(make_shared<VariableNode>("adda"));
+
         shared_ptr<StmtNode> callNode_12_1_1 = make_shared<CallNode>("procedure4");
         shared_ptr<ProcedureNode> procedureNode12_1 = make_shared<ProcedureNode>(ProcedureNode("procedure3",
                                                                                             {printNode_12_1,
+                                                                                             readNode_12_1,
                                                                                              callNode_12_1_1}));
 
         shared_ptr<ExprNode> exprNode_12_2 = make_shared<ExprNode>("+");
@@ -374,17 +378,19 @@ namespace TestDE {
        * 7 print y
        * 8 while(b == 4) {
        * 9  call procedure5
+       * 10 read oloha
        *   }
        * }
        * procedure4 {
-       * 10 print z
-       * 11 call procedure6
+       * 11 print z
+       * 12 call procedure6
+         * 13 read blabla
        * }
        * procedure5 {
-       * 12 print asdf
+       * 14 print asdf
        * }
        * procedure6 {
-       * 13 zxcv = vvv + xxx
+       * 15 zxcv = vvv + xxx
        * }
        */
 
@@ -413,7 +419,9 @@ namespace TestDE {
 
         shared_ptr<StmtNode> printNode_14_1 = make_shared<PrintNode>(make_shared<VariableNode>("y"));
         shared_ptr<StmtNode> callNode_14_1_1 = make_shared<CallNode>("procedure5");
-        vector<shared_ptr<StmtNode>> whileStmtLst_p14_1 {callNode_14_1_1};
+        shared_ptr<StmtNode> readNode_14_1 = make_shared<ReadNode>(make_shared<VariableNode>("oloha"));
+
+        vector<shared_ptr<StmtNode>> whileStmtLst_p14_1 {callNode_14_1_1, readNode_14_1};
         shared_ptr<WhileNode> whileNode_p14_1 = make_shared<WhileNode>(make_shared<CondExprNode>("b == 4"),
                                                                      whileStmtLst_p14_1);
         shared_ptr<ProcedureNode> procedureNode14_1 = make_shared<ProcedureNode>(ProcedureNode("procedure3",
@@ -422,9 +430,12 @@ namespace TestDE {
 
         shared_ptr<StmtNode> printNode_14_2 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
         shared_ptr<StmtNode> callNode_14_1_2 = make_shared<CallNode>("procedure6");
+        shared_ptr<StmtNode> readNode_14_1_2 = make_shared<ReadNode>(make_shared<VariableNode>("blabla"));
+
         shared_ptr<ProcedureNode> procedureNode14_2 = make_shared<ProcedureNode>(ProcedureNode("procedure4",
                                                                                                {printNode_14_2,
-                                                                                                callNode_14_1_2}));
+                                                                                                callNode_14_1_2,
+                                                                                                readNode_14_1_2}));
 
         shared_ptr<StmtNode> printNode_14_3 = make_shared<PrintNode>(make_shared<VariableNode>("asdf"));
         shared_ptr<ProcedureNode> procedureNode14_3 = make_shared<ProcedureNode>(ProcedureNode("procedure5",

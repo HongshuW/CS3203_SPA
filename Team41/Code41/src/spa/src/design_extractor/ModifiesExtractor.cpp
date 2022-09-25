@@ -135,17 +135,103 @@ shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesS(shared_ptr<
         output->push_back(*outputIterator);
         advance(outputIterator, 1);
     }
-
+    insertCallsForModifiesS(rootPtr, output);
     return output;
 }
 
 void ModifiesExtractor::insertCallsForModifiesS(shared_ptr<ProgramNode> rootPtr,
                                                 shared_ptr<list<vector<std::string>>> output) {
+    auto mappedProceduresToModifiedVar = mapProceduresToModifiedVariables(rootPtr);
+    auto mappedCallNodesToProcedures = getCallNodesFromProcedures(rootPtr);
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
+    for (auto pair: mappedCallNodesToProcedures){
+        vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
+        for(auto callNode: listOfCallNodes) {
+            int stmtNo = stmtNumbers->at(callNode);
+            queue<shared_ptr<CallNode>> queue;
+            queue.push(callNode);
+            while(!queue.empty()) {
+                auto callNodeEntry = queue.front();
+                queue.pop();
+                auto varList = mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
+                for (auto var: varList) {
+                    vector<string> modifiesCallEntry;
+                    modifiesCallEntry.push_back(to_string(stmtNo));
+                    modifiesCallEntry.push_back(var);
+                    output -> push_back(modifiesCallEntry);
+                }
 
+                if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+                    auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
+                    for (auto n: otherCallNodes) {
+                        queue.push(n);
+                    }
+                }
+            }
+        }
+    }
 }
 
 shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesP(shared_ptr<ProgramNode> rootPtr) {
     return extractModifiesS(rootPtr);
+}
+
+unordered_map<string, vector<shared_ptr<CallNode>>> ModifiesExtractor::getCallNodesFromProcedures(
+        shared_ptr<AST::ProgramNode> rootPtr) {
+    auto mapCallNodesToProcedures = unordered_map<string, vector<shared_ptr<CallNode>>>();
+    vector<shared_ptr<ProcedureNode>> procedureList = rootPtr -> procedureList;
+    for (auto procedureNode: procedureList) {
+        string name = procedureNode->procedureName;
+        auto listOfCallNodes = vector<shared_ptr<CallNode>>();
+        queue<vector<shared_ptr<StmtNode>>> queue;
+        queue.push(procedureNode->stmtList);
+        while(!queue.empty()) {
+            auto stmtList = queue.front();
+            queue.pop();
+            for (auto stmtNode: stmtList) {
+                NodeType nodeType = ASTUtils::getNodeType(stmtNode);
+                switch (nodeType) {
+                    case AST::CALL_NODE: {
+                        shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(stmtNode);
+                        listOfCallNodes.push_back(callNode);
+                        break;
+                    }
+                    case AST::IF_NODE: {
+                        shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+                        vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
+                        vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
+                        queue.push(ifStmtList);
+                        queue.push(elseStmtList);
+                        break;
+                    }
+                    case AST::WHILE_NODE: {
+                        shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
+                        vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
+                        queue.push(whileStmtList);
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+        }
+        if(!listOfCallNodes.empty()) {
+            mapCallNodesToProcedures.insert(make_pair(name, listOfCallNodes));
+        }
+    }
+    return mapCallNodesToProcedures;
+}
+
+unordered_map<string, unordered_set<string>> ModifiesExtractor::mapProceduresToModifiedVariables(
+        shared_ptr<AST::ProgramNode> rootPtr) {
+    unordered_map<string, unordered_set<string>> outputMap;
+    vector<shared_ptr<ProcedureNode>> procedureList = rootPtr -> procedureList;
+    for (auto procedure: procedureList) {
+        string procedureName = procedure -> procedureName;
+        unordered_set<string> modifiedVariables = getModifiedVariablesFromProcedure(procedure);
+        outputMap.insert(make_pair(procedureName, modifiedVariables));
+    }
+    return outputMap;
 }
 
 unordered_set<string> ModifiesExtractor::getModifiedVariablesFromProcedure(
@@ -177,11 +263,13 @@ unordered_set<string> ModifiesExtractor::getModifiedVariablesFromProcedure(
                 case AST::ASSIGN_NODE: {
                     shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(stmtNode);
                     outputVarList.insert(assignNode -> variableNode -> variable);
+                    break;
                 }
 
                 case AST::READ_NODE: {
                     shared_ptr<ReadNode> readNode = dynamic_pointer_cast<ReadNode>(stmtNode);
                     outputVarList.insert(readNode -> variableNode -> variable);
+                    break;
                 }
                 default:
                     break;
@@ -191,14 +279,4 @@ unordered_set<string> ModifiesExtractor::getModifiedVariablesFromProcedure(
     return outputVarList;
 }
 
-unordered_map<string, unordered_set<string>> ModifiesExtractor::mapProceduresToModifiedVariables(
-        shared_ptr<AST::ProgramNode> rootPtr) {
-    unordered_map<string, unordered_set<string>> outputMap;
-    vector<shared_ptr<ProcedureNode>> procedureList = rootPtr -> procedureList;
-    for (auto procedure: procedureList) {
-        string procedureName = procedure -> procedureName;
-        unordered_set<string> modifiedVariables = getModifiedVariablesFromProcedure(procedure);
-        outputMap.insert(make_pair(procedureName, modifiedVariables));
-    }
-    return outputMap;
-}
+
