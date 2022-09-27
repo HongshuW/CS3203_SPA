@@ -22,11 +22,7 @@ namespace AST {
 
         AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<ExprNode> expressionNode);
 
-        bool operator==(const ASTNode& node) const {
-            auto castedNode = dynamic_cast<const AssignNode*>(&node);
-            return castedNode != 0 && *variableNode == *castedNode->variableNode
-                && *expressionNode == *castedNode->expressionNode;
-        }
+        bool operator==(const ASTNode& node) const override;
     };
 }
 

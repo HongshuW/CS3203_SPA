@@ -19,16 +19,9 @@ namespace AST {
         shared_ptr<ExprNode> left;
         shared_ptr<ExprNode> right;
 
-        ExprNode(string expr);
+        explicit ExprNode(string expr);
 
-        bool operator==(const ASTNode& node) const {
-            auto castedNode = dynamic_cast<const ExprNode*>(&node);
-
-            return castedNode != 0
-                && (left == castedNode->left || *left == *castedNode->left)
-                && (right == castedNode->right || *right == *castedNode->right)
-                && expr.compare(castedNode->expr) == 0;
-        }
+        bool operator==(const ASTNode& node) const override;
     };
 
 } // AST

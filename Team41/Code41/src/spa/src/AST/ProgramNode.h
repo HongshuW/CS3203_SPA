@@ -18,15 +18,7 @@ namespace AST {
 
         explicit ProgramNode(vector<shared_ptr<ProcedureNode>> procedureList);
 
-        bool operator==(const ASTNode& node) const {
-            auto castedNode = dynamic_cast<const ProgramNode*>(&node);
-            bool isEqual = castedNode != 0 && equal(
-                    begin(procedureList), end(procedureList),
-                    begin(castedNode->procedureList), end(castedNode->procedureList),
-                    [] (const shared_ptr<ProcedureNode> lhs, const shared_ptr<ProcedureNode> rhs)
-                    {return *lhs == *rhs; });
-            return isEqual;
-        }
+        bool operator==(const ASTNode& node) const override;
     };
 }
 

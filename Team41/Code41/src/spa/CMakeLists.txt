@@ -168,7 +168,7 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/QueryTupleResult.cpp
         src/query_evaluator/QueryTupleResult.h
         src/query_builder/commons/WithRef.cpp
-        src/query_builder/commons/WithRef.h)
+        src/query_builder/commons/WithRef.h src/parser/ParserConstants.cpp src/parser/ParserConstants.h)
 
 
 

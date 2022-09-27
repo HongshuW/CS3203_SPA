@@ -6,4 +6,10 @@
 
 AST::AssignNode::AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<ExprNode> expressionNode) :
     variableNode(variableNode),
-    expressionNode(expressionNode) {};
+    expressionNode(expressionNode) {}
+
+bool AssignNode::operator==(const ASTNode &node) const {
+    auto castedNode = dynamic_cast<const AssignNode*>(&node);
+    return castedNode != nullptr && *variableNode == *castedNode->variableNode
+           && *expressionNode == *castedNode->expressionNode;
+};
