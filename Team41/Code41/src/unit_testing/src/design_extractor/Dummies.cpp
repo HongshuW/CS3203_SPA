@@ -397,7 +397,7 @@ namespace TestDE {
         exprNode_14->left = make_shared<ExprNode>("y");
         exprNode_14->right = make_shared<ExprNode>("1");
         shared_ptr<StmtNode> assignNode_14 = make_shared<AssignNode>(make_shared<VariableNode>("x"),
-                                                                     exprNode_12);
+                                                                     exprNode_14);
 
         shared_ptr<StmtNode> callNode_14 = make_shared<CallNode>("procedure3");
         shared_ptr<StmtNode> callNode_14_1 = make_shared<CallNode>("procedure4");
