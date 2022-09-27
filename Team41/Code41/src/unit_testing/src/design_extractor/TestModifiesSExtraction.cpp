@@ -64,4 +64,57 @@ TEST_CASE("Test ModifiesS Extraction") {
         REQUIRE(expectedModifiesSRelations.size() == actualModifiesSRelations->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualModifiesSRelations, expectedModifiesSRelations));
     }
+
+    SECTION("test non-nested procedure with single call") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(10);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_S);
+        vector<vector<string>> expected = {{"2", "z"}, {"3", "x"}, {"5", "z"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
+    SECTION("test non-nested procedure with multiple calls") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(11);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_S);
+        vector<vector<string>> expected = {{"2", "c"}, {"2", "adda"}, {"3", "c"},
+                                           {"4", "x"}, {"6", "adda"}, {"7", "c"},
+                                           {"9", "c"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
+    SECTION("test nested procedures with multiple calls") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(12);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_S);
+        vector<vector<string>> expected = {{"3", "abc"}, {"6", "x"}, {"9", "abc"},
+                                           {"11", "abc"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
+    SECTION("test doubly-nested procedures with multiple calls") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(13);
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_S);
+        vector<vector<string>> expected = {{"4", "oloha"}, {"5", "blabla"}, {"5", "zxcv"},
+                                           {"6", "x"}, {"8", "oloha"}, {"10", "oloha"},
+                                           {"12", "zxcv"}, {"13", "blabla"}, {"15", "zxcv"}};
+        std::list<vector<string>>::iterator it;
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
 }
