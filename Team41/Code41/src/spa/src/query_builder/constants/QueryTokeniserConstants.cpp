@@ -9,6 +9,7 @@ namespace QB {
      const string QueryTokeniserConstants::  STMT = "stmt";
      const string QueryTokeniserConstants::  EMPTY_STR = "";
      const string QueryTokeniserConstants::  DOUBLE_QUOTE = "\"";
+     const string QueryTokeniserConstants::  WHITE_SPACE = "\t";
 
 
      const char QueryTokeniserConstants::  HASH = '#';

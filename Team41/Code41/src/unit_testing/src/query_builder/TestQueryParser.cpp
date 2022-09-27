@@ -703,4 +703,14 @@ TEST_CASE ("Test Query Parser") {
         std::string queryStr = "if i; Select BOOLEAN such that Follows (9, 10) and pattern i (2, _, _)";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
     }
+
+    SECTION ("Invalid expressionSpec, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, _\" +temp\"_)";
+        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Invalid expressionSpec, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, _\" temp+ \"_)";
+        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
+    }
 }
