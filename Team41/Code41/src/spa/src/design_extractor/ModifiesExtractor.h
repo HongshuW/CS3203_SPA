@@ -15,9 +15,16 @@ namespace DE {
         static void extractModifiesSDFS(shared_ptr<ASTNode> node,
                                         shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNoMap,
                                         shared_ptr<vector<string>> ancestors, shared_ptr<set<vector<string>>> output);
+        static void insertCallsForModifiesS(shared_ptr<ProgramNode> rootPtr,
+                                            shared_ptr<list<vector<string>>> output);
+        static unordered_map<string, unordered_set<string>>
+            mapProceduresToModifiedVariables(shared_ptr<ProgramNode> rootPtr);
+        static unordered_set<string> getModifiedVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode);
+        static unordered_map<string, vector<shared_ptr<CallNode>>> getCallNodesFromProcedures(shared_ptr<ProgramNode> rootPtr);
 
     public:
         static shared_ptr<list<vector<string>>> extractModifiesS(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<list<vector<string>>> extractModifiesP(shared_ptr<ProgramNode> rootPtr);
     };
 }
 
