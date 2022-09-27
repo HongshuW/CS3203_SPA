@@ -21,7 +21,7 @@ namespace SourceParser {
     private:
         shared_ptr<CondExprNode> root;
         vector<string> tokens;
-        unsigned int currIdx;
+        unsigned int currIdx = 0;
         //! isConnected == true indicates that && or || is present in the expression
         bool isConnected;
 

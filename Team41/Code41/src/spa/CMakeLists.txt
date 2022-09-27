@@ -168,7 +168,20 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/QueryTupleResult.cpp
         src/query_evaluator/QueryTupleResult.h
         src/query_builder/commons/WithRef.cpp
-        src/query_builder/commons/WithRef.h src/design_extractor/CallsExtractor.cpp src/design_extractor/CallsExtractor.h)
+        src/parser/constants/ParserConstants.cpp
+        src/parser/constants/ParserConstants.h
+        src/parser/constants/TokeniserConstants.cpp
+        src/parser/constants/TokeniserConstants.h
+        src/utils/ErrorMessageFormatter.cpp
+        src/utils/ErrorMessageFormatter.h
+        src/query_builder/constants/QueryTokeniserConstants.cpp
+        src/query_builder/constants/QueryTokeniserConstants.h
+        src/query_builder/constants/QueryParserConstants.cpp
+        src/query_builder/constants/QueryParserConstants.h
+        src/query_builder/commons/WithRef.h
+        src/design_extractor/CallsExtractor.cpp
+        src/design_extractor/CallsExtractor.h)
+
 
 
 

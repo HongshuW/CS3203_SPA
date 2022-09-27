@@ -26,11 +26,11 @@ string Parser::pop() {
 }
 
 bool Parser::equals(string s1, string s2) {
-    return s1.compare(s2) == 0;
+    return s1 == s2;
 }
 
 bool Parser::match(string s) {
-    if (peek().compare(s) == 0) {
+    if (peek() == s) {
         currIdx++;
         return true;
     }
@@ -41,19 +41,20 @@ bool Parser::expect(string s) {
     if (match(s)) {
         return true;
     }
-    throw SPParseException("Expect '" + s + "', got '" + peek() + "'.");
+    string errorMessage = ErrorMessageFormatter::formatErrorMessage(s, peek());
+    throw SPParseException(errorMessage);
 }
 
 shared_ptr<ProcedureNode> Parser::parseProcedureNode() {
-    expect("procedure");
+    expect(ParserConstants::PROCEDURE);
     //! need to check for valid procedureName
     string procedureName = pop();
     if (!Utils::isValidName(procedureName)) {
-        throw SPParseException("Invalid procedure name: " + procedureName + ".");
+        throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_INVALID_PROC_NAME + procedureName);
     }
-    expect("{");
+    expect(ParserConstants::CURLY_LEFT_BRACKET);
     vector<shared_ptr<StmtNode>> statementList = parseStatementList();
-    expect("}");
+    expect(ParserConstants::CURLY_RIGHT_BRACKET);
 
     return make_shared<ProcedureNode>(procedureName, statementList);
 }
@@ -70,14 +71,14 @@ vector<shared_ptr<StmtNode>> Parser::parseStatementList() {
     }
 
     if (statementList.size() == 0) {
-        throw SPParseException("Statement list cannot be empty.");
+        throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_EMPTY_STMT_LIST);
     }
     return statementList;
 }
 
 shared_ptr<StmtNode> Parser::parseStatementNode() {
     //! if, read, assign, print, while, call
-    if (peek().compare("}") == 0) {
+    if (peek() == ParserConstants::CURLY_RIGHT_BRACKET) {
         // end of stmtList
         return nullptr;
     }
@@ -111,12 +112,12 @@ shared_ptr<IfNode> Parser::parseIfNode() {
     int savedIdx = currIdx;
 
     //! if may be a variable name
-    if (!match("if")) {
+    if (!match(ParserConstants::IF)) {
         currIdx = savedIdx;
         return nullptr;
     }
 
-    if (!match("(")) {
+    if (!match(ParserConstants::LEFT_BRACKET)) {
         currIdx = savedIdx;
         return nullptr;
     }
@@ -124,24 +125,27 @@ shared_ptr<IfNode> Parser::parseIfNode() {
     shared_ptr<CondExprNode> condExprNode = parseCondExprNode();
 
     if (!condExprNode) {
-        throw SPParseException("Expect a conditional expression, got " + peek());
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                ParserConstants::SP_PARSE_EXCEPTION_EXPECT_COND_EXPRESSION, peek());
+        throw SPParseException(errorMessage);
     }
 
-    expect("then");
-    expect("{");
+    expect(ParserConstants::THEN);
+    expect(ParserConstants::CURLY_LEFT_BRACKET);
     vector<shared_ptr<StmtNode>> ifStatementList = parseStatementList();
-    expect("}");
-    expect("else");
-    expect("{");
+    expect(ParserConstants::CURLY_RIGHT_BRACKET);
+    expect(ParserConstants::ELSE);
+    expect(ParserConstants::CURLY_LEFT_BRACKET);
     vector<shared_ptr<StmtNode>> elseStatementList = parseStatementList();
-    expect("}");
-    shared_ptr<IfNode> ifNode = make_shared<IfNode>(condExprNode, ifStatementList, elseStatementList);
+    expect(ParserConstants::CURLY_RIGHT_BRACKET);
+    shared_ptr<IfNode> ifNode = make_shared<IfNode>(condExprNode,
+                                                    ifStatementList, elseStatementList);
     return ifNode;
 }
 
 shared_ptr<ReadNode> Parser::parseReadNode() {
     int savedIdx = currIdx;
-    if (!match("read")) {
+    if (!match(ParserConstants::READ)) {
         currIdx = savedIdx;
         return nullptr;
     }
@@ -153,7 +157,7 @@ shared_ptr<ReadNode> Parser::parseReadNode() {
         return nullptr;
     }
     //! To check for syntax error
-    expect(";");
+    expect(ParserConstants::SEMICOLON);
     shared_ptr<ReadNode> readNode = make_shared<ReadNode>(varNode);
     return readNode;
 }
@@ -162,22 +166,24 @@ shared_ptr<AssignNode> Parser::parseAssignNode() {
     shared_ptr<VariableNode> variableNode = parseVariableNode();
 
     if (!variableNode) {
-        throw SPParseException("Expect a variable name for assign statement, got " + peek());
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                ParserConstants::SP_PARSE_EXCEPTION_EXPECT_VARIABLE_NAME, peek());
+        throw SPParseException(errorMessage);
     }
 
-    expect("=");
+    expect(ParserConstants::EQUAL);
 
     shared_ptr<ExprNode> exprNode = parseExprNode();
 
     //! To check for syntax error
-    expect(";");
+    expect(ParserConstants::SEMICOLON);
     shared_ptr<AssignNode> assignNode = make_shared<AssignNode>(variableNode, exprNode);
     return assignNode;
 }
 
 shared_ptr<PrintNode> Parser::parsePrintNode() {
     int savedIdx = currIdx;
-    if (!match("print")) {
+    if (!match(ParserConstants::PRINT)) {
         currIdx = savedIdx;
         return nullptr;
     }
@@ -188,7 +194,7 @@ shared_ptr<PrintNode> Parser::parsePrintNode() {
         return nullptr;
     }
     //! To check for syntax error
-    expect(";");
+    expect(ParserConstants::SEMICOLON);
 
     shared_ptr<PrintNode> printNode = make_shared<PrintNode>(varNode);
     return printNode;
@@ -196,29 +202,29 @@ shared_ptr<PrintNode> Parser::parsePrintNode() {
 
 shared_ptr<WhileNode> Parser::parseWhileNode() {
     int savedIdx = currIdx;
-    if (!match("while")) {
+    if (!match(ParserConstants::WHILE)) {
         currIdx = savedIdx;
         return nullptr;
     }
 
     //! while can be a variable name
-    if (!match("(")) {
+    if (!match(ParserConstants::LEFT_BRACKET)) {
         currIdx = savedIdx;
         return nullptr;
     }
 
     shared_ptr<CondExprNode> condExprNode = parseCondExprNode();
 
-    expect("{");
+    expect(ParserConstants::CURLY_LEFT_BRACKET);
     vector<shared_ptr<StmtNode>> statementList = parseStatementList();
-    expect("}");
+    expect(ParserConstants::CURLY_RIGHT_BRACKET);
     shared_ptr<WhileNode> whileNode = make_shared<WhileNode>(condExprNode, statementList);
     return whileNode;
 }
 
 shared_ptr<CallNode> Parser::parseCallNode() {
     int savedIdx = currIdx;
-    if (!match("call")) {
+    if (!match(ParserConstants::CALL)) {
         currIdx = savedIdx;
         return nullptr;
     }
@@ -229,7 +235,7 @@ shared_ptr<CallNode> Parser::parseCallNode() {
         return nullptr;
     }
     //! To check for syntax error
-    expect(";");
+    expect(ParserConstants::SEMICOLON);
 
     shared_ptr<CallNode> callNode = make_shared<CallNode>(programName);
     return callNode;
@@ -249,17 +255,17 @@ shared_ptr<VariableNode> Parser::parseVariableNode() {
 shared_ptr<ExprNode> Parser::parseExprNode() {
     vector<string> expr;
     expr.push_back(pop());
-    while (peek().compare(";") != 0) {
+    while (peek() != ParserConstants::SEMICOLON) {
         expr.push_back(pop());
     }
-    if (expr.size() <= 0) {
-        throw SPParseException("The RHS of assign statement cannot be empty");
+    if (expr.empty()) {
+        throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_ASSIGN_STMT_RHS_EMPTY);
     }
     ExprNodeParser exprNodeParser = ExprNodeParser(expr);
     shared_ptr<ExprNode> exprNode = exprNodeParser.parse();
     if (!exprNode) {
         // throw error
-        throw SPParseException("The RHS of assign statement cannot be empty");
+        throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_ASSIGN_STMT_RHS_EMPTY);
     }
     return exprNode;
 }
@@ -267,12 +273,16 @@ shared_ptr<ExprNode> Parser::parseExprNode() {
 shared_ptr<CondExprNode> Parser::parseCondExprNode() {
     vector<string> condExpr;
     bool isConnected = false;
-    while (!(equals(peek(), ")") && (equals(peekNext(), "then") || equals(peekNext(), "{")))) {
+    while (!(equals(peek(), ParserConstants::RIGHT_BRACKET)
+            && (equals(peekNext(), ParserConstants::THEN)
+                || equals(peekNext(), ParserConstants::CURLY_LEFT_BRACKET)))) {
         string curr = pop();
         if (!Utils::isValidName(curr) && !Utils::isValidNumber(curr)) {
             //! is a comparator operator, need to check for valid operator
-            if (Utils::VALID_TOKENS_COND_EXPR.count(curr) == 0) {
-                throw SPParseException("Expect a comparator operator, got: " + curr);
+            if (!Utils::VALID_TOKENS_COND_EXPR.count(curr)) {
+                string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                        ParserConstants::SP_PARSE_EXCEPTION_EXPECT_COMPARATOR_OP, curr);
+                throw SPParseException(errorMessage);
             }
         }
         //! Check for the presence of && and ||
@@ -290,7 +300,7 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode() {
 
     //! Check for valid parentheses
     if (!Utils::isValidParentheses(condExpr)) {
-        throw SPParseException("Invalid parentheses detected");
+        throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_INVALID_PARENTHESES);
     }
 
     CondExprParser condExprParser = CondExprParser(condExpr, isConnected);
@@ -298,7 +308,7 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode() {
     //! there is not syntax error and we can safely
     //! using the string representation of the conditional expression.
     condExprParser.parse();
-    string condExprStr = "";
+    string condExprStr = ParserConstants::EMPTY_STR;
     for (auto str : condExpr) {
         condExprStr += str;
     }
@@ -312,8 +322,8 @@ shared_ptr<ProgramNode> Parser::parse() {
         shared_ptr<ProcedureNode> procedure = parseProcedureNode();
         procedureList.push_back(procedure);
     }
-    if (procedureList.size() == 0) {
-        throw SPParseException("No procedure found.");
+    if (procedureList.empty()) {
+        throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_EMPTY_PROCEDURE);
     }
     shared_ptr<ProgramNode> root = make_shared<ProgramNode>(procedureList);
     return root;

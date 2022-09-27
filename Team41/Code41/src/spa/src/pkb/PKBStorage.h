@@ -31,25 +31,25 @@ public:
     explicit PKBStorage();
 
     // Column Names
-    static string PROCEDURE_TABLE_COL1_NAME;
-    static string STATEMENT_TABLE_COL1_NAME;
-    static string STATEMENT_TABLE_COL2_NAME;
-    static string VARIABLE_TABLE_COL1_NAME;
-    static string CONSTANT_TABLE_COL1_NAME;
-    static string USES_TABLE_COL1_NAME;
-    static string USES_TABLE_COL2_NAME;
-    static string PARENT_TABLE_COL1_NAME;
-    static string PARENT_TABLE_COL2_NAME;
-    static string MODIFIES_TABLE_COL1_NAME;
-    static string MODIFIES_TABLE_COL2_NAME;
-    static string FOLLOWS_TABLE_COL1_NAME;
-    static string FOLLOWS_TABLE_COL2_NAME;
-    static string CALLS_TABLE_COL1_NAME;
-    static string CALLS_TABLE_COL2_NAME;
-    static string NEXT_TABLE_COL1_NAME;
-    static string NEXT_TABLE_COL2_NAME;
-    static string AFFECTS_TABLE_COL1_NAME;
-    static string AFFECTS_TABLE_COL2_NAME;
+    static const string PROCEDURE_TABLE_COL1_NAME;
+    static const string STATEMENT_TABLE_COL1_NAME;
+    static const string STATEMENT_TABLE_COL2_NAME;
+    static const string VARIABLE_TABLE_COL1_NAME;
+    static const string CONSTANT_TABLE_COL1_NAME;
+    static const string USES_TABLE_COL1_NAME;
+    static const string USES_TABLE_COL2_NAME;
+    static const string PARENT_TABLE_COL1_NAME;
+    static const string PARENT_TABLE_COL2_NAME;
+    static const string MODIFIES_TABLE_COL1_NAME;
+    static const string MODIFIES_TABLE_COL2_NAME;
+    static const string FOLLOWS_TABLE_COL1_NAME;
+    static const string FOLLOWS_TABLE_COL2_NAME;
+    static const string CALLS_TABLE_COL1_NAME;
+    static const string CALLS_TABLE_COL2_NAME;
+    static const string NEXT_TABLE_COL1_NAME;
+    static const string NEXT_TABLE_COL2_NAME;
+    static const string AFFECTS_TABLE_COL1_NAME;
+    static const string AFFECTS_TABLE_COL2_NAME;
 
     // getters of entities
     ProcedureTable * getProcedures();

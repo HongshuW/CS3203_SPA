@@ -7,3 +7,8 @@
 using namespace AST;
 
 AST::CallNode::CallNode(string programName) : procedureName(programName) {}
+
+bool AST::CallNode::operator==(const ASTNode& node) const {
+    auto castedNode = dynamic_cast<const CallNode*>(&node);
+    return castedNode != nullptr && procedureName == castedNode->procedureName;
+}

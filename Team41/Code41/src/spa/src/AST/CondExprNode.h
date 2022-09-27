@@ -33,16 +33,7 @@ namespace AST {
         // (x == y) && (z == 1)
         CondExprNode(shared_ptr<CondExprNode> condExprLHS, string op, shared_ptr<CondExprNode> condExprRHS);
 
-        bool operator==(const ASTNode& node) const {
-            auto castedNode = dynamic_cast<const CondExprNode*>(&node);
-
-            return castedNode != 0
-                   && (relExprNode == castedNode->relExprNode || *relExprNode == *castedNode->relExprNode)
-                   && (condExprLHS == castedNode->condExprLHS || *condExprLHS == *castedNode->condExprLHS)
-                   && (condExprRHS == castedNode->condExprRHS || *condExprRHS == *castedNode->condExprRHS)
-                   && op.compare(castedNode->op) == 0
-                   && condExpr.compare(castedNode->condExpr) == 0;
-        }
+        bool operator==(const ASTNode& node) const override;
 
     };
 

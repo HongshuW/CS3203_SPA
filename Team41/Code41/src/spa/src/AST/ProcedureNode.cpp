@@ -8,3 +8,14 @@ ProcedureNode::ProcedureNode(string procedureName, vector<shared_ptr<StmtNode>> 
 procedureName(procedureName),
 stmtList(stmtList) {
 }
+
+bool ProcedureNode::operator==(const ASTNode &node) const {
+    auto castedNode = dynamic_cast<const ProcedureNode*>(&node);
+    bool isEqual = castedNode != nullptr && procedureName == castedNode->procedureName;
+    isEqual = isEqual && equal(
+            begin(stmtList), end(stmtList),
+            begin(castedNode->stmtList), end(castedNode->stmtList),
+            [] (const shared_ptr<StmtNode> lhs, const shared_ptr<StmtNode> rhs)
+            {return *lhs == *rhs; });
+    return isEqual;
+}

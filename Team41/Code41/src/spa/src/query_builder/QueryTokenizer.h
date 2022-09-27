@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
-
+#include "constants/QueryTokeniserConstants.h"
 using namespace std;
 
 namespace QB {

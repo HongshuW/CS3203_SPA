@@ -4,25 +4,25 @@
 
 #include "PKBStorage.h"
 
-string PKBStorage:: PROCEDURE_TABLE_COL1_NAME = "$procedure_name";
-string PKBStorage:: STATEMENT_TABLE_COL1_NAME = "$statement_number";
-string PKBStorage:: STATEMENT_TABLE_COL2_NAME ="$statement_type";
-string PKBStorage:: VARIABLE_TABLE_COL1_NAME = "$variable_name";
-string PKBStorage:: CONSTANT_TABLE_COL1_NAME = "$constant_value";
-string PKBStorage:: USES_TABLE_COL1_NAME = "$user";
-string PKBStorage:: USES_TABLE_COL2_NAME = "$used";
-string PKBStorage:: PARENT_TABLE_COL1_NAME = "$parent_statement";
-string PKBStorage:: PARENT_TABLE_COL2_NAME = "$child_statement";
-string PKBStorage:: MODIFIES_TABLE_COL1_NAME = "$modifier";
-string PKBStorage:: MODIFIES_TABLE_COL2_NAME = "$modified";
-string PKBStorage:: FOLLOWS_TABLE_COL1_NAME = "$followed_statement";
-string PKBStorage:: FOLLOWS_TABLE_COL2_NAME = "$following_statement";
-string PKBStorage:: CALLS_TABLE_COL1_NAME = "$calling_procedure";
-string PKBStorage:: CALLS_TABLE_COL2_NAME = "$called_procedure";
-string PKBStorage:: NEXT_TABLE_COL1_NAME = "$preceding_statement";
-string PKBStorage:: NEXT_TABLE_COL2_NAME = "$ensuing_statement";
-string PKBStorage:: AFFECTS_TABLE_COL1_NAME = "$affecting_statement";
-string PKBStorage:: AFFECTS_TABLE_COL2_NAME = "$affected_statement";
+const string PKBStorage:: PROCEDURE_TABLE_COL1_NAME = "$procedure_name";
+const string PKBStorage:: STATEMENT_TABLE_COL1_NAME = "$statement_number";
+const string PKBStorage:: STATEMENT_TABLE_COL2_NAME ="$statement_type";
+const string PKBStorage:: VARIABLE_TABLE_COL1_NAME = "$variable_name";
+const string PKBStorage:: CONSTANT_TABLE_COL1_NAME = "$constant_value";
+const string PKBStorage:: USES_TABLE_COL1_NAME = "$user";
+const string PKBStorage:: USES_TABLE_COL2_NAME = "$used";
+const string PKBStorage:: PARENT_TABLE_COL1_NAME = "$parent_statement";
+const string PKBStorage:: PARENT_TABLE_COL2_NAME = "$child_statement";
+const string PKBStorage:: MODIFIES_TABLE_COL1_NAME = "$modifier";
+const string PKBStorage:: MODIFIES_TABLE_COL2_NAME = "$modified";
+const string PKBStorage:: FOLLOWS_TABLE_COL1_NAME = "$followed_statement";
+const string PKBStorage:: FOLLOWS_TABLE_COL2_NAME = "$following_statement";
+const string PKBStorage:: CALLS_TABLE_COL1_NAME = "$calling_procedure";
+const string PKBStorage:: CALLS_TABLE_COL2_NAME = "$called_procedure";
+const string PKBStorage:: NEXT_TABLE_COL1_NAME = "$preceding_statement";
+const string PKBStorage:: NEXT_TABLE_COL2_NAME = "$ensuing_statement";
+const string PKBStorage:: AFFECTS_TABLE_COL1_NAME = "$affecting_statement";
+const string PKBStorage:: AFFECTS_TABLE_COL2_NAME = "$affected_statement";
 
 PKBStorage::PKBStorage() {
     // Entity Tables

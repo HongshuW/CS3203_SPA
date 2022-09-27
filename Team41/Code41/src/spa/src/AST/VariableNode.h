@@ -14,12 +14,9 @@ namespace AST {
     class VariableNode : public ASTNode {
     public:
         string variable;
-        VariableNode(string variable);
+        explicit VariableNode(string variable);
 
-        bool operator==(const ASTNode& node) const {
-            auto castedNode = dynamic_cast<const VariableNode*>(&node);
-            return castedNode != 0 && variable.compare(castedNode->variable) == 0;
-        }
+        bool operator==(const ASTNode& node) const override;
     };
 }
 

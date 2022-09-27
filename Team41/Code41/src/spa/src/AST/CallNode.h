@@ -20,10 +20,7 @@ namespace AST {
 
         explicit CallNode(string programName);
 
-        bool operator==(const ASTNode& node) const {
-            auto castedNode = dynamic_cast<const CallNode*>(&node);
-            return castedNode != 0 && procedureName.compare(castedNode->procedureName) == 0;
-        }
+        bool operator==(const ASTNode& node) const override;
     };
 
 } // AST

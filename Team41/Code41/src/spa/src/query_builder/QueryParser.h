@@ -11,7 +11,8 @@
 #include "utils/Utils.h"
 #include "query_builder/commons/ExprStringTokenizer.h"
 #include "query_builder/clauses/WithClauses.h"
-
+#include "utils/ErrorMessageFormatter.h"
+#include "constants/QueryParserConstants.h"
 using namespace std;
 
 namespace QB {

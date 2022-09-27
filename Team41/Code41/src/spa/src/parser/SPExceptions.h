@@ -8,6 +8,7 @@
 #pragma once
 #include <string>
 #include <stdexcept>
+#include "constants/TokeniserConstants.h"
 using namespace std;
 
 namespace SourceParser {
@@ -18,7 +19,7 @@ namespace SourceParser {
      */
     class SPTokenizeException : public runtime_error {
     public:
-        SPTokenizeException(const string& msg = "") : runtime_error(msg) {}
+        explicit SPTokenizeException(const string& msg = TokeniserConstants::EMPTY_STR) : runtime_error(msg) {}
     };
 
     /**
@@ -28,7 +29,7 @@ namespace SourceParser {
     */
     class SPParseException : public runtime_error {
     public:
-        SPParseException(const string& msg = "") : runtime_error(msg) {}
+        explicit SPParseException(const string& msg = TokeniserConstants::EMPTY_STR) : runtime_error(msg) {}
     };
 
     /**
@@ -38,7 +39,7 @@ namespace SourceParser {
     */
     class SPValidationException : public runtime_error {
     public:
-        SPValidationException(const string& msg = "") : runtime_error(msg) {}
+        explicit SPValidationException(const string& msg = TokeniserConstants::EMPTY_STR) : runtime_error(msg) {}
     };
 }
 
