@@ -6,7 +6,9 @@
 #include <iostream>
 #include "Tokenizer.h"
 #include "SPExceptions.h"
-
+#include "constants/TokeniserConstants.h"
+#include "utils/ErrorMessageFormatter.h"
+#include "constants/ParserConstants.h"
 using namespace SourceParser;
 using namespace std;
 
@@ -29,20 +31,17 @@ char Tokenizer::pop() {
 }
 
 bool Tokenizer::match(char c) {
-    if (peek() == c) {
-        return true;
-    }
-    return false;
+    return peek() == c;
 }
 
 void Tokenizer::processString() {
-    tokens.push_back("\"");
-    curr = "";
-    while (peek() != '"') {
+    tokens.push_back(TokeniserConstants::DOUBLE_QUOTE);
+    curr = TokeniserConstants::EMPTY_STR;
+    while (peek() != TokeniserConstants::DOUBLE_QUOTE_CHAR) {
         curr += pop();
     }
     tokens.push_back(curr);
-    tokens.push_back("\"");
+    tokens.push_back(TokeniserConstants::DOUBLE_QUOTE);
     currIdx++;
 }
 
@@ -54,31 +53,33 @@ void Tokenizer::processAlNum() {
 }
 
 void Tokenizer::processSymbols() {
-    if (curr == "=") {
-        if (match('=')) {
+    if (curr == TokeniserConstants::EQUAL) {
+        if (match(TokeniserConstants::EQUAL_CHAR)) {
             curr += pop();
         }
-    } else if (curr == ">") {
-        if (match('=')) {
+    } else if (curr == TokeniserConstants::GREATER_THAN) {
+        if (match(TokeniserConstants::EQUAL_CHAR)) {
             curr += pop();
         }
-    } else if (curr == "<") {
-        if (peek() == '=') {
+    } else if (curr == TokeniserConstants::SMALLER_THAN) {
+        if (peek() == TokeniserConstants::EQUAL_CHAR) {
             curr += pop();
         }
-    } else if (curr == "!") {
-        if (match('=')) {
+    } else if (curr == TokeniserConstants::EXCLAMATION_MARK) {
+        if (match(TokeniserConstants::EQUAL_CHAR)) {
             curr += pop();
         }
-    } else if (curr == "&") {
-        if (!match('&')) {
-            throw SPTokenizeException("Expect && but got &");
+    } else if (curr == TokeniserConstants::SINGLE_AND) {
+        if (!match(TokeniserConstants::SINGLE_AND_CHAR)) {
+            string errorMessage = ErrorMessageFormatter::formatErrorMessage(ParserConstants::AND_OP, TokeniserConstants::SINGLE_AND);
+            throw SPTokenizeException(errorMessage);
         } else {
             curr += pop();
         }
-    } else if (curr == "|") {
-        if (!match('|')) {
-            throw SPTokenizeException("Expect || but got |");
+    } else if (curr == TokeniserConstants::BAR) {
+        if (!match(TokeniserConstants::BAR_CHAR)) {
+            string errorMessage = ErrorMessageFormatter::formatErrorMessage(ParserConstants::OR_OP, TokeniserConstants::BAR);
+            throw SPTokenizeException(errorMessage);
         } else {
             curr += pop();
         }
@@ -90,7 +91,7 @@ vector<string> Tokenizer::tokenize() {
     char next;
 
     while (currIdx < source.length()) {
-        curr = "";
+        curr = TokeniserConstants::EMPTY_STR;
         next = pop();
         if (next == EOF) break;
         curr += next;
@@ -99,13 +100,13 @@ vector<string> Tokenizer::tokenize() {
             continue;
         } else if (isalnum(next)) {
             processAlNum();
-        } else if (next == '"') {
+        } else if (next == TokeniserConstants::DOUBLE_QUOTE_CHAR) {
             processString();
         } else if (SYMBOL_SET.count(curr)) {
             processSymbols();
         } else {
-            throw SPTokenizeException("Unexpected token " +
-                                      std::string(1, next) + "\n");
+            throw SPTokenizeException(TokeniserConstants::UNEXPECTED_TOKEN_MESSAGE +
+                                      std::string(1, next));
         }
     }
     return tokens;

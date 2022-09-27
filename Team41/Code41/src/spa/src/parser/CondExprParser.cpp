@@ -3,7 +3,8 @@
 //
 
 #include "CondExprParser.h"
-#include "ParserConstants.h"
+#include "parser/constants/ParserConstants.h"
+#include "utils/ErrorMessageFormatter.h"
 using namespace SourceParser;
 
 CondExprParser::CondExprParser(vector<string>& tokens, bool isConnected) : isConnected(isConnected),
@@ -36,7 +37,7 @@ bool CondExprParser::expect(string s) {
     if (match(s)) {
         return true;
     }
-    string errorMessage = ParserConstants::formatErrorMessage(s, peek());
+    string errorMessage = ErrorMessageFormatter::formatErrorMessage(s, peek());
     throw SPParseException(errorMessage);
 }
 
@@ -53,7 +54,7 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
                     && !Utils::isValidName(peek())
                     && !Utils::isMathOperators(peek())
                     && !Utils::isBracket(peek())) {
-                string errorMessage = ParserConstants::formatErrorMessage(
+                string errorMessage = ErrorMessageFormatter::formatErrorMessage(
                         ParserConstants::SP_PARSE_EXCEPTION_EXPECT_COMPARATOR_OP, peek());
                 throw SPParseException(errorMessage);
             }
@@ -65,7 +66,7 @@ shared_ptr<ExprNode> CondExprParser::parseExprNodeForRelExpr(string direction) {
                 && !Utils::isValidName(peek())
                 && !Utils::isMathOperators(peek())
                 && !Utils::isBracket(peek())) {
-                string errorMessage = ParserConstants::formatErrorMessage(
+                string errorMessage = ErrorMessageFormatter::formatErrorMessage(
                         ParserConstants::SP_PARSE_EXCEPTION_EXPECT_COMPARATOR_OP, peek());
                 throw SPParseException(errorMessage);
             }
@@ -95,7 +96,7 @@ shared_ptr<RelExprNode> CondExprParser::parseRelExprNode() {
     shared_ptr<ExprNode> exprNodeLHS = parseExprNodeForRelExpr(ParserConstants::LEFT_DIRECTION);
     string op = peek();
     if (!Utils::VALID_TOKENS_REL_EXPR.count(peek())) {
-        string errorMessage = ParserConstants::formatErrorMessage(
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
                 ParserConstants::SP_PARSE_EXCEPTION_EXPECT_COMPARATOR_OP, op);
         throw SPParseException(errorMessage);
     }
@@ -126,7 +127,7 @@ shared_ptr<CondExprNode> CondExprParser::parse() {
         } else if (match(ParserConstants::OR_OP)) {
             op = ParserConstants::OR_OP;
         } else {
-            string errorMessage = ParserConstants::formatErrorMessage(
+            string errorMessage = ErrorMessageFormatter::formatErrorMessage(
                     ParserConstants::AND_OP_OR_OR_OP, peek());
             throw SPParseException(errorMessage);
         }

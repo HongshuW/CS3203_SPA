@@ -30,10 +30,10 @@ void QueryTokenizer::processIdent() {
     while (isalnum(peek())) {
         curr += pop();
     }
-    if (curr == "stmt" && peek() == '#') {
+    if (curr == QueryTokeniserConstants::STMT && peek() == QueryTokeniserConstants::HASH) {
         curr += pop();
     }
-    if (CLAUSE_SET_WITH_T.count(curr) && peek() == '*') {
+    if (CLAUSE_SET_WITH_T.count(curr) && peek() == QueryTokeniserConstants::STAR) {
         curr += pop();
     }
     tokens.push_back(curr);
@@ -47,15 +47,15 @@ void QueryTokenizer::processDigit() {
 }
 
 void QueryTokenizer::processString() {
-    tokens.push_back("\"");
-    curr = "";
-    while (peek() != '"') {
+    tokens.push_back(QueryTokeniserConstants::DOUBLE_QUOTE);
+    curr = QueryTokeniserConstants::EMPTY_STR;
+    while (peek() != QueryTokeniserConstants::DOUBLE_QUOTE_CHAR) {
         char c = pop();
         if (isspace(c)) continue;
         curr += c;
     }
     tokens.push_back(curr);
-    tokens.push_back("\"");
+    tokens.push_back(QueryTokeniserConstants::DOUBLE_QUOTE);
     currIdx++;
 }
 
@@ -63,7 +63,7 @@ std::vector<std::string> QueryTokenizer::tokenize() {
     char next;
 
     while (currIdx < query.length()) {
-        curr = "";
+        curr = QueryTokeniserConstants::EMPTY_STR;
         next = pop();
         if (next == EOF) break;
         curr += next;
@@ -74,13 +74,13 @@ std::vector<std::string> QueryTokenizer::tokenize() {
             processIdent();
         } else if (isdigit(next)) {
             processDigit();
-        } else if (next == '"') {
+        } else if (next == QueryTokeniserConstants::DOUBLE_QUOTE_CHAR) {
             processString();
         } else if (SYMBOL_SET.count(curr)) {
             tokens.push_back(curr);
         } else {
-            throw PQLTokenizeException("Unexpected token " +
-                                       std::string(1, next) + "\n");
+            throw PQLTokenizeException(QueryTokeniserConstants::PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN +
+                                       std::string(1, next));
         }
     }
 
