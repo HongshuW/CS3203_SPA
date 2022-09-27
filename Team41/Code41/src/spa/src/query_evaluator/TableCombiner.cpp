@@ -48,19 +48,17 @@ namespace QE {
             for (auto dupHeaderPair: dupHeaders) {
                 int col1Idx = dupHeaderPair[FIRST_DUP_IDX];
                 int col2Idx = dupHeaderPair[SECOND_DUP_IDX];
-                if (row[col1Idx] != row[col2Idx]) {
-                    isAdding = false;
-                }
+                if (row[col1Idx] != row[col2Idx]) isAdding = false;
+            }
 
+            if (!isAdding) continue;
+            vector<string> rowToInsert = vector<string>();
+            for (int i = 0; i < row.size(); ++i) {
+                if (colInxToRemove.count(i)) continue;
+                rowToInsert.push_back(row[i]);
             }
-            if (isAdding) {
-                vector<string> rowToInsert = vector<string>();
-                for (int i = 0; i < row.size(); ++i) {
-                    if (colInxToRemove.count(i)) continue;
-                    rowToInsert.push_back(row[i]);
-                }
-                joinResultTable.rows.push_back(rowToInsert);
-            }
+            joinResultTable.rows.push_back(rowToInsert);
+
         }
         return joinResultTable;
     }
@@ -75,7 +73,7 @@ namespace QE {
         }
         for (int i = 0; i < h2.size(); ++i) {
             if (h1Map.find(h2[i]) != h1Map.end()) {
-                //find dup
+                //found dup
                 ans.push_back(vector<int>{h1Map.at(h2[i]), i + h1Offset});
             }
         }
