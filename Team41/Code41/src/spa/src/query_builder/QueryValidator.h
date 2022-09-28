@@ -21,18 +21,24 @@ namespace QB {
         void validateSelectClause();
         void validateSynonymDeclaredSelectClause() const;
         void validateDesignEntityAttrNamePairSelectClause() const;
-        void validateSynonymDeclaredSuchThatClause() const;
+        void validateSynonymDeclaredSuchThatClause();
+        void checkSynonymDeclared(Synonym& synonym,
+                                  const shared_ptr<vector<Declaration>>& declarations);
         void validateArgRefTypeSuchThatClause() const;
         void validateUsesModifiesNoUnderscoreForFirstArg() const;
-        void validateSynonymTypeSuchThatClause() const;
+        void validateSynonymTypeSuchThatClause();
         void validateSuchThatClause();
-        void validateSynonymDeclaredPatternClause() const;
+        void checkCorrectDesignEntity(Synonym synonym, unordered_set<DesignEntity> validSynonymTypes,
+                                      const shared_ptr<vector<Declaration>>& declarations);
+        void validateSynonymDeclaredPatternClause();
         void validateArgRefTypePatternClause() const;
-        void validateArg1DesignEntityPatternClause() const;
         void validateArg2DesignEntityPatternClause() const;
         void validatePatternClause();
-        void validateDesignEntityAttrNamePairWithClause() const;
-        void validateSameWithRefWithClause() const;
+        void checkDesignEntityAttrNamePair(WithRef& withRef,
+                                           const shared_ptr<vector<Declaration>>& declarations);
+        void validateDesignEntityAttrNamePairWithClause();
+        void validateSameWithRefWithClause();
+        WithComparingType getWithComparingType(WithRef withRef, const shared_ptr<WithClause>& withClause);
         void validateWithClause();
 
     public:
