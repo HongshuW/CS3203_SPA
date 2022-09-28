@@ -30,6 +30,11 @@ void ExprStringTokenizer::processAlnum() {
     }
     exprTokens.push_back(curr);
 }
+
+bool ExprStringTokenizer::isNotFirstAndLastChar(int index) {
+    return index > 0 && index < exprTokens.size() - 1;
+}
+
 vector<string> ExprStringTokenizer::tokenize() {
     char next;
 
@@ -56,7 +61,9 @@ vector<string> ExprStringTokenizer::tokenize() {
     for (int i = 0; i < exprTokens.size(); i++) {
         if (Utils::isValidName(exprTokens[i])) continue;
         if (Utils::isValidNumber(exprTokens[i])) continue;
-        if (Utils::isMathOperators(exprTokens[i])) continue;
+        //! To handle this case "+temp", syntax error should be thrown
+        //! The first and the last string in the exprTokens cannot be a math operator
+        if (Utils::isMathOperators(exprTokens[i]) && isNotFirstAndLastChar(i)) continue;
         if (Utils::isBracket(exprTokens[i])) continue;
         throw PQLParseException("Unexpected token found in expression: " + exprTokens[i]);
     }

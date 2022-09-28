@@ -9,6 +9,7 @@
 #include <string>
 #include "utils/Utils.h"
 #include "query_builder/exceptions/Exceptions.h"
+#include "query_builder/constants/QueryTokeniserConstants.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ namespace QB {
         char peek();
         char pop();
         void processAlnum();
+        bool isNotFirstAndLastChar(int index);
     public:
         vector<string> exprTokens;
         ExprStringTokenizer(string exprStr);

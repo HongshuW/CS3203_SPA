@@ -14,6 +14,7 @@ namespace QB {
         static const string STMT;
         static const string EMPTY_STR;
         static const string DOUBLE_QUOTE;
+        static const string WHITE_SPACE;
 
 
         static const char HASH;
