@@ -231,7 +231,7 @@ namespace DE {
     }
 
     void EntityExtractor::extractVariablesFromCallNodesInProceduresToList(shared_ptr<CallNode> callNode, 
-        unordered_map<string, unordered_set<string>> mappedProceduresToModifiedVar, 
+        unordered_map<string, unordered_set<string>> mappedProceduresToVar, 
         unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, 
         unordered_set<string>& uniqueVarList) {
 
@@ -241,7 +241,7 @@ namespace DE {
             auto callNodeEntry = queue.front();
             queue.pop();
             auto usedVarList =
-                mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
+                mappedProceduresToVar.at(callNodeEntry->procedureName);
             uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
 
             if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {

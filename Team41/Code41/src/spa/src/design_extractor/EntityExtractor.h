@@ -25,7 +25,7 @@ namespace DE {
         static unordered_set<string> extractDesignEntity(shared_ptr<StmtNode> node, QB::DesignEntity designEntityType);
         static unordered_map<string, vector<shared_ptr<CallNode>>> extractCallNodesFromProcedures(shared_ptr<AST::ProgramNode> rootPtr);
         static void extractVariablesFromCallNodesInProceduresToList (shared_ptr<CallNode> callNode,
-            unordered_map<string, unordered_set<string>> mappedProceduresToModifiedVar,
+            unordered_map<string, unordered_set<string>> mappedProceduresToVar,
             unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures,
             unordered_set<string>& uniqueVarList);
     };

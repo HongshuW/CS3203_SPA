@@ -13,9 +13,6 @@ class CallsExtractor {
 public:
     static shared_ptr<list<vector<string>>> extractCalls(shared_ptr<ProgramNode> programNode);
     static shared_ptr<list<vector<string>>> extractCallsStar(shared_ptr<ProgramNode> programNode);
-private:
-    static unordered_map<string, vector<shared_ptr<CallNode>>>
-            getCallNodesFromProcedure(shared_ptr<ProgramNode> programNode);
 };
 
 
