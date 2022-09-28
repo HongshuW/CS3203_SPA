@@ -23,24 +23,60 @@ TEST_CASE("Test PKBStorage") {
         REQUIRE(pkbStorage->getVariables()->rows[initialSize + 1][0] == "dummyVarB");
     }
 
-    SECTION("Save statements") {
+    SECTION("Save statements, UsesS, ModifiesS -> check statementTable") {
+        // save statements
         list<vector<string>> statements;
         vector<string> s1{"1", "while"};
         vector<string> s2{"2", "read"};
+        vector<string> s3{"3", "print"};
         statements.push_back(s1);
         statements.push_back(s2);
+        statements.push_back(s3);
         int initialSize = pkbStorage->getStatements()->rows.size();
         pkbStorage->saveStatements(statements);
+        shared_ptr<Table> stmtsTable = pkbStorage->getStatements();
 
         // check header is set automatically
-        REQUIRE(pkbStorage->getStatements()->header[0] == "$statement_number");
-        REQUIRE(pkbStorage->getStatements()->header[1] == "$statement_type");
+        REQUIRE(stmtsTable->header[0] == "$statement_number");
+        REQUIRE(stmtsTable->header[1] == "$statement_type");
 
         // check statements are added
-        REQUIRE(pkbStorage->getStatements()->rows[initialSize][0] == "1");
-        REQUIRE(pkbStorage->getStatements()->rows[initialSize][1] == "while");
-        REQUIRE(pkbStorage->getStatements()->rows[initialSize + 1][0] == "2");
-        REQUIRE(pkbStorage->getStatements()->rows[initialSize + 1][1] == "read");
+        REQUIRE(stmtsTable->rows[initialSize][0] == "1");
+        REQUIRE(stmtsTable->rows[initialSize][1] == "while");
+        REQUIRE(stmtsTable->rows[initialSize + 1][0] == "2");
+        REQUIRE(stmtsTable->rows[initialSize + 1][1] == "read");
+
+        // save UsesS
+        vector<string> u1 = vector<string>{"1", "used_in_while"};
+        vector<string> u2 = vector<string>{"3", "printed"};
+        initialSize = pkbStorage->getPrintVariableNames()->rows.size();
+        pkbStorage->saveUsesS(u1);
+        pkbStorage->saveUsesS(u2);
+        shared_ptr<Table> printedVars = pkbStorage->getPrintVariableNames();
+
+        // check header is set automatically
+        REQUIRE(printedVars->header[0] == "$statement_number");
+        REQUIRE(printedVars->header[1] == "$variable_name");
+
+        // check printed variables are added
+        REQUIRE(printedVars->rows[initialSize][0] == "3");
+        REQUIRE(printedVars->rows[initialSize][1] == "printed");
+
+        // save ModifiesS
+        vector<string> m1 = vector<string>{"1", "modified_in_while"};
+        vector<string> m2 = vector<string>{"2", "read"};
+        initialSize = pkbStorage->getReadVariableNames()->rows.size();
+        pkbStorage->saveModifiesS(m1);
+        pkbStorage->saveModifiesS(m2);
+        shared_ptr<Table> readVars = pkbStorage->getReadVariableNames();
+
+        // check header is set automatically
+        REQUIRE(readVars->header[0] == "$statement_number");
+        REQUIRE(readVars->header[1] == "$variable_name");
+
+        // check read variables are added
+        REQUIRE(readVars->rows[initialSize][0] == "2");
+        REQUIRE(readVars->rows[initialSize][1] == "read");
     }
 
     SECTION("Save parent") {
@@ -59,6 +95,39 @@ TEST_CASE("Test PKBStorage") {
         REQUIRE(pkbStorage->getParent()->rows[initialSize][1] == "2");
         REQUIRE(pkbStorage->getParent()->rows[initialSize + 1][0] == "2");
         REQUIRE(pkbStorage->getParent()->rows[initialSize + 1][1] == "3");
+    }
+
+    SECTION("Save calls") {
+        int initialSize = pkbStorage->getCalls()->rows.size();
+        vector<string> s1{"p1", "p2", "1"};
+        vector<string> s2{"p1", "p3", "2"};
+        vector<string> s3{"p2", "p3", "10"};
+        pkbStorage->saveCalls(s1);
+        pkbStorage->saveCalls(s2);
+        pkbStorage->saveCalls(s3);
+
+        shared_ptr<Table> procedures = pkbStorage->getCalls();
+        shared_ptr<Table> stmtNoProcMap = pkbStorage->getCallsProcedureNames();
+
+        // check header is set automatically
+        REQUIRE(procedures->header[0] == "$calling_procedure");
+        REQUIRE(procedures->header[1] == "$called_procedure");
+        REQUIRE(stmtNoProcMap->header[0] == "$statement_number");
+        REQUIRE(stmtNoProcMap->header[1] == "$called_procedure");
+
+        // check relationships are added
+        REQUIRE(procedures->rows[initialSize][0] == "p1");
+        REQUIRE(procedures->rows[initialSize][1] == "p2");
+        REQUIRE(procedures->rows[initialSize + 1][0] == "p1");
+        REQUIRE(procedures->rows[initialSize + 1][1] == "p3");
+        REQUIRE(procedures->rows[initialSize + 2][0] == "p2");
+        REQUIRE(procedures->rows[initialSize + 2][1] == "p3");
+        REQUIRE(stmtNoProcMap->rows[initialSize][0] == "1");
+        REQUIRE(stmtNoProcMap->rows[initialSize][1] == "p2");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 1][0] == "2");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 1][1] == "p3");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 2][0] == "10");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 2][1] == "p3");
     }
 
     // Testing of assign patterns

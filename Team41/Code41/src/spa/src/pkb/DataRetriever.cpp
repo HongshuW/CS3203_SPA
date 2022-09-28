@@ -77,6 +77,18 @@ Table DataRetriever::getTableByCondExprPattern(DesignEntity designEntity) {
     }
 }
 
+Table DataRetriever::getCallsProcedureNames() {
+    return *pkbStorage->getCallsProcedureNames();
+}
+
+Table DataRetriever::getPrintVariableNames() {
+    return *pkbStorage->getPrintVariableNames();
+}
+
+Table DataRetriever::getReadVariableNames() {
+    return *pkbStorage->getReadVariableNames();
+}
+
 DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {
     string stmtNumberString = to_string(stmtNumber);
     string type = pkbStorage->getStmtType(stmtNumberString);

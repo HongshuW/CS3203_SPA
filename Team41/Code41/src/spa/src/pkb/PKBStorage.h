@@ -53,7 +53,9 @@ public:
 
     // getters of entities
     ProcedureTable * getProcedures();
-    StatementTable * getStatements();
+    shared_ptr<Table> getStatements();
+    shared_ptr<Table> getPrintVariableNames();
+    shared_ptr<Table> getReadVariableNames();
     VariableTable * getVariables();
     ConstantTable * getConstants();
     string getStmtType(string stmtNumber);
@@ -72,8 +74,9 @@ public:
     UsesTable * getUsesP();
     ModifiesTable * getModifiesS();
     ModifiesTable * getModifiesP();
-    CallsTable * getCalls();
+    shared_ptr<Table> getCalls();
     CallsTable * getCallsT();
+    shared_ptr<Table> getCallsProcedureNames();
     NextTable * getNext();
     NextTable * getNextT();
     AffectsTable * getAffects();

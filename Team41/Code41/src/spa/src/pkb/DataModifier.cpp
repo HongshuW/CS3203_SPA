@@ -92,7 +92,7 @@ void DataModifier::saveUsesS(vector<string> usesSRelation) {
 /**
  * Saves a UsesP relationship to the pkb.
  *
- * @param usesPRelation vector<string>{userStatement, usedEntity}
+ * @param usesPRelation vector<string>{userProcedure, usedEntity}
  */
 void DataModifier::saveUsesP(vector<string> usesPRelation) {
     pkbStorage->saveUsesP(usesPRelation);
@@ -110,7 +110,7 @@ void DataModifier::saveModifiesS(vector<string> modifiesSRelation) {
 /**
  * Saves a ModifiesP relationship to the pkb.
  *
- * @param modifiesPRelation vector<string>{modifierStatement, modifiedEntity}
+ * @param modifiesPRelation vector<string>{modifierProcedure, modifiedEntity}
  */
 void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
     pkbStorage->saveModifiesP(modifiesPRelation);
@@ -119,7 +119,7 @@ void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
 /**
  * Saves a Calls relationship to the pkb.
  *
- * @param callsRelation vector<string>{callingProcedure, calledProcedure}
+ * @param callsRelation vector<string>{callingProcedure, calledProcedure, statementNumber}
  */
 void DataModifier::saveCalls(vector<string> callsRelation) {
     pkbStorage->saveCalls(callsRelation);

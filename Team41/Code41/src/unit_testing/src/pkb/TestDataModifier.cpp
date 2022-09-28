@@ -37,7 +37,7 @@ TEST_CASE("Test Data Modifier") {
 
         int initialSize = pkbStorage->getStatements()->rows.size();
         dataModifier.saveStatements(statements);
-        StatementTable * statementTable = pkbStorage->getStatements();
+        shared_ptr<Table> statementTable = pkbStorage->getStatements();
 
         // check header is set automatically
         REQUIRE(statementTable->header[0] == "$statement_number");
@@ -67,6 +67,30 @@ TEST_CASE("Test Data Modifier") {
         REQUIRE(parentTTable->rows[1][1] == "3");
         REQUIRE(parentTTable->rows[2][0] == "2");
         REQUIRE(parentTTable->rows[2][1] == "3");
+    }
+
+    SECTION ("Save calls relation") {
+        int initialSize = pkbStorage->getCalls()->rows.size();
+        dataModifier.saveCalls(vector<string>{"proc1", "proc2", "5"});
+        dataModifier.saveCalls(vector<string>{"proc2", "proc3", "12"});
+        shared_ptr<Table> procedures = pkbStorage->getCalls();
+        shared_ptr<Table> stmtNoProcMap = pkbStorage->getCallsProcedureNames();
+
+        // check header is set automatically
+        REQUIRE(procedures->header[0] == "$calling_procedure");
+        REQUIRE(procedures->header[1] == "$called_procedure");
+        REQUIRE(stmtNoProcMap->header[0] == "$statement_number");
+        REQUIRE(stmtNoProcMap->header[1] == "$called_procedure");
+
+        // check relationships are added
+        REQUIRE(procedures->rows[initialSize][0] == "proc1");
+        REQUIRE(procedures->rows[initialSize][1] == "proc2");
+        REQUIRE(procedures->rows[initialSize + 1][0] == "proc2");
+        REQUIRE(procedures->rows[initialSize + 1][1] == "proc3");
+        REQUIRE(stmtNoProcMap->rows[initialSize][0] == "5");
+        REQUIRE(stmtNoProcMap->rows[initialSize][1] == "proc2");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 1][0] == "12");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 1][1] == "proc3");
     }
 
     SECTION ("Save assign pattern") {
