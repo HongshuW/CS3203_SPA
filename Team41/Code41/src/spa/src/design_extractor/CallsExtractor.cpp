@@ -59,7 +59,7 @@ shared_ptr<list<vector<string>>> CallsExtractor::extractCallsStar(shared_ptr<Pro
 }
 
 void CallsExtractor::extractCallStmtRelationshipsToOutput(int stmtNo, shared_ptr<CallNode> callNode, 
-    unordered_map<string, unordered_set<string>> mappedProceduresToModifiedVar, 
+    unordered_map<string, unordered_set<string>> mappedProceduresToVar,
     unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, 
     shared_ptr<list<vector<string>>> output) {
 
@@ -68,7 +68,7 @@ void CallsExtractor::extractCallStmtRelationshipsToOutput(int stmtNo, shared_ptr
     while (!queue.empty()) {
         auto callNodeEntry = queue.front();
         queue.pop();
-        auto varList = mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
+        auto varList = mappedProceduresToVar.at(callNodeEntry->procedureName);
         for (auto var : varList) {
             vector<string> modifiesCallEntry;
             modifiesCallEntry.push_back(to_string(stmtNo));
