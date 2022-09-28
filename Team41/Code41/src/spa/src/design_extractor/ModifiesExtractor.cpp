@@ -142,7 +142,7 @@ shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesS(shared_ptr<
 void ModifiesExtractor::insertCallsForModifiesS(shared_ptr<ProgramNode> rootPtr,
                                                 shared_ptr<list<vector<std::string>>> output) {
     auto mappedProceduresToModifiedVar = mapProceduresToModifiedVariables(rootPtr);
-    auto mappedCallNodesToProcedures = getCallNodesFromProcedures(rootPtr);
+    auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(rootPtr);
     shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
     for (auto pair: mappedCallNodesToProcedures){
         vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;

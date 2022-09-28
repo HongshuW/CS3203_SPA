@@ -111,7 +111,7 @@ namespace DE {
 
     void UsesExtractor::insertCallsForUseS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans) {
         auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
-        auto mappedCallNodesToProcedures = getCallNodesFromProcedure(rootPtr);
+        auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(rootPtr);
         shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
 
         for (auto pair: mappedCallNodesToProcedures){
