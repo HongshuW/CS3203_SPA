@@ -195,13 +195,11 @@ shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesP(shared_ptr<
                     queue.pop();
                     auto usedVarList =
                             mappedProceduresToModifiedVar.at(callNodeEntry -> procedureName);
-                    for (auto v: usedVarList) {
-                        uniqueVarList.insert(v);
-                    }
+                    uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
 
                     if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
                         auto otherCallNodes =
-                                mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
+                                mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);  
                         for (auto n: otherCallNodes) {
                             queue.push(n);
                         }
