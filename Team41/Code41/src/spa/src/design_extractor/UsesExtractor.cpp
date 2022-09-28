@@ -150,9 +150,7 @@ namespace DE {
             unordered_set<string> uniqueVarList;
             string procedureName = pair.first;
             auto currentUsedVarList = pair.second;
-            for (auto v: currentUsedVarList) {
-                uniqueVarList.insert(v);
-            }
+            uniqueVarList.insert(currentUsedVarList.begin(), currentUsedVarList.end());
 
             // if the procedures has call nodes, handle them
             if (mappedCallNodesToProcedures.count(procedureName) != 0) {
@@ -165,10 +163,8 @@ namespace DE {
                         queue.pop();
                         auto usedVarList =
                                 mappedProceduresToUsedVar.at(callNodeEntry -> procedureName);
-                        for (auto v: usedVarList) {
-                            uniqueVarList.insert(v);
-                        }
-
+                        uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
+                       
                         if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
                             auto otherCallNodes =
                                     mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
