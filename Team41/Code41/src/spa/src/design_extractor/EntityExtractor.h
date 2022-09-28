@@ -23,6 +23,7 @@ namespace DE {
         static  unordered_set<string> getVariablesFromExprNode(shared_ptr<ExprNode> exprNode);
         static  unordered_set<string> getConstantsFromExprNode(shared_ptr<ExprNode> exprNode);
         static unordered_set<string> extractDesignEntity(shared_ptr<StmtNode> node, QB::DesignEntity designEntityType);
+        static unordered_map<string, vector<shared_ptr<CallNode>>> extractCallNodesFromProcedures(shared_ptr<AST::ProgramNode> rootPtr);
     };
 } // DE
 
