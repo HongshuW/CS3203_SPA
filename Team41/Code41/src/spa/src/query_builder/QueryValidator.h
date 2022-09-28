@@ -17,6 +17,7 @@ using namespace std;
 namespace QB {
     class QueryValidator {
     private:
+        shared_ptr<Query> query;
         void validateNoDuplicateDeclarations() const;
         void validateSelectClause();
         void validateSynonymDeclaredSelectClause() const;
@@ -28,7 +29,7 @@ namespace QB {
         void validateUsesModifiesNoUnderscoreForFirstArg() const;
         void validateSynonymTypeSuchThatClause();
         void validateSuchThatClause();
-        void checkCorrectDesignEntity(Synonym synonym, unordered_set<DesignEntity> validSynonymTypes,
+        void checkCorrectDesignEntity(Synonym synonym, const unordered_set<DesignEntity>& validSynonymTypes,
                                       const shared_ptr<vector<Declaration>>& declarations);
         void validateSynonymDeclaredPatternClause();
         void validateArgRefTypePatternClause() const;
@@ -43,7 +44,6 @@ namespace QB {
 
     public:
         //! Validate the Query object, throw Semantic Error if encounter
-        shared_ptr<Query> query;
         explicit QueryValidator(shared_ptr<Query> query);
         void validateQuery();
     };

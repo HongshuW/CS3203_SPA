@@ -10,9 +10,9 @@
 
 using namespace QB;
 
-shared_ptr<Query> QueryBuilder::buildPQLQuery(std::string& queryStr) {
+shared_ptr<Query> QueryBuilder::buildPQLQuery(string& queryStr) {
     QueryTokenizer tokenizer = QueryTokenizer(queryStr);
-    std::vector<std::string> tokens = tokenizer.tokenize();
+    vector<string> tokens = tokenizer.tokenize();
     QueryParser parser = QueryParser(tokens);
     shared_ptr<Query> queryPtr = parser.parse();
     QueryValidator validator = QueryValidator(queryPtr);

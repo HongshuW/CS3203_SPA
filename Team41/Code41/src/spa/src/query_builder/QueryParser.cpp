@@ -96,13 +96,11 @@ Elem QueryParser::parseTupleSelectClause() {
     string synonymStr = pop();
     Synonym synonym = Synonym(synonymStr);
     if (match(QueryParserConstants::FULL_STOP)) {
-        //! AttrRef
         string attrNameStr = pop();
         AttrName attrName = AttrRef::getAttrNameFromStr(attrNameStr);
         AttrRef attrRef = AttrRef(synonym, attrName);
         return attrRef;
     } else {
-        //! Synonym
         return synonym;
     }
 }
@@ -228,25 +226,33 @@ void QueryParser::parsePatternClause() {
     expect(QueryParserConstants::LEFT_BRACKET);
     shared_ptr<PatternClause> patternClause;
     DesignEntity de = declaration->getDesignEntity();
-    if (de == DesignEntity::ASSIGN) {
-        Ref arg2 = parseRef();
-        expect(QueryParserConstants::COMMA);
-        ExpressionSpec arg3 = parseExpressionSpec();
-        patternClause = make_shared<PatternClause>(DesignEntity::ASSIGN, arg1, arg2, arg3);
-    } else if (de == DesignEntity::IF) {
-        Ref arg2 = parseRef();
-        expect(QueryParserConstants::COMMA);
-        expect(QueryParserConstants::UNDERSCORE);
-        expect(QueryParserConstants::COMMA);
-        expect(QueryParserConstants::UNDERSCORE);
-        patternClause = make_shared<PatternClause>(DesignEntity::IF, arg1, arg2);
-    } else if (de == DesignEntity::WHILE) {
-        Ref arg2 = parseRef();
-        expect(QueryParserConstants::COMMA);
-        expect(QueryParserConstants::UNDERSCORE);
-        patternClause = make_shared<PatternClause>(DesignEntity::WHILE, arg1, arg2);
-    } else {
-        throw PQLParseException(getDesignEntityString(de) + QueryParserConstants::PQL_PARSE_EXCEPTION_NOT_SUPPORTED_PATTERN);
+    switch (de) {
+        case DesignEntity::ASSIGN: {
+            Ref arg2 = parseRef();
+            expect(QueryParserConstants::COMMA);
+            ExpressionSpec arg3 = parseExpressionSpec();
+            patternClause = make_shared<PatternClause>(DesignEntity::ASSIGN, arg1, arg2, arg3);
+            break;
+        }
+        case DesignEntity::IF: {
+            Ref arg2 = parseRef();
+            expect(QueryParserConstants::COMMA);
+            expect(QueryParserConstants::UNDERSCORE);
+            expect(QueryParserConstants::COMMA);
+            expect(QueryParserConstants::UNDERSCORE);
+            patternClause = make_shared<PatternClause>(DesignEntity::IF, arg1, arg2);
+            break;
+        }
+        case DesignEntity::WHILE: {
+            Ref arg2 = parseRef();
+            expect(QueryParserConstants::COMMA);
+            expect(QueryParserConstants::UNDERSCORE);
+            patternClause = make_shared<PatternClause>(DesignEntity::WHILE, arg1, arg2);
+            break;
+        }
+        default:
+            throw PQLParseException(getDesignEntityString(de) +
+            QueryParserConstants::PQL_PARSE_EXCEPTION_NOT_SUPPORTED_PATTERN);
     }
     expect(QueryParserConstants::RIGHT_BRACKET);
     query->patternClauses->push_back(patternClause);
@@ -317,7 +323,6 @@ shared_ptr<Query> QueryParser::parse() {
             if (parseSuchThat()) continue;
             if (parsePattern()) continue;
             if (parseWith()) continue;
-            //! Throw syntax error accordingly
             string errorMessage = ErrorMessageFormatter::formatErrorMessage(
                     QueryParserConstants::PQL_PARSE_EXCEPTION_EXPECT_SUCH_THAT_OR_PATTERN, peek());
             throw PQLParseException(errorMessage);

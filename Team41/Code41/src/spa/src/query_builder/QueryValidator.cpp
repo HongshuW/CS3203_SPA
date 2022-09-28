@@ -140,7 +140,7 @@ void QueryValidator::validateUsesModifiesNoUnderscoreForFirstArg() const {
     }
 }
 
-void QueryValidator::checkCorrectDesignEntity(Synonym synonym, unordered_set<DesignEntity> validSynonymTypes,
+void QueryValidator::checkCorrectDesignEntity(Synonym synonym, const unordered_set<DesignEntity>& validSynonymTypes,
                                               const shared_ptr<vector<Declaration>>& declarations) {
     auto declaration = Declaration::findDeclaration(synonym, declarations);
     auto designEntity = declaration->getDesignEntity();

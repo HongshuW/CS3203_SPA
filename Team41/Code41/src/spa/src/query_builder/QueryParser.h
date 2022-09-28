@@ -44,7 +44,6 @@ namespace QB {
     public:
         //! Parse tokens to Query object, throw Syntax Error if encounter
         explicit QueryParser(std::vector<std::string> tokens);
-
         shared_ptr<Query> parse();
     };
 }
