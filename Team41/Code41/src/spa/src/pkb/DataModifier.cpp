@@ -119,7 +119,7 @@ void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
 /**
  * Saves a Calls relationship to the pkb.
  *
- * @param callsRelation vector<string>{callingProcedure, calledProcedure}
+ * @param callsRelation vector<string>{callingProcedure, calledProcedure, statementNumber}
  */
 void DataModifier::saveCalls(vector<string> callsRelation) {
     pkbStorage->saveCalls(callsRelation);

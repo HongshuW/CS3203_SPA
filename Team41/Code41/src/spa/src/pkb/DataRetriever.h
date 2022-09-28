@@ -22,6 +22,7 @@ public:
     virtual Table getTableByRelationType(RelationType relationType);
     virtual Table getTableByExprPattern(ExpressionSpec expressionSpec);
     Table getTableByCondExprPattern(DesignEntity designEntity);
+    Table getCallsProcedureNames();
     virtual DesignEntity getDesignEntityOfStmt(int stmtNumber);
     unordered_set<string> getFollowingStatements(int followedStatement);
     unordered_set<string> getChildrenStatements(int parentStatement);

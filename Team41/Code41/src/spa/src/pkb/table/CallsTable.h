@@ -9,7 +9,12 @@
 
 class CallsTable : public RelationTable {
 public:
+    vector<string> mapHeader;
+    vector<vector<string>> stmtNoProcMap;
     explicit CallsTable();
+    void appendRowToSubtables(vector<string> row);
+    shared_ptr<Table> getCallsProcedures();
+    shared_ptr<Table> getStmtNoProcMap();
 };
 
 

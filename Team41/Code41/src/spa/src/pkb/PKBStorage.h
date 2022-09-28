@@ -72,8 +72,9 @@ public:
     UsesTable * getUsesP();
     ModifiesTable * getModifiesS();
     ModifiesTable * getModifiesP();
-    CallsTable * getCalls();
+    shared_ptr<Table> getCalls();
     CallsTable * getCallsT();
+    shared_ptr<Table> getCallsProcedureNames();
     NextTable * getNext();
     NextTable * getNextT();
     AffectsTable * getAffects();
