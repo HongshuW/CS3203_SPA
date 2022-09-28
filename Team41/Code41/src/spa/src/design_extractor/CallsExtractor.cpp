@@ -70,10 +70,10 @@ void CallsExtractor::extractCallStmtRelationshipsToOutput(int stmtNo, shared_ptr
         queue.pop();
         auto varList = mappedProceduresToVar.at(callNodeEntry->procedureName);
         for (auto var : varList) {
-            vector<string> modifiesCallEntry;
-            modifiesCallEntry.push_back(to_string(stmtNo));
-            modifiesCallEntry.push_back(var);
-            output->push_back(modifiesCallEntry);
+            vector<string> relationshipCallEntry;
+            relationshipCallEntry.push_back(to_string(stmtNo));
+            relationshipCallEntry.push_back(var);
+            output->push_back(relationshipCallEntry);
         }
 
         if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
