@@ -37,7 +37,7 @@ TEST_CASE("Test Data Modifier") {
 
         int initialSize = pkbStorage->getStatements()->rows.size();
         dataModifier.saveStatements(statements);
-        StatementTable * statementTable = pkbStorage->getStatements();
+        shared_ptr<Table> statementTable = pkbStorage->getStatements();
 
         // check header is set automatically
         REQUIRE(statementTable->header[0] == "$statement_number");

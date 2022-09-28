@@ -23,6 +23,8 @@ public:
     virtual Table getTableByExprPattern(ExpressionSpec expressionSpec);
     Table getTableByCondExprPattern(DesignEntity designEntity);
     Table getCallsProcedureNames();
+    Table getPrintVariableNames();
+    Table getReadVariableNames();
     virtual DesignEntity getDesignEntityOfStmt(int stmtNumber);
     unordered_set<string> getFollowingStatements(int followedStatement);
     unordered_set<string> getChildrenStatements(int parentStatement);

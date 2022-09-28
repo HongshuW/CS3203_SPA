@@ -8,6 +8,8 @@
 
 StatementTable::StatementTable() {
     header = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::STATEMENT_TABLE_COL2_NAME};
+    printedVarsHeader = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::VARIABLE_TABLE_COL1_NAME};
+    readVarsHeader = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::VARIABLE_TABLE_COL1_NAME};
 }
 
 string StatementTable::getStatementType(string stmtNumber) {
@@ -16,4 +18,33 @@ string StatementTable::getStatementType(string stmtNumber) {
         throw new KeyNotFoundException(header[0], stmtNumber);
     }
     return row[1];
+}
+
+shared_ptr<Table> StatementTable::getStatements() {
+    shared_ptr<Table> table = make_shared<Table>(Table());
+    table->header = header;
+    table->rows = rows;
+    return table;
+}
+
+shared_ptr<Table> StatementTable::getPrintedVariables() {
+    shared_ptr<Table> table = make_shared<Table>(Table());
+    table->header = printedVarsHeader;
+    table->rows = printedVars;
+    return table;
+}
+
+shared_ptr<Table> StatementTable::getReadVariables() {
+    shared_ptr<Table> table = make_shared<Table>(Table());
+    table->header = readVarsHeader;
+    table->rows = readVars;
+    return table;
+}
+
+void StatementTable::addPrintedVar(vector<string> printStmtVarPair) {
+    printedVars.push_back(printStmtVarPair);
+}
+
+void StatementTable::addReadVar(vector<string> readStmtVarPair) {
+    readVars.push_back(readStmtVarPair);
 }

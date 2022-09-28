@@ -3,6 +3,7 @@
 //
 
 #include "PKBStorage.h"
+#include "query_builder/commons/DesignEntity.h"
 
 const string PKBStorage:: PROCEDURE_TABLE_COL1_NAME = "$procedure_name";
 const string PKBStorage:: STATEMENT_TABLE_COL1_NAME = "$statement_number";
@@ -55,8 +56,16 @@ ProcedureTable * PKBStorage::getProcedures() {
     return &procedureTable;
 }
 
-StatementTable * PKBStorage::getStatements() {
-    return &statementTable;
+shared_ptr<Table> PKBStorage::getStatements() {
+    return statementTable.getStatements();
+}
+
+shared_ptr<Table> PKBStorage::getPrintVariableNames() {
+    return statementTable.getPrintedVariables();
+}
+
+shared_ptr<Table> PKBStorage::getReadVariableNames() {
+    return statementTable.getReadVariables();
 }
 
 VariableTable * PKBStorage::getVariables() {
@@ -176,7 +185,17 @@ void PKBStorage::saveParentT(vector<string> parentT) {
 }
 
 void PKBStorage::saveUsesS(vector<string> usesS) {
+    // append row
     usesSTable.appendRow(usesS);
+    // if the statement is print, save the printed variable to the statement table
+    string stmtNo = usesS[0];
+    string varName = usesS[1];
+    string statementType = statementTable.getStatementType(stmtNo);
+    string printTypeString = getDesignEntityString(DesignEntity::PRINT);
+    if (statementType == printTypeString) {
+        vector<string> printStmtVarPair = vector<string>{stmtNo, varName};
+        statementTable.addPrintedVar(printStmtVarPair);
+    }
 }
 
 void PKBStorage::saveUsesP(vector<string> usesP) {
@@ -184,7 +203,17 @@ void PKBStorage::saveUsesP(vector<string> usesP) {
 }
 
 void PKBStorage::saveModifiesS(vector<string> modifiesS) {
+    // append row
     modifiesSTable.appendRow(modifiesS);
+    // if the statement is read, save the read variable to the statement table
+    string stmtNo = modifiesS[0];
+    string varName = modifiesS[1];
+    string statementType = statementTable.getStatementType(stmtNo);
+    string readTypeString = getDesignEntityString(DesignEntity::READ);
+    if (statementType == readTypeString) {
+        vector<string> readStmtVarPair = vector<string>{stmtNo, varName};
+        statementTable.addReadVar(readStmtVarPair);
+    }
 }
 
 void PKBStorage::saveModifiesP(vector<string> modifiesP) {
