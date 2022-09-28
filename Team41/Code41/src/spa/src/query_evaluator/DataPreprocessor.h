@@ -9,7 +9,7 @@
 #include "pkb/DataRetriever.h"
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/clauses/SuchThatClause.h"
-#include "query_builder/clauses/PatternClause.h"
+#include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_builder/clauses/WithClauses.h"
 
 using namespace std;

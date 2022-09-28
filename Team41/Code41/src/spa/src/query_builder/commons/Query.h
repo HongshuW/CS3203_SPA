@@ -10,7 +10,7 @@
 #include <vector>
 #include "query_builder/clauses/SuchThatClause.h"
 #include "query_builder/clauses/SelectClause.h"
-#include "query_builder/clauses/PatternClause.h"
+#include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_builder/clauses/WithClauses.h"
 #include "DesignEntity.h"
 #include "Synonym.h"

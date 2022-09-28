@@ -10,9 +10,14 @@
 #include "utils/ExprNodeParser.h"
 #include "utils/Utils.h"
 #include "query_builder/commons/ExprStringTokenizer.h"
+#include "query_builder/commons/ExpressionSpec.h"
 #include "query_builder/clauses/WithClauses.h"
 #include "utils/ErrorMessageFormatter.h"
 #include "constants/QueryParserConstants.h"
+#include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
+
 using namespace std;
 
 namespace QB {
