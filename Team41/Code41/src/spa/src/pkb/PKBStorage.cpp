@@ -119,12 +119,16 @@ ModifiesTable * PKBStorage::getModifiesP() {
     return &modifiesPTable;
 }
 
-CallsTable * PKBStorage::getCalls() {
-    return &callsTable;
+shared_ptr<Table> PKBStorage::getCalls() {
+    return callsTable.getCallsProcedures();
 }
 
 CallsTable * PKBStorage::getCallsT() {
     return &callsTTable;
+}
+
+shared_ptr<Table> PKBStorage::getCallsProcedureNames() {
+    return callsTable.getStmtNoProcMap();
 }
 
 NextTable * PKBStorage::getNext() {
@@ -188,7 +192,7 @@ void PKBStorage::saveModifiesP(vector<string> modifiesP) {
 }
 
 void PKBStorage::saveCalls(vector<string> calls) {
-    callsTable.appendRow(calls);
+    callsTable.appendRowToSubtables(calls);
 }
 
 void PKBStorage::saveCallsT(vector<string> callsT) {

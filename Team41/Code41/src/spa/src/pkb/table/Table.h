@@ -22,7 +22,6 @@ public:
     vector<string> getColumnByName(string columnName);
     vector<string> getRowByPrimaryKey(string key);
     shared_ptr<unordered_set<string>> getValuesByKey(string key, int keyColumnNumber = 0, int valueColumnNumber = 1);
-    bool hasCol(string colName);
     int getColIdxByName(string colName);
 
     // setters
@@ -33,6 +32,7 @@ public:
 
     Table dropCol(int colIdx);
 
+    bool hasCol(string colName);
     bool isEqual(Table otherTable);
     bool isHeaderEmpty();
     bool isBodyEmpty();

@@ -87,9 +87,6 @@ void Table::renameHeader(vector<string> newHeader) {
     header = newHeader;
 }
 
-
-
-
 Table Table::dropCol(int colIdx) {
     if (colIdx >= this->header.size()) return Table();
     Table droppedTable = Table();

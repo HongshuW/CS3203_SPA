@@ -61,6 +61,39 @@ TEST_CASE("Test PKBStorage") {
         REQUIRE(pkbStorage->getParent()->rows[initialSize + 1][1] == "3");
     }
 
+    SECTION("Save calls") {
+        int initialSize = pkbStorage->getCalls()->rows.size();
+        vector<string> s1{"p1", "p2", "1"};
+        vector<string> s2{"p1", "p3", "2"};
+        vector<string> s3{"p2", "p3", "10"};
+        pkbStorage->saveCalls(s1);
+        pkbStorage->saveCalls(s2);
+        pkbStorage->saveCalls(s3);
+
+        shared_ptr<Table> procedures = pkbStorage->getCalls();
+        shared_ptr<Table> stmtNoProcMap = pkbStorage->getCallsProcedureNames();
+
+        // check header is set automatically
+        REQUIRE(procedures->header[0] == "$calling_procedure");
+        REQUIRE(procedures->header[1] == "$called_procedure");
+        REQUIRE(stmtNoProcMap->header[0] == "$statement_number");
+        REQUIRE(stmtNoProcMap->header[1] == "$called_procedure");
+
+        // check relationships are added
+        REQUIRE(procedures->rows[initialSize][0] == "p1");
+        REQUIRE(procedures->rows[initialSize][1] == "p2");
+        REQUIRE(procedures->rows[initialSize + 1][0] == "p1");
+        REQUIRE(procedures->rows[initialSize + 1][1] == "p3");
+        REQUIRE(procedures->rows[initialSize + 2][0] == "p2");
+        REQUIRE(procedures->rows[initialSize + 2][1] == "p3");
+        REQUIRE(stmtNoProcMap->rows[initialSize][0] == "1");
+        REQUIRE(stmtNoProcMap->rows[initialSize][1] == "p2");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 1][0] == "2");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 1][1] == "p3");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 2][0] == "10");
+        REQUIRE(stmtNoProcMap->rows[initialSize + 2][1] == "p3");
+    }
+
     // Testing of assign patterns
 
     PatternTable * patternTable = pkbStorage->getAssignPatterns();
