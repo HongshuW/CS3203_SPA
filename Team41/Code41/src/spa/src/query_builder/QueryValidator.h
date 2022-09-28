@@ -9,6 +9,7 @@
 
 #include "query_builder/commons/Query.h"
 #include "query_builder/commons/WithRef.h"
+#include "query_builder/constants/QueryValidatorConstants.h"
 #include <unordered_set>
 
 using namespace std;

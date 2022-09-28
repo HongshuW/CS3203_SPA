@@ -12,3 +12,5 @@ Ident::Ident(string identStr) : identStr(identStr) {
         throw PQLParseException("Invalid ident, unexpected token: " + identStr);
     }
 }
+
+bool Ident::operator==(const Ident& ident1) const { return identStr == ident1.identStr; }

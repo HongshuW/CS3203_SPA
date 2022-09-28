@@ -47,3 +47,7 @@ WithComparingType AttrRef::getWithComparingTypeFromAttrName(AttrName& attrName) 
     return attrNameToWithComparingType.at(attrName);
 }
 
+bool AttrRef::operator==(const AttrRef& attrRef1) const {
+    return synonym == attrRef1.synonym && attrName == attrRef1.attrName;
+}
+

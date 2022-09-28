@@ -17,7 +17,7 @@ void QueryValidator::validateNoDuplicateDeclarations() {
         auto synonym = declaration.getSynonym().synonym;
         if (synonymSet.count(synonym)) {
             throw PQLValidationException(
-                    "Found duplicated synonym for declaration: " + synonym);
+                    QueryValidatorConstants::PQL_VALIDATION_DUPLICATE_SYNONYM_DECLARATION + synonym);
         } else {
             synonymSet.insert(synonym);
         }
@@ -35,12 +35,14 @@ void QueryValidator::validateSynonymDeclaredSelectClause() {
 
         if (synonym && !Declaration::findDeclaration(*synonym, declarations)) {
             throw PQLValidationException(
-                    "Synonym: " + synonym->synonym + " is not defined for Select Clause");
+                    QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                    synonym->synonym);
         }
 
         if (attrRef && !Declaration::findDeclaration(attrRef->synonym, declarations)) {
             throw PQLValidationException(
-                    "AttrRef: " + attrRef->synonym.synonym + " is not defined for Select Clause");
+                    QueryValidatorConstants::PQL_VALIDATION_ATTRREF_NOT_DECLARED +
+                    attrRef->synonym.synonym);
         }
     }
 }
@@ -56,14 +58,16 @@ void QueryValidator::validateDesignEntityAttrNamePairSelectClause() {
         if (attrRef) {
             auto declaration = Declaration::findDeclaration(attrRef->synonym, declarations);
             if (!declaration) {
-                throw PQLValidationException(attrRef->synonym.synonym + " is not declared for Select Clause");
+                throw PQLValidationException(
+                        QueryValidatorConstants::PQL_VALIDATION_ATTRREF_NOT_DECLARED +
+                        attrRef->synonym.synonym);
             }
             unordered_set<AttrName> allowedAttrNameSet =
                     getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
             if (!allowedAttrNameSet.count(attrRef->attrName)) {
-                throw PQLValidationException(getDesignEntityString(declaration->getDesignEntity()) +
-                                             "." + AttrRef::getStrFromAttrName(attrRef->attrName) +
-                                             " is not valid for Select Clause");
+                throw PQLValidationException(
+                        QueryValidatorConstants::PQL_VALIDATION_ATTRREF_NOT_DECLARED +
+                        attrRef->synonym.synonym);
             }
         }
     }
@@ -86,12 +90,14 @@ void QueryValidator::validateSynonymDeclaredSuchThatClause() {
 
         if (arg1 && !Declaration::findDeclaration(*arg1, declarations)) {
             throw PQLValidationException(
-                    "Synonym: " + arg1->synonym + " is not defined for Such That Clause");
+                    QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                    arg1->synonym);
         }
 
         if (arg2 && !Declaration::findDeclaration(*arg2, declarations)) {
             throw PQLValidationException(
-                    "Synonym: " + arg2->synonym + " is not defined for Such That Clause");
+                    QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                    arg2->synonym);
         }
     }
 }
@@ -204,14 +210,16 @@ void QueryValidator::validateSynonymDeclaredPatternClause() {
         //! Validation for agr1
         if (!Declaration::findDeclaration(patternClause->arg1, declarations)) {
             throw PQLValidationException(
-                    "Synonym: " + patternClause->arg1.synonym + " is not defined for Pattern Clause first argument");
+                    QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                            patternClause->arg1.synonym);
         }
 
         //! Validation for agr2 (if arg2 is a Synonym)
         auto arg2 = get_if<Synonym>(&patternClause->arg2);
         if (arg2 && !Declaration::findDeclaration(*arg2, declarations)) {
             throw PQLValidationException(
-                    "Synonym: " + arg2->synonym + " is not defined for Pattern Clause second argument");
+                    QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                        arg2->synonym);
         }
     }
 }
@@ -284,7 +292,9 @@ void QueryValidator::validateDesignEntityAttrNamePairWithClause() {
         if (lhs) {
             auto declaration = Declaration::findDeclaration(lhs->synonym, declarations);
             if (!declaration) {
-                throw PQLValidationException(lhs->synonym.synonym + " is not declared for With Clause");
+                throw PQLValidationException(
+                        QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                                lhs->synonym.synonym);
             }
             unordered_set<AttrName> allowedAttrNameSet =
                     getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());

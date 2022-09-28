@@ -180,7 +180,7 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/constants/QueryParserConstants.h
         src/query_builder/commons/WithRef.h
         src/design_extractor/CallsExtractor.cpp
-        src/design_extractor/CallsExtractor.h src/query_builder/clauses/Clause.cpp src/query_builder/clauses/Clause.h src/query_evaluator/ClauseEvaluator.cpp src/query_evaluator/ClauseEvaluator.h)
+        src/design_extractor/CallsExtractor.h src/query_builder/clauses/Clause.cpp src/query_builder/clauses/Clause.h src/query_evaluator/ClauseEvaluator.cpp src/query_evaluator/ClauseEvaluator.h src/query_builder/commons/Underscore.cpp src/query_builder/constants/QueryValidatorConstants.cpp src/query_builder/constants/QueryValidatorConstants.h)
 
 
 

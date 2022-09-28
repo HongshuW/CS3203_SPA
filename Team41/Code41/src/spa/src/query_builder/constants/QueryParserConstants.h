@@ -4,6 +4,9 @@
 
 #ifndef SPA_QUERYPARSERCONSTANTS_H
 #define SPA_QUERYPARSERCONSTANTS_H
+
+#pragma once
+
 #include <string>
 
 using namespace std;
