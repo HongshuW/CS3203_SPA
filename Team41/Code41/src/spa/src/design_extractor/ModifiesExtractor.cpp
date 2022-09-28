@@ -140,34 +140,16 @@ shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesS(shared_ptr<
 }
 
 void ModifiesExtractor::insertCallsForModifiesS(shared_ptr<ProgramNode> rootPtr,
-                                                shared_ptr<list<vector<std::string>>> output) {
+                                                shared_ptr<list<vector<string>>> output) {
     auto mappedProceduresToModifiedVar = mapProceduresToModifiedVariables(rootPtr);
     auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(rootPtr);
     shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
     for (auto pair: mappedCallNodesToProcedures){
         vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
-        for(auto callNode: listOfCallNodes) {
+        for (auto callNode : listOfCallNodes) {
             int stmtNo = stmtNumbers->at(callNode);
-            queue<shared_ptr<CallNode>> queue;
-            queue.push(callNode);
-            while(!queue.empty()) {
-                auto callNodeEntry = queue.front();
-                queue.pop();
-                auto varList = mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
-                for (auto var: varList) {
-                    vector<string> modifiesCallEntry;
-                    modifiesCallEntry.push_back(to_string(stmtNo));
-                    modifiesCallEntry.push_back(var);
-                    output -> push_back(modifiesCallEntry);
-                }
-
-                if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-                    auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
-                    for (auto n: otherCallNodes) {
-                        queue.push(n);
-                    }
-                }
-            }
+            handleCallNodesInModifiesS(stmtNo, callNode, 
+                mappedProceduresToModifiedVar, mappedCallNodesToProcedures, output);
         }
     }
 }
@@ -187,24 +169,11 @@ shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesP(shared_ptr<
         // if the procedures has call nodes, handle them
         if (mappedCallNodesToProcedures.count(procedureName) != 0) {
             auto callNodes = mappedCallNodesToProcedures.at(procedureName);
-            for(auto node: callNodes) {
-                queue<shared_ptr<CallNode>> queue;
-                queue.push(node);
-                while(!queue.empty()) {
-                    auto callNodeEntry = queue.front();
-                    queue.pop();
-                    auto usedVarList =
-                            mappedProceduresToModifiedVar.at(callNodeEntry -> procedureName);
-                    uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
 
-                    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-                        auto otherCallNodes =
-                                mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);  
-                        for (auto n: otherCallNodes) {
-                            queue.push(n);
-                        }
-                    }
-                }
+            for (auto node : callNodes) {
+                handleCallNodesInModifiesP(node,
+                    mappedProceduresToModifiedVar,
+                    mappedCallNodesToProcedures, uniqueVarList);
             }
         }
 
@@ -276,4 +245,53 @@ unordered_set<string> ModifiesExtractor::getModifiedVariablesFromProcedure(
     return outputVarList;
 }
 
+void ModifiesExtractor::handleCallNodesInModifiesS(int stmtNo, shared_ptr<CallNode> callNode, unordered_map<string, unordered_set<string>>
+    mappedProceduresToModifiedVar, unordered_map<string,
+    vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, shared_ptr<list<vector<string>>> output) {
+
+    queue<shared_ptr<CallNode>> queue;
+    queue.push(callNode);
+    while (!queue.empty()) {
+        auto callNodeEntry = queue.front();
+        queue.pop();
+        auto varList = mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
+        for (auto var : varList) {
+            vector<string> modifiesCallEntry;
+            modifiesCallEntry.push_back(to_string(stmtNo));
+            modifiesCallEntry.push_back(var);
+            output->push_back(modifiesCallEntry);
+        }
+
+        if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+            auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
+            for (auto n : otherCallNodes) {
+                queue.push(n);
+            }
+        }
+    }
+}
+
+void ModifiesExtractor::handleCallNodesInModifiesP(shared_ptr<CallNode> callNode, 
+    unordered_map<string, unordered_set<string>> mappedProceduresToModifiedVar, 
+    unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, 
+    unordered_set<string> &uniqueVarList)
+{
+    queue<shared_ptr<CallNode>> queue;
+    queue.push(callNode);
+    while (!queue.empty()) {
+        auto callNodeEntry = queue.front();
+        queue.pop();
+        auto usedVarList =
+            mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
+        uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
+
+        if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+            auto otherCallNodes =
+                mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
+            for (auto n : otherCallNodes) {
+                queue.push(n);
+            }
+        }
+    }
+}
 
