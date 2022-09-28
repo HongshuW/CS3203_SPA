@@ -20,7 +20,13 @@ namespace DE {
         static unordered_map<string, unordered_set<string>>
             mapProceduresToModifiedVariables(shared_ptr<ProgramNode> rootPtr);
         static unordered_set<string> getModifiedVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode);
-        static unordered_map<string, vector<shared_ptr<CallNode>>> getCallNodesFromProcedures(shared_ptr<ProgramNode> rootPtr);
+        static void handleCallNodesInModifiesP(shared_ptr<CallNode> callNode, 
+            unordered_map<string, unordered_set<string>>
+            mappedProceduresToModifiedVar, unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures,
+            unordered_set<string> &uniqueVarList);
+        static void handleCallNodesInModifiesS(int stmtNo, shared_ptr<CallNode> callNode, unordered_map<string, unordered_set<string>>
+            mappedProceduresToModifiedVar, unordered_map<string,
+            vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, shared_ptr<list<vector<string>>> output);
 
     public:
         static shared_ptr<list<vector<string>>> extractModifiesS(shared_ptr<ProgramNode> rootPtr);
