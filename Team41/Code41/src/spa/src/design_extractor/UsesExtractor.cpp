@@ -7,6 +7,7 @@
 #include "utils/Utils.h"
 #include "queue"
 #include "EntityExtractor.h"
+#include "CallsExtractor.h"
 
 namespace DE {
     shared_ptr<list<vector<string>>> UsesExtractor::extractUsesS(shared_ptr<ProgramNode> rootPtr) {
@@ -118,26 +119,8 @@ namespace DE {
             vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
             for(auto callNode: listOfCallNodes) {
                 int stmtNo = stmtNumbers->at(callNode);
-                queue<shared_ptr<CallNode>> queue;
-                queue.push(callNode);
-                while(!queue.empty()) {
-                    auto callNodeEntry = queue.front();
-                    queue.pop();
-                    auto varList = mappedProceduresToUsedVar.at(callNodeEntry->procedureName);
-                    for (auto var: varList) {
-                        vector<string> useCallEntry;
-                        useCallEntry.push_back(to_string(stmtNo));
-                        useCallEntry.push_back(var);
-                        ans -> push_back(useCallEntry);
-                    }
-
-                    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-                        auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
-                        for (auto n: otherCallNodes) {
-                            queue.push(n);
-                        }
-                    }
-                }
+                CallsExtractor::extractCallStmtRelationshipsToOutput(stmtNo, callNode,
+                    mappedProceduresToUsedVar, mappedCallNodesToProcedures, ans);
             }
         }
     }
