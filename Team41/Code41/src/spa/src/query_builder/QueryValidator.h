@@ -9,6 +9,7 @@
 
 #include "query_builder/commons/Query.h"
 #include "query_builder/commons/WithRef.h"
+#include "query_builder/constants/QueryValidatorConstants.h"
 #include <unordered_set>
 
 using namespace std;
@@ -16,27 +17,33 @@ using namespace std;
 namespace QB {
     class QueryValidator {
     private:
-        void validateNoDuplicateDeclarations();
+        shared_ptr<Query> query;
+        void validateNoDuplicateDeclarations() const;
         void validateSelectClause();
-        void validateSynonymDeclaredSelectClause();
-        void validateDesignEntityAttrNamePairSelectClause();
+        void validateSynonymDeclaredSelectClause() const;
+        void validateDesignEntityAttrNamePairSelectClause() const;
         void validateSynonymDeclaredSuchThatClause();
-        void validateArgRefTypeSuchThatClause();
-        void validateUsesModifiesNoUnderscoreForFirstArg();
+        void checkSynonymDeclared(Synonym& synonym,
+                                  const shared_ptr<vector<Declaration>>& declarations);
+        void validateArgRefTypeSuchThatClause() const;
+        void validateUsesModifiesNoUnderscoreForFirstArg() const;
         void validateSynonymTypeSuchThatClause();
         void validateSuchThatClause();
+        void checkCorrectDesignEntity(Synonym synonym, const unordered_set<DesignEntity>& validSynonymTypes,
+                                      const shared_ptr<vector<Declaration>>& declarations);
         void validateSynonymDeclaredPatternClause();
-        void validateArgRefTypePatternClause();
-        void validateArg1DesignEntityPatternClause();
-        void validateArg2DesignEntityPatternClause();
+        void validateArgRefTypePatternClause() const;
+        void validateArg2DesignEntityPatternClause() const;
         void validatePatternClause();
+        void checkDesignEntityAttrNamePair(WithRef& withRef,
+                                           const shared_ptr<vector<Declaration>>& declarations);
         void validateDesignEntityAttrNamePairWithClause();
         void validateSameWithRefWithClause();
+        WithComparingType getWithComparingType(WithRef withRef, const shared_ptr<WithClause>& withClause);
         void validateWithClause();
 
     public:
         //! Validate the Query object, throw Semantic Error if encounter
-        shared_ptr<Query> query;
         explicit QueryValidator(shared_ptr<Query> query);
         void validateQuery();
     };

@@ -18,3 +18,7 @@ optional<Declaration> Declaration::findDeclaration(Synonym& synonymObj, shared_p
     }
     return nullopt;
 }
+
+bool Declaration::operator==(const Declaration& a2) const {
+    return designEntity == a2.designEntity && synonym == a2.synonym;
+}

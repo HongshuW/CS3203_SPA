@@ -3,27 +3,29 @@
 //
 
 #include "QueryValidator.h"
+
+#include <utility>
 #include "query_builder/exceptions/Exceptions.h"
 #include "query_builder/commons/Ref.h"
 
 using namespace QB;
 
-QueryValidator::QueryValidator(shared_ptr<QB::Query> query) : query(query){}
+QueryValidator::QueryValidator(shared_ptr<QB::Query> query) : query(std::move(query)){}
 
-void QueryValidator::validateNoDuplicateDeclarations() {
+void QueryValidator::validateNoDuplicateDeclarations() const {
     //! Validate no duplicate synonym for declarations
     unordered_set<string> synonymSet;
     for (auto declaration : *(query->declarations)) {
         auto synonym = declaration.getSynonym().synonym;
         if (synonymSet.count(synonym)) {
             throw PQLValidationException(
-                    "Found duplicated synonym for declaration: " + synonym);
+                    QueryValidatorConstants::PQL_VALIDATION_DUPLICATE_SYNONYM_DECLARATION + synonym);
         } else {
             synonymSet.insert(synonym);
         }
     }
 }
-void QueryValidator::validateSynonymDeclaredSelectClause() {
+void QueryValidator::validateSynonymDeclaredSelectClause() const {
     //! Validate that synonym is declared for Select Clause
     shared_ptr<SelectClause> selectClause = query->selectClause;
     //! If select BOOLEAN, no need to check for this condition
@@ -35,17 +37,19 @@ void QueryValidator::validateSynonymDeclaredSelectClause() {
 
         if (synonym && !Declaration::findDeclaration(*synonym, declarations)) {
             throw PQLValidationException(
-                    "Synonym: " + synonym->synonym + " is not defined for Select Clause");
+                    QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                    synonym->synonym);
         }
 
         if (attrRef && !Declaration::findDeclaration(attrRef->synonym, declarations)) {
             throw PQLValidationException(
-                    "AttrRef: " + attrRef->synonym.synonym + " is not defined for Select Clause");
+                    QueryValidatorConstants::PQL_VALIDATION_ATTR_REF_NOT_DECLARED +
+                    attrRef->synonym.synonym);
         }
     }
 }
 
-void QueryValidator::validateDesignEntityAttrNamePairSelectClause() {
+void QueryValidator::validateDesignEntityAttrNamePairSelectClause() const {
     shared_ptr<SelectClause> selectClause = query->selectClause;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
     shared_ptr<vector<Elem>> elemList = selectClause->returnResults;
@@ -53,18 +57,18 @@ void QueryValidator::validateDesignEntityAttrNamePairSelectClause() {
     for (auto &elem : *elemList) {
         auto attrRef = get_if<AttrRef>(&elem);
         //! Only need to check if it is a AttrRef
-        if (attrRef) {
-            auto declaration = Declaration::findDeclaration(attrRef->synonym, declarations);
-            if (!declaration) {
-                throw PQLValidationException(attrRef->synonym.synonym + " is not declared for Select Clause");
-            }
-            unordered_set<AttrName> allowedAttrNameSet =
-                    getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
-            if (!allowedAttrNameSet.count(attrRef->attrName)) {
-                throw PQLValidationException(getDesignEntityString(declaration->getDesignEntity()) +
-                                             "." + AttrRef::getStrFromAttrName(attrRef->attrName) +
-                                             " is not valid for Select Clause");
-            }
+        if (!attrRef) return;
+        auto declaration = Declaration::findDeclaration(attrRef->synonym, declarations);
+        if (!declaration) {
+            throw PQLValidationException(
+                    QueryValidatorConstants::PQL_VALIDATION_ATTR_REF_NOT_DECLARED +
+                    attrRef->synonym.synonym);
+        }
+        unordered_set<AttrName> allowedAttrNameSet =
+                getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
+        if (!allowedAttrNameSet.count(attrRef->attrName)) {
+            throw PQLValidationException(QueryValidatorConstants::PQL_VALIDATION_ATTR_REF_NOT_DECLARED +
+                attrRef->synonym.synonym);
         }
     }
 }
@@ -75,61 +79,76 @@ void QueryValidator::validateSelectClause() {
     validateDesignEntityAttrNamePairSelectClause();
 }
 
+void QueryValidator::checkSynonymDeclared(Synonym& synonym,
+                                          const shared_ptr<vector<Declaration>>& declarations) {
+    if (!Declaration::findDeclaration(synonym, declarations)) {
+        throw PQLValidationException(
+                QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                        synonym.synonym);
+    }
+}
+
 void QueryValidator::validateSynonymDeclaredSuchThatClause() {
-    //! Validate that synonyms are declared for Such that Clause
     shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
 
-    for(auto suchThat : *suchThatClauses) {
+    for(const auto& suchThat : *suchThatClauses) {
         auto arg1 = get_if<Synonym>(&suchThat->arg1);
         auto arg2 = get_if<Synonym>(&suchThat->arg2);
 
-        if (arg1 && !Declaration::findDeclaration(*arg1, declarations)) {
-            throw PQLValidationException(
-                    "Synonym: " + arg1->synonym + " is not defined for Such That Clause");
+        if (arg1) {
+            checkSynonymDeclared(*arg1, declarations);
         }
 
-        if (arg2 && !Declaration::findDeclaration(*arg2, declarations)) {
-            throw PQLValidationException(
-                    "Synonym: " + arg2->synonym + " is not defined for Such That Clause");
+        if (arg2) {
+            checkSynonymDeclared(*arg2, declarations);
         }
     }
 }
 
-void QueryValidator::validateArgRefTypeSuchThatClause() {
+void QueryValidator::validateArgRefTypeSuchThatClause() const {
     shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
 
-    for(auto suchThat : *suchThatClauses) {
+    for(const auto& suchThat : *suchThatClauses) {
         RelationType relationType = suchThat->relationType;
         pair<RefTypeSet, RefTypeSet> validArgsTypes = getSuchThatArgsRefTypeFromRelationType(relationType);
 
-        int arg1RefIndex= suchThat->arg1.index();
-        int arg2RefIndex= suchThat->arg2.index();
+        auto arg1RefIndex= suchThat->arg1.index();
+        auto arg2RefIndex= suchThat->arg2.index();
 
         RefTypeSet validFirstArgTypes = validArgsTypes.first;
         RefTypeSet validSecondArgTypes = validArgsTypes.second;
 
         if (!validFirstArgTypes.count(arg1RefIndex) || !validSecondArgTypes.count(arg2RefIndex)) {
             throw PQLParseException(
-                    "Argument types of " +
-                    getStrFromRelationType(relationType) +
-                    " do not match the expected RefTypes");
+                    QueryValidatorConstants::PQL_VALIDATION_INVALID_REF_TYPES +
+                            getStrFromRelationType(relationType));
         }
     }
 }
 
-void QueryValidator::validateUsesModifiesNoUnderscoreForFirstArg() {
+void QueryValidator::validateUsesModifiesNoUnderscoreForFirstArg() const {
     shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
-    for(auto suchThat : *suchThatClauses) {
+    for(const auto& suchThat : *suchThatClauses) {
         RelationType relationType = suchThat->relationType;
-        if (relationType != RelationType::MODIFIES && relationType != RelationType::USES) {
-            continue;
-        }
+        if (relationType != RelationType::MODIFIES && relationType != RelationType::USES) continue;
         if (get_if<Underscore>(&suchThat->arg1)) {
             throw PQLValidationException(
-                    "First argument cannot be underscore for Uses/Modifies Clause as it leads to ambiguity");
+                    QueryValidatorConstants::PQL_VALIDATION_FIRST_ARG_UNDERSCORE);
         }
+    }
+}
+
+void QueryValidator::checkCorrectDesignEntity(Synonym synonym, const unordered_set<DesignEntity>& validSynonymTypes,
+                                              const shared_ptr<vector<Declaration>>& declarations) {
+    auto declaration = Declaration::findDeclaration(synonym, declarations);
+    auto designEntity = declaration->getDesignEntity();
+    if (!validSynonymTypes.count(designEntity)) {
+        //! correct design entity not found, throw semantic error
+        throw PQLValidationException(
+                QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY +
+                getDesignEntityString(designEntity));
     }
 }
 
@@ -137,7 +156,7 @@ void QueryValidator::validateSynonymTypeSuchThatClause() {
     shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
 
-    for(auto suchThat : *suchThatClauses) {
+    for(const auto& suchThat : *suchThatClauses) {
         RelationType relationType = suchThat->relationType;
         pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>> validArgsSynonymTypes =
                 getSuchThatSynonymArgsTypeFromRelationType(relationType);
@@ -149,37 +168,11 @@ void QueryValidator::validateSynonymTypeSuchThatClause() {
         auto arg2 = get_if<Synonym>(&suchThat->arg2);
 
         if (arg1) {
-            //! arg1 is a synonym, need to check for the correct DesignEntity lhsType
-            auto declaration = Declaration::findDeclaration(*arg1, declarations);
-            auto designEntity = declaration->getDesignEntity();
-            if (!validFirstArgSynonymTypes.count(designEntity)) {
-                //! correct design entity not found, throw semantic error
-                throw PQLValidationException(
-                        "Current design entity arg 1: " +
-                        getDesignEntityString(designEntity) +
-                        ", does not match the allowed design entities: " +
-                        getDesignEntitySetString(validFirstArgSynonymTypes) +
-                        "for " +
-                        getStrFromRelationType(relationType) +
-                        " clause");
-            }
+            checkCorrectDesignEntity(*arg1, validFirstArgSynonymTypes, declarations);
         }
 
         if (arg2) {
-            //! arg2 is a synonym, need to check for the correct DesignEntity lhsType
-            auto declaration = Declaration::findDeclaration(*arg2, declarations);
-            auto designEntity = declaration->getDesignEntity();
-            if (!validSecondArgSynonymTypes.count(designEntity)) {
-                //! correct design entity not found, throw semantic error
-                throw PQLValidationException(
-                        "Current design entity for arg 2: " +
-                        getDesignEntityString(designEntity) +
-                        ", does not match the allowed design entities: " +
-                        getDesignEntitySetString(validSecondArgSynonymTypes) +
-                        "for " +
-                        getStrFromRelationType(relationType) +
-                        " clause");
-            }
+            checkCorrectDesignEntity(*arg2, validSecondArgSynonymTypes, declarations);
         }
     }
 }
@@ -200,62 +193,41 @@ void QueryValidator::validateSuchThatClause() {
 void QueryValidator::validateSynonymDeclaredPatternClause() {
     shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-    for (auto patternClause : *patternClauses) {
-        //! Validation for agr1
-        if (!Declaration::findDeclaration(patternClause->arg1, declarations)) {
-            throw PQLValidationException(
-                    "Synonym: " + patternClause->arg1.synonym + " is not defined for Pattern Clause first argument");
-        }
-
+    for (const auto& patternClause : *patternClauses) {
+        checkSynonymDeclared(patternClause->arg1, declarations);
         //! Validation for agr2 (if arg2 is a Synonym)
         auto arg2 = get_if<Synonym>(&patternClause->arg2);
-        if (arg2 && !Declaration::findDeclaration(*arg2, declarations)) {
-            throw PQLValidationException(
-                    "Synonym: " + arg2->synonym + " is not defined for Pattern Clause second argument");
+        if (arg2) {
+            checkSynonymDeclared(*arg2, declarations);
         }
     }
 }
 
-void QueryValidator::validateArgRefTypePatternClause() {
+void QueryValidator::validateArgRefTypePatternClause() const {
     //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
     shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-    for (auto patternClause : *patternClauses) {
-        int arg2RefIndex = patternClause->arg2.index();
+    for (const auto& patternClause : *patternClauses) {
+        auto arg2RefIndex = patternClause->arg2.index();
         if (!entRefIndexSet.count(arg2RefIndex)) {
             throw PQLParseException(
-                    "Second argument of Pattern Clause cannot be Integer");
+                    QueryValidatorConstants::PQL_VALIDATION_SECOND_ARG_INTEGER);
         }
     }
 }
 
-void QueryValidator::validateArg1DesignEntityPatternClause() {
-    //! Validate arg1 for pattern clause is declared as assign, if or while
-    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
-    shared_ptr<vector<Declaration>> declarations = query->declarations;
-    for (auto patternClause : *patternClauses) {
-        auto declaration = Declaration::findDeclaration(patternClause->arg1, declarations);
-        if (declaration && !ALLOW_SYNONYM_PATTERN.count(declaration->getDesignEntity())) {
-            throw PQLValidationException(
-                    "Expect pattern clause arg1 to be declared as assign, got " +
-                    getDesignEntityString(declaration->getDesignEntity()));
-        }
-    }
-}
-
-void QueryValidator::validateArg2DesignEntityPatternClause() {
+void QueryValidator::validateArg2DesignEntityPatternClause() const {
     //! Validate if agr2 is a synonym, it must be declared as variable
     shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-    for (auto patternClause : *patternClauses) {
+    for (const auto& patternClause : *patternClauses) {
         auto arg2 = get_if<Synonym>(&patternClause->arg2);
-        if (arg2) {
-            auto declaration = Declaration::findDeclaration(*arg2, declarations);
-            if (declaration && declaration->getDesignEntity() != DesignEntity::VARIABLE) {
-                throw PQLValidationException(
-                        "Expect pattern clause arg2 to be declared as variable, got " +
-                        getDesignEntityString(declaration->getDesignEntity()));
-            }
+        if (!arg2) continue;
+        auto declaration = Declaration::findDeclaration(*arg2, declarations);
+        if (declaration && declaration->getDesignEntity() != DesignEntity::VARIABLE) {
+            throw PQLValidationException(
+                    QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY_PATTERN +
+                    getDesignEntityString(declaration->getDesignEntity()));
         }
     }
 }
@@ -266,88 +238,70 @@ void QueryValidator::validatePatternClause() {
     //! Validate the correct RefType for pattern clause arg2
     //! Should throw syntax error not semantic error
     validateArgRefTypePatternClause();
-    //! Validate arg1 for pattern clause is declared as assign, if or while
-    // already check this in Query Parser
-    // validateArg1DesignEntityPatternClause();
     //! Validate if agr2 is a synonym, it must be declared as variable
     validateArg2DesignEntityPatternClause();
 }
 
+void QueryValidator::checkDesignEntityAttrNamePair(WithRef& withRef,
+                                                   const shared_ptr<vector<Declaration>>& declarations) {
+    //! Only need to check if it is a AttrRef
+    auto attrRef = get_if<AttrRef>(&withRef);
+    if (!attrRef) return;
+    auto declaration = Declaration::findDeclaration(attrRef->synonym, declarations);
+    if (!declaration) {
+        throw PQLValidationException(
+                QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED +
+                        attrRef->synonym.synonym);
+    }
+    unordered_set<AttrName> allowedAttrNameSet =
+            getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
+    if (!allowedAttrNameSet.count(attrRef->attrName)) {
+        throw PQLValidationException(
+                QueryValidatorConstants::PQL_VALIDATION_INVALID_ATTR_REF +
+                getDesignEntityString(declaration->getDesignEntity()) +
+                QueryValidatorConstants::DOT +
+                AttrRef::getStrFromAttrName(attrRef->attrName));
+    }
+}
 
 void QueryValidator::validateDesignEntityAttrNamePairWithClause() {
     shared_ptr<vector<shared_ptr<WithClause>>> withClauses = query->withClauses;
     shared_ptr<vector<Declaration>> declarations = query->declarations;
-    for (auto withClause : *withClauses) {
-        WithRef withRefLHS = withClause->lhs;
-        auto lhs = get_if<AttrRef>(&withRefLHS);
-        //! Only need to check if it is a AttrRef
-        if (lhs) {
-            auto declaration = Declaration::findDeclaration(lhs->synonym, declarations);
-            if (!declaration) {
-                throw PQLValidationException(lhs->synonym.synonym + " is not declared for With Clause");
-            }
-            unordered_set<AttrName> allowedAttrNameSet =
-                    getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
-            if (!allowedAttrNameSet.count(lhs->attrName)) {
-                throw PQLValidationException(getDesignEntityString(declaration->getDesignEntity()) +
-                    "." + AttrRef::getStrFromAttrName(lhs->attrName) +
-                    " is not valid for With Clause");
-            }
-        }
-
-        WithRef withRefRHS = withClause->rhs;
-        auto rhs = get_if<AttrRef>(&withRefRHS);
-        //! Only need to check if it is a AttrRef
-        if (rhs) {
-            auto declaration = Declaration::findDeclaration(rhs->synonym, declarations);
-            if (!declaration) {
-                throw PQLValidationException(lhs->synonym.synonym + " is not declared for With Clause");
-            }
-            unordered_set<AttrName> allowedAttrNameSet =
-                    getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
-            if (!allowedAttrNameSet.count(rhs->attrName)) {
-                throw PQLValidationException(getDesignEntityString(declaration->getDesignEntity()) +
-                                             "." + AttrRef::getStrFromAttrName(rhs->attrName) +
-                                             " is not valid for With Clause");
-            }
-        }
+    for (const auto& withClause : *withClauses) {
+        checkDesignEntityAttrNamePair(withClause->lhs, declarations);
+        checkDesignEntityAttrNamePair(withClause->rhs, declarations);
     }
+}
+
+WithComparingType QueryValidator::getWithComparingType(WithRef withRef, const shared_ptr<WithClause>& withClause) {
+    WithRefType withRefType = getWithRefTypeFromIndex((int) withRef.index());
+    //! Default value
+    WithComparingType withComparingType = WithComparingType::NAME;
+    switch (withRefType) {
+        case WithRefType::IDENT:
+            withComparingType = WithComparingType::NAME;
+            break;
+        case WithRefType::INTEGER:
+            withComparingType = WithComparingType::INTEGER;
+            break;
+        case WithRefType::ATTR_REF:
+            auto attrRef = get_if<AttrRef>(&withRef);
+            withComparingType = AttrRef::getWithComparingTypeFromAttrName(attrRef->attrName);
+            break;
+    }
+    return withComparingType;
 }
 
 void QueryValidator::validateSameWithRefWithClause() {
     //! Two WithRef comparison must be of the same type, both NAME, or both INTEGER
     //! WithRef can be Ident, int or AttrRef
     shared_ptr<vector<shared_ptr<WithClause>>> withClauses = query->withClauses;
-    for (auto withClause : *withClauses) {
-        WithRef withRefLHS = withClause->lhs;
-        WithRefType withRefTypeLHS = getWithRefTypeFromIndex(withRefLHS.index());
-        //! Default value
-        WithComparingType withComparingTypeLHS = WithComparingType::NAME;
-        if (withRefTypeLHS == WithRefType::IDENT) {
-            withComparingTypeLHS = WithComparingType::NAME;
-        } else if (withRefTypeLHS == WithRefType::INTEGER) {
-            withComparingTypeLHS = WithComparingType::INTEGER;
-        } else if (withRefTypeLHS == WithRefType::ATTR_REF) {
-            auto lhs = get_if<AttrRef>(&withRefLHS);
-            withComparingTypeLHS = AttrRef::getWithComparingTypeFromAttrName(lhs->attrName);
-        }
-
-        WithRef withRefRHS = withClause->rhs;
-        WithRefType withRefTypeRHS = getWithRefTypeFromIndex(withRefRHS.index());
-        //! Default value
-        WithComparingType withComparingTypeRHS = WithComparingType::NAME;
-        if (withRefTypeRHS == WithRefType::IDENT) {
-            withComparingTypeRHS = WithComparingType::NAME;
-        } else if (withRefTypeRHS == WithRefType::INTEGER) {
-            withComparingTypeRHS = WithComparingType::INTEGER;
-        } else if (withRefTypeRHS == WithRefType::ATTR_REF) {
-            auto rhs = get_if<AttrRef>(&withRefRHS);
-            withComparingTypeRHS = AttrRef::getWithComparingTypeFromAttrName(rhs->attrName);
-        }
-
+    for (const auto& withClause : *withClauses) {
+        WithComparingType withComparingTypeLHS = getWithComparingType(withClause->lhs, withClause);
+        WithComparingType withComparingTypeRHS = getWithComparingType(withClause->rhs, withClause);
         if (withComparingTypeLHS != withComparingTypeRHS) {
             throw PQLValidationException(
-                    "Two WithRef are different, no comparison can be made");
+                    QueryValidatorConstants::PQL_VALIDATION_DIFFERENT_WTIH_REF);
         }
     }
 }

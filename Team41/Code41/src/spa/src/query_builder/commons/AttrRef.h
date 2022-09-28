@@ -38,17 +38,12 @@ namespace QB {
         static string getStrFromAttrName(AttrName& attrName);
         static WithComparingType getWithComparingTypeFromAttrName(AttrName& attrName);
 
-
-        bool operator==(const AttrRef& attrRef1) const {
-            return synonym == attrRef1.synonym && attrName == attrRef1.attrName;
-        }
-
-        // For printing
-        friend std::ostream& operator<<(std::ostream& os, AttrRef const& attrRef) {
+        bool operator==(const AttrRef& attrRef1) const;
+        friend std::ostream& operator<<(std::ostream& os, const AttrRef& attrRef) {
             os << "AttrRef: ";
             os << attrRef.synonym;
             return os;
-        }
+        };
     };
 
 } // QB

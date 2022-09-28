@@ -13,3 +13,7 @@ Synonym::Synonym(string synonym) : synonym(synonym) {
         throw PQLParseException("Invalid synonym, unexpected token: " + synonym);
     }
 }
+
+bool Synonym::operator==(const Synonym& synonym1) const {
+    return synonym == synonym1.synonym;
+}

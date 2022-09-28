@@ -18,7 +18,7 @@ namespace QB {
         std::string synonym;
         explicit Synonym(std::string synonym);
 
-        bool operator==(const Synonym& synonym1) const { return synonym == synonym1.synonym; }
+        bool operator==(const Synonym& synonym1) const;
 
         // For printing
         friend std::ostream& operator<<(std::ostream& os, Synonym const& syn) {

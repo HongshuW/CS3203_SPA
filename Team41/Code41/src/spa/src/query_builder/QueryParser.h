@@ -25,8 +25,8 @@ namespace QB {
         string previous();
         string pop();
         bool isWithinBound();
-        bool expect(string s);
-        bool match(string s);
+        bool expect(const string& s);
+        bool match(const string& s);
         bool parseDeclarations();
         void parseSelectClause();
         Ref parseRef();
@@ -44,7 +44,6 @@ namespace QB {
     public:
         //! Parse tokens to Query object, throw Syntax Error if encounter
         explicit QueryParser(std::vector<std::string> tokens);
-
         shared_ptr<Query> parse();
     };
 }

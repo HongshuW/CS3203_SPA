@@ -4,6 +4,9 @@
 
 #ifndef SPA_QUERYTOKENISERCONSTANTS_H
 #define SPA_QUERYTOKENISERCONSTANTS_H
+
+#pragma once
+
 #include <string>
 
 using namespace std;

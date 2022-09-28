@@ -28,18 +28,12 @@ namespace QB {
         //! Only for ANY_MATCH
         ExpressionSpec(ExpressionSpecType expressionSpecType);
 
-        bool operator==(const ExpressionSpec& expressionSpec) const {
-            return expressionSpecType == expressionSpec.expressionSpecType &&
-                    (exprNode == expressionSpec.exprNode || *exprNode == *expressionSpec.exprNode);
-        }
-
-        // For printing
+        bool operator==(const ExpressionSpec& expressionSpec) const;
         friend std::ostream& operator<<(std::ostream& os, ExpressionSpec const& exprSpec) {
             //TODO: to be implemented later once the print method in the ATSNodes are done
             os << exprSpec.exprNode;
             return os;
-        }
-
+        };
     };
 
 } // QB

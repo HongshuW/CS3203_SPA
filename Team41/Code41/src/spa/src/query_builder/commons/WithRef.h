@@ -5,6 +5,8 @@
 #ifndef SPA_WITHREF_H
 #define SPA_WITHREF_H
 
+#pragma once
+
 #include "Ident.h"
 #include "AttrRef.h"
 #include <unordered_map>

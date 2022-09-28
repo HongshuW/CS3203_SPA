@@ -20,7 +20,7 @@ namespace QB {
         string identStr;
         Ident(string identStr);
 
-        bool operator==(const Ident& ident1) const { return identStr == ident1.identStr; }
+        bool operator==(const Ident& ident1) const;
 
         // For printing
         friend std::ostream& operator<<(std::ostream& os, Ident const& ident) {
