@@ -5,6 +5,7 @@
 #include "AST/utils/ASTUtils.h"
 #include "ModifiesExtractor.h"
 #include "EntityExtractor.h"
+#include "CallsExtractor.h"
 #include <queue>
 
 void ModifiesExtractor::extractModifiesSDFS(shared_ptr<ASTNode> node,
@@ -148,7 +149,7 @@ void ModifiesExtractor::insertCallsForModifiesS(shared_ptr<ProgramNode> rootPtr,
         vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
         for (auto callNode : listOfCallNodes) {
             int stmtNo = stmtNumbers->at(callNode);
-            handleCallNodesInModifiesS(stmtNo, callNode, 
+            CallsExtractor::extractCallStmtRelationshipsToOutput(stmtNo, callNode,
                 mappedProceduresToModifiedVar, mappedCallNodesToProcedures, output);
         }
     }
@@ -247,54 +248,4 @@ unordered_set<string> ModifiesExtractor::getModifiedVariablesFromProcedure(
     return outputVarList;
 }
 
-void ModifiesExtractor::handleCallNodesInModifiesS(int stmtNo, shared_ptr<CallNode> callNode, unordered_map<string, unordered_set<string>>
-    mappedProceduresToModifiedVar, 
-    unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, 
-    shared_ptr<list<vector<string>>> output) {
-
-    queue<shared_ptr<CallNode>> queue;
-    queue.push(callNode);
-    while (!queue.empty()) {
-        auto callNodeEntry = queue.front();
-        queue.pop();
-        auto varList = mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
-        for (auto var : varList) {
-            vector<string> modifiesCallEntry;
-            modifiesCallEntry.push_back(to_string(stmtNo));
-            modifiesCallEntry.push_back(var);
-            output->push_back(modifiesCallEntry);
-        }
-
-        if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-            auto otherCallNodes = mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
-            for (auto n : otherCallNodes) {
-                queue.push(n);
-            }
-        }
-    }
-}
-
-void ModifiesExtractor::handleCallNodesInModifiesP(shared_ptr<CallNode> callNode, 
-    unordered_map<string, unordered_set<string>> mappedProceduresToModifiedVar, 
-    unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, 
-    unordered_set<string> &uniqueVarList)
-{
-    queue<shared_ptr<CallNode>> queue;
-    queue.push(callNode);
-    while (!queue.empty()) {
-        auto callNodeEntry = queue.front();
-        queue.pop();
-        auto usedVarList =
-            mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
-        uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
-
-        if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-            auto otherCallNodes =
-                mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
-            for (auto n : otherCallNodes) {
-                queue.push(n);
-            }
-        }
-    }
-}
 
