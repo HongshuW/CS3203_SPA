@@ -23,24 +23,60 @@ TEST_CASE("Test PKBStorage") {
         REQUIRE(pkbStorage->getVariables()->rows[initialSize + 1][0] == "dummyVarB");
     }
 
-    SECTION("Save statements") {
+    SECTION("Save statements, UsesS, ModifiesS -> check statementTable") {
+        // save statements
         list<vector<string>> statements;
         vector<string> s1{"1", "while"};
         vector<string> s2{"2", "read"};
+        vector<string> s3{"3", "print"};
         statements.push_back(s1);
         statements.push_back(s2);
+        statements.push_back(s3);
         int initialSize = pkbStorage->getStatements()->rows.size();
         pkbStorage->saveStatements(statements);
+        shared_ptr<Table> stmtsTable = pkbStorage->getStatements();
 
         // check header is set automatically
-        REQUIRE(pkbStorage->getStatements()->header[0] == "$statement_number");
-        REQUIRE(pkbStorage->getStatements()->header[1] == "$statement_type");
+        REQUIRE(stmtsTable->header[0] == "$statement_number");
+        REQUIRE(stmtsTable->header[1] == "$statement_type");
 
         // check statements are added
-        REQUIRE(pkbStorage->getStatements()->rows[initialSize][0] == "1");
-        REQUIRE(pkbStorage->getStatements()->rows[initialSize][1] == "while");
-        REQUIRE(pkbStorage->getStatements()->rows[initialSize + 1][0] == "2");
-        REQUIRE(pkbStorage->getStatements()->rows[initialSize + 1][1] == "read");
+        REQUIRE(stmtsTable->rows[initialSize][0] == "1");
+        REQUIRE(stmtsTable->rows[initialSize][1] == "while");
+        REQUIRE(stmtsTable->rows[initialSize + 1][0] == "2");
+        REQUIRE(stmtsTable->rows[initialSize + 1][1] == "read");
+
+        // save UsesS
+        vector<string> u1 = vector<string>{"1", "used_in_while"};
+        vector<string> u2 = vector<string>{"3", "printed"};
+        initialSize = pkbStorage->getPrintVariableNames()->rows.size();
+        pkbStorage->saveUsesS(u1);
+        pkbStorage->saveUsesS(u2);
+        shared_ptr<Table> printedVars = pkbStorage->getPrintVariableNames();
+
+        // check header is set automatically
+        REQUIRE(printedVars->header[0] == "$statement_number");
+        REQUIRE(printedVars->header[1] == "$variable_name");
+
+        // check printed variables are added
+        REQUIRE(printedVars->rows[initialSize][0] == "3");
+        REQUIRE(printedVars->rows[initialSize][1] == "printed");
+
+        // save ModifiesS
+        vector<string> m1 = vector<string>{"1", "modified_in_while"};
+        vector<string> m2 = vector<string>{"2", "read"};
+        initialSize = pkbStorage->getReadVariableNames()->rows.size();
+        pkbStorage->saveModifiesS(m1);
+        pkbStorage->saveModifiesS(m2);
+        shared_ptr<Table> readVars = pkbStorage->getReadVariableNames();
+
+        // check header is set automatically
+        REQUIRE(readVars->header[0] == "$statement_number");
+        REQUIRE(readVars->header[1] == "$variable_name");
+
+        // check read variables are added
+        REQUIRE(readVars->rows[initialSize][0] == "2");
+        REQUIRE(readVars->rows[initialSize][1] == "read");
     }
 
     SECTION("Save parent") {

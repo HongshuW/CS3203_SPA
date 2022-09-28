@@ -58,24 +58,6 @@ TEST_CASE("Test Data Retriever") {
         REQUIRE(actualModifiesPTable.isEqual(expectedModifiesPTable));
     }
 
-    SECTION ("Get Design Entity of Statement") {
-        // add valid rows to statement table
-        vector<string> r1{"100", "if"};
-        vector<string> r2{"101", "assign"};
-        StatementTable * statementTable = pkbStorage->getStatements();
-        statementTable->appendRow(r1);
-        statementTable->appendRow(r2);
-        // test valid rows
-        DesignEntity actualRow1DE = dataRetriever.getDesignEntityOfStmt(100);
-        DesignEntity actualRow2DE = dataRetriever.getDesignEntityOfStmt(101);
-        DesignEntity expectedRow1DE = DesignEntity::IF;
-        DesignEntity expectedRow2DE = DesignEntity::ASSIGN;
-        REQUIRE(actualRow1DE == expectedRow1DE);
-        REQUIRE(actualRow2DE == expectedRow2DE);
-        // test invalid keys
-        REQUIRE_THROWS(dataRetriever.getDesignEntityOfStmt(1000));
-    }
-
     SECTION ("Get Table by Assign Pattern") {
         ExpressionSpec expressionSpec = ExpressionSpec(ExpressionSpecType::ANY_MATCH);
         Table actualPatternResults = dataRetriever.getTableByExprPattern(expressionSpec);

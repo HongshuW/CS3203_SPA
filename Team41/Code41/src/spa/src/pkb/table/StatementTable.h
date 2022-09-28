@@ -8,8 +8,22 @@
 #include "EntityTable.h"
 class StatementTable : public EntityTable {
 public:
+    vector<string> printedVarsHeader;
+    vector<string> readVarsHeader;
+    vector<vector<string>> printedVars;
+    vector<vector<string>> readVars;
+
     explicit StatementTable();
+
+    // getters
     string getStatementType(string stmtNumber);
+    shared_ptr<Table> getStatements();
+    shared_ptr<Table> getPrintedVariables();
+    shared_ptr<Table> getReadVariables();
+
+    // setters
+    void addPrintedVar(vector<string> printStmtVarPair);
+    void addReadVar(vector<string> readStmtVarPair);
 };
 
 
