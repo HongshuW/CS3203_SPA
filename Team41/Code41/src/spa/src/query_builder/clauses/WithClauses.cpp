@@ -12,15 +12,31 @@ namespace QB {
 
 }
 
-WithRefType WithClause::lhsType() {
+WithRefType WithClause::lhsType() const {
     return indexToWithRefType.at(lhs.index());
 }
 
-WithRefType WithClause::rhsType() {
+WithRefType WithClause::rhsType() const {
     return indexToWithRefType.at(rhs.index());
 }
 
 WithRefType WithClause::getWithRefType(int idx) {
     return indexToWithRefType.at(idx);
+}
+
+bool WithClause::operator==(const Clause& clause) const {
+    auto withClause = dynamic_cast<const WithClause*>(&clause);
+    return withClause != nullptr && lhs == withClause->lhs && rhs == withClause->rhs;
+}
+
+// For printing
+ostream& WithClause::print(ostream& os) const {
+    // Print the derived class specific information.
+    os << "With clause";
+    return os;
+}
+
+Table WithClause::accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) {
+
 }
 

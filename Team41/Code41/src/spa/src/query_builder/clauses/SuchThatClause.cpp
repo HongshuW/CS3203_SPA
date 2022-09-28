@@ -4,6 +4,9 @@
 
 #include "SuchThatClause.h"
 
+#include <utility>
+
+
 using namespace QB;
 
 SuchThatClause::SuchThatClause(RelationType relationType,
@@ -11,13 +14,13 @@ SuchThatClause::SuchThatClause(RelationType relationType,
                                Ref arg2,
                                shared_ptr<vector<Declaration>> declarations) :
         relationType(relationType),
-        arg1(arg1),
-        arg2(arg2),
-        declarations(declarations) {
+        arg1(std::move(std::move(arg1))),
+        arg2(std::move(std::move(arg2))),
+        declarations(std::move(declarations)) {
     if (relationType == RelationType::MODIFIES || relationType == RelationType::USES) {
         updateSpecificModifiesUsesClause();
     }
-};
+}
 
 void SuchThatClause::updateSpecificModifiesUsesClause() {
     if (getRefType(arg1) == RefType::INTEGER) {
@@ -36,4 +39,19 @@ void SuchThatClause::updateSpecificModifiesUsesClause() {
             }
         }
     }
+}
+
+bool SuchThatClause::operator==(const Clause& clause) const {
+    auto suchThatClause = dynamic_cast<const SuchThatClause*>(&clause);
+    return suchThatClause != nullptr && arg1 == suchThatClause->arg1 && arg2 == suchThatClause->arg2;
+}
+
+ostream& SuchThatClause::print(ostream& os) const {
+    // Print the derived class specific information.
+    os << getStrFromRelationType(relationType) << "Clause;";
+    return os;
+}
+
+Table SuchThatClause::accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) {
+
 }

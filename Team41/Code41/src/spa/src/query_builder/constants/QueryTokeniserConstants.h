@@ -14,7 +14,6 @@ namespace QB {
         static const string STMT;
         static const string EMPTY_STR;
         static const string DOUBLE_QUOTE;
-        static const string WHITE_SPACE;
 
 
         static const char HASH;
@@ -22,6 +21,7 @@ namespace QB {
         static const char DOUBLE_QUOTE_CHAR;
 
         static const string PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN;
+        static const string QPL_EXPR_STRING_INVALID_PARENTHESES;
     };
 
 } // QB

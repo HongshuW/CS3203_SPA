@@ -11,9 +11,15 @@
 #include "query_builder/commons/Ref.h"
 #include "query_builder/commons/RelationType.h"
 #include "query_builder/commons/Declaration.h"
+#include "Clause.h"
 #include <ostream>
+
+namespace QE {
+    class ClauseEvaluator;
+}
+
 namespace QB {
-    class SuchThatClause {
+    class SuchThatClause : public Clause {
     private:
         //! Update specific relationship lhsType for Modifies (Modifies_S / Modifies_P) Clause
         //! and Uses Clause (Uses_S, Uses_P)
@@ -25,16 +31,9 @@ namespace QB {
         shared_ptr<vector<Declaration>> declarations;
         SuchThatClause(RelationType relationType, Ref arg1, Ref arg2, shared_ptr<vector<Declaration>> declarations);
 
-        bool operator==(const SuchThatClause& suchThatClause) const {
-            return arg1 == suchThatClause.arg1 && arg2 == suchThatClause.arg2;
-        }
-
-        // For printing
-        std::ostream & print(std::ostream & os) const {
-            // Print the derived class specific information.
-            os << getStrFromRelationType(relationType) << "Clause;";
-            return os;
-        }
+        bool operator==(const Clause& clause) const override;
+        std::ostream & print(std::ostream & os) const;
+        Table accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) override;
     };
 }
 

@@ -13,9 +13,7 @@ namespace AST {
     class ASTNode {
     public:
         virtual ~ASTNode() = default;
-        //TODO: override == and print method
         virtual bool operator==(const ASTNode& node) const = 0;
-//    virtual ostream & print(std::ostream & os) const = 0;
     };
 }
 

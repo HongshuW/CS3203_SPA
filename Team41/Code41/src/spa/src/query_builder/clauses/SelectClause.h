@@ -9,11 +9,17 @@
 
 #include "query_builder/commons/Synonym.h"
 #include "query_builder/commons/AttrRef.h"
+#include "Clause.h"
 #include <ostream>
 #include <variant>
 #include <vector>
 
 using namespace std;
+
+namespace QE {
+    class ClauseEvaluator;
+}
+
 namespace QB {
     enum class ReturnType {
         TUPLE,
@@ -22,7 +28,7 @@ namespace QB {
 
     using Elem = variant<Synonym, AttrRef>;
 
-    class SelectClause {
+    class SelectClause : public Clause {
     public:
         //! Can be Synonym, Tuple or BOOLEAN
         ReturnType returnType;
@@ -33,33 +39,15 @@ namespace QB {
         //! For Tuple
         SelectClause(ReturnType returnType, shared_ptr<vector<Elem>> returnResults);
 
-        bool isBoolean();
-        bool isTuple();
+        bool isBoolean() const;
+        bool isTuple() const;
 
         static const int ELEM_SYN_IDX = 0;
         static const int ELEM_ATTR_REF_IDX = 1;
 
-        bool operator==(const SelectClause& selectClause1) const {
-            bool isEqual = returnType == selectClause1.returnType;
-            if (returnResults) {
-                isEqual = isEqual && equal(begin(*returnResults), end(*returnResults),
-                                           begin(*selectClause1.returnResults),
-                                           end(*selectClause1.returnResults),
-                                           [](const Elem l, const Elem o)
-                                           {return l == o;});
-            }
-            return isEqual;
-        }
-
-        // For printing
-        std::ostream & print(std::ostream & os) const {
-            // Print the derived class specific information.
-            os << "Select Clause, return results include: ";
-            for (const auto& result : *(returnResults)) {
-                //TODO: implement this later
-            }
-            return os;
-        }
+        bool operator==(const Clause& clause) const override;
+        ostream& print(ostream& os) const override;
+        Table accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) override;
     };
 }
 
