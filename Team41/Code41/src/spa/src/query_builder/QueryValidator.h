@@ -17,22 +17,22 @@ using namespace std;
 namespace QB {
     class QueryValidator {
     private:
-        void validateNoDuplicateDeclarations();
+        void validateNoDuplicateDeclarations() const;
         void validateSelectClause();
-        void validateSynonymDeclaredSelectClause();
-        void validateDesignEntityAttrNamePairSelectClause();
-        void validateSynonymDeclaredSuchThatClause();
-        void validateArgRefTypeSuchThatClause();
-        void validateUsesModifiesNoUnderscoreForFirstArg();
-        void validateSynonymTypeSuchThatClause();
+        void validateSynonymDeclaredSelectClause() const;
+        void validateDesignEntityAttrNamePairSelectClause() const;
+        void validateSynonymDeclaredSuchThatClause() const;
+        void validateArgRefTypeSuchThatClause() const;
+        void validateUsesModifiesNoUnderscoreForFirstArg() const;
+        void validateSynonymTypeSuchThatClause() const;
         void validateSuchThatClause();
-        void validateSynonymDeclaredPatternClause();
-        void validateArgRefTypePatternClause();
-        void validateArg1DesignEntityPatternClause();
-        void validateArg2DesignEntityPatternClause();
+        void validateSynonymDeclaredPatternClause() const;
+        void validateArgRefTypePatternClause() const;
+        void validateArg1DesignEntityPatternClause() const;
+        void validateArg2DesignEntityPatternClause() const;
         void validatePatternClause();
-        void validateDesignEntityAttrNamePairWithClause();
-        void validateSameWithRefWithClause();
+        void validateDesignEntityAttrNamePairWithClause() const;
+        void validateSameWithRefWithClause() const;
         void validateWithClause();
 
     public:

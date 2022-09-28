@@ -28,7 +28,7 @@ namespace QB {
         void processString();
     public:
         vector<string> tokens;
-        QueryTokenizer(string query);
+        explicit QueryTokenizer(string query);
         vector<string> tokenize();
     };
 }

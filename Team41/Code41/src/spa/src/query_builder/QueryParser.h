@@ -25,8 +25,8 @@ namespace QB {
         string previous();
         string pop();
         bool isWithinBound();
-        bool expect(string s);
-        bool match(string s);
+        bool expect(const string& s);
+        bool match(const string& s);
         bool parseDeclarations();
         void parseSelectClause();
         Ref parseRef();

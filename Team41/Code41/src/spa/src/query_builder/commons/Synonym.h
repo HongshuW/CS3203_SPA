@@ -21,7 +21,10 @@ namespace QB {
         bool operator==(const Synonym& synonym1) const;
 
         // For printing
-        friend std::ostream& operator<<(std::ostream& os, Synonym const& syn);
+        friend std::ostream& operator<<(std::ostream& os, Synonym const& syn) {
+            os << syn.synonym;
+            return os;
+        }
     };
 }
 

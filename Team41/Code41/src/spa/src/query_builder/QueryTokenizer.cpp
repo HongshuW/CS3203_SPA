@@ -3,12 +3,14 @@
 //
 
 #include "query_builder/QueryTokenizer.h"
+
+#include <utility>
 #include "query_builder/exceptions/Exceptions.h"
 
 using QB::QueryTokenizer;
 using namespace std;
 
-QueryTokenizer::QueryTokenizer(string query) : currIdx(0), query(query){};
+QueryTokenizer::QueryTokenizer(string query) : currIdx(0), query(std::move(query)){}
 
 char QueryTokenizer::peek() {
     char c;
@@ -79,8 +81,7 @@ std::vector<std::string> QueryTokenizer::tokenize() {
         } else if (SYMBOL_SET.count(curr)) {
             tokens.push_back(curr);
         } else {
-            throw PQLTokenizeException(QueryTokeniserConstants::PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN +
-                                       std::string(1, next));
+            throw PQLTokenizeException(QueryTokeniserConstants::PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN + next);
         }
     }
 
