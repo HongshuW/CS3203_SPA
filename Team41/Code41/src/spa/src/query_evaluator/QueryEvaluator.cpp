@@ -14,7 +14,7 @@
 #include <sstream>
 #include <iterator>
 #include <numeric>
-
+#include "ClauseVisitor.h"
 
 using namespace QB;
 using namespace QE;
@@ -44,6 +44,9 @@ QueryEvaluator::QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor) {
 }
 
 vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
+    shared_ptr<ClauseVisitor> clauseEvaluator = make_shared<ClauseVisitor>(dataPreprocessor,
+                                                                           query->declarations);
+
     bool hasCondition = !query->suchThatClauses->empty() || !query->patternClauses->empty() || !query->withClauses->empty();
     if (!hasCondition) {//no such that or pattern clause
         return this->evaluateNoConditionQuery(query);
@@ -56,11 +59,10 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
         };
     }
 
-
     TableCombiner tableCombiner = TableCombiner();
     Table resultTable;
-    for (auto stClause: *query->suchThatClauses) {
-        Table intermediateTable = this->dataPreprocessor->getTableByRelation(*stClause);
+    for (Clause stClause: *query->suchThatClauses) {
+        Table intermediateTable = std::visit(*clauseEvaluator, stClause);
         if (intermediateTable.isBodyEmpty()) {
             if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return FALSE_RESULT;
             return EMPTY_RESULT;
@@ -75,8 +77,8 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
 
     }
 
-    for (auto patternClause: *query->patternClauses) {
-        Table intermediateTable = this->dataPreprocessor->getTableByPattern(patternClause);
+    for (Clause patternClause: *query->patternClauses) {
+        Table intermediateTable = std::visit(*clauseEvaluator, patternClause);
         if (intermediateTable.isBodyEmpty()) {
             if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return FALSE_RESULT;
             return EMPTY_RESULT;
@@ -90,8 +92,8 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
     }
 
     //all conditions must be valid at this point
-    for (auto withClause: *query->withClauses) {
-        Table intermediateTable = dataPreprocessor->getTableByWith(withClause, query->declarations);
+    for (Clause withClause: *query->withClauses) {
+        Table intermediateTable = std::visit(*clauseEvaluator, withClause);
         resultTable = tableCombiner.joinTable(intermediateTable, resultTable);
 
         if (resultTable.isBodyEmpty()) {

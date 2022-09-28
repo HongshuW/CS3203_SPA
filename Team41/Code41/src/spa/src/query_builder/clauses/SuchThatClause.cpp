@@ -41,7 +41,7 @@ void SuchThatClause::updateSpecificModifiesUsesClause() {
     }
 }
 
-bool SuchThatClause::operator==(const Clause& clause) const {
+bool SuchThatClause::operator==(const SuchThatClause& clause) const {
     auto suchThatClause = dynamic_cast<const SuchThatClause*>(&clause);
     return suchThatClause != nullptr && arg1 == suchThatClause->arg1 && arg2 == suchThatClause->arg2;
 }
@@ -52,6 +52,3 @@ ostream& SuchThatClause::print(ostream& os) const {
     return os;
 }
 
-Table SuchThatClause::accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) {
-
-}

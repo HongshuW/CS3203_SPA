@@ -21,7 +21,7 @@ bool SelectClause::isTuple() const {
     return returnType == ReturnType::TUPLE;
 }
 
-bool SelectClause::operator==(const Clause& clause) const {
+bool SelectClause::operator==(const SelectClause& clause) const {
     auto selectClause = dynamic_cast<const SelectClause*>(&clause);
     bool isEqual = selectClause != nullptr && returnType == selectClause->returnType;
     if (returnResults) {
@@ -43,6 +43,3 @@ ostream& SelectClause::print(ostream& os) const {
     return os;
 }
 
-Table SelectClause::accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) {
-
-}
