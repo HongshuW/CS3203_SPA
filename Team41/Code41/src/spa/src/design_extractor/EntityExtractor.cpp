@@ -254,5 +254,37 @@ namespace DE {
         }
     }
 
+    vector<shared_ptr<StmtNode>> EntityExtractor::extractIfAndWhileNodesFromProcedures(shared_ptr<ProgramNode> rootPtr) {
+        vector<shared_ptr<StmtNode>> extractedNodes;
+
+        for (auto procedureNode : rootPtr->procedureList) {
+            queue<vector<shared_ptr<StmtNode>>> queue;
+            queue.push(procedureNode->stmtList);
+            while (!queue.empty()) {
+                auto stmtList = queue.front();
+                queue.pop();
+                for (auto stmtNode : stmtList) {
+                    NodeType nodeType = ASTUtils::getNodeType(stmtNode);
+                    switch (nodeType) {
+                    case AST::IF_NODE: {
+                        shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+                        extractedNodes.push_back(ifNode);
+                        break;
+                    }
+                    case AST::WHILE_NODE: {
+                        shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
+                        extractedNodes.push_back(whileNode);
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+                }
+            }
+        }
+
+        return extractedNodes;
+    }
+
     
 } // DE

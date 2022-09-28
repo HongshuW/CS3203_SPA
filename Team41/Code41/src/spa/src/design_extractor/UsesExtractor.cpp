@@ -161,7 +161,6 @@ namespace DE {
             UsesExtractor::mapProceduresToUsedVariables(shared_ptr<ProgramNode> rootPtr) {
         shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
         shared_ptr<vector<vector<vector<string>>>> resultOfProcedures = make_shared<vector<vector<vector<string>>>>();
-        shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
         auto map = unordered_map<string, unordered_set<string>>();
 
         for (auto procedureNode: rootPtr->procedureList) {
@@ -173,6 +172,47 @@ namespace DE {
                 variableList.insert(pair[1]);
             }
             map.insert(make_pair(procedureName, variableList));
+        }
+
+        return map;
+    }
+
+    unordered_map<string, unordered_set<string>> UsesExtractor::mapIfAndWhileStmtNoToUsedVariables(shared_ptr<ProgramNode> rootPtr) {
+        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
+        auto map = unordered_map<string, unordered_set<string>>();
+        auto uniqueVarList = unordered_set<string>();
+
+        auto ifAndWhileNodeList = EntityExtractor::extractIfAndWhileNodesFromProcedures(rootPtr);
+
+        for (auto node : ifAndWhileNodeList) {
+            NodeType nodeType = ASTUtils::getNodeType(node);
+            int stmtNo = stmtNumbers->at(node);
+            queue<shared_ptr<StmtNode>> queue;
+            queue.push(node);
+            while (!queue.empty()) {
+                switch (nodeType) {
+                case AST::IF_NODE: {
+                    shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(node);
+                    auto variables = Utils::getVariablesFromExprString(ifNode->condExpr->condExpr);
+                    uniqueVarList.insert(variables.begin(), variables.end());
+                    for (auto n : ifNode->ifStmtList) {
+                        queue.push(n);
+                    }
+                    for (auto n : ifNode->elseStmtList) {
+                        queue.push(n);
+                    }
+                    break;
+                }
+                case AST::WHILE_NODE: {
+                    shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(node);
+                    auto variables = Utils::getVariablesFromExprString(whileNode->condExpr->condExpr);
+                    uniqueVarList.insert(variables.begin(), variables.end());
+                    for (auto n : whileNode->stmtList) {
+                        queue.push(n);
+                    }
+                    break;
+                }
+            }
         }
 
         return map;
