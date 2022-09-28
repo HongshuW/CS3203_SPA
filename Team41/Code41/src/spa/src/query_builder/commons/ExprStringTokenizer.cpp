@@ -4,9 +4,11 @@
 
 #include "ExprStringTokenizer.h"
 
+#include <utility>
+
 using namespace QB;
 
-ExprStringTokenizer::ExprStringTokenizer(string exprStr) : currIdx(0), exprStr(exprStr) {};
+ExprStringTokenizer::ExprStringTokenizer(string exprStr) : currIdx(0), exprStr(std::move(exprStr)){}
 
 char ExprStringTokenizer::peek() {
     char c;
@@ -24,7 +26,7 @@ char ExprStringTokenizer::pop() {
     return c;
 }
 
-void ExprStringTokenizer::processAlnum() {
+void ExprStringTokenizer::processAlNum() {
     while (isalnum(peek())) {
         curr += pop();
     }
@@ -47,13 +49,11 @@ vector<string> ExprStringTokenizer::tokenize() {
         if (isspace(next)) {
             continue;
         } else if (isalnum(next)) {
-            processAlnum();
-        } else if (Utils::isBracket(curr)) {
-            exprTokens.push_back(curr);
-        } else if (Utils::isMathOperators(curr)) {
+            processAlNum();
+        } else if (Utils::isBracket(curr) || Utils::isMathOperators(curr)) {
             exprTokens.push_back(curr);
         } else {
-            throw PQLParseException("Unexpected token found in expression: " + next);
+            throw PQLParseException(QueryTokeniserConstants::PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN + next);
         }
     }
 
@@ -65,11 +65,11 @@ vector<string> ExprStringTokenizer::tokenize() {
         //! The first and the last string in the exprTokens cannot be a math operator
         if (Utils::isMathOperators(exprTokens[i]) && isNotFirstAndLastChar(i)) continue;
         if (Utils::isBracket(exprTokens[i])) continue;
-        throw PQLParseException("Unexpected token found in expression: " + exprTokens[i]);
+        throw PQLParseException(QueryTokeniserConstants::PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN + exprTokens[i]);
     }
 
     if (!Utils::isValidParentheses(exprTokens)) {
-        throw PQLParseException("Invalid parentheses found in expression");
+        throw PQLParseException(QueryTokeniserConstants::QPL_EXPR_STRING_INVALID_PARENTHESES);
     }
 
     return exprTokens;

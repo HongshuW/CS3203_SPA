@@ -21,11 +21,11 @@ namespace QB {
         string curr;
         char peek();
         char pop();
-        void processAlnum();
+        void processAlNum();
         bool isNotFirstAndLastChar(int index);
-    public:
         vector<string> exprTokens;
-        ExprStringTokenizer(string exprStr);
+    public:
+        explicit ExprStringTokenizer(string exprStr);
         vector<string> tokenize();
     };
 
