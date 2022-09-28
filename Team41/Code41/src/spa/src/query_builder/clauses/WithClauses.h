@@ -8,16 +8,12 @@
 #include "query_builder/commons/Ident.h"
 #include "query_builder/commons/WithRef.h"
 #include "query_builder/commons/WithRef.h"
-#include "Clause.h"
+
 
 using namespace QB;
 
-namespace QE {
-    class ClauseEvaluator;
-}
-
 namespace QB {
-    class WithClause : public Clause {
+    class WithClause {
     public:
         WithRef lhs;
         WithRef rhs;
@@ -31,9 +27,8 @@ namespace QB {
 
         WithClause(WithRef lhs, WithRef rhs) : lhs(lhs), rhs(rhs) {}
 
-        bool operator==(const Clause& clause) const override;
+        bool operator==(const WithClause& clause) const;
         ostream& print(ostream& os) const;
-        Table accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) override;
     };
 
 } // QB

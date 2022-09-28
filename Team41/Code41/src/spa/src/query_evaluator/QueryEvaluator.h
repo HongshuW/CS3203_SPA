@@ -9,7 +9,7 @@
 #include "query_builder/commons/Query.h"
 #include "pkb/DataRetriever.h"
 #include "DataPreprocessor.h"
-
+#include "ClauseVisitor.h"
 
 using namespace QB;
 

@@ -9,16 +9,11 @@
 
 #include "query_builder/commons/Synonym.h"
 #include "query_builder/commons/AttrRef.h"
-#include "Clause.h"
 #include <ostream>
 #include <variant>
 #include <vector>
 
 using namespace std;
-
-namespace QE {
-    class ClauseEvaluator;
-}
 
 namespace QB {
     enum class ReturnType {
@@ -28,7 +23,7 @@ namespace QB {
 
     using Elem = variant<Synonym, AttrRef>;
 
-    class SelectClause : public Clause {
+    class SelectClause {
     public:
         //! Can be Synonym, Tuple or BOOLEAN
         ReturnType returnType;
@@ -45,9 +40,8 @@ namespace QB {
         static const int ELEM_SYN_IDX = 0;
         static const int ELEM_ATTR_REF_IDX = 1;
 
-        bool operator==(const Clause& clause) const override;
-        ostream& print(ostream& os) const override;
-        Table accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) override;
+        bool operator==(const SelectClause& clause) const;
+        ostream& print(ostream& os) const;
     };
 }
 

@@ -276,6 +276,7 @@ namespace QE {
 
                 Table dummyPKBTable; //get results
                 string attrName;
+                //todo: remove magic strings
                 attrName.append("$");
                 attrName.append(attrRef.synonym.synonym);
                 attrName.append(".");

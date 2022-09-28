@@ -24,7 +24,7 @@ WithRefType WithClause::getWithRefType(int idx) {
     return indexToWithRefType.at(idx);
 }
 
-bool WithClause::operator==(const Clause& clause) const {
+bool WithClause::operator==(const WithClause& clause) const {
     auto withClause = dynamic_cast<const WithClause*>(&clause);
     return withClause != nullptr && lhs == withClause->lhs && rhs == withClause->rhs;
 }
@@ -36,7 +36,4 @@ ostream& WithClause::print(ostream& os) const {
     return os;
 }
 
-Table WithClause::accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) {
-
-}
 

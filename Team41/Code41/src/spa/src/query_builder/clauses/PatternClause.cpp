@@ -12,7 +12,7 @@ PatternClause::PatternClause(DesignEntity patternType, Synonym arg1, Ref arg2, E
 PatternClause::PatternClause(DesignEntity patternType, Synonym arg1, Ref arg2) :
         patternType(patternType), arg1(std::move(arg1)), arg2(std::move(arg2)) {}
 
-bool PatternClause::operator==(const Clause &clause) const {
+bool PatternClause::operator==(const PatternClause &clause) const {
     auto patternClause = dynamic_cast<const PatternClause*>(&clause);
     return patternClause != nullptr && patternType == patternClause->patternType &&
             arg1 == patternClause->arg1 && arg2 == patternClause->arg2 && arg3 == patternClause->arg3;
@@ -23,6 +23,3 @@ ostream& PatternClause::print(ostream & os) const {
     return os;
 }
 
-Table PatternClause::accept(shared_ptr<QE::ClauseEvaluator> clauseEvaluator) {
-
-}
