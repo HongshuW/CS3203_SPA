@@ -22,8 +22,7 @@ namespace DE {
         static unordered_set<string> getModifiedVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode);
         static void handleCallNodesInModifiesP(shared_ptr<CallNode> callNode, 
             unordered_map<string, unordered_set<string>>
-            mappedProceduresToModifiedVar, unordered_map<string, 
-            vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures,
+            mappedProceduresToModifiedVar, unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures,
             unordered_set<string> &uniqueVarList);
         static void handleCallNodesInModifiesS(int stmtNo, shared_ptr<CallNode> callNode, unordered_map<string, unordered_set<string>>
             mappedProceduresToModifiedVar, unordered_map<string,

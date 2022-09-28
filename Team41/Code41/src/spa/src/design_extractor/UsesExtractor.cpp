@@ -156,23 +156,10 @@ namespace DE {
             if (mappedCallNodesToProcedures.count(procedureName) != 0) {
                 auto callNodes = mappedCallNodesToProcedures.at(procedureName);
                 for(auto node: callNodes) {
-                    queue<shared_ptr<CallNode>> queue;
-                    queue.push(node);
-                    while(!queue.empty()) {
-                        auto callNodeEntry = queue.front();
-                        queue.pop();
-                        auto usedVarList =
-                                mappedProceduresToUsedVar.at(callNodeEntry -> procedureName);
-                        uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
-                       
-                        if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-                            auto otherCallNodes =
-                                    mappedCallNodesToProcedures.at(callNodeEntry-> procedureName);
-                            for (auto n: otherCallNodes) {
-                                queue.push(n);
-                            }
-                        }
-                    }
+                    EntityExtractor::extractVariablesFromCallNodesInProceduresToList(
+                        node,
+                        mappedProceduresToUsedVar,
+                        mappedCallNodesToProcedures, uniqueVarList);
                 }
             }
 

@@ -171,9 +171,11 @@ shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesP(shared_ptr<
             auto callNodes = mappedCallNodesToProcedures.at(procedureName);
 
             for (auto node : callNodes) {
-                handleCallNodesInModifiesP(node,
+                EntityExtractor::extractVariablesFromCallNodesInProceduresToList(
+                    node,
                     mappedProceduresToModifiedVar,
                     mappedCallNodesToProcedures, uniqueVarList);
+
             }
         }
 
@@ -246,8 +248,9 @@ unordered_set<string> ModifiesExtractor::getModifiedVariablesFromProcedure(
 }
 
 void ModifiesExtractor::handleCallNodesInModifiesS(int stmtNo, shared_ptr<CallNode> callNode, unordered_map<string, unordered_set<string>>
-    mappedProceduresToModifiedVar, unordered_map<string,
-    vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, shared_ptr<list<vector<string>>> output) {
+    mappedProceduresToModifiedVar, 
+    unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, 
+    shared_ptr<list<vector<string>>> output) {
 
     queue<shared_ptr<CallNode>> queue;
     queue.push(callNode);

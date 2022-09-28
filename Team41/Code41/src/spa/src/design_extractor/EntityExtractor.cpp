@@ -229,4 +229,30 @@ namespace DE {
         }
         return mapCallNodesToProcedures;
     }
+
+    void EntityExtractor::extractVariablesFromCallNodesInProceduresToList(shared_ptr<CallNode> callNode, 
+        unordered_map<string, unordered_set<string>> mappedProceduresToModifiedVar, 
+        unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures, 
+        unordered_set<string>& uniqueVarList) {
+
+        queue<shared_ptr<CallNode>> queue;
+        queue.push(callNode);
+        while (!queue.empty()) {
+            auto callNodeEntry = queue.front();
+            queue.pop();
+            auto usedVarList =
+                mappedProceduresToModifiedVar.at(callNodeEntry->procedureName);
+            uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
+
+            if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
+                auto otherCallNodes =
+                    mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
+                for (auto n : otherCallNodes) {
+                    queue.push(n);
+                }
+            }
+        }
+    }
+
+    
 } // DE
