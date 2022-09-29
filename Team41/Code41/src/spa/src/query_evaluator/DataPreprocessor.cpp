@@ -109,39 +109,6 @@ namespace QE {
         return resultTable;
     }
 
-//    Table DataPreprocessor::getTableByPattern(shared_ptr<PatternClause> patternClause) {
-//
-//        //table of stmtNo, varname
-//        Table resultTable;
-//        switch (patternClause->patternType) {
-//            case QB::DesignEntity::ASSIGN: {
-//                auto exprSpecOpt = patternClause->arg3;
-//                auto exprSpec = std::move(*exprSpecOpt);
-//                resultTable = this->dataRetriever->getTableByExprPattern(exprSpec);
-//                break;
-//            }
-//            default : {
-//                resultTable = this->dataRetriever->getTableByCondExprPattern(patternClause->patternType);
-//                break;
-//            }
-//        }
-//
-//        //process result table: rename headers + filter
-//        string col1Name = patternClause->arg1.synonym; //arg1 must be ASSIGN, IF, WHILE synonym
-//        Ref ref2 = patternClause->arg2;
-//        RefType ref2Type = getRefType(ref2); //arg2 can be syn, _ or ident
-//        string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(patternClause->arg2).synonym : QEUtils::getColNameByRefType(ref2Type);
-//        resultTable.renameHeader({col1Name, col2Name});
-//
-//        if (ref2Type == QB::RefType::IDENT) {
-//            Ident ident2 = get<Ident>(ref2);
-//            resultTable = this->filerTableByColumnValue(resultTable, col2Name, ident2.identStr);
-//        }
-//
-//        return resultTable;
-//    }
-
-
     Table DataPreprocessor::filerTableByColumnValue(const Table& table, const string& colName, const string& value) {
         long colIdx = this->getColIndexByColName(table.header, colName);
         Table filteredTable = Table();
