@@ -125,6 +125,7 @@ namespace QE {
             }
             default : {
                 resultTable = this->dataRetriever->getTableByCondExprPattern(patternClause->patternType);
+
                 break;
             }
         }
