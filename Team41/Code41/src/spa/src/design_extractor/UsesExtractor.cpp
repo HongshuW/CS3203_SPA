@@ -186,10 +186,6 @@ namespace DE {
 
         auto ifAndWhileNodeList = EntityExtractor::extractIfAndWhileNodesFromProcedures(rootPtr);
 
-        if (ifAndWhileNodeList.empty()) {
-            return map;
-        }
-
         for (auto node : ifAndWhileNodeList) {
             auto uniqueVarList = unordered_set<string>();
             int stmtNo = stmtNumbers->at(node);
@@ -239,10 +235,10 @@ namespace DE {
                     break;
                 }
             }
-
             map.insert(make_pair(to_string(stmtNo), uniqueVarList));
-            return map;
         }
+
+        return map;
 
     } // DE
 
@@ -253,10 +249,6 @@ namespace DE {
         auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(rootPtr);
         auto mappedIfAndWhileStmtNoToUsedVariables = mapIfAndWhileStmtNoToUsedVariables(rootPtr);
 
-        if (ifAndWhileNodeList.empty()) {
-            return;
-        }
-       
         for (auto node : ifAndWhileNodeList) {
             auto uniqueVarList = unordered_set<string>();
             int stmtNo = stmtNumbers->at(node);
@@ -321,7 +313,6 @@ namespace DE {
                 callEntry.push_back(var);
                 ans->push_back(callEntry);
             }
-
         }
     }
 }
