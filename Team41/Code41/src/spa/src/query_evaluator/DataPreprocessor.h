@@ -15,6 +15,7 @@
 using namespace std;
 using namespace QB;
 namespace QE {
+    typedef shared_ptr<vector<Declaration>> Declarations;
 
     class DataPreprocessor {
         Table getTableByRelationHelper(Ref ref1, Ref ref2, RelationType relationType,
@@ -25,14 +26,15 @@ namespace QE {
         long getColIndexByColName(vector<string> v, const string& K);
         DesignEntity getDesignEntityOfSyn(Synonym synonym, shared_ptr<vector<Declaration>> declarations);
         shared_ptr<DataRetriever> dataRetriever;
-
+        Declarations declarations;
     public:
-        explicit DataPreprocessor(shared_ptr<DataRetriever> dataRetriever);
+
+        explicit DataPreprocessor(shared_ptr<DataRetriever> dataRetriever, Declarations declarations);
         Table getAllByDesignEntity(DesignEntity designEntity);
         Table getTableByRelation(SuchThatClause suchThatClause);
-        Table getTableByPattern(shared_ptr<PatternClause> patternClause);
         Table getTableByWith(shared_ptr<WithClause> withClause, shared_ptr<vector<Declaration>> declarations);
 
+        Table filterSingleClauseResultTable(Ref ref1, Ref ref2, Table table);
         /**
          * Used for with clause evaluation
          * Valid paras: stmt, read, print, call, while, if assign
@@ -47,7 +49,7 @@ namespace QE {
          * @param designEntity
          * @return
          */
-         //todo: implement call, read and print
+        //todo: implement call, read and print
         vector<string> getEntityNames(DesignEntity designEntity);
     };
 

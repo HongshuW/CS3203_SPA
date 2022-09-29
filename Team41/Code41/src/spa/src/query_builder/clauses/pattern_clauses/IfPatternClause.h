@@ -13,9 +13,10 @@
 
 using namespace QB;
 
+
 namespace QB {
 
-    class IfPatternClause : public PatternClause {
+    class IfPatternClause : public PatternClause, public enable_shared_from_this<IfPatternClause> {
     public:
         Synonym arg1; // must be declared as If
         Ref arg2; // entRef -> synonym, _, ident
@@ -23,6 +24,7 @@ namespace QB {
         IfPatternClause(Synonym arg1, Ref arg2);
 
         bool operator==(const IfPatternClause &clause) const;
+        Clause asClauseVariant() override;
     };
 
 } // QB

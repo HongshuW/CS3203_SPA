@@ -15,7 +15,7 @@
 using namespace QB;
 
 namespace QB {
-    class AssignPatternClause : public PatternClause{
+    class AssignPatternClause : public PatternClause, public enable_shared_from_this<AssignPatternClause>{
     public:
         Synonym arg1; // must be declared as ASSIGN
         Ref arg2; // entRef -> synonym, _, ident
@@ -24,6 +24,7 @@ namespace QB {
         AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
 
         bool operator==(const AssignPatternClause &clause) const;
+        Clause asClauseVariant() override;
     };
 }
 

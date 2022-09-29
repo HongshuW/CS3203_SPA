@@ -186,7 +186,7 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/constants/QueryValidatorConstants.h
         src/design_extractor/CallsExtractor.h
         src/query_evaluator/ClauseVisitor.cpp
-        src/query_evaluator/ClauseVisitor.h src/query_builder/clauses/pattern_clauses/IfPatternClause.cpp src/query_builder/clauses/pattern_clauses/IfPatternClause.h src/query_builder/clauses/pattern_clauses/WhilePatternClause.cpp src/query_builder/clauses/pattern_clauses/WhilePatternClause.h src/query_builder/clauses/pattern_clauses/AssignPatternClause.cpp src/query_builder/clauses/pattern_clauses/AssignPatternClause.h src/query_builder/clauses/pattern_clauses/PatternClause.cpp)
+        src/query_evaluator/ClauseVisitor.h src/query_builder/clauses/pattern_clauses/IfPatternClause.cpp src/query_builder/clauses/pattern_clauses/IfPatternClause.h src/query_builder/clauses/pattern_clauses/WhilePatternClause.cpp src/query_builder/clauses/pattern_clauses/WhilePatternClause.h src/query_builder/clauses/pattern_clauses/AssignPatternClause.cpp src/query_builder/clauses/pattern_clauses/AssignPatternClause.h src/query_builder/clauses/pattern_clauses/PatternClause.cpp src/query_evaluator/constants/ClauseVisitorConstants.cpp src/query_evaluator/constants/ClauseVisitorConstants.h)
 
 
 

@@ -15,7 +15,7 @@ using namespace QB;
 
 namespace QB {
 
-    class WhilePatternClause : public PatternClause {
+    class WhilePatternClause : public PatternClause, public enable_shared_from_this<WhilePatternClause> {
     public:
         Synonym arg1; // must be declared as If
         Ref arg2; // entRef -> synonym, _, ident
@@ -23,6 +23,7 @@ namespace QB {
         WhilePatternClause(const Synonym& arg1, const Ref& arg2);
 
         bool operator==(const WhilePatternClause &clause) const;
+        Clause asClauseVariant() override;
     };
 
 } // QB

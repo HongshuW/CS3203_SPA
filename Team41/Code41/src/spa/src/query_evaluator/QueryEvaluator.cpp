@@ -15,9 +15,14 @@
 #include <iterator>
 #include <numeric>
 #include "ClauseVisitor.h"
+#include "constants/ClauseVisitorConstants.h"
 
 using namespace QB;
 using namespace QE;
+
+const vector<string> FALSE_RESULT = {"FALSE"};
+const vector<string> TRUE_RESULT = {"TRUE"};
+const vector<string> EMPTY_RESULT = {};
 
 namespace QE {
     //TODO: update map
@@ -33,161 +38,90 @@ namespace QE {
                                                                               {DesignEntity::CONSTANT, "$constant_value"},
                                                                               {DesignEntity::PROCEDURE, "$procedure_name"}
                                                                       });
-    const vector<string> FALSE_RESULT = {"FALSE"};
-    const vector<string> TRUE_RESULT = {"TRUE"};
-    const vector<string> EMPTY_RESULT = {};
+
 
 }
 
-QueryEvaluator::QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor) {
-    this->dataPreprocessor = dataPreprocessor;
+QueryEvaluator::QueryEvaluator(shared_ptr<DataRetriever> dataRetriever): dataRetriever(dataRetriever) {
+
 }
 
 vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
+    this->declarations = query->declarations;
+    shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(dataRetriever, declarations);
     shared_ptr<ClauseVisitor> clauseEvaluator = make_shared<ClauseVisitor>(dataPreprocessor,
-                                                                           query->declarations);
+                                                                           dataRetriever,
+                                                                           declarations);
 
     bool hasCondition = !query->suchThatClauses->empty() || !query->patternClauses->empty() || !query->withClauses->empty();
     if (!hasCondition) {//no such that or pattern clause
-        return this->evaluateNoConditionQuery(query);
+        return this->evaluateNoConditionQuery(query, clauseEvaluator);
     }
+    bool isReturnTypeBool = query->selectClause->returnType == QB::ReturnType::BOOLEAN;
 
+    clauseEvaluator->setReturnBool();
     for (auto withClause: *query->withClauses) {
-        if (!doesConditionExist(query, *withClause)) {
-            if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return FALSE_RESULT;
-            return EMPTY_RESULT;
-        };
+        bool doesConditionExist = visit(*clauseEvaluator, (Clause) withClause).isEqual(
+                ClauseVisitorConstants::FALSE_TABLE);
+        if (!doesConditionExist) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
     }
 
+    clauseEvaluator->setReturnTable();
     TableCombiner tableCombiner = TableCombiner();
     Table resultTable;
     for (Clause stClause: *query->suchThatClauses) {
         Table intermediateTable = std::visit(*clauseEvaluator, stClause);
-        if (intermediateTable.isBodyEmpty()) {
-            if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return FALSE_RESULT;
-            return EMPTY_RESULT;
-
-        };
+        if (intermediateTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
         resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
-
-        if (resultTable.isBodyEmpty()) {
-            if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return FALSE_RESULT;
-            return EMPTY_RESULT;
-        };
-
+        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
     }
 
-    for (Clause patternClause: *query->patternClauses) {
-        Table intermediateTable = std::visit(*clauseEvaluator, patternClause);
-        if (intermediateTable.isBodyEmpty()) {
-            if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return FALSE_RESULT;
-            return EMPTY_RESULT;
-        };
+    for (auto patternClause: *query->patternClauses) {
+        Table intermediateTable = std::visit(*clauseEvaluator, patternClause->asClauseVariant());
+        if (intermediateTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
         resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
-
-        if (resultTable.isBodyEmpty()) {
-            if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return FALSE_RESULT;
-            return EMPTY_RESULT;
-        };
+        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
     }
 
     //all conditions must be valid at this point
     for (Clause withClause: *query->withClauses) {
         Table intermediateTable = std::visit(*clauseEvaluator, withClause);
         resultTable = tableCombiner.joinTable(intermediateTable, resultTable);
-
-        if (resultTable.isBodyEmpty()) {
-            if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return FALSE_RESULT;
-            return EMPTY_RESULT;
-        };
+        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
     }
 
     shared_ptr<vector<Elem>> returnTuple = query->selectClause->returnResults;
-    return formatConditionalQueryResult(resultTable, returnTuple, query);
+    return formatConditionalQueryResult(resultTable, returnTuple, query, dataPreprocessor);
 }
 
-vector<string> QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query) {
+vector<string>
+QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query, shared_ptr<ClauseVisitor> clauseVisitor) {
     shared_ptr<SelectClause> selectClause = query->selectClause;
 
-    if (selectClause->isBoolean()) {
-        return TRUE_RESULT;
-    }
+    if (selectClause->isBoolean()) return TRUE_RESULT;
 
-    TableCombiner tableCombiner = TableCombiner();
-    Table resultTable;
-    for (auto elem: *selectClause->returnResults) {
-        if (elem.index() == SelectClause::ELEM_SYN_IDX) {
-            Synonym synonym = std::get<SelectClause::ELEM_SYN_IDX>(elem);
-            DesignEntity designEntity = getDesignEntity(synonym, query);
-
-            Table intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity);
-            if (intermediateTable.isBodyEmpty()) {
-                return EMPTY_RESULT;
-            }
-            intermediateTable.renameHeader({synonym.synonym});
-            resultTable = tableCombiner.crossProduct(resultTable, intermediateTable);
-        } else {
-            //elem is a attrRef
-            AttrRef attrRef = std::get<AttrRef>(elem);
-            DesignEntity designEntity = getDesignEntity(attrRef.synonym, query);
-            Table intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity);
-
-            if (intermediateTable.isBodyEmpty()) {
-                return EMPTY_RESULT;
-            }
-
-            vector<DesignEntity> notDirectlyAvailEntities = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
-            vector<AttrName> notDirectlyAvailAttrNames = {AttrName::PROC_NAME, AttrName::VAR_NAME};
-
-
-            bool processingNeeded = std::count(notDirectlyAvailEntities.begin(), notDirectlyAvailEntities.end(), designEntity)
-                                    && std::count(notDirectlyAvailAttrNames.begin(), notDirectlyAvailAttrNames.end(), attrRef.attrName);
-
-            //todo: query pkb for data
-            if (processingNeeded) {
-
-            } else {
-                for (int i = 1; i < intermediateTable.header.size(); i++) {
-                    intermediateTable = intermediateTable.dropCol(i);
-                }
-                string headerName;
-                headerName.append("$");
-                headerName.append(attrRef.synonym.synonym);
-                headerName.append(".");
-                headerName.append(attrRef.getStrOfAttrName());
-                intermediateTable.renameHeader({headerName});
-            }
-            resultTable = tableCombiner.crossProduct(resultTable, intermediateTable);
-        }
-    }
-
+    Table resultTable = std::visit(*clauseVisitor, (Clause) selectClause);
     vector<string> ans;
+
     for (const auto& row: resultTable.rows) {
         string singleAns = join(row, " ");
         ans.push_back(singleAns);
     }
-
     return removeDup(ans);
 }
 
-DesignEntity QueryEvaluator::getDesignEntity(Synonym synonym, shared_ptr<Query> query) {
-    for (Declaration d: *query->declarations) {
-        if (synonym.synonym == d.getSynonym().synonym) {
-            return d.getDesignEntity();
-        }
+DesignEntity QueryEvaluator::getDesignEntity(Synonym synonym) {
+    for (Declaration d: *declarations) {
+        if (!(synonym.synonym == d.getSynonym().synonym)) continue;
+        return d.getDesignEntity();
     }
-    return static_cast<DesignEntity>(NULL);
-}
 
-string QueryEvaluator::getDesignEntityColName(DesignEntity entity) {
-    return designEntityToColNameMap.at(entity);
+    return static_cast<DesignEntity>(NULL);
 }
 
 std::string QueryEvaluator::join(std::vector<std::string> const &strings, std::string delim)
 {
-    if (strings.empty()) {
-        return std::string();
-    }
+    if (strings.empty()) return std::string();
 
     return std::accumulate(strings.begin() + 1, strings.end(), strings[0],
                            [&delim](std::string x, std::string y) {
@@ -203,164 +137,21 @@ vector<string> QueryEvaluator::removeDup(vector<string> vec) {
     return ans;
 }
 
-bool QueryEvaluator::doesConditionExist(shared_ptr<Query> query, WithClause withClause) {
-
-    using Value = variant<string, int, vector<int>, vector<string>>;
-    Value valLHS;
-    Value valRHS;
-
-    const int STR_VAL_IDX = 0;
-    const int INT_VAL_IDX = 1;
-    const int VECTOR_INT_VAL_IDX = 2;
-    const int VECTOR_STR_VAL_IDX = 3;
-
-    vector<WithRef> withRefs = {withClause.lhs, withClause.rhs};
-    vector<Value> values = {valLHS, valRHS};
-
-    //get values from each ref and store in val1 and val2
-    for (int i = 0; i < withRefs.size(); i++) {
-        switch (withRefs[i].index()) {
-            case (WithClause::WITHREF_IDENT_IDX): {
-                values[i] = get<WithClause::WITHREF_IDENT_IDX>(withRefs[i]).identStr;
-                break;
-            }
-            case (WithClause::WITHREF_INT_IDX): {
-                values[i] = get<WithClause::WITHREF_INT_IDX>(withRefs[i]);
-                break;
-            }
-            case (WithClause::WITHREF_ATTR_REF_IDX): {
-                AttrRef attrRef = std::get<AttrRef>(withRefs[i]);
-                DesignEntity designEntity = getDesignEntity(attrRef.synonym, query);
-                vector<DesignEntity> notDirectlyAvailDEs = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
-                vector<AttrName> notDirectlyAvailAttrs = {AttrName::PROC_NAME, AttrName::VAR_NAME};
-                bool processingNeeded = std::count(notDirectlyAvailDEs.begin(), notDirectlyAvailDEs.end(), designEntity)
-                                        && std::count(notDirectlyAvailAttrs.begin(), notDirectlyAvailAttrs.end(), attrRef.attrName);
-                if (!processingNeeded) {
-                    switch (attrRef.attrName) {
-                        case AttrName::PROC_NAME: {
-                            values[i] = dataPreprocessor->getEntityNames(designEntity); //design entity must be procedure
-                            break;
-                        }
-                        case AttrName::VAR_NAME: {
-                            values[i] = dataPreprocessor->getEntityNames(designEntity);//design entity must be variable
-                            break;
-                        }
-                        case AttrName::VALUE: {
-                            values[i] = dataPreprocessor->getEntityNames(
-                                    designEntity);//this can only be constant values with return lhsType vector<string>
-                            vector<int> constVals;
-                            if (values[i].index() == VECTOR_STR_VAL_IDX) {
-                                vector<string> strVals = get<VECTOR_STR_VAL_IDX>(values[i]);
-                                for (auto strVal: strVals) {
-                                    constVals.push_back(stoi(strVal));
-                                }
-                            }
-                            values[i]= constVals;
-                            break;
-                        }
-                        case AttrName::STMT_NUMBER: {
-                            values[i] = dataPreprocessor->getStmtNumsByDesignEntity(designEntity); //vector<int>
-                            break;
-                        }
-                    }
-                } else {
-                    //todo: process call.procName, read.varname and print.varname
-                }
-                break;
-            }
-
-        }
-    }
-
-    //compare two values, assumption made: two values are of the same lhsType, i.e either int or string
-    switch (valLHS.index()) {
-        case STR_VAL_IDX: {
-            string lhsStr = get<STR_VAL_IDX>(valLHS);
-            if (valRHS.index() == STR_VAL_IDX) return lhsStr == get<STR_VAL_IDX>(valRHS);
-            if (valRHS.index() == VECTOR_STR_VAL_IDX) {
-                vector<string> strs = get<VECTOR_STR_VAL_IDX>(valRHS);
-                return count(strs.begin(), strs.end(), lhsStr);
-            }
-            break;
-        }
-        case INT_VAL_IDX: {
-            int lhsInt = get<INT_VAL_IDX>(valLHS);
-            if (valRHS.index() == INT_VAL_IDX) return lhsInt == get<INT_VAL_IDX>(valRHS);
-            if (valRHS.index() == VECTOR_INT_VAL_IDX) {
-                vector<int> ints = get<VECTOR_INT_VAL_IDX>(valRHS);
-                return count(ints.begin(), ints.end(), lhsInt);
-            }
-            break;
-        }
-        case VECTOR_STR_VAL_IDX: {
-            vector<string> lhsVecStr = get<VECTOR_STR_VAL_IDX>(valLHS);
-            if (valRHS.index() == STR_VAL_IDX) {
-                string rhsStr = get<STR_VAL_IDX>(valRHS);
-                return count(lhsVecStr.begin(), lhsVecStr.end(), rhsStr);
-            }
-            if (valRHS.index() == VECTOR_STR_VAL_IDX) {
-                vector<string> rhsVecStr = get<VECTOR_STR_VAL_IDX>(valRHS);
-                return !intersection(lhsVecStr, rhsVecStr).empty();
-            }
-            break;
-        }
-        case VECTOR_INT_VAL_IDX: {
-            vector<int> lhsVecInt = get<VECTOR_INT_VAL_IDX>(valLHS);
-            if (valRHS.index() == INT_VAL_IDX) {
-                int rhsInt = get<INT_VAL_IDX>(valRHS);
-                return count(lhsVecInt.begin(), lhsVecInt.end(), rhsInt);
-            }
-            if (valRHS.index() == VECTOR_INT_VAL_IDX) {
-                vector<int> rhsVecInt = get<VECTOR_INT_VAL_IDX>(valRHS);
-                return !intersection(lhsVecInt, rhsVecInt).empty();
-            }
-            break;
-        }
-    }
-
-    return false;
-}
-
-std::vector<std::string> QueryEvaluator::intersection(std::vector<std::string> v1,
-                                      std::vector<std::string> v2){
-    std::vector<std::string> v3;
-
-    std::sort(v1.begin(), v1.end());
-    std::sort(v2.begin(), v2.end());
-
-    std::set_intersection(v1.begin(),v1.end(),
-                          v2.begin(),v2.end(),
-                          back_inserter(v3));
-    return v3;
-}
-
-std::vector<int> QueryEvaluator::intersection(std::vector<int> v1,
-                                                      std::vector<int> v2){
-    std::vector<int> v3;
-
-    std::sort(v1.begin(), v1.end());
-    std::sort(v2.begin(), v2.end());
-
-    std::set_intersection(v1.begin(),v1.end(),
-                          v2.begin(),v2.end(),
-                          back_inserter(v3));
-    return v3;
-}
-
-vector<string> QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vector<Elem>> tuple, shared_ptr<Query> query) {
+vector<string>
+QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vector<Elem>> tuple, shared_ptr<Query> query,
+                                             shared_ptr<DataPreprocessor> dataPreprocessor) {
     if (query->selectClause->returnType == QB::ReturnType::BOOLEAN) return resultTable.isBodyEmpty() ? FALSE_RESULT: TRUE_RESULT;
 
     //cartesian product for any missing synonym
+    const int COL_DOES_NOT_EXIST = -1;
     for (auto elem: *tuple) {
         if (elem.index() == SelectClause::ELEM_ATTR_REF_IDX) {
             AttrRef attrRef = std::get<AttrRef>(elem);
             int colIdx = resultTable.getColIdxByName(attrRef.synonym.synonym);
-            if (colIdx == - 1) {
-                DesignEntity designEntity = getDesignEntity(attrRef.synonym, query);
+            if (colIdx == COL_DOES_NOT_EXIST) {
+                DesignEntity designEntity = getDesignEntity(attrRef.synonym);
                 Table intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity);
-                if (intermediateTable.isBodyEmpty()) {
-                    return EMPTY_RESULT;
-                }
+                if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
                 vector<DesignEntity> notDirectlyAvailEntities = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
                 vector<AttrName> notDirectlyAvailAttrNames = {AttrName::PROC_NAME, AttrName::VAR_NAME};
                 bool processingNeeded = std::count(notDirectlyAvailEntities.begin(), notDirectlyAvailEntities.end(), designEntity)
@@ -380,7 +171,7 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(Table resultTable, s
             int colIdx = resultTable.getColIdxByName(synonym.synonym);
 
             if (colIdx == -1) {
-                DesignEntity designEntity = getDesignEntity(synonym, query);
+                DesignEntity designEntity = getDesignEntity(synonym);
                 Table intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity);
                 if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
 
@@ -391,40 +182,11 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(Table resultTable, s
     }}
     //everything should be in the result table, no more cross product and table size stays the same
     //hence can project answers
-    size_t ans_size = resultTable.rows.size();
-    vector<string> ans = vector<string>(ans_size, "");
-
-    for (auto elem: *tuple) {
-        if (elem.index() == SelectClause::ELEM_SYN_IDX) {
-            Synonym synonym = std::get<SelectClause::ELEM_SYN_IDX>(elem);
-            int colIdx = resultTable.getColIdxByName(synonym.synonym);
-
-            vector<string> colValues = resultTable.getColumnByName(synonym.synonym);
-            for (int r = 0; r < ans_size; r++) {
-                ans[r] =  ans[r].empty() ? colValues[r] : ans[r] + " " + colValues[r];
-            }
-        } else {
-            //elem is a attrRef
-            AttrRef attrRef = std::get<AttrRef>(elem);
-            int colIdx = resultTable.getColIdxByName(attrRef.synonym.synonym);
-            if (colIdx >= 0) {
-                vector<string> colValues = getAttributeValuesOfCol(resultTable, attrRef, query);
-                for (int r = 0; r < ans_size; r++) {
-
-                    ans[r] = ans[r].empty() ? colValues[r] : ans[r] + " " + colValues[r];
-                }
-            }
-        }
-    }
-    return removeDup(ans);
+    return projectResult(resultTable, tuple);
 }
 
-
-
-
-
-vector<string> QueryEvaluator::getAttributeValuesOfCol(Table resultTable, AttrRef attrRef, shared_ptr<Query> query) {
-    DesignEntity designEntity = getDesignEntity(attrRef.synonym, query);
+vector<string> QueryEvaluator::getAttributeValuesOfCol(Table resultTable, AttrRef attrRef) {
+    DesignEntity designEntity = getDesignEntity(attrRef.synonym);
     vector<DesignEntity> notDirectlyAvailEntities = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
     vector<AttrName> notDirectlyAvailAttrNames = {AttrName::PROC_NAME, AttrName::VAR_NAME};
     bool processingNeeded = std::count(notDirectlyAvailEntities.begin(), notDirectlyAvailEntities.end(), designEntity)
@@ -436,5 +198,31 @@ vector<string> QueryEvaluator::getAttributeValuesOfCol(Table resultTable, AttrRe
         ans = resultTable.getColumnByName(attrRef.synonym.synonym);
     }
     return ans;
+}
+
+vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vector<Elem>> tuple) {
+    size_t ans_size = resultTable.rows.size();
+    vector<string> ans = vector<string>(ans_size, "");
+
+    for (auto elem: *tuple) {
+        if (elem.index() == SelectClause::ELEM_SYN_IDX) {
+            Synonym synonym = std::get<SelectClause::ELEM_SYN_IDX>(elem);
+            vector<string> colValues = resultTable.getColumnByName(synonym.synonym);
+            for (int r = 0; r < ans_size; r++) {
+                ans[r] =  ans[r].empty() ? colValues[r] : ans[r] + " " + colValues[r];
+            }
+        } else {
+            //elem is a attrRef
+            AttrRef attrRef = std::get<AttrRef>(elem);
+            int colIdx = resultTable.getColIdxByName(attrRef.synonym.synonym);
+            if (colIdx >= 0) {
+                vector<string> colValues = getAttributeValuesOfCol(resultTable, attrRef);
+                for (int r = 0; r < ans_size; r++) {
+                    ans[r] = ans[r].empty() ? colValues[r] : ans[r] + " " + colValues[r];
+                }
+            }
+        }
+    }
+    return removeDup(ans);
 }
 

@@ -19,9 +19,6 @@ namespace QE {
     vector<AttrName> notDirectlyAvailAttrs = {AttrName::PROC_NAME, AttrName::VAR_NAME};
     vector<DesignEntity> stmtEntities = {DesignEntity::STMT, DesignEntity::READ, DesignEntity::PRINT, DesignEntity::CALL, DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN};
 
-    DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever) {
-        this->dataRetriever = std::move(dataRetriever);
-    }
 
     Table
     DataPreprocessor::getTableByRelation(SuchThatClause suchThatClause) {
@@ -112,38 +109,37 @@ namespace QE {
         return resultTable;
     }
 
-    Table DataPreprocessor::getTableByPattern(shared_ptr<PatternClause> patternClause) {
-
-        //table of stmtNo, varname
-        Table resultTable;
-        switch (patternClause->patternType) {
-            case QB::DesignEntity::ASSIGN: {
-                auto exprSpecOpt = patternClause->arg3;
-                auto exprSpec = std::move(*exprSpecOpt);
-                resultTable = this->dataRetriever->getTableByExprPattern(exprSpec);
-                break;
-            }
-            default : {
-                resultTable = this->dataRetriever->getTableByCondExprPattern(patternClause->patternType);
-
-                break;
-            }
-        }
-
-        //process result table: rename headers + filter
-        string col1Name = patternClause->arg1.synonym; //arg1 must be ASSIGN, IF, WHILE synonym
-        Ref ref2 = patternClause->arg2;
-        RefType ref2Type = getRefType(ref2); //arg2 can be syn, _ or ident
-        string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(patternClause->arg2).synonym : QEUtils::getColNameByRefType(ref2Type);
-        resultTable.renameHeader({col1Name, col2Name});
-
-        if (ref2Type == QB::RefType::IDENT) {
-            Ident ident2 = get<Ident>(ref2);
-            resultTable = this->filerTableByColumnValue(resultTable, col2Name, ident2.identStr);
-        }
-
-        return resultTable;
-    }
+//    Table DataPreprocessor::getTableByPattern(shared_ptr<PatternClause> patternClause) {
+//
+//        //table of stmtNo, varname
+//        Table resultTable;
+//        switch (patternClause->patternType) {
+//            case QB::DesignEntity::ASSIGN: {
+//                auto exprSpecOpt = patternClause->arg3;
+//                auto exprSpec = std::move(*exprSpecOpt);
+//                resultTable = this->dataRetriever->getTableByExprPattern(exprSpec);
+//                break;
+//            }
+//            default : {
+//                resultTable = this->dataRetriever->getTableByCondExprPattern(patternClause->patternType);
+//                break;
+//            }
+//        }
+//
+//        //process result table: rename headers + filter
+//        string col1Name = patternClause->arg1.synonym; //arg1 must be ASSIGN, IF, WHILE synonym
+//        Ref ref2 = patternClause->arg2;
+//        RefType ref2Type = getRefType(ref2); //arg2 can be syn, _ or ident
+//        string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(patternClause->arg2).synonym : QEUtils::getColNameByRefType(ref2Type);
+//        resultTable.renameHeader({col1Name, col2Name});
+//
+//        if (ref2Type == QB::RefType::IDENT) {
+//            Ident ident2 = get<Ident>(ref2);
+//            resultTable = this->filerTableByColumnValue(resultTable, col2Name, ident2.identStr);
+//        }
+//
+//        return resultTable;
+//    }
 
 
     Table DataPreprocessor::filerTableByColumnValue(const Table& table, const string& colName, const string& value) {
@@ -301,10 +297,71 @@ namespace QE {
             for (int colIdx: comparedCols) {
                 set.insert(row[colIdx]);
             }
-            if (set.size() > 1) continue;
+            if (set.size() > 1) continue; //values are not the same
             filteredTable.appendRow(row);
         }
         return filteredTable;
+    }
+
+    Table DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2, Table table) {
+        //RefType can be synonym, integer, underscore or string
+        RefType ref1Type = getRefType(ref1);
+        RefType ref2Type = getRefType(ref2);
+        string col1Name = ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : QEUtils::getColNameByRefType(ref1Type);
+        string col2Name = ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : QEUtils::getColNameByRefType(ref2Type);
+
+        vector<string> newHeaders = vector<string>{col1Name, col2Name};
+        table.renameHeader(newHeaders);
+        switch (ref1Type) {
+            case RefType::SYNONYM: {
+                Synonym syn1 = get<Synonym>(ref1);
+                table = this->filerTableByDesignEntity(table,col1Name,
+                                                       this->getDesignEntityOfSyn(syn1, declarations));
+                break;
+            }
+            case RefType::UNDERSCORE:
+                break;
+            case RefType::INTEGER: {
+                int int1 = get<int>(ref1);
+                table = this->filerTableByColumnValue(table, col1Name, to_string(int1));
+                break;
+            }
+            case RefType::IDENT:
+                Ident ident1 = get<Ident>(ref1);
+                table = this->filerTableByColumnValue(table, col1Name, ident1.identStr);
+                break;
+        }
+        switch (ref2Type) {
+            case RefType::SYNONYM: {
+                Synonym syn2 = get<Synonym>(ref2);
+                table = this->filerTableByDesignEntity(table,col2Name,
+                                                       this->getDesignEntityOfSyn(syn2, declarations));
+
+                //synonyms are the same: equality check between the two cols
+                if (ref1Type != QB::RefType::SYNONYM) break;
+                Synonym syn1 = get<Synonym>(ref1);
+                if (!(syn1 == syn2)) break;
+                const int FIRST_COL_IDX = 0;
+                const int SECOND_COL_IDX = 1;
+                return this->filterTableByColValueEquality(table, {FIRST_COL_IDX, SECOND_COL_IDX});
+            }
+            case RefType::UNDERSCORE:
+                break;
+            case RefType::INTEGER: {
+                int int2 = get<int>(ref2);
+                table = this->filerTableByColumnValue(table, col2Name, to_string(int2));
+                break;
+            }
+            case RefType::IDENT:
+                Ident ident2 = get<Ident>(ref2);
+                table = this->filerTableByColumnValue(table, col2Name, ident2.identStr);
+                break;
+        }
+        return table;
+    }
+
+    DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever, Declarations declarations): dataRetriever(dataRetriever), declarations(declarations) {
+
     }
 
 

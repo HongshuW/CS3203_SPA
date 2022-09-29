@@ -14,3 +14,7 @@ bool AssignPatternClause::operator==(const AssignPatternClause &clause) const {
     return patternClause != nullptr && arg1 == patternClause->arg1
         && arg2 == patternClause->arg2 && arg3 == patternClause->arg3;
 }
+
+Clause AssignPatternClause::asClauseVariant() {
+    return shared_from_this();
+}

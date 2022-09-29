@@ -8,6 +8,7 @@
 #include "DummyDataRetrievers/DummyDataRetriever.h"
 #include "DummyDataRetrievers/DummyDataRetriever2.h"
 #include "QETestUtils.h"
+#include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
 
 using namespace std;
 TEST_CASE("Test query evaluator") {
@@ -15,8 +16,7 @@ TEST_CASE("Test query evaluator") {
     const vector<string> TRUE_RESULT = {"TRUE"};
     const vector<string> EMPTY_RESULT = {};
     shared_ptr<DummyDataRetriever> dummyDataRetriever = make_shared<DummyDataRetriever>(make_shared<PKBStorage>());
-    shared_ptr<QE::DataPreprocessor> dataPreprocessor = make_shared<QE::DataPreprocessor>(dummyDataRetriever);
-    QE::QueryEvaluator queryEvaluator = QE::QueryEvaluator(dataPreprocessor);
+    QE::QueryEvaluator queryEvaluator = QE::QueryEvaluator(dummyDataRetriever);
     SECTION("test no clause select bool") {
         shared_ptr<Query> query = make_shared<Query>();
         query->selectClause = make_shared<SelectClause>(ReturnType::BOOLEAN);
@@ -321,7 +321,7 @@ TEST_CASE("Test query evaluator") {
         query->selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
 
         ExpressionSpec expressionSpec = ExpressionSpec(QB::ExpressionSpecType::ANY_MATCH);
-        shared_ptr<PatternClause> patternClause1 = make_shared<PatternClause>(DesignEntity::ASSIGN, syn1, Ident("dummyVarA"), expressionSpec);
+        shared_ptr<PatternClause> patternClause1 = make_shared<AssignPatternClause>( syn1, Ident("dummyVarA"), expressionSpec);
         query->patternClauses->push_back(patternClause1);
         auto actual = queryEvaluator.evaluate(query);
         vector<string> expected = {"1"};
@@ -341,7 +341,7 @@ TEST_CASE("Test query evaluator") {
         query->selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
 
         ExpressionSpec expressionSpec = ExpressionSpec(QB::ExpressionSpecType::ANY_MATCH);
-        shared_ptr<PatternClause> patternClause1 = make_shared<PatternClause>(DesignEntity::ASSIGN, syn1, syn2, expressionSpec);
+        shared_ptr<PatternClause> patternClause1 = make_shared<AssignPatternClause>( syn1, syn2, expressionSpec);
         query->patternClauses->push_back(patternClause1);
 
         shared_ptr<SuchThatClause> suchThatClause1 =
@@ -367,7 +367,7 @@ TEST_CASE("Test query evaluator") {
         query->selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
 
         ExpressionSpec expressionSpec = ExpressionSpec(QB::ExpressionSpecType::ANY_MATCH);
-        shared_ptr<PatternClause> patternClause1 = make_shared<PatternClause>(DesignEntity::ASSIGN, syn1, syn2, expressionSpec);
+        shared_ptr<PatternClause> patternClause1 = make_shared<AssignPatternClause>( syn1, syn2, expressionSpec);
         query->patternClauses->push_back(patternClause1);
 
         shared_ptr<SuchThatClause> suchThatClause1 =
@@ -381,8 +381,7 @@ TEST_CASE("Test query evaluator") {
     }
 
     shared_ptr<DummyDataRetriever2> dummyDataRetriever2 = make_shared<DummyDataRetriever2>(make_shared<PKBStorage>());
-    shared_ptr<QE::DataPreprocessor> dataPreprocessor2 = make_shared<QE::DataPreprocessor>(dummyDataRetriever2);
-    QE::QueryEvaluator queryEvaluator2 = QE::QueryEvaluator(dataPreprocessor2);
+    QE::QueryEvaluator queryEvaluator2 = QE::QueryEvaluator(dummyDataRetriever2);
     SECTION("test no clause select bool") {
         shared_ptr<Query> query = make_shared<Query>();
         query->selectClause = make_shared<SelectClause>(ReturnType::BOOLEAN);
