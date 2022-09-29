@@ -124,13 +124,14 @@ TEST_CASE("Test Uses_S Extraction") {
         auto actual = designExtractor.extractRelations(QB::RelationType::USES_S);
         vector<vector<string>> expected = { {"1", "x"}, {"2", "a"}, {"2", "x"}, {"2", "y"},
                                             {"2", "b"}, {"2", "asdf"}, {"2", "z"}, {"2", "vvv"}, {"2", "xxx"},
-                                            {"3", "x"},{"3", "y"}, {"3", "b"}, {"3", "z"},
-                                           {"4", "y"}, {"4", "b"},
-                                           {"4", "asdf"}, {"5", "z"}, {"5", "xxx"},
-                                           {"5", "vvv"}, {"6", "y"}, {"7", "y"},
-                                           {"8", "b"}, {"8", "asdf"}, {"9", "asdf"}, {"11", "z"}, {"12", "xxx"},
-                                           {"12", "vvv"}, {"14", "asdf"},
-                                           {"15", "vvv"}, {"15", "xxx"}};
+                                            {"3", "x"},{"3", "y"}, {"3", "b"}, {"3", "z"}, {"3", "asdf"},
+                                            {"3", "xxx"}, {"3", "vvv"},
+                                            {"4", "y"}, {"4", "b"},
+                                            {"4", "asdf"}, {"5", "z"}, {"5", "xxx"},
+                                            {"5", "vvv"}, {"6", "y"}, {"7", "y"},
+                                            {"8", "b"}, {"8", "asdf"}, {"9", "asdf"}, {"11", "z"}, {"12", "xxx"},
+                                            {"12", "vvv"}, {"14", "asdf"},
+                                            {"15", "vvv"}, {"15", "xxx"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));

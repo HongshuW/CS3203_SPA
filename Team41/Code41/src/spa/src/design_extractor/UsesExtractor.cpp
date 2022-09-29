@@ -172,6 +172,7 @@ namespace DE {
             for (auto pair : *result) {
                 variableList.insert(pair[1]);
             }
+
             map.insert(make_pair(procedureName, variableList));
         }
 
@@ -273,7 +274,6 @@ namespace DE {
                         for (auto var : varList) {
                              uniqueVarList.insert(var);
                         }
-                        break;
                     }
                     else {
                         auto usedVarList = mappedIfAndWhileStmtNoToUsedVariables.at(to_string(stmtNo));
