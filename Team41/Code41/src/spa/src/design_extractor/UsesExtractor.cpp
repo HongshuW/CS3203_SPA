@@ -185,6 +185,10 @@ namespace DE {
 
         auto ifAndWhileNodeList = EntityExtractor::extractIfAndWhileNodesFromProcedures(rootPtr);
 
+        if (ifAndWhileNodeList.empty()) {
+            return map;
+        }
+
         for (auto node : ifAndWhileNodeList) {
             auto uniqueVarList = unordered_set<string>();
             NodeType nodeType = ASTUtils::getNodeType(node);
