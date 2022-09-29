@@ -245,6 +245,10 @@ namespace DE {
         auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
         auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(rootPtr);
         auto mappedIfAndWhileStmtNoToUsedVariables = mapIfAndWhileStmtNoToUsedVariables(rootPtr);
+
+        if (ifAndWhileNodeList.empty()) {
+            return;
+        }
        
         for (auto node : ifAndWhileNodeList) {
             auto uniqueVarList = unordered_set<string>();
