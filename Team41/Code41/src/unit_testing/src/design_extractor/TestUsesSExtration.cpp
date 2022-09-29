@@ -104,6 +104,8 @@ TEST_CASE("Test Uses_S Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::USES_S);
         vector<vector<string>> expected = {{"1", "x"}, {"2", "x"}, {"2", "qwerty"},
+                                           {"2", "y"}, {"2", "z"}, {"2", "xyz"},
+                                           {"2", "def"},
                                            {"3", "y"}, {"3", "z"}, {"3", "def"},
                                            {"3", "xyz"}, {"4", "qwerty"}, {"5", "z"},
                                            {"6", "y"}, {"7", "y"}, {"8", "z"},
