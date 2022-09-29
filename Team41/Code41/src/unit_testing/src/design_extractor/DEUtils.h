@@ -15,6 +15,7 @@ namespace TestDE {
     class DEUtils {
     public:
         static bool containsSameElementPair(list<vector<string>> lst, vector<vector<string>> vec);
+        static bool containsSameElementTuple(list<vector<string>> lst, vector<vector<string>> vec);
         static bool isSamePattern(vector<pair<pair<int, string>, shared_ptr<AssignNode>>> actual,
                                     vector<pair<pair<int, string>, shared_ptr<AssignNode>>> expected);
     };

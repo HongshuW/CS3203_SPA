@@ -13,6 +13,7 @@
 shared_ptr<list<vector<string>>> CallsExtractor::extractCalls(shared_ptr<ProgramNode> programNode) {
     list<vector<string>> output;
     auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(programNode);
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
     for (auto& it: mappedCallNodesToProcedures) {
         string name = it.first;
         vector<shared_ptr<CallNode>> listOfCallNodes = it.second;
@@ -21,6 +22,7 @@ shared_ptr<list<vector<string>>> CallsExtractor::extractCalls(shared_ptr<Program
             string callNodeName = callNode->procedureName;
             callsEntry.push_back(name);
             callsEntry.push_back(callNodeName);
+            callsEntry.push_back(to_string(stmtNumbers->at(callNode)));
             output.push_back(callsEntry);
         }
     }
@@ -30,6 +32,7 @@ shared_ptr<list<vector<string>>> CallsExtractor::extractCalls(shared_ptr<Program
 shared_ptr<list<vector<string>>> CallsExtractor::extractCallsStar(shared_ptr<ProgramNode> programNode) {
     list<vector<string>> output;
     auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(programNode);
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
     for (auto& it: mappedCallNodesToProcedures) {
         string name = it.first;
         vector<shared_ptr<CallNode>> listOfCallNodes = it.second;
