@@ -254,6 +254,7 @@ namespace DE {
             int stmtNo = stmtNumbers->at(node);
             queue<shared_ptr<StmtNode>> queue;
             queue.push(node);
+           
             while (!queue.empty()) {
                 auto nodeEntry = queue.front();
                 queue.pop();
@@ -262,20 +263,14 @@ namespace DE {
                 case AST::CALL_NODE: {
                     shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(nodeEntry);
                     auto varList = mappedProceduresToUsedVar.at(callNode->procedureName);
-                    if (mappedIfAndWhileStmtNoToUsedVariables.count(to_string(stmtNo)) == 0) {
-                        for (auto var : varList) {
-                             uniqueVarList.insert(var);
+
+                    auto usedVarList = mappedIfAndWhileStmtNoToUsedVariables.at(to_string(stmtNo));
+                    for (auto var : varList) {
+                        if (usedVarList.count(var) == 0) {
+                            uniqueVarList.insert(var);
                         }
                     }
-                    else {
-                        auto usedVarList = mappedIfAndWhileStmtNoToUsedVariables.at(to_string(stmtNo));
-                        for (auto var : varList) {
-                            if (usedVarList.count(var) == 0) {
-                                uniqueVarList.insert(var);
-                            }
-                        }
-                    }
-                   
+                    
                     if (mappedCallNodesToProcedures.count(callNode->procedureName) != 0) {
                         auto otherCallNodes = mappedCallNodesToProcedures.at(callNode->procedureName);
                         for (auto n : otherCallNodes) {
