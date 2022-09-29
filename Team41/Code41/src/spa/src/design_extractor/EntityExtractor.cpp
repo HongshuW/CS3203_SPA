@@ -269,11 +269,14 @@ namespace DE {
                     case AST::IF_NODE: {
                         shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
                         extractedNodes.push_back(ifNode);
+                        queue.push(ifNode->ifStmtList);
+                        queue.push(ifNode->elseStmtList);
                         break;
                     }
                     case AST::WHILE_NODE: {
                         shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
                         extractedNodes.push_back(whileNode);
+                        queue.push(whileNode->stmtList);
                         break;
                     }
                     default:
