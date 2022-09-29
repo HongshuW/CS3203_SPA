@@ -222,7 +222,6 @@ namespace QE {
                                     && std::count(notDirectlyAvailAttrs.begin(), notDirectlyAvailAttrs.end(), attrRef.attrName);
 
             if (!processingNeeded) {
-
                 Table table = getAllByDesignEntity(designEntity);
                 if (table.isBodyEmpty()) return Table();
                 const int DROP_COL_FROM = 1;

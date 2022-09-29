@@ -39,10 +39,13 @@ namespace QE {
     enum ClauseReturnType {
         BOOL, TABLE
     };
+    using Value = variant<string, int, vector<int>, vector<string>>;
 
     class ClauseVisitor {
         shared_ptr<DataPreprocessor> dataPreprocessor;
         shared_ptr<DataRetriever> dataRetriever;
+
+        void getWithValues(vector<WithRef> withRefs, shared_ptr<vector<Value>> values);
 
         DesignEntity getDesignEntity(Synonym);
         std::vector<std::string> intersection(std::vector<std::string> v1,

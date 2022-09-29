@@ -11,7 +11,7 @@
 #include "TableCombiner.h"
 #include "constants/ClauseVisitorConstants.h"
 #include <numeric>
-
+#include "constants/ClauseVisitorConstants.h"
 
 QE::ClauseReturnType QE::ClauseVisitor::setReturnTable() {
     returnType = TABLE;
@@ -36,131 +36,75 @@ Table QE::ClauseVisitor::operator()(shared_ptr<SuchThatClause> suchThatClause) {
     return dataPreprocessor->getTableByRelation(*suchThatClause);
 }
 
+
 Table QE::ClauseVisitor::operator()(shared_ptr<WithClause> withClause) {
     if (this->returnType == TABLE) return dataPreprocessor->getTableByWith(withClause, declarations);
 
-    using Value = variant<string, int, vector<int>, vector<string>>;
     Value valLHS;
     Value valRHS;
 
-    const int STR_VAL_IDX = 0;
-    const int INT_VAL_IDX = 1;
-    const int VECTOR_INT_VAL_IDX = 2;
-    const int VECTOR_STR_VAL_IDX = 3;
-
     vector<WithRef> withRefs = {withClause->lhs, withClause->rhs};
-    vector<Value> values = {valLHS, valRHS};
+    shared_ptr<vector<Value>> values = make_shared<vector<Value>>();
+    values->push_back(valLHS);
+    values->push_back(valRHS);
 
     //get values from each ref and store in val1 and val2
-    for (int i = 0; i < withRefs.size(); i++) {
-        switch (withRefs[i].index()) {
-            case (WithClause::WITHREF_IDENT_IDX): {
-                values[i] = get<WithClause::WITHREF_IDENT_IDX>(withRefs[i]).identStr;
-                break;
-            }
-            case (WithClause::WITHREF_INT_IDX): {
-                values[i] = get<WithClause::WITHREF_INT_IDX>(withRefs[i]);
-                break;
-            }
-            case (WithClause::WITHREF_ATTR_REF_IDX): {
-                AttrRef attrRef = std::get<AttrRef>(withRefs[i]);
-                DesignEntity designEntity = getDesignEntity(attrRef.synonym);
-                vector<DesignEntity> notDirectlyAvailDEs = {DesignEntity::CALL, DesignEntity::READ,
-                                                            DesignEntity::PRINT};
-                vector<AttrName> notDirectlyAvailAttrs = {AttrName::PROC_NAME, AttrName::VAR_NAME};
-                bool processingNeeded = std::count(notDirectlyAvailDEs.begin(), notDirectlyAvailDEs.end(), designEntity)
-                                        && std::count(notDirectlyAvailAttrs.begin(), notDirectlyAvailAttrs.end(),
-                                                      attrRef.attrName);
-                if (!processingNeeded) {
-                    switch (attrRef.attrName) {
-                        case AttrName::PROC_NAME: {
-                            values[i] = dataPreprocessor->getEntityNames(
-                                    designEntity); //design entity must be procedure
-                            break;
-                        }
-                        case AttrName::VAR_NAME: {
-                            values[i] = dataPreprocessor->getEntityNames(designEntity);//design entity must be variable
-                            break;
-                        }
-                        case AttrName::VALUE: {
-                            values[i] = dataPreprocessor->getEntityNames(
-                                    designEntity);//this can only be constant values with return lhsType vector<string>
-                            vector<int> constVals;
-                            if (values[i].index() == VECTOR_STR_VAL_IDX) {
-                                vector<string> strVals = get<VECTOR_STR_VAL_IDX>(values[i]);
-                                for (auto strVal: strVals) {
-                                    constVals.push_back(stoi(strVal));
-                                }
-                            }
-                            values[i] = constVals;
-                            break;
-                        }
-                        case AttrName::STMT_NUMBER: {
-                            values[i] = dataPreprocessor->getStmtNumsByDesignEntity(designEntity); //vector<int>
-                            break;
-                        }
-                    }
-                } else {
-                    //todo: process call.procName, read.varname and print.varname
-                }
-                break;
-            }
-
-        }
-    }
+    getWithValues(withRefs, values);
+    valLHS = values->at(0);
+    valRHS = values->at(1);
 
     //compare two values, assumption made: two values are of the same lhsType, i.e either int or string
     switch (valLHS.index()) {
-        case STR_VAL_IDX: {
-            string lhsStr = get<STR_VAL_IDX>(valLHS);
-            if (valRHS.index() == STR_VAL_IDX) {
-                return lhsStr == get<STR_VAL_IDX>(valRHS)
+        case ClauseVisitorConstants::STR_VAL_IDX: {
+            string lhsStr = get<ClauseVisitorConstants::STR_VAL_IDX>(valLHS);
+            if (valRHS.index() == ClauseVisitorConstants::STR_VAL_IDX) return
+            lhsStr == get<ClauseVisitorConstants::STR_VAL_IDX>(valRHS)
                        ? ClauseVisitorConstants::TRUE_TABLE
                        : ClauseVisitorConstants::FALSE_TABLE;
-            }
-            if (valRHS.index() == VECTOR_STR_VAL_IDX) {
-                vector<string> strs = get<VECTOR_STR_VAL_IDX>(valRHS);
+
+            if (valRHS.index() == ClauseVisitorConstants::VECTOR_STR_VAL_IDX) {
+                vector<string> strs = get<ClauseVisitorConstants::VECTOR_STR_VAL_IDX>(valRHS);
                 return count(strs.begin(), strs.end(), lhsStr)
                        ? ClauseVisitorConstants::TRUE_TABLE
                        : ClauseVisitorConstants::FALSE_TABLE;
             }
             break;
         }
-        case INT_VAL_IDX: {
-            int lhsInt = get<INT_VAL_IDX>(valLHS);
-            if (valRHS.index() == INT_VAL_IDX)
-                return lhsInt == get<INT_VAL_IDX>(valRHS) ? ClauseVisitorConstants::TRUE_TABLE
+        case ClauseVisitorConstants::INT_VAL_IDX: {
+            int lhsInt = get<ClauseVisitorConstants::INT_VAL_IDX>(valLHS);
+            if (valRHS.index() == ClauseVisitorConstants::INT_VAL_IDX)
+                return lhsInt == get<ClauseVisitorConstants::INT_VAL_IDX>(valRHS) ? ClauseVisitorConstants::TRUE_TABLE
                                                           : ClauseVisitorConstants::FALSE_TABLE;
-            if (valRHS.index() == VECTOR_INT_VAL_IDX) {
-                vector<int> ints = get<VECTOR_INT_VAL_IDX>(valRHS);
+            if (valRHS.index() == ClauseVisitorConstants::VECTOR_INT_VAL_IDX) {
+                vector<int> ints = get<ClauseVisitorConstants::VECTOR_INT_VAL_IDX>(valRHS);
                 return count(ints.begin(), ints.end(), lhsInt) ? ClauseVisitorConstants::TRUE_TABLE
                                                                : ClauseVisitorConstants::FALSE_TABLE;
             }
             break;
         }
-        case VECTOR_STR_VAL_IDX: {
-            vector<string> lhsVecStr = get<VECTOR_STR_VAL_IDX>(valLHS);
-            if (valRHS.index() == STR_VAL_IDX) {
-                string rhsStr = get<STR_VAL_IDX>(valRHS);
+        case ClauseVisitorConstants::VECTOR_STR_VAL_IDX: {
+            vector<string> lhsVecStr = get<ClauseVisitorConstants::VECTOR_STR_VAL_IDX>(valLHS);
+            if (valRHS.index() == ClauseVisitorConstants::STR_VAL_IDX) {
+                string rhsStr = get<ClauseVisitorConstants::STR_VAL_IDX>(valRHS);
                 return count(lhsVecStr.begin(), lhsVecStr.end(), rhsStr) ? ClauseVisitorConstants::TRUE_TABLE
                                                                          : ClauseVisitorConstants::FALSE_TABLE;
             }
-            if (valRHS.index() == VECTOR_STR_VAL_IDX) {
-                vector<string> rhsVecStr = get<VECTOR_STR_VAL_IDX>(valRHS);
+            if (valRHS.index() == ClauseVisitorConstants::VECTOR_STR_VAL_IDX) {
+                vector<string> rhsVecStr = get<ClauseVisitorConstants::VECTOR_STR_VAL_IDX>(valRHS);
                 return !intersection(lhsVecStr, rhsVecStr).empty() ? ClauseVisitorConstants::TRUE_TABLE
                                                                    : ClauseVisitorConstants::FALSE_TABLE;
             }
             break;
         }
-        case VECTOR_INT_VAL_IDX: {
-            vector<int> lhsVecInt = get<VECTOR_INT_VAL_IDX>(valLHS);
-            if (valRHS.index() == INT_VAL_IDX) {
-                int rhsInt = get<INT_VAL_IDX>(valRHS);
+        case ClauseVisitorConstants::VECTOR_INT_VAL_IDX: {
+            vector<int> lhsVecInt = get<ClauseVisitorConstants::VECTOR_INT_VAL_IDX>(valLHS);
+            if (valRHS.index() == ClauseVisitorConstants::INT_VAL_IDX) {
+                int rhsInt = get<ClauseVisitorConstants::INT_VAL_IDX>(valRHS);
                 return count(lhsVecInt.begin(), lhsVecInt.end(), rhsInt) ? ClauseVisitorConstants::TRUE_TABLE
                                                                          : ClauseVisitorConstants::FALSE_TABLE;
             }
-            if (valRHS.index() == VECTOR_INT_VAL_IDX) {
-                vector<int> rhsVecInt = get<VECTOR_INT_VAL_IDX>(valRHS);
+            if (valRHS.index() == ClauseVisitorConstants::VECTOR_INT_VAL_IDX) {
+                vector<int> rhsVecInt = get<ClauseVisitorConstants::VECTOR_INT_VAL_IDX>(valRHS);
                 return !intersection(lhsVecInt, rhsVecInt).empty() ? ClauseVisitorConstants::TRUE_TABLE
                                                                    : ClauseVisitorConstants::FALSE_TABLE;
             }
@@ -170,6 +114,56 @@ Table QE::ClauseVisitor::operator()(shared_ptr<WithClause> withClause) {
 
     return ClauseVisitorConstants::FALSE_TABLE;
 
+}
+
+void QE::ClauseVisitor::getWithValues(vector<WithRef> withRefs, shared_ptr<vector<Value>> values) {
+
+    for (int i = 0; i < withRefs.size(); i++) {
+        if (withRefs[i].index() == WithClause::WITHREF_IDENT_IDX) {
+            values->at(i) = get<WithClause::WITHREF_IDENT_IDX>(withRefs[i]).identStr;
+            continue;
+        }
+        if (withRefs[i].index() == WithClause::WITHREF_INT_IDX) {
+            values->at(i) = get<WithClause::WITHREF_INT_IDX>(withRefs[i]);
+            continue;
+        }
+        //withRefs[i].index() == WithClause::WITHREF_ATTR_REF_IDX
+        AttrRef attrRef = std::get<AttrRef>(withRefs[i]);
+        DesignEntity designEntity = getDesignEntity(attrRef.synonym);
+        vector<DesignEntity> notDirectlyAvailDEs = {DesignEntity::CALL, DesignEntity::READ,
+                                                    DesignEntity::PRINT};
+        vector<AttrName> notDirectlyAvailAttrs = {AttrName::PROC_NAME, AttrName::VAR_NAME};
+        bool processingNeeded = std::count(notDirectlyAvailDEs.begin(), notDirectlyAvailDEs.end(), designEntity)
+                                && std::count(notDirectlyAvailAttrs.begin(), notDirectlyAvailAttrs.end(),
+                                              attrRef.attrName);
+        if (!processingNeeded) {
+            if (attrRef.attrName == AttrName::PROC_NAME) {
+                values->at(i) = dataPreprocessor->getEntityNames(designEntity);
+                continue;
+            }
+
+            if (attrRef.attrName == AttrName::VAR_NAME) {
+                values->at(i) = dataPreprocessor->getEntityNames(designEntity);//design entity must be variable
+                continue;
+            }
+
+            if (attrRef.attrName == AttrName::STMT_NUMBER) {
+                values->at(i) = dataPreprocessor->getStmtNumsByDesignEntity(designEntity); //vector<int>
+                continue;
+            }
+            //attrRef.attrName == AttrName::VALUE
+            values->at(i) = dataPreprocessor->getEntityNames(
+                    designEntity);//this can only be constant values with return type vector<string>
+            vector<int> constVals;
+            vector<string> strVals = get<ClauseVisitorConstants::VECTOR_STR_VAL_IDX>(values->at(i));
+            for (auto strVal: strVals) {
+                constVals.push_back(stoi(strVal));
+            }
+            values->at(i) = constVals;
+        } else {
+            //todo: process call.procName, read.varname and print.varname
+        }
+    }
 }
 
 Table QE::ClauseVisitor::operator()(shared_ptr<AssignPatternClause> assignPatternClause) {

@@ -20,6 +20,11 @@ namespace QE {
         static const Table TRUE_TABLE;
         static const Table FALSE_TABLE;
 
+        static const int STR_VAL_IDX = 0;
+        static const int INT_VAL_IDX = 1;
+        static const int VECTOR_INT_VAL_IDX = 2;
+        static const int VECTOR_STR_VAL_IDX = 3;
+
     };
 
 } // QE
