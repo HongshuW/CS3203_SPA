@@ -243,71 +243,9 @@ namespace DE {
     } // DE
 
     void UsesExtractor::insertCallsInIfAndWhileForUseS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans) {
-        auto ifAndWhileNodeList = EntityExtractor::extractIfAndWhileNodesFromProcedures(rootPtr);
-        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
         auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
-        auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(rootPtr);
         auto mappedIfAndWhileStmtNoToUsedVariables = mapIfAndWhileStmtNoToUsedVariables(rootPtr);
-
-        for (auto node : ifAndWhileNodeList) {
-            auto uniqueVarList = unordered_set<string>();
-            int stmtNo = stmtNumbers->at(node);
-            queue<shared_ptr<StmtNode>> queue;
-            queue.push(node);
-           
-            while (!queue.empty()) {
-                auto nodeEntry = queue.front();
-                queue.pop();
-                NodeType nodeType = ASTUtils::getNodeType(nodeEntry);
-                switch (nodeType) {
-                case AST::CALL_NODE: {
-                    shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(nodeEntry);
-                    auto varList = mappedProceduresToUsedVar.at(callNode->procedureName);
-
-                    auto usedVarList = mappedIfAndWhileStmtNoToUsedVariables.at(to_string(stmtNo));
-                    for (auto var : varList) {
-                        if (usedVarList.count(var) == 0) {
-                            uniqueVarList.insert(var);
-                        }
-                    }
-                    
-                    if (mappedCallNodesToProcedures.count(callNode->procedureName) != 0) {
-                        auto otherCallNodes = mappedCallNodesToProcedures.at(callNode->procedureName);
-                        for (auto n : otherCallNodes) {
-                            queue.push(n);
-                        }
-                    }
-                    break;
-                }
-
-                case AST::IF_NODE: {
-                    shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(nodeEntry);
-                    for (auto n : ifNode->ifStmtList) {
-                        queue.push(n);
-                    }
-                    for (auto n : ifNode->elseStmtList) {
-                        queue.push(n);
-                    }
-                    break;
-                }
-                case AST::WHILE_NODE: {
-                    shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(nodeEntry);
-                    for (auto n : whileNode->stmtList) {
-                        queue.push(n);
-                    }
-                    break;
-                }
-
-                default:
-                    break;
-                }
-            }
-            for (auto var : uniqueVarList) {
-                vector<string> callEntry;
-                callEntry.push_back(to_string(stmtNo));
-                callEntry.push_back(var);
-                ans->push_back(callEntry);
-            }
-        }
+        CallsExtractor::extractCallStmtRelationshipsWithIfAndWhileToOutput(rootPtr,
+            mappedProceduresToUsedVar, mappedIfAndWhileStmtNoToUsedVariables, ans);
     }
 }
