@@ -27,7 +27,12 @@ namespace DE {
         static unordered_map<string, unordered_set<string>>
                 mapProceduresToUsedVariables(shared_ptr<ProgramNode> rootPtr);
 
+        static unordered_map<string, unordered_set<string>> mapIfAndWhileStmtNoToUsedVariables(shared_ptr<ProgramNode> rootPtr);
+
+        static void insertCallsInIfAndWhileForUseS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans);
+
         static void insertCallsForUseS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans);
+
     };
 
 } // DE

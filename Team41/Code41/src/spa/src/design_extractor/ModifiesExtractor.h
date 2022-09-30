@@ -20,6 +20,9 @@ namespace DE {
         static unordered_map<string, unordered_set<string>>
             mapProceduresToModifiedVariables(shared_ptr<ProgramNode> rootPtr);
         static unordered_set<string> getModifiedVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode);
+        static unordered_map<string, unordered_set<string>> mapIfAndWhileStmtNoToModifiedVariables(shared_ptr<ProgramNode> rootPtr);
+        static void insertCallsInIfAndWhileForModifiesS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans);
+
 
     public:
         static shared_ptr<list<vector<string>>> extractModifiesS(shared_ptr<ProgramNode> rootPtr);

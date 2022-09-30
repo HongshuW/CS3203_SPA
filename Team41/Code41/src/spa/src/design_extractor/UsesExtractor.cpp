@@ -15,13 +15,13 @@ namespace DE {
         shared_ptr<vector<vector<vector<string>>>> resultOfProcedures = make_shared<vector<vector<vector<string>>>>();
         shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
 
-        for (auto procedureNode: rootPtr->procedureList) {
+        for (auto procedureNode : rootPtr->procedureList) {
             shared_ptr<vector<vector<string>>> result = make_shared<vector<vector<string>>>();
             extractUsesSHelper(procedureNode, result, stmtNumbers);
 
             //save Uses relation from each procedure in result
             auto it = ans->begin();
-            for (auto pair: *result) {
+            for (auto pair : *result) {
                 it = ans->insert(it, pair);
             }
         }
@@ -30,15 +30,15 @@ namespace DE {
     }
 
     unordered_set<string> UsesExtractor::extractUsesSHelper(shared_ptr<ASTNode> node,
-                                                            shared_ptr<vector<vector<string>>> result,
-                                                            shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
-                                                            stmtNumbers) {
+        shared_ptr<vector<vector<string>>> result,
+        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
+        stmtNumbers) {
         NodeType nodeType = ASTUtils::getNodeType(node);
 
         if (nodeType == AST::PROCEDURE_NODE) {
             shared_ptr<ProcedureNode> procedureNode1 = dynamic_pointer_cast<ProcedureNode>(node);
             unordered_set<string> usedVarsProcedure = unordered_set<string>();
-            for (auto stmtNode: procedureNode1->stmtList) {
+            for (auto stmtNode : procedureNode1->stmtList) {
                 auto fromChild = extractUsesSHelper(stmtNode, result, stmtNumbers);
                 usedVarsProcedure.insert(fromChild.begin(), fromChild.end());
             }
@@ -46,67 +46,67 @@ namespace DE {
         }
 
         switch (nodeType) {
-            case AST::PRINT_NODE: {
-                shared_ptr<PrintNode> printNode = dynamic_pointer_cast<PrintNode>(node);
-                int stmtNum = stmtNumbers->at(printNode);
-                string var = printNode->variableNode->variable;
-                result->insert(result->begin(), {to_string(stmtNum), var});
-                return unordered_set<string>({var});
+        case AST::PRINT_NODE: {
+            shared_ptr<PrintNode> printNode = dynamic_pointer_cast<PrintNode>(node);
+            int stmtNum = stmtNumbers->at(printNode);
+            string var = printNode->variableNode->variable;
+            result->insert(result->begin(), { to_string(stmtNum), var });
+            return unordered_set<string>({ var });
+        }
+        case AST::IF_NODE: {
+            shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(node);
+            unordered_set<string> usedVarsIf = unordered_set<string>();
+
+            for (auto child : ifNode->ifStmtList) {
+                auto fromChild = extractUsesSHelper(child, result, stmtNumbers);
+                usedVarsIf.insert(fromChild.begin(), fromChild.end());
             }
-            case AST::IF_NODE: {
-                shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(node);
-                unordered_set<string> usedVarsIf = unordered_set<string>();
 
-                for (auto child: ifNode->ifStmtList) {
-                    auto fromChild = extractUsesSHelper(child, result, stmtNumbers);
-                    usedVarsIf.insert(fromChild.begin(), fromChild.end());
-                }
-
-                for (auto child: ifNode->elseStmtList) {
-                    auto fromChild = extractUsesSHelper(child, result, stmtNumbers);
-                    usedVarsIf.insert(fromChild.begin(), fromChild.end());
-                }
-
-                auto variables = Utils::getVariablesFromExprString(ifNode->condExpr->condExpr);
-                usedVarsIf.insert(variables.begin(), variables.end());
-
-                for (const auto& usedVarIf: usedVarsIf) {
-                    int stmtNum = stmtNumbers->at(ifNode);
-                    result->insert( result->begin() , {to_string(stmtNum), usedVarIf} );
-                }
-                return usedVarsIf;
+            for (auto child : ifNode->elseStmtList) {
+                auto fromChild = extractUsesSHelper(child, result, stmtNumbers);
+                usedVarsIf.insert(fromChild.begin(), fromChild.end());
             }
-            case AST::WHILE_NODE: {
-                shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(node);
-                unordered_set<string> usedVarsWhile = unordered_set<string>();
 
-                for (auto child: whileNode->stmtList) {
-                    auto fromChild = extractUsesSHelper(child, result, stmtNumbers);
-                    usedVarsWhile.insert(fromChild.begin(), fromChild.end());
-                }
+            auto variables = Utils::getVariablesFromExprString(ifNode->condExpr->condExpr);
+            usedVarsIf.insert(variables.begin(), variables.end());
 
-                auto variables = Utils::getVariablesFromExprString(whileNode->condExpr->condExpr);
-                usedVarsWhile.insert(variables.begin(), variables.end());
-
-                for (const auto& usedVarWhile: usedVarsWhile) {
-                    int stmtNum = stmtNumbers->at(whileNode);
-                    result->insert( result->begin() , {to_string(stmtNum), usedVarWhile} );
-                }
-                return usedVarsWhile;
-
+            for (const auto& usedVarIf : usedVarsIf) {
+                int stmtNum = stmtNumbers->at(ifNode);
+                result->insert(result->begin(), { to_string(stmtNum), usedVarIf });
             }
-            case AST::ASSIGN_NODE: {
-                shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(node);
-                auto variables = EntityExtractor::getVariablesFromExprNode(assignNode->expressionNode);
-                for (const auto& var: variables) {
-                    int stmtNum = stmtNumbers->at(assignNode);
-                    result->insert(result->begin(), {to_string(stmtNum), var});
-                }
-                return variables;
+            return usedVarsIf;
+        }
+        case AST::WHILE_NODE: {
+            shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(node);
+            unordered_set<string> usedVarsWhile = unordered_set<string>();
+
+            for (auto child : whileNode->stmtList) {
+                auto fromChild = extractUsesSHelper(child, result, stmtNumbers);
+                usedVarsWhile.insert(fromChild.begin(), fromChild.end());
             }
-            default: {
-                return unordered_set<string>();
+
+            auto variables = Utils::getVariablesFromExprString(whileNode->condExpr->condExpr);
+            usedVarsWhile.insert(variables.begin(), variables.end());
+
+            for (const auto& usedVarWhile : usedVarsWhile) {
+                int stmtNum = stmtNumbers->at(whileNode);
+                result->insert(result->begin(), { to_string(stmtNum), usedVarWhile });
             }
+            return usedVarsWhile;
+
+        }
+        case AST::ASSIGN_NODE: {
+            shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(node);
+            auto variables = EntityExtractor::getVariablesFromExprNode(assignNode->expressionNode);
+            for (const auto& var : variables) {
+                int stmtNum = stmtNumbers->at(assignNode);
+                result->insert(result->begin(), { to_string(stmtNum), var });
+            }
+            return variables;
+        }
+        default: {
+            return unordered_set<string>();
+        }
         }
     }
 
@@ -115,21 +115,23 @@ namespace DE {
         auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(rootPtr);
         shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
 
-        for (auto pair: mappedCallNodesToProcedures){
+        for (auto pair : mappedCallNodesToProcedures) {
             vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
-            for(auto callNode: listOfCallNodes) {
+            for (auto callNode : listOfCallNodes) {
                 int stmtNo = stmtNumbers->at(callNode);
                 CallsExtractor::extractCallStmtRelationshipsToOutput(stmtNo, callNode,
                     mappedProceduresToUsedVar, mappedCallNodesToProcedures, ans);
             }
         }
+
+        insertCallsInIfAndWhileForUseS(rootPtr, ans);
     }
 
     shared_ptr<list<vector<string>>> UsesExtractor::extractUsesP(shared_ptr<ProgramNode> rootPtr) {
         shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
         auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
         auto mappedCallNodesToProcedures = EntityExtractor::extractCallNodesFromProcedures(rootPtr);
-        for (auto pair: mappedProceduresToUsedVar) {
+        for (auto pair : mappedProceduresToUsedVar) {
             unordered_set<string> uniqueVarList;
             string procedureName = pair.first;
             auto currentUsedVarList = pair.second;
@@ -138,7 +140,7 @@ namespace DE {
             // if the procedures has call nodes, handle them
             if (mappedCallNodesToProcedures.count(procedureName) != 0) {
                 auto callNodes = mappedCallNodesToProcedures.at(procedureName);
-                for(auto node: callNodes) {
+                for (auto node : callNodes) {
                     EntityExtractor::extractVariablesFromCallNodesInProceduresToList(
                         node,
                         mappedProceduresToUsedVar,
@@ -158,24 +160,93 @@ namespace DE {
     }
 
     unordered_map<string, unordered_set<string>>
-            UsesExtractor::mapProceduresToUsedVariables(shared_ptr<ProgramNode> rootPtr) {
+        UsesExtractor::mapProceduresToUsedVariables(shared_ptr<ProgramNode> rootPtr) {
         shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
         shared_ptr<vector<vector<vector<string>>>> resultOfProcedures = make_shared<vector<vector<vector<string>>>>();
-        shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
         auto map = unordered_map<string, unordered_set<string>>();
 
-        for (auto procedureNode: rootPtr->procedureList) {
+        for (auto procedureNode : rootPtr->procedureList) {
             shared_ptr<vector<vector<string>>> result = make_shared<vector<vector<string>>>();
             extractUsesSHelper(procedureNode, result, stmtNumbers);
-            string procedureName = procedureNode -> procedureName;
+            string procedureName = procedureNode->procedureName;
             unordered_set<string> variableList;
-            for (auto pair: *result) {
+            for (auto pair : *result) {
                 variableList.insert(pair[1]);
             }
+
             map.insert(make_pair(procedureName, variableList));
         }
 
         return map;
     }
 
-} // DE
+    unordered_map<string, unordered_set<string>>
+        UsesExtractor::mapIfAndWhileStmtNoToUsedVariables(shared_ptr<ProgramNode> rootPtr) {
+        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);
+        auto map = unordered_map<string, unordered_set<string>>();
+
+        auto ifAndWhileNodeList = EntityExtractor::extractIfAndWhileNodesFromProcedures(rootPtr);
+
+        for (auto node : ifAndWhileNodeList) {
+            auto uniqueVarList = unordered_set<string>();
+            int stmtNo = stmtNumbers->at(node);
+            queue<shared_ptr<StmtNode>> queue;
+            queue.push(node);
+            while (!queue.empty()) {
+                auto nodeEntry = queue.front();
+                queue.pop();
+                NodeType nodeType = ASTUtils::getNodeType(nodeEntry);
+                switch (nodeType) {
+                case AST::IF_NODE: {
+                    shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(nodeEntry);
+                    auto variables = Utils::getVariablesFromExprString(ifNode->condExpr->condExpr);
+                    uniqueVarList.insert(variables.begin(), variables.end());
+                    for (auto n : ifNode->ifStmtList) {
+                        queue.push(n);
+                    }
+                    for (auto n : ifNode->elseStmtList) {
+                        queue.push(n);
+                    }
+                    break;
+                }
+                case AST::WHILE_NODE: {
+                    shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(nodeEntry);
+                    auto variables = Utils::getVariablesFromExprString(whileNode->condExpr->condExpr);
+                    uniqueVarList.insert(variables.begin(), variables.end());
+                    for (auto n : whileNode->stmtList) {
+                        queue.push(n);
+                    }
+                    break;
+                }
+
+                case AST::ASSIGN_NODE: {
+                    shared_ptr<AssignNode> assignNode = dynamic_pointer_cast<AssignNode>(nodeEntry);
+                    auto variables = EntityExtractor::getVariablesFromExprNode(assignNode->expressionNode);
+                    uniqueVarList.insert(variables.begin(), variables.end());
+                    break;
+                }
+
+                case AST::PRINT_NODE: {
+                    shared_ptr<PrintNode> printNode = dynamic_pointer_cast<PrintNode>(nodeEntry);
+                    string var = printNode->variableNode->variable;
+                    uniqueVarList.insert(var);
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+            map.insert(make_pair(to_string(stmtNo), uniqueVarList));
+        }
+
+        return map;
+
+    } // DE
+
+    void UsesExtractor::insertCallsInIfAndWhileForUseS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans) {
+        auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
+        auto mappedIfAndWhileStmtNoToUsedVariables = mapIfAndWhileStmtNoToUsedVariables(rootPtr);
+        CallsExtractor::extractCallStmtRelationshipsWithIfAndWhileToOutput(rootPtr,
+            mappedProceduresToUsedVar, mappedIfAndWhileStmtNoToUsedVariables, ans);
+    }
+}
