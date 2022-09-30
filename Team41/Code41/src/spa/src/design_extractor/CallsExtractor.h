@@ -17,6 +17,10 @@ public:
         mappedProceduresToVar,
         unordered_map<string, vector<shared_ptr<CallNode>>> mappedCallNodesToProcedures,
         shared_ptr<list<vector<string>>> output);
+    static void extractCallStmtRelationshipsWithIfAndWhileToOutput(shared_ptr<ProgramNode> rootPtr,
+        unordered_map<string, unordered_set<string>> mappedProceduresToVars,
+        unordered_map<string, unordered_set<string>> mappedIfAndWhileToVars,
+        shared_ptr<list<vector<string>>> output);
 };
 
 

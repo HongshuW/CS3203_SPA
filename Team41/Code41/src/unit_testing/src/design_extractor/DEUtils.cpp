@@ -26,6 +26,29 @@ namespace TestDE {
         return true;
     }
 
+    bool DEUtils::containsSameElementTuple(list<vector<string>> lst, vector<vector<string>> vec)
+    {
+        if (lst.size() != vec.size()) return false;
+        std::list<vector<string>>::iterator it;
+        for (it = lst.begin(); it != lst.end(); ++it) {
+            bool found = false;
+            for (auto expectedPair : vec) {
+                if (it->at(0) == expectedPair[0] && (it->at(1) == expectedPair[1]) && (it->at(2) == expectedPair[2])) {
+                    found = true;
+                }
+            }
+
+
+            if (!found) {
+                cout << it->at(0) + " " + it->at(1) << " not found" << endl;
+                return false;
+            }
+        }
+        return true;
+    }
+
+   
+
     bool DEUtils::isSamePattern(vector<pair<pair<int, string>, shared_ptr<AssignNode>>> actual,
                                 vector<pair<pair<int, string>, shared_ptr<AssignNode>>> expected) {
         if (actual.size() != expected.size()) return false;

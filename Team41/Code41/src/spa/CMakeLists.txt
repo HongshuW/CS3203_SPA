@@ -138,8 +138,8 @@ add_library(spa ${srcs} ${headers}
         src/parser/CondExprParser.cpp
         src/parser/CondExprParser.h src/design_extractor/PatternExtractor.cpp 
         src/design_extractor/PatternExtractor.h
-        src/parser/CondExprParser.h src/query_builder/clauses/PatternClause.cpp 
-        src/query_builder/clauses/PatternClause.h 
+        src/parser/CondExprParser.h
+        src/query_builder/clauses/pattern_clauses/PatternClause.h
         src/query_builder/commons/ExpressionSpec.cpp 
         src/query_builder/commons/ExpressionSpec.h
         src/query_builder/commons/ExpressionSpecType.h
@@ -186,7 +186,26 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/constants/QueryValidatorConstants.h
         src/design_extractor/CallsExtractor.h
         src/query_evaluator/ClauseVisitor.cpp
-        src/query_evaluator/ClauseVisitor.h src/CFG/CFG.cpp src/CFG/CFG.h)
+        src/query_evaluator/ClauseVisitor.h
+        src/query_builder/clauses/pattern_clauses/IfPatternClause.cpp
+        src/query_builder/clauses/pattern_clauses/IfPatternClause.h
+        src/query_builder/clauses/pattern_clauses/WhilePatternClause.cpp
+        src/query_builder/clauses/pattern_clauses/WhilePatternClause.h
+        src/query_builder/clauses/pattern_clauses/AssignPatternClause.cpp
+        src/query_builder/clauses/pattern_clauses/AssignPatternClause.h
+        src/query_builder/clauses/pattern_clauses/PatternClause.cpp
+        src/query_evaluator/constants/ClauseVisitorConstants.cpp
+        src/query_evaluator/constants/ClauseVisitorConstants.h
+        src/query_evaluator/IVisitor.cpp src/query_evaluator/IVisitor.h
+        src/query_builder/IVisitorHost.cpp src/query_builder/IVisitorHost.h
+        src/query_builder/clauses/AbstractClause.cpp
+        src/query_builder/clauses/AbstractClause.h
+        src/query_evaluator/AbstractClauseVisitor.cpp
+        src/query_evaluator/AbstractClauseVisitor.h
+        src/query_evaluator/ConcreteClauseVisitor.cpp
+        src/query_evaluator/ConcreteClauseVisitor.h
+        src/CFG/CFG.cpp
+        src/CFG/CFG.h)
 
 
 

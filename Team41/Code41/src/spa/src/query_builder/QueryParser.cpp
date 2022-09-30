@@ -231,7 +231,7 @@ void QueryParser::parsePatternClause() {
             Ref arg2 = parseRef();
             expect(QueryParserConstants::COMMA);
             ExpressionSpec arg3 = parseExpressionSpec();
-            patternClause = make_shared<PatternClause>(DesignEntity::ASSIGN, arg1, arg2, arg3);
+            patternClause = make_shared<AssignPatternClause>(arg1, arg2, arg3);
             break;
         }
         case DesignEntity::IF: {
@@ -240,14 +240,14 @@ void QueryParser::parsePatternClause() {
             expect(QueryParserConstants::UNDERSCORE);
             expect(QueryParserConstants::COMMA);
             expect(QueryParserConstants::UNDERSCORE);
-            patternClause = make_shared<PatternClause>(DesignEntity::IF, arg1, arg2);
+            patternClause = make_shared<IfPatternClause>(arg1, arg2);
             break;
         }
         case DesignEntity::WHILE: {
             Ref arg2 = parseRef();
             expect(QueryParserConstants::COMMA);
             expect(QueryParserConstants::UNDERSCORE);
-            patternClause = make_shared<PatternClause>(DesignEntity::WHILE, arg1, arg2);
+            patternClause = make_shared<WhilePatternClause>(arg1, arg2);
             break;
         }
         default:

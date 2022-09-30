@@ -33,9 +33,9 @@ TEST_CASE("Test Call Extractor") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
-        vector<vector<string>> expected = {{"procedure2", "procedure3"}};
+        vector<vector<string>> expected = {{"procedure2", "procedure3", "2"}};
         REQUIRE(expected.size() == actual->size());
-        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+        REQUIRE(TestDE::DEUtils::containsSameElementTuple(*actual, expected));
     }
     SECTION("Test Two Procedures Call The Same Procedures") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
@@ -43,10 +43,10 @@ TEST_CASE("Test Call Extractor") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
-        vector<vector<string>> expected = {{"procedure2", "procedure3"}, {"procedure2", "procedure4"},
-                                           {"procedure3", "procedure4"}};
+        vector<vector<string>> expected = {{"procedure2", "procedure3", "2"}, {"procedure2", "procedure4", "3"},
+                                           {"procedure3", "procedure4", "7"}};
         REQUIRE(expected.size() == actual->size());
-        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+        REQUIRE(TestDE::DEUtils::containsSameElementTuple(*actual, expected));
     }
 
     SECTION("Test Call In Singly-Nested Procedure") {
@@ -55,10 +55,10 @@ TEST_CASE("Test Call Extractor") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
-        vector<vector<string>> expected = {{"procedure2", "procedure3"}, {"procedure2", "procedure4"},
-                                           {"procedure3", "procedure4"}, {"procedure3", "procedure6"}};
+        vector<vector<string>> expected = {{"procedure2", "procedure3", "3"}, {"procedure2", "procedure4", "5"},
+                                           {"procedure3", "procedure4", "8"}, {"procedure3", "procedure6", "9"}};
         REQUIRE(expected.size() == actual->size());
-        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+        REQUIRE(TestDE::DEUtils::containsSameElementTuple(*actual, expected));
     }
 
     SECTION("Test Call In Doubly-Nested Procedure") {
@@ -67,9 +67,9 @@ TEST_CASE("Test Call Extractor") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         auto actual = designExtractor.extractRelations(QB::RelationType::CALLS);
-        vector<vector<string>> expected = {{"procedure2", "procedure3"}, {"procedure2", "procedure4"},
-                                           {"procedure3", "procedure5"}, {"procedure4", "procedure6"}};
+        vector<vector<string>> expected = {{"procedure2", "procedure3", "4"}, {"procedure2", "procedure4", "5"},
+                                           {"procedure3", "procedure5", "9"}, {"procedure4", "procedure6", "12"}};
         REQUIRE(expected.size() == actual->size());
-        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+        REQUIRE(TestDE::DEUtils::containsSameElementTuple(*actual, expected));
     }
 }

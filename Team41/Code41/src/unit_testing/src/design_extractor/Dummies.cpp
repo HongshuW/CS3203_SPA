@@ -382,7 +382,7 @@ namespace TestDE {
        * procedure4 {
        * 11 print z
        * 12 call procedure6
-         * 13 read blabla
+       * 13 read blabla
        * }
        * procedure5 {
        * 14 print asdf

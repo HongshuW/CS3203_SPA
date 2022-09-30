@@ -10,8 +10,7 @@ add_executable(unit_testing ${srcs}
     src/pkb/TestTable.cpp
         src/pkb/TestDataRetriever.cpp
     src/pkb/TestDataModifier.cpp
-        src/query_evaluator/TestQueryResultFormatter.cpp
-    src/query_evaluator/Dummies/DummyQueryBuilder.cpp
+        src/query_evaluator/Dummies/DummyQueryBuilder.cpp
     src/query_evaluator/Dummies/DummyQueryBuilder.h
     src/query_evaluator/TestDataPreprocessor.cpp
     src/query_evaluator/TestTableCombiner.cpp

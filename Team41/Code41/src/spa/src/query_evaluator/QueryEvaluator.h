@@ -16,27 +16,30 @@ using namespace QB;
 namespace QE {
 
     class QueryEvaluator {
-        shared_ptr<DataPreprocessor> dataPreprocessor;
-        DesignEntity getDesignEntity(Synonym synonym, shared_ptr<Query> query);
-        string getDesignEntityColName(DesignEntity entity);
-        vector<string> evaluateNoConditionQuery(shared_ptr<Query> query);
+        shared_ptr<DataRetriever> dataRetriever;
+        Declarations declarations;
+
+        DesignEntity getDesignEntity(Synonym synonym);
+
+        vector<string> evaluateNoConditionQuery(shared_ptr<Query> query, shared_ptr<ClauseVisitor> clauseVisitor);
+
         std::string join(std::vector<std::string> const &strings, std::string delim);
+
         vector<string> removeDup(vector<string> vec);
-        bool doesConditionExist(shared_ptr<Query> query, WithClause withClause);
-        std::vector<std::string> intersection(std::vector<std::string> v1,
-                                              std::vector<std::string> v2);
-        std::vector<int> intersection(std::vector<int> v1,
-                                                      std::vector<int> v2);
-        vector<string> formatConditionalQueryResult(Table resultTable, shared_ptr<vector<Elem>> tuple, shared_ptr<Query> query);
-        vector<string> getAttributeValuesOfCol(Table resultTable, AttrRef attrRef, shared_ptr<Query> query);
+
+        vector<string>
+        formatConditionalQueryResult(Table resultTable, shared_ptr<vector<Elem>> tuple, shared_ptr<Query> query,
+                                     shared_ptr<DataPreprocessor> dataPreprocessor);
+
+        vector<string> getAttributeValuesOfCol(Table resultTable, AttrRef attrRef);
+
+        vector<string> projectResult(Table resultTable, shared_ptr<vector<Elem>> tuple);
 
 
     public:
-        explicit QueryEvaluator(shared_ptr<DataPreprocessor> dataPreprocessor);
+        explicit QueryEvaluator(shared_ptr<DataRetriever> dataRetriever);
+
         vector<string> evaluate(shared_ptr<Query> query);
-
-
-
     };
 
 } // QE
