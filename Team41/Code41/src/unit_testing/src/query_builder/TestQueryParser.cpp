@@ -7,6 +7,8 @@
 #include "query_builder/QueryBuilder.h"
 #include "query_builder/clauses/SelectClause.h"
 #include "query_builder/clauses/SuchThatClause.h"
+#include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
+#include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
 #include "query_builder/commons/Ref.h"
 #include "query_builder/exceptions/Exceptions.h"
 #include <memory>
@@ -335,9 +337,9 @@ TEST_CASE ("Test Query Parser") {
         returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
-        REQUIRE(*(query->patternClauses->at(0)) ==
-                PatternClause(
-                        DesignEntity::ASSIGN,
+        AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
+        REQUIRE(assignPatternClause ==
+                AssignPatternClause(
                         Synonym("a"),
                         Ident("test"),
                         ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
@@ -354,9 +356,8 @@ TEST_CASE ("Test Query Parser") {
         returnResults->push_back(Synonym("a"));
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
-        REQUIRE(*(query->patternClauses->at(0)) ==
-                PatternClause(
-                        DesignEntity::ASSIGN,
+        AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
+        REQUIRE(assignPatternClause ==  AssignPatternClause(
                         Synonym("a"),
                         Underscore(),
                         ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
@@ -377,9 +378,8 @@ TEST_CASE ("Test Query Parser") {
         shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
         exprNode->left = make_shared<ExprNode>("x");
         exprNode->right = make_shared<ExprNode>("1");
-        REQUIRE(*(query->patternClauses->at(0)) ==
-                PatternClause(
-                        DesignEntity::ASSIGN,
+        AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
+        REQUIRE(assignPatternClause == AssignPatternClause(
                         Synonym("a"),
                         Underscore(),
                         ExpressionSpec(ExpressionSpecType::FULL_MATCH,
@@ -400,9 +400,8 @@ TEST_CASE ("Test Query Parser") {
         shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
         exprNode->left = make_shared<ExprNode>("2");
         exprNode->right = make_shared<ExprNode>("1");
-        REQUIRE(*(query->patternClauses->at(0)) ==
-                PatternClause(
-                        DesignEntity::ASSIGN,
+        AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
+        REQUIRE(assignPatternClause == AssignPatternClause(
                         Synonym("a"),
                         Underscore(),
                         ExpressionSpec(ExpressionSpecType::FULL_MATCH,
@@ -427,9 +426,8 @@ TEST_CASE ("Test Query Parser") {
         shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("*");
         exprNode->left = exprNodeLeft;
         exprNode->right = make_shared<ExprNode>("3");
-        REQUIRE(*(query->patternClauses->at(0)) ==
-                PatternClause(
-                        DesignEntity::ASSIGN,
+        AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
+        REQUIRE(assignPatternClause == AssignPatternClause(
                         Synonym("a"),
                         Underscore(),
                         ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
@@ -453,9 +451,9 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
                                query->declarations));
-        REQUIRE(*(query->patternClauses->at(0)) ==
-                PatternClause(
-                        DesignEntity::ASSIGN,
+        AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
+        REQUIRE(assignPatternClause ==
+                AssignPatternClause(
                         Synonym("a"),
                         Synonym("v"),
                         ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
@@ -478,9 +476,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->suchThatClauses)->at(0) ==
                 SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
                                query->declarations));
-        REQUIRE(*(query->patternClauses->at(0)) ==
-                PatternClause(
-                        DesignEntity::ASSIGN,
+        AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
+        REQUIRE(assignPatternClause ==  AssignPatternClause(
                         Synonym("a"),
                         Synonym("v"),
                         ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
@@ -612,11 +609,10 @@ TEST_CASE ("Test Query Parser") {
                 SuchThatClause(RelationType::NEXT_T, 60, Synonym("s"),
                                query->declarations));
         REQUIRE(query->patternClauses->size() == 1);
-        REQUIRE(*(query->patternClauses->at(0)) ==
-                PatternClause(
-                        DesignEntity::WHILE,
-                        Synonym("w"),
-                        Ident("x")));
+        WhilePatternClause whilePatternClause = dynamic_cast<WhilePatternClause&>( *(query->patternClauses->at(0)));
+        REQUIRE(whilePatternClause == WhilePatternClause(
+                Synonym("w"),
+                Ident("x")));
         REQUIRE(query->withClauses->size() == 1);
         AttrRef lhs = AttrRef(Synonym("a"), AttrName::STMT_NUMBER);
         AttrRef rhs = AttrRef(Synonym("s"), AttrName::STMT_NUMBER);
