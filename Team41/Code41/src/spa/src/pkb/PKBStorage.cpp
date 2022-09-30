@@ -6,6 +6,7 @@
 #include "query_builder/commons/DesignEntity.h"
 
 const string PKBStorage:: PROCEDURE_TABLE_COL1_NAME = "$procedure_name";
+const string PKBStorage:: PROCEDURE_TABLE_COL2_NAME = "$cfg_ptr";
 const string PKBStorage:: STATEMENT_TABLE_COL1_NAME = "$statement_number";
 const string PKBStorage:: STATEMENT_TABLE_COL2_NAME ="$statement_type";
 const string PKBStorage:: VARIABLE_TABLE_COL1_NAME = "$variable_name";
@@ -42,18 +43,14 @@ PKBStorage::PKBStorage() {
     modifiesPTable = ModifiesTable();
     callsTable = CallsTable();
     callsTTable = CallsTable();
-    nextTable = NextTable();
-    nextTTable = NextTable();
-    affectsTable = AffectsTable();
-    affectsTTable = AffectsTable();
     // Pattern Tables
     assignPatternTable = PatternTable();
     whilePatternTable = PatternTable();
     ifPatternTable = PatternTable();
 }
 
-ProcedureTable * PKBStorage::getProcedures() {
-    return &procedureTable;
+shared_ptr<Table> PKBStorage::getProcedures() {
+    return procedureTable.getProcedureNames();
 }
 
 shared_ptr<Table> PKBStorage::getStatements() {
@@ -82,6 +79,10 @@ string PKBStorage::getStmtType(string stmtNumber) {
 
 void PKBStorage::saveProcedures(list<string> procedures) {
     procedureTable.addValues(procedures);
+}
+
+void PKBStorage::saveCFG(string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg) {
+    procedureTable.saveCFGofProcedure(procedure, cfg);
 }
 
 void PKBStorage::saveStatements(list<vector<string>> statements) {
@@ -138,22 +139,6 @@ CallsTable * PKBStorage::getCallsT() {
 
 shared_ptr<Table> PKBStorage::getCallsProcedureNames() {
     return callsTable.getStmtNoProcMap();
-}
-
-NextTable * PKBStorage::getNext() {
-    return &nextTable;
-}
-
-NextTable * PKBStorage::getNextT() {
-    return &nextTTable;
-}
-
-AffectsTable * PKBStorage::getAffects() {
-    return &affectsTable;
-}
-
-AffectsTable * PKBStorage::getAffectsT() {
-    return &affectsTTable;
 }
 
 shared_ptr<unordered_set<string>> PKBStorage::getFollowingStatements(string followedStatement) {
@@ -226,22 +211,6 @@ void PKBStorage::saveCalls(vector<string> calls) {
 
 void PKBStorage::saveCallsT(vector<string> callsT) {
     callsTTable.appendRow(callsT);
-}
-
-void PKBStorage::saveNext(vector<string> next) {
-    nextTable.appendRow(next);
-}
-
-void PKBStorage::saveNextT(vector<string> nextT) {
-    nextTTable.appendRow(nextT);
-}
-
-void PKBStorage::saveAffects(vector<string> affects) {
-    affectsTable.appendRow(affects);
-}
-
-void PKBStorage::saveAffectsT(vector<string> affectsT) {
-    affectsTTable.appendRow(affectsT);
 }
 
 shared_ptr<Table> PKBStorage::getMatchedAssignPatterns(ExpressionSpec expressionSpec) {
