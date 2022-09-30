@@ -43,6 +43,10 @@ PKBStorage::PKBStorage() {
     modifiesPTable = ModifiesTable();
     callsTable = CallsTable();
     callsTTable = CallsTable();
+    nextTable = NextTable();
+    nextTTable = NextTable();
+    affectsTable = AffectsTable();
+    affectsTTable = AffectsTable();
     // Pattern Tables
     assignPatternTable = PatternTable();
     whilePatternTable = PatternTable();
@@ -211,6 +215,22 @@ void PKBStorage::saveCalls(vector<string> calls) {
 
 void PKBStorage::saveCallsT(vector<string> callsT) {
     callsTTable.appendRow(callsT);
+}
+
+void PKBStorage::saveNext(vector<string> next) {
+    nextTable.appendRow(next);
+}
+
+void PKBStorage::saveNextT(vector<string> nextT) {
+    nextTTable.appendRow(nextT);
+}
+
+void PKBStorage::saveAffects(vector<string> affects) {
+    affectsTable.appendRow(affects);
+}
+
+void PKBStorage::saveAffectsT(vector<string> affectsT) {
+    affectsTTable.appendRow(affectsT);
 }
 
 shared_ptr<Table> PKBStorage::getMatchedAssignPatterns(ExpressionSpec expressionSpec) {

@@ -34,6 +34,10 @@ public:
     void saveModifiesP(vector<string> modifiesPRelation);
     void saveCalls(vector<string> callsRelation);
     void saveCallsT(vector<string> callsTRelation);
+    void saveNext(vector<string> nextRelation);
+    void saveNextT(vector<string> nextTRelation);
+    void saveAffects(vector<string> affectsRelation);
+    void saveAffectsT(vector<string> affectsTRelation);
     void saveCFG(string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg);
 
     // pattern

@@ -93,6 +93,10 @@ public:
     void saveModifiesP(vector<string> modifiesP);
     void saveCalls(vector<string> calls);
     void saveCallsT(vector<string> callsT);
+    void saveNext(vector<string> next);
+    void saveNextT(vector<string> nextT);
+    void saveAffects(vector<string> affects);
+    void saveAffectsT(vector<string> affectsT);
 
     // getters of patterns
     shared_ptr<Table> getMatchedAssignPatterns(ExpressionSpec expressionSpec);
@@ -121,6 +125,10 @@ private:
     ModifiesTable modifiesPTable;
     CallsTable callsTable;
     CallsTable callsTTable;
+    NextTable nextTable;
+    NextTable nextTTable;
+    AffectsTable affectsTable;
+    AffectsTable affectsTTable;
     // Pattern Tables
     PatternTable assignPatternTable;
     PatternTable whilePatternTable;
