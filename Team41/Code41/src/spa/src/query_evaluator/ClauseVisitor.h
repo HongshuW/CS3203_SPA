@@ -44,7 +44,6 @@ namespace QE {
 
     class ClauseVisitor {
         shared_ptr<DataPreprocessor> dataPreprocessor;
-        shared_ptr<DataRetriever> dataRetriever;
 
         void getWithValues(vector<WithRef> withRefs, shared_ptr<vector<Value>> values);
 
@@ -59,7 +58,6 @@ namespace QE {
 
     public:
         explicit ClauseVisitor(shared_ptr<DataPreprocessor> dataPreprocessor,
-                               shared_ptr<DataRetriever> dataRetriever,
                                Declarations declarations);
         ClauseReturnType setReturnTable();
         ClauseReturnType setReturnBool();

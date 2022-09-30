@@ -17,7 +17,7 @@ TEST_CASE("Test Clause evaluator") {
         shared_ptr<DummyDataRetriever> dummyDataRetriever = make_shared<DummyDataRetriever>(make_shared<PKBStorage>());
         shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(dummyDataRetriever, declarations);
 
-        shared_ptr<ClauseVisitor> clauseEvaluator = make_shared<ClauseVisitor>(dataPreprocessor, dummyDataRetriever, declarations);
+        shared_ptr<ClauseVisitor> clauseEvaluator = make_shared<ClauseVisitor>(dataPreprocessor, declarations);
 
         Synonym syn1 = Synonym("a1");
         Synonym syn2 = Synonym("a2");

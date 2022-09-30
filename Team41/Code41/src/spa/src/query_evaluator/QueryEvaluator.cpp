@@ -52,7 +52,6 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
     this->declarations = query->declarations;
     shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(dataRetriever, declarations);
     shared_ptr<ClauseVisitor> clauseEvaluator = make_shared<ClauseVisitor>(dataPreprocessor,
-                                                                           dataRetriever,
                                                                            declarations);
 
 

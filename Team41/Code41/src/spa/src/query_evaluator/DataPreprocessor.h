@@ -34,6 +34,11 @@ namespace QE {
         Table getTableByRelation(SuchThatClause suchThatClause);
         Table getTableByWith(shared_ptr<WithClause> withClause, shared_ptr<vector<Declaration>> declarations);
         Table getTableByExprPattern(ExpressionSpec expressionSpec);
+        Table getIfPatternTable();
+        Table getWhilePatternTable();
+        vector<string> getCallsProcedureNames();
+        vector<string> getReadVariableNames();
+        vector<string> getPrintVariableNames();
 
         Table filterSingleClauseResultTable(Ref ref1, Ref ref2, Table table);
         /**

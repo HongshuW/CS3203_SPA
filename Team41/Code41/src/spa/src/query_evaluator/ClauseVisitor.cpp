@@ -22,9 +22,9 @@ QE::ClauseReturnType QE::ClauseVisitor::setReturnBool() {
     return returnType;
 }
 
-QE::ClauseVisitor::ClauseVisitor(shared_ptr<DataPreprocessor> dataPreprocessor, shared_ptr<DataRetriever> dataRetriever,
+QE::ClauseVisitor::ClauseVisitor(shared_ptr<DataPreprocessor> dataPreprocessor,
                                  Declarations declarations)
-        : dataPreprocessor(dataPreprocessor), declarations(declarations), dataRetriever(dataRetriever) {
+        : dataPreprocessor(dataPreprocessor), declarations(declarations) {
 
 }
 
@@ -162,30 +162,30 @@ void QE::ClauseVisitor::getWithValues(vector<WithRef> withRefs, shared_ptr<vecto
             values->at(i) = constVals;
         } else {
             if (attrRef.attrName == AttrName::PROC_NAME) {
-                values->at(i) = dataRetriever->getCallsProcedureNames().getColumnByName(PKBStorage::CALLS_TABLE_COL2_NAME);
+                values->at(i) = dataPreprocessor->getCallsProcedureNames();
             }
             if (attrRef.attrName == QB::AttrName::VAR_NAME && designEntity == QB::DesignEntity::READ) {
-                values->at(i) = dataRetriever->getReadVariableNames().getColumnByName(PKBStorage::VARIABLE_TABLE_COL1_NAME);
+                values->at(i) = dataPreprocessor->getReadVariableNames();
             }
             if (attrRef.attrName == QB::AttrName::VAR_NAME && designEntity == QB::DesignEntity::PRINT) {
-                values->at(i) = dataRetriever->getPrintVariableNames().getColumnByName(PKBStorage::VARIABLE_TABLE_COL1_NAME);
+                values->at(i) = dataPreprocessor->getPrintVariableNames();
             }
         }
     }
 }
 
 Table QE::ClauseVisitor::operator()(shared_ptr<AssignPatternClause> assignPatternClause) {
-    Table table = dataRetriever->getTableByExprPattern(assignPatternClause->arg3);
+    Table table = dataPreprocessor->getTableByExprPattern(assignPatternClause->arg3);
     return dataPreprocessor->filterSingleClauseResultTable(assignPatternClause->arg1, assignPatternClause->arg2, table);
 }
 
 Table QE::ClauseVisitor::operator()(shared_ptr<IfPatternClause> ifPatternClause) {
-    Table table = dataRetriever->getTableByCondExprPattern(DesignEntity::IF);
+    Table table = dataPreprocessor->getIfPatternTable();
     return dataPreprocessor->filterSingleClauseResultTable(ifPatternClause->arg1, ifPatternClause->arg2, table);
 }
 
 Table QE::ClauseVisitor::operator()(shared_ptr<WhilePatternClause> whilePatternClause) {
-    Table table = dataRetriever->getTableByCondExprPattern(DesignEntity::WHILE);
+    Table table = dataPreprocessor->getWhilePatternTable();
     return dataPreprocessor->filterSingleClauseResultTable(whilePatternClause->arg1, whilePatternClause->arg2, table);
 }
 

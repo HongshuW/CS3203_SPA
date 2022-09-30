@@ -334,5 +334,25 @@ namespace QE {
         return dataRetriever->getTableByExprPattern(expressionSpec);
     }
 
+    Table DataPreprocessor::getIfPatternTable() {
+        return dataRetriever->getTableByCondExprPattern(QB::DesignEntity::IF);
+    }
+
+    Table DataPreprocessor::getWhilePatternTable() {
+        return dataRetriever->getTableByCondExprPattern(QB::DesignEntity::WHILE);
+    }
+
+    vector<string> DataPreprocessor::getCallsProcedureNames() {
+        return dataRetriever->getCallsProcedureNames().getColumnByName(PKBStorage::CALLS_TABLE_COL2_NAME);
+    }
+
+    vector<string> DataPreprocessor::getReadVariableNames() {
+        return dataRetriever->getReadVariableNames().getColumnByName(PKBStorage::VARIABLE_TABLE_COL1_NAME);
+    }
+
+    vector<string> DataPreprocessor::getPrintVariableNames() {
+        return dataRetriever->getPrintVariableNames().getColumnByName(PKBStorage::VARIABLE_TABLE_COL1_NAME);
+    }
+
 
 } // QE
