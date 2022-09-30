@@ -22,8 +22,9 @@ namespace QE {
 
     Table
     DataPreprocessor::getTableByRelation(SuchThatClause suchThatClause) {
-        return this->getTableByRelationHelper(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType,
-                                              suchThatClause.declarations);
+//        return this->getTableByRelationHelper(suchThatClause.arg1, suchThatClause.arg2, suchThatClause.relationType,
+//                                              suchThatClause.declarations);
+            return Table();
     }
 
     Table DataPreprocessor::getTableByRelationHelper(Ref ref1, Ref ref2, RelationType relationType,

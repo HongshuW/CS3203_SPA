@@ -22,7 +22,7 @@ namespace QB {
 
         AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
 
-        bool operator==(const AssignPatternClause &clause) const;
+        bool operator==(const AssignPatternClause &other) const;
         Clause asClauseVariant() override;
         Table accept(shared_ptr<IVisitor> visitor) override;
     };

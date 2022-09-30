@@ -6,8 +6,8 @@
 #include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
-#include "query_builder/clauses/SelectClause.h"
-#include "query_builder/clauses/WithClauses.h"
+#include "query_builder/clauses/select_clauses/SelectClause.h"
+#include "query_builder/clauses/with_clauses/WithClauses.h"
 #include "TableCombiner.h"
 #include "constants/ClauseVisitorConstants.h"
 #include <numeric>
@@ -33,7 +33,8 @@ QE::ClauseVisitor::ClauseVisitor(shared_ptr<DataPreprocessor> dataPreprocessor,
 //}
 
 Table QE::ClauseVisitor::operator()(shared_ptr<SuchThatClause> suchThatClause) {
-    return dataPreprocessor->getTableByRelation(*suchThatClause);
+//    return dataPreprocessor->getTableByRelation(*suchThatClause);
+    return Table();
 }
 
 

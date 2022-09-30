@@ -6,11 +6,14 @@
 
 #include <utility>
 #include "query_builder/commons/Synonym.h"
-#include "query_builder/clauses/SelectClause.h"
-#include "query_builder/clauses/SuchThatClause.h"
+#include "query_builder/clauses/select_clauses/SelectClause.h"
+#include "query_builder/clauses/such_that_clauses/SuchThatClause.h"
 #include "query_builder/exceptions/Exceptions.h"
 
 using namespace QB;
+
+namespace QB {
+}
 
 QueryParser::QueryParser(std::vector<std::string> tokens)
         : query(new Query()), currIdx(0), tokens(std::move(tokens)) {}
@@ -164,10 +167,23 @@ void QueryParser::parseSuchThatClause() {
     expect(QueryParserConstants::COMMA);
     auto arg2 = parseRef();
     expect(QueryParserConstants::RIGHT_BRACKET);
-
-    shared_ptr<SuchThatClause> suchThatClause =
-        make_shared<SuchThatClause>(relationType, arg1, arg2, query->declarations);
-    query->suchThatClauses->push_back(suchThatClause);
+    const unordered_map<RelationType, shared_ptr<SuchThatRelations>> SUCH_THAT_CREATORS({
+        {RelationType::FOLLOWS, make_shared<Follows>()},
+        {RelationType::FOLLOWS_T, make_shared<FollowsT>()},
+        {RelationType::PARENT, make_shared<Parent>()},
+        {RelationType::PARENT_T, make_shared<ParentT>()},
+        {RelationType::USES, make_shared<Uses>(query->declarations)},
+        {RelationType::MODIFIES, make_shared<Modifies>(query->declarations)},
+        {RelationType::CALLS, make_shared<Calls>()},
+        {RelationType::CALLS_T, make_shared<CallsT>()},
+        {RelationType::NEXT, make_shared<Next>()},
+        {RelationType::NEXT_T, make_shared<NextT>()},
+        {RelationType::AFFECTS, make_shared<Affects>()},
+        {RelationType::AFFECTS_T, make_shared<AffectsT>()}
+    });
+    auto suchThatClauseCreator = SUCH_THAT_CREATORS.at(relationType);
+    auto suchThatClause = suchThatClauseCreator->createClause(arg1, arg2);
+    query->suchThatClauses->push_back(dynamic_pointer_cast<SuchThatClause>(suchThatClause));
 }
 
 bool QueryParser::parseSuchThat() {

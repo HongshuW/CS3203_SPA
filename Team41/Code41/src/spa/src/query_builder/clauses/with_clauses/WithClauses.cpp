@@ -12,6 +12,8 @@ namespace QB {
 
 }
 
+WithClause::WithClause(WithRef lhs, WithRef rhs) : lhs(lhs), rhs(rhs) {}
+
 WithRefType WithClause::lhsType() const {
     return indexToWithRefType.at(lhs.index());
 }
@@ -36,4 +38,6 @@ ostream& WithClause::print(ostream& os) const {
     return os;
 }
 
-
+Table WithClause::accept(shared_ptr<IVisitor> visitor) {
+    return visitor->visit(shared_from_this());
+}

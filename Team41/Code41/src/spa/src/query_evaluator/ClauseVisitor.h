@@ -2,6 +2,7 @@
 // Created by Xingchen Lin on 28/9/22.
 //
 
+#pragma once
 #ifndef SPA_CLAUSEVISITOR_H
 #define SPA_CLAUSEVISITOR_H
 

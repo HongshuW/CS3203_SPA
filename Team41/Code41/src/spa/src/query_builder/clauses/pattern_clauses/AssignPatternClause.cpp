@@ -9,10 +9,10 @@
 AssignPatternClause::AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3) : PatternClause(arg1, arg2),
         arg3(std::move(arg3)) {}
 
-bool AssignPatternClause::operator==(const AssignPatternClause &clause) const {
-    auto patternClause = dynamic_cast<const AssignPatternClause*>(&clause);
-    return patternClause != nullptr && arg1 == patternClause->arg1
-        && arg2 == patternClause->arg2 && arg3 == patternClause->arg3;
+bool AssignPatternClause::operator==(const AssignPatternClause &other) const {
+    auto clause = dynamic_cast<const AssignPatternClause*>(&other);
+    return clause != nullptr && arg1 == clause->arg1
+        && arg2 == clause->arg2 && arg3 == clause->arg3;
 }
 
 Clause AssignPatternClause::asClauseVariant() {

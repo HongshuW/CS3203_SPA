@@ -5,8 +5,21 @@
 #include "catch.hpp"
 
 #include "query_builder/QueryBuilder.h"
-#include "query_builder/clauses/SelectClause.h"
-#include "query_builder/clauses/SuchThatClause.h"
+#include "query_builder/clauses/select_clauses/SelectClause.h"
+#include "query_builder/relations/Follows.h"
+#include "query_builder/relations/FollowsT.h"
+#include "query_builder/relations/Parent.h"
+#include "query_builder/relations/ParentT.h"
+#include "query_builder/relations/UsesP.h"
+#include "query_builder/relations/UsesS.h"
+#include "query_builder/relations/ModifiesP.h"
+#include "query_builder/relations/ModifiesS.h"
+#include "query_builder/relations/Calls.h"
+#include "query_builder/relations/CallsT.h"
+#include "query_builder/relations/Next.h"
+#include "query_builder/relations/NextT.h"
+#include "query_builder/relations/Affects.h"
+#include "query_builder/relations/AffectsT.h"
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
 #include "query_builder/commons/Ref.h"
@@ -29,8 +42,7 @@ TEST_CASE ("Test Query Parser") {
                         Declaration(DesignEntity::VARIABLE, Synonym("v1"))});
         shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
         returnResults->push_back(Synonym("v1"));
-        REQUIRE(*(query->selectClause) ==
-                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(*(query->selectClause) == SelectClause(ReturnType::TUPLE, returnResults));
     }
 
     SECTION ("stmt a, b, c; Select a") {
@@ -44,8 +56,7 @@ TEST_CASE ("Test Query Parser") {
                         Declaration(DesignEntity::STMT, Synonym("c"))});
         shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
         returnResults->push_back(Synonym("a"));
-        REQUIRE(*(query->selectClause) ==
-                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(*(query->selectClause) == SelectClause(ReturnType::TUPLE, returnResults));
     }
 
     SECTION ("assign a; while w; Select a") {
@@ -58,8 +69,7 @@ TEST_CASE ("Test Query Parser") {
                         Declaration(DesignEntity::WHILE, Synonym("w"))});
         shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
         returnResults->push_back(Synonym("a"));
-        REQUIRE(*(query->selectClause) ==
-                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(*(query->selectClause) == SelectClause(ReturnType::TUPLE, returnResults));
     }
 
     SECTION ("stmt s; Select s such that Parent (s, 12)") {
@@ -74,9 +84,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::PARENT, Synonym("s"), 12,
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<ParentClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == ParentClause(Synonym("s"), 12));
     }
 
     SECTION ("assign a; Select a such that Parent* (_, a)") {
@@ -91,9 +100,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::PARENT_T, Underscore(), Synonym("a"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<ParentTClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == ParentTClause(Underscore(), Synonym("a")));
     }
 
     SECTION ("stmt s; Select s such that Follows (6, s)") {
@@ -108,9 +116,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::FOLLOWS, 6, Synonym("s"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<FollowsClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == FollowsClause(6, Synonym("s")));
     }
 
     SECTION ("stmt s; Select s such that Follows* (s, 6)") {
@@ -125,9 +132,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::FOLLOWS_T, Synonym("s"), 6,
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<FollowsTClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == FollowsTClause(Synonym("s"), 6));
     }
 
     SECTION ("stmt s; Select s such that Follows* (s, _)") {
@@ -142,9 +148,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::FOLLOWS_T, Synonym("s"), Underscore(),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<FollowsTClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == FollowsTClause(Synonym("s"), Underscore()));
     }
 
     SECTION ("assign a; Select a such that Uses (a, \"x\")") {
@@ -159,9 +164,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<UsesSClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == UsesSClause(Synonym("a"), Ident("x")));
     }
 
     SECTION ("variable v; Select v such that Modifies (\"main\", v)") {
@@ -176,10 +180,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_P);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::MODIFIES_P, Ident("main"), Synonym("v"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<ModifiesPClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == ModifiesPClause(Ident("main"), Synonym("v")));
     }
 
     SECTION ("variable v; Select v such that Modifies (8, v)") {
@@ -194,10 +196,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_S);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::MODIFIES_S, 8, Synonym("v"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<ModifiesSClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == ModifiesSClause(8, Synonym("v")));
     }
 
     SECTION ("stmt s; Select s such that Modifies (s, _)") {
@@ -212,10 +212,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_S);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::MODIFIES_S, Synonym("s"), Underscore(),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<ModifiesSClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == ModifiesSClause(Synonym("s"), Underscore()));
     }
 
     SECTION ("procedure p; Select p such that Modifies (p, _)") {
@@ -230,10 +228,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::MODIFIES_P);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::MODIFIES_P, Synonym("p"), Underscore(),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<ModifiesPClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == ModifiesPClause(Synonym("p"), Underscore()));
     }
 
     SECTION ("assign a; Select a such that Uses (a, _)") {
@@ -248,10 +244,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::USES_S);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::USES_P, Synonym("a"), Underscore(),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<UsesSClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == UsesSClause(Synonym("a"), Underscore()));
     }
 
     SECTION ("procedure p; Select p such that Uses (p, _)") {
@@ -266,10 +260,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::USES_P);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::USES_P, Synonym("p"), Underscore(),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<UsesPClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == UsesPClause(Synonym("p"), Underscore()));
     }
 
     SECTION ("procedure p; Select p such that Calls* (p, _)") {
@@ -284,10 +276,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::CALLS_T);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::CALLS_T, Synonym("p"), Underscore(),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<CallsTClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == CallsTClause(Synonym("p"), Underscore()));
     }
 
     SECTION ("while w; Select w such that Next (w, 2)") {
@@ -302,10 +292,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::NEXT);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::NEXT, Synonym("w"), 2,
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<NextClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == NextClause(Synonym("w"), 2));
     }
 
     SECTION ("while w; Select w such that Affects* (_, w)") {
@@ -320,10 +308,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(query->suchThatClauses->at(0)->relationType == RelationType::AFFECTS_T);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::AFFECTS_T, Underscore(), Synonym("w"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<AffectsTClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == AffectsTClause(Underscore(), Synonym("w")));
     }
 
     SECTION ("assign a; Select a pattern a (\"test\", _)") {
@@ -448,9 +434,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<UsesSClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == UsesSClause(Synonym("a"), Ident("x")));
         AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
         REQUIRE(assignPatternClause ==
                 AssignPatternClause(
@@ -473,9 +458,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::USES_P, Synonym("a"), Ident("x"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<UsesSClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == UsesSClause(Synonym("a"), Ident("x")));
         AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
         REQUIRE(assignPatternClause ==  AssignPatternClause(
                         Synonym("a"),
@@ -498,9 +482,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::AFFECTS, Synonym("a1"), Synonym("a2"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<AffectsClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == AffectsClause(Synonym("a1"), Synonym("a2")));
     }
 
     SECTION ("Select BOOLEAN such that Next* (2, 9)") {
@@ -509,9 +492,8 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::BOOLEAN));
         REQUIRE(query->suchThatClauses->size() == 1);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::NEXT_T, 2, 9,
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<NextTClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == NextTClause(2, 9));
     }
 
     SECTION ("Select BOOLEAN such that Next* (2, 9) and Next (9, 10)") {
@@ -520,12 +502,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::BOOLEAN));
         REQUIRE(query->suchThatClauses->size() == 2);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::NEXT_T, 2, 9,
-                               query->declarations));
-        REQUIRE(*(query->suchThatClauses)->at(1) ==
-                SuchThatClause(RelationType::NEXT, 9, 10,
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<NextTClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == NextTClause(2, 9));
+        auto clause2 = dynamic_pointer_cast<NextClause>((query->suchThatClauses)->at(1));
+        REQUIRE(*clause2 == NextClause(9, 10));
     }
 
     SECTION ("procedure p; variable v; Select p with p.procName = v.varName") {
@@ -602,12 +582,10 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::TUPLE, returnResults));
         REQUIRE(query->suchThatClauses->size() == 2);
-        REQUIRE(*(query->suchThatClauses)->at(0) ==
-                SuchThatClause(RelationType::PARENT_T, Synonym("w"), Synonym("a"),
-                               query->declarations));
-        REQUIRE(*(query->suchThatClauses)->at(1) ==
-                SuchThatClause(RelationType::NEXT_T, 60, Synonym("s"),
-                               query->declarations));
+        auto clause = dynamic_pointer_cast<ParentTClause>((query->suchThatClauses)->at(0));
+        REQUIRE(*clause == ParentTClause(Synonym("w"), Synonym("a")));
+        auto clause2 = dynamic_pointer_cast<NextTClause>((query->suchThatClauses)->at(1));
+        REQUIRE(*clause2 == NextTClause(60, Synonym("s")));
         REQUIRE(query->patternClauses->size() == 1);
         WhilePatternClause whilePatternClause = dynamic_cast<WhilePatternClause&>( *(query->patternClauses->at(0)));
         REQUIRE(whilePatternClause == WhilePatternClause(

@@ -8,10 +8,10 @@
 
 IfPatternClause::IfPatternClause(Synonym arg1, Ref arg2) : PatternClause(arg1, arg2) {}
 
-bool IfPatternClause::operator==(const IfPatternClause &clause) const {
-    auto patternClause = dynamic_cast<const IfPatternClause*>(&clause);
-    return patternClause != nullptr && arg1 == patternClause->arg1
-           && arg2 == patternClause->arg2;
+bool IfPatternClause::operator==(const IfPatternClause &other) const {
+    auto clause = dynamic_cast<const IfPatternClause*>(&other);
+    return clause != nullptr && arg1 == clause->arg1
+           && arg2 == clause->arg2;
 }
 
 Clause IfPatternClause::asClauseVariant() {

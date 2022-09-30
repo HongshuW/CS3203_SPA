@@ -21,7 +21,7 @@ namespace QB {
     public:
         IfPatternClause(Synonym arg1, Ref arg2);
 
-        bool operator==(const IfPatternClause &clause) const;
+        bool operator==(const IfPatternClause &other) const;
         Clause asClauseVariant() override;
         Table accept(shared_ptr<IVisitor> visitor) override;
     };

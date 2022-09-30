@@ -8,7 +8,7 @@
 #pragma once
 #include "query_builder/commons/Synonym.h"
 #include "query_builder/commons/Ref.h"
-#include "../AbstractClause.h"
+#include "query_builder/clauses/AbstractClause.h"
 
 namespace QB {
     class WithClause;
@@ -40,7 +40,7 @@ namespace QB {
         Synonym arg1; // must be declared as If
         Ref arg2; // entRef -> synonym, _, ident
         PatternClause(Synonym arg1, Ref arg2);
-        virtual ~PatternClause() = default;
+        ~PatternClause() override = default;
         virtual Clause asClauseVariant() = 0;
         virtual Table accept(shared_ptr<IVisitor> visitor) override = 0;
     };

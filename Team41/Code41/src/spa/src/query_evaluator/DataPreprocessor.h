@@ -8,9 +8,9 @@
 #include <memory>
 #include "pkb/DataRetriever.h"
 #include "query_builder/commons/DesignEntity.h"
-#include "query_builder/clauses/SuchThatClause.h"
+#include "query_builder/clauses/such_that_clauses/SuchThatClause.h"
 #include "query_builder/clauses/pattern_clauses/PatternClause.h"
-#include "query_builder/clauses/WithClauses.h"
+#include "query_builder/clauses/with_clauses/WithClauses.h"
 
 using namespace std;
 using namespace QB;

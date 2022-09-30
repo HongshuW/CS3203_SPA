@@ -22,7 +22,7 @@ namespace QB {
     public:
         WhilePatternClause(const Synonym& arg1, const Ref& arg2);
 
-        bool operator==(const WhilePatternClause &clause) const;
+        bool operator==(const WhilePatternClause &other) const;
         Clause asClauseVariant() override;
         Table accept(shared_ptr<IVisitor> visitor) override;
     };
