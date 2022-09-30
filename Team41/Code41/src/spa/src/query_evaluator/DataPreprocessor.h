@@ -33,6 +33,7 @@ namespace QE {
         Table getAllByDesignEntity(DesignEntity designEntity);
         Table getTableByRelation(SuchThatClause suchThatClause);
         Table getTableByWith(shared_ptr<WithClause> withClause, shared_ptr<vector<Declaration>> declarations);
+        Table getTableByExprPattern(ExpressionSpec expressionSpec);
 
         Table filterSingleClauseResultTable(Ref ref1, Ref ref2, Table table);
         /**

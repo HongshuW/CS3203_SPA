@@ -330,5 +330,9 @@ namespace QE {
 
     }
 
+    Table DataPreprocessor::getTableByExprPattern(ExpressionSpec expressionSpec) {
+        return dataRetriever->getTableByExprPattern(expressionSpec);
+    }
+
 
 } // QE

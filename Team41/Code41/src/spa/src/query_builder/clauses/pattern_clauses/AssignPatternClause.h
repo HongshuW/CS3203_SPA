@@ -11,11 +11,12 @@
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/commons/ExpressionSpec.h"
 #include "query_builder/clauses/pattern_clauses/PatternClause.h"
+#include "query_builder/clauses/AbstractClause.h"
 
 using namespace QB;
 
 namespace QB {
-    class AssignPatternClause : public PatternClause, public enable_shared_from_this<AssignPatternClause>{
+    class AssignPatternClause : public PatternClause, public enable_shared_from_this<AssignPatternClause> {
     public:
         Synonym arg1; // must be declared as ASSIGN
         Ref arg2; // entRef -> synonym, _, ident
@@ -25,6 +26,7 @@ namespace QB {
 
         bool operator==(const AssignPatternClause &clause) const;
         Clause asClauseVariant() override;
+        Table accept(shared_ptr<IVisitor> visitor) override;
     };
 }
 

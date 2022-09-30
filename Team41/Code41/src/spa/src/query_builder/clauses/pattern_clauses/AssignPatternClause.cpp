@@ -3,7 +3,7 @@
 //
 
 #include "AssignPatternClause.h"
-
+#include "query_evaluator/IVisitor.h"
 #include <utility>
 
 AssignPatternClause::AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3) : PatternClause(arg1, arg2),
@@ -17,4 +17,8 @@ bool AssignPatternClause::operator==(const AssignPatternClause &clause) const {
 
 Clause AssignPatternClause::asClauseVariant() {
     return shared_from_this();
+}
+
+Table AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
+    return visitor->visit(shared_from_this());
 }

@@ -10,6 +10,9 @@
 #include "query_builder/commons/Synonym.h"
 #include "query_builder/commons/Ref.h"
 #include "query_builder/clauses/pattern_clauses/PatternClause.h"
+#include "pkb/table/Table.h"
+#include "query_evaluator/IVisitor.h"
+#include "query_builder/clauses/AbstractClause.h"
 
 using namespace QB;
 
@@ -24,6 +27,7 @@ namespace QB {
 
         bool operator==(const WhilePatternClause &clause) const;
         Clause asClauseVariant() override;
+        Table accept(shared_ptr<IVisitor> visitor) override;
     };
 
 } // QB

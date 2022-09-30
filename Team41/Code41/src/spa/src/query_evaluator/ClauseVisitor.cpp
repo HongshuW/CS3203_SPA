@@ -138,7 +138,7 @@ void QE::ClauseVisitor::getWithValues(vector<WithRef> withRefs, shared_ptr<vecto
                                               attrRef.attrName);
         if (!processingNeeded) {
             if (attrRef.attrName == AttrName::PROC_NAME) {
-                values->at(i) = dataPreprocessor->getEntityNames(designEntity);
+                values->at(i) = dataPreprocessor->getEntityNames(designEntity);//design entity must be procedure
                 continue;
             }
 
@@ -161,7 +161,15 @@ void QE::ClauseVisitor::getWithValues(vector<WithRef> withRefs, shared_ptr<vecto
             }
             values->at(i) = constVals;
         } else {
-            //todo: process call.procName, read.varname and print.varname
+            if (attrRef.attrName == AttrName::PROC_NAME) {
+                values->at(i) = dataRetriever->getCallsProcedureNames().getColumnByName(PKBStorage::CALLS_TABLE_COL2_NAME);
+            }
+            if (attrRef.attrName == QB::AttrName::VAR_NAME && designEntity == QB::DesignEntity::READ) {
+                values->at(i) = dataRetriever->getReadVariableNames().getColumnByName(PKBStorage::VARIABLE_TABLE_COL1_NAME);
+            }
+            if (attrRef.attrName == QB::AttrName::VAR_NAME && designEntity == QB::DesignEntity::PRINT) {
+                values->at(i) = dataRetriever->getPrintVariableNames().getColumnByName(PKBStorage::VARIABLE_TABLE_COL1_NAME);
+            }
         }
     }
 }
@@ -217,6 +225,9 @@ Table QE::ClauseVisitor::operator()(shared_ptr<SelectClause> selectClause) {
 
             //todo: query pkb for data
             if (processingNeeded) {
+                if (designEntity == QB::DesignEntity::CALL) {
+                    
+                }
 
             } else {
                 for (int i = 1; i < intermediateTable.header.size(); i++) {

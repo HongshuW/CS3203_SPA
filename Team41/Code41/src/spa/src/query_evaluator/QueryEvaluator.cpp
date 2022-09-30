@@ -16,6 +16,8 @@
 #include <numeric>
 #include "ClauseVisitor.h"
 #include "constants/ClauseVisitorConstants.h"
+#include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
+#include "ConcreteClauseVisitor.h"
 
 using namespace QB;
 using namespace QE;
@@ -53,6 +55,7 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
                                                                            dataRetriever,
                                                                            declarations);
 
+
     bool hasCondition = !query->suchThatClauses->empty() || !query->patternClauses->empty() || !query->withClauses->empty();
     if (!hasCondition) {//no such that or pattern clause
         return this->evaluateNoConditionQuery(query, clauseEvaluator);
@@ -76,8 +79,11 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
         if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
     }
 
+    shared_ptr<ConcreteClauseVisitor> concreteClauseVisitor = make_shared<ConcreteClauseVisitor>(dataPreprocessor);
+
     for (auto patternClause: *query->patternClauses) {
-        Table intermediateTable = std::visit(*clauseEvaluator, patternClause->asClauseVariant());
+
+        Table intermediateTable = patternClause->accept(concreteClauseVisitor);;
         if (intermediateTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
         resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
         if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
