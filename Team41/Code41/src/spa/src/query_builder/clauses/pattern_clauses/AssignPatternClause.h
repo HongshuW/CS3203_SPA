@@ -18,8 +18,6 @@ using namespace QB;
 namespace QB {
     class AssignPatternClause : public PatternClause, public enable_shared_from_this<AssignPatternClause> {
     public:
-        Synonym arg1; // must be declared as ASSIGN
-        Ref arg2; // entRef -> synonym, _, ident
         ExpressionSpec arg3;
 
         AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);

@@ -5,7 +5,7 @@
 #include "WhilePatternClause.h"
 
 
-WhilePatternClause::WhilePatternClause(const Synonym& arg1, const Ref& arg2) : PatternClause(arg1, arg2), arg1(arg1), arg2(arg2) {};
+WhilePatternClause::WhilePatternClause(const Synonym& arg1, const Ref& arg2) : PatternClause(arg1, arg2) {}
 
 bool WhilePatternClause::operator==(const WhilePatternClause &clause) const {
     auto patternClause = dynamic_cast<const WhilePatternClause*>(&clause);

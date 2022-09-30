@@ -6,8 +6,7 @@
 #include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_evaluator/IVisitor.h"
 
-IfPatternClause::IfPatternClause(Synonym arg1, Ref arg2) : PatternClause(arg1, arg2),
-        arg1(std::move(arg1)), arg2(std::move(arg2)) {}
+IfPatternClause::IfPatternClause(Synonym arg1, Ref arg2) : PatternClause(arg1, arg2) {}
 
 bool IfPatternClause::operator==(const IfPatternClause &clause) const {
     auto patternClause = dynamic_cast<const IfPatternClause*>(&clause);
