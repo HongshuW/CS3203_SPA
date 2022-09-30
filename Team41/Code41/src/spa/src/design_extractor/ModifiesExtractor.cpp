@@ -137,7 +137,7 @@ shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesS(shared_ptr<
         advance(outputIterator, 1);
     }
     insertCallsForModifiesS(rootPtr, output);
-    insertCallsInIfAndWhileForModifiesS(rootPtr, output);
+    
     return output;
 }
 
@@ -154,6 +154,8 @@ void ModifiesExtractor::insertCallsForModifiesS(shared_ptr<ProgramNode> rootPtr,
                 mappedProceduresToModifiedVar, mappedCallNodesToProcedures, output);
         }
     }
+
+    insertCallsInIfAndWhileForModifiesS(rootPtr, output);
 }
 
 shared_ptr<list<vector<string>>> ModifiesExtractor::extractModifiesP(shared_ptr<ProgramNode> rootPtr) {

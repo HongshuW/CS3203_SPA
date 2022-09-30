@@ -26,7 +26,6 @@ namespace DE {
             }
         }
         insertCallsForUseS(rootPtr, ans);
-        insertCallsInIfAndWhileForUseS(rootPtr, ans);
         return ans;
     }
 
@@ -124,6 +123,8 @@ namespace DE {
                     mappedProceduresToUsedVar, mappedCallNodesToProcedures, ans);
             }
         }
+
+        insertCallsInIfAndWhileForUseS(rootPtr, ans);
     }
 
     shared_ptr<list<vector<string>>> UsesExtractor::extractUsesP(shared_ptr<ProgramNode> rootPtr) {
