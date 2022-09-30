@@ -184,7 +184,9 @@ void DesignExtractor::run() {
                                                 RelationType::USES_S,
                                                 RelationType::MODIFIES_S,
                                                 RelationType::USES_P,
-                                                RelationType::MODIFIES_P};
+                                                RelationType::MODIFIES_P,
+                                                RelationType::CALLS,
+                                                RelationType::CALLS_T};
     for (auto relationType: relationsToSave) {
         this->saveRelationToPKB(relationType);
     }
