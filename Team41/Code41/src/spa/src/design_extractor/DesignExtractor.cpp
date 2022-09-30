@@ -90,6 +90,14 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
                 this->dataModifier->saveModifiesP(*iterator);
                 break;
             }
+            case RelationType::CALLS: {
+                this->dataModifier->saveCalls(*iterator);
+                break;
+            }
+            case RelationType::CALLS_T: {
+                this->dataModifier->saveCallsT(*iterator);
+                break;
+            }
             default:
                 break;
         }
