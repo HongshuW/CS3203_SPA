@@ -186,7 +186,8 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/constants/QueryValidatorConstants.h
         src/design_extractor/CallsExtractor.h
         src/query_evaluator/ClauseVisitor.cpp
-        src/query_evaluator/ClauseVisitor.h)
+        src/query_evaluator/ClauseVisitor.h
+        )
 
 
 
