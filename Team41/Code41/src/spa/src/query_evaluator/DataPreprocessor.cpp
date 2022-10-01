@@ -114,13 +114,26 @@ namespace QE {
         bool hasSynonym =
                 withClause->lhsType() == WithRefType::ATTR_REF || withClause->rhsType() == WithRefType::ATTR_REF;
         if (!hasSynonym) return Table(); //the with clause must have some result due to existence check
+
+        int intRef;
+        string identRef;
+        bool isIntType = true;
+
         vector<WithRef> withRefs = {withClause->lhs, withClause->rhs};
         Table resultTable = Table();
         vector<int> comparedCols = {};
         int colOffSet = 0;
+
+
         for (auto withRef: withRefs) {
             WithRefType withRefType = WithClause::getWithRefType(withRef.index());
+            if (withRefType == QB::WithRefType::INTEGER) intRef = get<WithClause::WITHREF_INT_IDX>(withRef);
+            if (withRefType == QB::WithRefType::IDENT) {
+                isIntType = false;
+                identRef = get<WithClause::WITHREF_IDENT_IDX>(withRef).identStr;
+            }
             if (withRefType != WithRefType::ATTR_REF) continue;
+
             AttrRef attrRef = get<WithClause::WITHREF_ATTR_REF_IDX>(withRef);
             DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym);
 
@@ -161,7 +174,13 @@ namespace QE {
                 colOffSet += (int) TABLE_HEADER_SIZE;
             }
         }
-        resultTable = filterTableByColValueEquality(resultTable, comparedCols);
+        if ( withClause->lhsType() == WithRefType::ATTR_REF && withClause->rhsType() == WithRefType::ATTR_REF) {
+            resultTable = filterTableByColValueEquality(resultTable, comparedCols);
+        } else {
+            const int ATTR_NAME_COL_IDX = 1;
+            resultTable = filerTableByColumnIdx(resultTable, ATTR_NAME_COL_IDX, isIntType ? to_string(intRef) : identRef);
+        }
+
         return resultTable;
     }
 
