@@ -6,7 +6,6 @@
 //#include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
 //#include "query_evaluator/DataPreprocessor.h"
 //#include "query_builder/commons/Declaration.h"
-//#include "query_evaluator/ClauseVisitor.h"
 //#include <iostream>
 //#include <variant>
 //

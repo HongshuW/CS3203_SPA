@@ -4,87 +4,88 @@
 
 #include "ConcreteClauseVisitor.h"
 #include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
-
+#include "query_builder/clauses/such_that_clauses/FollowsClause.h"
+#include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 ConcreteClauseVisitor::ConcreteClauseVisitor(shared_ptr<QE::DataPreprocessor> dataPreprocessor) : AbstractClauseVisitor(
         dataPreprocessor) {
 
 }
 
+//only for no condition select clause
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::SelectClause> selectClause) {
-    return Table();
+    return dataPreprocessor->getNoConditionSelectClauseResult(selectClause);
 }
 
-
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::IfPatternClause> ifPatternClause) {
-    return Table();
+    return dataPreprocessor->getIfPatternTable(ifPatternClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::WhilePatternClause> whilePatternClause) {
-    return Table();
+    return dataPreprocessor->getWhilePatternTable(whilePatternClause);
 }
 
+
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::WithClause> withClause) {
-    return Table();
+    return dataPreprocessor->getTableByWith(withClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::FollowsClause> followsClause) {
-    return Table();
+    return dataPreprocessor->getTableByFollows(followsClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::FollowsTClause> followsTClause) {
-    return Table();
+    return dataPreprocessor->getTableByFollowsT(followsTClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::ParentClause> parentClause) {
-    return Table();
+    return dataPreprocessor->getTableByParent(parentClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::ParentTClause> parentTClause) {
-    return Table();
+    return dataPreprocessor->getTableByParentT(parentTClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::UsesSClause> usesSClause) {
-    return Table();
+    return dataPreprocessor->getTableByUsesS(usesSClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::UsesPClause> usesPClause) {
-    return Table();
+    return dataPreprocessor->getTableByUsesP(usesPClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::ModifiesSClause> modifiesSClause) {
-    return Table();
+    return dataPreprocessor->getTableByModifiesS(modifiesSClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::ModifiesPClause> modifiesPClause) {
-    return Table();
+    return dataPreprocessor->getTableByModifiesP(modifiesPClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::CallsClause> callsClause) {
-    return Table();
+    return dataPreprocessor->getTableByCalls(callsClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::CallsTClause> callsTClause) {
-    return Table();
+    return dataPreprocessor->getTableByCallsT(callsTClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::NextClause> nextClause) {
-    return Table();
+    return dataPreprocessor->getTableByNext(nextClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::NextTClause> nextTClause) {
-    return Table();
+    return dataPreprocessor->getTableByNextT(nextTClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::AffectsClause> affectsClause) {
-    return Table();
+    return dataPreprocessor->getTableByAffects(affectsClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::AffectsTClause> affectsTClause) {
-    return Table();
+    return dataPreprocessor->getTableByAffectsT(affectsTClause);
 }
 
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::AssignPatternClause> assignPatternClause) {
-    cout << "visit assign pattern" << endl;
-    Table table = dataPreprocessor->getTableByExprPattern(assignPatternClause->arg3);
-    return dataPreprocessor->filterSingleClauseResultTable(assignPatternClause->arg1, assignPatternClause->arg2, table);
+    return dataPreprocessor->getTableByAssignPattern(
+            assignPatternClause);
 }

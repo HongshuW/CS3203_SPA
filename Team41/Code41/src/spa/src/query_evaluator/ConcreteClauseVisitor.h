@@ -10,13 +10,23 @@
 
 class ConcreteClauseVisitor: public AbstractClauseVisitor {
 
-
 public:
     explicit ConcreteClauseVisitor(shared_ptr<QE::DataPreprocessor> dataPreprocessor);
+    /**
+     * Visit to selectClause is an evaluate of a clause without any condition.
+     * @param selectClause
+     * @return
+     */
     Table visit(shared_ptr<QB::SelectClause> selectClause) override;
     Table visit(shared_ptr<QB::IfPatternClause> ifPatternClause) override;
     Table visit(shared_ptr<QB::WhilePatternClause> WhilePatternClause) override;
     Table visit(shared_ptr<QB::AssignPatternClause> assignPatternClause) override;
+    /**
+     * Visit to with clause checks if there is any synonym in the clause,
+     * it will return an empty table if there is no synonym.
+     * @param withClause
+     * @return
+     */
     Table visit(shared_ptr<QB::WithClause> withClause) override;
     Table visit(shared_ptr<QB::FollowsClause> followsClause) override;
     Table visit(shared_ptr<QB::FollowsTClause> followsTClause) override;
@@ -32,6 +42,7 @@ public:
     Table visit(shared_ptr<QB::NextTClause> nextTClause) override;
     Table visit(shared_ptr<QB::AffectsClause> affectsClause) override;
     Table visit(shared_ptr<QB::AffectsTClause> affectsTClause) override;
+
 };
 
 

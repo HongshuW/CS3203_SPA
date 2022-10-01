@@ -137,3 +137,18 @@ bool Table::isHeaderEmpty() {
 bool Table::isBodyEmpty() {
     return this->rows.size() == 0;
 }
+
+Table Table::dupCol(int colIdx) {
+    if (colIdx >= this->header.size()) return Table();
+    const string DUP_COL_NAME = "$dup_col";
+    Table resultTable = Table();
+    resultTable.header = this->header;
+    resultTable.rows = this->rows;
+
+    //append the dup col to the right of the table
+    resultTable.header.push_back(DUP_COL_NAME);
+    for (int i = 0; i < this->rows.size() ; i++) {
+        resultTable.rows[i].push_back(this->rows[i][colIdx]);
+    }
+    return resultTable;
+}

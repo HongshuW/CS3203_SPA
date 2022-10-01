@@ -9,7 +9,7 @@
 #include "pkb/table/Table.h"
 
 class IVisitor;
-
+using ClauseResult = std::variant<bool, Table>;
 class IVisitorHost {
 public:
     virtual ~IVisitorHost() = default;
