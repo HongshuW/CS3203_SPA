@@ -135,10 +135,10 @@ void DataModifier::saveCallsT(vector<string> callsTRelation) {
 }
 
 /**
- * Saves a Next relationship to the pkb.
- *
- * @param nextRelation vector<string>{precedingStatement, ensuingStatement}
- */
+  * Saves a Next relationship to the pkb.
+  *
+  * @param nextRelation vector<string>{precedingStatement, ensuingStatement}
+  */
 void DataModifier::saveNext(vector<string> nextRelation) {
     pkbStorage->saveNext(nextRelation);
 }
@@ -168,6 +168,10 @@ void DataModifier::saveAffects(vector<string> affectsRelation) {
  */
 void DataModifier::saveAffectsT(vector<string> affectsTRelation) {
     pkbStorage->saveAffectsT(affectsTRelation);
+}
+
+void DataModifier::saveCFG(string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg) {
+    pkbStorage->saveCFG(procedure, cfg);
 }
 
 /**

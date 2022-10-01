@@ -82,6 +82,22 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
                 this->dataModifier->saveUsesS(*iterator);
                 break;
             }
+            case RelationType::USES_P: {
+                this->dataModifier->saveUsesP(*iterator);
+                break;
+            }
+            case RelationType::MODIFIES_P: {
+                this->dataModifier->saveModifiesP(*iterator);
+                break;
+            }
+            case RelationType::CALLS: {
+                this->dataModifier->saveCalls(*iterator);
+                break;
+            }
+            case RelationType::CALLS_T: {
+                this->dataModifier->saveCallsT(*iterator);
+                break;
+            }
             default:
                 break;
         }
@@ -161,7 +177,16 @@ void DesignExtractor::run() {
     this->dataModifier->saveStatements(payload);
 
     //save relations
-    auto relationsToSave = vector<RelationType>{RelationType::PARENT, RelationType::PARENT_T, RelationType::FOLLOWS, RelationType::FOLLOWS_T, RelationType::USES_S, RelationType::MODIFIES_S};
+    auto relationsToSave = vector<RelationType>{RelationType::PARENT,
+                                                RelationType::PARENT_T,
+                                                RelationType::FOLLOWS,
+                                                RelationType::FOLLOWS_T,
+                                                RelationType::USES_S,
+                                                RelationType::MODIFIES_S,
+                                                RelationType::USES_P,
+                                                RelationType::MODIFIES_P,
+                                                RelationType::CALLS,
+                                                RelationType::CALLS_T};
     for (auto relationType: relationsToSave) {
         this->saveRelationToPKB(relationType);
     }
