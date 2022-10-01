@@ -32,6 +32,7 @@ public:
 
     // Column Names
     static const string PROCEDURE_TABLE_COL1_NAME;
+    static const string PROCEDURE_TABLE_COL2_NAME;
     static const string STATEMENT_TABLE_COL1_NAME;
     static const string STATEMENT_TABLE_COL2_NAME;
     static const string VARIABLE_TABLE_COL1_NAME;
@@ -52,7 +53,7 @@ public:
     static const string AFFECTS_TABLE_COL2_NAME;
 
     // getters of entities
-    ProcedureTable * getProcedures();
+    shared_ptr<Table> getProcedures();
     shared_ptr<Table> getStatements();
     shared_ptr<Table> getPrintVariableNames();
     shared_ptr<Table> getReadVariableNames();
@@ -61,6 +62,7 @@ public:
     string getStmtType(string stmtNumber);
     // setters of entities
     void saveProcedures(list<string> procedures);
+    void saveCFG(string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg);
     void saveStatements(list<vector<string>> statements);
     void saveVariables(list<string> variables);
     void saveConstants(list<string> constants);
@@ -77,10 +79,6 @@ public:
     shared_ptr<Table> getCalls();
     CallsTable * getCallsT();
     shared_ptr<Table> getCallsProcedureNames();
-    NextTable * getNext();
-    NextTable * getNextT();
-    AffectsTable * getAffects();
-    AffectsTable * getAffectsT();
     shared_ptr<unordered_set<string>> getFollowingStatements(string followedStatement);
     shared_ptr<unordered_set<string>> getChildrenStatements(string parentStatement);
     shared_ptr<unordered_set<string>> getModifiedVariables(string modifierStatement);
