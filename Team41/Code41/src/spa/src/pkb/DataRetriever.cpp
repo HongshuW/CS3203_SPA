@@ -130,7 +130,7 @@ Table DataRetriever::getAffectsTTable() {
 //}
 
 Table DataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {
-    *pkbStorage->getMatchedAssignPatterns(expressionSpec);
+    return *pkbStorage->getMatchedAssignPatterns(expressionSpec);
 }
 
 Table DataRetriever::getIfPatternTable() {

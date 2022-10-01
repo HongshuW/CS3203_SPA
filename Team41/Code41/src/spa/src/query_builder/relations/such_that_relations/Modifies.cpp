@@ -21,6 +21,9 @@ shared_ptr<AbstractClause> Modifies::createClause(Ref arg1, Ref arg2) {
             } else {
                 return make_shared<ModifiesSClause>(arg1, arg2);
             }
+        } else {
+            // Arg1 is not declared, return ModifiesSClause as default, semantic error will be thrown in validator
+            return make_shared<ModifiesSClause>(arg1, arg2);
         }
     } else {
         // Arg1 is under core, return ModifiesS as default, semantic error will be thrown in validator
