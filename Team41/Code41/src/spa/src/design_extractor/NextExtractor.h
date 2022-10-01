@@ -5,8 +5,15 @@
 #ifndef SPA_NEXTEXTRACTOR_H
 #define SPA_NEXTEXTRACTOR_H
 
+#include "DesignExtractor.h"
+using namespace DE;
 
 class NextExtractor {
+public:
+	static vector<string> extractNext(shared_ptr<ProgramNode> programNode, 
+		shared_ptr<ProcedureNode> procedureNode, int n1, int n2);
+	static shared_ptr<list<vector<string>>> extractNextStar(shared_ptr<ProgramNode> programNode, 
+		shared_ptr<ProcedureNode> procedureNode, int n1, int n2);
 
 };
 
