@@ -324,4 +324,36 @@ TEST_CASE("Test SP Integration") {
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
+
+    SECTION("Test Parser + Call Extraction -> deep nested source program") {
+        string source_1 = "../../../src/integration_testing/src/sp/calls_source/source1.txt";
+        ASTBuilder astBuilder = ASTBuilder();
+        shared_ptr<ProgramNode> root = astBuilder.buildAST(source_1);
+
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+
+        QB::RelationType callS = RelationType::CALLS;
+        auto actual = designExtractor.extractRelations(callS);
+        vector<vector<string>> expected = { {"deepNesting", "x23", "23"} };
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementTuple(*actual, expected));
+    }
+
+    SECTION("Test Parser + CallStar Extraction -> deep nested source program") {
+        string source_1 = "../../../src/integration_testing/src/sp/calls_source/source1.txt";
+        ASTBuilder astBuilder = ASTBuilder();
+        shared_ptr<ProgramNode> root = astBuilder.buildAST(source_1);
+
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+
+        QB::RelationType callT = RelationType::CALLS_T;
+        auto actual = designExtractor.extractRelations(callT);
+        vector<vector<string>> expected = { {"deepNesting", "x23"} };
+        REQUIRE(expected.size() == actual->size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
 }
