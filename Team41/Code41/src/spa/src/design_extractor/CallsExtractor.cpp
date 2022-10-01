@@ -119,7 +119,10 @@ void CallsExtractor::extractCallStmtRelationshipsWithIfAndWhileToOutput(shared_p
                 if (mappedProceduresToVars.count(callNode ->procedureName) != 0) {
                     varList = mappedProceduresToVars.at(callNode->procedureName);
                 }
-                auto usedVarList = mappedIfAndWhileToVars.at(to_string(stmtNo));
+                unordered_set<string> usedVarList;
+                if (mappedIfAndWhileToVars.count(to_string(stmtNo)) != 0) {
+                    usedVarList = mappedIfAndWhileToVars.at(to_string(stmtNo));
+                }
                 for (auto var : varList) {
                     if (usedVarList.count(var) == 0) {
                         uniqueVarList.insert(var);

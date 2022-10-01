@@ -325,23 +325,6 @@ TEST_CASE("Test SP Integration") {
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
 
-    SECTION("Test Parser + UseS Extraction -> basic source program with deeply nested statements") {
-        string source_3 = "../../../src/integration_testing/src/sp/uses_source/source4.txt";
-        ASTBuilder astBuilder = ASTBuilder();
-        shared_ptr<ProgramNode> root = astBuilder.buildAST(source_3);
-
-        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
-        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
-        DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-
-        QB::RelationType usesS = RelationType::USES_S;
-        auto actual = designExtractor.extractRelations(usesS);
-        vector<vector<string>> expected = { {"2", "x"}, {"2", "y"}, {"2", "a"}, {"2", "e"}, {"3", "x"},
-                                            {"3", "y"}, {"4", "x"}, {"5", "x"}, {"6", "y"}, {"7", "e"}, {"8", "a"}};
-        REQUIRE(expected.size() == actual->size());
-        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
-    }
-
     SECTION("Test Parser + Call Extraction -> deep nested source program") {
         string source_1 = "../../../src/integration_testing/src/sp/calls_source/source1.txt";
         ASTBuilder astBuilder = ASTBuilder();
