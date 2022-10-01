@@ -22,5 +22,8 @@ shared_ptr<AbstractClause> Uses::createClause(Ref arg1, Ref arg2) {
                 return make_shared<UsesSClause>(arg1, arg2);
             }
         }
+    } else {
+        // Arg1 is under core, return UsesS as default, semantic error will be thrown in validator
+        return make_shared<UsesSClause>(arg1, arg2);
     }
 }

@@ -134,7 +134,7 @@ void QueryValidator::validateUsesModifiesNoUnderscoreForFirstArg() const {
         auto modifiesS = dynamic_pointer_cast<ModifiesSClause>(suchThat);
         auto usesP = dynamic_pointer_cast<UsesPClause>(suchThat);
         auto usesS = dynamic_pointer_cast<UsesSClause>(suchThat);
-        if (modifiesP || modifiesS || usesP || usesS) continue;
+        if (!modifiesP && !modifiesS && !usesP && !usesS) continue;
         if (get_if<Underscore>(&suchThat->arg1)) {
             throw PQLValidationException(
                     QueryValidatorConstants::PQL_VALIDATION_FIRST_ARG_UNDERSCORE);
