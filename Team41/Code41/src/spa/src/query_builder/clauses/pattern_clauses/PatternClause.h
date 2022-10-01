@@ -9,6 +9,7 @@
 #include "query_builder/commons/Synonym.h"
 #include "query_builder/commons/Ref.h"
 #include "query_builder/clauses/AbstractClause.h"
+#include "utils/ErrorMessageFormatter.h"
 
 namespace QB {
     class WithClause;
@@ -43,6 +44,8 @@ namespace QB {
         ~PatternClause() override = default;
         virtual Clause asClauseVariant() = 0;
         virtual Table accept(shared_ptr<IVisitor> visitor) override = 0;
+        virtual unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) = 0;
+        virtual bool expect(const string& s, unsigned int currIdx, const vector<string>& tokens);
     };
 }
 

@@ -240,35 +240,31 @@ void QueryParser::parsePatternClause() {
                 QueryParserConstants::PQL_PARSE_EXCEPTION_SYNONYM_NOT_DECLARED + arg1.synonym);
     }
     expect(QueryParserConstants::LEFT_BRACKET);
-    shared_ptr<PatternClause> patternClause;
     DesignEntity de = declaration->getDesignEntity();
-    switch (de) {
-        case DesignEntity::ASSIGN: {
-            Ref arg2 = parseRef();
-            expect(QueryParserConstants::COMMA);
-            ExpressionSpec arg3 = parseExpressionSpec();
-            patternClause = make_shared<AssignPatternClause>(arg1, arg2, arg3);
-            break;
-        }
-        case DesignEntity::IF: {
-            Ref arg2 = parseRef();
-            expect(QueryParserConstants::COMMA);
-            expect(QueryParserConstants::UNDERSCORE);
-            expect(QueryParserConstants::COMMA);
-            expect(QueryParserConstants::UNDERSCORE);
-            patternClause = make_shared<IfPatternClause>(arg1, arg2);
-            break;
-        }
-        case DesignEntity::WHILE: {
-            Ref arg2 = parseRef();
-            expect(QueryParserConstants::COMMA);
-            expect(QueryParserConstants::UNDERSCORE);
-            patternClause = make_shared<WhilePatternClause>(arg1, arg2);
-            break;
-        }
-        default:
-            throw PQLParseException(getDesignEntityString(de) +
-            QueryParserConstants::PQL_PARSE_EXCEPTION_NOT_SUPPORTED_PATTERN);
+    Ref arg2 = parseRef();
+    expect(QueryParserConstants::COMMA);
+    const unordered_map<DesignEntity, shared_ptr<PatternRelations>> PATTERN_CREATORS({
+        {DesignEntity::IF, make_shared<IfPattern>()},
+        {DesignEntity::WHILE, make_shared<WhilePattern>()},
+        {DesignEntity::ASSIGN, make_shared<AssignPattern>()},
+    });
+
+    //! Default patternClauseCreator, will change later
+    shared_ptr<PatternRelations> patternClauseCreator = make_shared<PatternRelations>();
+    try {
+        patternClauseCreator = PATTERN_CREATORS.at(de);
+    } catch (const std::out_of_range& oor) {
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                QueryParserConstants::PQL_PARSE_EXCEPTION_EXPECT_EXPRESSION, peek());
+        throw PQLParseException(errorMessage);
+    }
+
+    auto patternClause = dynamic_pointer_cast<PatternClause>(patternClauseCreator->createClause(arg1, arg2));
+    currIdx = patternClause->validateSyntaxError(currIdx, tokens);
+    //! Special case, need to parse ExpressionSpec
+    if (dynamic_pointer_cast<AssignPatternClause>(patternClause)) {
+        ExpressionSpec arg3 = parseExpressionSpec();
+        dynamic_pointer_cast<AssignPatternClause>(patternClause)->arg3 = arg3;
     }
     expect(QueryParserConstants::RIGHT_BRACKET);
     query->patternClauses->push_back(patternClause);

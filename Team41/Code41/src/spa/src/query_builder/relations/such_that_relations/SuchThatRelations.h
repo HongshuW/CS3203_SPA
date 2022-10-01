@@ -8,6 +8,8 @@
 #include "query_builder/commons/Ref.h"
 #include "query_builder/clauses/AbstractClause.h"
 
+using namespace QB;
+
 namespace QB {
 
     class SuchThatRelations {
