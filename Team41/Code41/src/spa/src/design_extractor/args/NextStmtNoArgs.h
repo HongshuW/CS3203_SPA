@@ -5,6 +5,8 @@
 #ifndef SPA_NEXTSTMTNOARGS_H
 #define SPA_NEXTSTMTNOARGS_H
 
+#include "../../AST/ProgramNode.h"
+
 
 class NextStmtNoArgs {
 public:
@@ -15,7 +17,7 @@ public:
     void setStartStmtNo(int start) {startStmtNo = start; };
     void setEndStmtNo(int end) {endStmtNo = end; };
 
-    bool isArgVaild(shared_ptr<ProgramNode> programNode);
+    bool isBothArgsVaild(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args);
 
 private:
     int startStmtNo = 0;

@@ -210,4 +210,8 @@ void DesignExtractor::savePatternsToPKB() {
     }
 }
 
+vector<string> DE::DesignExtractor::getNextRelations(NextStmtNoArgs args) {
+    return NextExtractor::extractNext(this->programNode, args);
+}
+
 

@@ -9,19 +9,12 @@
 
 
 
-vector<string> NextExtractor::extractNextWithStartAndEnd(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args) {
-	if (!args.isArgVaild) {
-		return vector<string>();
-	}
-
+vector<string> NextExtractor::extractNextWithStartAndEnd(shared_ptr<ProgramNode> programNode, int start, int end) {
 	auto ans = vector<string>();
 	shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
 		ASTUtils::getNodePtrToLineNumMap(programNode);
 	auto stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
-	auto procedureNode = stmtNoToProcMap->at(args.getStartStmtNo);
-
-	int start = args.getStartStmtNo;
-	int end = args.getEndStmtNo;
+	auto procedureNode = stmtNoToProcMap->at(start);
 
 	CFG cfg = CFG(*procedureNode, stmtNumbers);
 	unordered_set<int> children = cfg.cfg->find(start)->second;
@@ -37,22 +30,22 @@ vector<string> NextExtractor::extractNextWithStartAndEnd(shared_ptr<ProgramNode>
 	return ans;
 }
 
-vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode,
-	shared_ptr<ProcedureNode> procedureNode, NextStmtNoArgs args) {
-	vector<string> ans;
-	/*shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-		ASTUtils::getNodePtrToLineNumMap(programNode);
-	CFG cfg = CFG(*procedureNode, stmtNumbers);
-	unordered_set<int> children = cfg.cfg->find(n1)->second;
-	if (!children.empty()) {
-		for (int stmtNo : children) {
-			if (stmtNo == n2) {
-				ans.push_back(to_string(n1));
-				ans.push_back(to_string(n2));
-			}
-		}
-	}*/
+vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args) {
+	if (!args.isBothArgsVaild(programNode, args)) {
+		return vector<string>();
+	}
+	int start = args.getStartStmtNo();
+	int end = args.getEndStmtNo();
 
+	bool startAndEndExists = start > 0 && end > 0;
+	bool onlyStart = start > 0 && end == 0;
+	bool onlyEnd = start == 0 && end > 0; 
+
+	if (startAndEndExists) {
+		return extractNextWithStartAndEnd(programNode, start, end);
+	}
+
+	vector<string> ans;
 	return ans;
 }
 

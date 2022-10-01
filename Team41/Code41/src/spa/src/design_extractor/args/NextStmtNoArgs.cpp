@@ -9,18 +9,17 @@ NextStmtNoArgs::NextStmtNoArgs()
 {
 }
 
-bool NextStmtNoArgs::isArgVaild(shared_ptr<ProgramNode> programNode)
+bool NextStmtNoArgs::isBothArgsVaild(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args)
 {
     bool isValid = true;
-    int start = this->startStmtNo;
-    int end = this->endStmtNo;
+    int start = args.getStartStmtNo();
+    int end = args.getEndStmtNo();
 
     auto stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
     bool startAndEndDoesNotExist = stmtNoToProcMap->count(start) == 0 && stmtNoToProcMap->count(end) == 0;
-    bool startOrEndDoesNotExist = stmtNoToProcMap->count(start) == 0 || stmtNoToProcMap->count(end) == 0;
    
 
-    if (startAndEndDoesNotExist || startOrEndDoesNotExist) {
+    if (startAndEndDoesNotExist) {
         isValid = false;
     }
 
