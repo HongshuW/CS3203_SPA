@@ -575,21 +575,7 @@ namespace TestDE {
         shared_ptr<ProcedureNode> procedureNode9 = make_shared<ProcedureNode>(ProcedureNode("procedure9", {assignNode1_p9, whileNode2_p9}));
         shared_ptr<ProgramNode> programNode17 = make_shared<ProgramNode>(ProgramNode({procedureNode9}));
 
-        //18
-         /*
-         * procedure9 {
-         * 1 call abc
-         * }
-         */
-
-        shared_ptr<StmtNode> callNode_18 = make_shared<CallNode>("abc");
-        // procedure & program
-        shared_ptr<ProcedureNode> procedureNode18 = make_shared<ProcedureNode>(ProcedureNode("procedure9", { callNode_18 }));
-        shared_ptr<ProgramNode> programNode18 = make_shared<ProgramNode>(ProgramNode({ procedureNode18 }));
-
-
-
-
+       
         vector<shared_ptr<ProgramNode>> programNodes = vector<shared_ptr<ProgramNode>>{programNode1, programNode2,
                                                                                        programNode3, programNode4,
                                                                                        programNode5, programNode6,
@@ -598,7 +584,7 @@ namespace TestDE {
                                                                                        programNode11, programNode12,
                                                                                        programNode13, programNode14,
                                                                                        programNode15, programNode16,
-                                                                                       programNode17, programNode18};
+                                                                                       programNode17};
 
         return programNodes[idx];
     }
