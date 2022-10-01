@@ -28,6 +28,9 @@ namespace QB {
         //! Only for ANY_MATCH
         ExpressionSpec(ExpressionSpecType expressionSpecType);
 
+        // For creating partial AssignPatternClause in QueryParser
+        ExpressionSpec();
+
         bool operator==(const ExpressionSpec& expressionSpec) const;
         friend std::ostream& operator<<(std::ostream& os, ExpressionSpec const& exprSpec) {
             //TODO: to be implemented later once the print method in the ATSNodes are done

@@ -275,86 +275,86 @@ namespace QE {
 
     Table DataPreprocessor::getTableByAssignPattern(shared_ptr<QB::AssignPatternClause> assignPatternClause) {
         return filterSingleClauseResultTable(assignPatternClause->arg1, assignPatternClause->arg2,
-                                             dataRetriever->getTableByExprPattern(assignPatternClause->arg3));
+                                             dataRetriever->getAssignPatternTable(assignPatternClause->arg3));
     }
 
     Table DataPreprocessor::getIfPatternTable(shared_ptr<QB::IfPatternClause> ifPatternClause) {
         return filterSingleClauseResultTable(ifPatternClause->arg1, ifPatternClause->arg2,
-                                             dataRetriever->getTableByCondExprPattern(QB::DesignEntity::IF));
+                                             dataRetriever->  getIfPatternTable());
     }
 
     Table DataPreprocessor::getWhilePatternTable(shared_ptr<WhilePatternClause> whilePatternClause) {
         return filterSingleClauseResultTable(whilePatternClause->arg1, whilePatternClause->arg2,
-                                             dataRetriever->getTableByCondExprPattern(QB::DesignEntity::WHILE));
+                                             dataRetriever->getWhilePatternTable());
     }
 
     Table DataPreprocessor::getTableByFollows(shared_ptr<FollowsClause> followsClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::FOLLOWS);
+        Table table = dataRetriever->getFollowsTable();
         return filterSingleClauseResultTable(followsClause->arg1, followsClause->arg2, table);
     }
 
+    Table DataPreprocessor::getTableByFollowsT(shared_ptr<FollowsTClause> followsTClause) {
+        Table table = dataRetriever->getFollowsTTable();
+        return filterSingleClauseResultTable(followsTClause->arg1, followsTClause->arg2, table);
+    }
+
     Table DataPreprocessor::getTableByAffects(shared_ptr<AffectsClause> affectsClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::AFFECTS);
+        Table table = dataRetriever->getAffectsTable();
         return filterSingleClauseResultTable(affectsClause->arg1, affectsClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByAffectsT(shared_ptr<AffectsTClause> affectsTClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::AFFECTS_T);
+        Table table = dataRetriever->getAffectsTTable();
         return filterSingleClauseResultTable(affectsTClause->arg1, affectsTClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByCalls(shared_ptr<CallsClause> callsClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::CALLS);
+        Table table = dataRetriever->getCallsTable();
         return filterSingleClauseResultTable(callsClause->arg1, callsClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByCallsT(shared_ptr<CallsTClause> callsTClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::CALLS_T);
+        Table table = dataRetriever->getCallsTTable();
         return filterSingleClauseResultTable(callsTClause->arg1, callsTClause->arg2, table);
     }
 
-    Table DataPreprocessor::getTableByFollowsT(shared_ptr<FollowsTClause> followsTClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::FOLLOWS_T);
-        return filterSingleClauseResultTable(followsTClause->arg1, followsTClause->arg2, table);
-    }
-
     Table DataPreprocessor::getTableByModifiesP(shared_ptr<ModifiesPClause> modifiesPClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::MODIFIES_P);
+        Table table = dataRetriever->getModifiesPTable();
         return filterSingleClauseResultTable(modifiesPClause->arg1, modifiesPClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByModifiesS(shared_ptr<ModifiesSClause> modifiesSClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::MODIFIES_S);
+        Table table = dataRetriever->getModifiesSTable();
         return filterSingleClauseResultTable(modifiesSClause->arg1, modifiesSClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByNext(shared_ptr<NextClause> nextClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::NEXT);
+        Table table = dataRetriever->getNextTable();
         return filterSingleClauseResultTable(nextClause->arg1, nextClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByNextT(shared_ptr<NextTClause> nextTClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::NEXT_T);
+        Table table = dataRetriever->getNextTTable();
         return filterSingleClauseResultTable(nextTClause->arg1, nextTClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByParent(shared_ptr<ParentClause> parentClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::PARENT);
+        Table table = dataRetriever->getParentTable();
         return filterSingleClauseResultTable(parentClause->arg1, parentClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByParentT(shared_ptr<ParentTClause> parentTClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::PARENT_T);
+        Table table = dataRetriever->getParentTTable();
         return filterSingleClauseResultTable(parentTClause->arg1, parentTClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByUsesP(shared_ptr<UsesPClause> usesPClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::USES_P);
+        Table table = dataRetriever->getUsesPTable();
         return filterSingleClauseResultTable(usesPClause->arg1, usesPClause->arg2, table);
     }
 
     Table DataPreprocessor::getTableByUsesS(shared_ptr<UsesSClause> usesSClause) {
-        Table table = dataRetriever->getTableByRelationType(QB::RelationType::USES_S);
+        Table table = dataRetriever->getUsesSTable();
         return filterSingleClauseResultTable(usesSClause->arg1, usesSClause->arg2, table);
     }
 
