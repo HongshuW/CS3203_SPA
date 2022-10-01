@@ -205,7 +205,7 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/ConcreteClauseVisitor.cpp
         src/query_evaluator/ConcreteClauseVisitor.h
         src/CFG/CFG.cpp
-        src/CFG/CFG.h)
+        src/CFG/CFG.h src/design_extractor/NextExtractor.cpp src/design_extractor/NextExtractor.h src/design_extractor/AffectsExtractor.cpp src/design_extractor/AffectsExtractor.h)
 
 
 
