@@ -25,14 +25,6 @@ TEST_CASE("Test CallStar Extractor") {
         auto actual = designExtractor.extractRelations(QB::RelationType::CALLS_T);
         REQUIRE(actual->empty());
     }
-    SECTION("Test Non-Existent Procedure") {
-        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
-        auto programNode = TestDE::Dummies::getTestProgramNode(17);
-        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
-        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS_T);
-        REQUIRE(actual->empty());
-    }
     SECTION("Test CallStar One Procedure") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         auto programNode = TestDE::Dummies::getTestProgramNode(10);
