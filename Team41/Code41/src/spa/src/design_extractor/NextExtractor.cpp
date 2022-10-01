@@ -14,7 +14,8 @@ vector<string> NextExtractor::extractNextWithStartAndEnd(shared_ptr<ProgramNode>
 	shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
 		ASTUtils::getNodePtrToLineNumMap(programNode);
 	auto stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
-	auto procedureNode = stmtNoToProcMap->at(start);
+	auto procNameToProcMap = ASTUtils::getProcNameToProcNodeMap(programNode);
+	shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(start);
 
 	CFG cfg = CFG(*procedureNode, stmtNumbers);
 	unordered_set<int> children = cfg.cfg->find(start)->second;
