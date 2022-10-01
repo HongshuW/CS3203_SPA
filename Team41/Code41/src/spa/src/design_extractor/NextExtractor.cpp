@@ -17,8 +17,8 @@ vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode,
 	if (!children.empty()) {
 		for (int stmtNo : children) {
 			if (stmtNo == n2) {
-				ans.push_back(n1);
-				ans.push_back(n2);
+				ans.push_back(to_string(n1));
+				ans.push_back(to_string(n2));
 			}
 		}
 	}
