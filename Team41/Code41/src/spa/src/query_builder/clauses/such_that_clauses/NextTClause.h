@@ -14,7 +14,7 @@ using namespace QB;
 
 namespace QB {
 
-    class NextTClause : public SuchThatClause, public enable_shared_from_this<UsesPClause>, public Validatable {
+    class NextTClause : public SuchThatClause, public enable_shared_from_this<NextTClause>, public Validatable {
     public:
         NextTClause(Ref arg1, Ref arg2);
 

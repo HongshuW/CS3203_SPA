@@ -8,6 +8,7 @@
 #include "SuchThatRelations.h"
 #include "query_builder/clauses/such_that_clauses/UsesSClause.h"
 #include "query_builder/clauses/such_that_clauses/UsesPClause.h"
+#include "query_builder/commons/Declaration.h"
 
 using namespace QB;
 
