@@ -20,10 +20,9 @@ namespace QE {
     using Value = variant<string, int, vector<int>, vector<string>>;
 
     class DataPreprocessor {
-        Table filerTableByColumnValue(const Table& table, const string& colName, const string& value);
-        Table filerTableByDesignEntity(const Table& table, const string& colName, DesignEntity designEntity);
+        Table filerTableByDesignEntity(const Table& table, int colIdx, DesignEntity designEntity);
         Table filterTableByColValueEquality(Table table, vector<int> comparedCols);
-        long getColIndexByColName(vector<string> v, const string& K);
+        Table filerTableByColumnIdx(const Table& table, int colIdx, const string& value);
         DesignEntity getDesignEntityOfSyn(Synonym synonym);
         std::vector<std::string> intersection(std::vector<std::string> v1,
                                               std::vector<std::string> v2);

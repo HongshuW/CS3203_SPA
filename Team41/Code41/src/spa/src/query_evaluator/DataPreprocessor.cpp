@@ -39,6 +39,7 @@ namespace QE {
     vector<AttrName> notDirectlyAvailAttrs = {AttrName::PROC_NAME, AttrName::VAR_NAME};
 
     Table DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
+        const int FIRST_COL_IDX = 0;
         vector<DesignEntity> directlyAvailEntities = {DesignEntity::STMT, DesignEntity::CONSTANT,
                                                       DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
         if (count(directlyAvailEntities.begin(), directlyAvailEntities.end(), designEntity)) {
@@ -52,31 +53,18 @@ namespace QE {
         //assign, call, print, if, while , read
         Table resultTable = this->filerTableByDesignEntity(
                 this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT),
-                PKBStorage::STATEMENT_TABLE_COL1_NAME, designEntity);
+                FIRST_COL_IDX, designEntity);
         for (int i = 1; i < resultTable.header.size(); i++) {
             resultTable = resultTable.dropCol(i);
         }
         return resultTable;
     }
 
-    Table DataPreprocessor::filerTableByColumnValue(const Table &table, const string &colName, const string &value) {
-        long colIdx = this->getColIndexByColName(table.header, colName);
-        Table filteredTable = Table();
-        filteredTable.header = table.header;
-        for (auto row: table.rows) {
-            if (row[colIdx] == value) {
-                filteredTable.appendRow(row);
-            }
-        }
-        return filteredTable;
-    }
-
     Table
-    DataPreprocessor::filerTableByDesignEntity(const Table &table, const string &colName, DesignEntity designEntity) {
+    DataPreprocessor::filerTableByDesignEntity(const Table &table, int colIdx, DesignEntity designEntity) {
         vector<DesignEntity> directlyAvailEntities = {DesignEntity::STMT, DesignEntity::CONSTANT,
                                                       DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
         if (count(directlyAvailEntities.begin(), directlyAvailEntities.end(), designEntity)) return table;
-        long colIdx = this->getColIndexByColName(table.header, colName);
         Table filteredTable = Table();
         filteredTable.header = table.header;
         for (auto row: table.rows) {
@@ -89,23 +77,6 @@ namespace QE {
             }
         }
         return filteredTable;
-    }
-
-    long DataPreprocessor::getColIndexByColName(vector<string> v, const string &K) {
-        auto it = find(v.begin(), v.end(), K);
-
-        // If element was found
-        if (it != v.end()) {
-
-            // calculating the index
-            // of K
-            auto index = it - v.begin();
-            return index;
-        } else {
-            // If the element is not
-            // present in the vector
-            return -1;
-        }
     }
 
     DesignEntity DataPreprocessor::getDesignEntityOfSyn(Synonym synonym) {
@@ -195,7 +166,7 @@ namespace QE {
     }
 
     Table DataPreprocessor::filterTableByColValueEquality(Table table, vector<int> comparedCols) {
-        Table filteredTable = table;
+        Table filteredTable = Table();
 
         filteredTable.renameHeader(table.header);
         for (auto row: table.rows) {
@@ -220,10 +191,14 @@ namespace QE {
 
         vector<string> newHeaders = vector<string>{col1Name, col2Name};
         table.renameHeader(newHeaders);
+
+        const int FIRST_COL_IDX = 0;
+        const int SECOND_COL_IDX = 1;
+
         switch (ref1Type) {
             case RefType::SYNONYM: {
                 Synonym syn1 = get<Synonym>(ref1);
-                table = this->filerTableByDesignEntity(table, col1Name,
+                table = this->filerTableByDesignEntity(table, FIRST_COL_IDX,
                                                        this->getDesignEntityOfSyn(syn1));
                 break;
             }
@@ -231,39 +206,46 @@ namespace QE {
                 break;
             case RefType::INTEGER: {
                 int int1 = get<int>(ref1);
-                table = this->filerTableByColumnValue(table, col1Name, to_string(int1));
+                table = this->filerTableByColumnIdx(table, FIRST_COL_IDX, to_string(int1));
                 break;
             }
             case RefType::IDENT:
                 Ident ident1 = get<Ident>(ref1);
-                table = this->filerTableByColumnValue(table, col1Name, ident1.identStr);
+                table = this->filerTableByColumnIdx(table, FIRST_COL_IDX, ident1.identStr);
                 break;
         }
         switch (ref2Type) {
             case RefType::SYNONYM: {
                 Synonym syn2 = get<Synonym>(ref2);
-                table = this->filerTableByDesignEntity(table, col2Name,
+                table = this->filerTableByDesignEntity(table, SECOND_COL_IDX,
                                                        this->getDesignEntityOfSyn(syn2));
 
                 //synonyms are the same: equality check between the two cols
                 if (ref1Type != QB::RefType::SYNONYM) break;
                 Synonym syn1 = get<Synonym>(ref1);
                 if (!(syn1 == syn2)) break;
-                const int FIRST_COL_IDX = 0;
-                const int SECOND_COL_IDX = 1;
+
                 return this->filterTableByColValueEquality(table, {FIRST_COL_IDX, SECOND_COL_IDX});
             }
             case RefType::UNDERSCORE:
                 break;
             case RefType::INTEGER: {
                 int int2 = get<int>(ref2);
-                table = this->filerTableByColumnValue(table, col2Name, to_string(int2));
-                break;
+                table = this->filerTableByColumnIdx(table, SECOND_COL_IDX, to_string(int2));
+
+                if (ref1Type != QB::RefType::INTEGER) break;
+                int int1 = get<int>(ref1);
+                if (int1 != int2) break;
+                return this->filterTableByColValueEquality(table, {FIRST_COL_IDX, SECOND_COL_IDX});
             }
             case RefType::IDENT:
                 Ident ident2 = get<Ident>(ref2);
-                table = this->filerTableByColumnValue(table, col2Name, ident2.identStr);
-                break;
+                table = this->filerTableByColumnIdx(table, SECOND_COL_IDX, ident2.identStr);
+
+                if (ref1Type != QB::RefType::IDENT) break;
+                Ident ident1 = get<Ident>(ref1);
+                if (!(ident1 == ident2)) break;
+                return this->filterTableByColValueEquality(table, {FIRST_COL_IDX, SECOND_COL_IDX});
         }
         return table;
     }
@@ -573,6 +555,17 @@ namespace QE {
                 }
             }
         }
+    }
+
+    Table DataPreprocessor::filerTableByColumnIdx(const Table &table, int colIdx, const string &value) {
+        Table filteredTable = Table();
+        filteredTable.header = table.header;
+        for (auto row: table.rows) {
+            if (row[colIdx] == value) {
+                filteredTable.appendRow(row);
+            }
+        }
+        return filteredTable;
     }
 
 } // QE
