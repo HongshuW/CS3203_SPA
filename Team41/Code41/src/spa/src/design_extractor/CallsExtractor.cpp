@@ -72,7 +72,10 @@ void CallsExtractor::extractCallStmtRelationshipsToOutput(int stmtNo, shared_ptr
     while (!queue.empty()) {
         auto callNodeEntry = queue.front();
         queue.pop();
-        auto varList = mappedProceduresToVars.at(callNodeEntry->procedureName);
+        unordered_set<string> varList;
+        if (mappedProceduresToVars.count(callNodeEntry ->procedureName) != 0) {
+            varList = mappedProceduresToVars.at(callNodeEntry->procedureName);
+        }
         for (auto var : varList) {
             vector<string> relationshipCallEntry;
             relationshipCallEntry.push_back(to_string(stmtNo));
@@ -112,8 +115,10 @@ void CallsExtractor::extractCallStmtRelationshipsWithIfAndWhileToOutput(shared_p
             switch (nodeType) {
             case AST::CALL_NODE: {
                 shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(nodeEntry);
-                auto varList = mappedProceduresToVars.at(callNode->procedureName);
-
+                unordered_set<string> varList;
+                if (mappedProceduresToVars.count(callNode ->procedureName) != 0) {
+                    varList = mappedProceduresToVars.at(callNode->procedureName);
+                }
                 auto usedVarList = mappedIfAndWhileToVars.at(to_string(stmtNo));
                 for (auto var : varList) {
                     if (usedVarList.count(var) == 0) {
