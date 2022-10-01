@@ -27,46 +27,118 @@ Table DataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
     }
 }
 
-Table DataRetriever::getTableByRelationType(RelationType relationType) {
-    switch (relationType) {
-        case RelationType::FOLLOWS:
-            return *pkbStorage->getFollows();
-        case RelationType::FOLLOWS_T:
-            return *pkbStorage->getFollowsT();
-        case RelationType::PARENT:
-            return *pkbStorage->getParent();
-        case RelationType::PARENT_T:
-            return *pkbStorage->getParentT();
-        case RelationType::MODIFIES_S:
-            return *pkbStorage->getModifiesS();
-        case RelationType::MODIFIES_P:
-            return *pkbStorage->getModifiesP();
-        case RelationType::USES_S:
-            return *pkbStorage->getUsesS();
-        case RelationType::USES_P:
-            return *pkbStorage->getUsesP();
-        case RelationType::CALLS:
-            return *pkbStorage->getCalls();
-        case RelationType::CALLS_T:
-            return *pkbStorage->getCallsT();
-        default:
-            return Table();
-    }
+//Table DataRetriever::getTableByRelationType(RelationType relationType) {
+//    switch (relationType) {
+//        case RelationType::FOLLOWS:
+//            return *pkbStorage->getFollows();
+//        case RelationType::FOLLOWS_T:
+//            return *pkbStorage->getFollowsT();
+//        case RelationType::PARENT:
+//            return *pkbStorage->getParent();
+//        case RelationType::PARENT_T:
+//            return *pkbStorage->getParentT();
+//        case RelationType::MODIFIES_S:
+//            return *pkbStorage->getModifiesS();
+//        case RelationType::MODIFIES_P:
+//            return *pkbStorage->getModifiesP();
+//        case RelationType::USES_S:
+//            return *pkbStorage->getUsesS();
+//        case RelationType::USES_P:
+//            return *pkbStorage->getUsesP();
+//        case RelationType::CALLS:
+//            return *pkbStorage->getCalls();
+//        case RelationType::CALLS_T:
+//            return *pkbStorage->getCallsT();
+//        default:
+//            return Table();
+//    }
+//}
+
+Table DataRetriever::getFollowsTable() {
+    return *pkbStorage->getFollows();
 }
 
-Table DataRetriever::getTableByExprPattern(ExpressionSpec expressionSpec) {
-    return *pkbStorage->getMatchedAssignPatterns(expressionSpec);
+Table DataRetriever::getFollowsTTable() {
+    return *pkbStorage->getFollowsT();
 }
 
-Table DataRetriever::getTableByCondExprPattern(DesignEntity designEntity) {
-    switch (designEntity) {
-        case DesignEntity::WHILE:
-            return *pkbStorage->getWhilePatterns();
-        case DesignEntity::IF:
-            return *pkbStorage->getIfPatterns();
-        default:
-            return Table();
-    }
+Table DataRetriever::getParentTable() {
+    return *pkbStorage->getParent();
+}
+
+Table DataRetriever::getParentTTable() {
+    return *pkbStorage->getParentT();
+}
+
+Table DataRetriever::getUsesSTable() {
+    return *pkbStorage->getUsesS();
+}
+
+Table DataRetriever::getUsesPTable() {
+    return *pkbStorage->getUsesP();
+}
+
+Table DataRetriever::getModifiesSTable() {
+    return *pkbStorage->getModifiesS();
+}
+
+Table DataRetriever::getModifiesPTable() {
+    return *pkbStorage->getModifiesP();
+}
+
+Table DataRetriever::getCallsTable() {
+    return *pkbStorage->getCalls();
+}
+
+Table DataRetriever::getCallsTTable() {
+    return *pkbStorage->getCallsT();
+}
+
+Table DataRetriever::getNextTable() {
+    //TODO: to be implemented
+    return Table();
+}
+
+Table DataRetriever::getNextTTable() {
+    //TODO: to be implemented
+    return Table();
+}
+
+Table DataRetriever::getAffectsTable() {
+    //TODO: to be implemented
+    return Table();
+}
+
+Table DataRetriever::getAffectsTTable() {
+    //TODO: to be implemented
+    return Table();
+}
+
+//Table DataRetriever::getTableByExprPattern(ExpressionSpec expressionSpec) {
+//    return *pkbStorage->getMatchedAssignPatterns(expressionSpec);
+//}
+//
+//Table DataRetriever::getTableByCondExprPattern(DesignEntity designEntity) {
+//    switch (designEntity) {
+//        case DesignEntity::WHILE:
+//            return *pkbStorage->getWhilePatterns();
+//        case DesignEntity::IF:
+//            return *pkbStorage->getIfPatterns();
+//        default:
+//            return Table();
+//    }
+//}
+
+Table DataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {
+    *pkbStorage->getMatchedAssignPatterns(expressionSpec);
+}
+
+Table DataRetriever::getIfPatternTable() {
+    return *pkbStorage->getIfPatterns();
+}
+
+Table DataRetriever::getWhilePatternTable() {
+    return *pkbStorage->getWhilePatterns();
 }
 
 Table DataRetriever::getCallsProcedureNames() {
