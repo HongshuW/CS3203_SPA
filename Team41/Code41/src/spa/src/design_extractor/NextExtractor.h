@@ -11,6 +11,7 @@ using namespace DE;
 
 class NextExtractor {
 public:
+	static vector<string> extractNextWithStartAndEnd(shared_ptr<ProgramNode> programNode, int start, int end);
 	static vector<string> extractNext(shared_ptr<ProgramNode> programNode, 
 		shared_ptr<ProcedureNode> procedureNode, NextStmtNoArgs args);
 	static shared_ptr<list<vector<string>>> extractNextStar(shared_ptr<ProgramNode> programNode, 

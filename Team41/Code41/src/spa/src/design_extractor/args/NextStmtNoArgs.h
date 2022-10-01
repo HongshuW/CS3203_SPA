@@ -14,6 +14,9 @@ public:
 
     void setStartStmtNo(int start) {startStmtNo = start; };
     void setEndStmtNo(int end) {endStmtNo = end; };
+
+    bool isArgVaild(shared_ptr<ProgramNode> programNode);
+
 private:
     int startStmtNo = 0;
     int endStmtNo = 0;

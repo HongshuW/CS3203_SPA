@@ -7,7 +7,37 @@
 #include "../AST/utils/ASTUtils.h"
 #include "../CFG/CFG.h"
 
-vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode, 
+
+
+vector<string> NextExtractor::extractNextWithStartAndEnd(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args) {
+	if (!args.isArgVaild) {
+		return vector<string>();
+	}
+
+	auto ans = vector<string>();
+	shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
+		ASTUtils::getNodePtrToLineNumMap(programNode);
+	auto stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
+	auto procedureNode = stmtNoToProcMap->at(args.getStartStmtNo);
+
+	int start = args.getStartStmtNo;
+	int end = args.getEndStmtNo;
+
+	CFG cfg = CFG(*procedureNode, stmtNumbers);
+	unordered_set<int> children = cfg.cfg->find(start)->second;
+	if (!children.empty()) {
+		for (int stmtNo : children) {
+			if (stmtNo == end) {
+				ans.push_back(to_string(start));
+				ans.push_back(to_string(end));
+			}
+		}
+	}
+
+	return ans;
+}
+
+vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode,
 	shared_ptr<ProcedureNode> procedureNode, NextStmtNoArgs args) {
 	vector<string> ans;
 	/*shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =

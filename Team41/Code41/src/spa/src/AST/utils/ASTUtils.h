@@ -35,6 +35,8 @@ namespace AST {
         static void getNodeLineMapping(shared_ptr<ProgramNode> root, shared_ptr<unordered_map<shared_ptr < ASTNode>, int>> nodeToLine, shared_ptr<unordered_map<int, shared_ptr < ASTNode>>> lineToNode);
         static shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> getNodePtrToLineNumMap(shared_ptr<ProgramNode> root);
         static DesignEntity getStmtNodeDesignEntity(shared_ptr<StmtNode> node);
+        static shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>> getLineNumToProcMap(shared_ptr<ProgramNode> root);
+        static shared_ptr<unordered_map<int, string>> getProcNameToProcNodeMap(shared_ptr<ProgramNode> root);
     };
 
 } // AST
