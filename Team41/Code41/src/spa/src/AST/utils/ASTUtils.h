@@ -17,7 +17,6 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include <map>
 #include "query_builder/commons/DesignEntity.h"
 
 using namespace QB;
@@ -37,7 +36,6 @@ namespace AST {
         static shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> getNodePtrToLineNumMap(shared_ptr<ProgramNode> root);
         static DesignEntity getStmtNodeDesignEntity(shared_ptr<StmtNode> node);
         static shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>> getLineNumToProcMap(shared_ptr<ProgramNode> root);
-        static shared_ptr<map<string, shared_ptr<ProcedureNode>>> getProcNameToProcNodeMap(shared_ptr<ProgramNode> root);
     };
 
 } // AST
