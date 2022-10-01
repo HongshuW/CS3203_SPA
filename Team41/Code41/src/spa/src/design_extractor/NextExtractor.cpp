@@ -8,9 +8,9 @@
 #include "../CFG/CFG.h"
 
 vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode, 
-	shared_ptr<ProcedureNode> procedureNode, int n1, int n2) {
+	shared_ptr<ProcedureNode> procedureNode, NextStmtNoArgs args) {
 	vector<string> ans;
-	shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
+	/*shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
 		ASTUtils::getNodePtrToLineNumMap(programNode);
 	CFG cfg = CFG(*procedureNode, stmtNumbers);
 	unordered_set<int> children = cfg.cfg->find(n1)->second;
@@ -21,7 +21,7 @@ vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode,
 				ans.push_back(to_string(n2));
 			}
 		}
-	}
+	}*/
 
 	return ans;
 }

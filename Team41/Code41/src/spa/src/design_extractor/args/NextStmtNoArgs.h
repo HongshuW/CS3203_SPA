@@ -8,6 +8,7 @@
 
 class NextStmtNoArgs {
 public:
+    NextStmtNoArgs();
     int getStartStmtNo() { return startStmtNo; };
     int getEndStmtNo() { return endStmtNo; }
 
