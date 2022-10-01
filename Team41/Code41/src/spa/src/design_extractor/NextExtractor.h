@@ -7,7 +7,6 @@
 
 #include "DesignExtractor.h"
 #include "args/NextStmtNoArgs.h"
-using namespace DE;
 
 class NextExtractor {
 public:
@@ -17,6 +16,5 @@ public:
 		shared_ptr<ProcedureNode> procedureNode, int n1, int n2);
 
 };
-
 
 #endif //SPA_NEXTEXTRACTOR_H
