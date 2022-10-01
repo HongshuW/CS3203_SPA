@@ -9,7 +9,13 @@
 
 
 
-vector<string> NextExtractor::extractNextWithStartAndEnd(shared_ptr<ProgramNode> programNode, int start, int end) {
+vector<string> NextExtractor::extractNextWithStartAndEnd(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args) {
+	if (!args.isBothArgsVaild(programNode, args)) {
+		return vector<string>();
+	}
+	int start = args.getStartStmtNo();
+	int end = args.getEndStmtNo();
+
 	auto ans = vector<string>();
 	shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
 		ASTUtils::getNodePtrToLineNumMap(programNode);
@@ -31,9 +37,7 @@ vector<string> NextExtractor::extractNextWithStartAndEnd(shared_ptr<ProgramNode>
 }
 
 vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args) {
-	if (!args.isBothArgsVaild(programNode, args)) {
-		return vector<string>();
-	}
+	
 	int start = args.getStartStmtNo();
 	int end = args.getEndStmtNo();
 
@@ -42,7 +46,7 @@ vector<string> NextExtractor::extractNext(shared_ptr<ProgramNode> programNode, N
 	bool onlyEnd = start == 0 && end > 0; 
 
 	if (startAndEndExists) {
-		return extractNextWithStartAndEnd(programNode, start, end);
+		return extractNextWithStartAndEnd(programNode, args);
 	}
 
 	vector<string> ans;
