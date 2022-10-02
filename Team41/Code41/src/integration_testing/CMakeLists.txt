@@ -3,7 +3,11 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_
 add_executable(integration_testing ${srcs}
         ../unit_testing/src/design_extractor/DEUtils.cpp
         ../unit_testing/src/design_extractor/DEUtils.h
-        src/sp/TestSPIntegration.cpp)
+        ../unit_testing/src/query_evaluator/QETestUtils.cpp
+        ../unit_testing/src/query_evaluator/QETestUtils.h
+        ../unit_testing/src/design_extractor/Dummies.cpp
+        ../unit_testing/src/design_extractor/Dummies.h
+        src/sp/TestSPIntegration.cpp src/de-pkb-qe/test1.cpp)
 
 
 target_link_libraries(integration_testing spa)

@@ -32,7 +32,7 @@ public:
     void addValues(list<string> values);
 
     Table dropCol(int colIdx);
-    Table dupCol(int colIdx);
+    Table dupCol(int colIdx, string dupColName = "$dup_col");
 
     bool hasCol(string colName);
     bool isEqual(Table otherTable);
