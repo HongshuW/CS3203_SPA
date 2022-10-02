@@ -28,7 +28,6 @@ QueryEvaluator::QueryEvaluator(shared_ptr<DataRetriever> dataRetriever): dataRet
 }
 
 vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
-    elemNotInSelect = make_shared<unordered_set<string>>();
 
     this->declarations = query->declarations;
     shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(dataRetriever, declarations);
@@ -87,16 +86,7 @@ QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query, shared_ptr<Con
     if (selectClause->isBoolean()) return TRUE_RESULT;
 
     Table resultTable = selectClause->accept(clauseVisitor);
-    for (auto elem: *selectClause->returnResults) {
-        if (elem.index() == SelectClause::ELEM_ATTR_REF_IDX) {
-            AttrRef attrRef = std::get<SelectClause::ELEM_ATTR_REF_IDX>(elem);
-            elemNotInSelect->insert(attrRef.toString());
-        }
-        if (elem.index() == SelectClause::ELEM_SYN_IDX) {
-            Synonym syn = std::get<SelectClause::ELEM_SYN_IDX>(elem);
-            elemNotInSelect->insert(syn.synonym);
-        }
-    }
+
     vector<string> ans = projectResult(resultTable, selectClause->returnResults);
 
     return removeDup(ans);
