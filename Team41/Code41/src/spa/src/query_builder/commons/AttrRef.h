@@ -35,6 +35,7 @@ namespace QB {
         static AttrName getAttrNameFromStr(string& str);
 
         string getStrOfAttrName();
+        string toString();
         static string getStrFromAttrName(AttrName& attrName);
         static WithComparingType getWithComparingTypeFromAttrName(AttrName& attrName);
 

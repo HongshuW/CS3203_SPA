@@ -20,6 +20,7 @@ public:
 
     // getters
     vector<string> getColumnByName(string columnName);
+    vector<string> getColumnByIndex(int index);
     vector<string> getRowByPrimaryKey(string key);
     shared_ptr<unordered_set<string>> getValuesByKey(string key, int keyColumnNumber = 0, int valueColumnNumber = 1);
     int getColIdxByName(string colName);
@@ -31,14 +32,14 @@ public:
     void addValues(list<string> values);
 
     Table dropCol(int colIdx);
+    Table dupCol(int colIdx);
 
     bool hasCol(string colName);
     bool isEqual(Table otherTable);
     bool isHeaderEmpty();
     bool isBodyEmpty();
 
-private:
-    vector<string> getColumnByIndex(int index);
+
 
 };
 

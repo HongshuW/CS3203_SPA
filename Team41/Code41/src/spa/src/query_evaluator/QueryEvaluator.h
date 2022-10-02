@@ -9,7 +9,7 @@
 #include "query_builder/commons/Query.h"
 #include "pkb/DataRetriever.h"
 #include "DataPreprocessor.h"
-#include "ClauseVisitor.h"
+#include "ConcreteClauseVisitor.h"
 
 using namespace QB;
 
@@ -21,7 +21,7 @@ namespace QE {
 
         DesignEntity getDesignEntity(Synonym synonym);
 
-        vector<string> evaluateNoConditionQuery(shared_ptr<Query> query, shared_ptr<ClauseVisitor> clauseVisitor);
+        vector<string> evaluateNoConditionQuery(shared_ptr<Query> query, shared_ptr<ConcreteClauseVisitor> clauseVisitor);
 
         std::string join(std::vector<std::string> const &strings, std::string delim);
 
@@ -31,9 +31,12 @@ namespace QE {
         formatConditionalQueryResult(Table resultTable, shared_ptr<vector<Elem>> tuple, shared_ptr<Query> query,
                                      shared_ptr<DataPreprocessor> dataPreprocessor);
 
-        vector<string> getAttributeValuesOfCol(Table resultTable, AttrRef attrRef);
-
         vector<string> projectResult(Table resultTable, shared_ptr<vector<Elem>> tuple);
+
+        typedef shared_ptr<unordered_map<string, shared_ptr<unordered_set<int>>>>  ViewedDups;
+        int getUnvisitedColIdxByName(const string& colName, ViewedDups viewedDupsMap, const Table& table);
+
+        shared_ptr<unordered_set<string>> elemNotInSelect;
 
 
     public:

@@ -51,3 +51,8 @@ bool AttrRef::operator==(const AttrRef& attrRef1) const {
     return synonym == attrRef1.synonym && attrName == attrRef1.attrName;
 }
 
+string AttrRef::toString() {
+    const string CONCAT_SYMBOL = ".";
+    return synonym.synonym + CONCAT_SYMBOL + getStrOfAttrName();
+}
+

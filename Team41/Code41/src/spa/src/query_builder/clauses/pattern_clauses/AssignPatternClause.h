@@ -12,6 +12,7 @@
 #include "query_builder/commons/ExpressionSpec.h"
 #include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_builder/clauses/AbstractClause.h"
+#include "query_builder/constants/QueryParserConstants.h"
 
 using namespace QB;
 
@@ -21,10 +22,13 @@ namespace QB {
         ExpressionSpec arg3;
 
         AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
+        // Create a partial AssignPatternClause
+        AssignPatternClause(Synonym arg1, Ref arg2);
 
-        bool operator==(const AssignPatternClause &clause) const;
+        bool operator==(const AssignPatternClause &other) const;
         Clause asClauseVariant() override;
         Table accept(shared_ptr<IVisitor> visitor) override;
+        unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
     };
 }
 

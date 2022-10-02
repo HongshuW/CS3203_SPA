@@ -4,7 +4,7 @@
 
 #ifndef SPA_ABSTRACTCLAUSE_H
 #define SPA_ABSTRACTCLAUSE_H
-#include "query_builder/IVisitorHost.h"
+#include "IVisitorHost.h"
 
 class AbstractClause: public IVisitorHost {
 

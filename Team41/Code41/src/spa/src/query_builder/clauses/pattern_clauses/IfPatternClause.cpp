@@ -8,10 +8,10 @@
 
 IfPatternClause::IfPatternClause(Synonym arg1, Ref arg2) : PatternClause(arg1, arg2) {}
 
-bool IfPatternClause::operator==(const IfPatternClause &clause) const {
-    auto patternClause = dynamic_cast<const IfPatternClause*>(&clause);
-    return patternClause != nullptr && arg1 == patternClause->arg1
-           && arg2 == patternClause->arg2;
+bool IfPatternClause::operator==(const IfPatternClause &other) const {
+    auto clause = dynamic_cast<const IfPatternClause*>(&other);
+    return clause != nullptr && arg1 == clause->arg1
+           && arg2 == clause->arg2;
 }
 
 Clause IfPatternClause::asClauseVariant() {
@@ -20,4 +20,14 @@ Clause IfPatternClause::asClauseVariant() {
 
 Table IfPatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
+}
+
+unsigned int IfPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
+    expect(QueryParserConstants::UNDERSCORE, currIdx, tokens);
+    currIdx++;
+    expect(QueryParserConstants::COMMA, currIdx, tokens);
+    currIdx++;
+    expect(QueryParserConstants::UNDERSCORE, currIdx, tokens);
+    currIdx++;
+    return currIdx;
 }

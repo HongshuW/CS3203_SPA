@@ -11,6 +11,7 @@
 #include "query_builder/commons/Ref.h"
 #include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_builder/clauses/AbstractClause.h"
+#include "query_builder/constants/QueryParserConstants.h"
 
 using namespace QB;
 
@@ -21,9 +22,10 @@ namespace QB {
     public:
         IfPatternClause(Synonym arg1, Ref arg2);
 
-        bool operator==(const IfPatternClause &clause) const;
+        bool operator==(const IfPatternClause &other) const;
         Clause asClauseVariant() override;
         Table accept(shared_ptr<IVisitor> visitor) override;
+        unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
     };
 
 } // QB

@@ -5,7 +5,7 @@
 #ifndef SPA_QUERYTUPLERESULT_H
 #define SPA_QUERYTUPLERESULT_H
 #include "QueryResult.h"
-#include "query_builder/clauses/SelectClause.h"
+#include "query_builder/clauses/select_clauses/SelectClause.h"
 #include "query_builder/commons/Declaration.h"
 
 
