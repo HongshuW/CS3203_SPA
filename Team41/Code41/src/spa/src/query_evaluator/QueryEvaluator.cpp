@@ -28,7 +28,6 @@ QueryEvaluator::QueryEvaluator(shared_ptr<DataRetriever> dataRetriever): dataRet
 }
 
 vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
-    elemNotInSelect = make_shared<unordered_set<string>>();
 
     this->declarations = query->declarations;
     shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(dataRetriever, declarations);
@@ -87,16 +86,7 @@ QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query, shared_ptr<Con
     if (selectClause->isBoolean()) return TRUE_RESULT;
 
     Table resultTable = selectClause->accept(clauseVisitor);
-    for (auto elem: *selectClause->returnResults) {
-        if (elem.index() == SelectClause::ELEM_ATTR_REF_IDX) {
-            AttrRef attrRef = std::get<SelectClause::ELEM_ATTR_REF_IDX>(elem);
-            elemNotInSelect->insert(attrRef.toString());
-        }
-        if (elem.index() == SelectClause::ELEM_SYN_IDX) {
-            Synonym syn = std::get<SelectClause::ELEM_SYN_IDX>(elem);
-            elemNotInSelect->insert(syn.synonym);
-        }
-    }
+
     vector<string> ans = projectResult(resultTable, selectClause->returnResults);
 
     return removeDup(ans);
@@ -141,13 +131,14 @@ QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vecto
     for (auto elem: *tuple) {
         if (elem.index() == SelectClause::ELEM_ATTR_REF_IDX) {
             AttrRef attrRef = std::get<AttrRef>(elem);
+            int attrNameColIdx = resultTable.getColIdxByName(attrRef.toString());
 
-            int colIdx = resultTable.getColIdxByName(attrRef.synonym.synonym);
-            if (colIdx == COL_DOES_NOT_EXIST) {
-                elemNotInSelect->insert(attrRef.toString());
+            if (attrNameColIdx != COL_DOES_NOT_EXIST) continue;
 
-                DesignEntity designEntity = getDesignEntity(attrRef.synonym);
+            DesignEntity designEntity = getDesignEntity(attrRef.synonym);
+            int synColIdx = resultTable.getColIdxByName(attrRef.synonym.synonym);
 
+            if (synColIdx == COL_DOES_NOT_EXIST) {
                 //this table has only one col
                 Table intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity);
 
@@ -172,6 +163,20 @@ QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vecto
 
                 resultTable = TableCombiner().crossProduct(intermediateTable, resultTable);
                 if (resultTable.isBodyEmpty())  return EMPTY_RESULT;
+            } else {
+                //synonym name exists in the table but synonym attribute is not
+                const vector<DesignEntity> entitiesToFilter = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
+                bool needFilter = std::find(entitiesToFilter.begin(), entitiesToFilter.end(), designEntity) != entitiesToFilter.end();
+                if (needFilter) {
+                   Table intermediateTable;
+                   if (designEntity == QB::DesignEntity::CALL) intermediateTable = dataPreprocessor->getCallsProcedureTable();
+                   if (designEntity == QB::DesignEntity::READ) intermediateTable = dataPreprocessor->getReadVariableTable();
+                   if (designEntity == QB::DesignEntity::PRINT) intermediateTable = dataPreprocessor->getPrintVariableTable();
+                   intermediateTable.renameHeader({attrRef.synonym.synonym, attrRef.toString()});
+                   resultTable = TableCombiner().joinTable(intermediateTable, resultTable);
+                } else {
+                    resultTable = resultTable.dupCol(synColIdx, attrRef.toString());
+                }
             }
         }
         if (elem.index() == SelectClause::ELEM_SYN_IDX) {
@@ -180,8 +185,6 @@ QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vecto
             int colIdx = resultTable.getColIdxByName(synonym.synonym);
 
             if (colIdx == COL_DOES_NOT_EXIST) {
-                elemNotInSelect->insert(synonym.synonym);
-
                 DesignEntity designEntity = getDesignEntity(synonym);
                 Table intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity);
                 if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
@@ -204,12 +207,7 @@ vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vecto
     for (auto elem: *tuple) {
         if (elem.index() == SelectClause::ELEM_SYN_IDX) {
             Synonym synonym = std::get<SelectClause::ELEM_SYN_IDX>(elem);
-            int selectedColIdx;
-            if (elemNotInSelect->count(synonym.synonym)) {
-                selectedColIdx = getUnvisitedColIdxByName(synonym.synonym, viewedDupsMap, resultTable);
-            } else {
-                selectedColIdx = resultTable.getColIdxByName(synonym.synonym);
-            }
+            int selectedColIdx = resultTable.getColIdxByName(synonym.synonym);
             vector<string> colValues = resultTable.getColumnByIndex(selectedColIdx);
             for (int r = 0; r < ans_size; r++) {
                 ans[r] =  ans[r].empty() ? colValues[r] : ans[r] + " " + colValues[r];
@@ -217,12 +215,7 @@ vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vecto
         } else {
             //elem is a attrRef
             AttrRef attrRef = std::get<AttrRef>(elem);
-            int selectedColIdx;
-            if (elemNotInSelect->count(attrRef.toString())) {
-                selectedColIdx = getUnvisitedColIdxByName(attrRef.toString(), viewedDupsMap, resultTable);
-            } else {
-                selectedColIdx = resultTable.getColIdxByName(attrRef.toString());
-            }
+            int selectedColIdx = resultTable.getColIdxByName(attrRef.toString());
             vector<string> colValues = resultTable.getColumnByIndex(selectedColIdx);
             for (int r = 0; r < ans_size; r++) {
                 ans[r] = ans[r].empty() ? colValues[r] : ans[r] + " " + colValues[r];

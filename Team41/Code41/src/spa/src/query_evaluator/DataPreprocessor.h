@@ -15,8 +15,9 @@
 
 using namespace std;
 using namespace QB;
+
+typedef shared_ptr<vector<Declaration>> Declarations;
 namespace QE {
-    typedef shared_ptr<vector<Declaration>> Declarations;
     using Value = variant<string, int, vector<int>, vector<string>>;
 
     class DataPreprocessor {
