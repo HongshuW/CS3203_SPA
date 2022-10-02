@@ -15,14 +15,14 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/QueryParser.h
         src/query_builder/QueryParser.cpp
         src/query_builder/commons/Declaration.h
-        src/query_builder/clauses/SelectClause.h
-        src/query_builder/clauses/SelectClause.cpp
-        src/query_builder/clauses/SuchThatClause.h
+        src/query_builder/clauses/select_clauses/SelectClause.h
+        src/query_builder/clauses/select_clauses/SelectClause.cpp
+        src/query_builder/clauses/such_that_clauses/SuchThatClause.h
         src/query_builder/commons/Ref.h
         src/query_builder/commons/Underscore.h
         src/query_builder/commons/RelationType.h
         src/query_builder/commons/RelationType.cpp
-        src/query_builder/clauses/SuchThatClause.cpp
+        src/query_builder/clauses/such_that_clauses/SuchThatClause.cpp
         src/query_builder/commons/Ref.cpp
         src/query_builder/QueryValidator.h
         src/query_builder/QueryValidator.cpp
@@ -136,11 +136,11 @@ add_library(spa ${srcs} ${headers}
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
         src/parser/CondExprParser.cpp
-        src/parser/CondExprParser.h src/design_extractor/PatternExtractor.cpp 
+        src/parser/CondExprParser.h src/design_extractor/PatternExtractor.cpp
         src/design_extractor/PatternExtractor.h
         src/parser/CondExprParser.h
         src/query_builder/clauses/pattern_clauses/PatternClause.h
-        src/query_builder/commons/ExpressionSpec.cpp 
+        src/query_builder/commons/ExpressionSpec.cpp
         src/query_builder/commons/ExpressionSpec.h
         src/query_builder/commons/ExpressionSpecType.h
         src/pkb/table/PatternTable.cpp
@@ -161,8 +161,8 @@ add_library(spa ${srcs} ${headers}
         src/pkb/PKBStorage.h
         src/query_builder/commons/AttrRef.cpp
         src/query_builder/commons/AttrRef.h
-        src/query_builder/clauses/WithClauses.cpp
-        src/query_builder/clauses/WithClauses.h
+        src/query_builder/clauses/with_clauses/WithClauses.cpp
+        src/query_builder/clauses/with_clauses/WithClauses.h
         src/query_evaluator/QueryBooleanResult.cpp
         src/query_evaluator/QueryBooleanResult.h
         src/query_evaluator/QueryTupleResult.cpp
@@ -185,8 +185,6 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/constants/QueryValidatorConstants.cpp
         src/query_builder/constants/QueryValidatorConstants.h
         src/design_extractor/CallsExtractor.h
-        src/query_evaluator/ClauseVisitor.cpp
-        src/query_evaluator/ClauseVisitor.h
         src/query_builder/clauses/pattern_clauses/IfPatternClause.cpp
         src/query_builder/clauses/pattern_clauses/IfPatternClause.h
         src/query_builder/clauses/pattern_clauses/WhilePatternClause.cpp
@@ -196,21 +194,97 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/pattern_clauses/PatternClause.cpp
         src/query_evaluator/constants/ClauseVisitorConstants.cpp
         src/query_evaluator/constants/ClauseVisitorConstants.h
-        src/query_evaluator/IVisitor.cpp src/query_evaluator/IVisitor.h
-        src/query_builder/IVisitorHost.cpp src/query_builder/IVisitorHost.h
+        src/query_evaluator/IVisitor.cpp
+        src/query_evaluator/IVisitor.h
+        src/query_builder/clauses/IVisitorHost.cpp
+        src/query_builder/clauses/IVisitorHost.h
         src/query_builder/clauses/AbstractClause.cpp
         src/query_builder/clauses/AbstractClause.h
         src/query_evaluator/AbstractClauseVisitor.cpp
         src/query_evaluator/AbstractClauseVisitor.h
         src/query_evaluator/ConcreteClauseVisitor.cpp
         src/query_evaluator/ConcreteClauseVisitor.h
+        src/query_builder/clauses/such_that_clauses/FollowsClause.cpp
+        src/query_builder/clauses/such_that_clauses/FollowsClause.h
+        src/query_builder/clauses/such_that_clauses/FollowsTClause.cpp
+        src/query_builder/clauses/such_that_clauses/FollowsTClause.h
+        src/query_builder/clauses/such_that_clauses/ParentClause.cpp
+        src/query_builder/clauses/such_that_clauses/ParentClause.h
+        src/query_builder/clauses/such_that_clauses/ParentTClause.cpp
+        src/query_builder/clauses/such_that_clauses/ParentTClause.h
+        src/query_builder/clauses/such_that_clauses/UsesSClause.cpp
+        src/query_builder/clauses/such_that_clauses/UsesSClause.h
+        src/query_builder/clauses/such_that_clauses/UsesPClause.cpp
+        src/query_builder/clauses/such_that_clauses/UsesPClause.h
+        src/query_builder/clauses/such_that_clauses/ModifiesSClause.cpp
+        src/query_builder/clauses/such_that_clauses/ModifiesSClause.h
+        src/query_builder/clauses/such_that_clauses/ModifiesPClause.cpp
+        src/query_builder/clauses/such_that_clauses/ModifiesPClause.h
+        src/query_builder/clauses/such_that_clauses/CallsClause.cpp
+        src/query_builder/clauses/such_that_clauses/CallsClause.h
+        src/query_builder/clauses/such_that_clauses/CallsTClause.cpp
+        src/query_builder/clauses/such_that_clauses/CallsTClause.h
+        src/query_builder/clauses/such_that_clauses/NextClause.cpp
+        src/query_builder/clauses/such_that_clauses/NextClause.h
+        src/query_builder/clauses/such_that_clauses/NextTClause.cpp
+        src/query_builder/clauses/such_that_clauses/NextTClause.h
+        src/query_builder/clauses/such_that_clauses/AffectsClause.cpp
+        src/query_builder/clauses/such_that_clauses/AffectsClause.h
+        src/query_builder/clauses/such_that_clauses/AffectsTClause.cpp
+        src/query_builder/clauses/such_that_clauses/AffectsTClause.h
+        src/query_builder/clauses/such_that_clauses/Validatable.h
         src/CFG/CFG.cpp
-        src/CFG/CFG.h src/design_extractor/NextExtractor.cpp src/design_extractor/NextExtractor.h src/design_extractor/AffectsExtractor.cpp src/design_extractor/AffectsExtractor.h src/design_extractor/args/NextStmtNoArgs.cpp src/design_extractor/args/NextStmtNoArgs.h)
-
-
-
-
-
+        src/CFG/CFG.h 
+        src/design_extractor/NextExtractor.cpp 
+        src/design_extractor/NextExtractor.h 
+        src/design_extractor/AffectsExtractor.cpp 
+        src/design_extractor/AffectsExtractor.h 
+        src/design_extractor/args/NextStmtNoArgs.cpp 
+        src/design_extractor/args/NextStmtNoArgs.h
+        src/query_builder/relations/such_that_relations/Follows.cpp
+        src/query_builder/relations/such_that_relations/Follows.h
+        src/query_builder/relations/such_that_relations/SuchThatRelations.cpp
+        src/query_builder/relations/such_that_relations/SuchThatRelations.h
+        src/query_builder/relations/such_that_relations/PatternRelations.cpp
+        src/query_builder/relations/such_that_relations/PatternRelations.h
+        src/query_builder/relations/such_that_relations/FollowsT.cpp
+        src/query_builder/relations/such_that_relations/FollowsT.h
+        src/query_builder/relations/such_that_relations/Parent.cpp
+        src/query_builder/relations/such_that_relations/Parent.h
+        src/query_builder/relations/such_that_relations/ParentT.cpp
+        src/query_builder/relations/such_that_relations/ParentT.h
+        src/query_builder/relations/such_that_relations/UsesS.cpp
+        src/query_builder/relations/such_that_relations/UsesS.h
+        src/query_builder/relations/such_that_relations/UsesP.cpp
+        src/query_builder/relations/such_that_relations/UsesP.h
+        src/query_builder/relations/such_that_relations/ModifiesS.cpp
+        src/query_builder/relations/such_that_relations/ModifiesS.h
+        src/query_builder/relations/such_that_relations/ModifiesP.cpp
+        src/query_builder/relations/such_that_relations/ModifiesP.h
+        src/query_builder/relations/such_that_relations/Calls.cpp
+        src/query_builder/relations/such_that_relations/Calls.h
+        src/query_builder/relations/such_that_relations/CallsT.cpp
+        src/query_builder/relations/such_that_relations/CallsT.h
+        src/query_builder/relations/such_that_relations/Next.cpp
+        src/query_builder/relations/such_that_relations/Next.h
+        src/query_builder/relations/such_that_relations/NextT.cpp
+        src/query_builder/relations/such_that_relations/NextT.h
+        src/query_builder/relations/such_that_relations/Affects.cpp
+        src/query_builder/relations/such_that_relations/Affects.h
+        src/query_builder/relations/such_that_relations/AffectsT.cpp
+        src/query_builder/relations/such_that_relations/AffectsT.h
+        src/query_builder/relations/such_that_relations/Uses.cpp
+        src/query_builder/relations/such_that_relations/Uses.h
+        src/query_builder/relations/such_that_relations/Modifies.cpp
+        src/query_builder/relations/such_that_relations/Modifies.h
+        src/query_builder/relations/pattern_relations/IfPattern.cpp
+        src/query_builder/relations/pattern_relations/IfPattern.h
+        src/query_builder/relations/pattern_relations/WhilePattern.cpp
+        src/query_builder/relations/pattern_relations/WhilePattern.h
+        src/query_builder/relations/pattern_relations/AssignPattern.cpp
+        src/query_builder/relations/pattern_relations/AssignPattern.h
+        src/query_builder/relations/pattern_relations/PatternRelations.cpp
+        src/query_builder/relations/pattern_relations/PatternRelations.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

@@ -13,6 +13,7 @@
 #include "pkb/table/Table.h"
 #include "query_evaluator/IVisitor.h"
 #include "query_builder/clauses/AbstractClause.h"
+#include "query_builder/constants/QueryParserConstants.h"
 
 using namespace QB;
 
@@ -22,9 +23,10 @@ namespace QB {
     public:
         WhilePatternClause(const Synonym& arg1, const Ref& arg2);
 
-        bool operator==(const WhilePatternClause &clause) const;
+        bool operator==(const WhilePatternClause &other) const;
         Clause asClauseVariant() override;
         Table accept(shared_ptr<IVisitor> visitor) override;
+        unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
     };
 
 } // QB

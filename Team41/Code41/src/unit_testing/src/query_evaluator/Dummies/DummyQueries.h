@@ -5,7 +5,7 @@
 #ifndef SPA_DUMMYQUERIES_H
 #define SPA_DUMMYQUERIES_H
 
-#include "query_builder/clauses/SuchThatClause.h"
+#include "query_builder/clauses/such_that_clauses/SuchThatClause.h"
 namespace TestQE {
 
     class DummyQueries {

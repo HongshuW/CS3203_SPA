@@ -111,8 +111,8 @@ void QueryValidator::validateArgRefTypeSuchThatClause() const {
     shared_ptr<vector<Declaration>> declarations = query->declarations;
 
     for(const auto& suchThat : *suchThatClauses) {
-        RelationType relationType = suchThat->relationType;
-        pair<RefTypeSet, RefTypeSet> validArgsTypes = getSuchThatArgsRefTypeFromRelationType(relationType);
+        shared_ptr<Validatable> clause = dynamic_pointer_cast<Validatable>(suchThat);
+        pair<RefTypeSet, RefTypeSet> validArgsTypes = clause->getAllowedArgsRefType();
 
         auto arg1RefIndex= suchThat->arg1.index();
         auto arg2RefIndex= suchThat->arg2.index();
@@ -122,8 +122,7 @@ void QueryValidator::validateArgRefTypeSuchThatClause() const {
 
         if (!validFirstArgTypes.count(arg1RefIndex) || !validSecondArgTypes.count(arg2RefIndex)) {
             throw PQLParseException(
-                    QueryValidatorConstants::PQL_VALIDATION_INVALID_REF_TYPES +
-                            getStrFromRelationType(relationType));
+                    QueryValidatorConstants::PQL_VALIDATION_INVALID_REF_TYPES);
         }
     }
 }
@@ -131,8 +130,11 @@ void QueryValidator::validateArgRefTypeSuchThatClause() const {
 void QueryValidator::validateUsesModifiesNoUnderscoreForFirstArg() const {
     shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses = query->suchThatClauses;
     for(const auto& suchThat : *suchThatClauses) {
-        RelationType relationType = suchThat->relationType;
-        if (relationType != RelationType::MODIFIES && relationType != RelationType::USES) continue;
+        auto modifiesP = dynamic_pointer_cast<ModifiesPClause>(suchThat);
+        auto modifiesS = dynamic_pointer_cast<ModifiesSClause>(suchThat);
+        auto usesP = dynamic_pointer_cast<UsesPClause>(suchThat);
+        auto usesS = dynamic_pointer_cast<UsesSClause>(suchThat);
+        if (!modifiesP && !modifiesS && !usesP && !usesS) continue;
         if (get_if<Underscore>(&suchThat->arg1)) {
             throw PQLValidationException(
                     QueryValidatorConstants::PQL_VALIDATION_FIRST_ARG_UNDERSCORE);
@@ -157,9 +159,9 @@ void QueryValidator::validateSynonymTypeSuchThatClause() {
     shared_ptr<vector<Declaration>> declarations = query->declarations;
 
     for(const auto& suchThat : *suchThatClauses) {
-        RelationType relationType = suchThat->relationType;
+        shared_ptr<Validatable> clause = dynamic_pointer_cast<Validatable>(suchThat);
         pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>> validArgsSynonymTypes =
-                getSuchThatSynonymArgsTypeFromRelationType(relationType);
+                clause->getAllowedArgsSynonym();
 
         unordered_set<DesignEntity> validFirstArgSynonymTypes = validArgsSynonymTypes.first;
         unordered_set<DesignEntity> validSecondArgSynonymTypes = validArgsSynonymTypes.second;

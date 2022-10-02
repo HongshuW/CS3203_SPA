@@ -13,6 +13,8 @@ ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType, shared_ptr
 ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType) :
         expressionSpecType(expressionSpecType) {}
 
+ExpressionSpec::ExpressionSpec() {}
+
 bool ExpressionSpec::operator==(const ExpressionSpec& expressionSpec) const {
     return expressionSpecType == expressionSpec.expressionSpecType &&
            (exprNode == expressionSpec.exprNode || *exprNode == *expressionSpec.exprNode);

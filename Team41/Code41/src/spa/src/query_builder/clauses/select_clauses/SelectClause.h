@@ -9,6 +9,9 @@
 
 #include "query_builder/commons/Synonym.h"
 #include "query_builder/commons/AttrRef.h"
+#include "pkb/table/Table.h"
+#include "query_evaluator/IVisitor.h"
+#include "query_builder/clauses/AbstractClause.h"
 #include <ostream>
 #include <variant>
 #include <vector>
@@ -22,8 +25,9 @@ namespace QB {
     };
 
     using Elem = variant<Synonym, AttrRef>;
+    typedef shared_ptr<vector<Elem>> Tuple;
 
-    class SelectClause {
+    class SelectClause : public AbstractClause, public enable_shared_from_this<SelectClause> {
     public:
         //! Can be Synonym, Tuple or BOOLEAN
         ReturnType returnType;
@@ -42,6 +46,7 @@ namespace QB {
 
         bool operator==(const SelectClause& clause) const;
         ostream& print(ostream& os) const;
+        Table accept(shared_ptr<IVisitor> visitor) override;
     };
 }
 

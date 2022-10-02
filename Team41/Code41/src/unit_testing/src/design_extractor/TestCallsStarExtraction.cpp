@@ -25,7 +25,6 @@ TEST_CASE("Test CallStar Extractor") {
         auto actual = designExtractor.extractRelations(QB::RelationType::CALLS_T);
         REQUIRE(actual->empty());
     }
-
     SECTION("Test CallStar One Procedure") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         auto programNode = TestDE::Dummies::getTestProgramNode(10);

@@ -6,13 +6,16 @@
 #include "query_evaluator/IVisitor.h"
 #include <utility>
 
-AssignPatternClause::AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3) : PatternClause(arg1, arg2),
-        arg3(std::move(arg3)) {}
+AssignPatternClause::AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3) :
+    PatternClause(std::move(arg1), arg2), arg3(std::move(arg3)) {}
 
-bool AssignPatternClause::operator==(const AssignPatternClause &clause) const {
-    auto patternClause = dynamic_cast<const AssignPatternClause*>(&clause);
-    return patternClause != nullptr && arg1 == patternClause->arg1
-        && arg2 == patternClause->arg2 && arg3 == patternClause->arg3;
+AssignPatternClause::AssignPatternClause(Synonym arg1, Ref arg2) : PatternClause(std::move(arg1), arg2),
+    arg3(ExpressionSpec()) {}
+
+bool AssignPatternClause::operator==(const AssignPatternClause &other) const {
+    auto clause = dynamic_cast<const AssignPatternClause*>(&other);
+    return clause != nullptr && arg1 == clause->arg1
+        && arg2 == clause->arg2 && arg3 == clause->arg3;
 }
 
 Clause AssignPatternClause::asClauseVariant() {
@@ -21,4 +24,8 @@ Clause AssignPatternClause::asClauseVariant() {
 
 Table AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
+}
+
+unsigned int AssignPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
+    return currIdx;
 }

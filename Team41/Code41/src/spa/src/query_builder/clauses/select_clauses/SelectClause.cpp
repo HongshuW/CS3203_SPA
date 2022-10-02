@@ -43,3 +43,6 @@ ostream& SelectClause::print(ostream& os) const {
     return os;
 }
 
+Table SelectClause::accept(shared_ptr<IVisitor> visitor) {
+    return visitor->visit(shared_from_this());
+}
