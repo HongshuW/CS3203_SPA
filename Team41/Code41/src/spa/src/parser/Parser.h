@@ -17,7 +17,6 @@
 #include "AST/IfNode.h"
 #include "utils/Utils.h"
 #include "utils/ExprNodeParser.h"
-#include "CondExprParser.h"
 #include "AST/RelExprNode.h"
 #include <unordered_set>
 #include "constants/ParserConstants.h"
@@ -54,10 +53,14 @@ namespace SourceParser {
         shared_ptr<StmtNode> parseStatementNode();
         vector<shared_ptr<StmtNode>> parseStatementList();
         shared_ptr<VariableNode> parseVariableNode();
-        //!TODO: implement later
+
         shared_ptr<ExprNode> parseExprNode();
-        shared_ptr<CondExprNode> parseCondExprNode();
+        shared_ptr<CondExprNode> parseCondExprNode(int startIdx);
         shared_ptr<RelExprNode> parseRelExprNode();
+        shared_ptr<ExprNode> parseRelFactor(int priority);
+        shared_ptr<ExprNode> parseToken(string curr);
+        shared_ptr<ExprNode> makeExprNode(string curr, shared_ptr<ExprNode> lhs);
+        int parseSymbol(string curr);
 
     public:
         explicit Parser(vector<string> tokens);

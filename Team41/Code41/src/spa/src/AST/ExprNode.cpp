@@ -6,6 +6,18 @@
 
 AST::ExprNode::ExprNode(string expr) : expr(expr) {}
 
+bool ExprNode::isNumberNode() {
+    return Utils::isValidNumber(expr);
+}
+
+bool ExprNode::isVariableNode() {
+    return Utils::isValidName(expr);
+}
+
+bool ExprNode::isOperatorNode() {
+    return Utils::isMathOperators(expr);
+}
+
 bool ExprNode::operator==(const ASTNode &node) const{
     auto castedNode = dynamic_cast<const ExprNode*>(&node);
 

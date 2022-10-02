@@ -6,6 +6,7 @@
 #define SPA_EXPRNODE_H
 
 #include "ASTNode.h"
+#include "utils/Utils.h"
 #include <string>
 
 using namespace AST;
@@ -20,6 +21,10 @@ namespace AST {
         shared_ptr<ExprNode> right;
 
         explicit ExprNode(string expr);
+
+        bool isNumberNode();
+        bool isVariableNode();
+        bool isOperatorNode();
 
         bool operator==(const ASTNode& node) const override;
     };
