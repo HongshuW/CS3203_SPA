@@ -30,6 +30,7 @@ public:
     void appendRow(vector<string> row);
     void appendRows(list<vector<string>> rows);
     void addValues(list<string> values);
+    void dropRows();
 
     Table dropCol(int colIdx);
     Table dupCol(int colIdx);

@@ -7,6 +7,7 @@
 
 
 #include "pkb/table/Table.h"
+#include <variant>
 
 class IVisitor;
 using ClauseResult = std::variant<bool, Table>;
