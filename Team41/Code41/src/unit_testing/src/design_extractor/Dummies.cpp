@@ -575,6 +575,7 @@ namespace TestDE {
         shared_ptr<ProcedureNode> procedureNode9 = make_shared<ProcedureNode>(ProcedureNode("procedure9", {assignNode1_p9, whileNode2_p9}));
         shared_ptr<ProgramNode> programNode17 = make_shared<ProgramNode>(ProgramNode({procedureNode9}));
 
+       
         vector<shared_ptr<ProgramNode>> programNodes = vector<shared_ptr<ProgramNode>>{programNode1, programNode2,
                                                                                        programNode3, programNode4,
                                                                                        programNode5, programNode6,
