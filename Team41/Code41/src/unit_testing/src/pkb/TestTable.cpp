@@ -110,4 +110,16 @@ TEST_CASE("Test Table") {
 
         REQUIRE(actual.isEqual(expected));
     }
+
+    SECTION("drop rows") {
+        Table actualTable = Table();
+        actualTable.header = {"header"};
+        actualTable.rows = {{"a"}, {"b"}, {"c"}};
+        actualTable.dropRows();
+
+        Table expectedTable = Table();
+        expectedTable.header = {"header"};
+
+        REQUIRE(actualTable.isEqual(expectedTable));
+    }
 }
