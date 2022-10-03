@@ -13,10 +13,6 @@ bool WhilePatternClause::operator==(const WhilePatternClause &other) const {
            && arg2 == clause->arg2;
 }
 
-Clause WhilePatternClause::asClauseVariant() {
-    return shared_from_this();
-}
-
 Table WhilePatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }

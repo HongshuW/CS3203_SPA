@@ -18,10 +18,6 @@ bool AssignPatternClause::operator==(const AssignPatternClause &other) const {
         && arg2 == clause->arg2 && arg3 == clause->arg3;
 }
 
-Clause AssignPatternClause::asClauseVariant() {
-    return shared_from_this();
-}
-
 Table AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }

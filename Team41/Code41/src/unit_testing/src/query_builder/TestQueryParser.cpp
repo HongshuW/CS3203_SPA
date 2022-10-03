@@ -663,11 +663,6 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid Design Entity type of argument 1 in Pattern Clause, throw PQLParseException") {
-        std::string queryStr = "variable a; Select a pattern a (_, _)";
-        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
-    }
-
     SECTION ("Invalid tuple syntax, throw PQLParseException") {
         std::string queryStr = "variable a; Select <a pattern a (_, _)";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);

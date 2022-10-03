@@ -1,8 +1,9 @@
 //
-// Created by Xingchen Lin on 1/10/22.
+// Created by Xingchen Lin on 3/10/22.
 //
 
 #include "InvalidPattern.h"
 
-namespace QB {
-} // QB
+shared_ptr<AbstractClause> InvalidPattern::createClause(Synonym arg1, Ref arg2) {
+    return make_shared<InvalidPatternClause>(arg1, arg2);
+}
