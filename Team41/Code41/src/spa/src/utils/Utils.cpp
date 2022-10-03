@@ -19,7 +19,11 @@ bool Utils::isValidName(string str) {
 }
 
 bool Utils::isValidNumber(string str) {
-    return str.find_first_not_of("0123456789") == std::string::npos;
+    if (str[0] == '-' || (isdigit(str[0]) && isdigit(str[0]) != 0)) {
+        return str.substr(1, str.length()).find_first_not_of("0123456789") == std::string::npos;
+    } else {
+        return false;
+    }
 }
 
 

@@ -1,0 +1,210 @@
+1 - valid next - two numbers, select BOOLEAN
+
+Select BOOLEAN such that Next(4, 27)
+TRUE
+5000
+1 - valid next - two numbers, select BOOLEAN
+
+Select BOOLEAN such that Next(26, 27)
+TRUE
+5000
+1 - valid next - two numbers, select BOOLEAN
+
+Select BOOLEAN such that Next(25, 27)
+FALSE
+5000
+1 - valid next - two numbers, select BOOLEAN
+
+Select BOOLEAN such that Next(3, 27)
+FALSE
+5000
+1 - valid next - two numbers, select BOOLEAN
+
+Select BOOLEAN such that Next(19, 20)
+TRUE
+5000
+1 - valid next - two numbers, select BOOLEAN
+
+Select BOOLEAN such that Next(20, 19)
+FALSE
+5000
+1 - valid next - two numbers, select BOOLEAN
+
+Select BOOLEAN such that Next(28, 29)
+FALSE
+5000
+1 - valid next - two numbers, select statement
+stmt s;
+Select s such that Next(19, 20)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
+5000
+1 - valid next - one number one synonym, select synonym
+assign a;
+Select a such that Next(19, a)
+20
+5000
+1 - valid next - one number one synonym, select synonym
+stmt s;
+Select s such that Next(19, s)
+20
+5000
+1 - valid next - one number one synonym, select synonym
+call c;
+Select c such that Next(22, c)
+23
+5000
+1 - valid next - one number one synonym, select synonym
+if i;
+Select i such that Next(1, i)
+none
+5000
+1 - valid next - one number one synonym, select synonym
+while w;
+Select w such that Next(1, w)
+none
+5000
+1 - valid next - one number one synonym, select synonym
+print p;
+Select p such that Next(1, p)
+none
+5000
+1 - valid next - one number one synonym, select synonym
+read r;
+Select r such that Next(1, r)
+none
+5000
+1 - valid next - one number one _, select BOOLEAN
+
+Select BOOLEAN such that Next (2, _)
+TRUE
+5000
+1 - valid next - one number one _, select BOOLEAN
+
+Select BOOLEAN such that Next (1, _)
+FALSE
+5000
+1 - valid next - one synonym one _, select BOOLEAN
+assign a;
+Select BOOLEAN such that Next (a, _)
+TRUE
+5000
+1 - valid next - one synonym one _, select BOOLEAN
+while w;
+Select BOOLEAN such that Next (w, _)
+TRUE
+5000
+1 - valid next - one synonym one _, select synonym
+assign a;
+Select a such that Next (_, a)
+none
+5000
+1 - valid next - one synonym one _, select synonym
+while w;
+Select w such that Next (_, w)
+none
+5000
+1 - valid next - two _, select BOOLEAN
+
+Select BOOLEAN such that Next (_, _)
+TRUE
+5000
+1 - valid next - two _, select synonym
+stmt s;
+Select s such that Next (_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
+5000
+1 - valid next - two synonym, select tuple
+read r; assign a;
+Select <r, a> such that Next(r, a)
+none
+5000
+1 - valid next - two synonym, select tuple
+read r; while w;
+Select <r, w> such that Next(w, r)
+none
+5000
+1 - valid next - two synonym, select tuple
+read r; if i;
+Select <r, i> such that Next(r, i)
+none
+5000
+1 - valid next - two synonym, select tuple
+read r; if i;
+Select <r, i> such that Next(i, r)
+none
+5000
+1 - valid next - two synonym, select tuple
+print p; assign a;
+Select <p, a> such that Next(p, a)
+none
+5000
+1 - valid next - two synonym, select tuple
+print p; while w;
+Select <p, w> such that Next(w, p)
+none
+5000
+1 - valid next - two synonym, select tuple
+print p; if i;
+Select <p, i> such that Next(p, i)
+none
+5000
+1 - valid next - two synonym, select tuple
+print p; if i;
+Select <p, i> such that Next(i, p)
+none
+5000
+1 - valid next - two synonym, select tuple
+call c; assign a;
+Select <c, a> such that Next(c, a)
+none
+5000
+1 - valid next - two synonym, select tuple
+call c; while w;
+Select <c, w> such that Next(w, c)
+none
+5000
+1 - valid next - two synonym, select tuple
+call c; if i;
+Select <c, i> such that Next(c, i)
+none
+5000
+1 - valid next - two synonym, select tuple
+call c; if i;
+Select <c, i> such that Next(i, c)
+none
+5000
+1 - valid next - two synonym, select tuple
+stmt s; assign a;
+Select <s, a> such that Next(s, a)
+none
+5000
+1 - valid next - two synonym, select tuple
+stmt s; while w;
+Select <s, w> such that Next(w, s)
+none
+5000
+1 - valid next - two synonym, select tuple
+stmt s; if i;
+Select <s, i> such that Next(s, i)
+none
+5000
+1 - valid next - two synonym, select tuple
+stmt s; if i;
+Select <s, i> such that Next(i, s)
+none
+5000
+1 - invalid next - procedure
+procedure p;
+Select BOOLEAN such that Next(1, p)
+Semantic Error
+5000
+1 - invalid next - variable
+variable v;
+Select BOOLEAN such that Next(1, v)
+Semantic Error
+5000
+1 - invalid next - entRef
+
+Select BOOLEAN such that Next(29, "x35")
+Semantic Error
+5000

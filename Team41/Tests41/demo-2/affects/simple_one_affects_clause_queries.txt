@@ -1,0 +1,292 @@
+1 - valid affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(5, 6)
+FALSE
+5000
+1 - valid affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(5, 9)
+TRUE
+5000
+1 - valid affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(7, 11)
+TRUE
+5000
+1 - valid affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(7, 13)
+TRUE
+5000
+1 - valid affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(12, 9)
+FALSE
+5000
+1 - valid affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(12, 14)
+FALSE
+5000
+1 - valid affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(9, 9)
+TRUE
+5000
+1 - valid Affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(4, 7)
+FALSE
+5000
+1 - valid Affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(4, 13)
+FALSE
+5000
+1 - valid Affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(4, 14)
+FALSE
+5000
+1 - valid Affects - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects(12, 15)
+FALSE
+5000
+1 - valid affects - one number one assign, select BOOLEAN
+assign a;
+Select BOOLEAN such that Affects(a, 9)
+5, 9
+5000
+1 - valid affects - one number one assign, select assign
+assign a;
+Select a such that Affects(a, 9)
+5, 9
+5000
+1 - valid affects - one number one assign, select assign
+assign a;
+Select a such that Affects(a, 14)
+5, 9
+5000
+1 - valid affects - one number one assign, select assign
+assign a;
+Select a such that Affects(7, a)
+11, 13
+5000
+1 - valid affects - one number one assign, select assign
+assign a;
+Select a such that Affects(5, a)
+9
+5000
+1 - valid affects - two different assign, select first
+assign a1, a2;
+Select a1 such that Affects(a1, a2)
+5, 7, 9
+5000
+1 - valid affects - two different assign, select second
+assign a1, a2;
+Select a2 such that Affects(a1, a2)
+none
+5000
+1 - valid affects - two different assign, select tuple
+assign a1, a2;
+Select <a1, a2> such that Affects(a1, a2)
+none
+5000
+1 - valid affects - two same assign, select assign
+assign a;
+Select a such that Affects(a, a)
+9
+5000
+1 - invalid affects
+procedure p;
+Select BOOLEAN such that Affects(9, p)
+Semantic Error
+5000
+1 - invalid affects
+print p;
+Select BOOLEAN such that Affects(9, p)
+Semantic Error
+5000
+1 - invalid affects
+variable v;
+Select BOOLEAN such that Affects(9, v)
+Semantic Error
+5000
+1 - invalid affects
+while w;
+Select BOOLEAN such that Affects(9, w)
+Semantic Error
+5000
+1 - invalid affects
+call c;
+Select BOOLEAN such that Affects(9, c)
+Semantic Error
+5000
+1 - invalid affects
+if i;
+Select BOOLEAN such that Affects(9, i)
+Semantic Error
+5000
+1 - invalid affects
+read r;
+Select BOOLEAN such that Affects(9, r)
+Semantic Error
+5000
+1 - invalid affects
+stmt s;
+Select BOOLEAN such that Affects(9, s)
+Semantic Error
+5000
+1 - invalid affects
+
+Select BOOLEAN such that Affects(9, "i")
+Semantic Error
+5000
+
+
+1 - valid Affects* - two statement numbers, select BOOLEAN [start of Affects*]
+
+Select BOOLEAN such that Affects*(5, 6)
+FALSE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(5, 9)
+TRUE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(7, 11)
+TRUE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(7, 13)
+TRUE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(12, 9)
+FALSE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(12, 14)
+FALSE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(9, 9)
+TRUE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(4, 7)
+TRUE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(4, 13)
+TRUE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(4, 14)
+TRUE
+5000
+1 - valid Affects* - two statement numbers, select BOOLEAN
+
+Select BOOLEAN such that Affects*(12, 15)
+TRUE
+5000
+1 - valid Affects* - one number one assign, select BOOLEAN
+assign a;
+Select BOOLEAN such that Affects*(a, 9)
+5, 9
+5000
+1 - valid Affects* - one number one assign, select assign
+assign a;
+Select a such that Affects*(a, 9)
+5, 9
+5000
+1 - valid Affects* - one number one assign, select assign
+assign a;
+Select a such that Affects*(a, 14)
+5, 9
+5000
+1 - valid Affects* - one number one assign, select assign
+assign a;
+Select a such that Affects*(7, a)
+11, 13
+5000
+1 - valid Affects* - one number one assign, select assign
+assign a;
+Select a such that Affects*(5, a)
+9
+5000
+1 - valid Affects* - two different assign, select first
+assign a1, a2;
+Select a1 such that Affects*(a1, a2)
+5, 7, 9
+5000
+1 - valid Affects* - two different assign, select second
+assign a1, a2;
+Select a2 such that Affects*(a1, a2)
+none
+5000
+1 - valid Affects* - two different assign, select tuple
+assign a1, a2;
+Select <a1, a2> such that Affects*(a1, a2)
+none
+5000
+1 - valid Affects* - two same assign, select assign
+assign a;
+Select a such that Affects*(a, a)
+9
+5000
+1 - invalid Affects*
+procedure p;
+Select BOOLEAN such that Affects*(9, p)
+Semantic Error
+5000
+1 - invalid Affects*
+print p;
+Select BOOLEAN such that Affects*(9, p)
+Semantic Error
+5000
+1 - invalid Affects*
+variable v;
+Select BOOLEAN such that Affects*(9, v)
+Semantic Error
+5000
+1 - invalid Affects*
+while w;
+Select BOOLEAN such that Affects*(9, w)
+Semantic Error
+5000
+1 - invalid Affects*
+call c;
+Select BOOLEAN such that Affects*(9, c)
+Semantic Error
+5000
+1 - invalid Affects*
+if i;
+Select BOOLEAN such that Affects*(9, i)
+Semantic Error
+5000
+1 - invalid Affects*
+read r;
+Select BOOLEAN such that Affects*(9, r)
+Semantic Error
+5000
+1 - invalid Affects*
+stmt s;
+Select BOOLEAN such that Affects*(9, s)
+Semantic Error
+5000
+1 - invalid Affects*
+
+Select BOOLEAN such that Affects*(9, "i")
+Semantic Error
+5000
