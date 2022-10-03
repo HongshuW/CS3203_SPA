@@ -68,11 +68,9 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
     //all conditions must be valid at this point
     for (const auto& withClause: *query->withClauses) {
         Table intermediateTable = withClause->accept(concreteClauseVisitor);
-        //nothing has been added to result table yet.
-        bool isResultEmpty = resultTable.isBodyEmpty();
         //intermediate table return an empty table if there is no synonym in with clause
         resultTable = tableCombiner.joinTable(intermediateTable, resultTable);
-        if (!isResultEmpty && resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
+        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
     }
 
     shared_ptr<vector<Elem>> returnTuple = query->selectClause->returnResults;
