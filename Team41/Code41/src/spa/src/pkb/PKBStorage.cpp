@@ -145,6 +145,31 @@ shared_ptr<Table> PKBStorage::getCallsProcedureNames() {
     return callsTable.getStmtNoProcMap();
 }
 
+NextTable * PKBStorage::getNext() {
+    return &nextTable;
+}
+
+NextTable * PKBStorage::getNextT() {
+    // TODO: change the implementation after DE has implemented the API
+    // if table is empty, query from DE
+    // else, return the table
+    return &nextTTable;
+}
+
+AffectsTable * PKBStorage::getAffects() {
+    // TODO: change the implementation after DE has implemented the API
+    // if table is empty, query from DE
+    // else, return the table
+    return &affectsTable;
+}
+
+AffectsTable * PKBStorage::getAffectsT() {
+    // TODO: change the implementation after DE has implemented the API
+    // if table is empty, query from DE
+    // else, return the table
+    return &affectsTTable;
+}
+
 shared_ptr<unordered_set<string>> PKBStorage::getFollowingStatements(string followedStatement) {
     return followsTable.getValuesByKey(followedStatement);
 }
@@ -259,4 +284,10 @@ void PKBStorage::saveWhilePattern(vector<string> metainfo) {
 
 void PKBStorage::saveIfPattern(vector<string> metainfo) {
     ifPatternTable.appendRow(metainfo);
+}
+
+void PKBStorage::clearCache() {
+    nextTTable.dropRows();
+    affectsTable.dropRows();
+    affectsTTable.dropRows();
 }

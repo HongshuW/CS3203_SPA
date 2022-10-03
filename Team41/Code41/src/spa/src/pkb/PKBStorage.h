@@ -79,6 +79,10 @@ public:
     shared_ptr<Table> getCalls();
     CallsTable * getCallsT();
     shared_ptr<Table> getCallsProcedureNames();
+    NextTable * getNext();
+    NextTable * getNextT();
+    AffectsTable * getAffects();
+    AffectsTable * getAffectsT();
     shared_ptr<unordered_set<string>> getFollowingStatements(string followedStatement);
     shared_ptr<unordered_set<string>> getChildrenStatements(string parentStatement);
     shared_ptr<unordered_set<string>> getModifiedVariables(string modifierStatement);
@@ -107,6 +111,8 @@ public:
     void saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
     void saveWhilePattern(vector<string> metainfo);
     void saveIfPattern(vector<string> metainfo);
+
+    void clearCache();
 
 private:
     // Entity Tables
