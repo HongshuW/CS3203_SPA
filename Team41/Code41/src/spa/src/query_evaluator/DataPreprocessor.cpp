@@ -113,7 +113,14 @@ namespace QE {
     Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
         bool hasSynonym =
                 withClause->lhsType() == WithRefType::ATTR_REF || withClause->rhsType() == WithRefType::ATTR_REF;
-        if (!hasSynonym) return Table(); //the with clause must have some result due to existence check
+        //if the with clause does not have synonym, dont have to care what's inside since
+        //I have checked this clause evaluates to true
+        const string DUMMY_HEADER = "$dummy_header";
+        const string DUMMY_VALUE = "$dummy_value";
+        Table dummyTable = Table();
+        dummyTable.renameHeader({DUMMY_HEADER}) ;
+        dummyTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+        if (!hasSynonym) return dummyTable;
 
         int intRef;
         string identRef;
@@ -184,7 +191,7 @@ namespace QE {
         return resultTable;
     }
 
-    Table DataPreprocessor::filterTableByColValueEquality(Table table, vector<int> comparedCols) {
+    Table DataPreprocessor::filterTableByColValueEquality(const Table& table, const vector<int>& comparedCols) {
         Table filteredTable = Table();
 
         filteredTable.renameHeader(table.header);

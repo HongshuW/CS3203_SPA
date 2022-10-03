@@ -22,7 +22,7 @@ namespace QE {
 
     class DataPreprocessor {
         Table filerTableByDesignEntity(const Table& table, int colIdx, DesignEntity designEntity);
-        Table filterTableByColValueEquality(Table table, vector<int> comparedCols);
+        Table filterTableByColValueEquality(const Table& table, const vector<int>& comparedCols);
         Table filerTableByColumnIdx(const Table& table, int colIdx, const string& value);
         DesignEntity getDesignEntityOfSyn(Synonym synonym);
         std::vector<std::string> intersection(std::vector<std::string> v1,

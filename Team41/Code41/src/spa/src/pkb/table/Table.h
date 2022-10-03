@@ -35,9 +35,9 @@ public:
     Table dupCol(int colIdx, string dupColName = "$dup_col");
 
     bool hasCol(string colName);
-    bool isEqual(Table otherTable);
-    bool isHeaderEmpty();
-    bool isBodyEmpty();
+    bool isEqual(const Table &otherTable);
+    bool isHeaderEmpty() const;
+    bool isBodyEmpty() const;
 
 
 
