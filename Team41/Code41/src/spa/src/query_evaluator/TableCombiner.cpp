@@ -7,7 +7,7 @@
 #include "iostream"
 using namespace std;
 namespace QE {
-    Table TableCombiner::crossProduct(Table t1, Table t2) {
+    Table TableCombiner::crossProduct(const Table &t1, const Table &t2) {
         if (t1.isHeaderEmpty()) return t2;
         if (t2.isHeaderEmpty()) return t1;
         Table productTable = Table();
@@ -24,7 +24,7 @@ namespace QE {
         return productTable;
     }
 
-    Table TableCombiner::joinTable(Table t1, Table t2) {
+    Table TableCombiner::joinTable(const Table &t1, const Table &t2) {
         if (t1.isHeaderEmpty()) return t2;
         if (t2.isHeaderEmpty()) return t1;
         int FIRST_DUP_IDX = 0;
