@@ -74,7 +74,8 @@ std::vector<std::string> QueryTokenizer::tokenize() {
             continue;
         } else if (isalpha(next)) {
             processIdent();
-        } else if (isdigit(next)) {
+        } else if (next == QueryTokeniserConstants::MINUS || isdigit(next)) {
+            //! Handle both positive and negative digit
             processDigit();
         } else if (next == QueryTokeniserConstants::DOUBLE_QUOTE_CHAR) {
             processString();

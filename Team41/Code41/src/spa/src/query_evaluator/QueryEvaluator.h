@@ -36,7 +36,6 @@ namespace QE {
         typedef shared_ptr<unordered_map<string, shared_ptr<unordered_set<int>>>>  ViewedDups;
         int getUnvisitedColIdxByName(const string& colName, ViewedDups viewedDupsMap, const Table& table);
 
-
     public:
         explicit QueryEvaluator(shared_ptr<DataRetriever> dataRetriever);
 

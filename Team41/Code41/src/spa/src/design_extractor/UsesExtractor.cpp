@@ -67,7 +67,7 @@ namespace DE {
                 usedVarsIf.insert(fromChild.begin(), fromChild.end());
             }
 
-            auto variables = Utils::getVariablesFromExprString(ifNode->condExpr->condExpr);
+            auto variables = EntityExtractor::getVariablesFromCondExprNode(ifNode->condExpr);
             usedVarsIf.insert(variables.begin(), variables.end());
 
             for (const auto& usedVarIf : usedVarsIf) {
@@ -85,7 +85,7 @@ namespace DE {
                 usedVarsWhile.insert(fromChild.begin(), fromChild.end());
             }
 
-            auto variables = Utils::getVariablesFromExprString(whileNode->condExpr->condExpr);
+            auto variables = EntityExtractor::getVariablesFromCondExprNode(whileNode->condExpr);
             usedVarsWhile.insert(variables.begin(), variables.end());
 
             for (const auto& usedVarWhile : usedVarsWhile) {
@@ -139,7 +139,10 @@ namespace DE {
 
             // if the procedures has call nodes, handle them
             if (mappedCallNodesToProcedures.count(procedureName) != 0) {
-                auto callNodes = mappedCallNodesToProcedures.at(procedureName);
+                vector<shared_ptr<CallNode>> callNodes = vector<shared_ptr<CallNode>>();
+                if (mappedCallNodesToProcedures.count(procedureName)) {
+                    callNodes = mappedCallNodesToProcedures.at(procedureName);
+                }
                 for (auto node : callNodes) {
                     EntityExtractor::extractVariablesFromCallNodesInProceduresToList(
                         node,
@@ -199,7 +202,7 @@ namespace DE {
                 switch (nodeType) {
                 case AST::IF_NODE: {
                     shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(nodeEntry);
-                    auto variables = Utils::getVariablesFromExprString(ifNode->condExpr->condExpr);
+                    auto variables = EntityExtractor::getVariablesFromCondExprNode(ifNode->condExpr);
                     uniqueVarList.insert(variables.begin(), variables.end());
                     for (auto n : ifNode->ifStmtList) {
                         queue.push(n);
@@ -211,7 +214,7 @@ namespace DE {
                 }
                 case AST::WHILE_NODE: {
                     shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(nodeEntry);
-                    auto variables = Utils::getVariablesFromExprString(whileNode->condExpr->condExpr);
+                    auto variables = EntityExtractor::getVariablesFromCondExprNode(whileNode->condExpr);
                     uniqueVarList.insert(variables.begin(), variables.end());
                     for (auto n : whileNode->stmtList) {
                         queue.push(n);

@@ -113,14 +113,34 @@ namespace QE {
     Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
         bool hasSynonym =
                 withClause->lhsType() == WithRefType::ATTR_REF || withClause->rhsType() == WithRefType::ATTR_REF;
-        if (!hasSynonym) return Table(); //the with clause must have some result due to existence check
+        //if the with clause does not have synonym, dont have to care what's inside since
+        //I have checked this clause evaluates to true
+        const string DUMMY_HEADER = "$dummy_header";
+        const string DUMMY_VALUE = "$dummy_value";
+        Table dummyTable = Table();
+        dummyTable.renameHeader({DUMMY_HEADER}) ;
+        dummyTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+        if (!hasSynonym) return dummyTable;
+
+        int intRef;
+        string identRef;
+        bool isIntType = true;
+
         vector<WithRef> withRefs = {withClause->lhs, withClause->rhs};
         Table resultTable = Table();
         vector<int> comparedCols = {};
         int colOffSet = 0;
+
+
         for (auto withRef: withRefs) {
             WithRefType withRefType = WithClause::getWithRefType(withRef.index());
+            if (withRefType == QB::WithRefType::INTEGER) intRef = get<WithClause::WITHREF_INT_IDX>(withRef);
+            if (withRefType == QB::WithRefType::IDENT) {
+                isIntType = false;
+                identRef = get<WithClause::WITHREF_IDENT_IDX>(withRef).identStr;
+            }
             if (withRefType != WithRefType::ATTR_REF) continue;
+
             AttrRef attrRef = get<WithClause::WITHREF_ATTR_REF_IDX>(withRef);
             DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym);
 
@@ -140,7 +160,7 @@ namespace QE {
                 //get two identical cols with different names
                 table = table.dupCol(FIRST_COL_IDX);
                 table.renameHeader({attrRef.synonym.synonym, attrRef.toString()});
-                resultTable = TableCombiner().crossProduct(table, resultTable);
+                resultTable = TableCombiner().crossProduct( resultTable, table);
 
                 //since two cols are identical, compare either is alright
                 comparedCols.push_back(colOffSet);
@@ -154,18 +174,24 @@ namespace QE {
                 if (designEntity == QB::DesignEntity::PRINT) intermediateTable = dataRetriever->getPrintVariableNames();
 
                 intermediateTable.renameHeader({attrRef.synonym.synonym, attrRef.toString()});
-                resultTable = TableCombiner().crossProduct(intermediateTable, resultTable);
+                resultTable = TableCombiner().crossProduct( resultTable, intermediateTable);
 
                 //compare the second col which is the attribute value
                 comparedCols.push_back(colOffSet + ATTR_NAME_COL_INX);
                 colOffSet += (int) TABLE_HEADER_SIZE;
             }
         }
-        resultTable = filterTableByColValueEquality(resultTable, comparedCols);
+        if ( withClause->lhsType() == WithRefType::ATTR_REF && withClause->rhsType() == WithRefType::ATTR_REF) {
+            resultTable = filterTableByColValueEquality(resultTable, comparedCols);
+        } else {
+            const int ATTR_NAME_COL_IDX = 1;
+            resultTable = filerTableByColumnIdx(resultTable, ATTR_NAME_COL_IDX, isIntType ? to_string(intRef) : identRef);
+        }
+
         return resultTable;
     }
 
-    Table DataPreprocessor::filterTableByColValueEquality(Table table, vector<int> comparedCols) {
+    Table DataPreprocessor::filterTableByColValueEquality(const Table& table, const vector<int>& comparedCols) {
         Table filteredTable = Table();
 
         filteredTable.renameHeader(table.header);

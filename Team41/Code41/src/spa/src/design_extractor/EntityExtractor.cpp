@@ -42,7 +42,7 @@ namespace DE {
             }
             case AST::IF_NODE: {
                 shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-                unordered_set<string> variables = getVariablesFromExprString(ifNode->condExpr->condExpr);
+                unordered_set<string> variables = getVariablesFromCondExprNode(ifNode->condExpr);
                 set->insert(variables.begin(), variables.end());
                 break;
             }
@@ -53,7 +53,7 @@ namespace DE {
             }
             case AST::WHILE_NODE: {
                 shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
-                unordered_set<string> variables = getVariablesFromExprString(whileNode->condExpr->condExpr);
+                unordered_set<string> variables = getVariablesFromCondExprNode(whileNode->condExpr);
                 set->insert(variables.begin(), variables.end());
                 break;
             }
@@ -78,13 +78,13 @@ namespace DE {
             }
             case AST::IF_NODE: {
                 shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-                unordered_set<string> constants = getConstantsFromExprString(ifNode->condExpr->condExpr);
+                unordered_set<string> constants = getConstantsFromCondExprNode(ifNode->condExpr);
                 set->insert(constants.begin(), constants.end());
                 break;
             }
             case AST::WHILE_NODE: {
                 shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
-                unordered_set<string> constants = getConstantsFromExprString(whileNode->condExpr->condExpr);
+                unordered_set<string> constants = getConstantsFromCondExprNode(whileNode->condExpr);
                 set->insert(constants.begin(), constants.end());
                 break;
             }
@@ -96,46 +96,6 @@ namespace DE {
 
     }
 
-    unordered_set<string> EntityExtractor::getVariablesFromExprString(string expr) {
-        unordered_set<string> ans;
-        unordered_set<char> ignored = {'*', '/', '%', '+', '-', '(', ')', ' ', '=', '<', '>', '!', '|', '&'};
-        string acc = "";
-        for (int i = 0 ; i < expr.length(); i++) {
-            if (ignored.find(expr[i]) == ignored.end()) { // char not in ignored
-                acc += expr[i];
-            } else {
-                if (!acc.empty() && !is_number(acc)) {
-                    ans.insert(acc);
-                }
-                acc = "";
-            }
-        }
-        if (!acc.empty() && !is_number(acc)) {
-            ans.insert(acc);
-        }
-        return ans;
-    }
-
-    unordered_set<string> EntityExtractor::getConstantsFromExprString(string expr) {
-        unordered_set<string> ans;
-        unordered_set<char> ignored = {'*', '/', '%', '+', '-', '(', ')', ' ', '=', '<', '>', '!', '|', '&'};
-        string acc = "";
-        for (int i = 0 ; i < expr.length(); i++) {
-            if (ignored.find(expr[i]) == ignored.end()) { // char not in ignored
-                acc += expr[i];
-            } else {
-                if (!acc.empty() && is_number(acc)) {
-                    ans.insert(acc);
-                }
-                acc = "";
-            }
-        }
-        if (!acc.empty() && is_number(acc)) {
-            ans.insert(acc);
-        }
-        return ans;
-    }
-
     bool EntityExtractor::is_number(const std::string& s)
     {
         std::string::const_iterator it = s.begin();
@@ -145,6 +105,7 @@ namespace DE {
 
     unordered_set<string> EntityExtractor::getVariablesFromExprNode(shared_ptr<ExprNode> exprNode) {
         unordered_set<string> ans;
+        if (!exprNode) return ans;
         queue<shared_ptr<ExprNode>> queue;
         queue.push(exprNode);
 
@@ -166,6 +127,7 @@ namespace DE {
 
     unordered_set<string> EntityExtractor::getConstantsFromExprNode(shared_ptr<ExprNode> exprNode) {
         unordered_set<string> ans;
+        if (!exprNode) return ans;
         queue<shared_ptr<ExprNode>> queue;
         queue.push(exprNode);
 
@@ -240,8 +202,12 @@ namespace DE {
         while (!queue.empty()) {
             auto callNodeEntry = queue.front();
             queue.pop();
-            auto usedVarList =
-                mappedProceduresToVar.at(callNodeEntry->procedureName);
+            unordered_set<string> usedVarList = unordered_set<string>();
+            if (mappedProceduresToVar.count(callNodeEntry->procedureName)) {
+                usedVarList =
+                        mappedProceduresToVar.at(callNodeEntry->procedureName);
+            }
+
             uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
 
             if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
@@ -289,5 +255,46 @@ namespace DE {
         return extractedNodes;
     }
 
-    
+    unordered_set<string> EntityExtractor::getVariablesFromCondExprNode(shared_ptr<CondExprNode> condExprNode) {
+        unordered_set<string> ans;
+        if (!condExprNode) return ans;
+        queue<shared_ptr<CondExprNode>> queue;
+        queue.push(condExprNode);
+
+        while (!queue.empty()) {
+            auto curr = queue.front();
+            queue.pop();
+            if (curr->relExprNode) {
+                auto setL = getVariablesFromExprNode(curr->relExprNode->exprNodeLHS);
+                auto setR = getVariablesFromExprNode(curr->relExprNode->exprNodeRHS);
+                ans.insert(setL.begin(), setL.end());
+                ans.insert(setR.begin(), setR.end());
+            }
+            if (curr->condExprLHS) queue.push(curr->condExprLHS);
+            if (curr->condExprRHS) queue.push(curr->condExprRHS);
+        }
+        return ans;
+    }
+
+    unordered_set<string> EntityExtractor::getConstantsFromCondExprNode(shared_ptr<CondExprNode> condExprNode) {
+        unordered_set<string> ans;
+        if (!condExprNode) return ans;
+        queue<shared_ptr<CondExprNode>> queue;
+        queue.push(condExprNode);
+        while (!queue.empty()) {
+            auto curr = queue.front();
+            queue.pop();
+            if (curr->relExprNode) {
+                auto setL = getConstantsFromExprNode(curr->relExprNode->exprNodeLHS);
+                auto setR = getConstantsFromExprNode(curr->relExprNode->exprNodeRHS);
+                ans.insert(setL.begin(), setL.end());
+                ans.insert(setR.begin(), setR.end());
+            }
+            if (curr->condExprLHS) queue.push(curr->condExprLHS);
+            if (curr->condExprRHS) queue.push(curr->condExprRHS);
+        }
+        return ans;
+    }
+
+
 } // DE

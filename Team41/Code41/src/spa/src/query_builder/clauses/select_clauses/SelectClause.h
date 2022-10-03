@@ -25,6 +25,7 @@ namespace QB {
     };
 
     using Elem = variant<Synonym, AttrRef>;
+    typedef shared_ptr<vector<Elem>> Tuple;
 
     class SelectClause : public AbstractClause, public enable_shared_from_this<SelectClause> {
     public:

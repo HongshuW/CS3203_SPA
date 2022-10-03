@@ -52,6 +52,13 @@ void Tokenizer::processAlNum() {
     tokens.push_back(curr);
 }
 
+void Tokenizer::processDigit() {
+    while (isdigit(peek())) {
+        curr += pop();
+    }
+    tokens.push_back(curr);
+}
+
 void Tokenizer::processSymbols() {
     if (curr == TokeniserConstants::EQUAL) {
         if (match(TokeniserConstants::EQUAL_CHAR)) {
@@ -95,11 +102,13 @@ vector<string> Tokenizer::tokenize() {
         next = pop();
         if (next == EOF) break;
         curr += next;
-
         if (isspace(next)) {
             continue;
-        } else if (isalnum(next)) {
+        } else if (isalpha(next)) {
             processAlNum();
+        } else if (next == TokeniserConstants::MINUS_CHAR || isdigit(next)) {
+            //! Handle both positive and negative digit
+            processDigit();
         } else if (next == TokeniserConstants::DOUBLE_QUOTE_CHAR) {
             processString();
         } else if (SYMBOL_SET.count(curr)) {

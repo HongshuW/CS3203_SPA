@@ -25,6 +25,8 @@ namespace SourceParser {
      const string TokeniserConstants::  RIGHT_BRACKET = ")";
      const string TokeniserConstants::  SEMICOLON = ";";
 
+     const char TokeniserConstants::  MINUS_CHAR = '-';
+
 
      const char TokeniserConstants::  DOUBLE_QUOTE_CHAR = '"';
      const char TokeniserConstants::  EQUAL_CHAR = '=';

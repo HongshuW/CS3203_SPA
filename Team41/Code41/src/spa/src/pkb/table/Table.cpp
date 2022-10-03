@@ -87,8 +87,12 @@ void Table::renameHeader(vector<string> newHeader) {
     header = newHeader;
 }
 
+void Table::dropRows() {
+    this->rows = {};
+}
+
 Table Table::dropCol(int colIdx) {
-    if (colIdx >= this->header.size()) return Table();
+    if (colIdx >= this->header.size()) return *this;
     Table droppedTable = Table();
     droppedTable.header = {};
     droppedTable.rows = {};
@@ -112,7 +116,7 @@ Table Table::dropCol(int colIdx) {
     return droppedTable;
 }
 
-bool Table::isEqual(Table otherTable) {
+bool Table::isEqual(const Table &otherTable) {
     if (header.size() != otherTable.header.size()) return false;
     if (rows.size() != otherTable.rows.size()) return false;
     for (int i = 0; i < otherTable.header.size(); ++i) {
@@ -130,23 +134,22 @@ bool Table::isEqual(Table otherTable) {
     return true;
 }
 
-bool Table::isHeaderEmpty() {
+bool Table::isHeaderEmpty() const {
     return this->header.size() == 0;
 }
 
-bool Table::isBodyEmpty() {
+bool Table::isBodyEmpty() const {
     return this->rows.size() == 0;
 }
 
-Table Table::dupCol(int colIdx) {
+Table Table::dupCol(int colIdx, string dupColName) {
     if (colIdx >= this->header.size()) return Table();
-    const string DUP_COL_NAME = "$dup_col";
     Table resultTable = Table();
     resultTable.header = this->header;
     resultTable.rows = this->rows;
 
     //append the dup col to the right of the table
-    resultTable.header.push_back(DUP_COL_NAME);
+    resultTable.header.push_back(dupColName);
     for (int i = 0; i < this->rows.size() ; i++) {
         resultTable.rows[i].push_back(this->rows[i][colIdx]);
     }
