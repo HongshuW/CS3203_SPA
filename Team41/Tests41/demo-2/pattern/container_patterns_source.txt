@@ -1,7 +1,7 @@
 procedure firstProcedure {
     if (((x1 < 100) && (a1 >= 500)) || (b1 != c1)) then {
         if (x2 < x1) then {
-            if ((x3 < x2) || (x2 >= x3) || (x1 < x2)) then {
+            if ((x3 < x2) || ((x2 >= x3) || (x1 < x2))) then {
                 while ((x4 < 20) || (20 >= a4)) {
                     read x5;
                 }
