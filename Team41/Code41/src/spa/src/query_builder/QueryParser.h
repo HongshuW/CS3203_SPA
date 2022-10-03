@@ -37,6 +37,7 @@
 #include "query_builder/relations/pattern_relations/PatternRelations.h"
 #include "query_builder/relations/pattern_relations/AssignPattern.h"
 #include "query_builder/relations/pattern_relations/IfPattern.h"
+#include "query_builder/relations/pattern_relations/InvalidPattern.h"
 #include "query_builder/relations/pattern_relations/WhilePattern.h"
 #include <unordered_map>
 

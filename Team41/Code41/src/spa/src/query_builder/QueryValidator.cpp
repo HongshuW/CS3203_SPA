@@ -205,6 +205,16 @@ void QueryValidator::validateSynonymDeclaredPatternClause() {
     }
 }
 
+void QueryValidator::validateAllowedDesignEntityPatternClause() {
+    shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
+    for (const auto& patternClause : *patternClauses) {
+        if (dynamic_pointer_cast<InvalidPatternClause>(patternClause)) {
+            throw PQLValidationException(
+                    QueryValidatorConstants::PQL_VALIDATION_INVALID_SYNONYM_PATTERN);
+        }
+    }
+}
+
 void QueryValidator::validateArgRefTypePatternClause() const {
     //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
     shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses = query->patternClauses;
@@ -237,6 +247,8 @@ void QueryValidator::validateArg2DesignEntityPatternClause() const {
 void QueryValidator::validatePatternClause() {
     //! Validate synonym for arg1 and arg2 are declared
     validateSynonymDeclaredPatternClause();
+    //! Validate design entity for arg1 can only be assign, while and if
+    validateAllowedDesignEntityPatternClause();
     //! Validate the correct RefType for pattern clause arg2
     //! Should throw syntax error not semantic error
     validateArgRefTypePatternClause();
