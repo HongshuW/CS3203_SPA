@@ -31,6 +31,8 @@ namespace SourceParser {
         static const string RIGHT_BRACKET;
         static const string SEMICOLON;
 
+        static const char MINUS_CHAR;
+
         static const char DOUBLE_QUOTE_CHAR;
         static const char EQUAL_CHAR;
         static const char GREATER_THAN_CHAR;

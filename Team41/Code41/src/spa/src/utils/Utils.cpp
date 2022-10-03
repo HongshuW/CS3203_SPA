@@ -19,10 +19,19 @@ bool Utils::isValidName(string str) {
 }
 
 bool Utils::isValidNumber(string str) {
-    if (str[0] == '-' || (isdigit(str[0]) && isdigit(str[0]) != 0)) {
-        return str.substr(1, str.length()).find_first_not_of("0123456789") == std::string::npos;
+    if (str.empty()) return false;
+    if (str[0] == '-') {
+        //! Negative number
+        if (str.length() <= 1) return false;
+        if (str[1] == '0') return false;
+        for (int i = 1; i < str.length(); i++) {
+            if (!isdigit(str[i])) return false;
+        }
+        return true;
     } else {
-        return false;
+        //! Positive number
+        if (str[0] == '0' && str.length() > 1) return false;
+        return str.find_first_not_of("0123456789") == std::string::npos;
     }
 }
 
