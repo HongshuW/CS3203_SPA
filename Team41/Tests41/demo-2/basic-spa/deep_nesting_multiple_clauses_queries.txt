@@ -1,269 +1,404 @@
-1 - valid follows - one number one statement - select BOOLEAN
+1 - valid usesP - one procedure one variable, select procedure
+procedure p; variable v;
+Select p such that Uses(p, v)
+deepNesting, procedure29, procedure35, doesNotModify
+5000
+2 - valid usesP - one procedure one variable, select tuple
+procedure p; variable v;
+Select <p, v> such that Uses(p, v)
+deepNesting x1, deepNesting x2, deepNesting x3, deepNesting x4, deepNesting x5, deepNesting x6, deepNesting x7, deepNesting x8, deepNesting x9, deepNesting x10, deepNesting x11, deepNesting x12, deepNesting x13, deepNesting x14, deepNesting x15, deepNesting x16, deepNesting x17, deepNesting x18, deepNesting x19, deepNesting x20, deepNesting x21, deepNesting x22, deepNesting x26, deepNesting x29, deepNesting x32, deepNesting x37, deepNesting x40, procedure29 x1, procedure29 x2, procedure29 x3, procedure29 x4, procedure29 x40, procedure29 x5, procedure29 x6, procedure29 x17, procedure29 x29, procedure29 x32, procedure29 x37, procedure35 x2, procedure35 x3, procedure35 x4,procedure35 x5, procedure35 x17, procedure35 x37, procedure35 x40, doesNotModify x41
+5000
+3 - valid usesP - one procedure one IDENT select procedure
+procedure p;
+Select p such that Uses(p, "x3")
+deepNesting, procedure29, procedure35
+5000
+4 - valid usesP - one procedure one IDENT select procedure
+procedure p;
+Select p such that Uses(p, "x41")
+doesNotModify
+5000
+5 - valid usesP - one procedure one IDENT select procedure
+procedure p;
+Select p such that Uses(p, "x9")
+deepNesting
+5000
+6 - valid usesP - one call one variable, select call
+call c; variable v;
+Select c such that Uses(c, v)
+23, 35
+5000
+7 - valid usesP - one call one variable, select tuple
+call c; variable v;
+Select <c, v> such that Uses(c, v)
+23 x1, 23 x2, 23 x3, 23 x4, 23 x5, 23 x6, 23 x17, 23 x29, 23 x32, 23 x37, 23 x40, 35 x17, 35 x2, 35 x3, 35 x37, 35 x4, 35 x40, 35 x5
+5000
+8 - valid usesP - one call one IDENT select call
+call c;
+Select c such that Uses(c, "x3")
+23, 35
+5000
+9 - valid usesP - one call one IDENT select call
+call c;
+Select c such that Uses(c, "x41")
+none
+5000
+10 - valid usesP - one call one IDENT select call
+call c;
+Select c such that Uses(c, "x9")
+none
+5000
+11 - valid usesP - one number one IDENT select BOOLEAN
+Select BOOLEAN such that Uses(23, "x5")
+
+TRUE
+5000
+12 - valid usesP - two IDENT select BOOLEAN
+
+Select BOOLEAN such that Uses("procedure29", "x5")
+TRUE
+5000
+13 - valid modifiesP - one number one IDENT select BOOLEAN
+
+Select BOOLEAN such that Uses(23, "x41")
+FALSE
+5000
+14 - valid modifiesP - two IDENT select BOOLEAN
+
+Select BOOLEAN such that Uses("doesNotModify", "x41")
+TRUE
+5000
+15 - valid modifiesP - one procedure one variable select procedure
+procedure p; variable v;
+Select p such that Modifies(p, v)
+deepNesting, procedure29, procedure35
+5000
+16 - valid modifiesP - one procedure one variable select tuple
+procedure p; variable v;
+Select <p, v> such that Modifies(p, v)
+deepNesting x1, deepNesting x5, deepNesting x6, deepNesting x9, deepNesting x14, deepNesting x17, deepNesting x19, deepNesting x20, deepNesting x24, deepNesting x25, deepNesting x27, deepNesting x28, deepNesting x36, procedure29 x1, procedure29 x5, procedure29 x6, procedure29 x17, procedure29 x27, procedure29 x28, procedure29 x36, procedure35 x1, procedure35 x17, procedure35 x36
+5000
+17 - valid modifiesP - one procedure one IDENT select procedure
+procedure p;
+Select p such that Modifies(p, "x27")
+deepNesting, procedure29
+5000
+18 - valid modifiesP - one procedure one IDENT select procedure
+procedure p;
+Select p such that Modifies(p, "x9")
+deepNesting
+5000
+19 - valid modifiesP - one procedure one IDENT select procedure
+procedure p;
+Select p such that Modifies(p, "x36")
+deepNesting, procedure29, procedure35
+5000
+20 - valid modifiesP - one procedure one variable select call
+call c; variable v;
+Select c such that Modifies(c, v)
+23, 35
+5000
+21 - valid modifiesP - one procedure one variable select tuple
+call c; variable v;
+Select <c, v> such that Modifies(c, v)
+23 x1, 23 x5, 23 x6, 23 x17, 23 x27, 23 x28, 23 x36, 35 x1, 35 x17, 35 x36
+5000
+22 - valid modifiesP - one procedure one IDENT select call
+call c;
+Select c such that Modifies(c, "x1")
+23, 35
+5000
+23 - valid modifiesP - one procedure one IDENT select call
+call c;
+Select c such that Modifies(c, "x27")
+23
+5000
+24 - valid modifiesP - one procedure one IDENT select call
+call c;
+Select c such that Modifies(c, "x9")
+none
+5000
+25 - valid modifiesP - one procedure one IDENT select call
+call c;
+Select c such that Modifies(c, "x36")
+23, 35
+5000
+26 - valid modifiesP - one number one IDENT select BOOLEAN
+
+Select BOOLEAN such that Modifies(23, "x36")
+TRUE
+5000
+27 - valid modifiesP - two IDENT select BOOLEAN
+
+Select BOOLEAN such that Modifies("procedure29", "x36")
+TRUE
+5000
+28 - valid follows - one number one statement - select BOOLEAN
 stmt s; assign a; variable v;
 Select BOOLEAN such that Follows(10, s) pattern a(v, _)
 TRUE
 5000
-2 - valid follows - one number one statement - select tuple
+29 - valid follows - one number one statement - select tuple
 stmt s; assign a; variable v;
 Select <a, v> such that Follows(10, s) pattern a(v, _)
-5 x5, 6 x6, 9 x9, 17 x17, 19 x19, 20 x20, 24 x24, 25 x25, 27 x27, 28 x28
+5 x5, 6 x6, 9 x9, 17 x17, 19 x19, 20 x20, 24 x24, 25 x25, 27 x27, 28 x28, 30 x27, 33 x5, 34 x6, 38 x17, 39 x1
 5000
-3 - valid followsT - one number one statement - select BOOLEAN
+30 - valid followsT - one number one statement - select BOOLEAN
 stmt s; assign a; variable v;
 Select BOOLEAN such that Follows*(10, s) pattern a(v, _)
 TRUE
 5000
-4 - valid followsT - one number one statement - select tuple
+31 - valid followsT - one number one statement - select tuple
 stmt s; assign a; variable v;
 Select <a, v> such that Follows*(10, s) pattern a(v, _)
-5 x5, 6 x6, 9 x9, 17 x17, 19 x19, 20 x20, 24 x24, 25 x25, 27 x27, 28 x28
+5 x5, 6 x6, 9 x9, 17 x17, 19 x19, 20 x20, 24 x24, 25 x25, 27 x27, 28 x28, 30 x27, 33 x5, 34 x6, 38 x17, 39 x1
 5000
-5 - valid follows - one number one statement - select BOOLEAN
+32 - valid follows - one number one statement - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Follows(10, a) pattern a(v, _"x19"_)
 TRUE
 5000
-6 - valid follows - one number one statement - select tuple
+33 - valid follows - one number one statement - select tuple
 assign a; variable v;
 Select <a, v> such that Follows(10, a) pattern a(v, _"x19"_)
 19 x19
 5000
-7 - valid follows - one number one statement - select BOOLEAN
+34 - valid follows - one number one statement - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Follows(10, a) pattern a(v, "x19 * x19")
 TRUE
 5000
-8 - valid follows - one number one statement - select tuple
+35 - valid follows - one number one statement - select tuple
 assign a; variable v;
 Select <a, v> such that Follows(10, a) pattern a(v, "x19 * x19")
 19 x19
 5000
-9 - valid followsT - one number one statement - select BOOLEAN
+36 - valid followsT - one number one statement - select BOOLEAN
 stmt s; assign a; variable v;
 Select BOOLEAN such that Follows*(10, a) pattern a(v, _"x9 + x9"_)
 TRUE
 5000
-10 - valid followsT - one number one statement - select tuple
+37 - valid followsT - one number one statement - select tuple
 assign a; variable v;
 Select <a, v> such that Follows*(10, a) pattern a(v, _"x9 + x9"_)
 20 x20
 5000
-11 - valid modifies - one number one variable - select BOOLEAN
+38 - valid modifies - one number one variable - select BOOLEAN
 variable v; assign a;
 Select BOOLEAN such that Modifies(6, v) pattern a(v, _)
 TRUE
 5000
-12 - valid modifies - one number one variable - select tuple
+39 - valid modifies - one number one variable - select tuple
 stmt s; variable v; assign a;
 Select <a, v> such that Modifies(6, v) pattern a(v, _)
-6 x6
+6 x6, 34 x6
 5000
-13 - valid modifies - one statement one variable - select BOOLEAN
+40 - valid modifies - one statement one variable - select BOOLEAN
 variable v; assign a;
 Select BOOLEAN such that Modifies(1, v) pattern a(v, _)
 TRUE
 5000
-14 - valid modifies - one statement one variable - select tuple
+41 - valid modifies - one statement one variable - select tuple
 variable v; assign a;
 Select <a, v> such that Modifies(1, v) pattern a(v, _)
-5 x5, 6 x6, 9 x9, 17 x17, 19 x19, 20 x20, 24 x24, 25 x25, 27 x27, 28 x28
+5 x5, 6 x6, 9 x9, 17 x17, 19 x19, 20 x20, 24 x24, 25 x25, 27 x27, 28 x28, 30 x27, 33 x5, 34 x6, 38 x17, 39 x1
 5000
-15 - valid modifies - one statement one variable - select BOOLEAN
+42 - valid modifies - one statement one variable - select BOOLEAN
 stmt s; variable v; assign a;
 Select BOOLEAN such that Modifies(s, v) pattern a(v, _"x9 * 2"_)
 FALSE
 5000
-16 - valid modifies - one statement one variable - select tuple
+43 - valid modifies - one statement one variable - select tuple
 stmt s; variable v; assign a;
 Select <s, v> such that Modifies(s, v) pattern a(v, _"x9 * 2"_)
 none
 5000
-16 - valid modifies - one statement one variable - select tuple
+44 - valid modifies - one statement one variable - select tuple
 stmt s; variable v; assign a;
 Select <a, v> such that Modifies(s, v) pattern a(v, _"x9 * 2"_)
 none
 5000
-16 - valid modifies - one statement one variable - select tuple
+45 - valid modifies - one statement one variable - select tuple
 stmt s; variable v; assign a;
 Select <a, s> such that Modifies(s, v) pattern a(v, _"x9 * 2"_)
 none
 5000
-17 - valid modifies - one assign one variable - select BOOLEAN
+46 - valid modifies - one assign one variable - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Modifies(a, v) pattern a(v, "10")
 TRUE
 5000
-18 - valid modifies - one assign one variable - select tuple
+47 - valid modifies - one assign one variable - select tuple
 assign a; variable v;
 Select <a, v> such that Modifies(a, v) pattern a(v, "10")
 25 x25
 5000
-19 - valid parent - two statements - select BOOLEAN
+48 - valid parent - two statements - select BOOLEAN
 stmt s, s2; assign a; variable v;
 Select BOOLEAN such that Parent(s, s2) pattern a(v, _)
 TRUE
 5000
-20 - valid parent - two statements - select statement
+49 - valid parent - two statements - select statement
 stmt s, s2; assign a; variable v;
 Select s such that Parent(s, s2) pattern a(v, _)
-1, 2, 3, 4, 7, 8, 10, 12, 15, 16, 21
+1, 2, 3, 4, 7, 8, 10, 12, 15, 16, 21, 32, 37
 5000
-20 - valid parent - two statements - select statement
+50 - valid parent - two statements - select statement
 stmt s, s2; assign a; variable v;
 Select s2 such that Parent(s, s2) pattern a(v, _)
-2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 33, 34, 38
 5000
-21 - valid parent - one number one assign - select BOOLEAN
+51 - valid parent - one number one assign - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Parent(4, a) pattern a(v, _)
 TRUE
 5000
-22 - valid parent - one number one assign - select tuple
+52 - valid parent - one number one assign - select tuple
 assign a; variable v;
 Select <a, v> such that Parent(4, a) pattern a(v, _)
 5 x5, 6 x6
 5000
-23 - valid parent - one number one assign - select BOOLEAN
+53 - valid parent - one number one assign - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Parent(4, a) pattern a(v, _"5"_)
 TRUE
 5000
-24 - valid parent - one number one assign - select tuple
+54 - valid parent - one number one assign - select tuple
 assign a; variable v;
 Select <a, v> such that Parent(4, a) pattern a(v, _"5"_)
 5 x5
 5000
-25 - valid parent - one number one assign, select BOOLEAN
+55 - valid parent - one number one assign, select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Parent(2, a) pattern a(v, "x18 / 2")
 FALSE
 5000
-26 - valid parent - one number one assign, select tuple
+56 - valid parent - one number one assign, select tuple
 assign a; variable v;
 Select <a, v> such that Parent(2, a) pattern a(v, "x18 / 2")
 none
 5000
-27 - valid parent* - one number one assign - select BOOLEAN
+57 - valid parent* - one number one assign - select BOOLEAN
 stmt s; assign a; variable v;
 Select BOOLEAN such that Parent*(4, a) pattern a(v, _)
 TRUE
 5000
-28 - valid parent* - one number one assign - select tuple
+58 - valid parent* - one number one assign - select tuple
 stmt s; assign a; variable v;
 Select <a, v> such that Parent*(4, a) pattern a(v, _)
 5 x5, 6 x6, 9 x9, 17 x17, 19 x19, 20 x20, 24 x24
 5000
-29 - valid parent* - one number one assign - select BOOLEAN
+59 - valid parent* - one number one assign - select BOOLEAN
 stmt s; assign a; variable v;
 Select BOOLEAN such that Parent*(4, a) pattern a(v, _"x9 + x9"_)
 TRUE
 5000
-30 - valid parent* - one number one assign - select tuple
+60 - valid parent* - one number one assign - select tuple
 stmt s; assign a; variable v;
 Select <a, v> such that Parent*(4, a) pattern a(v, _"x9 + x9"_)
 20 x20
 5000
-31 - valid parent* - one number one assign, select BOOLEAN
+61 - valid parent* - one number one assign, select BOOLEAN
 stmt s; assign a; variable v;
 Select BOOLEAN such that Parent*(4, a) pattern a(v, "10")
 FALSE
 5000
-32 - valid parent* - one number one assign, select tuple
+62 - valid parent* - one number one assign, select tuple
 stmt s; assign a; variable v;
 Select <a, v> such that Parent*(4, a) pattern a(v, "10")
 none
 5000
-33 - valid parent* - one number one assign, select BOOLEAN
+63 - valid parent* - one number one assign, select BOOLEAN
 stmt s; assign a; variable v;
 Select BOOLEAN such that Parent*(4, a) pattern a("x19", _)
 TRUE
 5000
-34 - valid parent* - one number one assign, select tuple
+64 - valid parent* - one number one assign, select tuple
 stmt s; assign a; variable v;
 Select <a> such that Parent*(4, a) pattern a("x19", _)
 19
 5000
-35 - valid parent* - one number one assign, select BOOLEAN
+65 - valid parent* - one number one assign, select BOOLEAN
 stmt s; assign a; variable v;
 Select BOOLEAN such that Parent*(4, a) pattern a("x20", _"x900 + x900"_)
 FALSE
 5000
-36 - valid parent* - one number one assign, select tuple
+66 - valid parent* - one number one assign, select tuple
 stmt s; assign a; variable v;
 Select <a> such that Parent*(4, a) pattern a("x20", _"x900 + x900"_)
 none
 5000
-37 - valid uses - one number one variable - select BOOLEAN
+67 - valid uses - one number one variable - select BOOLEAN
 stmt s; variable v; assign a;
 Select BOOLEAN such that Uses(8, v) pattern a(v, _)
 TRUE
 5000
-38 - valid uses - one number one variable - select tuple
+68 - valid uses - one number one variable - select tuple
 stmt s; variable v; assign a;
 Select <a, v> such that Uses(8, v) pattern a(v, _)
-9 x9, 19 x19, 20 x20
+5 x5, 33 x5, 6 x6, 34 x6, 17 x17, 9 x9, 19 x19, 20 x20, 39 x1, 38 x17
 5000
-39 - valid uses - one statement one variable - select BOOLEAN
+69 - valid uses - one statement one variable - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Uses(3, v) pattern a(v, _)
 TRUE
 5000
-40 - valid uses - one statement one variable - select tuple
+70 - valid uses - one statement one variable - select tuple
 assign a; variable v;
 Select <a, v> such that Uses(3, v) pattern a(v, _)
-5 x5, 6 x6, 9 x9, 19 x19, 20 x20
+5 x5, 33 x5, 6 x6, 34 x6, 17 x17, 9 x9, 19 x19, 20 x20, 39 x1, 38 x17
 5000
-41 - valid uses - one statement one IDENT - select BOOLEAN
+71 - valid uses - one statement one IDENT - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Uses(a, "x1") pattern a(v, "5 * 5 + x1")
 FALSE
 5000
-42 - valid uses - one statement one IDENT - select tuple
+72 - valid uses - one statement one IDENT - select tuple
 assign a; variable v;
 Select <a, v> such that Uses(a, "x1") pattern a(v, "5 * 5 + x1")
 none
 5000
-43 - valid uses - one assign one variable - select BOOLEAN
+73 - valid uses - one assign one variable - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Uses(a, v) pattern a (v, _"x5 * 2 + x4"_)
 FALSE
 5000
-44 - valid uses - one assign one variable - select tuple
+74 - valid uses - one assign one variable - select tuple
 assign a; variable v;
 Select <a, v> such that Uses(a, v) pattern a (v, _"x5 * 2 + x4"_)
 none
 5000
-45 - valid uses - one assign one variable - select BOOLEAN
+75 - valid uses - one assign one variable - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Uses(a, v) pattern a ("x27", _)
 TRUE
 5000
-46 - valid uses - one assign one variable - select tuple
+76 - valid uses - one assign one variable - select tuple
 assign a; variable v;
 Select <a, v> such that Uses(a, v) pattern a ("x27", _)
-27 x1, 27 x2
+27 x1, 27 x2, 30 x1, 30 x2
 5000
-47 - valid uses - one assign one variable - select BOOLEAN
+77 - valid uses - one assign one variable - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Uses(a, v) pattern a ("x20", _"x9 * 2"_)
 FALSE
 5000
-48 - valid uses - one assign one variable - select tuple
+78 - valid uses - one assign one variable - select tuple
 assign a; variable v;
 Select <a, v> such that Uses(a, v) pattern a ("x20", _"x9 * 2"_)
 none
 5000
-49 - valid uses - one assign one variable - select BOOLEAN
+79 - valid uses - one assign one variable - select BOOLEAN
 assign a; variable v;
 Select BOOLEAN such that Uses(a, v) pattern a (v, _"x900"_)
 FALSE
 5000
-50 - valid uses - one assign one variable - select tuple
+80 - valid uses - one assign one variable - select tuple
 assign a; variable v;
 Select <a, v> such that Uses(a, v) pattern a (v, _"x900"_)
 none
 5000
-51 - milestone 1 bugs
+1 - milestone 1 bugs
 assign a;
 Select a pattern a(_, _" +temp"_)
 SyntaxError
