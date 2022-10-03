@@ -40,6 +40,7 @@ namespace SourceParser {
         void processSymbols();
         void processString();
         void processAlNum();
+        void processDigit();
         bool match(char s);
 
     public:
