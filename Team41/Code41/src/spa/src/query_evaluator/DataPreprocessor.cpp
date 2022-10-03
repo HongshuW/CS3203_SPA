@@ -153,7 +153,7 @@ namespace QE {
                 //get two identical cols with different names
                 table = table.dupCol(FIRST_COL_IDX);
                 table.renameHeader({attrRef.synonym.synonym, attrRef.toString()});
-                resultTable = TableCombiner().crossProduct(table, resultTable);
+                resultTable = TableCombiner().crossProduct( resultTable, table);
 
                 //since two cols are identical, compare either is alright
                 comparedCols.push_back(colOffSet);
@@ -167,7 +167,7 @@ namespace QE {
                 if (designEntity == QB::DesignEntity::PRINT) intermediateTable = dataRetriever->getPrintVariableNames();
 
                 intermediateTable.renameHeader({attrRef.synonym.synonym, attrRef.toString()});
-                resultTable = TableCombiner().crossProduct(intermediateTable, resultTable);
+                resultTable = TableCombiner().crossProduct( resultTable, intermediateTable);
 
                 //compare the second col which is the attribute value
                 comparedCols.push_back(colOffSet + ATTR_NAME_COL_INX);
