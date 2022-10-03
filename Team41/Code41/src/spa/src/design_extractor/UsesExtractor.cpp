@@ -139,7 +139,10 @@ namespace DE {
 
             // if the procedures has call nodes, handle them
             if (mappedCallNodesToProcedures.count(procedureName) != 0) {
-                auto callNodes = mappedCallNodesToProcedures.at(procedureName);
+                vector<shared_ptr<CallNode>> callNodes = vector<shared_ptr<CallNode>>();
+                if (mappedCallNodesToProcedures.count(procedureName)) {
+                    callNodes = mappedCallNodesToProcedures.at(procedureName);
+                }
                 for (auto node : callNodes) {
                     EntityExtractor::extractVariablesFromCallNodesInProceduresToList(
                         node,
