@@ -40,7 +40,7 @@ namespace TestAST {
        * procedure3 {
        * 1 print x
        * 2 read y
-       * 3 if (bar == y + 112312341234) then {
+       * 3 if (bar == y + 1123) then {
        * 4     call procedure3;
        * 5     print z
        *   } else {
@@ -110,7 +110,7 @@ namespace TestAST {
 
         auto rhs_p4 = make_shared<ExprNode>("+");
         rhs_p4->left = make_shared<ExprNode>("y");
-        rhs_p4->right = make_shared<ExprNode>("112312341234");
+        rhs_p4->right = make_shared<ExprNode>("1123");
         shared_ptr<CondExprNode> ifCondExpr_p4 = make_shared<CondExprNode>(make_shared<RelExprNode>(make_shared<ExprNode>("bar"), "==",
                                                                                                     rhs_p4));
         auto if_p4 = make_shared<IfNode>(ifCondExpr_p4, statementList_p4, elseStatementList_p4);
