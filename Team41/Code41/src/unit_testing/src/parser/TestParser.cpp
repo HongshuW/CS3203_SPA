@@ -266,4 +266,44 @@ TEST_CASE("Test SP Parser") {
         Parser parser = Parser(tokens);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
+
+    SECTION("Negative number, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "-", "99", ";", "while", "(", "x", "<", "-", "100",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid number in assign statement, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "0123", ";", "while", "(", "x", "<", "100",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid name in assign statement, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "123x", "=", "123", ";", "while", "(", "x", "<", "100",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid number in assign condExpr, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "123", ";", "while", "(", "x", "<", "0123",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid name in assign condExpr, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "123", ";", "while", "(", "123x", "<", "123",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
 }

@@ -31,8 +31,6 @@ namespace SourceParser {
         static const string RIGHT_BRACKET;
         static const string SEMICOLON;
 
-        static const char MINUS_CHAR;
-
         static const char DOUBLE_QUOTE_CHAR;
         static const char EQUAL_CHAR;
         static const char GREATER_THAN_CHAR;
@@ -42,8 +40,8 @@ namespace SourceParser {
         static const char BAR_CHAR;
 
         static const string UNEXPECTED_TOKEN_MESSAGE;
-
-
+        static const string INVALID_NAME;
+        static const string INVALID_NUMBER;
     };
 
 } // SourceParser

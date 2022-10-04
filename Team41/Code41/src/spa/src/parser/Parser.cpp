@@ -262,9 +262,15 @@ shared_ptr<VariableNode> Parser::parseVariableNode() {
 
 shared_ptr<ExprNode> Parser::parseExprNode() {
     vector<string> expr;
-    expr.push_back(pop());
     while (peek() != ParserConstants::SEMICOLON) {
-        expr.push_back(pop());
+        string curr = pop();
+        if (Utils::isBracket(curr) || Utils::isMathOperators(curr) ||
+            Utils::isValidName(curr) || Utils::isValidNumber(curr)) {
+            //! We need to ensure all tokens are valid before passing to the ExprNodeParser
+            expr.push_back(curr);
+        } else {
+            throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_INVALID_TOKEN_EXPR);
+        }
     }
     if (expr.empty()) {
         throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_ASSIGN_STMT_RHS_EMPTY);

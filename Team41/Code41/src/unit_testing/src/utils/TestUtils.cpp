@@ -67,7 +67,7 @@ TEST_CASE("Test TestUtils") {
 
     SECTION("-123") {
         bool isValid = Utils::isValidNumber("-123");
-        REQUIRE(isValid == true);
+        REQUIRE(isValid == false);
     }
 
     SECTION("c") {
