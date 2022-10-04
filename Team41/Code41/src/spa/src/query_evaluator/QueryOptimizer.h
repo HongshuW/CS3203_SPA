@@ -5,26 +5,41 @@
 #ifndef SPA_QUERYOPTIMIZER_H
 #define SPA_QUERYOPTIMIZER_H
 #include <unordered_set>
-#include "query_builder/clauses/AbstractClause.h"
+#include "query_builder/clauses/ConditionalClause.h"
 #include "query_builder/commons/Query.h"
 
 using namespace  std;
 namespace QE {
-
+    typedef shared_ptr<unordered_map<int, shared_ptr<vector<shared_ptr<ConditionalClause>>>>> ConnectedClauseGroups;
     class QueryOptimizer {
+
+
         shared_ptr<Query> query;
         int clauseCount;
         vector<int> parent;
         vector<pair<int, int>> edges;
-        unordered_map<shared_ptr<AbstractClause>, int> clauseIdMap;
+        unordered_map<shared_ptr<ConditionalClause>, int> clauseIdMap;
+        unordered_map<int, shared_ptr<ConditionalClause>> idClauseMap;
 
         void initParent();
-        void initclauseIdMap();
+        void initMaps();
         void initEdges();
+
+        bool hasCommonSyn(shared_ptr<ConditionalClause> clause1, shared_ptr<ConditionalClause> clause2);
+
+        int root(int clause);
+        int connect(int clause1, int clause2);
+
+
+        void processEdges();
+        ConnectedClauseGroups getConnectedGroups();
+        ConnectedClauseGroups optimiseSubGroups(ConnectedClauseGroups ccg);
 
     public:
         explicit QueryOptimizer(shared_ptr<Query> query);
-        unordered_set<shared_ptr<AbstractClause>> optimise();
+        ConnectedClauseGroups optimise();
+        void connectedComponents();
+        static const int NO_SYN_GROUP_IDX;
     };
 
 } // QE

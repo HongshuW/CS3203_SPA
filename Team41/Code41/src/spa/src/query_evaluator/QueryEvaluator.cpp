@@ -4,9 +4,7 @@
 
 #include "QueryEvaluator.h"
 #include "query_builder/commons/Query.h"
-#include "query_evaluator/QueryResult.h"
 #include "TableCombiner.h"
-#include "QueryBooleanResult.h"
 #include "QueryTupleResult.h"
 #include <algorithm>
 #include <vector>
@@ -15,6 +13,7 @@
 #include "constants/ClauseVisitorConstants.h"
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 #include "ConcreteClauseVisitor.h"
+#include "QueryOptimizer.h"
 
 using namespace QB;
 using namespace QE;
@@ -49,27 +48,32 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
     }
 
     TableCombiner tableCombiner = TableCombiner();
-    Table resultTable;
-    for (const auto& stClause: *query->suchThatClauses) {
-        Table intermediateTable = stClause->accept(concreteClauseVisitor);
+    const string DUMMY_HEADER = "$dummy_header";
+    const string DUMMY_VALUE = "$dummy_value";
+    Table resultTable = Table();
+    resultTable.renameHeader({DUMMY_HEADER}) ;
+    resultTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+
+    shared_ptr<QueryOptimizer> queryOptimizer = make_shared<QueryOptimizer>(query);
+    ConnectedClauseGroups ccg = queryOptimizer->optimise();
+
+    //first evaluate group of clauses without synonyms, and dont have to join table
+    for (auto noSynClause: *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
+        Table intermediateTable = noSynClause->accept(concreteClauseVisitor);
         if (intermediateTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-        resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
-        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
     }
+    ccg->erase(QueryOptimizer::NO_SYN_GROUP_IDX);
 
-    for (const auto& patternClause: *query->patternClauses) {
-
-        Table intermediateTable = patternClause->accept(concreteClauseVisitor);;
-        if (intermediateTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-        resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
-        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-    }
-
-    //all conditions must be valid at this point
-    for (const auto& withClause: *query->withClauses) {
-        Table intermediateTable = withClause->accept(concreteClauseVisitor);
-        //intermediate table return an empty table if there is no synonym in with clause
-        resultTable = tableCombiner.joinTable(intermediateTable, resultTable);
+    for (auto it: *ccg) {
+        //eval each subgroup
+        Table subGroupResultTable;
+        for (auto subGroupClause: *it.second) {
+            Table intermediateTable = subGroupClause->accept(concreteClauseVisitor);
+            if (intermediateTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
+            subGroupResultTable = tableCombiner.joinTable( intermediateTable, subGroupResultTable);
+            if (subGroupResultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
+        }
+        resultTable = tableCombiner.joinTable(subGroupResultTable, resultTable);
         if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
     }
 
