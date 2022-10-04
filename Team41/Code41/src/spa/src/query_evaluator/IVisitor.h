@@ -13,6 +13,7 @@ namespace QB {
     class IfPatternClause;
     class WhilePatternClause;
     class AssignPatternClause;
+    class InvalidPatternClause;
     class WithClause;
     class FollowsClause;
     class FollowsTClause;
@@ -37,6 +38,7 @@ public:
     virtual Table visit(shared_ptr<QB::IfPatternClause> ifPatternClause) = 0;
     virtual Table visit(shared_ptr<QB::WhilePatternClause> whilePatternClause) = 0;
     virtual Table visit(shared_ptr<QB::AssignPatternClause> assignPatternClause) = 0;
+    virtual Table visit(shared_ptr<QB::InvalidPatternClause> invalidPatternClause) = 0;
     virtual Table visit(shared_ptr<QB::WithClause> withClause) = 0;
     virtual Table visit(shared_ptr<QB::FollowsClause> followsClause) = 0;
     virtual Table visit(shared_ptr<QB::FollowsTClause> followsTClause) = 0;

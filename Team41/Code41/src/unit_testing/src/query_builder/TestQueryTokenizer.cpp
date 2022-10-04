@@ -423,6 +423,21 @@ TEST_CASE ("Test Query Tokenizer") {
                            }));
     }
 
+    SECTION ("procedure p; Select p with -9999 = -9999") {
+        std::string query = "procedure p; Select p with -9999 = -9999";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        auto tokens = tokenizer.tokenize();
+        auto expected = std::vector<std::string>(
+                {"procedure", "p", ";", "Select", "p", "with", "-9999", "=", "-9999"});
+
+        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
+                           end(expected),
+                           [](const std::string l, const std::string o) {
+                               return l.compare(o) == 0;
+                           }));
+    }
+
     SECTION ("Test unexpected tokens") {
         std::string query = "stmt s& Select s such that Follows* (a, 6)";
         QueryTokenizer tokenizer = QueryTokenizer(query);

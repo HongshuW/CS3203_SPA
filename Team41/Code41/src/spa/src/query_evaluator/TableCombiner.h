@@ -16,8 +16,8 @@ namespace QE {
         vector<vector<int>> findDuplicateHeaders(vector<string> h1, vector<string> h2);
 
     public:
-        Table crossProduct(Table t1, Table t2);
-        Table joinTable(Table t1, Table t2);
+        Table crossProduct(const Table &t1, const Table &t2);
+        Table joinTable(const Table &t1, const Table &t2);
 
 
     };

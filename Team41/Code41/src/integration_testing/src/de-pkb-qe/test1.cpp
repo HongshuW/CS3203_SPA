@@ -2,7 +2,7 @@
 // Created by Nafour on 2/10/22.
 //
 #include "catch.hpp"
-#include "/Users/nafour/Desktop/Y3S1/CS3203/22s1-cp-spa-team-41/Team41/Code41/src/unit_testing/src/design_extractor/Dummies.h"
+#include "../../../unit_testing/src/design_extractor/Dummies.h"
 #include "design_extractor/DesignExtractor.h"
 #include "pkb/PKBStorage.h"
 #include "pkb/DataRetriever.h"

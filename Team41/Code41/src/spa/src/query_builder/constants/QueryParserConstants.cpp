@@ -32,4 +32,5 @@ namespace QB {
      const string QueryParserConstants:: PQL_PARSE_EXCEPTION_SYNONYM_NOT_DECLARED = "Synonym is not declared for Pattern Clause: ";
      const string QueryParserConstants:: PQL_PARSE_EXCEPTION_NOT_SUPPORTED_PATTERN = " is not supported for Pattern Clause";
      const string QueryParserConstants:: PQL_PARSE_EXCEPTION_EXPECT_SUCH_THAT_OR_PATTERN = "such that or pattern clause";
+     const string QueryParserConstants:: PQL_PARSE_EXCEPTION_INVALID_PATTERN_SYNTAX = "Invalid syntax for pattern clause";
 } // QB

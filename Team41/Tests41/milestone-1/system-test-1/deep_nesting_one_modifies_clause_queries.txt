@@ -41,17 +41,17 @@ Select s such that Modifies(s, "x9")
 7 - valid modifies - one procedure one variable - select procedure [not implemented yet, all return none]
 procedure p; variable v;
 Select p such that Modifies(p, v)
-none
+deepNesting
 5000
 8 - valid modifies - one procedure one variable - select variable
 procedure p; variable v;
 Select v such that Modifies(p, v)
-none
+x5, x6, x9, x14, x17, x19, x20, x24, x25, x27, x28
 5000
 9 - valid modifies - one procedure one _ - select procedure
 procedure p;
 Select p such that Modifies(p, _)
-none
+deepNesting
 5000
 10 - valid modifies - one procedure one IDENT - select statement
 procedure p; stmt s;

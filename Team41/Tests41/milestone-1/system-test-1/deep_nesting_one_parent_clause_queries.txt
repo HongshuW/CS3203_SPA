@@ -246,12 +246,12 @@ Select s such that Parent*(2, a)
 49 - valid parent* - one number one call, select call
 stmt s; call c;
 Select c such that Parent*(2, c)
-23
+none
 5000
 50 - valid parent* - one number one print, select print
 stmt s; print p;
 Select p such that Parent*(2, p)
-11, 13, 18, 22, 26
+11, 13, 18, 22, 23, 26
 5000
 51 - valid parent* - one number one read, select read
 stmt s; read r;

@@ -14,10 +14,6 @@ bool IfPatternClause::operator==(const IfPatternClause &other) const {
            && arg2 == clause->arg2;
 }
 
-Clause IfPatternClause::asClauseVariant() {
-    return shared_from_this();
-}
-
 Table IfPatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }

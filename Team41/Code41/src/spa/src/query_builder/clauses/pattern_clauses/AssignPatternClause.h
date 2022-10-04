@@ -26,7 +26,6 @@ namespace QB {
         AssignPatternClause(Synonym arg1, Ref arg2);
 
         bool operator==(const AssignPatternClause &other) const;
-        Clause asClauseVariant() override;
         Table accept(shared_ptr<IVisitor> visitor) override;
         unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
     };

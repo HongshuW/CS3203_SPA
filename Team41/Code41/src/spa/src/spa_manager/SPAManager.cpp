@@ -46,7 +46,7 @@ vector<string> SPAManager::evaluate(string& query) {
         string errorMessage = "SemanticError";
         results.push_back(errorMessage);
     } catch (std::exception& e) {
-        string errorMessage = "SyntaxError";
+        string errorMessage = e.what();
         results.push_back(errorMessage);
     }
     return results;

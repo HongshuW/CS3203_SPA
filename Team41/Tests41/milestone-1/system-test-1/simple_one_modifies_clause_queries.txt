@@ -31,22 +31,22 @@ Select s such that Modifies(s, "x1")
 7 - valid modifies - one procedure one variable - select procedure [not implemented yet, all return none]
 procedure p; variable v;
 Select p such that Modifies(p, v)
-none
+simpleProcedure
 5000
 8 - valid modifies - one procedure one variable - select variable
 procedure p; variable v;
 Select v such that Modifies(p, v)
-none
+x1,x3,x6,x7,x8,x9
 5000
 9 - valid modifies - one procedure one _ - select procedure
 procedure p;
 Select p such that Modifies(p, _)
-none
+simpleProcedure
 5000
 10 - valid modifies - one procedure one IDENT - select statement
 procedure p;
 Select p such that Modifies(p, "x1")
-none
+simpleProcedure
 5000
 11 - valid modifies - one statement one variable - select statement [statement]
 stmt s; variable v;

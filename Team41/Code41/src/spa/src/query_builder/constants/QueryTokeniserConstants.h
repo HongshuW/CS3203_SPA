@@ -22,6 +22,7 @@ namespace QB {
         static const char HASH;
         static const char STAR;
         static const char DOUBLE_QUOTE_CHAR;
+        static const char MINUS;
 
         static const string PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN;
         static const string QPL_EXPR_STRING_INVALID_PARENTHESES;

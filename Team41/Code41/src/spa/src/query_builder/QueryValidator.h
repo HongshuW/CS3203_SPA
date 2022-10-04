@@ -15,6 +15,7 @@
 #include "query_builder/clauses/such_that_clauses/UsesPClause.h"
 #include "query_builder/clauses/such_that_clauses/UsesSClause.h"
 #include "query_builder/clauses/such_that_clauses/Validatable.h"
+#include "query_builder/clauses/pattern_clauses/InvalidPatternClause.h"
 #include <unordered_set>
 
 using namespace std;
@@ -37,6 +38,7 @@ namespace QB {
         void checkCorrectDesignEntity(Synonym synonym, const unordered_set<DesignEntity>& validSynonymTypes,
                                       const shared_ptr<vector<Declaration>>& declarations);
         void validateSynonymDeclaredPatternClause();
+        void validateAllowedDesignEntityPatternClause();
         void validateArgRefTypePatternClause() const;
         void validateArg2DesignEntityPatternClause() const;
         void validatePatternClause();

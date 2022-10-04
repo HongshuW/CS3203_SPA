@@ -598,6 +598,38 @@ TEST_CASE ("Test Query Parser") {
                 WithClause(lhs, rhs));
     }
 
+    SECTION ("stmt BOOLEAN; Select BOOLEAN with -123 = -123") {
+        std::string queryStr = "stmt BOOLEAN; Select BOOLEAN with -123 = -123";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::STMT, Synonym("BOOLEAN"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("BOOLEAN"));
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(query->withClauses->size() == 1);
+        REQUIRE(*(query->withClauses)->at(0) ==
+                WithClause(-123, -123));
+    }
+
+    SECTION ("constant c; Select c with c.value = 1") {
+        std::string queryStr = "constant c; Select c with c.value = 1";
+        auto query = queryBuilder->buildPQLQuery(queryStr);
+        REQUIRE(query->declarations->size() == 1);
+        REQUIRE(*(query->declarations) ==
+                std::vector<Declaration>{
+                        Declaration(DesignEntity::CONSTANT, Synonym("c"))});
+        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
+        returnResults->push_back(Synonym("c"));
+        REQUIRE(*(query->selectClause) ==
+                SelectClause(ReturnType::TUPLE, returnResults));
+        REQUIRE(query->withClauses->size() == 1);
+        REQUIRE(*(query->withClauses)->at(0) ==
+                WithClause(AttrRef(Synonym("c"), AttrName::VALUE), 1));
+    }
+
     SECTION ("'select' is not defined, throw PQLParseException") {
         std::string queryStr = "variable v; select v";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
@@ -660,11 +692,6 @@ TEST_CASE ("Test Query Parser") {
 
     SECTION ("Invalid expression (synonym), throw PQLParseException") {
         std::string queryStr = "assign a, Select a pattern a (_, x)";
-        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
-    }
-
-    SECTION ("Invalid Design Entity type of argument 1 in Pattern Clause, throw PQLParseException") {
-        std::string queryStr = "variable a; Select a pattern a (_, _)";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
     }
 

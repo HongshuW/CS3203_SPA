@@ -17,9 +17,7 @@ class DataRetriever {
 public:
     explicit DataRetriever(shared_ptr<PKBStorage> pkbStorage);
 
-    virtual Table getVariables();
     virtual Table getTableByDesignEntity(DesignEntity designEntity);
-//    virtual Table getTableByRelationType(RelationType relationType);
     virtual Table getFollowsTable();
     virtual Table getFollowsTTable();
     virtual Table getParentTable();
@@ -34,11 +32,9 @@ public:
     virtual Table getNextTTable();
     virtual Table getAffectsTable();
     virtual Table getAffectsTTable();
-//    virtual Table getTableByExprPattern(ExpressionSpec expressionSpec);
     virtual Table getAssignPatternTable(ExpressionSpec expressionSpec);
     virtual Table getIfPatternTable();
     virtual Table getWhilePatternTable();
-//    Table getTableByCondExprPattern(DesignEntity designEntity);
     Table getCallsProcedureNames();
     Table getPrintVariableNames();
     Table getReadVariableNames();
@@ -46,6 +42,8 @@ public:
     unordered_set<string> getFollowingStatements(int followedStatement);
     unordered_set<string> getChildrenStatements(int parentStatement);
     unordered_set<string> getModifiedVariables(int modifierStatement);
+
+    void clearCache();
 
 private:
     shared_ptr<PKBStorage> pkbStorage;

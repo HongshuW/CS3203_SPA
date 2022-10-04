@@ -243,6 +243,9 @@ void QueryParser::parsePatternClause() {
     DesignEntity de = declaration->getDesignEntity();
     Ref arg2 = parseRef();
     expect(QueryParserConstants::COMMA);
+    const unordered_set<DesignEntity> ALLOWED_DE = {
+            DesignEntity::IF, DesignEntity::WHILE, DesignEntity::ASSIGN
+    };
     const unordered_map<DesignEntity, shared_ptr<PatternRelations>> PATTERN_CREATORS({
         {DesignEntity::IF, make_shared<IfPattern>()},
         {DesignEntity::WHILE, make_shared<WhilePattern>()},
@@ -251,12 +254,11 @@ void QueryParser::parsePatternClause() {
 
     //! Default patternClauseCreator, will change later
     shared_ptr<PatternRelations> patternClauseCreator = make_shared<PatternRelations>();
-    try {
+    if (ALLOWED_DE.count(de)) {
         patternClauseCreator = PATTERN_CREATORS.at(de);
-    } catch (const std::out_of_range& oor) {
-        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                QueryParserConstants::PQL_PARSE_EXCEPTION_EXPECT_EXPRESSION, peek());
-        throw PQLParseException(errorMessage);
+    } else {
+        //! Throw error in Validator
+        patternClauseCreator = make_shared<InvalidPattern>();
     }
 
     auto patternClause = dynamic_pointer_cast<PatternClause>(patternClauseCreator->createClause(arg1, arg2));

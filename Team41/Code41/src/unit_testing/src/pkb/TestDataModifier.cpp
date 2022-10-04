@@ -15,7 +15,7 @@ TEST_CASE("Test Data Modifier") {
     SECTION ("Save variables") {
         list<string> variables{"dummyVarX", "dummyVarY", "dummyVarZ"};
 
-        int initialSize = pkbStorage->getVariables()->rows.size();
+        pkbStorage->getVariables()->dropRows();
         dataModifier.saveVariables(variables);
         VariableTable * variableTable = pkbStorage->getVariables();
 
@@ -23,9 +23,9 @@ TEST_CASE("Test Data Modifier") {
         REQUIRE(variableTable->header[0] == "$variable_name");
 
         // check variables are added
-        REQUIRE(variableTable->rows[initialSize][0] == "dummyVarX");
-        REQUIRE(variableTable->rows[initialSize + 1][0] == "dummyVarY");
-        REQUIRE(variableTable->rows[initialSize + 2][0] == "dummyVarZ");
+        REQUIRE(variableTable->rows[0][0] == "dummyVarX");
+        REQUIRE(variableTable->rows[1][0] == "dummyVarY");
+        REQUIRE(variableTable->rows[2][0] == "dummyVarZ");
     }
 
     SECTION ("Save statements") {
@@ -35,7 +35,7 @@ TEST_CASE("Test Data Modifier") {
         statements.push_back(s1);
         statements.push_back(s2);
 
-        int initialSize = pkbStorage->getStatements()->rows.size();
+        pkbStorage->getStatements()->dropRows();
         dataModifier.saveStatements(statements);
         shared_ptr<Table> statementTable = pkbStorage->getStatements();
 
@@ -44,10 +44,10 @@ TEST_CASE("Test Data Modifier") {
         REQUIRE(statementTable->header[1] == "$statement_type");
 
         // check statements are added
-        REQUIRE(statementTable->rows[initialSize][0] == "3");
-        REQUIRE(statementTable->rows[initialSize][1] == "assign");
-        REQUIRE(statementTable->rows[initialSize + 1][0] == "4");
-        REQUIRE(statementTable->rows[initialSize + 1][1] == "if");
+        REQUIRE(statementTable->rows[0][0] == "3");
+        REQUIRE(statementTable->rows[0][1] == "assign");
+        REQUIRE(statementTable->rows[1][0] == "4");
+        REQUIRE(statementTable->rows[1][1] == "if");
     }
 
     SECTION ("Save parentT") {
@@ -70,7 +70,7 @@ TEST_CASE("Test Data Modifier") {
     }
 
     SECTION ("Save calls relation") {
-        int initialSize = pkbStorage->getCalls()->rows.size();
+        pkbStorage->getCalls()->dropRows();
         dataModifier.saveCalls(vector<string>{"proc1", "proc2", "5"});
         dataModifier.saveCalls(vector<string>{"proc2", "proc3", "12"});
         shared_ptr<Table> procedures = pkbStorage->getCalls();
@@ -83,14 +83,14 @@ TEST_CASE("Test Data Modifier") {
         REQUIRE(stmtNoProcMap->header[1] == "$called_procedure");
 
         // check relationships are added
-        REQUIRE(procedures->rows[initialSize][0] == "proc1");
-        REQUIRE(procedures->rows[initialSize][1] == "proc2");
-        REQUIRE(procedures->rows[initialSize + 1][0] == "proc2");
-        REQUIRE(procedures->rows[initialSize + 1][1] == "proc3");
-        REQUIRE(stmtNoProcMap->rows[initialSize][0] == "5");
-        REQUIRE(stmtNoProcMap->rows[initialSize][1] == "proc2");
-        REQUIRE(stmtNoProcMap->rows[initialSize + 1][0] == "12");
-        REQUIRE(stmtNoProcMap->rows[initialSize + 1][1] == "proc3");
+        REQUIRE(procedures->rows[0][0] == "proc1");
+        REQUIRE(procedures->rows[0][1] == "proc2");
+        REQUIRE(procedures->rows[1][0] == "proc2");
+        REQUIRE(procedures->rows[1][1] == "proc3");
+        REQUIRE(stmtNoProcMap->rows[0][0] == "5");
+        REQUIRE(stmtNoProcMap->rows[0][1] == "proc2");
+        REQUIRE(stmtNoProcMap->rows[1][0] == "12");
+        REQUIRE(stmtNoProcMap->rows[1][1] == "proc3");
     }
 
     SECTION ("Save assign pattern") {

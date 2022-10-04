@@ -2,7 +2,7 @@
 # before first execution: chmod 777 test-source-simple.sh to set execution permission
 # remember to build the latest autotester before execution
 # paths to edit
-autotester=../../../Code41/cmake-build-release/src/autotester/autotester
+autotester=../../../Code41/cmake-build-debug/src/autotester/autotester
 # the path for source and query files
 filesPath=./
 # where do you want the output to be located, remember to put analysis.xsl under this path
@@ -29,5 +29,5 @@ done
 #open browser to view result, can comment out
 cd $outputPath
 open http://localhost:8000
-python -m http.server 8000
+python3 -m http.server 8000
 

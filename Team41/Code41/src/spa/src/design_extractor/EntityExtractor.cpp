@@ -202,8 +202,12 @@ namespace DE {
         while (!queue.empty()) {
             auto callNodeEntry = queue.front();
             queue.pop();
-            auto usedVarList =
-                mappedProceduresToVar.at(callNodeEntry->procedureName);
+            unordered_set<string> usedVarList = unordered_set<string>();
+            if (mappedProceduresToVar.count(callNodeEntry->procedureName)) {
+                usedVarList =
+                        mappedProceduresToVar.at(callNodeEntry->procedureName);
+            }
+
             uniqueVarList.insert(usedVarList.begin(), usedVarList.end());
 
             if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
