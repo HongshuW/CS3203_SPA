@@ -2,11 +2,11 @@
 // Created by Tan Wei En on 4/10/22.
 //
 
-#include "Dummies.h"
+#include "InvalidProcedureDummies.h"
 
 namespace TestAST {
 
-    shared_ptr<ProgramNode> Dummies::getTestProgramNode(int idx) {
+    shared_ptr<ProgramNode> InvalidProcedureDummies::getTestProgramNode(int idx) {
 
         /* procedure procedure1 {
          * print x1;

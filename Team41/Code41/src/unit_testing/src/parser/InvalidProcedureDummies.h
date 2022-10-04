@@ -2,8 +2,8 @@
 // Created by Tan Wei En on 4/10/22.
 //
 
-#ifndef SPA_DUMMIES_H
-#define SPA_DUMMIES_H
+#ifndef SPA_INVALIDPROCEDUREDUMMIES_H
+#define SPA_INVALIDPROCEDUREDUMMIES_H
 
 #include "AST/PrintNode.h"
 #include "AST/ReadNode.h"
@@ -14,7 +14,7 @@
 
 namespace TestAST {
 
-    class Dummies {
+    class InvalidProcedureDummies {
     public:
         static shared_ptr<ProgramNode> getTestProgramNode(int idx);
     };
@@ -22,4 +22,4 @@ namespace TestAST {
 
 } // TestDE
 
-#endif //SPA_DUMMIES_H
+#endif //SPA_INVALIDPROCEDUREDUMMIES_H
