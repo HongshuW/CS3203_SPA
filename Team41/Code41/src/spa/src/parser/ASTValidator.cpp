@@ -11,11 +11,13 @@ using namespace SourceParser;
 
 ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {}
 
-bool ASTValidator::validateAST() {
-    return validateProcedureNames() && validateNodes() && validateCyclicDependencies();
+void ASTValidator::validateAST() {
+    validateProcedureNames();
+    validateNodes();
+    validateCyclicDependencies();
 }
 
-bool ASTValidator::validateProcedureNames() {
+void ASTValidator::validateProcedureNames() {
     for (auto procedure : ast->procedureList) {
         string procedureName = procedure->procedureName;
         auto iterator = procedureNames.find(procedureName);
@@ -28,10 +30,9 @@ bool ASTValidator::validateProcedureNames() {
         procedureNames.insert(procedureName);
         procedureCalls.insert({procedureName, unordered_set<string>()});
     }
-    return true;
 }
 
-bool ASTValidator::validateNodes() {
+void ASTValidator::validateNodes() {
     for (auto procedure: ast->procedureList) {
         string procedureName = procedure->procedureName;
         queue<shared_ptr<StmtNode>> queue;
@@ -67,7 +68,6 @@ bool ASTValidator::validateNodes() {
             }
         }
     }
-    return true;
 }
 
 void ASTValidator::validateCallNode(shared_ptr<CallNode> callNode, string procedureName) {
@@ -99,24 +99,20 @@ void ASTValidator::validateCallNode(shared_ptr<CallNode> callNode, string proced
 }
 
 
-bool ASTValidator::validateCyclicDependencies() {
+void ASTValidator::validateCyclicDependencies() {
     for (auto &unorderedMapIterator: procedureCalls) {
         string mainProcedure = unorderedMapIterator.first;
         unordered_set<string> proceduresCalled = unorderedMapIterator.second;
         for (auto &unorderedSetIterator : proceduresCalled) {
             string procedure = unorderedSetIterator;
-
-            if (calls(procedure, mainProcedure)) {
-                throw SPASTException(ParserConstants::SP_AST_EXCEPTION_CYCLIC_DEPENDENCY);
-            }
+            calls(procedure, mainProcedure);
         }
     }
-    return true;
 }
 
-bool ASTValidator::calls(string procedure, string calledProcedure) {
+void ASTValidator::calls(string procedure, string calledProcedure) {
     if (procedure == calledProcedure) {
-        return true;
+        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_CYCLIC_DEPENDENCY);
     }
 
     auto callsIterator = procedureCalls.find(procedure);
@@ -129,6 +125,4 @@ bool ASTValidator::calls(string procedure, string calledProcedure) {
     for (auto &unorderedSetIterator : calledProcedures) {
         return calls(unorderedSetIterator, calledProcedure);
     }
-
-    return false;
 }

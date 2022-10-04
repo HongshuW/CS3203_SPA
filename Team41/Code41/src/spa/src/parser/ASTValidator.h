@@ -20,11 +20,11 @@ namespace SourceParser {
         unordered_map<string, unordered_set<string>> procedureCalls;
         shared_ptr<ProgramNode> ast;
 
-        bool validateProcedureNames();
-        bool validateNodes();
-        bool validateCyclicDependencies();
+        void validateProcedureNames();
+        void validateNodes();
+        void validateCyclicDependencies();
         void validateCallNode(shared_ptr<CallNode> callNode, string procedureName);
-        bool calls(string procedure, string calledProcedure);
+        void calls(string procedure, string calledProcedure);
 
     public:
         /**
@@ -33,7 +33,7 @@ namespace SourceParser {
          * @param shared_ptr<ProgramNode> AST.
          * @return true if AST is valid, false otherwise
          */
-        bool validateAST();
+        void validateAST();
         explicit ASTValidator(shared_ptr<ProgramNode> ast);
     };
 }
