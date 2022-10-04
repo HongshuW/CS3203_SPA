@@ -423,19 +423,11 @@ TEST_CASE ("Test Query Tokenizer") {
                            }));
     }
 
-    SECTION ("procedure p; Select p with -9999 = -9999") {
+    SECTION ("Test invalid token - negative number") {
         std::string query = "procedure p; Select p with -9999 = -9999";
 
         QueryTokenizer tokenizer = QueryTokenizer(query);
-        auto tokens = tokenizer.tokenize();
-        auto expected = std::vector<std::string>(
-                {"procedure", "p", ";", "Select", "p", "with", "-9999", "=", "-9999"});
-
-        REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
-                           end(expected),
-                           [](const std::string l, const std::string o) {
-                               return l.compare(o) == 0;
-                           }));
+        REQUIRE_THROWS_AS(tokenizer.tokenize(), PQLTokenizeException);
     }
 
     SECTION ("Test unexpected tokens") {

@@ -8,6 +8,7 @@
 #include <vector>
 #include <unordered_set>
 #include "constants/TokeniserConstants.h"
+#include "utils/Utils.h"
 // maybe include method to tokenise symbols
 
 using namespace std;

@@ -196,7 +196,8 @@ TEST_CASE ("Test Tokenizer") {
         Tokenizer tokenizer = Tokenizer(source);
         auto tokens = tokenizer.tokenize();
         auto expected = std::vector<std::string>(
-                {"procedure", "testProcedure", "{", "x", "=", "-99", ";", "while", "(", "x", "<", "-100", ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+                {"procedure", "testProcedure", "{", "x", "=", "-", "99", ";", "while", "(", "x", "<", "-", "100",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
 
         REQUIRE(std::equal(begin(tokens), end(tokens), begin(expected),
                            end(expected),
@@ -208,6 +209,15 @@ TEST_CASE ("Test Tokenizer") {
     SECTION ("Invalid token, throw SPTokenizeException") {
         std::string source = "procedure firstProcedure {"
                              "@ = 1;"
+                             "}";
+
+        Tokenizer tokenizer = Tokenizer(source);
+        REQUIRE_THROWS_AS(tokenizer.tokenize(), SPTokenizeException);
+    }
+
+    SECTION ("Invalid name, throw SPTokenizeException") {
+        std::string source = "procedure firstProcedure {"
+                             "x = 0123;"
                              "}";
 
         Tokenizer tokenizer = Tokenizer(source);
