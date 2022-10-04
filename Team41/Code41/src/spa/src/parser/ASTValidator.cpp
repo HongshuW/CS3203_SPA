@@ -14,21 +14,8 @@ ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {}
 bool ASTValidator::validateAST() {
     updateProcedureNames();
     validateCalls();
-    cout << "procedures: " << endl;
-    for (const auto& elem: procedureNames) {
-        /* ... process elem ... */
-        cout << elem << endl;
-        auto iterator = procedureCalls.find(elem);
-        cout << "calls:" << endl;
-        auto calledProcedures = iterator->second;
-        for (const auto& secondElem: calledProcedures) {
-            cout << secondElem << endl;
-        }
-        cout << "end" << endl;
-    }
-
     validateLoops();
-    return false;
+    return true;
 }
 
 void ASTValidator::updateProcedureNames() {
@@ -38,7 +25,7 @@ void ASTValidator::updateProcedureNames() {
         auto iterator = procedureNames.find(procedureName);
 
         if (iterator != procedureNames.end()) {
-            throw new SPASTException("duplicate procedure");
+            throw SPASTException("duplicate procedure " + procedureName);
         }
 
         procedureNames.insert(procedureName);
@@ -79,25 +66,25 @@ bool ASTValidator::validateCalls() {
                     break;
                 }
                 case AST::CALL_NODE: {
-                    cout << "call node!" << endl;
                     shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(stmtNode);
                     string calledProcedure = callNode->procedureName;
 
                     // check if procedure calls itself
                     if (calledProcedure == procedureName) {
-//                        throw new SPASTException("procedure calls itself");
+
+                        throw SPASTException("procedure "  + procedureName + " calls itself");
                     }
 
                     // check if procedure called exists
                     auto iterator = procedureNames.find(procedureName);
                     if (iterator == procedureNames.end()) {
-//                        throw new SPASTException("called procedure does not exist");
+                        throw SPASTException("called procedure "  + procedureName + " does not exist");
                     }
 
                     // update unordered_set
                     auto callsIterator = procedureCalls.find(procedureName);
                     if (callsIterator == procedureCalls.end()) {
-//                        throw new SPASTException("procedure does not exist");
+                        throw SPASTException("procedure "  + procedureName + " does not exist");
                     }
                     unordered_set<string> calledProcedures = callsIterator->second;
                     calledProcedures.insert(calledProcedure);
@@ -122,7 +109,7 @@ bool ASTValidator::validateLoops() {
             string procedure = unorderedSetIterator;
 
             if (calls(procedure, calledProcedure)) {
-                throw new SPASTException("cycling dependency found");
+                throw SPASTException("cyclic dependency");
             }
         }
     }
@@ -136,7 +123,7 @@ bool ASTValidator::calls(string procedure, string calledProcedure) {
 
     auto callsIterator = procedureCalls.find(procedure);
     if (callsIterator == procedureCalls.end()) {
-//        throw new SPASTException("procedure does not exist");
+        throw SPASTException("procedure " + procedure + " does not exist");
     }
     unordered_set<string> calledProcedures = callsIterator->second;
     for (auto &unorderedSetIterator : calledProcedures) {
