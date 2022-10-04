@@ -8,7 +8,7 @@ procedure deepNesting {
                     while (x7 >= 0) {
                         while (x8 >= 0) {
                             x9 = x9 + 1;
-                            if (x10 <= x9) then {
+                            if (x10 <= 9) then {
                                 print x11;
                             } else {
                                 while (x12 < x10) {
@@ -27,7 +27,7 @@ procedure deepNesting {
                             while (x21 < x20) {
                                 print x22;
                             }
-                            call x23;
+                            call procedure29;
                             x24 = 100;
                         }
                     }
@@ -42,6 +42,27 @@ procedure deepNesting {
     }
 }
 
-procedure x23 {
-    print x23;
+procedure procedure29 {
+    print x29;
+    x27 = x2 * 2 + x1 * 2 + 10;
+    read x28;
+    if (x32 >= 30) then {
+        x5 = x5 * 2;
+    } else {
+        x6 = x6 * 2;
+    }
+    call procedure35;
+}
+
+procedure procedure35 {
+    read x36;
+    while (x37 != x5) {
+        x17 = x17 * 2;
+    }
+    x1 = x2 + x3 + x4 + x5;
+    print x40;
+}
+
+procedure doesNotModify {
+    print x41;
 }
