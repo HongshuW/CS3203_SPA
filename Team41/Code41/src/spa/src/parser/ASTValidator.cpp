@@ -12,17 +12,15 @@ using namespace SourceParser;
 ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {}
 
 bool ASTValidator::validateAST() {
-    return validateProcedureNames() && validateCalls() && validateCyclicDependencies();
+    return validateProcedureNames() && validateNodes() && validateCyclicDependencies();
 }
 
 bool ASTValidator::validateProcedureNames() {
     for (auto procedure : ast->procedureList) {
         string procedureName = procedure->procedureName;
-
         auto iterator = procedureNames.find(procedureName);
-
         if (iterator != procedureNames.end()) {
-            throw SPASTException("duplicate procedure " + procedureName);
+            throw SPASTException(ParserConstants::SP_AST_EXCEPTION_DUPLICATE_PROCEDURE);
         }
 
         procedureNames.insert(procedureName);
@@ -31,10 +29,9 @@ bool ASTValidator::validateProcedureNames() {
     return true;
 }
 
-bool ASTValidator::validateCalls() {
+bool ASTValidator::validateNodes() {
     for (auto procedure: ast->procedureList) {
         string procedureName = procedure->procedureName;
-
         queue<shared_ptr<StmtNode>> queue;
         for (auto statement: procedure->stmtList) {
             queue.push(statement);
@@ -43,61 +40,56 @@ bool ASTValidator::validateCalls() {
         while (!queue.empty()) {
             auto stmtNode = queue.front();
             queue.pop();
-
             NodeType nodeType = ASTUtils::getNodeType(stmtNode);
-            switch (nodeType) {
-                case AST::IF_NODE: {
-                    shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-                    for (auto childStmtNode: ifNode->ifStmtList) {
-                        queue.push(childStmtNode);
-                    }
-                    for (auto childStmtNode: ifNode->elseStmtList) {
-                        queue.push(childStmtNode);
-                    }
-                    break;
+
+            if (nodeType == AST::IF_NODE) {
+                shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+                for (auto childStmtNode: ifNode->ifStmtList) {
+                    queue.push(childStmtNode);
                 }
-                case AST::WHILE_NODE: {
-                    shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
-                    for (auto childStmtNode: whileNode->stmtList) {
-                        queue.push(childStmtNode);
-                    }
-                    break;
+                for (auto childStmtNode: ifNode->elseStmtList) {
+                    queue.push(childStmtNode);
                 }
-                case AST::CALL_NODE: {
-                    shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(stmtNode);
-                    string calledProcedure = callNode->procedureName;
+            }
 
-                    // check if procedure calls itself
-                    if (calledProcedure == procedureName) {
-
-                        throw SPASTException("procedure "  + procedureName + " calls itself");
-                    }
-
-                    // check if procedure called exists
-                    auto iterator = procedureNames.find(procedureName);
-                    if (iterator == procedureNames.end()) {
-                        throw SPASTException("called procedure "  + procedureName + " does not exist");
-                    }
-
-                    // update unordered_set
-                    auto callsIterator = procedureCalls.find(procedureName);
-                    if (callsIterator == procedureCalls.end()) {
-                        throw SPASTException("procedure "  + procedureName + " does not exist");
-                    }
-                    unordered_set<string> calledProcedures = callsIterator->second;
-                    calledProcedures.insert(calledProcedure);
-                    callsIterator->second = calledProcedures;
-
-                    break;
+            if (nodeType == AST::WHILE_NODE) {
+                shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
+                for (auto childStmtNode: whileNode->stmtList) {
+                    queue.push(childStmtNode);
                 }
-                default: {
-                    break;
-                }
+            }
+
+            if (nodeType == AST::CALL_NODE) {
+                shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(stmtNode);
+                validateCallNode(callNode, procedureName);
             }
         }
     }
     return true;
 }
+
+void ASTValidator::validateCallNode(shared_ptr<CallNode> callNode, string procedureName) {
+    string calledProcedure = callNode->procedureName;
+
+    if (calledProcedure == procedureName) {
+        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_PROCEDURE_CALLS_ITSELF);
+    }
+
+    auto iterator = procedureNames.find(procedureName);
+    if (iterator == procedureNames.end()) {
+        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND);
+    }
+
+    auto callsIterator = procedureCalls.find(procedureName);
+    if (callsIterator == procedureCalls.end()) {
+        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND);
+    }
+
+    unordered_set<string> calledProcedures = callsIterator->second;
+    calledProcedures.insert(calledProcedure);
+    callsIterator->second = calledProcedures;
+}
+
 
 bool ASTValidator::validateCyclicDependencies() {
     for (auto &unorderedMapIterator: procedureCalls) {
@@ -107,7 +99,7 @@ bool ASTValidator::validateCyclicDependencies() {
             string procedure = unorderedSetIterator;
 
             if (calls(procedure, mainProcedure)) {
-                throw SPASTException("cyclic dependency");
+                throw SPASTException(ParserConstants::SP_AST_EXCEPTION_CYCLIC_DEPENDENCY);
             }
         }
     }
@@ -121,7 +113,7 @@ bool ASTValidator::calls(string procedure, string calledProcedure) {
 
     auto callsIterator = procedureCalls.find(procedure);
     if (callsIterator == procedureCalls.end()) {
-        throw SPASTException("procedure " + procedure + " does not exist");
+        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND);
     }
     unordered_set<string> calledProcedures = callsIterator->second;
     for (auto &unorderedSetIterator : calledProcedures) {

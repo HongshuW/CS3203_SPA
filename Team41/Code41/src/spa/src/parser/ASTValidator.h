@@ -6,7 +6,9 @@
 #define SPA_ASTVALIDATOR_H
 
 #include "AST/ProgramNode.h"
+#include "AST/CallNode.h"
 #include "unordered_map"
+#include "constants/ParserConstants.h"
 
 using namespace std;
 
@@ -18,8 +20,9 @@ namespace SourceParser {
         shared_ptr<ProgramNode> ast;
 
         bool validateProcedureNames();
-        bool validateCalls();
+        bool validateNodes();
         bool validateCyclicDependencies();
+        void validateCallNode(shared_ptr<CallNode> callNode, string procedureName);
         bool calls(string procedure, string calledProcedure);
 
     public:

@@ -38,4 +38,13 @@ namespace SourceParser {
      const string ParserConstants::  SP_PARSE_EXCEPTION_ASSIGN_STMT_RHS_EMPTY = "The RHS of assign statement cannot be empty";
      const string ParserConstants::  SP_PARSE_EXCEPTION_INVALID_PARENTHESES = "Invalid parentheses detected";
      const string ParserConstants::  SP_PARSE_EXCEPTION_EMPTY_PROCEDURE = "No procedure found.";
+
+     const string ParserConstants:: SP_AST_EXCEPTION_CYCLIC_DEPENDENCY = "Cyclic dependency found. ";
+    const string ParserConstants:: SP_AST_EXCEPTION_DUPLICATE_PROCEDURE = "Duplicate procedure found. ";
+    const string ParserConstants:: SP_AST_EXCEPTION_PROCEDURE_CALLS_ITSELF = "Procedure cannot call itself. ";
+    const string ParserConstants:: SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND = "Called procedure does not exist. ";
+
+
+
+
 } // SourceParser
