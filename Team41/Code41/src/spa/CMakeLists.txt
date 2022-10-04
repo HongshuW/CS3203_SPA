@@ -275,6 +275,9 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/relations/pattern_relations/AssignPattern.h
         src/query_builder/relations/pattern_relations/PatternRelations.cpp
         src/query_builder/relations/pattern_relations/PatternRelations.h
+        src/parser/ASTValidator.cpp
+        src/parser/ASTValidator.h
+        src/query_builder/relations/pattern_relations/PatternRelations.h
         src/query_builder/clauses/pattern_clauses/InvalidPatternClause.cpp
         src/query_builder/clauses/pattern_clauses/InvalidPatternClause.h
         src/query_builder/relations/pattern_relations/InvalidPattern.cpp

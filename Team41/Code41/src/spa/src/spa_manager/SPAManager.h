@@ -10,6 +10,7 @@
 #include "pkb/PKBStorage.h"
 #include "design_extractor/DesignExtractor.h"
 #include "parser/ASTBuilder.h"
+#include "parser/ASTValidator.h"
 #include "parser/SPExceptions.h"
 #include "query_builder/QueryBuilder.h"
 #include "query_builder/exceptions/Exceptions.h"
