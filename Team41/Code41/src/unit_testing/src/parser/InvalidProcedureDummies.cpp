@@ -52,10 +52,10 @@ namespace TestAST {
 
         shared_ptr<StmtNode> printNode_p3 = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<StmtNode> readNode_p3 = make_shared<ReadNode>(make_shared<VariableNode>("y"));
-        //"bar == y + 112312341234"
+        //"bar == y + 1123"
         auto rhs_p3 = make_shared<ExprNode>("+");
         rhs_p3->left = make_shared<ExprNode>("y");
-        rhs_p3->right = make_shared<ExprNode>("112312341234");
+        rhs_p3->right = make_shared<ExprNode>("1123");
         shared_ptr<CondExprNode> ifCondExpr_p3 = make_shared<CondExprNode>(make_shared<RelExprNode>(make_shared<ExprNode>("bar"), "==",
                                                                                                     rhs_p3));
 

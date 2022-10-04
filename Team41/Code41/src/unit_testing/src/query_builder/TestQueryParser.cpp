@@ -598,22 +598,6 @@ TEST_CASE ("Test Query Parser") {
                 WithClause(lhs, rhs));
     }
 
-    SECTION ("stmt BOOLEAN; Select BOOLEAN with -123 = -123") {
-        std::string queryStr = "stmt BOOLEAN; Select BOOLEAN with -123 = -123";
-        auto query = queryBuilder->buildPQLQuery(queryStr);
-        REQUIRE(query->declarations->size() == 1);
-        REQUIRE(*(query->declarations) ==
-                std::vector<Declaration>{
-                        Declaration(DesignEntity::STMT, Synonym("BOOLEAN"))});
-        shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
-        returnResults->push_back(Synonym("BOOLEAN"));
-        REQUIRE(*(query->selectClause) ==
-                SelectClause(ReturnType::TUPLE, returnResults));
-        REQUIRE(query->withClauses->size() == 1);
-        REQUIRE(*(query->withClauses)->at(0) ==
-                WithClause(-123, -123));
-    }
-
     SECTION ("constant c; Select c with c.value = 1") {
         std::string queryStr = "constant c; Select c with c.value = 1";
         auto query = queryBuilder->buildPQLQuery(queryStr);
@@ -667,6 +651,11 @@ TEST_CASE ("Test Query Parser") {
 
     SECTION ("Invalid synonym declared, throw PQLParseException") {
         std::string queryStr = "variable v, Select v Uses (2, 123abc)";
+        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Invalid number, throw PQLParseException") {
+        std::string queryStr = "stmt BOOLEAN; Select BOOLEAN with 0123 = 0123";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
     }
 

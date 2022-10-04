@@ -25,9 +25,6 @@ namespace SourceParser {
      const string TokeniserConstants::  RIGHT_BRACKET = ")";
      const string TokeniserConstants::  SEMICOLON = ";";
 
-     const char TokeniserConstants::  MINUS_CHAR = '-';
-
-
      const char TokeniserConstants::  DOUBLE_QUOTE_CHAR = '"';
      const char TokeniserConstants::  EQUAL_CHAR = '=';
      const char TokeniserConstants::  GREATER_THAN_CHAR = '>';
@@ -37,4 +34,6 @@ namespace SourceParser {
      const char TokeniserConstants::  BAR_CHAR = '|';
 
      const string TokeniserConstants:: UNEXPECTED_TOKEN_MESSAGE = "Unexpected token: ";
+     const string TokeniserConstants:: INVALID_NAME = "Invalid name for token";
+     const string TokeniserConstants:: INVALID_NUMBER = "Invalid number for token";
 } // SourceParser

@@ -9,6 +9,7 @@
 #include "AST/CallNode.h"
 #include "unordered_map"
 #include "constants/ParserConstants.h"
+#include "utils/ErrorMessageFormatter.h"
 
 using namespace std;
 

@@ -48,6 +48,7 @@ namespace SourceParser {
         static const string SP_PARSE_EXCEPTION_ASSIGN_STMT_RHS_EMPTY;
         static const string SP_PARSE_EXCEPTION_INVALID_PARENTHESES;
         static const string SP_PARSE_EXCEPTION_EMPTY_PROCEDURE;
+        static const string SP_PARSE_EXCEPTION_INVALID_TOKEN_EXPR;
 
         static const string SP_AST_EXCEPTION_CYCLIC_DEPENDENCY;
         static const string SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND;

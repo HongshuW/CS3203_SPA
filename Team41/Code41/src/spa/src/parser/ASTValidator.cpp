@@ -20,7 +20,9 @@ bool ASTValidator::validateProcedureNames() {
         string procedureName = procedure->procedureName;
         auto iterator = procedureNames.find(procedureName);
         if (iterator != procedureNames.end()) {
-            throw SPASTException(ParserConstants::SP_AST_EXCEPTION_DUPLICATE_PROCEDURE);
+            string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                    ParserConstants::SP_AST_EXCEPTION_DUPLICATE_PROCEDURE, procedureName);
+            throw SPASTException(errorMessage);
         }
 
         procedureNames.insert(procedureName);
@@ -72,17 +74,23 @@ void ASTValidator::validateCallNode(shared_ptr<CallNode> callNode, string proced
     string calledProcedure = callNode->procedureName;
 
     if (calledProcedure == procedureName) {
-        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_PROCEDURE_CALLS_ITSELF);
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                ParserConstants::SP_AST_EXCEPTION_PROCEDURE_CALLS_ITSELF, procedureName);
+        throw SPASTException(errorMessage);
     }
 
     auto iterator = procedureNames.find(procedureName);
     if (iterator == procedureNames.end()) {
-        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND);
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedureName);
+        throw SPASTException(errorMessage);
     }
 
     auto callsIterator = procedureCalls.find(procedureName);
     if (callsIterator == procedureCalls.end()) {
-        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND);
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedureName);
+        throw SPASTException(errorMessage);
     }
 
     unordered_set<string> calledProcedures = callsIterator->second;
@@ -113,7 +121,9 @@ bool ASTValidator::calls(string procedure, string calledProcedure) {
 
     auto callsIterator = procedureCalls.find(procedure);
     if (callsIterator == procedureCalls.end()) {
-        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND);
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedure);
+        throw SPASTException(errorMessage);
     }
     unordered_set<string> calledProcedures = callsIterator->second;
     for (auto &unorderedSetIterator : calledProcedures) {
