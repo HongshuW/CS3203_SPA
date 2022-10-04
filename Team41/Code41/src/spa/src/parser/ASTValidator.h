@@ -16,9 +16,9 @@ namespace SourceParser {
         unordered_set<string> procedureNames;
         unordered_map<string, unordered_set<string>> procedureCalls;
         shared_ptr<ProgramNode> ast;
-        void updateProcedureNames();
+
         bool validateCalls();
-        bool validateLoops();
+        bool validateCyclicDependencies();
         bool calls(string procedure, string calledProcedure);
 
     public:

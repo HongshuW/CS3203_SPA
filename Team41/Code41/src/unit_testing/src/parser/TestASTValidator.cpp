@@ -13,8 +13,64 @@ using namespace std;
 using namespace SourceParser;
 
 TEST_CASE("Test AST Validator") {
-    SECTION("Test valid AST") {
-        auto program = TestDE::Dummies::getTestProgramNode(0);
+    SECTION("Test valid AST 1") {
+        auto program = TestDE::Dummies::getTestProgramNode(1);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 2") {
+        auto program = TestDE::Dummies::getTestProgramNode(2);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 3") {
+        auto program = TestDE::Dummies::getTestProgramNode(3);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 4") {
+        auto program = TestDE::Dummies::getTestProgramNode(4);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 5") {
+        auto program = TestDE::Dummies::getTestProgramNode(5);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 6") {
+        auto program = TestDE::Dummies::getTestProgramNode(6);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 7") {
+        auto program = TestDE::Dummies::getTestProgramNode(7);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 8") {
+        auto program = TestDE::Dummies::getTestProgramNode(8);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 9") {
+        auto program = TestDE::Dummies::getTestProgramNode(9);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
+    }
+
+    SECTION("Test valid AST 10") {
+        auto program = TestDE::Dummies::getTestProgramNode(10);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE(astValidator.validateAST() == true);
     }
 
     SECTION("Test invalid AST, procedure called does not exist") {

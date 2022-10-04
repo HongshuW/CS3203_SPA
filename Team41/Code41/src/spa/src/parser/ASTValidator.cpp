@@ -9,16 +9,7 @@
 
 using namespace SourceParser;
 
-ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {}
-
-bool ASTValidator::validateAST() {
-    updateProcedureNames();
-    validateCalls();
-    validateLoops();
-    return true;
-}
-
-void ASTValidator::updateProcedureNames() {
+ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {
     for (auto procedure : ast->procedureList) {
         string procedureName = procedure->procedureName;
 
@@ -31,6 +22,10 @@ void ASTValidator::updateProcedureNames() {
         procedureNames.insert(procedureName);
         procedureCalls.insert({procedureName, unordered_set<string>()});
     }
+}
+
+bool ASTValidator::validateAST() {
+    return validateCalls() && validateCyclicDependencies();
 }
 
 bool ASTValidator::validateCalls() {
@@ -98,17 +93,18 @@ bool ASTValidator::validateCalls() {
             }
         }
     }
+    return true;
 }
 
 // check for cyclical dependencies
-bool ASTValidator::validateLoops() {
+bool ASTValidator::validateCyclicDependencies() {
     for (auto &unorderedMapIterator: procedureCalls) {
-        string calledProcedure = unorderedMapIterator.first;
-        unordered_set<string> calledProcedures = unorderedMapIterator.second;
-        for (auto &unorderedSetIterator : calledProcedures) {
+        string mainProcedure = unorderedMapIterator.first;
+        unordered_set<string> proceduresCalled = unorderedMapIterator.second;
+        for (auto &unorderedSetIterator : proceduresCalled) {
             string procedure = unorderedSetIterator;
 
-            if (calls(procedure, calledProcedure)) {
+            if (calls(procedure, mainProcedure)) {
                 throw SPASTException("cyclic dependency");
             }
         }
