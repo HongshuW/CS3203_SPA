@@ -9,7 +9,13 @@
 
 using namespace SourceParser;
 
-ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {
+ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {}
+
+bool ASTValidator::validateAST() {
+    return validateProcedureNames() && validateCalls() && validateCyclicDependencies();
+}
+
+bool ASTValidator::validateProcedureNames() {
     for (auto procedure : ast->procedureList) {
         string procedureName = procedure->procedureName;
 
@@ -22,10 +28,7 @@ ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {
         procedureNames.insert(procedureName);
         procedureCalls.insert({procedureName, unordered_set<string>()});
     }
-}
-
-bool ASTValidator::validateAST() {
-    return validateCalls() && validateCyclicDependencies();
+    return true;
 }
 
 bool ASTValidator::validateCalls() {
@@ -96,7 +99,6 @@ bool ASTValidator::validateCalls() {
     return true;
 }
 
-// check for cyclical dependencies
 bool ASTValidator::validateCyclicDependencies() {
     for (auto &unorderedMapIterator: procedureCalls) {
         string mainProcedure = unorderedMapIterator.first;
