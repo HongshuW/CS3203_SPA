@@ -40,6 +40,7 @@ public:
     bool isHeaderEmpty() const;
     bool isBodyEmpty() const;
 
+    static const string DEFAULT_HEADER_PREFIX;
 
 
 };

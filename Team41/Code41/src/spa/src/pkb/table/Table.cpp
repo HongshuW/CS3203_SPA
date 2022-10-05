@@ -3,6 +3,7 @@
 //
 
 #include "Table.h"
+const string Table::DEFAULT_HEADER_PREFIX = "$";
 
 vector<string> Table::getColumnByName(string columnName) {
     int numOfColumns = header.size();
