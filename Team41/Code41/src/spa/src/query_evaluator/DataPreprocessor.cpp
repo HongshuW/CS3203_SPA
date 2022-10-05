@@ -273,6 +273,12 @@ namespace QE {
                 if (!(ident1 == ident2)) break;
                 return this->filterTableByColValueEquality(table, {FIRST_COL_IDX, SECOND_COL_IDX});
         }
+        //drop unused columns
+        for (int i = 0; i < table.header.size(); i++) {
+            if (table.header[i].find('$') != std::string::npos) {
+                table = table.dropCol(i);
+            }
+        }
         return table;
     }
 
