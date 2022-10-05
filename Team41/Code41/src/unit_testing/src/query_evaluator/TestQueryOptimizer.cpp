@@ -104,19 +104,5 @@ TEST_CASE("Test query optimizer") {
 
         REQUIRE(map->size() == 2);
 
-        const int ONE_SYN_CLAUSE_COUNT = 3;
-
-        for (auto it: *map) {
-            if (it.first != QE::QueryOptimizer::NO_SYN_GROUP_IDX) {
-                for (int i = 0; i < it.second->size(); i++) {
-                    if (i < ONE_SYN_CLAUSE_COUNT) {
-                        REQUIRE(it.second->at(i)->getSynonymNames().size() == 1);
-                    } else {
-                        REQUIRE(it.second->at(i)->getSynonymNames().size() == 2);
-                    }
-                }
-            }
-        }
-
     }
 }

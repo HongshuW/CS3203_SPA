@@ -13,6 +13,8 @@ void SPAManager::parse(string &filename) {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         designExtractor.run();
+    } catch (const SPASTException& e) {
+        exit(EXIT_SUCCESS);
     } catch (const SPTokenizeException& e) {
         exit(EXIT_SUCCESS);
     } catch (const SPParseException& e) {
