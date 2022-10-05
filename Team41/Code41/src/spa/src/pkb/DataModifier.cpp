@@ -175,19 +175,29 @@ void DataModifier::saveCFG(string procedure, shared_ptr<unordered_map<int, unord
 }
 
 /**
- * Saves a Pattern to the pkb.
+ * Saves an Assign Pattern to the pkb.
  *
- * @param metainfo vector<string>{statementNumber, variableName};
- * @param pattern
+ * @param metainfo vector<string>{statementNumber, variableName}
+ * @param pattern an expression node representing the pattern
  */
 void DataModifier::saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
     pkbStorage->saveAssignPattern(metainfo, pattern);
 }
 
+/**
+ * Saves a While Pattern to the pkb.
+ *
+ * @param whilePattern vector<string>{statementNumber, variableName}
+ */
 void DataModifier::saveWhilePattern(vector<string> whilePattern) {
     pkbStorage->saveWhilePattern(whilePattern);
 }
 
+/**
+ * Saves an If Pattern to the pkb.
+ *
+ * @param ifPattern vector<string>{statementNumber, variableName}
+ */
 void DataModifier::saveIfPattern(vector<string> ifPattern) {
     pkbStorage->saveIfPattern(ifPattern);
 }
