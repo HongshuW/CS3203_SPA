@@ -9,7 +9,9 @@
 #include "query_builder/clauses/such_that_clauses/NextClause.h"
 #include "query_builder/clauses/with_clauses/WithClauses.h"
 #include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
-
+#include "query_builder/clauses/such_that_clauses/ParentClause.h"
+#include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 
 #include "query_builder/clauses/such_that_clauses/AffectsClause.h"
 #include "query_builder/clauses/such_that_clauses/AffectsTClause.h"
@@ -23,10 +25,8 @@
 namespace QE {
     const int  QueryOptimizer::NO_SYN_GROUP_IDX = -1;
     const vector<string> lowCostRelations = {typeid(FollowsClause).name(),
-                                             typeid(ModifiesSClause).name(),
                                              typeid(WithClause).name(),
                                              typeid(NextClause).name(),
-                                             typeid(AssignPatternClause).name()
     };
 
 
@@ -92,13 +92,14 @@ namespace QE {
             auto curr_i = it_i.first;
             for (auto& it_j: clauseIdMap) {
                 auto curr_j = it_j.first;
-                if (curr_i != curr_j
-                && hasCommonSyn(curr_i, curr_j)
-                && !visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)]) {
-                    visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)] = true;
-                    edges.emplace_back(clauseIdMap.at(curr_i), clauseIdMap.at(curr_j));
-                    edgeWeights[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)] = calculateEdgeWeight(curr_i, curr_j);
-                }
+                if ( curr_i == curr_j
+                || !hasCommonSyn(curr_i, curr_j)
+                || visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)]) continue;
+
+                visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)] = true;
+                edges.emplace_back(clauseIdMap.at(curr_i), clauseIdMap.at(curr_j));
+                edgeWeights[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)] = calculateEdgeWeight(curr_i, curr_j);
+
             }
         }
         cout << clauseCount;
@@ -233,22 +234,12 @@ namespace QE {
     }
 
     ConnectedClauseGroups QueryOptimizer::optimiseSubGroups(ConnectedClauseGroups ccg) {
-//        struct compareSynCount {
-//            inline bool operator() (shared_ptr<ConditionalClause> clause1, shared_ptr<ConditionalClause> clause2)
-//            {
-//                return clause1->getSynonymNames().size() < clause2->getSynonymNames().size();
-//            }
-//        };
-
         //sort
         for (auto it: *ccg) {
             if (it.first == NO_SYN_GROUP_IDX) continue;
             shared_ptr<vector<shared_ptr<ConditionalClause>>> sortedVec = make_shared<vector<shared_ptr<ConditionalClause>>>();
-            auto vec = it.second;
-            const int V = vec->size();
-//
-//            sort(vec->begin(), vec->end(), compareSynCount());
-//
+            auto clauseGroupVec = it.second;
+            const int V = clauseGroupVec->size();
             int selected[clauseCount];
             for (int i = 0; i < clauseCount; i++) {
                 selected[i] = false;
@@ -256,45 +247,29 @@ namespace QE {
             int no_edge = 0;
 
             //pick first vertex with min edge cost:
-            int minEdgeCost = INF;
-            int x_first = 0; int y_first = 0;
-           for (auto cl1: *vec) {
-               int i = clauseIdMap.at(cl1);
-               for (auto cl2: *vec) {
-                   if (cl1 == cl2) continue;
-                   int j = clauseIdMap.at(cl2);
-                   if (edgeWeights[i][j] && minEdgeCost > edgeWeights[i][j]) {
-                       minEdgeCost = edgeWeights[i][j];
-                       x_first = i;
-                       y_first = j;
-                   }
-               }
-           }
-            int first = getLowerCostClause( x_first,  y_first);
+            int first = getMinClauseIdFromGroup(clauseGroupVec);
             sortedVec->push_back(idClauseMap.at(first));
             selected[first] = true;
 
+            //prim's algo to sort vectors and ensure clauses with connected synonyms are evaluated together
             int x; int y;
-
             while (no_edge < V - 1) {
                 int min = INF;
-                int x = 0;
-                int y = 0;
+                x = 0;
+                y = 0;
 
-                for (auto cl1: *vec) {
+                for (auto cl1: *clauseGroupVec) {
                     int i = clauseIdMap.at(cl1);
-                    if (selected[i]) {
-                        for (auto cl2: *vec) {
-                            int j = clauseIdMap.at(cl2);
-                            if (!selected[j] && edgeWeights[i][j]) {
-                                if (min > edgeWeights[i][j]) {
-                                    min = edgeWeights[i][j];
-                                    x = i;
-                                    y = j;
-                                }
-                            }
-                        }
+                    if (!selected[i]) continue;
+                    for (auto cl2: *clauseGroupVec) {
+                        int j = clauseIdMap.at(cl2);
+                        if (selected[j] || !edgeWeights[i][j]) continue;
+                        if (min < edgeWeights[i][j]) continue;
+                        min = edgeWeights[i][j];
+                        x = i;
+                        y = j;
                     }
+
                 }
                 sortedVec->push_back(idClauseMap.at(y));
                 selected[y] = true;
@@ -303,6 +278,25 @@ namespace QE {
             it.second = sortedVec;
         }
         return ccg;
+    }
+
+    int QueryOptimizer::getMinClauseIdFromGroup(SubgroupClauses clauses) {
+        //pick first vertex with min edge cost:
+        int minEdgeCost = INF;
+        int x_first = 0; int y_first = 0;
+        for (auto cl1: *clauses) {
+            int i = clauseIdMap.at(cl1);
+            for (auto cl2: *clauses) {
+                if (cl1 == cl2) continue;
+                int j = clauseIdMap.at(cl2);
+                if (!edgeWeights[i][j] || minEdgeCost < edgeWeights[i][j]) continue;
+                minEdgeCost = edgeWeights[i][j];
+                x_first = i;
+                y_first = j;
+            }
+        }
+        int first = getLowerCostClause( x_first,  y_first);
+        return first;
     }
 
 

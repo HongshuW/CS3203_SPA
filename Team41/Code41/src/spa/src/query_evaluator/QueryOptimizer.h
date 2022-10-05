@@ -11,6 +11,7 @@
 using namespace  std;
 namespace QE {
     typedef shared_ptr<unordered_map<int, shared_ptr<vector<shared_ptr<ConditionalClause>>>>> ConnectedClauseGroups;
+    typedef  shared_ptr<vector<shared_ptr<ConditionalClause>>> SubgroupClauses;
     class QueryOptimizer {
 
 
@@ -21,6 +22,8 @@ namespace QE {
         unordered_map<shared_ptr<ConditionalClause>, int> clauseIdMap;
         unordered_map<int, shared_ptr<ConditionalClause>> idClauseMap;
         vector<vector<int>> edgeWeights;
+
+        int getMinClauseIdFromGroup(SubgroupClauses clauses);
 
         void initParent();
         void initMaps();
