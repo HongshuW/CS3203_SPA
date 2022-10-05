@@ -6,15 +6,18 @@
 #define SPA_NEXTEXTRACTOR_H
 
 #include "DesignExtractor.h"
-#include "args/NextStmtNoArgs.h"
+#include "CFG/CFG.h"
 
 class NextExtractor {
 public:
-	static vector<string> extractNextWithStartAndEnd(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args);
-	static vector<string> extractNext(shared_ptr<ProgramNode> programNode, NextStmtNoArgs args);
-	static shared_ptr<list<vector<string>>> extractNextStar(shared_ptr<ProgramNode> programNode, 
-		shared_ptr<ProcedureNode> procedureNode, int n1, int n2);
-
+    static shared_ptr<list<vector<string>>> extractNext(shared_ptr<ProgramNode> programNode);
+	static vector<string> extractNextStar(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
+private:
+    static vector<string> extractNextStarWithEndOnly(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
+    static vector<string> extractNextStarWithStartOnly(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
+    static vector<string> extractNextStarWithStartAndEnd(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
+    static void extractNextStarWithStartAndEndDFSHelper(int start, int end, CFG cfg, vector<string>& ans, vector<bool>& visitedArr);
+    static bool areBothArgsVaild(shared_ptr<ProgramNode> programNode, int start, int end);
 };
 
 #endif //SPA_NEXTEXTRACTOR_H

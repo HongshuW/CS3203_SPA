@@ -186,7 +186,8 @@ void DesignExtractor::run() {
                                                 RelationType::USES_P,
                                                 RelationType::MODIFIES_P,
                                                 RelationType::CALLS,
-                                                RelationType::CALLS_T};
+                                                RelationType::CALLS_T,
+                                                RelationType::NEXT};
     for (auto relationType: relationsToSave) {
         this->saveRelationToPKB(relationType);
     }
@@ -210,8 +211,18 @@ void DesignExtractor::savePatternsToPKB() {
     }
 }
 
-vector<string> DE::DesignExtractor::getNextRelations(NextStmtNoArgs args) {
-    return NextExtractor::extractNext(this->programNode, args);
+vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
+    return NextExtractor::extractNextStar(this->programNode, args);
+}
+
+vector<string> DE::DesignExtractor::getAffectsRelations(StmtNoArgs args)
+{
+    return AffectsExtractor::extractAffects(this->programNode, args);
+}
+
+vector<string> DE::DesignExtractor::getAffectsStarRelations(StmtNoArgs args)
+{
+    return AffectsExtractor::extractAffectsStar(this->programNode, args);
 }
 
 

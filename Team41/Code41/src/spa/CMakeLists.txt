@@ -238,9 +238,7 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/NextExtractor.cpp 
         src/design_extractor/NextExtractor.h 
         src/design_extractor/AffectsExtractor.cpp 
-        src/design_extractor/AffectsExtractor.h 
-        src/design_extractor/args/NextStmtNoArgs.cpp 
-        src/design_extractor/args/NextStmtNoArgs.h
+        src/design_extractor/AffectsExtractor.h
         src/query_builder/relations/such_that_relations/Follows.cpp
         src/query_builder/relations/such_that_relations/Follows.h
         src/query_builder/relations/such_that_relations/SuchThatRelations.cpp
@@ -284,7 +282,7 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/relations/pattern_relations/AssignPattern.cpp
         src/query_builder/relations/pattern_relations/AssignPattern.h
         src/query_builder/relations/pattern_relations/PatternRelations.cpp
-        src/query_builder/relations/pattern_relations/PatternRelations.h)
+        src/query_builder/relations/pattern_relations/PatternRelations.h src/design_extractor/args/StmtNoArgs.cpp src/design_extractor/args/StmtNoArgs.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

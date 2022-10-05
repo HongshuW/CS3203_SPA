@@ -12,8 +12,9 @@
 #include "pkb/DataModifier.h"
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/commons/RelationType.h"
-#include "args/NextStmtNoArgs.h"
+#include "args/StmtNoArgs.h"
 #include "NextExtractor.h"
+#include "AffectsExtractor.h"
 
 using namespace QB;
 namespace DE {
@@ -34,7 +35,10 @@ namespace DE {
         void saveRelationToPKB(RelationType relationType);
         vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> extractPatterns();
         void savePatternsToPKB();
-        vector<string> getNextRelations(NextStmtNoArgs args);
+        vector<string> getNextRelations(StmtNoArgs args);
+        vector<string> getNextStarRelations(StmtNoArgs args);
+        vector<string> getAffectsRelations(StmtNoArgs args);
+        vector<string> getAffectsStarRelations(StmtNoArgs args);
     };
 }
 
