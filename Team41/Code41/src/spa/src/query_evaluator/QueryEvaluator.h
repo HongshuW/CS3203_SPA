@@ -10,6 +10,7 @@
 #include "pkb/DataRetriever.h"
 #include "DataPreprocessor.h"
 #include "ConcreteClauseVisitor.h"
+#include "QueryOptimizer.h"
 
 using namespace QB;
 
@@ -18,10 +19,19 @@ namespace QE {
     class QueryEvaluator {
         shared_ptr<DataRetriever> dataRetriever;
         Declarations declarations;
+        shared_ptr<Query> query;
 
         DesignEntity getDesignEntity(Synonym synonym);
 
-        vector<string> evaluateNoConditionQuery(shared_ptr<Query> query, shared_ptr<ConcreteClauseVisitor> clauseVisitor);
+        vector<string> evaluateNoConditionSelectTupleQuery(shared_ptr<Query> query, shared_ptr<ConcreteClauseVisitor> clauseVisitor);
+
+        vector<string> evaluateSelectBoolQuery(shared_ptr<ConcreteClauseVisitor> clauseVisitor,
+                                               shared_ptr<DataPreprocessor> dataPreprocessor,
+                                               ConnectedClauseGroups ccg);
+
+        vector<string> evaluateSelectTupleQuery(shared_ptr<ConcreteClauseVisitor> clauseVisitor,
+                                                shared_ptr<DataPreprocessor> dataPreprocessor,
+                                                ConnectedClauseGroups ccg);
 
         std::string join(std::vector<std::string> const &strings, std::string delim);
 

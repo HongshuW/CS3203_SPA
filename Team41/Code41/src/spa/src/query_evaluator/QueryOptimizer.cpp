@@ -4,9 +4,41 @@
 
 #include "QueryOptimizer.h"
 #include <set>
+#include "query_builder/clauses/such_that_clauses/FollowsClause.h"
+#include "query_builder/clauses/such_that_clauses/ModifiesSClause.h"
+#include "query_builder/clauses/such_that_clauses/NextClause.h"
+#include "query_builder/clauses/with_clauses/WithClauses.h"
+#include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
+
+
+#include "query_builder/clauses/such_that_clauses/AffectsClause.h"
+#include "query_builder/clauses/such_that_clauses/AffectsTClause.h"
+#include "query_builder/clauses/such_that_clauses/NextTClause.h"
+#include "query_builder/clauses/such_that_clauses/FollowsTClause.h"
+#include "query_builder/clauses/such_that_clauses/ParentTClause.h"
+#include "query_builder/clauses/such_that_clauses/ModifiesPClause.h"
+#include "query_builder/clauses/such_that_clauses/UsesPClause.h"
+#include "query_builder/clauses/such_that_clauses/CallsTClause.h"
 
 namespace QE {
     const int  QueryOptimizer::NO_SYN_GROUP_IDX = -1;
+    const vector<string> lowCostRelations = {typeid(FollowsClause).name(),
+                                             typeid(ModifiesSClause).name(),
+                                             typeid(WithClause).name(),
+                                             typeid(NextClause).name(),
+                                             typeid(AssignPatternClause).name()
+    };
+
+
+    const vector<string> highCostRelations = {
+            typeid(AffectsTClause).name(),
+            typeid(FollowsTClause).name(),
+            typeid(ParentTClause).name(),
+            typeid(CallsTClause).name(),
+            typeid(ModifiesPClause).name(),
+            typeid(UsesPClause).name()
+    };
+    const int default_cost = 100;
 
     QueryOptimizer::QueryOptimizer(shared_ptr<Query> query): query(query) {
         initMaps();
@@ -50,7 +82,10 @@ namespace QE {
     void QueryOptimizer::initEdges() {
         size_t M = clauseIdMap.size();
         const bool value = false;
+        const int valueInt = 0;
         bool visited[M][M];
+
+        edgeWeights.resize(M, vector<int>(M, valueInt));
         std::fill(*visited, *visited + M*M, value);
 
         for (auto& it_i: clauseIdMap) {
@@ -62,9 +97,12 @@ namespace QE {
                 && !visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)]) {
                     visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)] = true;
                     edges.emplace_back(clauseIdMap.at(curr_i), clauseIdMap.at(curr_j));
+                    edgeWeights[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)] = calculateEdgeWeight(curr_i, curr_j);
                 }
             }
         }
+        cout << clauseCount;
+
     }
 
     bool QueryOptimizer::hasCommonSyn(shared_ptr<ConditionalClause> clause1, shared_ptr<ConditionalClause> clause2) {
@@ -74,6 +112,67 @@ namespace QE {
             if (set1.count(syn)) return true;
         }
         return false;
+    }
+
+    int QueryOptimizer::calculateEdgeWeight(shared_ptr<ConditionalClause> clause1, shared_ptr<ConditionalClause> clause2) {
+
+
+        int curr_cost = default_cost;
+
+        //reduce cost for clauses with only one synonym
+        if (clause1->getSynonymNames().size() <= 1) curr_cost -= 10;
+        if (clause2->getSynonymNames().size() <= 1) curr_cost -= 10;
+
+
+        //reduce cost for clauses with less number of results
+        if (std::find(lowCostRelations.begin(), lowCostRelations.end(), typeid(*clause1).name()) != lowCostRelations.end()) {
+            curr_cost -= 10;
+        }
+        if (std::find(lowCostRelations.begin(), lowCostRelations.end(), typeid(*clause2).name()) != lowCostRelations.end()) {
+            curr_cost -= 10;
+        }
+
+        //increase cost for clauses with high number of results
+        if (std::find(highCostRelations.begin(), highCostRelations.end(), typeid(*clause1).name()) != highCostRelations.end()) {
+            curr_cost += 20;
+        }
+        if (std::find(highCostRelations.begin(), highCostRelations.end(), typeid(*clause2).name()) != highCostRelations.end()) {
+            curr_cost += 20;
+        }
+
+        return curr_cost;
+    }
+
+
+    int QueryOptimizer::getLowerCostClause(int x, int y) {
+        auto clause1 = idClauseMap.at(x);
+        auto clause2 = idClauseMap.at(y);
+        int cl1Cost = default_cost;
+        int cl2Cost = default_cost;
+
+        if (clause1->getSynonymNames().size() <= 1) cl1Cost -= 10;
+        if (clause2->getSynonymNames().size() <= 1) cl1Cost -= 10;
+
+        //reduce cost for clauses with less number of results
+        if (std::find(lowCostRelations.begin(), lowCostRelations.end(), typeid(*clause1).name()) != lowCostRelations.end()) {
+            cl1Cost -= 10;
+        }
+        if (std::find(lowCostRelations.begin(), lowCostRelations.end(), typeid(*clause2).name()) != lowCostRelations.end()) {
+            cl2Cost -= 10;
+        }
+
+
+
+        //increase cost for clauses with high number of results
+        if (std::find(highCostRelations.begin(), highCostRelations.end(), typeid(*clause1).name()) != highCostRelations.end()) {
+            cl1Cost += 20;
+        }
+        if (std::find(highCostRelations.begin(), highCostRelations.end(), typeid(*clause2).name()) != highCostRelations.end()) {
+            cl2Cost += 20;
+        }
+
+        return cl1Cost > cl2Cost ? y : x;
+
     }
 
     int QueryOptimizer::root(int clause) {
@@ -134,17 +233,74 @@ namespace QE {
     }
 
     ConnectedClauseGroups QueryOptimizer::optimiseSubGroups(ConnectedClauseGroups ccg) {
-        struct compareSynCount {
-            inline bool operator() (shared_ptr<ConditionalClause> clause1, shared_ptr<ConditionalClause> clause2)
-            {
-                return clause1->getSynonymNames().size() < clause2->getSynonymNames().size();
-            }
-        };
+//        struct compareSynCount {
+//            inline bool operator() (shared_ptr<ConditionalClause> clause1, shared_ptr<ConditionalClause> clause2)
+//            {
+//                return clause1->getSynonymNames().size() < clause2->getSynonymNames().size();
+//            }
+//        };
 
         //sort
         for (auto it: *ccg) {
+            if (it.first == NO_SYN_GROUP_IDX) continue;
+            shared_ptr<vector<shared_ptr<ConditionalClause>>> sortedVec = make_shared<vector<shared_ptr<ConditionalClause>>>();
             auto vec = it.second;
-            sort(vec->begin(), vec->end(), compareSynCount());
+            const int V = vec->size();
+//
+//            sort(vec->begin(), vec->end(), compareSynCount());
+//
+            int selected[clauseCount];
+            for (int i = 0; i < clauseCount; i++) {
+                selected[i] = false;
+            }
+            int no_edge = 0;
+
+            //pick first vertex with min edge cost:
+            int minEdgeCost = INF;
+            int x_first = 0; int y_first = 0;
+           for (auto cl1: *vec) {
+               int i = clauseIdMap.at(cl1);
+               for (auto cl2: *vec) {
+                   if (cl1 == cl2) continue;
+                   int j = clauseIdMap.at(cl2);
+                   if (edgeWeights[i][j] && minEdgeCost > edgeWeights[i][j]) {
+                       minEdgeCost = edgeWeights[i][j];
+                       x_first = i;
+                       y_first = j;
+                   }
+               }
+           }
+            int first = getLowerCostClause( x_first,  y_first);
+            sortedVec->push_back(idClauseMap.at(first));
+            selected[first] = true;
+
+            int x; int y;
+
+            while (no_edge < V - 1) {
+                int min = INF;
+                int x = 0;
+                int y = 0;
+
+                for (auto cl1: *vec) {
+                    int i = clauseIdMap.at(cl1);
+                    if (selected[i]) {
+                        for (auto cl2: *vec) {
+                            int j = clauseIdMap.at(cl2);
+                            if (!selected[j] && edgeWeights[i][j]) {
+                                if (min > edgeWeights[i][j]) {
+                                    min = edgeWeights[i][j];
+                                    x = i;
+                                    y = j;
+                                }
+                            }
+                        }
+                    }
+                }
+                sortedVec->push_back(idClauseMap.at(y));
+                selected[y] = true;
+                no_edge++;
+            }
+            it.second = sortedVec;
         }
         return ccg;
     }
