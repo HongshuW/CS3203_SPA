@@ -41,6 +41,16 @@ namespace SourceParser {
     public:
         explicit SPValidationException(const string& msg = TokeniserConstants::EMPTY_STR) : runtime_error(msg) {}
     };
+
+    /**
+    * Represents an error that occurs during validation of
+    * AST
+    *
+    */
+    class SPASTException : public runtime_error {
+    public:
+        explicit SPASTException(const string& msg = TokeniserConstants::EMPTY_STR) : runtime_error(msg) {}
+    };
 }
 
 #endif //SPA_SPEXCEPTIONS_H

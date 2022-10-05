@@ -122,7 +122,7 @@ shared_ptr<IfNode> Parser::parseIfNode() {
         return nullptr;
     }
 
-    shared_ptr<CondExprNode> condExprNode = parseCondExprNode();
+    shared_ptr<CondExprNode> condExprNode = parseCondExprNode(currIdx);
 
     if (!condExprNode) {
         string errorMessage = ErrorMessageFormatter::formatErrorMessage(
@@ -130,6 +130,7 @@ shared_ptr<IfNode> Parser::parseIfNode() {
         throw SPParseException(errorMessage);
     }
 
+    expect(ParserConstants::RIGHT_BRACKET);
     expect(ParserConstants::THEN);
     expect(ParserConstants::CURLY_LEFT_BRACKET);
     vector<shared_ptr<StmtNode>> ifStatementList = parseStatementList();
@@ -213,8 +214,15 @@ shared_ptr<WhileNode> Parser::parseWhileNode() {
         return nullptr;
     }
 
-    shared_ptr<CondExprNode> condExprNode = parseCondExprNode();
+    shared_ptr<CondExprNode> condExprNode = parseCondExprNode(currIdx);
 
+    if (!condExprNode) {
+        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
+                ParserConstants::SP_PARSE_EXCEPTION_EXPECT_COND_EXPRESSION, peek());
+        throw SPParseException(errorMessage);
+    }
+
+    expect(ParserConstants::RIGHT_BRACKET);
     expect(ParserConstants::CURLY_LEFT_BRACKET);
     vector<shared_ptr<StmtNode>> statementList = parseStatementList();
     expect(ParserConstants::CURLY_RIGHT_BRACKET);
@@ -254,9 +262,15 @@ shared_ptr<VariableNode> Parser::parseVariableNode() {
 
 shared_ptr<ExprNode> Parser::parseExprNode() {
     vector<string> expr;
-    expr.push_back(pop());
     while (peek() != ParserConstants::SEMICOLON) {
-        expr.push_back(pop());
+        string curr = pop();
+        if (Utils::isBracket(curr) || Utils::isMathOperators(curr) ||
+            Utils::isValidName(curr) || Utils::isValidNumber(curr)) {
+            //! We need to ensure all tokens are valid before passing to the ExprNodeParser
+            expr.push_back(curr);
+        } else {
+            throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_INVALID_TOKEN_EXPR);
+        }
     }
     if (expr.empty()) {
         throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_ASSIGN_STMT_RHS_EMPTY);
@@ -270,49 +284,146 @@ shared_ptr<ExprNode> Parser::parseExprNode() {
     return exprNode;
 }
 
-shared_ptr<CondExprNode> Parser::parseCondExprNode() {
-    vector<string> condExpr;
-    bool isConnected = false;
-    while (!(equals(peek(), ParserConstants::RIGHT_BRACKET)
-            && (equals(peekNext(), ParserConstants::THEN)
-                || equals(peekNext(), ParserConstants::CURLY_LEFT_BRACKET)))) {
-        string curr = pop();
-        if (!Utils::isValidName(curr) && !Utils::isValidNumber(curr)) {
-            //! is a comparator operator, need to check for valid operator
-            if (!Utils::VALID_TOKENS_COND_EXPR.count(curr)) {
-                string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                        ParserConstants::SP_PARSE_EXCEPTION_EXPECT_COMPARATOR_OP, curr);
-                throw SPParseException(errorMessage);
-            }
-        }
-        //! Check for the presence of && and ||
-        if (Utils::isConnector(curr)) {
-            isConnected = true;
-        }
-        condExpr.push_back(curr);
+shared_ptr<ExprNode> Parser::parseToken(string curr) {
+    if (Utils::isValidNumber(curr)) {
+        return std::make_shared<ExprNode>(curr);
+    } else if (Utils::isValidName(curr)) {
+        return std::make_shared<ExprNode>(curr);
+    } else if (curr == "(") {
+        shared_ptr<ExprNode> expr = parseRelFactor(0);
+        expect(")");
+        return expr;
+    } else {
+        throw SPParseException("Expected an expression, got '" + curr + "'.");
+    }
+}
+
+int Parser::parseSymbol(string curr) {
+    const unordered_set<string> ALLOWED_TOKENS = unordered_set<std::string>(
+    {">", ">=", "<", "<=", "==", "!=", ";", ")"});
+    if (ALLOWED_TOKENS.count(curr) ||
+        currIdx >= tokens.size() || curr == ")") {
+        return 0;
+    } else if (curr == "+" || curr == "-") {
+        return 10;
+    } else if (curr == "*" || curr == "/" || curr == "%") {
+        return 20;
+    } else {
+        throw SPParseException("Unexpected token '" + curr + "'.");
+    }
+}
+
+shared_ptr<ExprNode> Parser::makeExprNode(string curr, shared_ptr<ExprNode> lhs) {
+    if (curr == "+") {
+        shared_ptr<ExprNode> rhs = parseRelFactor(10);
+        shared_ptr<ExprNode> node = make_shared<ExprNode>("+");
+        node->left = lhs;
+        node ->right = rhs;
+        return node;
+    } else if (curr == "-") {
+        shared_ptr<ExprNode> rhs = parseRelFactor(10);
+        shared_ptr<ExprNode> node = make_shared<ExprNode>("-");
+        node->left = lhs;
+        node ->right = rhs;
+        return node;
+    } else if (curr == "*") {
+        shared_ptr<ExprNode> rhs = parseRelFactor(20);
+        shared_ptr<ExprNode> node = make_shared<ExprNode>("*");
+        node->left = lhs;
+        node ->right = rhs;
+        return node;
+    } else if (curr == "/") {
+        shared_ptr<ExprNode> rhs = parseRelFactor(20);
+        shared_ptr<ExprNode> node = make_shared<ExprNode>("/");
+        node->left = lhs;
+        node ->right = rhs;
+        return node;
+    } else if (curr == "%") {
+        shared_ptr<ExprNode> rhs = parseRelFactor(20);
+        shared_ptr<ExprNode> node = make_shared<ExprNode>("%");
+        node->left = lhs;
+        node ->right = rhs;
+        return node;
+    } else {
+        throw SPParseException("MakeExprNode called on invalid token " + curr);
+    }
+}
+
+shared_ptr<ExprNode> Parser::parseRelFactor(int priority) {
+    string curr = pop();
+    shared_ptr<ExprNode> exprNode = parseToken(curr);
+    while (parseSymbol(peek()) > priority) {
+        curr = pop();
+        exprNode = makeExprNode(curr, exprNode);
+    }
+    return exprNode;
+}
+
+shared_ptr<RelExprNode> Parser::parseRelExprNode() {
+    auto lhs = parseRelFactor(0);
+
+    std::unordered_set<std::string> valid_ops({">", ">=", "<", "<=", "==", "!="});
+    auto op = peek();
+    if (!valid_ops.count(op)) {
+        throw SPParseException("Expected a comparator, got '" + op + "'.");
     }
 
-    //! remove the ending )
-//    if (previous().compare(")") == 0) {
-//        condExpr.pop_back();
-//    }
     pop();
 
-    //! Check for valid parentheses
-    if (!Utils::isValidParentheses(condExpr)) {
-        throw SPParseException(ParserConstants::SP_PARSE_EXCEPTION_INVALID_PARENTHESES);
-    }
+    auto rhs = parseRelFactor(0);
 
-    CondExprParser condExprParser = CondExprParser(condExpr, isConnected);
-    //! If the tree can be built without any errors,
-    //! there is not syntax error and we can safely
-    //! using the string representation of the conditional expression.
-    condExprParser.parse();
-    string condExprStr = ParserConstants::EMPTY_STR;
-    for (auto str : condExpr) {
-        condExprStr += str;
+    return std::make_shared<RelExprNode>(lhs, op, rhs);
+}
+
+shared_ptr<CondExprNode> Parser::parseCondExprNode(int startIdx) {
+    if (match("!")) {
+        expect("(");
+        auto condExprNode = parseCondExprNode(startIdx - 1);
+        expect(")");
+        return make_shared<CondExprNode>(condExprNode);
     }
-    return make_shared<CondExprNode>(condExprStr);
+    else if (peek() == "(") {  // () op ()
+        unsigned long tempStart = currIdx;
+        expect("(");
+        shared_ptr<CondExprNode> condLHS = nullptr;
+        try {
+            condLHS = parseCondExprNode(startIdx - 1);
+        } catch (const SPParseException& e) {
+            currIdx = tempStart;
+            auto relExpr = parseRelExprNode();
+
+            if (relExpr) {
+                return std::make_shared<CondExprNode>(std::move(relExpr));
+            }
+        }
+        expect(")");
+
+        std::string op;
+
+        if (match("&&")) {
+            op = "&&";
+        } else if (match("||")) {
+            op = "||";
+        } else {
+            return nullptr;
+        }
+
+        expect("(");
+        auto condRHS = parseCondExprNode(startIdx - 1);
+        expect(")");
+
+        return std::make_shared<CondExprNode>(std::move(condLHS), op,
+                                              std::move(condRHS));
+    }
+    else {  // relExpr
+        auto relExpr = parseRelExprNode();
+
+        if (relExpr) {
+            return std::make_shared<CondExprNode>(std::move(relExpr));
+        }
+    }
+    // Shouldn't reach here
+    return nullptr;
 }
 
 shared_ptr<ProgramNode> Parser::parse() {
@@ -328,3 +439,4 @@ shared_ptr<ProgramNode> Parser::parse() {
     shared_ptr<ProgramNode> root = make_shared<ProgramNode>(procedureList);
     return root;
 }
+

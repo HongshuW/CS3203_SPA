@@ -30,15 +30,17 @@ public:
     void appendRow(vector<string> row);
     void appendRows(list<vector<string>> rows);
     void addValues(list<string> values);
+    void dropRows();
 
     Table dropCol(int colIdx);
     Table dupCol(int colIdx, string dupColName = "$dup_col");
 
     bool hasCol(string colName);
-    bool isEqual(Table otherTable);
-    bool isHeaderEmpty();
-    bool isBodyEmpty();
+    bool isEqual(const Table &otherTable);
+    bool isHeaderEmpty() const;
+    bool isBodyEmpty() const;
 
+    static const string DEFAULT_HEADER_PREFIX;
 
 
 };

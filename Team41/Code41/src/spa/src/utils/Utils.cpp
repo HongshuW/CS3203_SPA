@@ -19,28 +19,11 @@ bool Utils::isValidName(string str) {
 }
 
 bool Utils::isValidNumber(string str) {
+    if (str.empty()) return false;
+    if (str[0] == '0' && str.length() > 1) return false;
     return str.find_first_not_of("0123456789") == std::string::npos;
 }
 
-unordered_set<string> Utils::getVariablesFromExprString(string expr) {
-    unordered_set<string> ans;
-    unordered_set<char> ignored = {'*', '/', '%', '+', '-', '(', ')', ' ', '=', '<', '>', '!', '|', '&'};
-    string acc = "";
-    for (int i = 0; i < expr.length(); i++) {
-        if (ignored.find(expr[i]) == ignored.end()) { // char not in ignored
-            acc += expr[i];
-        } else {
-            if (!acc.empty() && !isValidNumber(acc)) {
-                ans.insert(acc);
-            }
-            acc = "";
-        }
-    }
-    if (!acc.empty() && !isValidNumber(acc)) {
-        ans.insert(acc);
-    }
-    return ans;
-}
 
 bool Utils::isMathOperators(string str) {
     return Utils::MATH_OPERATORS.count(str) > 0;

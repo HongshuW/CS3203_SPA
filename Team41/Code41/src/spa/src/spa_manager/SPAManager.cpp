@@ -13,6 +13,8 @@ void SPAManager::parse(string &filename) {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         designExtractor.run();
+    } catch (const SPASTException& e) {
+        exit(EXIT_SUCCESS);
     } catch (const SPTokenizeException& e) {
         exit(EXIT_SUCCESS);
     } catch (const SPParseException& e) {
@@ -42,7 +44,7 @@ vector<string> SPAManager::evaluate(string& query) {
         string errorMessage = "SemanticError";
         results.push_back(errorMessage);
     } catch (std::exception& e) {
-        string errorMessage = "SyntaxError";
+        string errorMessage = e.what();
         results.push_back(errorMessage);
     }
     return results;

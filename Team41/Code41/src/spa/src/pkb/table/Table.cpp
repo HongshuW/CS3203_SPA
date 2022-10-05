@@ -3,6 +3,7 @@
 //
 
 #include "Table.h"
+const string Table::DEFAULT_HEADER_PREFIX = "$";
 
 vector<string> Table::getColumnByName(string columnName) {
     int numOfColumns = header.size();
@@ -87,6 +88,10 @@ void Table::renameHeader(vector<string> newHeader) {
     header = newHeader;
 }
 
+void Table::dropRows() {
+    this->rows = {};
+}
+
 Table Table::dropCol(int colIdx) {
     if (colIdx >= this->header.size()) return *this;
     Table droppedTable = Table();
@@ -112,7 +117,7 @@ Table Table::dropCol(int colIdx) {
     return droppedTable;
 }
 
-bool Table::isEqual(Table otherTable) {
+bool Table::isEqual(const Table &otherTable) {
     if (header.size() != otherTable.header.size()) return false;
     if (rows.size() != otherTable.rows.size()) return false;
     for (int i = 0; i < otherTable.header.size(); ++i) {
@@ -130,11 +135,11 @@ bool Table::isEqual(Table otherTable) {
     return true;
 }
 
-bool Table::isHeaderEmpty() {
+bool Table::isHeaderEmpty() const {
     return this->header.size() == 0;
 }
 
-bool Table::isBodyEmpty() {
+bool Table::isBodyEmpty() const {
     return this->rows.size() == 0;
 }
 

@@ -423,6 +423,13 @@ TEST_CASE ("Test Query Tokenizer") {
                            }));
     }
 
+    SECTION ("Test invalid token - negative number") {
+        std::string query = "procedure p; Select p with -9999 = -9999";
+
+        QueryTokenizer tokenizer = QueryTokenizer(query);
+        REQUIRE_THROWS_AS(tokenizer.tokenize(), PQLTokenizeException);
+    }
+
     SECTION ("Test unexpected tokens") {
         std::string query = "stmt s& Select s such that Follows* (a, 6)";
         QueryTokenizer tokenizer = QueryTokenizer(query);

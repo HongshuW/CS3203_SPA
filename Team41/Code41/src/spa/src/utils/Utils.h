@@ -22,7 +22,6 @@ public:
 
     static bool isValidName(string str);
     static bool isValidNumber(string str);
-    static unordered_set<string> getVariablesFromExprString(string expr);
     static bool isMathOperators(string str);
     static bool isBracket(string str);
     static bool isValidParentheses(vector<string>& tokens);

@@ -57,7 +57,11 @@ TEST_CASE("Test SP Parser") {
 
         auto readNode = make_shared<ReadNode>(
                 make_shared<VariableNode>("num1"));
-        auto condExpr = make_shared<CondExprNode>("number>0");
+        auto relExprNode =
+                make_shared<RelExprNode>(make_shared<ExprNode>("number"),
+                        ">",
+                        make_shared<ExprNode>("0"));
+        auto condExpr = make_shared<CondExprNode>(relExprNode);
         auto stmtListInner = vector<shared_ptr<StmtNode>>({readNode});
         auto whileNode = make_shared<WhileNode>(condExpr, stmtListInner);
         auto stmtListOuter = vector<shared_ptr<StmtNode>>({whileNode});
@@ -77,7 +81,11 @@ TEST_CASE("Test SP Parser") {
 
         auto readNode = make_shared<ReadNode>(
                 make_shared<VariableNode>("num1"));
-        auto condExpr = make_shared<CondExprNode>("!(number>0)");
+        auto relExprNode =
+                make_shared<RelExprNode>(make_shared<ExprNode>("number"),
+                                         ">",
+                                         make_shared<ExprNode>("0"));
+        auto condExpr = make_shared<CondExprNode>(make_shared<CondExprNode>(relExprNode));
         auto stmtListInner = vector<shared_ptr<StmtNode>>({readNode});
         auto whileNode = make_shared<WhileNode>(condExpr, stmtListInner);
         auto stmtListOuter = vector<shared_ptr<StmtNode>>({whileNode});
@@ -99,7 +107,10 @@ TEST_CASE("Test SP Parser") {
                 make_shared<VariableNode>("num1"));
         auto readNodeElse = make_shared<ReadNode>(
                 make_shared<VariableNode>("num2"));
-        auto condExpr = make_shared<CondExprNode>("number>0");
+        auto relExprNode =make_shared<RelExprNode>(make_shared<ExprNode>("number"),
+                                 ">",
+                                 make_shared<ExprNode>("0"));
+        auto condExpr = make_shared<CondExprNode>(relExprNode);
         auto stmtListIf = vector<shared_ptr<StmtNode>>({readNode});
         auto stmtListElse = vector<shared_ptr<StmtNode>>({readNodeElse});
         auto ifNode = make_shared<IfNode>(condExpr, stmtListIf, stmtListElse);
@@ -122,10 +133,18 @@ TEST_CASE("Test SP Parser") {
                 make_shared<VariableNode>("num1"));
         auto readNodeElse = make_shared<ReadNode>(
                 make_shared<VariableNode>("num2"));
-        auto condExpr = make_shared<CondExprNode>("(x==y)&&(z>2)");
+        auto relExprNodeLHS =make_shared<RelExprNode>(make_shared<ExprNode>("x"),
+                                                   "==",
+                                                   make_shared<ExprNode>("y"));
+        auto condExprLHS = make_shared<CondExprNode>(relExprNodeLHS);
+        auto relExprNodeRHS =make_shared<RelExprNode>(make_shared<ExprNode>("z"),
+                                                      ">",
+                                                      make_shared<ExprNode>("2"));
+        auto condExprRHS = make_shared<CondExprNode>(relExprNodeRHS);
+        auto condExprRoot = make_shared<CondExprNode>(condExprLHS, "&&", condExprRHS);
         auto stmtListIf = vector<shared_ptr<StmtNode>>({readNode});
         auto stmtListElse = vector<shared_ptr<StmtNode>>({readNodeElse});
-        auto ifNode = make_shared<IfNode>(condExpr, stmtListIf, stmtListElse);
+        auto ifNode = make_shared<IfNode>(condExprRoot, stmtListIf, stmtListElse);
         auto stmtListOuter = vector<shared_ptr<StmtNode>>({ifNode});
         auto procedure = make_shared<ProcedureNode>("testProcedure", stmtListOuter);
         vector<shared_ptr<ProcedureNode>> procedureList = vector<std::shared_ptr<ProcedureNode>>(
@@ -144,12 +163,17 @@ TEST_CASE("Test SP Parser") {
 
         auto readNode = make_shared<ReadNode>(make_shared<VariableNode>("num1"));
         auto stmtListInner = vector<shared_ptr<StmtNode>>({readNode});
-        auto whileCondExpr = make_shared<CondExprNode>("x!=100");
+        auto whileRelExprNode =make_shared<RelExprNode>(make_shared<ExprNode>("x"),
+                                                     "!=",
+                                                     make_shared<ExprNode>("100"));
+        auto whileCondExpr = make_shared<CondExprNode>(whileRelExprNode);
         auto printNode = make_shared<PrintNode>(
                 make_shared<VariableNode>("x"));
         auto whileNode = make_shared<WhileNode>(whileCondExpr, stmtListInner);
-
-        auto ifCondExpr = make_shared<CondExprNode>("x<=100");
+        auto ifRelExprNode =make_shared<RelExprNode>(make_shared<ExprNode>("x"),
+                                                      "<=",
+                                                      make_shared<ExprNode>("100"));
+        auto ifCondExpr = make_shared<CondExprNode>(ifRelExprNode);
         auto stmtListIf = vector<shared_ptr<StmtNode>>({whileNode});
         auto stmtListElse = vector<shared_ptr<StmtNode>>({printNode});
         auto ifNode = make_shared<IfNode>(ifCondExpr, stmtListIf, stmtListElse);
@@ -159,6 +183,15 @@ TEST_CASE("Test SP Parser") {
                 {procedure});
         shared_ptr<ASTNode> expectedProgram = make_shared<ProgramNode>(procedureList);
         REQUIRE(*testProgram == *expectedProgram);
+    }
+
+    SECTION("1 while statement with complex conditional expression") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "while", "(", "(", "a", "<=", "z", "-", "(", "b", "-", "a", ")",
+                 ")", "||", "(", "(", "!", "(", "xyz", "==", "123", ")", ")", "||", "(", "test", "<=", "3", "+", "90", ")", ")", ")",
+                 "{", "read", "num1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_NOTHROW(parser.parse());
     }
 
     SECTION("Empty program, throw SPParserException") {
@@ -230,6 +263,46 @@ TEST_CASE("Test SP Parser") {
         vector<std::string> tokens = vector<std::string>(
                 {"procedure", "testProcedure", "{", "while", "(", "!", "(", "(", "number", ">", "0", ")", ")", "{",
                  "read", "12num1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Negative number, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "-", "99", ";", "while", "(", "x", "<", "-", "100",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid number in assign statement, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "0123", ";", "while", "(", "x", "<", "100",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid name in assign statement, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "123x", "=", "123", ";", "while", "(", "x", "<", "100",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid number in assign condExpr, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "123", ";", "while", "(", "x", "<", "0123",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid name in assign condExpr, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "123", ";", "while", "(", "123x", "<", "123",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
         Parser parser = Parser(tokens);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }

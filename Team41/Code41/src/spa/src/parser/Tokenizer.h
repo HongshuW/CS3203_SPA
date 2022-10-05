@@ -8,6 +8,7 @@
 #include <vector>
 #include <unordered_set>
 #include "constants/TokeniserConstants.h"
+#include "utils/Utils.h"
 // maybe include method to tokenise symbols
 
 using namespace std;
@@ -40,6 +41,7 @@ namespace SourceParser {
         void processSymbols();
         void processString();
         void processAlNum();
+        void processDigit();
         bool match(char s);
 
     public:

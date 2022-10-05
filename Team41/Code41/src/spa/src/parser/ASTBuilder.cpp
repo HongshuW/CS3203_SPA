@@ -5,6 +5,7 @@
 #include "ASTBuilder.h"
 #include "AST/ProgramNode.h"
 #include "parser/Parser.h"
+#include "parser/ASTValidator.h"
 
 using namespace SourceParser;
 
@@ -21,5 +22,7 @@ shared_ptr<ProgramNode> ASTBuilder::buildAST(std::string filename) {
     vector<string> tokens = tokenizer.tokenize();
     Parser parser = Parser(tokens);
     shared_ptr<ProgramNode> rootPtr = parser.parse();
+    ASTValidator astValidator = ASTValidator(rootPtr);
+    astValidator.validateAST();
     return rootPtr;
 }

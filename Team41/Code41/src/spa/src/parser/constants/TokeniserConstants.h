@@ -40,8 +40,8 @@ namespace SourceParser {
         static const char BAR_CHAR;
 
         static const string UNEXPECTED_TOKEN_MESSAGE;
-
-
+        static const string INVALID_NAME;
+        static const string INVALID_NUMBER;
     };
 
 } // SourceParser

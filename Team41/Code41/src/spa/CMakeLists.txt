@@ -125,8 +125,6 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/UsesExtractor.h
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
-        src/parser/CondExprParser.cpp
-        src/parser/CondExprParser.h
         src/query_evaluator/QEUtils.cpp
         src/query_evaluator/QEUtils.h
         src/utils/ExprNodeParser.h
@@ -135,10 +133,8 @@ add_library(spa ${srcs} ${headers}
         src/utils/ExprNodeParser.h
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
-        src/parser/CondExprParser.cpp
-        src/parser/CondExprParser.h src/design_extractor/PatternExtractor.cpp
+        src/design_extractor/PatternExtractor.cpp
         src/design_extractor/PatternExtractor.h
-        src/parser/CondExprParser.h
         src/query_builder/clauses/pattern_clauses/PatternClause.h
         src/query_builder/commons/ExpressionSpec.cpp
         src/query_builder/commons/ExpressionSpec.h
@@ -234,10 +230,10 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/such_that_clauses/AffectsTClause.h
         src/query_builder/clauses/such_that_clauses/Validatable.h
         src/CFG/CFG.cpp
-        src/CFG/CFG.h 
-        src/design_extractor/NextExtractor.cpp 
-        src/design_extractor/NextExtractor.h 
-        src/design_extractor/AffectsExtractor.cpp 
+        src/CFG/CFG.h
+        src/design_extractor/NextExtractor.cpp
+        src/design_extractor/NextExtractor.h
+        src/design_extractor/AffectsExtractor.cpp
         src/design_extractor/AffectsExtractor.h
         src/query_builder/relations/such_that_relations/Follows.cpp
         src/query_builder/relations/such_that_relations/Follows.h
@@ -282,9 +278,15 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/relations/pattern_relations/AssignPattern.cpp
         src/query_builder/relations/pattern_relations/AssignPattern.h
         src/query_builder/relations/pattern_relations/PatternRelations.cpp
-        src/query_builder/relations/pattern_relations/PatternRelations.h src/design_extractor/args/StmtNoArgs.cpp src/design_extractor/args/StmtNoArgs.h)
+        src/query_builder/relations/pattern_relations/PatternRelations.h
+        src/parser/ASTValidator.cpp
+        src/parser/ASTValidator.h
+        src/query_builder/relations/pattern_relations/PatternRelations.h
+        src/query_builder/clauses/pattern_clauses/InvalidPatternClause.cpp
+        src/query_builder/clauses/pattern_clauses/InvalidPatternClause.h
+        src/query_builder/relations/pattern_relations/InvalidPattern.cpp
+        src/query_builder/relations/pattern_relations/InvalidPattern.h
+        src/design_extractor/args/StmtNoArgs.cpp src/design_extractor/args/StmtNoArgs.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-

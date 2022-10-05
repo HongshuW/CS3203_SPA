@@ -15,7 +15,6 @@
 
 using namespace QB;
 
-
 namespace QB {
 
     class IfPatternClause : public PatternClause, public enable_shared_from_this<IfPatternClause> {
@@ -23,7 +22,6 @@ namespace QB {
         IfPatternClause(Synonym arg1, Ref arg2);
 
         bool operator==(const IfPatternClause &other) const;
-        Clause asClauseVariant() override;
         Table accept(shared_ptr<IVisitor> visitor) override;
         unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
     };

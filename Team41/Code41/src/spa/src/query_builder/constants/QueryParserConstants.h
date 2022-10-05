@@ -39,6 +39,7 @@ namespace QB {
         static const string PQL_PARSE_EXCEPTION_EXPECT_SUCH_THAT_OR_PATTERN;
         static const string PQL_PARSE_EXCEPTION_EXPECT_WITH_REF;
         static const string PQL_PARSE_EXCEPTION_EXPECT_REF;
+        static const string PQL_PARSE_EXCEPTION_INVALID_PATTERN_SYNTAX;
     };
 
 } // QB

@@ -27,7 +27,7 @@ procedure deepNesting {
                             while (x21 < x20) {
                                 print x22;
                             }
-                            call x23;
+                            print x23;
                             x24 = 100;
                         }
                     }
