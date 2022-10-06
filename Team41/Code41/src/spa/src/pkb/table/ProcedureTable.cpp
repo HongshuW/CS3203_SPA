@@ -5,8 +5,6 @@
 #include "ProcedureTable.h"
 #include "../PKBStorage.h"
 
-using cfgTableRow = variant<string, shared_ptr<unordered_map<int, unordered_set<int>>>>;
-
 ProcedureTable::ProcedureTable() {
     header = vector<string>{PKBStorage::PROCEDURE_TABLE_COL1_NAME};
     cfgSubTableHeader = vector<string>{PKBStorage::PROCEDURE_TABLE_COL1_NAME, PKBStorage::PROCEDURE_TABLE_COL2_NAME};

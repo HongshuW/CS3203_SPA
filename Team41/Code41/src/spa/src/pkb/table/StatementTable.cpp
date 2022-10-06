@@ -15,9 +15,9 @@ StatementTable::StatementTable() {
 string StatementTable::getStatementType(string stmtNumber) {
     vector<string> row = getRowByPrimaryKey(stmtNumber);
     if (row.empty()) {
-        throw new KeyNotFoundException(header[0], stmtNumber);
+        throw new KeyNotFoundException(header[primaryKeyColumnIndex], stmtNumber);
     }
-    return row[1];
+    return row[statementTypeColumn];
 }
 
 shared_ptr<Table> StatementTable::getStatements() {

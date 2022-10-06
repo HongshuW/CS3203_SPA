@@ -24,6 +24,9 @@ public:
     // setters
     void addPrintedVar(vector<string> printStmtVarPair);
     void addReadVar(vector<string> readStmtVarPair);
+
+private:
+    int statementTypeColumn = 1;
 };
 
 
