@@ -289,7 +289,7 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/QueryOptimizer.cpp 
         src/query_evaluator/QueryOptimizer.h 
         src/query_builder/clauses/ConditionalClause.cpp 
-        src/query_builder/clauses/ConditionalClause.h)
+        src/query_builder/clauses/ConditionalClause.h
         src/design_extractor/args/StmtNoArgs.cpp 
         src/design_extractor/args/StmtNoArgs.h)
 
