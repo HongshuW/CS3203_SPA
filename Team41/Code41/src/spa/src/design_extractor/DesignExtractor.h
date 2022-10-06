@@ -40,6 +40,7 @@ namespace DE {
         vector<string> getAffectsRelations(StmtNoArgs args);
         vector<string> getAffectsStarRelations(StmtNoArgs args);
 
+        list<vector<string>> getAllNextStarRelations();
         list<vector<string>> getAllAffectsRelations();
         list<vector<string>> getAllAffectsStarRelations();
     };

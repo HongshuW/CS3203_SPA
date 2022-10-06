@@ -20,14 +20,41 @@ using namespace std;
 using namespace DE;
 
 TEST_CASE("Test NextStar Extractor") {
-    SECTION("Test Empty Arguments") {
+    SECTION("Test No Arguments In Simple Procedure") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         auto programNode = TestDE::Dummies::getTestProgramNode(1);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        StmtNoArgs args = StmtNoArgs();
-        vector<string> expected = designExtractor.getNextStarRelations(args);
-        REQUIRE(expected.empty());
+        list<vector<string>> actual = designExtractor.getAllNextStarRelations();
+        vector<vector<string>> expected = { {"1", "2"}, {"2", "3"}, {"1", "3"} };
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
+    }
+
+    SECTION("Test No Arguments In Normal Procedure") {
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        auto programNode = TestDE::Dummies::getTestProgramNode(2);
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        list<vector<string>> actual = designExtractor.getAllNextStarRelations();
+        vector<vector<string>> expected = { {"1", "2"}, {"1", "3"}, {"1", "4"}, {"1", "5"}, {"1", "6"}, {"1", "7"},
+                                             {"2", "3"}, {"2", "4"}, {"2", "5"}, {"2", "6"}, {"2", "7"}, {"3", "4"}, {"3", "5"},
+                                              {"3", "6"}, {"3", "7"}, {"4", "5"}, {"4", "7"}, {"5", "7"}, {"6", "7"}};
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
+    }
+
+    SECTION("Test No Arguments With While Statement") {
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        auto programNode = TestDE::Dummies::getTestProgramNode(24);
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        list<vector<string>> actual = designExtractor.getAllNextStarRelations();
+        vector<vector<string>> expected = { {"1", "2"}, {"1", "3"}, {"1", "4"}, {"2", "2"}, {"2", "3"},
+                                             {"2", "4"}, {"3", "2"}, {"3", "3"},
+                                              {"3", "4"}};
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
     }
 
     SECTION("Test Invalid Start and End Arguments") {
