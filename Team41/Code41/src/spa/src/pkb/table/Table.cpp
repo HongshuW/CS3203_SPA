@@ -3,6 +3,7 @@
 //
 
 #include "Table.h"
+const string Table::DEFAULT_HEADER_PREFIX = "$";
 
 vector<string> Table::getColumnByName(string columnName) {
     int numOfColumns = header.size();
@@ -16,13 +17,14 @@ vector<string> Table::getColumnByName(string columnName) {
 }
 
 int Table::getColIdxByName(string colName) {
+    int invalidColumn = -1;
     int numOfColumns = header.size();
     for (int i = 0; i < numOfColumns; i++) {
         if (header[i] == colName) {
             return i;
         }
     }
-    return -1;
+    return invalidColumn;
 }
 
 vector<string> Table::getColumnByIndex(int index) {
@@ -35,10 +37,9 @@ vector<string> Table::getColumnByIndex(int index) {
 }
 
 vector<string> Table::getRowByPrimaryKey(string key) {
-    // assume the first column is the primary key
     int size = rows.size();
     for (int i = 0; i < size; i++) {
-        if (rows[i][0] == key) {
+        if (rows[i][primaryKeyColumnIndex] == key) {
             return rows[i];
         }
     }
@@ -66,20 +67,22 @@ void Table::appendRow(vector<string> row) {
 
 void Table::appendRows(list<vector<string>> rows) {
     auto rowsIterator = rows.begin();
+    int stepSize = 1;
     while (rowsIterator != rows.end()) {
         appendRow(*rowsIterator);
-        advance(rowsIterator, 1);
+        advance(rowsIterator, stepSize);
     }
 }
 
 void Table::addValues(list<string> values) {
     // used in tables with one column only
     auto valuesIterator = values.begin();
+    int stepSize = 1;
     while (valuesIterator != values.end()) {
         vector<string> row;
         row.push_back(*valuesIterator);
         appendRow(row);
-        advance(valuesIterator, 1);
+        advance(valuesIterator, stepSize);
     }
 }
 
@@ -135,11 +138,11 @@ bool Table::isEqual(const Table &otherTable) {
 }
 
 bool Table::isHeaderEmpty() const {
-    return this->header.size() == 0;
+    return this->header.empty();
 }
 
 bool Table::isBodyEmpty() const {
-    return this->rows.size() == 0;
+    return this->rows.empty();
 }
 
 Table Table::dupCol(int colIdx, string dupColName) {

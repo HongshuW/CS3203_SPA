@@ -275,7 +275,7 @@ namespace QE {
         }
         //drop unused columns
         for (int i = 0; i < table.header.size(); i++) {
-            if (table.header[i].find('$') != std::string::npos) {
+            if (table.header[i].find(Table::DEFAULT_HEADER_PREFIX) != std::string::npos) {
                 table = table.dropCol(i);
             }
         }
