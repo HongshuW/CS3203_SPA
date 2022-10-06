@@ -13,6 +13,9 @@ class AffectsExtractor {
 public:
 	static vector<string> extractAffects(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
 	static vector<string> extractAffectsStar(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
+
+	static list<vector<string>> extractAllAffectsInProgram(shared_ptr<ProgramNode> programNode);
+	static list<vector<string>> extractAllAffectsStarInProgram(shared_ptr<ProgramNode> programNode);
 private:
 	static vector<string> extractAffectsWithStartAndEnd(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
 	static vector<string> extractAffectsWithEndOnly(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
@@ -21,9 +24,6 @@ private:
 	static void extractAffectsWithStartAndEndDFSHelper(int start, int end,
 		CFG cfg, list<vector<string>>& validPathsList, 
 		vector<string>& validPaths, vector<bool>& visitedArr);
-
-	static list<vector<string>> extractAllAffectsInProgram(shared_ptr<ProgramNode> programNode);
-	static list<vector<string>> extractAllAffectsStarInProgram(shared_ptr<ProgramNode> programNode);
 
 	static vector<string> extractAffectsStarWithStartAndEnd(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
 	static vector<string> extractAffectsStarWithStartOnly(shared_ptr<ProgramNode> programNode, StmtNoArgs args);

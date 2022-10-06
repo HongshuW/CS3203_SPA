@@ -19,15 +19,36 @@ using namespace std;
 using namespace DE;
 
 TEST_CASE("Test AffectsStar Extractor") {
-    SECTION("Test Empty Arguments") {
+    SECTION("Test No Arguments") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         auto programNode = TestDE::Dummies::getTestProgramNode(20);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         StmtNoArgs args = StmtNoArgs();
-        vector<string> actual = designExtractor.getAffectsStarRelations(args);
-        vector<string> expected = {};
-        REQUIRE(actual == expected);
+        list<vector<string>> actual = designExtractor.getAllAffectsStarRelations();
+        vector<vector<string>> expected = { {"1", "2"}, {"2", "3"}, {"1", "3"}};
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
+    }
+
+    SECTION("Test No Arguments With Normal Procedure") {
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+        auto programNode = TestDE::Dummies::getTestProgramNode(21);
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
+        StmtNoArgs args = StmtNoArgs();
+        list<vector<string>> actual = designExtractor.getAllAffectsStarRelations();
+        vector<vector<string>> expected = { 
+            {"1", "4"}, {"1", "8"}, {"1", "10"}, {"1", "11"}, 
+            {"1", "12"}, {"10", "11"}, {"10", "12"}, {"11", "12"}, 
+            {"2", "10"}, {"2", "11"}, {"2", "12"}, 
+            {"2", "6"}, {"6", "11"}, {"6", "12"}, 
+            {"8", "10"}, {"8", "11"}, {"8", "12"}, 
+            {"4", "4"},  {"4", "8"}, {"4", "10"}, {"4", "11"}, {"4", "12"}, 
+            {"6", "6"},  {"6", "10"},
+            {"9", "10"}, {"9", "11"}, {"9", "12"}, {"13", "14"}};
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
     }
 
     SECTION("Test Invalid Arguments") {

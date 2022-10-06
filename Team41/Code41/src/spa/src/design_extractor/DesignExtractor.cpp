@@ -225,4 +225,13 @@ vector<string> DE::DesignExtractor::getAffectsStarRelations(StmtNoArgs args)
     return AffectsExtractor::extractAffectsStar(this->programNode, args);
 }
 
+list<vector<string>> DE::DesignExtractor::getAllAffectsRelations() {
+    return AffectsExtractor::extractAllAffectsInProgram(this->programNode);
+}
+
+list<vector<string>> DE::DesignExtractor::getAllAffectsStarRelations()
+{
+    return AffectsExtractor::extractAllAffectsStarInProgram(this->programNode);
+}
+
 
