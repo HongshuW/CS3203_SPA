@@ -134,7 +134,7 @@ vector<string> AffectsExtractor::extractAffectsWithEndOnly(shared_ptr<ProgramNod
         return {};
     }
 
-    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(end, programNode);
+    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(programNode);
     bool isEndStmtNoAssignNode = allStmtNoOfAssignNodes.count(to_string(end));
     if (!isEndStmtNoAssignNode) {
         return {};
@@ -166,7 +166,7 @@ vector<string> AffectsExtractor::extractAffectsWithStartOnly(shared_ptr<ProgramN
         return {};
     }
 
-    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(start, programNode);
+    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(programNode);
     bool isStartStmtNoAssignNode = allStmtNoOfAssignNodes.count(to_string(start));
     if (!isStartStmtNoAssignNode) {
         return {};
@@ -183,6 +183,43 @@ vector<string> AffectsExtractor::extractAffectsWithStartOnly(shared_ptr<ProgramN
     }
 
     return ans;
+}
+
+list<vector<string>> AffectsExtractor::extractAllAffectsInProgram(shared_ptr<ProgramNode> programNode) {
+    list<vector<string>> output;
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
+        ASTUtils::getNodePtrToLineNumMap(programNode);
+    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(programNode);
+    for (auto startStmtNo: allStmtNoOfAssignNodes) {
+        for (auto endStmtNo : allStmtNoOfAssignNodes) {
+            StmtNoArgs args;
+            args.setStartAndEndStmtNo(stoi(startStmtNo), stoi(endStmtNo));
+            vector<string> ans = AffectsExtractor::extractAffectsWithStartAndEnd(programNode, args);
+            if (!ans.empty()) {
+                output.push_back(ans);
+            }
+        }
+    }
+
+    return output;
+}
+
+list<vector<string>> AffectsExtractor::extractAllAffectsStarInProgram(shared_ptr<ProgramNode> programNode) {
+    list<vector<string>> output;
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
+        ASTUtils::getNodePtrToLineNumMap(programNode);
+    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(programNode);
+    for (auto startStmtNo : allStmtNoOfAssignNodes) {
+        for (auto endStmtNo : allStmtNoOfAssignNodes) {
+            StmtNoArgs args;
+            args.setStartAndEndStmtNo(stoi(startStmtNo), stoi(endStmtNo));
+            vector<string> ans = AffectsExtractor::extractAffectsStarWithStartAndEnd(programNode, args);
+            if (!ans.empty()) {
+                output.push_back(ans);
+            }
+        }
+    }
+    return output;
 }
 
 void AffectsExtractor::extractAffectsWithStartAndEndDFSHelper(int start, int end, CFG cfg, 
@@ -273,7 +310,7 @@ vector<string> AffectsExtractor::extractAffectsStarWithStartOnly(shared_ptr<Prog
         return {};
     }
 
-    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(start, programNode);
+    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(programNode);
     bool isStartStmtNoAssignNode = allStmtNoOfAssignNodes.count(to_string(start));
     if (!isStartStmtNoAssignNode) {
         return {};
@@ -305,7 +342,7 @@ vector<string> AffectsExtractor::extractAffectsStarWithEndOnly(shared_ptr<Progra
         return {};
     }
 
-    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(end, programNode);
+    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(programNode);
     bool isEndStmtNoAssignNode = allStmtNoOfAssignNodes.count(to_string(end));
     if (!isEndStmtNoAssignNode) {
         return {};
@@ -381,7 +418,7 @@ unordered_map<string, shared_ptr<StmtNode>> AffectsExtractor::getStmtNoToAssignR
     return map;
 }
 
-unordered_set<string> AffectsExtractor::getAllStmtNoOfAssignNodes(int stmtNoArg, shared_ptr<ProgramNode> programNode) {
+unordered_set<string> AffectsExtractor::getAllStmtNoOfAssignNodes(shared_ptr<ProgramNode> programNode) {
     unordered_set<string> stmtNoList;
     auto stmtNoToAssignReadAndCallMap
         = AffectsExtractor::getStmtNoToAssignReadAndCallNodesMap(programNode);

@@ -22,6 +22,7 @@ public:
     bool startAndEndExists();
     bool startExistsOnly();
     bool endExistsOnly();
+    bool noArgsProvided();
 
 private:
     int startStmtNo = 0;
