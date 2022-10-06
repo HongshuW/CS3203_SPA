@@ -40,6 +40,8 @@ public:
     bool isEqual(const Table &otherTable);
     bool isHeaderEmpty() const;
     bool isBodyEmpty() const;
+
+    static const string DEFAULT_HEADER_PREFIX;
 };
 
 #endif //SPA_TABLE_H
