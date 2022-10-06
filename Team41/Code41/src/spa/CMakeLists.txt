@@ -281,7 +281,7 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/pattern_clauses/InvalidPatternClause.cpp
         src/query_builder/clauses/pattern_clauses/InvalidPatternClause.h
         src/query_builder/relations/pattern_relations/InvalidPattern.cpp
-        src/query_builder/relations/pattern_relations/InvalidPattern.h)
+        src/query_builder/relations/pattern_relations/InvalidPattern.h src/query_evaluator/QueryOptimizer.cpp src/query_evaluator/QueryOptimizer.h src/query_builder/clauses/ConditionalClause.cpp src/query_builder/clauses/ConditionalClause.h)
 
 
 

@@ -4,9 +4,7 @@
 
 #include "QueryEvaluator.h"
 #include "query_builder/commons/Query.h"
-#include "query_evaluator/QueryResult.h"
 #include "TableCombiner.h"
-#include "QueryBooleanResult.h"
 #include "QueryTupleResult.h"
 #include <algorithm>
 #include <vector>
@@ -15,6 +13,7 @@
 #include "constants/ClauseVisitorConstants.h"
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 #include "ConcreteClauseVisitor.h"
+#include "QueryOptimizer.h"
 
 using namespace QB;
 using namespace QE;
@@ -28,65 +27,26 @@ QueryEvaluator::QueryEvaluator(shared_ptr<DataRetriever> dataRetriever): dataRet
 }
 
 vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
-
+    this->query = query;
     this->declarations = query->declarations;
     shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(dataRetriever, declarations);
 //    shared_ptr<ClauseVisitor> clauseEvaluator = make_shared<ClauseVisitor>(dataPreprocessor,
 //                                                                           declarations);
     shared_ptr<ConcreteClauseVisitor> concreteClauseVisitor = make_shared<ConcreteClauseVisitor>(dataPreprocessor);
 
+    shared_ptr<QueryOptimizer> queryOptimizer = make_shared<QueryOptimizer>(query);
+    ConnectedClauseGroups ccg = queryOptimizer->optimise();
 
-    bool hasCondition = !query->suchThatClauses->empty() || !query->patternClauses->empty() || !query->withClauses->empty();
-    if (!hasCondition) {//no such that or pattern clause
-        return this->evaluateNoConditionQuery(query, concreteClauseVisitor);
-    }
     bool isReturnTypeBool = query->selectClause->returnType == QB::ReturnType::BOOLEAN;
-
-    //check for bool result
-    for (auto withClause: *query->withClauses) {
-        bool doesConditionExist = dataPreprocessor->hasResult(withClause);
-        if (!doesConditionExist) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-    }
-
-    TableCombiner tableCombiner = TableCombiner();
-    Table resultTable;
-    for (const auto& stClause: *query->suchThatClauses) {
-        Table intermediateTable = stClause->accept(concreteClauseVisitor);
-        if (intermediateTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-        resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
-        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-    }
-
-    for (const auto& patternClause: *query->patternClauses) {
-
-        Table intermediateTable = patternClause->accept(concreteClauseVisitor);;
-        if (intermediateTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-        resultTable = tableCombiner.joinTable( intermediateTable, resultTable);
-        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-    }
-
-    //all conditions must be valid at this point
-    for (const auto& withClause: *query->withClauses) {
-        Table intermediateTable = withClause->accept(concreteClauseVisitor);
-        //intermediate table return an empty table if there is no synonym in with clause
-        resultTable = tableCombiner.joinTable(intermediateTable, resultTable);
-        if (resultTable.isBodyEmpty()) return isReturnTypeBool ? FALSE_RESULT : EMPTY_RESULT;
-    }
-
-    shared_ptr<vector<Elem>> returnTuple = query->selectClause->returnResults;
-    return formatConditionalQueryResult(resultTable, returnTuple, query, dataPreprocessor);
+    return isReturnTypeBool
+    ? evaluateSelectBoolQuery(concreteClauseVisitor, dataPreprocessor, ccg)
+    : evaluateSelectTupleQuery(concreteClauseVisitor, dataPreprocessor, ccg);
 }
 
 vector<string>
-QueryEvaluator::evaluateNoConditionQuery(shared_ptr<Query> query, shared_ptr<ConcreteClauseVisitor> clauseVisitor) {
-    shared_ptr<SelectClause> selectClause = query->selectClause;
-
-    if (selectClause->isBoolean()) return TRUE_RESULT;
-
-    Table resultTable = selectClause->accept(clauseVisitor);
-
-    vector<string> ans = projectResult(resultTable, selectClause->returnResults);
-
+QueryEvaluator::evaluateNoConditionSelectTupleQuery(shared_ptr<Query> query, shared_ptr<ConcreteClauseVisitor> clauseVisitor) {
+    Table resultTable = query->selectClause->accept(clauseVisitor);
+    vector<string> ans = projectResult(resultTable, query->selectClause->returnResults);
     return removeDup(ans);
 }
 
@@ -235,6 +195,95 @@ int QueryEvaluator::getUnvisitedColIdxByName(const string& colName, ViewedDups v
         }
     }
     return -1;
+}
+
+vector<string> QueryEvaluator::evaluateSelectBoolQuery(shared_ptr<ConcreteClauseVisitor> clauseVisitor,
+                                                       shared_ptr<DataPreprocessor> dataPreprocessor,
+                                                       ConnectedClauseGroups ccg) {
+    //if no condition, return true
+    bool hasCondition = !query->suchThatClauses->empty() || !query->patternClauses->empty() || !query->withClauses->empty();
+    if (!hasCondition) return TRUE_RESULT;
+
+    //eval truthiness of with clauses
+    for (auto withClause: *query->withClauses) {
+        bool doesConditionExist = dataPreprocessor->hasResult(withClause);
+        if (!doesConditionExist) return FALSE_RESULT;
+    }
+
+    //first evaluate group of clauses without synonyms
+    for (auto noSynClause: *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
+        Table intermediateTable = noSynClause->accept(clauseVisitor);
+        if (intermediateTable.isBodyEmpty()) return  FALSE_RESULT;
+    }
+    //erase group of clauses without synonyms after evaluation
+    ccg->erase(QueryOptimizer::NO_SYN_GROUP_IDX);
+
+    TableCombiner tableCombiner = TableCombiner();
+    const string DUMMY_HEADER = "$dummy_header";
+    const string DUMMY_VALUE = "$dummy_value";
+    Table resultTable = Table();
+    resultTable.renameHeader({DUMMY_HEADER}) ;
+    resultTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+
+    //evaluate the rest of the groups
+    for (auto it: *ccg) {
+        //eval each subgroup
+        Table subGroupResultTable;
+        for (auto subGroupClause: *it.second) {
+            Table intermediateTable = subGroupClause->accept(clauseVisitor);
+            if (intermediateTable.isBodyEmpty()) return FALSE_RESULT ;
+            subGroupResultTable = tableCombiner.joinTable( intermediateTable, subGroupResultTable);
+            if (subGroupResultTable.isBodyEmpty()) return FALSE_RESULT;
+        }
+        resultTable = tableCombiner.joinTable(subGroupResultTable, resultTable);
+        if (resultTable.isBodyEmpty()) return FALSE_RESULT;
+    }
+
+    return TRUE_RESULT;
+}
+
+vector<string> QueryEvaluator::evaluateSelectTupleQuery( shared_ptr<ConcreteClauseVisitor> clauseVisitor, shared_ptr<DataPreprocessor> dataPreprocessor, ConnectedClauseGroups ccg) {
+
+    bool hasCondition = !query->suchThatClauses->empty() || !query->patternClauses->empty() || !query->withClauses->empty();
+    if (!hasCondition) {//no conditional clause
+        return this->evaluateNoConditionSelectTupleQuery(query, clauseVisitor);
+    }
+
+    //evaluate truthiness of with clauses
+    for (auto withClause: *query->withClauses) {
+        bool doesConditionExist = dataPreprocessor->hasResult(withClause);
+        if (!doesConditionExist) return EMPTY_RESULT;
+    }
+
+    TableCombiner tableCombiner = TableCombiner();
+    const string DUMMY_HEADER = "$dummy_header";
+    const string DUMMY_VALUE = "$dummy_value";
+    Table resultTable = Table();
+    resultTable.renameHeader({DUMMY_HEADER}) ;
+    resultTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+
+    //first evaluate group of clauses without synonyms, and dont have to join table
+    for (auto noSynClause: *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
+        Table intermediateTable = noSynClause->accept(clauseVisitor);
+        if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
+    }
+    ccg->erase(QueryOptimizer::NO_SYN_GROUP_IDX);
+
+    for (auto it: *ccg) {
+        //eval each subgroup
+        Table subGroupResultTable;
+        for (auto subGroupClause: *it.second) {
+            Table intermediateTable = subGroupClause->accept(clauseVisitor);
+            if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
+            subGroupResultTable = tableCombiner.joinTable( intermediateTable, subGroupResultTable);
+            if (subGroupResultTable.isBodyEmpty()) return EMPTY_RESULT;
+        }
+        resultTable = tableCombiner.joinTable(subGroupResultTable, resultTable);
+        if (resultTable.isBodyEmpty()) return EMPTY_RESULT;
+    }
+
+    shared_ptr<vector<Elem>> returnTuple = query->selectClause->returnResults;
+    return formatConditionalQueryResult(resultTable, returnTuple, query, dataPreprocessor);
 }
 
 

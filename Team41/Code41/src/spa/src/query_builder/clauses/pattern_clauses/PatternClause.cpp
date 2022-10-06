@@ -23,3 +23,10 @@ bool PatternClause::expect(const string& s, unsigned int currIdx, const vector<s
     throw PQLParseException(errorMessage);
 }
 
+unordered_set<string> PatternClause::getSynonymNames() {
+    unordered_set<string> synonyms = unordered_set<string>();
+     synonyms.insert(arg1.synonym);
+    if (getRefType(arg2) == RefType::SYNONYM) synonyms.insert(get<Synonym>(arg2).synonym);
+    return synonyms;
+}
+
