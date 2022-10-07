@@ -17,6 +17,7 @@ class Table {
 public:
     vector<string> header;
     vector<vector<string>> rows;
+    int primaryKeyColumnIndex = 0;
 
     // getters
     vector<string> getColumnByName(string columnName);
@@ -41,8 +42,6 @@ public:
     bool isBodyEmpty() const;
 
     static const string DEFAULT_HEADER_PREFIX;
-
-
 };
 
 #endif //SPA_TABLE_H

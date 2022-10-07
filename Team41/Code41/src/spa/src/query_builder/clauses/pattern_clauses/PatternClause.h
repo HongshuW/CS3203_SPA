@@ -10,11 +10,11 @@
 #include "query_builder/commons/Ref.h"
 #include "query_builder/clauses/AbstractClause.h"
 #include "utils/ErrorMessageFormatter.h"
-
+#include "query_builder/clauses/ConditionalClause.h"
 using namespace QB;
 
 namespace QB {
-    class PatternClause : public AbstractClause {
+    class PatternClause : public ConditionalClause {
     public:
         Synonym arg1; // must be declared as If
         Ref arg2; // entRef -> synonym, _, ident
@@ -23,6 +23,7 @@ namespace QB {
         virtual Table accept(shared_ptr<IVisitor> visitor) override = 0;
         virtual unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) = 0;
         virtual bool expect(const string& s, unsigned int currIdx, const vector<string>& tokens);
+        unordered_set<string> getSynonymNames() override;
     };
 }
 

@@ -51,17 +51,19 @@ add_executable(unit_testing ${srcs}
         src/parser/TestCondExprParser.cpp
         src/utils/TestUtils.cpp
         src/design_extractor/TestPatternExtraction.cpp
-        src/query_builder/TestExprStringTokenizer.cpp src/pkb/TestPKBStorage.cpp
+        src/query_evaluator/TestQueryOptimizer.cpp
+        src/query_builder/TestExprStringTokenizer.cpp
+        src/pkb/TestPKBStorage.cpp
         src/query_evaluator/TestQueryEvaluator.cpp
         src/design_extractor/TestCallsExtraction.cpp
         src/design_extractor/TestCallsStarExtraction.cpp
         src/design_extractor/TestModifiesPExtraction.cpp
-        src/design_extractor/TestUsesPExtraction.cpp src/query_evaluator/TestClauseEvaluator.cpp
-        src/CFG/TestCFG.cpp src/parser/TestASTValidator.cpp src/parser/InvalidProcedureDummies.cpp
-        src/parser/InvalidProcedureDummies.h
-        src/design_extractor/TestNextExtraction.cpp
-        src/design_extractor/TestNextStarExtraction.cpp
-        src/design_extractor/TestAffectsExtraction.cpp
-        src/design_extractor/TestAffectsStarExtraction.cpp)
+        src/design_extractor/TestUsesPExtraction.cpp
+        src/query_evaluator/TestClauseEvaluator.cpp
+        src/CFG/TestCFG.cpp
+        src/parser/TestASTValidator.cpp
+        src/parser/InvalidProcedureDummies.cpp
+        src/parser/InvalidProcedureDummies.h)
+
 
 target_link_libraries(unit_testing spa)
