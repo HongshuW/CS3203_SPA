@@ -9,6 +9,7 @@
 #include "EntityExtractor.h"
 #include "RelationExtractor.h"
 #include "PatternExtractor.h"
+#include "pkb_saver/PKBPatternSaver.h"
 using namespace AST;
 using namespace DE;
 using namespace std;
@@ -192,6 +193,10 @@ void DesignExtractor::run() {
 
     //save patterns
     this->savePatternsToPKB();
+
+    //save if and while patterns
+    PKBPatternSaver::saveIfPattern(this->programNode, this->dataModifier);
+    PKBPatternSaver::saveWhilePattern(this->programNode, this->dataModifier);
 }
 
 vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::extractPatterns() {
