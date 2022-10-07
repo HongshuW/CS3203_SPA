@@ -150,26 +150,14 @@ NextTable * PKBStorage::getNext() {
 }
 
 NextTable * PKBStorage::getNextT() {
-    if (!nextTTable.isQueried()) {
-        //TODO: if relation hasn't been queried, extract relation from cfg
-        nextTTable.setQueried(true);
-    }
     return &nextTTable;
 }
 
 AffectsTable * PKBStorage::getAffects() {
-    if (!affectsTable.isQueried()) {
-        //TODO: if relation hasn't been queried, extract relation from cfg
-        affectsTable.setQueried(true);
-    }
     return &affectsTable;
 }
 
 AffectsTable * PKBStorage::getAffectsT() {
-    if (!affectsTTable.isQueried()) {
-        //TODO: if relation hasn't been queried, extract relation from cfg
-        affectsTTable.setQueried(true);
-    }
     return &affectsTTable;
 }
 

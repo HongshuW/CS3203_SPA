@@ -68,15 +68,33 @@ Table DataRetriever::getNextTable() {
 }
 
 Table DataRetriever::getNextTTable() {
-    return *pkbStorage->getNextT();
+    NextTable * nextTTable = pkbStorage->getNextT();
+    if (!nextTTable->isQueried()) {
+        list<vector<string>> nextTRelations = cacheManager->getNextTRelations();
+        nextTTable->appendRows(nextTRelations);
+        nextTTable->setQueried(true);
+    }
+    return *nextTTable;
 }
 
 Table DataRetriever::getAffectsTable() {
-    return *pkbStorage->getAffects();
+    AffectsTable * affectsTable = pkbStorage->getAffects();
+    if (!affectsTable->isQueried()) {
+        list<vector<string>> affectsRelations = cacheManager->getAffectsRelations();
+        affectsTable->appendRows(affectsRelations);
+        affectsTable->setQueried(true);
+    }
+    return *affectsTable;
 }
 
 Table DataRetriever::getAffectsTTable() {
-    return *pkbStorage->getAffectsT();
+    AffectsTable * affectsTTable = pkbStorage->getAffectsT();
+    if (!affectsTTable->isQueried()) {
+        list<vector<string>> affectsTRelations = cacheManager->getAffectsTRelations();
+        affectsTTable->appendRows(affectsTRelations);
+        affectsTTable->setQueried(true);
+    }
+    return *affectsTTable;
 }
 
 Table DataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {

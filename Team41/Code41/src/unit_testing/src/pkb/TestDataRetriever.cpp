@@ -41,9 +41,9 @@ TEST_CASE("Test Data Retriever") {
         Table actualCallsTable = dataRetriever.getCallsTable();
         Table actualCallsTTable = dataRetriever.getCallsTTable();
         Table actualNextTable = dataRetriever.getNextTable();
-        Table actualNextTTable = dataRetriever.getNextTTable();
-        Table actualAffectsTable = dataRetriever.getAffectsTable();
-        Table actualAffectsTTable = dataRetriever.getAffectsTTable();
+//        Table actualNextTTable = dataRetriever.getNextTTable();
+//        Table actualAffectsTable = dataRetriever.getAffectsTable();
+//        Table actualAffectsTTable = dataRetriever.getAffectsTTable();
 
         Table expectedFollowsTable = *(pkbStorage->getFollows());
         Table expectedFollowsTTable = *(pkbStorage->getFollowsT());
@@ -56,9 +56,9 @@ TEST_CASE("Test Data Retriever") {
         Table expectedCallsTable = *(pkbStorage->getCalls());
         Table expectedCallsTTable = *(pkbStorage->getCallsT());
         Table expectedNextTable = *(pkbStorage->getNext());
-        Table expectedNextTTable = *(pkbStorage->getNextT());
-        Table expectedAffectsTable = *(pkbStorage->getAffects());
-        Table expectedAffectsTTable = *(pkbStorage->getAffectsT());
+//        Table expectedNextTTable = *(pkbStorage->getNextT());
+//        Table expectedAffectsTable = *(pkbStorage->getAffects());
+//        Table expectedAffectsTTable = *(pkbStorage->getAffectsT());
 
         REQUIRE(actualFollowsTable.isEqual(expectedFollowsTable));
         REQUIRE(actualFollowsTTable.isEqual(expectedFollowsTTable));
@@ -71,9 +71,9 @@ TEST_CASE("Test Data Retriever") {
         REQUIRE(actualCallsTable.isEqual(expectedCallsTable));
         REQUIRE(actualCallsTTable.isEqual(expectedCallsTTable));
         REQUIRE(actualNextTable.isEqual(expectedNextTable));
-        REQUIRE(actualNextTTable.isEqual(expectedNextTTable));
-        REQUIRE(actualAffectsTable.isEqual(expectedAffectsTable));
-        REQUIRE(actualAffectsTTable.isEqual(expectedAffectsTTable));
+//        REQUIRE(actualNextTTable.isEqual(expectedNextTTable));
+//        REQUIRE(actualAffectsTable.isEqual(expectedAffectsTable));
+//        REQUIRE(actualAffectsTTable.isEqual(expectedAffectsTTable));
     }
 
     SECTION ("Get Table by Assign Pattern") {

@@ -5,6 +5,7 @@
 #ifndef SPA_SPAMANAGER_H
 #define SPA_SPAMANAGER_H
 
+#include "cache_manager/CacheManager.h"
 #include "pkb/DataModifier.h"
 #include "pkb/DataRetriever.h"
 #include "pkb/PKBStorage.h"
@@ -30,6 +31,7 @@ private:
     shared_ptr<PKBStorage> pkbStorage;
     shared_ptr<DataModifier> dataModifier;
     shared_ptr<DataRetriever> dataRetriever;
+    shared_ptr<CacheManager> cacheManager;
 public:
     explicit SPAManager(shared_ptr<PKBStorage> pkbStorage);
 

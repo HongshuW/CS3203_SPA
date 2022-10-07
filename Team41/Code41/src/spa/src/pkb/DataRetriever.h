@@ -5,6 +5,7 @@
 #ifndef SPA_DATARETRIEVER_H
 #define SPA_DATARETRIEVER_H
 
+#include "cache_manager/CacheManager.h"
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/commons/ExpressionSpec.h"
 #include "query_builder/commons/RelationType.h"
@@ -15,6 +16,8 @@ using namespace QB;
 
 class DataRetriever {
 public:
+    shared_ptr<CacheManager> cacheManager;
+
     explicit DataRetriever(shared_ptr<PKBStorage> pkbStorage);
 
     virtual Table getTableByDesignEntity(DesignEntity designEntity);
