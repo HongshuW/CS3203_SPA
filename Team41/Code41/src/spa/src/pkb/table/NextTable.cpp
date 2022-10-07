@@ -8,3 +8,8 @@
 NextTable::NextTable() {
     header = vector<string>{PKBStorage::NEXT_TABLE_COL1_NAME, PKBStorage::NEXT_TABLE_COL2_NAME};
 }
+
+void NextTable::clearCache() {
+    setQueried(false);
+    dropRows();
+}

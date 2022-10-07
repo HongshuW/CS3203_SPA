@@ -91,7 +91,7 @@ void Table::renameHeader(vector<string> newHeader) {
 }
 
 void Table::dropRows() {
-    this->rows = {};
+    this->rows.clear();
 }
 
 Table Table::dropCol(int colIdx) {

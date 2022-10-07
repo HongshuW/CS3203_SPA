@@ -8,3 +8,8 @@
 AffectsTable::AffectsTable() {
     header = vector<string>{PKBStorage::AFFECTS_TABLE_COL1_NAME, PKBStorage::AFFECTS_TABLE_COL2_NAME};
 }
+
+void AffectsTable::clearCache() {
+    setQueried(false);
+    dropRows();
+}

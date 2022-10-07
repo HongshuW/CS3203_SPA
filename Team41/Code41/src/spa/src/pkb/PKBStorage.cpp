@@ -150,23 +150,26 @@ NextTable * PKBStorage::getNext() {
 }
 
 NextTable * PKBStorage::getNextT() {
-    // TODO: change the implementation after DE has implemented the API
-    // if table is empty, query from DE
-    // else, return the table
+    if (!nextTTable.isQueried()) {
+        //TODO: if relation hasn't been queried, extract relation from cfg
+        nextTTable.setQueried(true);
+    }
     return &nextTTable;
 }
 
 AffectsTable * PKBStorage::getAffects() {
-    // TODO: change the implementation after DE has implemented the API
-    // if table is empty, query from DE
-    // else, return the table
+    if (!affectsTable.isQueried()) {
+        //TODO: if relation hasn't been queried, extract relation from cfg
+        affectsTable.setQueried(true);
+    }
     return &affectsTable;
 }
 
 AffectsTable * PKBStorage::getAffectsT() {
-    // TODO: change the implementation after DE has implemented the API
-    // if table is empty, query from DE
-    // else, return the table
+    if (!affectsTTable.isQueried()) {
+        //TODO: if relation hasn't been queried, extract relation from cfg
+        affectsTTable.setQueried(true);
+    }
     return &affectsTTable;
 }
 
@@ -287,7 +290,7 @@ void PKBStorage::saveIfPattern(vector<string> metainfo) {
 }
 
 void PKBStorage::clearCache() {
-    nextTTable.dropRows();
-    affectsTable.dropRows();
-    affectsTTable.dropRows();
+    nextTTable.clearCache();
+    affectsTable.clearCache();
+    affectsTTable.clearCache();
 }
