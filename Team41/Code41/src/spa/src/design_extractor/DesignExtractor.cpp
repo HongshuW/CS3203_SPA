@@ -107,7 +107,6 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
 
 DesignExtractor::DesignExtractor(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
         : dataModifier(dataModifier), programNode(programNode) {
-
 }
 
 void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode,
@@ -209,7 +208,6 @@ void DesignExtractor::savePatternsToPKB() {
         this->dataModifier->saveAssignPattern({lineNumStr, varName}, exprNode);
     }
 }
-
 
 vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
     return NextExtractor::extractNextStar(this->programNode, args);

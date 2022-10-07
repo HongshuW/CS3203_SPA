@@ -19,6 +19,7 @@ namespace DE {
     public:
         static vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> extractPattern(shared_ptr<ProgramNode> programNode);
         static list<vector<string>> extractIfPattern(shared_ptr<ProgramNode> programNode);
+        static list<vector<string>> extractWhilePattern(shared_ptr<ProgramNode> programNode);
 
         static vector<string> condExprNodeHandler(shared_ptr<CondExprNode> condExpr);
         static void relExprNodeHandler(shared_ptr<RelExprNode> relExpr, vector<string>& varList);
