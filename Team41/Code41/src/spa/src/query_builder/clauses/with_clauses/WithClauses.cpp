@@ -41,10 +41,3 @@ ostream& WithClause::print(ostream& os) const {
 Table WithClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }
-
-unordered_set<string> WithClause::getSynonymNames() {
-    unordered_set<string> synonyms = unordered_set<string>();
-    if (getWithRefType(lhs.index()) == WithRefType::ATTR_REF) synonyms.insert(get<AttrRef>(lhs).synonym.synonym);
-    if (getWithRefType(rhs.index()) == WithRefType::ATTR_REF) synonyms.insert(get<AttrRef>(rhs).synonym.synonym);
-    return synonyms;
-}

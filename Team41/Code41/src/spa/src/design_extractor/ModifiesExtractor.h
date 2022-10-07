@@ -17,14 +17,14 @@ namespace DE {
                                         shared_ptr<vector<string>> ancestors, shared_ptr<set<vector<string>>> output);
         static void insertCallsForModifiesS(shared_ptr<ProgramNode> rootPtr,
                                             shared_ptr<list<vector<string>>> output);
-        static unordered_map<string, unordered_set<string>>
-            mapProceduresToModifiedVariables(shared_ptr<ProgramNode> rootPtr);
         static unordered_set<string> getModifiedVariablesFromProcedure(shared_ptr<ProcedureNode> procedureNode);
         static unordered_map<string, unordered_set<string>> mapIfAndWhileStmtNoToModifiedVariables(shared_ptr<ProgramNode> rootPtr);
         static void insertCallsInIfAndWhileForModifiesS(shared_ptr<ProgramNode> rootPtr, shared_ptr<list<vector<string>>> ans);
 
 
     public:
+        static unordered_map<string, unordered_set<string>>
+            mapProceduresToModifiedVariables(shared_ptr<ProgramNode> rootPtr);
         static shared_ptr<list<vector<string>>> extractModifiesS(shared_ptr<ProgramNode> rootPtr);
         static shared_ptr<list<vector<string>>> extractModifiesP(shared_ptr<ProgramNode> rootPtr);
     };

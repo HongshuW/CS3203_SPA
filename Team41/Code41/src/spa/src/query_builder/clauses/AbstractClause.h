@@ -8,8 +8,6 @@
 
 class AbstractClause: public IVisitorHost {
 
-public:
-
     virtual Table accept(shared_ptr<IVisitor> visitor) = 0;
 };
 

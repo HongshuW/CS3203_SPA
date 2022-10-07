@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <variant>
 
-typedef variant<string, shared_ptr<unordered_map<int, unordered_set<int>>>> cfgTableRow;
+using cfgTableRow = variant<string, shared_ptr<unordered_map<int, unordered_set<int>>>>;
 
 class ProcedureTable : public EntityTable {
 public:

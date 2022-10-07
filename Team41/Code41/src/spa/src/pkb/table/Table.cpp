@@ -17,14 +17,13 @@ vector<string> Table::getColumnByName(string columnName) {
 }
 
 int Table::getColIdxByName(string colName) {
-    int invalidColumn = -1;
     int numOfColumns = header.size();
     for (int i = 0; i < numOfColumns; i++) {
         if (header[i] == colName) {
             return i;
         }
     }
-    return invalidColumn;
+    return -1;
 }
 
 vector<string> Table::getColumnByIndex(int index) {
@@ -37,9 +36,10 @@ vector<string> Table::getColumnByIndex(int index) {
 }
 
 vector<string> Table::getRowByPrimaryKey(string key) {
+    // assume the first column is the primary key
     int size = rows.size();
     for (int i = 0; i < size; i++) {
-        if (rows[i][primaryKeyColumnIndex] == key) {
+        if (rows[i][0] == key) {
             return rows[i];
         }
     }
@@ -67,22 +67,20 @@ void Table::appendRow(vector<string> row) {
 
 void Table::appendRows(list<vector<string>> rows) {
     auto rowsIterator = rows.begin();
-    int stepSize = 1;
     while (rowsIterator != rows.end()) {
         appendRow(*rowsIterator);
-        advance(rowsIterator, stepSize);
+        advance(rowsIterator, 1);
     }
 }
 
 void Table::addValues(list<string> values) {
     // used in tables with one column only
     auto valuesIterator = values.begin();
-    int stepSize = 1;
     while (valuesIterator != values.end()) {
         vector<string> row;
         row.push_back(*valuesIterator);
         appendRow(row);
-        advance(valuesIterator, stepSize);
+        advance(valuesIterator, 1);
     }
 }
 
@@ -138,11 +136,11 @@ bool Table::isEqual(const Table &otherTable) {
 }
 
 bool Table::isHeaderEmpty() const {
-    return this->header.empty();
+    return this->header.size() == 0;
 }
 
 bool Table::isBodyEmpty() const {
-    return this->rows.empty();
+    return this->rows.size() == 0;
 }
 
 Table Table::dupCol(int colIdx, string dupColName) {

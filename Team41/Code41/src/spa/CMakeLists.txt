@@ -231,6 +231,10 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/such_that_clauses/Validatable.h
         src/CFG/CFG.cpp
         src/CFG/CFG.h
+        src/design_extractor/NextExtractor.cpp
+        src/design_extractor/NextExtractor.h
+        src/design_extractor/AffectsExtractor.cpp
+        src/design_extractor/AffectsExtractor.h
         src/query_builder/relations/such_that_relations/Follows.cpp
         src/query_builder/relations/such_that_relations/Follows.h
         src/query_builder/relations/such_that_relations/SuchThatRelations.cpp
@@ -281,12 +285,8 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/pattern_clauses/InvalidPatternClause.cpp
         src/query_builder/clauses/pattern_clauses/InvalidPatternClause.h
         src/query_builder/relations/pattern_relations/InvalidPattern.cpp
-        src/query_builder/relations/pattern_relations/InvalidPattern.h src/query_evaluator/QueryOptimizer.cpp src/query_evaluator/QueryOptimizer.h src/query_builder/clauses/ConditionalClause.cpp src/query_builder/clauses/ConditionalClause.h)
-
-
-
-
-
+        src/query_builder/relations/pattern_relations/InvalidPattern.h
+        src/design_extractor/args/StmtNoArgs.cpp src/design_extractor/args/StmtNoArgs.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
