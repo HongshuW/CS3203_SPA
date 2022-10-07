@@ -42,35 +42,6 @@ namespace AST {
         return nodeTypeToDesignEntity.at(nodeType);
     }
 
-    shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>> ASTUtils::getLineNumToProcMap(shared_ptr<ProgramNode> root) {
-        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> mapping =
-            make_shared<unordered_map<shared_ptr<StmtNode>, int>>();
-        shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>> output =
-            make_shared<unordered_map<int, shared_ptr<ProcedureNode>>>();
-        int curr_line_no = 1;
-        for (auto procedureNode : root->procedureList) {
-            curr_line_no = getNodePtrToLineNoMapHelper(procedureNode, mapping, curr_line_no);
-            for (int i = 1; i < curr_line_no; i++) {
-                output->insert({ i, procedureNode });
-            }
-        }
-        return output;
-    }
-
-    shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>> ASTUtils::getFirstLineNumToProcMap(
-            shared_ptr<AST::ProgramNode> root) {
-        shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> mapping =
-                make_shared<unordered_map<shared_ptr<StmtNode>, int>>();
-        shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>> output =
-                make_shared<unordered_map<shared_ptr<ProcedureNode>, int>>();
-        int curr_line_no = 1;
-        for (auto procedureNode : root->procedureList) {
-            output->insert({procedureNode, curr_line_no});
-            curr_line_no = getNodePtrToLineNoMapHelper(procedureNode, mapping, curr_line_no);
-        }
-        return output;
-    }
-
    void ASTUtils::getNodeLineMapping(shared_ptr<ProgramNode> root, shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> nodeToLine, shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> lineToNode) {
 
         int curr_line_no = 1;

@@ -186,8 +186,7 @@ void DesignExtractor::run() {
                                                 RelationType::USES_P,
                                                 RelationType::MODIFIES_P,
                                                 RelationType::CALLS,
-                                                RelationType::CALLS_T,
-                                                RelationType::NEXT};
+                                                RelationType::CALLS_T};
     for (auto relationType: relationsToSave) {
         this->saveRelationToPKB(relationType);
     }
@@ -209,20 +208,6 @@ void DesignExtractor::savePatternsToPKB() {
         auto exprNode = resultRow.second->expressionNode;
         this->dataModifier->saveAssignPattern({lineNumStr, varName}, exprNode);
     }
-}
-
-vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
-    return NextExtractor::extractNextStar(this->programNode, args);
-}
-
-vector<string> DE::DesignExtractor::getAffectsRelations(StmtNoArgs args)
-{
-    return AffectsExtractor::extractAffects(this->programNode, args);
-}
-
-vector<string> DE::DesignExtractor::getAffectsStarRelations(StmtNoArgs args)
-{
-    return AffectsExtractor::extractAffectsStar(this->programNode, args);
 }
 
 

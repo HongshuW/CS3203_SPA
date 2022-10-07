@@ -4,26 +4,8 @@
 
 #include "DEUtils.h"
 #include "iostream"
-#include <algorithm>
-
 using namespace std;
 namespace TestDE {
-    bool DEUtils::stringCmp(string s1, string s2) {
-        if (s1.size() == s2.size()) {
-            return s1 < s2;
-        }
-
-        else {
-            return s1.size() < s2.size();
-        }
-
-    }
-
-    bool DEUtils::vectorStringContainsSameElements(vector<string> actual, vector<string> expected) {
-        sort(actual.begin(), actual.end(), DEUtils::stringCmp);
-        return actual == expected;
-    }
-  
     bool DEUtils::containsSameElementPair(list<vector<string>> lst, vector<vector<string>> vec) {
         if (lst.size() != vec.size()) return false;
         std::list<vector<string>>::iterator it;
@@ -65,6 +47,7 @@ namespace TestDE {
         return true;
     }
 
+   
 
     bool DEUtils::isSamePattern(vector<pair<pair<int, string>, shared_ptr<AssignNode>>> actual,
                                 vector<pair<pair<int, string>, shared_ptr<AssignNode>>> expected) {
