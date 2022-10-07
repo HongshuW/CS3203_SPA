@@ -35,14 +35,10 @@ namespace DE {
         void saveRelationToPKB(RelationType relationType);
         vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> extractPatterns();
         void savePatternsToPKB();
-
+        vector<string> getNextRelations(StmtNoArgs args);
         vector<string> getNextStarRelations(StmtNoArgs args);
         vector<string> getAffectsRelations(StmtNoArgs args);
         vector<string> getAffectsStarRelations(StmtNoArgs args);
-
-        list<vector<string>> getAllNextStarRelations();
-        list<vector<string>> getAllAffectsRelations();
-        list<vector<string>> getAllAffectsStarRelations();
     };
 }
 

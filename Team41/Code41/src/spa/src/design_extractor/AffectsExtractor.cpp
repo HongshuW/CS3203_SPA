@@ -51,8 +51,6 @@ vector<string> AffectsExtractor::extractAffectsWithStartAndEnd(shared_ptr<Progra
         return {};
     }
 
-    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-        ASTUtils::getNodePtrToLineNumMap(programNode);
     shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>> stmtNoToProcMap
         = ASTUtils::getLineNumToProcMap(programNode);
     auto stmtNoToAssignReadAndCallMap 
@@ -71,7 +69,9 @@ vector<string> AffectsExtractor::extractAffectsWithStartAndEnd(shared_ptr<Progra
     }
 
     shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(startStmtNo);
-    string procedureName = procedureNode->procedureName;
+    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
+            ASTUtils::getNodePtrToLineNumMap(programNode);
+
     CFG cfg = CFG(*procedureNode, stmtNumbers);
     unordered_set<int> children = cfg.cfg->find(startStmtNo)->second;
 
@@ -102,15 +102,10 @@ vector<string> AffectsExtractor::extractAffectsWithStartAndEnd(shared_ptr<Progra
             }
         }
 
-        // all visited nodes are not assign, read or call nodes
-        // hence path is vaild as variable not modified
-        if (filteredStmtNoList.empty()) {
-            ans.push_back(to_string(startStmtNo));
-            ans.push_back(to_string(endStmtNo));
-            return ans;
-        }
+        bool allVisitedNodesNotAssignReadOrCall = filteredStmtNoList.empty();
+        bool varIsModified = isVarModified(modifiedVar, programNode, filteredStmtNoList);
 
-        if (!isVarModified(modifiedVar, programNode, filteredStmtNoList)) {
+        if(allVisitedNodesNotAssignReadOrCall || !varIsModified) {
             ans.push_back(to_string(startStmtNo));
             ans.push_back(to_string(endStmtNo));
             return ans;
@@ -185,43 +180,6 @@ vector<string> AffectsExtractor::extractAffectsWithStartOnly(shared_ptr<ProgramN
     return ans;
 }
 
-list<vector<string>> AffectsExtractor::extractAllAffectsInProgram(shared_ptr<ProgramNode> programNode) {
-    list<vector<string>> output;
-    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-        ASTUtils::getNodePtrToLineNumMap(programNode);
-    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(programNode);
-    for (auto startStmtNo: allStmtNoOfAssignNodes) {
-        for (auto endStmtNo : allStmtNoOfAssignNodes) {
-            StmtNoArgs args;
-            args.setStartAndEndStmtNo(stoi(startStmtNo), stoi(endStmtNo));
-            vector<string> ans = AffectsExtractor::extractAffectsWithStartAndEnd(programNode, args);
-            if (!ans.empty()) {
-                output.push_back(ans);
-            }
-        }
-    }
-
-    return output;
-}
-
-list<vector<string>> AffectsExtractor::extractAllAffectsStarInProgram(shared_ptr<ProgramNode> programNode) {
-    list<vector<string>> output;
-    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-        ASTUtils::getNodePtrToLineNumMap(programNode);
-    unordered_set<string> allStmtNoOfAssignNodes = AffectsExtractor::getAllStmtNoOfAssignNodes(programNode);
-    for (auto startStmtNo : allStmtNoOfAssignNodes) {
-        for (auto endStmtNo : allStmtNoOfAssignNodes) {
-            StmtNoArgs args;
-            args.setStartAndEndStmtNo(stoi(startStmtNo), stoi(endStmtNo));
-            vector<string> ans = AffectsExtractor::extractAffectsStarWithStartAndEnd(programNode, args);
-            if (!ans.empty()) {
-                output.push_back(ans);
-            }
-        }
-    }
-    return output;
-}
-
 void AffectsExtractor::extractAffectsWithStartAndEndDFSHelper(int start, int end, CFG cfg, 
     list<vector<string>>& validPathsList, vector<string>& validPaths, vector<bool>& visitedArr) {
     unordered_set<int> children = cfg.cfg->find(start)->second;
@@ -273,28 +231,14 @@ vector<string> AffectsExtractor::extractAffectsStarWithStartAndEnd(shared_ptr<Pr
 
     vector<string> output1 = AffectsExtractor::extractAffectsWithStartOnly(programNode, startArgsOnly);
     vector<string> output2 = AffectsExtractor::extractAffectsWithEndOnly(programNode, endArgsOnly);
-    vector<string> output3;
 
-    // for Affects*(a1, a2)
-    // if there is an intersection between Affects(a1, _) and Affects(_, a2)
+    // for Affects*(a1, a2), if there is an intersection between Affects(a1, _) and Affects(_, a2)
     // then Affects*(a1, a2) is valid
 
-    sort(output1.begin(), output1.end());
-    sort(output2.begin(), output2.end());
+    vector<string> ans = AffectsExtractor::getIntersectionBetweenAffects
+            (output1, output2, args);
 
-    set_intersection(output1.begin(), output1.end(),
-        output2.begin(), output2.end(),
-        back_inserter(output3));
-
-    vector<string> ans;
-
-    if (!output3.empty()) {
-        ans.push_back(to_string(startStmtNo));
-        ans.push_back(to_string(endStmtNo));
-        return ans;
-    }
-
-    return {};
+    return ans;
 }
 
 vector<string> AffectsExtractor::extractAffectsStarWithStartOnly(shared_ptr<ProgramNode> programNode, StmtNoArgs args) {
@@ -491,13 +435,22 @@ bool AffectsExtractor::areBothArgsVaild(shared_ptr<ProgramNode> programNode, int
     // both args exists, check if they have the same procedure
     string startStmtNoProcName = stmtNoToProcMap->at(start)->procedureName;
     string endStmtNoProcName = stmtNoToProcMap->at(end)->procedureName;
-
     if (startStmtNoProcName != endStmtNoProcName) {
         return false;
     }
 
     //check if start and end are AssignNodes
     auto stmtNoToAssignReadAndCallMap = AffectsExtractor::getStmtNoToAssignReadAndCallNodesMap(programNode);
+    bool bothArgsAssign = AffectsExtractor::areBothArgsAssign(stmtNoToAssignReadAndCallMap, start, end);
+    if (!bothArgsAssign) {
+        return false;
+    }
+
+    return true;
+}
+
+bool AffectsExtractor::areBothArgsAssign(unordered_map<string, shared_ptr<StmtNode>> stmtNoToAssignReadAndCallMap,
+                                         int start, int end) {
 
     bool startStmtNoIsAssignReadOrCall = stmtNoToAssignReadAndCallMap.count(to_string(start)) != 0;
     bool endStmtNoIsAssignReadOrCall = stmtNoToAssignReadAndCallMap.count(to_string(end)) != 0;
@@ -520,3 +473,29 @@ bool AffectsExtractor::areBothArgsVaild(shared_ptr<ProgramNode> programNode, int
 
     return true;
 }
+
+vector<string> AffectsExtractor::getIntersectionBetweenAffects(vector<string> affectsWithStartOnly,
+                                                               vector<string> affectsWithEndOnly,
+                                                               StmtNoArgs args) {
+    vector<string> output;
+    sort(affectsWithStartOnly.begin(), affectsWithStartOnly.end());
+    sort(affectsWithEndOnly.begin(), affectsWithEndOnly.end());
+
+    set_intersection(affectsWithStartOnly.begin(), affectsWithStartOnly.end(),
+                     affectsWithEndOnly.begin(), affectsWithEndOnly.end(),
+                     back_inserter(output));
+
+    int startStmtNo = args.getStartStmtNo();
+    int endStmtNo = args.getEndStmtNo();
+
+    vector<string> ans;
+
+    if (!output.empty()) {
+        ans.push_back(to_string(startStmtNo));
+        ans.push_back(to_string(endStmtNo));
+        return ans;
+    }
+
+    return ans;
+}
+

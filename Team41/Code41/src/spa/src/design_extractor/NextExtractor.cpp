@@ -184,28 +184,3 @@ vector<string> NextExtractor::extractNextStar(shared_ptr<ProgramNode> programNod
     return ans;
 }
 
-list<vector<string>> NextExtractor::extractAllNextStarInProgram(shared_ptr<ProgramNode> programNode) {
-    vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-        ASTUtils::getNodePtrToLineNumMap(programNode);
-    auto firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
-    list<vector<string>> output;
-    for (auto procedure : procedureList) {
-        int startNum = firstLineNumToProcMap->at(procedure);
-        CFG cfg = CFG(*procedure, stmtNumbers);
-        int cfgSize = cfg.cfg->size() + startNum;
-        for (int i = startNum; i < cfgSize; i++) {
-            for (int j = startNum; j < cfgSize; j++) {
-                StmtNoArgs args;
-                args.setStartAndEndStmtNo(i, j);
-                vector<string> ans = NextExtractor::extractNextStarWithStartAndEnd(programNode, args);
-                if (!ans.empty()) {
-                    output.push_back(ans);
-                }
-            }
-        }
-    }
-
-    return output;
-}
-

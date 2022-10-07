@@ -53,18 +53,6 @@ TEST_CASE("Test Next Extractor") {
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
     }
 
-    SECTION("Test Procedure With While Statments") {
-        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
-        auto programNode = TestDE::Dummies::getTestProgramNode(24);
-        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
-        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::NEXT);
-        vector<vector<string>> expected = { {"1", "2"}, {"2", "3"},
-                                            {"2", "4"}, {"3", "2"} };
-        REQUIRE(expected.size() == actual->size());
-        REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
-    }
-
     SECTION("Test Procedure With Nested If Statments In While Loop") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         auto programNode = TestDE::Dummies::getTestProgramNode(4);

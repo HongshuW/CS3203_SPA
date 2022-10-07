@@ -10,12 +10,12 @@
 #include "query_builder/commons/WithRef.h"
 #include "pkb/table/Table.h"
 #include "query_evaluator/IVisitor.h"
-#include "query_builder/clauses/ConditionalClause.h"
+#include "query_builder/clauses/AbstractClause.h"
 
 using namespace QB;
 
 namespace QB {
-    class WithClause : public ConditionalClause, public enable_shared_from_this<WithClause> {
+    class WithClause : public AbstractClause, public enable_shared_from_this<WithClause> {
     public:
         WithRef lhs;
         WithRef rhs;
@@ -32,7 +32,6 @@ namespace QB {
         bool operator==(const WithClause& clause) const;
         ostream& print(ostream& os) const;
         Table accept(shared_ptr<IVisitor> visitor) override;
-        unordered_set<string> getSynonymNames() override;
     };
 
 } // QB

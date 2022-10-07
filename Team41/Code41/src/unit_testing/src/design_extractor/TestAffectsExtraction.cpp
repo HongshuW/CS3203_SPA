@@ -25,29 +25,9 @@ TEST_CASE("Test Affects Extractor") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         StmtNoArgs args = StmtNoArgs();
-        list<vector<string>> actual = designExtractor.getAllAffectsRelations();
-        vector<vector<string>> expected = { {"1", "5"}, {"3", "5"} };
-        REQUIRE(expected.size() == actual.size());
-        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
-    }
-
-    SECTION("Test No Arguments With Normal Procedure") {
-        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
-        auto programNode = TestDE::Dummies::getTestProgramNode(21);
-        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
-        DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        StmtNoArgs args = StmtNoArgs();
-        list<vector<string>> actual = designExtractor.getAllAffectsRelations();
-        vector<vector<string>> expected = {
-            {"1", "4"}, {"1", "8"}, {"1", "10"},
-            {"1", "12"}, {"10", "11"}, {"10", "12"}, {"11", "12"},
-            {"2", "10"}, {"2", "6"},
-            {"8", "10"}, {"8", "12"},
-            {"4", "4"}, {"4", "10"}, {"4", "12"}, {"4", "8"},
-            {"6", "6"},  {"6", "10"},
-            {"9", "10"}, {"13", "14"} };
-        REQUIRE(expected.size() == actual.size());
-        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
+        vector<string> actual = designExtractor.getAffectsRelations(args);
+        vector<string> expected = {};
+        REQUIRE(actual == expected);
     }
 
     SECTION("Test Both Invalid Arguments") {

@@ -8,33 +8,29 @@
 
 CFG::CFG(ProcedureNode procedureNode, shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers) {
     this->stmtNumbers = stmtNumbers;
-    this->cfg = make_shared<cfgType>(cfgType());
+    this->cfg = make_shared<unordered_map<int, unordered_set<int>>>(unordered_map<int, unordered_set<int>>());
 
     vector<shared_ptr<StmtNode>> stmtList = procedureNode.stmtList;
     processStmtList(stmtList);
 }
 
-vector<int> CFG::getStmtNoList(vector<shared_ptr<StmtNode>> stmtList) {
+void CFG::processStmtList(vector<shared_ptr<StmtNode>> stmtList) {
     int size = stmtList.size();
-    vector<int> output = vector<int>(vector<int>());
+    if (size == 0) {
+        return;
+    }
+
+    // record the statement number for each statement in the list
+    vector<int> stmtNoVector = vector<int>();
     for (int i = 0; i < size; i++) {
         shared_ptr<StmtNode> stmt = stmtList[i];
         int stmtNumber = stmtNumbers->at(stmt);
-        output.push_back(stmtNumber);
+        stmtNoVector.push_back(stmtNumber);
     }
-    return output;
-}
 
-void CFG::processStmtList(vector<shared_ptr<StmtNode>> stmtList) {
-    if (stmtList.empty()) {
-        return;
-    }
-    // record the statement number for each statement in the list
-    vector<int> stmtNoVector = getStmtNoList(stmtList);
     // add each statement to the cfg
-    int size = stmtList.size();
-    int previous = invalidStmtNo;
-    int next;
+    int previous = 0;
+    int next = 0;
     NodeType previousNodeType;
     for (int i = 0; i < size; i++) {
         shared_ptr<StmtNode> stmt = stmtList[i];
@@ -42,23 +38,21 @@ void CFG::processStmtList(vector<shared_ptr<StmtNode>> stmtList) {
         if (i < size - 1) {
             next = stmtNoVector[i + 1];
         } else {
-            next = invalidStmtNo;
+            next = 0;
         }
         if (i > 0 && previousNodeType == AST::IF_NODE) {
             // do not add next for if statement
-            previous = invalidStmtNo;
+            previous = 0;
         }
-        processStmt(stmt, previous, next);
+        processStmt(stmt, stmtNoVector[i], previous, next);
         previous = stmtNumber;
         previousNodeType = ASTUtils::getNodeType(stmt);
     }
-    addEdgeToCFG(stmtNoVector[size - 1], invalidStmtNo);
+    addEdgeToCFG(stmtNoVector[size - 1], 0);
 }
 
-void CFG::processStmt(shared_ptr<StmtNode> stmt, int previous, int next) {
-    int stmtNumber = stmtNumbers->at(stmt);
-
-    if (previous != invalidStmtNo) {
+void CFG::processStmt(shared_ptr<StmtNode> stmt, int stmtNumber, int previous, int next) {
+    if (previous > 0) {
         addEdgeToCFG(previous, stmtNumber);
     }
 
@@ -82,21 +76,28 @@ void CFG::addEdgeToCFG(int current, int next) {
         cfg->insert({current, unordered_set<int>()});
     }
     currentPtr = cfg->find(current);
-    if (next != invalidStmtNo) {
+    if (next > 0) {
         currentPtr->second.insert(next);
     }
 }
 
 void CFG::processWhileStmtList(int parent, vector<shared_ptr<StmtNode>> stmtList) {
-    if (stmtList.empty()) {
+    int size = stmtList.size();
+    if (size == 0) {
         // loop with no statements, the statement points to itself.
         addEdgeToCFG(parent, parent);
         return;
     }
+
     // record the statement number for each statement in the list
-    vector<int> stmtNoVector = getStmtNoList(stmtList);
+    vector<int> stmtNoVector = vector<int>();
+    for (int i = 0; i < size; i++) {
+        shared_ptr<StmtNode> stmt = stmtList[i];
+        int stmtNumber = stmtNumbers->at(stmt);
+        stmtNoVector.push_back(stmtNumber);
+    }
+
     // add each statement to the cfg
-    int size = stmtList.size();
     int previous = parent;
     int next;
     NodeType previousNodeType;
@@ -111,9 +112,9 @@ void CFG::processWhileStmtList(int parent, vector<shared_ptr<StmtNode>> stmtList
         }
         if (i > 0 && previousNodeType == AST::IF_NODE) {
             // do not add next for if statement
-            previous = invalidStmtNo;
+            previous = 0;
         }
-        processStmt(stmt, previous, next);
+        processStmt(stmt, stmtNoVector[i], previous, next);
         previous = stmtNumber;
         previousNodeType = ASTUtils::getNodeType(stmt);
     }
@@ -123,15 +124,22 @@ void CFG::processWhileStmtList(int parent, vector<shared_ptr<StmtNode>> stmtList
 }
 
 void CFG::processIfStmtList(int parent, int parentNext, vector<shared_ptr<StmtNode>> stmtList) {
-    if (stmtList.empty()) {
+    int size = stmtList.size();
+    if (size == 0) {
         // if list is empty, the if statement is skipped
         addEdgeToCFG(parent, parentNext);
         return;
     }
+
     // record the statement number for each statement in the list
-    vector<int> stmtNoVector = getStmtNoList(stmtList);
+    vector<int> stmtNoVector = vector<int>();
+    for (int i = 0; i < size; i++) {
+        shared_ptr<StmtNode> stmt = stmtList[i];
+        int stmtNumber = stmtNumbers->at(stmt);
+        stmtNoVector.push_back(stmtNumber);
+    }
+
     // add each statement to the cfg
-    int size = stmtList.size();
     int previous = parent;
     int next;
     NodeType previousNodeType;
@@ -147,9 +155,9 @@ void CFG::processIfStmtList(int parent, int parentNext, vector<shared_ptr<StmtNo
         }
         if (i > 0 && previousNodeType == AST::IF_NODE) {
             // do not add next for if statement
-            previous = invalidStmtNo;
+            previous = 0;
         }
-        processStmt(stmt, previous, next);
+        processStmt(stmt, stmtNoVector[i], previous, next);
         previous = stmtNumber;
         previousNodeType = ASTUtils::getNodeType(stmt);
     }

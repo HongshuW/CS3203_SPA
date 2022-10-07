@@ -12,7 +12,6 @@ class NextExtractor {
 public:
     static shared_ptr<list<vector<string>>> extractNext(shared_ptr<ProgramNode> programNode);
 	static vector<string> extractNextStar(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
-    static list<vector<string>> extractAllNextStarInProgram(shared_ptr<ProgramNode> programNode);
 private:
     static vector<string> extractNextStarWithEndOnly(shared_ptr<ProgramNode> programNode, StmtNoArgs args);
     static vector<string> extractNextStarWithStartOnly(shared_ptr<ProgramNode> programNode, StmtNoArgs args);

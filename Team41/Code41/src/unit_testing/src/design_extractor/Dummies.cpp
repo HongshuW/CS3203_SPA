@@ -892,7 +892,7 @@ namespace TestDE {
             = make_shared<ProgramNode>(ProgramNode({ procedureNode24 }));
 
 
-        //24
+        //23
 
        /*
 
@@ -919,36 +919,6 @@ namespace TestDE {
         shared_ptr<ProgramNode> programNode24
             = make_shared<ProgramNode>(ProgramNode({ procedureNode25 }));
 
-        //25
-
-       /*
-
-       procedure p {
-       1.    x = a;
-       2.    while (x == 0) {
-       3.      y = b
-             }
-       4.    a = x
-         }
-       */
-
-        shared_ptr<AssignNode> assignNode25 =
-            make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("a"));
-        shared_ptr<AssignNode> assignNode25_1 =
-            make_shared<AssignNode>(make_shared<VariableNode>("a"), make_shared<ExprNode>("x"));
-        shared_ptr<AssignNode> assignNode25_2 =
-            make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("b"));
-        vector<shared_ptr<StmtNode>> whileStmtLst25{ assignNode25_2 };
-        shared_ptr<WhileNode> whileNode25 = make_shared<WhileNode>(make_shared<CondExprNode>("x == 0"), whileStmtLst25);
-
-
-        shared_ptr<ProcedureNode> procedureNode26
-            = make_shared<ProcedureNode>(ProcedureNode("p",
-                { assignNode25, whileNode25, assignNode25_1 }));
-
-        shared_ptr<ProgramNode> programNode25
-            = make_shared<ProgramNode>(ProgramNode({ procedureNode26 }));
-
        
         vector<shared_ptr<ProgramNode>> programNodes = vector<shared_ptr<ProgramNode>>{programNode1, programNode2,
                                                                                        programNode3, programNode4,
@@ -961,8 +931,7 @@ namespace TestDE {
                                                                                        programNode17, programNode18,
                                                                                        programNode19, programNode20,
                                                                                        programNode21, programNode22,
-                                                                                       programNode23, programNode24,
-                                                                                       programNode25};
+                                                                                       programNode23, programNode24};
 
         return programNodes[idx];
     }
