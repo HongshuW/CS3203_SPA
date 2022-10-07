@@ -150,7 +150,19 @@ namespace DE {
     vector<string> PatternExtractor::condExprNodeHandler(shared_ptr<CondExprNode> condExpr) {
         vector<shared_ptr<RelExprNode>> relExprNodeList;
         vector<string> varList;
-        PatternExtractor::getRelExprNodesDFS(condExpr, relExprNodeList);
+
+        if (condExpr->relExprNode != nullptr) {
+            relExprNodeList.push_back(condExpr->relExprNode);
+        }
+
+        if (condExpr->condExprLHS != nullptr) {
+            PatternExtractor::getRelExprNodesDFS(condExpr->condExprLHS, relExprNodeList);
+        }
+
+        if (condExpr->condExprRHS != nullptr) {
+            PatternExtractor::getRelExprNodesDFS(condExpr->condExprRHS, relExprNodeList);
+        }
+
         for (auto relExpr: relExprNodeList) {
             relExprNodeHandler(relExpr, varList);
         }
@@ -193,7 +205,7 @@ namespace DE {
         }
 
         if (condExpr->condExprRHS != nullptr) {
-            getRelExprNodesDFS(condExpr->condExprLHS, relExprNodeList);
+            getRelExprNodesDFS(condExpr->condExprRHS, relExprNodeList);
         }
     }
 } // DE

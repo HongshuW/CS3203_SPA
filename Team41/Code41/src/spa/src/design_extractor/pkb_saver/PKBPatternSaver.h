@@ -13,7 +13,6 @@ class PKBPatternSaver {
 public:
     static void saveIfPattern(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier);
     static void saveWhilePattern(shared_ptr<ProgramNode> programNode,  shared_ptr<DataModifier> dataModifier);
-
 };
 
 
