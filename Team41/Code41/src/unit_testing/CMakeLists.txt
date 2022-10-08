@@ -63,7 +63,15 @@ add_executable(unit_testing ${srcs}
         src/CFG/TestCFG.cpp
         src/parser/TestASTValidator.cpp
         src/parser/InvalidProcedureDummies.cpp
-        src/parser/InvalidProcedureDummies.h src/design_extractor/TestAffectsExtraction.cpp src/design_extractor/TestAffectsStarExtraction.cpp src/design_extractor/TestNextExtraction.cpp src/design_extractor/TestNextStarExtraction.cpp src/query_evaluator/Dummies/TestQueryBuilder.cpp src/query_evaluator/Dummies/TestQueryBuilder.h)
+        src/parser/InvalidProcedureDummies.h 
+        src/query_evaluator/Dummies/TestQueryBuilder.cpp 
+        src/query_evaluator/Dummies/TestQueryBuilder.h
+        src/design_extractor/TestAffectsExtraction.cpp 
+        src/design_extractor/TestAffectsStarExtraction.cpp 
+        src/design_extractor/TestNextExtraction.cpp 
+        src/design_extractor/TestNextStarExtraction.cpp 
+        src/design_extractor/TestConditionalPatternExtractor.cpp)
+
 
 
 target_link_libraries(unit_testing spa)

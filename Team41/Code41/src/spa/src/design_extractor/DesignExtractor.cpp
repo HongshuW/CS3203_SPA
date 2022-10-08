@@ -107,7 +107,6 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
 
 DesignExtractor::DesignExtractor(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
         : dataModifier(dataModifier), programNode(programNode) {
-
 }
 
 void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode,
@@ -186,17 +185,29 @@ void DesignExtractor::run() {
                                                 RelationType::USES_P,
                                                 RelationType::MODIFIES_P,
                                                 RelationType::CALLS,
-                                                RelationType::CALLS_T};
+                                                RelationType::CALLS_T,
+                                                RelationType::NEXT};
     for (auto relationType: relationsToSave) {
         this->saveRelationToPKB(relationType);
     }
 
     //save patterns
     this->savePatternsToPKB();
+
+    //save if and while patterns
+    this->saveConditionalPatternsToPKB();
 }
 
 vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::extractPatterns() {
     return PatternExtractor::extractPattern(this->programNode);
+}
+
+list<vector<string>> DesignExtractor::extractIfPatterns() {
+    return PatternExtractor::extractIfPattern(this->programNode);
+}
+
+list<vector<string>> DesignExtractor::extractWhilePatterns() {
+    return PatternExtractor::extractWhilePattern(this->programNode);
 }
 
 void DesignExtractor::savePatternsToPKB() {
@@ -210,6 +221,17 @@ void DesignExtractor::savePatternsToPKB() {
     }
 }
 
+void DesignExtractor::saveConditionalPatternsToPKB() {
+    auto ifPatternList = this->extractIfPatterns();
+    for (auto entry: ifPatternList) {
+        dataModifier->saveIfPattern(entry);
+    }
+
+    auto whilePatternList = this->extractWhilePatterns();
+    for (auto entry: whilePatternList) {
+        dataModifier->saveWhilePattern(entry);
+    }
+}
 
 vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
     return NextExtractor::extractNextStar(this->programNode, args);
