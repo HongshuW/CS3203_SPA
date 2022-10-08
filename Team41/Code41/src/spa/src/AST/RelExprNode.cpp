@@ -4,8 +4,10 @@
 
 #include "RelExprNode.h"
 
+#include <utility>
+
 RelExprNode::RelExprNode(shared_ptr<ExprNode> exprNodeLHS, string op, shared_ptr<ExprNode> exprNodeRHS) :
-        exprNodeLHS(exprNodeLHS), op(op), exprNodeRHS(exprNodeRHS){}
+        exprNodeLHS(std::move(exprNodeLHS)), op(std::move(op)), exprNodeRHS(std::move(exprNodeRHS)){}
 
 bool RelExprNode::operator==(const ASTNode &node) const {
     auto castedNode = dynamic_cast<const RelExprNode*>(&node);
@@ -14,4 +16,4 @@ bool RelExprNode::operator==(const ASTNode &node) const {
            && (exprNodeLHS == castedNode->exprNodeLHS || *exprNodeLHS == *castedNode->exprNodeLHS)
            && (exprNodeRHS == castedNode->exprNodeRHS || *exprNodeRHS == *castedNode->exprNodeRHS)
            && op == castedNode->op;
-};
+}

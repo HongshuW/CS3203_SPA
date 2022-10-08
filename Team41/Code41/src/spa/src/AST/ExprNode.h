@@ -22,9 +22,9 @@ namespace AST {
 
         explicit ExprNode(string expr);
 
-        bool isNumberNode();
-        bool isVariableNode();
-        bool isOperatorNode();
+        bool isNumberNode() const;
+        bool isVariableNode() const;
+        bool isOperatorNode() const;
 
         bool operator==(const ASTNode& node) const override;
     };
