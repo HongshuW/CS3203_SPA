@@ -37,6 +37,7 @@ namespace DE {
         list<vector<string>> extractIfPatterns();
         list<vector<string>> extractWhilePatterns();
         void savePatternsToPKB();
+        void saveConditionalPatternsToPKB();
 
         vector<string> getNextStarRelations(StmtNoArgs args);
         vector<string> getAffectsRelations(StmtNoArgs args);
