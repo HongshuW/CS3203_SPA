@@ -151,15 +151,15 @@ namespace DE {
         vector<shared_ptr<RelExprNode>> relExprNodeList;
         unordered_set<string> varList;
 
-        if (condExpr->relExprNode != nullptr) {
+        if (condExpr->relExprNode) {
             relExprNodeList.push_back(condExpr->relExprNode);
         }
 
-        if (condExpr->condExprLHS != nullptr) {
+        if (condExpr->condExprLHS) {
             PatternExtractor::getRelExprNodesDFS(condExpr->condExprLHS, relExprNodeList);
         }
 
-        if (condExpr->condExprRHS != nullptr) {
+        if (condExpr->condExprRHS) {
             PatternExtractor::getRelExprNodesDFS(condExpr->condExprRHS, relExprNodeList);
         }
 
@@ -196,15 +196,15 @@ namespace DE {
 
     void PatternExtractor::getRelExprNodesDFS(shared_ptr<CondExprNode> condExpr,
                                               vector<shared_ptr<RelExprNode>> &relExprNodeList) {
-        if(condExpr->relExprNode != nullptr) {
+        if(condExpr->relExprNode) {
             relExprNodeList.push_back(condExpr->relExprNode);
         }
 
-        if (condExpr->condExprLHS != nullptr) {
+        if (condExpr->condExprLHS) {
             getRelExprNodesDFS(condExpr->condExprLHS, relExprNodeList);
         }
 
-        if (condExpr->condExprRHS != nullptr) {
+        if (condExpr->condExprRHS) {
             getRelExprNodesDFS(condExpr->condExprRHS, relExprNodeList);
         }
     }
