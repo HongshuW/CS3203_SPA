@@ -23,8 +23,8 @@ namespace SourceParser {
         void validateProcedureNames();
         void validateNodes();
         void validateCyclicDependencies();
-        void validateCallNode(shared_ptr<CallNode> callNode, string procedureName);
-        void calls(string procedure, string calledProcedure);
+        void validateCallNode(const shared_ptr<CallNode>& callNode, const string& procedureName);
+        void calls(const string& procedure, string calledProcedure);
 
     public:
         /**

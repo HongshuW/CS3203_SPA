@@ -9,7 +9,7 @@
 
 using namespace SourceParser;
 
-shared_ptr<ProgramNode> ASTBuilder::buildAST(std::string filename) {
+shared_ptr<ProgramNode> ASTBuilder::buildAST(const std::string& filename) {
     std::string str;
     std::ifstream MyReadFile(filename);
     std::string input;
