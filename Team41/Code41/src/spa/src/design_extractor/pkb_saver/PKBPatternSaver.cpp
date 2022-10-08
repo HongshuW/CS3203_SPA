@@ -8,6 +8,12 @@
 
 using namespace DE;
 
+void PKBPatternSaver::saveConditionalPatterns(shared_ptr<ProgramNode> programNode,
+                                              shared_ptr<DataModifier> dataModifier) {
+    saveIfPattern(programNode, dataModifier);
+    saveWhilePattern(programNode, dataModifier);
+}
+
 void PKBPatternSaver::saveIfPattern(shared_ptr<ProgramNode> programNode,
                                     shared_ptr<DataModifier> dataModifier) {
     list<vector<string>> ifPatternList = PatternExtractor::extractIfPattern(programNode);

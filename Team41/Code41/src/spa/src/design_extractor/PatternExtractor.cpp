@@ -72,7 +72,7 @@ namespace DE {
                         case AST::IF_NODE: {
                             shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
                             int stmtNo = stmtNumbers->at(ifNode);
-                            vector<string> varList = condExprNodeHandler(ifNode->condExpr);
+                            unordered_set<string> varList = condExprNodeHandler(ifNode->condExpr);
                             for (string var: varList) {
                                 vector<string> ifEntry;
                                 ifEntry.push_back(to_string(stmtNo));
@@ -117,7 +117,7 @@ namespace DE {
                         case AST::WHILE_NODE: {
                             shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
                             int stmtNo = stmtNumbers->at(whileNode);
-                            vector<string> varList = condExprNodeHandler(whileNode->condExpr);
+                            unordered_set<string> varList = condExprNodeHandler(whileNode->condExpr);
                             for (string var: varList) {
                                 vector<string> whileEntry;
                                 whileEntry.push_back(to_string(stmtNo));
@@ -147,9 +147,9 @@ namespace DE {
         return output;
     }
 
-    vector<string> PatternExtractor::condExprNodeHandler(shared_ptr<CondExprNode> condExpr) {
+    unordered_set<string> PatternExtractor::condExprNodeHandler(shared_ptr<CondExprNode> condExpr) {
         vector<shared_ptr<RelExprNode>> relExprNodeList;
-        vector<string> varList;
+        unordered_set<string> varList;
 
         if (condExpr->relExprNode != nullptr) {
             relExprNodeList.push_back(condExpr->relExprNode);
@@ -170,20 +170,20 @@ namespace DE {
     }
 
     void PatternExtractor::relExprNodeHandler(shared_ptr<RelExprNode> relExpr,
-                                                        vector<string>& varList) {
+                                              unordered_set<string>& varList) {
         auto exprLHS = relExpr->exprNodeLHS;
         auto exprRHS = relExpr->exprNodeRHS;
         exprNodeHandler(exprLHS, varList);
         exprNodeHandler(exprRHS, varList);
     }
 
-    void PatternExtractor::exprNodeHandler(shared_ptr<ExprNode> expr, vector<string>& varList) {
+    void PatternExtractor::exprNodeHandler(shared_ptr<ExprNode> expr,  unordered_set<string>& varList) {
         getVarFromExprNodesDFS(expr, varList);
     }
 
-    void PatternExtractor::getVarFromExprNodesDFS(shared_ptr<ExprNode> expr, vector<string>& varList) {
+    void PatternExtractor::getVarFromExprNodesDFS(shared_ptr<ExprNode> expr, unordered_set<string>& varList) {
         if (expr->isVariableNode()) {
-            varList.push_back(expr->expr);
+            varList.insert(expr->expr);
         }
 
         if (expr->isOperatorNode()) {

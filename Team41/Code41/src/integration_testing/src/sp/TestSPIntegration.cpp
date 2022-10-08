@@ -8,8 +8,10 @@
 #include "parser/Tokenizer.h"
 #include "parser/SPExceptions.h"
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/PatternExtractor.h"
 #include "pkb/DataModifier.h"
 #include "query_builder/QueryBuilder.h"
+
 
 using namespace SourceParser;
 using namespace std;
@@ -334,7 +336,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
 
-        QB::RelationType callS = RelationType::CALLS;
+        RelationType callS = RelationType::CALLS;
         auto actual = designExtractor.extractRelations(callS);
         vector<vector<string>> expected = { {"deepNesting", "x23", "23"} };
         REQUIRE(expected.size() == actual->size());
@@ -355,5 +357,50 @@ TEST_CASE("Test SP Integration") {
         vector<vector<string>> expected = { {"deepNesting", "x23"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
+    }
+
+    SECTION("Test Parser + Conditional Pattern Extraction -> all variable same"){
+        string source_1 = "../../../src/integration_testing/src/sp/conditional_pattern_source/source1.txt";
+        ASTBuilder astBuilder = ASTBuilder();
+        shared_ptr<ProgramNode> root = astBuilder.buildAST(source_1);
+
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+        list<vector<string>> actual = designExtractor.extractIfPatterns();
+        vector<vector<string>> expected = { {"2", "x"} };
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
+    }
+
+    SECTION("Test Parser + If Conditional Pattern Extraction -> doubly nested loops"){
+        string source_1 = "../../../src/integration_testing/src/sp/conditional_pattern_source/source2.txt";
+        ASTBuilder astBuilder = ASTBuilder();
+        shared_ptr<ProgramNode> root = astBuilder.buildAST(source_1);
+
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+        list<vector<string>> actual = designExtractor.extractIfPatterns();
+        vector<vector<string>> expected = {{"2", "baz"}, {"2", "qux"}, {"2", "quux"},
+                                           {"3", "bing"}, {"3", "boom"}, {"3", "qxxx"}};
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
+    }
+
+    SECTION("Test Parser + While Conditional Pattern Extraction -> triple nested loops"){
+        string source_1 = "../../../src/integration_testing/src/sp/conditional_pattern_source/source3.txt";
+        ASTBuilder astBuilder = ASTBuilder();
+        shared_ptr<ProgramNode> root = astBuilder.buildAST(source_1);
+
+        shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
+        DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+        list<vector<string>> actual = designExtractor.extractWhilePatterns();
+        vector<vector<string>> expected = {{"2", "baz"}, {"2", "qux"}, {"2", "quux"},
+                                           {"3", "bing"}, {"3", "boom"}, {"3", "qxxx"},
+                                           {"5", "x"}, {"5", "y"}};
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
     }
 }

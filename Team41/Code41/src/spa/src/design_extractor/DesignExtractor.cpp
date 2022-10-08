@@ -186,7 +186,8 @@ void DesignExtractor::run() {
                                                 RelationType::USES_P,
                                                 RelationType::MODIFIES_P,
                                                 RelationType::CALLS,
-                                                RelationType::CALLS_T};
+                                                RelationType::CALLS_T,
+                                                RelationType::NEXT};
     for (auto relationType: relationsToSave) {
         this->saveRelationToPKB(relationType);
     }
@@ -195,12 +196,19 @@ void DesignExtractor::run() {
     this->savePatternsToPKB();
 
     //save if and while patterns
-    PKBPatternSaver::saveIfPattern(this->programNode, this->dataModifier);
-    PKBPatternSaver::saveWhilePattern(this->programNode, this->dataModifier);
+    PKBPatternSaver::saveConditionalPatterns(this->programNode, this->dataModifier);
 }
 
 vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::extractPatterns() {
     return PatternExtractor::extractPattern(this->programNode);
+}
+
+list<vector<string>> DesignExtractor::extractIfPatterns() {
+    return PatternExtractor::extractIfPattern(this->programNode);
+}
+
+list<vector<string>> DesignExtractor::extractWhilePatterns() {
+    return PatternExtractor::extractWhilePattern(this->programNode);
 }
 
 void DesignExtractor::savePatternsToPKB() {

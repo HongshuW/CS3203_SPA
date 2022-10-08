@@ -18,10 +18,16 @@
 using namespace std;
 using namespace DE;
 
-TEST_CASE("Test If Pattern Extractor") {
-    SECTION("test empty procedure") {
+TEST_CASE("Test Conditional Pattern Extractor") {
+    SECTION("test empty procedure for extract if") {
         auto programNode = TestDE::Dummies::getTestProgramNode(0);
         list<vector<string>> actual = PatternExtractor::extractIfPattern(programNode);
+        REQUIRE(actual.empty());
+    }
+
+    SECTION("test empty procedure for extract while") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(0);
+        list<vector<string>> actual = PatternExtractor::extractWhilePattern(programNode);
         REQUIRE(actual.empty());
     }
 
@@ -29,6 +35,14 @@ TEST_CASE("Test If Pattern Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(2);
         list<vector<string>> actual = PatternExtractor::extractIfPattern(programNode);
         vector<vector<string>> expected = {{"3", "bar"}, {"3", "y"}};
+        REQUIRE(expected.size() == actual.size());
+        REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
+    }
+
+    SECTION("test complicated while statement") {
+        auto programNode = TestDE::Dummies::getTestProgramNode(3);
+        list<vector<string>> actual = PatternExtractor::extractWhilePattern(programNode);
+        vector<vector<string>> expected = {{"5", "baz"}, {"5", "qux"}, {"5", "quux"}, {"5", "haha"}};
         REQUIRE(expected.size() == actual.size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
     }
