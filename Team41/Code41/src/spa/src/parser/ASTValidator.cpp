@@ -113,7 +113,7 @@ void ASTValidator::validateCyclicDependencies() {
     }
 }
 
-void ASTValidator::calls(const string& procedure, string calledProcedure) {
+void ASTValidator::calls(const string& procedure, const string& calledProcedure) {
     if (procedure == calledProcedure) {
         throw SPValidationException(ValidatorConstants::SP_AST_EXCEPTION_CYCLIC_DEPENDENCY);
     }

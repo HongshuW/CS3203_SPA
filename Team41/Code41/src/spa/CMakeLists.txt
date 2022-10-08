@@ -166,8 +166,8 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/WithRef.cpp
         src/parser/constants/ParserConstants.cpp
         src/parser/constants/ParserConstants.h
-        src/parser/constants/TokeniserConstants.cpp
-        src/parser/constants/TokeniserConstants.h
+        src/parser/constants/TokenizerConstants.cpp
+        src/parser/constants/TokenizerConstants.h
         src/utils/ErrorMessageFormatter.cpp
         src/utils/ErrorMessageFormatter.h
         src/query_builder/constants/QueryTokeniserConstants.cpp

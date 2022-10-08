@@ -14,7 +14,7 @@ Parser::Parser(vector<string> tokens)
 
 string Parser::peek() { return tokens[currIdx]; }
 
-string Parser::previous() { return tokens[currIdx - 1]; }
+string Parser::previous() { return tokens[currIdx - ParserConstants::ONE]; }
 
 string Parser::pop() {
     string currToken = peek();

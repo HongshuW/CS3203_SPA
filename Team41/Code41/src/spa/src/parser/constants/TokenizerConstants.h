@@ -2,14 +2,14 @@
 // Created by Nafour on 27/9/22.
 //
 
-#ifndef SPA_TOKENISERCONSTANTS_H
-#define SPA_TOKENISERCONSTANTS_H
+#ifndef SPA_TOKENIZERCONSTANTS_H
+#define SPA_TOKENIZERCONSTANTS_H
 #include <string>
 
 using namespace std;
 namespace SourceParser {
 
-    class TokeniserConstants {
+    class TokenizerConstants {
     public:
         static const string EMPTY_STR;
         static const string DOUBLE_QUOTE;
@@ -45,4 +45,4 @@ namespace SourceParser {
 
 } // SourceParser
 
-#endif //SPA_TOKENISERCONSTANTS_H
+#endif //SPA_TOKENIZERCONSTANTS_H
