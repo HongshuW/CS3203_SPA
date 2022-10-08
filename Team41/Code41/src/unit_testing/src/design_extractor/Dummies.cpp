@@ -650,7 +650,14 @@ namespace TestDE {
         vector<shared_ptr<StmtNode>> ifStmtLst18{ assignNode18_1};
         vector<shared_ptr<StmtNode>> elseStmtLst18{ assignNode18_2 };
 
-        shared_ptr<IfNode> ifNode18 = make_shared<IfNode>(make_shared<CondExprNode>("i != 2"),
+        auto relExpr_18 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("i"),
+                        "!=",
+                make_shared<ExprNode>("2")
+                );
+        auto condNode_18 = make_shared<CondExprNode>(relExpr_18);
+
+        shared_ptr<IfNode> ifNode18 = make_shared<IfNode>(make_shared<CondExprNode>(condNode_18),
                                                           ifStmtLst18, elseStmtLst18);
 
         shared_ptr<ProcedureNode> procedureNode18
@@ -769,8 +776,15 @@ namespace TestDE {
         shared_ptr<AssignNode> assignNode22_4 =
                 make_shared<AssignNode>(make_shared<VariableNode>("i"), exprNode_22_2);
 
+        auto relExpr_22 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("i"),
+                "!=",
+                make_shared<ExprNode>("0")
+        );
+        auto condNode_22 = make_shared<CondExprNode>(relExpr_22);
+
         vector<shared_ptr<StmtNode>> whileStmtLst22{ assignNode22_3, callNode_22, assignNode22_4 };
-        shared_ptr<WhileNode> whileNode22 = make_shared<WhileNode>(make_shared<CondExprNode>("i != 0"), whileStmtLst22);
+        shared_ptr<WhileNode> whileNode22 = make_shared<WhileNode>(condNode_22, whileStmtLst22);
 
         // 07 08 09
         shared_ptr<ExprNode> exprNode22_3 = make_shared<ExprNode>("+");
@@ -783,9 +797,16 @@ namespace TestDE {
         shared_ptr<AssignNode> assignNode22_6 =
                 make_shared<AssignNode>(make_shared<VariableNode>("z"), make_shared<ExprNode>("1"));
 
+        auto relExpr_22_2 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("x"),
+                "==",
+                make_shared<ExprNode>("1")
+        );
+        auto condNode_22_2 = make_shared<CondExprNode>(relExpr_22_2);
+
         vector<shared_ptr<StmtNode>> ifStmtLst22{ assignNode22_5 };
         vector<shared_ptr<StmtNode>> elseStmtLst22{ assignNode22_6 };
-        shared_ptr<IfNode> ifNode22 = make_shared<IfNode>(make_shared<CondExprNode>("x == 1"),
+        shared_ptr<IfNode> ifNode22 = make_shared<IfNode>(condNode_22_2,
                                                           ifStmtLst22, elseStmtLst22);
 
         //10 11 12
@@ -871,13 +892,28 @@ namespace TestDE {
         shared_ptr<AssignNode> assignNode23_5 =
                 make_shared<AssignNode>(make_shared<VariableNode>("a"), make_shared<ExprNode>("c"));
 
+
+        auto relExpr_23 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("i"),
+                "!=",
+                make_shared<ExprNode>("2")
+        );
+        auto condNode_23 = make_shared<CondExprNode>(relExpr_23);
+
         vector<shared_ptr<StmtNode>> ifStmtLst23{ assignNode22_4 };
         vector<shared_ptr<StmtNode>> elseStmtLst23{ assignNode22_5 };
-        shared_ptr<IfNode> ifNode23 = make_shared<IfNode>(make_shared<CondExprNode>("i != 2"),
+        shared_ptr<IfNode> ifNode23 = make_shared<IfNode>(condNode_23,
                                                           ifStmtLst23, elseStmtLst23);
 
+        auto relExpr_23_2 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("x"),
+                "==",
+                make_shared<ExprNode>("0")
+        );
+        auto condNode_23_2 = make_shared<CondExprNode>(relExpr_23_2);
+
         vector<shared_ptr<StmtNode>> whileStmtLst23{ assignNode23_1, ifNode23, assignNode23_2, assignNode23_3 };
-        shared_ptr<WhileNode> whileNode23 = make_shared<WhileNode>(make_shared<CondExprNode>("x == 0"), whileStmtLst23);
+        shared_ptr<WhileNode> whileNode23 = make_shared<WhileNode>(condNode_23_2, whileStmtLst23);
 
         shared_ptr<ProcedureNode> procedureNode24
                 = make_shared<ProcedureNode>(ProcedureNode("p",
@@ -897,13 +933,19 @@ namespace TestDE {
         3.    a = x
           }
         */
+        auto relExpr_24 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("x"),
+                "==",
+                make_shared<ExprNode>("0")
+        );
+        auto condNode_24 = make_shared<CondExprNode>(relExpr_24);
 
         shared_ptr<AssignNode> assignNode24 =
                 make_shared<AssignNode>(make_shared<VariableNode>("x"), make_shared<ExprNode>("a"));
         shared_ptr<AssignNode> assignNode24_1 =
                 make_shared<AssignNode>(make_shared<VariableNode>("a"), make_shared<ExprNode>("x"));
         vector<shared_ptr<StmtNode>> whileStmtLst24{ };
-        shared_ptr<WhileNode> whileNode24 = make_shared<WhileNode>(make_shared<CondExprNode>("x == 0"), whileStmtLst24);
+        shared_ptr<WhileNode> whileNode24 = make_shared<WhileNode>(condNode_24, whileStmtLst24);
 
 
         shared_ptr<ProcedureNode> procedureNode25
@@ -932,7 +974,15 @@ namespace TestDE {
         shared_ptr<AssignNode> assignNode25_2 =
                 make_shared<AssignNode>(make_shared<VariableNode>("y"), make_shared<ExprNode>("b"));
         vector<shared_ptr<StmtNode>> whileStmtLst25{ assignNode25_2 };
-        shared_ptr<WhileNode> whileNode25 = make_shared<WhileNode>(make_shared<CondExprNode>("x == 0"), whileStmtLst25);
+
+        auto relExpr_25 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("x"),
+                "==",
+                make_shared<ExprNode>("0")
+        );
+        auto condNode_25 = make_shared<CondExprNode>(relExpr_25);
+
+        shared_ptr<WhileNode> whileNode25 = make_shared<WhileNode>(condNode_25, whileStmtLst25);
 
 
         shared_ptr<ProcedureNode> procedureNode26
