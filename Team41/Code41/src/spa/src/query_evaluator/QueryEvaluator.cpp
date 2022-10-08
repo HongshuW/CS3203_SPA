@@ -5,7 +5,6 @@
 #include "QueryEvaluator.h"
 #include "query_builder/commons/Query.h"
 #include "TableCombiner.h"
-#include "QueryTupleResult.h"
 #include <algorithm>
 #include <vector>
 #include <iterator>

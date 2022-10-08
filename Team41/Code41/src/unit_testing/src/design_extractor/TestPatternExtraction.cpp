@@ -57,8 +57,17 @@ TEST_CASE("Test pattern extraction")
       */
         shared_ptr<StmtNode> printNode_p3 = make_shared<PrintNode>(make_shared<VariableNode>("x"));
         shared_ptr<StmtNode> readNode_p3 = make_shared<ReadNode>(make_shared<VariableNode>("y"));
+        auto rhs = make_shared<ExprNode>("+");
+        rhs->left = make_shared<ExprNode>("y");
+        rhs->right = make_shared<ExprNode>("112312341234");
+        auto relExpr_p3 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("bar"),
+                "==",
+                rhs
+        );
+        auto condNode_p3 = make_shared<CondExprNode>(relExpr_p3);
 
-        shared_ptr<CondExprNode> ifCondExpr_p3 = make_shared<CondExprNode>("bar == y + 112312341234");
+        shared_ptr<CondExprNode> ifCondExpr_p3 = make_shared<CondExprNode>(condNode_p3);
         shared_ptr<StmtNode> printNode2_p3 = make_shared<PrintNode>(make_shared<VariableNode>("z"));
 
         shared_ptr<ExprNode> exprNode_1 = make_shared<ExprNode>("+");
@@ -126,10 +135,26 @@ TEST_CASE("Test pattern extraction")
         // 4
         vector<shared_ptr<StmtNode>> ifStmtLst_p5{assignNode3_p5};
         vector<shared_ptr<StmtNode>> elseStmtLst_p5{assignNode4_p5};
-        shared_ptr<IfNode> ifNode_p5 = make_shared<IfNode>(make_shared<CondExprNode>("x == 0"), ifStmtLst_p5, elseStmtLst_p5);
+
+        auto relExpr_p5 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("x"),
+                "==",
+                make_shared<ExprNode>("0")
+        );
+        auto condNode_p5 = make_shared<CondExprNode>(relExpr_p5);
+
+        shared_ptr<IfNode> ifNode_p5 = make_shared<IfNode>(condNode_p5, ifStmtLst_p5, elseStmtLst_p5);
         // 2
         vector<shared_ptr<StmtNode>> whileStmtLst_p5{assignNode2_p5, ifNode_p5};
-        shared_ptr<WhileNode> whileNode_p5 = make_shared<WhileNode>(make_shared<CondExprNode>("x != 0"), whileStmtLst_p5);
+
+        auto relExpr_p5_2 = make_shared<RelExprNode>(
+                make_shared<ExprNode>("x"),
+                "!=",
+                make_shared<ExprNode>("0")
+        );
+        auto condNode_p5_2 = make_shared<CondExprNode>(relExpr_p5_2);
+
+        shared_ptr<WhileNode> whileNode_p5 = make_shared<WhileNode>(condNode_p5_2, whileStmtLst_p5);
         // procedure & program
         shared_ptr<ProcedureNode> procedureNode5 = make_shared<ProcedureNode>(ProcedureNode("CASE2", {assignNode1_p5, whileNode_p5, assignNode5_p5}));
         shared_ptr<ProgramNode> programNode5 = make_shared<ProgramNode>(ProgramNode({procedureNode5}));

@@ -15,16 +15,10 @@ namespace AST {
 
     class CondExprNode : public ASTNode {
     public:
-        //TODO: need to remove this
-        string condExpr;
-        shared_ptr<RelExprNode> relExprNode;
-        shared_ptr<CondExprNode> condExprLHS;
-        string op;
-        shared_ptr<CondExprNode> condExprRHS;
-
-        // string representation
-        //TODO: need to remove this
-        explicit CondExprNode(string condExpr);
+        shared_ptr<RelExprNode> relExprNode = nullptr;
+        shared_ptr<CondExprNode> condExprLHS = nullptr;
+        string op = "";
+        shared_ptr<CondExprNode> condExprRHS = nullptr;
 
         // x == y
         explicit CondExprNode(shared_ptr<RelExprNode> relExprNode);

@@ -273,12 +273,28 @@ namespace QE {
                 if (!(ident1 == ident2)) break;
                 return this->filterTableByColValueEquality(table, {FIRST_COL_IDX, SECOND_COL_IDX});
         }
+        bool hasResult = !table.isBodyEmpty();
+
         //drop unused columns
-        for (int i = 0; i < table.header.size(); i++) {
-            if (table.header[i].find(Table::DEFAULT_HEADER_PREFIX) != std::string::npos) {
-                table = table.dropCol(i);
+        int offset = 0;
+        int n = table.header.size();
+        for (int i = 0; i < n; i++) {
+            int adjustedIdx = i + offset;
+            if (table.header[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) != std::string::npos) {
+                table = table.dropCol(adjustedIdx);
+                offset--;
             }
         }
+
+        if (table.isBodyEmpty() && hasResult) {
+            const string DUMMY_HEADER = "$dummy_header";
+            const string DUMMY_VALUE = "$dummy_value";
+            Table dummyTable = Table();
+            dummyTable.renameHeader({DUMMY_HEADER}) ;
+            dummyTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+            return dummyTable;
+        }
+
         return table;
     }
 
