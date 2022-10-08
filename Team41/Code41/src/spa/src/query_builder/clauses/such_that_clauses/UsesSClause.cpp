@@ -4,7 +4,7 @@
 
 #include "UsesSClause.h"
 
-UsesSClause::UsesSClause(Ref arg1, Ref arg2) : SuchThatClause(arg1, arg2) {}
+UsesSClause::UsesSClause(Ref arg1, Ref arg2) : SuchThatClause(std::move(arg1), std::move(arg2)) {}
 
 bool UsesSClause::operator==(const UsesSClause &other) const {
     auto clause = dynamic_cast<const UsesSClause*>(&other);

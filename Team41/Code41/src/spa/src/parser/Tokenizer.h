@@ -32,7 +32,7 @@ namespace SourceParser {
                                                   TokenizerConstants::MODULO,
                                                   TokenizerConstants::BAR,
                                                   TokenizerConstants::SINGLE_AND};
-        unsigned int currIdx = TokenizerConstants::ZERO;
+        int currIdx;
         string source;
         string curr;
         char peek();
@@ -43,12 +43,11 @@ namespace SourceParser {
         void processDigit();
         bool match(char s);
         bool isWithinBound();
-        std::vector<std::string> tokens;
+        vector<string> tokens;
 
     public:
-        std::vector<std::string> tokenize();
-        explicit Tokenizer(std::string source);
-
+        vector<string> tokenize();
+        explicit Tokenizer(string source);
     };
 }
 

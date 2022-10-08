@@ -23,7 +23,7 @@ namespace QB {
 
         bool operator==(const IfPatternClause &other) const;
         Table accept(shared_ptr<IVisitor> visitor) override;
-        unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
+        int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
     };
 
 } // QB

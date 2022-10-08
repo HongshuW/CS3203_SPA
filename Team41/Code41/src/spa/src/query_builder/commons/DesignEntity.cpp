@@ -6,30 +6,41 @@
 #include "query_builder/exceptions/Exceptions.h"
 
 namespace QB {
+    const string STMT = "stmt";
+    const string READ = "read";
+    const string PRINT = "print";
+    const string CALL = "call";
+    const string WHILE = "while";
+    const string IF = "if";
+    const string ASSIGN = "assign";
+    const string VARIABLE = "variable";
+    const string CONSTANT = "constant";
+    const string PROCEDURE = "procedure";
+
     unordered_map<DesignEntity, std::string> designEntityToStringMap({
-        {DesignEntity::STMT, "stmt"},
-        {DesignEntity::READ, "read"},
-        {DesignEntity::PRINT, "print"},
-        {DesignEntity::CALL, "call"},
-        {DesignEntity::WHILE, "while"},
-        {DesignEntity::IF, "if"},
-        {DesignEntity::ASSIGN, "assign"},
-        {DesignEntity::VARIABLE, "variable"},
-        {DesignEntity::CONSTANT, "constant"},
-        {DesignEntity::PROCEDURE, "procedure"}
+        {DesignEntity::STMT, STMT},
+        {DesignEntity::READ, READ},
+        {DesignEntity::PRINT, PRINT},
+        {DesignEntity::CALL, CALL},
+        {DesignEntity::WHILE, WHILE},
+        {DesignEntity::IF, IF},
+        {DesignEntity::ASSIGN, ASSIGN},
+        {DesignEntity::VARIABLE, VARIABLE},
+        {DesignEntity::CONSTANT, CONSTANT},
+        {DesignEntity::PROCEDURE, PROCEDURE}
     });
 
     unordered_map<std::string, DesignEntity> stringToDesignEntityMap({
-        {"stmt", DesignEntity::STMT},
-        {"read", DesignEntity::READ},
-        {"print", DesignEntity::PRINT},
-        {"call", DesignEntity::CALL},
-        {"while", DesignEntity::WHILE},
-        {"if", DesignEntity::IF},
-        {"assign", DesignEntity::ASSIGN},
-        {"variable", DesignEntity::VARIABLE},
-        {"constant", DesignEntity::CONSTANT},
-        {"procedure", DesignEntity::PROCEDURE}
+        {STMT, DesignEntity::STMT},
+        {READ, DesignEntity::READ},
+        {PRINT, DesignEntity::PRINT},
+        {CALL, DesignEntity::CALL},
+        {WHILE, DesignEntity::WHILE},
+        {IF, DesignEntity::IF},
+        {ASSIGN, DesignEntity::ASSIGN},
+        {VARIABLE, DesignEntity::VARIABLE},
+        {CONSTANT, DesignEntity::CONSTANT},
+        {PROCEDURE, DesignEntity::PROCEDURE}
     });
 
     unordered_map<DesignEntity, unordered_set<AttrName>> designEntityToAttrNameMap({
@@ -49,22 +60,12 @@ namespace QB {
         try {
             return stringToDesignEntityMap.at(str);
         } catch (const std::out_of_range& oor) {
-            throw PQLParseException("Cannot find a Design Entity called " +
-                                            str);
+            throw PQLParseException(CommonConstants::PQL_INVALID_DESIGN_ENTITY);
         }
     }
 
     string getDesignEntityString(DesignEntity designEntity) {
         return designEntityToStringMap.at(designEntity);
-    }
-
-    string getDesignEntitySetString(unordered_set<DesignEntity> set) {
-        string str = "";
-        for (auto designEntity : set) {
-            str += getDesignEntityString(designEntity);
-            str += ", ";
-        }
-        return str;
     }
 
     unordered_set<AttrName> getAllowedAttrNameSetFromDesignEntity(DesignEntity designEntity) {

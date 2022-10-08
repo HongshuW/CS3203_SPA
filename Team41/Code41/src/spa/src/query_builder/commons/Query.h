@@ -27,31 +27,7 @@ namespace QB {
         shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses;
         shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses;
         shared_ptr<vector<shared_ptr<WithClause>>> withClauses;
-
         Query();
-
-        // For printing
-        friend ostream& operator<<(ostream& os, Query const& query) {
-            for (const auto& declaration : *(query.declarations)) {
-                os << declaration << "; ";
-            }
-
-            os << query.selectClause << "; ";
-
-            for (const auto& clause : *(query.suchThatClauses)) {
-                os << clause << " ";
-            }
-
-            for (const auto& clause : *(query.patternClauses)) {
-                os << clause << " ";
-            }
-
-            for (const auto& clause : *(query.withClauses)) {
-                os << clause << " ";
-            }
-
-            return os;
-        }
     };
 }
 

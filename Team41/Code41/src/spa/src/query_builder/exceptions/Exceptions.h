@@ -18,7 +18,7 @@ namespace QB {
      */
     class PQLTokenizeException : public std::runtime_error {
     public:
-        PQLTokenizeException(const std::string& msg = "") : std::runtime_error(msg) {}
+        explicit PQLTokenizeException(const std::string& msg = "") : std::runtime_error(msg) {}
     };
 
     /**
@@ -28,7 +28,7 @@ namespace QB {
     */
     class PQLParseException : public std::runtime_error {
     public:
-        PQLParseException(const std::string& msg = "") : std::runtime_error(msg) {}
+        explicit PQLParseException(const std::string& msg = "") : std::runtime_error(msg) {}
     };
 
     /**
@@ -38,7 +38,7 @@ namespace QB {
     */
     class PQLValidationException : public std::runtime_error {
     public:
-        PQLValidationException(const std::string& msg = "") : std::runtime_error(msg) {}
+        explicit PQLValidationException(const std::string& msg = "") : std::runtime_error(msg) {}
     };
 }
 

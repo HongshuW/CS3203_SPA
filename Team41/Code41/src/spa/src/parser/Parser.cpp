@@ -10,7 +10,7 @@ using namespace SourceParser;
 using namespace std;
 
 Parser::Parser(vector<string> tokens)
-    : tokens(std::move(tokens)) {}
+    : currIdx(TokenizerConstants::ZERO), tokens(std::move(tokens)) {}
 
 string Parser::peek() { return tokens[currIdx]; }
 

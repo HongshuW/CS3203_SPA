@@ -6,46 +6,24 @@
 #include "query_builder/exceptions/Exceptions.h"
 
 namespace QB {
-    unordered_map<RefType, int> refTypeToIndexMap({
-        {RefType::SYNONYM, 0},
-        {RefType::UNDERSCORE, 1},
-        {RefType::INTEGER, 2},
-        {RefType::IDENT, 3}
-    });
 
     unordered_map<int, RefType> indexToRefTypeMap({
-        {0, RefType::SYNONYM},
-        {1, RefType::UNDERSCORE},
-        {2, RefType::INTEGER},
-        {3, RefType::IDENT}
+        {CommonConstants::ZERO, RefType::SYNONYM},
+        {CommonConstants::ONE, RefType::UNDERSCORE},
+        {CommonConstants::TWO, RefType::INTEGER},
+        {CommonConstants::THREE, RefType::IDENT}
     });
 
-    //! For printing
-    unordered_map<RefType, string> refTypeToStringMap({
-        {RefType::SYNONYM, "Synonym"},
-        {RefType::UNDERSCORE, "Underscore"},
-        {RefType::INTEGER, "Integer"},
-        {RefType::IDENT, "Ident"}
-    });
 
     RefType getRefTypeFromIndex(int index) {
         try {
             return indexToRefTypeMap.at(index);
         } catch (const std::out_of_range& oor) {
-            throw PQLParseException("Cannot find the RefType at index " +
-                                            index);
+            throw PQLParseException(CommonConstants::PQL_INVALID_REF_TYPE);
         }
     }
 
-    RefType getRefType(Ref ref) {
-        return getRefTypeFromIndex(ref.index());
-    }
-
-    int getIndexFromRefType(RefType refType) {
-        return refTypeToIndexMap.at(refType);
-    }
-
-    string refTypeToString(RefType refType) {
-        return refTypeToStringMap.at(refType);
+    RefType getRefType(const Ref& ref) {
+        return getRefTypeFromIndex((int) ref.index());
     }
 }

@@ -53,7 +53,7 @@ vector<string> ExprStringTokenizer::tokenize() {
         } else if (Utils::isBracket(curr) || Utils::isMathOperators(curr)) {
             exprTokens.push_back(curr);
         } else {
-            throw PQLParseException(QueryTokeniserConstants::PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN + next);
+            throw PQLParseException(QueryTokenizerConstants::PQL_TOKENIZE_EXCEPTION_UNEXPECTED_TOKEN + next);
         }
     }
 
@@ -65,11 +65,11 @@ vector<string> ExprStringTokenizer::tokenize() {
         //! The first and the last string in the exprTokens cannot be a math operator
         if (Utils::isMathOperators(exprTokens[i]) && isNotFirstAndLastChar(i)) continue;
         if (Utils::isBracket(exprTokens[i])) continue;
-        throw PQLParseException(QueryTokeniserConstants::PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN + exprTokens[i]);
+        throw PQLParseException(QueryTokenizerConstants::PQL_TOKENIZE_EXCEPTION_UNEXPECTED_TOKEN + exprTokens[i]);
     }
 
     if (!Utils::isValidParentheses(exprTokens)) {
-        throw PQLParseException(QueryTokeniserConstants::QPL_EXPR_STRING_INVALID_PARENTHESES);
+        throw PQLParseException(QueryTokenizerConstants::QPL_EXPR_STRING_INVALID_PARENTHESES);
     }
 
     return exprTokens;

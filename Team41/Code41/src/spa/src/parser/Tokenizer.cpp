@@ -12,7 +12,7 @@
 using namespace SourceParser;
 using namespace std;
 
-Tokenizer::Tokenizer(std::string source) : source(std::move(source)) {}
+Tokenizer::Tokenizer(std::string source) : currIdx(TokenizerConstants::ZERO), source(std::move(source)) {}
 
 bool Tokenizer::isWithinBound() {
     return currIdx < source.length();

@@ -7,9 +7,9 @@
 #include <utility>
 
 AssignPatternClause::AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3) :
-    PatternClause(std::move(arg1), arg2), arg3(std::move(arg3)) {}
+    PatternClause(std::move(arg1), std::move(arg2)), arg3(std::move(arg3)) {}
 
-AssignPatternClause::AssignPatternClause(Synonym arg1, Ref arg2) : PatternClause(std::move(arg1), arg2),
+AssignPatternClause::AssignPatternClause(Synonym arg1, Ref arg2) : PatternClause(std::move(arg1), std::move(arg2)),
     arg3(ExpressionSpec()) {}
 
 bool AssignPatternClause::operator==(const AssignPatternClause &other) const {
@@ -22,6 +22,6 @@ Table AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }
 
-unsigned int AssignPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
+int AssignPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
     return currIdx;
 }

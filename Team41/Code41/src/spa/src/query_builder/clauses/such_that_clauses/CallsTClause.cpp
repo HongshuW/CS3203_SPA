@@ -4,7 +4,7 @@
 
 #include "CallsTClause.h"
 
-CallsTClause::CallsTClause(Ref arg1, Ref arg2) : SuchThatClause(arg1, arg2) {}
+CallsTClause::CallsTClause(Ref arg1, Ref arg2) : SuchThatClause(std::move(arg1), std::move(arg2)) {}
 
 bool CallsTClause::operator==(const CallsTClause &other) const {
     auto clause = dynamic_cast<const CallsTClause*>(&other);
