@@ -7,33 +7,32 @@
 
 #include <vector>
 #include <unordered_set>
-#include "constants/TokeniserConstants.h"
+#include "constants/TokenizerConstants.h"
 #include "utils/Utils.h"
-// maybe include method to tokenise symbols
 
 using namespace std;
 
 namespace SourceParser {
     class Tokenizer {
     private:
-        const unordered_set<string> SYMBOL_SET = {TokeniserConstants::LEFT_BRACKET,
-                                                  TokeniserConstants::RIGHT_BRACKET,
-                                                  TokeniserConstants::COMMA,
-                                                  TokeniserConstants::CURLY_LEFT_BRACKET,
-                                                  TokeniserConstants::CURLY_RIGHT_BRACKET,
-                                                  TokeniserConstants::SEMICOLON,
-                                                  TokeniserConstants::EQUAL,
-                                                  TokeniserConstants::PLUS,
-                                                  TokeniserConstants::MINUS,
-                                                  TokeniserConstants::GREATER_THAN,
-                                                  TokeniserConstants::SMALLER_THAN,
-                                                  TokeniserConstants::EXCLAMATION_MARK,
-                                                  TokeniserConstants::STAR,
-                                                  TokeniserConstants::FORWARD_SLASH,
-                                                  TokeniserConstants::MODULO,
-                                                  TokeniserConstants::BAR,
-                                                  TokeniserConstants::SINGLE_AND};
-        unsigned int currIdx;
+        const unordered_set<string> SYMBOL_SET = {TokenizerConstants::LEFT_BRACKET,
+                                                  TokenizerConstants::RIGHT_BRACKET,
+                                                  TokenizerConstants::COMMA,
+                                                  TokenizerConstants::CURLY_LEFT_BRACKET,
+                                                  TokenizerConstants::CURLY_RIGHT_BRACKET,
+                                                  TokenizerConstants::SEMICOLON,
+                                                  TokenizerConstants::EQUAL,
+                                                  TokenizerConstants::PLUS,
+                                                  TokenizerConstants::MINUS,
+                                                  TokenizerConstants::GREATER_THAN,
+                                                  TokenizerConstants::SMALLER_THAN,
+                                                  TokenizerConstants::EXCLAMATION_MARK,
+                                                  TokenizerConstants::STAR,
+                                                  TokenizerConstants::FORWARD_SLASH,
+                                                  TokenizerConstants::MODULO,
+                                                  TokenizerConstants::BAR,
+                                                  TokenizerConstants::SINGLE_AND};
+        unsigned int currIdx = TokenizerConstants::ZERO;
         string source;
         string curr;
         char peek();
@@ -43,11 +42,12 @@ namespace SourceParser {
         void processAlNum();
         void processDigit();
         bool match(char s);
+        bool isWithinBound();
+        std::vector<std::string> tokens;
 
     public:
-        std::vector<std::string> tokens;
         std::vector<std::string> tokenize();
-        Tokenizer(std::string source);
+        explicit Tokenizer(std::string source);
 
     };
 }
