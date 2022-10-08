@@ -4,15 +4,17 @@
 
 #include "Declaration.h"
 
+#include <utility>
+
 using namespace std;
 using namespace QB;
 
 Declaration::Declaration(DesignEntity designEntity, Synonym synonym)
-: designEntity(designEntity), synonym(synonym){};
+: designEntity(designEntity), synonym(std::move(synonym)) {}
 
-optional<Declaration> Declaration::findDeclaration(Synonym& synonymObj, shared_ptr<vector<Declaration>> declarations) {
+optional<Declaration> Declaration::findDeclaration(Synonym& synonymObj, const shared_ptr<vector<Declaration>>& declarations) {
     for (auto declaration : *declarations) {
-        if (declaration.getSynonym().synonym.compare(synonymObj.synonym) == 0) {
+        if (declaration.getSynonym().synonym == synonymObj.synonym) {
             return make_optional(declaration);
         }
     }

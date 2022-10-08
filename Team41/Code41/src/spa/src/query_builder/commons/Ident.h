@@ -11,6 +11,7 @@
 #include <optional>
 #include <regex>
 #include "utils/Utils.h"
+#include "query_builder/constants/CommonConstants.h"
 
 using namespace std;
 
@@ -18,15 +19,9 @@ namespace QB {
     class Ident {
     public:
         string identStr;
-        Ident(string identStr);
+        explicit Ident(const string& identStr);
 
         bool operator==(const Ident& ident1) const;
-
-        // For printing
-        friend std::ostream& operator<<(std::ostream& os, Ident const& ident) {
-            os << ident.identStr;
-            return os;
-        }
     };
 }
 

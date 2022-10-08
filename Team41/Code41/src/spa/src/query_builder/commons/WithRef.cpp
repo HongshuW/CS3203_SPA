@@ -5,17 +5,18 @@
 #include "WithRef.h"
 
 namespace QB {
+
     unordered_map<int, WithRefType> indexToWithRefTypeMap({
-        {0, WithRefType::IDENT},
-        {1, WithRefType::INTEGER},
-        {2, WithRefType::ATTR_REF}
+        {CommonConstants::ZERO, WithRefType::IDENT},
+        {CommonConstants::ONE, WithRefType::INTEGER},
+        {CommonConstants::TWO, WithRefType::ATTR_REF}
     });
 
     WithRefType getWithRefTypeFromIndex(int index) {
         try {
             return indexToWithRefTypeMap.at(index);
         } catch (const std::out_of_range& oor) {
-            throw PQLParseException("Cannot find the WithRefType at index " + index);
+            throw PQLParseException(CommonConstants::PQL_INVALID_WITH_REF_TYPE);
         }
     }
 }

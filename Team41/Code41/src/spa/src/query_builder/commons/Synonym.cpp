@@ -3,14 +3,13 @@
 //
 
 #include "Synonym.h"
-#include <regex>
 #include "query_builder/exceptions/Exceptions.h"
 
 using namespace QB;
 
-Synonym::Synonym(string synonym) : synonym(synonym) {
+Synonym::Synonym(const string& synonym) : synonym(synonym) {
     if (!Utils::isValidName(synonym)) {
-        throw PQLParseException("Invalid synonym, unexpected token: " + synonym);
+        throw PQLParseException(CommonConstants::PQL_INVALID_SYNONYM);
     }
 }
 

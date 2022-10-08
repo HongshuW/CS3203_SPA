@@ -4,16 +4,18 @@
 
 #include "ExpressionSpec.h"
 
+#include <utility>
+
 using namespace QB;
 
 ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType, shared_ptr<ExprNode> exprNode) :
         expressionSpecType(expressionSpecType),
-        exprNode(exprNode) {}
+        exprNode(std::move(exprNode)) {}
 
 ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType) :
         expressionSpecType(expressionSpecType) {}
 
-ExpressionSpec::ExpressionSpec() {}
+ExpressionSpec::ExpressionSpec() = default;
 
 bool ExpressionSpec::operator==(const ExpressionSpec& expressionSpec) const {
     return expressionSpecType == expressionSpec.expressionSpecType &&

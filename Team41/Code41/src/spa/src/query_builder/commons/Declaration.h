@@ -15,7 +15,7 @@
 #include "query_builder/commons/Synonym.h"
 
 namespace QB {
-//! Represents a single declaration in a PQL query (e.g. 'assign a')
+    //! Represents a single declaration in a PQL query (e.g. 'assign a')
     class Declaration {
     public:
         DesignEntity designEntity;
@@ -26,13 +26,7 @@ namespace QB {
         Declaration(DesignEntity designEntity, Synonym synonym);
 
         bool operator==(const Declaration& a2) const;
-        friend std::ostream& operator<<(std::ostream& os, Declaration const& declaration) {
-            os << "Declaration, synonym: " << declaration.synonym <<
-               " designEntity: " << getDesignEntityString(declaration.designEntity);
-            return os;
-        };
-
-        static optional<Declaration> findDeclaration(Synonym& synonymObj, shared_ptr<vector<Declaration>> declarations);
+        static optional<Declaration> findDeclaration(Synonym& synonymObj, const shared_ptr<vector<Declaration>>& declarations);
     };
 }
 #endif //SPA_DECLARATION_H
