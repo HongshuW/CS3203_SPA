@@ -5,7 +5,7 @@
 #include "TokeniserConstants.h"
 
 namespace SourceParser {
-     const string TokeniserConstants::  EMPTY_STR = "";
+     const string TokeniserConstants::  EMPTY_STR;
      const string TokeniserConstants::  DOUBLE_QUOTE = "\"";
      const string TokeniserConstants::  EQUAL = "=";
      const string TokeniserConstants::  GREATER_THAN = ">";
@@ -36,4 +36,6 @@ namespace SourceParser {
      const string TokeniserConstants:: UNEXPECTED_TOKEN_MESSAGE = "Unexpected token: ";
      const string TokeniserConstants:: INVALID_NAME = "Invalid name for token";
      const string TokeniserConstants:: INVALID_NUMBER = "Invalid number for token";
+
+     const unsigned int TokeniserConstants:: ZERO = 0;
 } // SourceParser

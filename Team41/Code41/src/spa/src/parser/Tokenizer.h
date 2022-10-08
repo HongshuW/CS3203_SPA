@@ -9,7 +9,6 @@
 #include <unordered_set>
 #include "constants/TokeniserConstants.h"
 #include "utils/Utils.h"
-// maybe include method to tokenise symbols
 
 using namespace std;
 
@@ -33,7 +32,7 @@ namespace SourceParser {
                                                   TokeniserConstants::MODULO,
                                                   TokeniserConstants::BAR,
                                                   TokeniserConstants::SINGLE_AND};
-        unsigned int currIdx;
+        unsigned int currIdx = TokeniserConstants::ZERO;
         string source;
         string curr;
         char peek();
@@ -43,11 +42,12 @@ namespace SourceParser {
         void processAlNum();
         void processDigit();
         bool match(char s);
+        bool isWithinBound();
+        std::vector<std::string> tokens;
 
     public:
-        std::vector<std::string> tokens;
         std::vector<std::string> tokenize();
-        Tokenizer(std::string source);
+        explicit Tokenizer(std::string source);
 
     };
 }

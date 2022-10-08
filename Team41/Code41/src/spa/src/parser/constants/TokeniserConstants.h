@@ -42,6 +42,8 @@ namespace SourceParser {
         static const string UNEXPECTED_TOKEN_MESSAGE;
         static const string INVALID_NAME;
         static const string INVALID_NUMBER;
+
+        static const unsigned int ZERO;
     };
 
 } // SourceParser
