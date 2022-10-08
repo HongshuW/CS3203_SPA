@@ -41,3 +41,7 @@ procedure deepNesting {
         x28 = x18 / 2;
     }
 }
+
+procedure x23 {
+    x = 5;
+}

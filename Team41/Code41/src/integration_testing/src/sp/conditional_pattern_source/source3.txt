@@ -1,0 +1,11 @@
+procedure procedure2 {
+   x = 5;
+   while ((baz == qux + 1) && (5 + 3 < quux)) {
+        while ((bing == boom + 1) || (5 + 3 < qxxx)) {
+            x = 10;
+            while (y == x + 1) {
+              y = 1000;
+            }
+        }
+   }
+}
