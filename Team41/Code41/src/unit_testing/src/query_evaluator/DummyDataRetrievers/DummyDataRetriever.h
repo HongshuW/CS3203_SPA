@@ -29,6 +29,7 @@ public:
     Table getNextTTable() override;
     Table getAffectsTable() override;
     Table getAffectsTTable() override;
+    Table getAssignPatternTable(ExpressionSpec expressionSpec) override;
     DesignEntity getDesignEntityOfStmt(int line_no) override;
     explicit DummyDataRetriever(shared_ptr<PKBStorage> pkbStorage);
 //    explicit DummyDataRetriever();

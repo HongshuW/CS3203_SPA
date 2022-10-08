@@ -4,8 +4,6 @@
 #include "query_builder/QueryBuilder.h"
 #include "query_builder/exceptions/Exceptions.h"
 #include "query_evaluator/QueryEvaluator.h"
-#include "query_evaluator/QueryResultFormatter.h"
-#include "query_evaluator/QueryResult.h"
 #include "parser/ASTBuilder.h"
 #include "parser/Parser.h"
 #include "parser/Tokenizer.h"

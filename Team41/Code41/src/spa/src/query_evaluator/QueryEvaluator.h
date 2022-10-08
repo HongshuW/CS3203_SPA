@@ -5,7 +5,6 @@
 #ifndef SPA_QUERYEVALUATOR_H
 #define SPA_QUERYEVALUATOR_H
 
-#include "QueryResult.h"
 #include "query_builder/commons/Query.h"
 #include "pkb/DataRetriever.h"
 #include "DataPreprocessor.h"

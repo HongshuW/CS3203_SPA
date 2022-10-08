@@ -16,7 +16,6 @@
 #include "query_builder/exceptions/Exceptions.h"
 #include "query_evaluator/DataPreprocessor.h"
 #include "query_evaluator/QueryEvaluator.h"
-#include "query_evaluator/QueryResultFormatter.h"
 #include <memory>
 #include <stdlib.h>
 

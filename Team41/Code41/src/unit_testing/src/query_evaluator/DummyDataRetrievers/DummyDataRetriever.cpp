@@ -120,7 +120,7 @@ Table DummyDataRetriever::getFollowsTTable() {
     relationTable.appendRow({"1", "2"});
     relationTable.appendRow({"2", "3"});
     relationTable.appendRow({"1", "3"});
-    return DataRetriever::getFollowsTTable();
+    return relationTable;
 }
 
 Table DummyDataRetriever::getParentTable() {
@@ -146,7 +146,7 @@ Table DummyDataRetriever::getModifiesSTable() {
     Table relationTable = Table();
     relationTable.appendRow({"1", "dummyVarA"});
     relationTable.appendRow({"2", "dummyVarB"});
-    return DataRetriever::getModifiesSTable();
+    return relationTable;
 }
 
 Table DummyDataRetriever::getModifiesPTable() {
@@ -177,14 +177,14 @@ Table DummyDataRetriever::getAffectsTTable() {
     return Table();
 }
 
-//Table DummyDataRetriever::getTableByExprPattern(ExpressionSpec expressionSpec) {
-//    if (expressionSpec.expressionSpecType == QB::ExpressionSpecType::ANY_MATCH) {
-//       Table table = Table();
-//       table.renameHeader({PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::VARIABLE_TABLE_COL1_NAME});
-//       table.appendRow({"1", "dummyVarA"});
-//       table.appendRow({"2", "dummyVarB"});
-//       return table;
-//    }
-//    return DataRetriever::getTableByExprPattern(expressionSpec);
-//}
+Table DummyDataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {
+    if (expressionSpec.expressionSpecType == QB::ExpressionSpecType::ANY_MATCH) {
+        Table table = Table();
+        table.renameHeader({PKBStorage::STATEMENT_TABLE_COL1_NAME, PKBStorage::VARIABLE_TABLE_COL1_NAME});
+        table.appendRow({"1", "dummyVarA"});
+        table.appendRow({"2", "dummyVarB"});
+        return table;
+    }
+    return DataRetriever::getAssignPatternTable(expressionSpec);
+}
 

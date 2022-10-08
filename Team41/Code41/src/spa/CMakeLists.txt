@@ -35,10 +35,6 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/Table.h
         src/query_evaluator/QueryEvaluator.cpp
         src/query_evaluator/QueryEvaluator.h
-        src/query_evaluator/QueryResult.cpp
-        src/query_evaluator/QueryResult.h
-        src/query_evaluator/QueryResultFormatter.cpp
-        src/query_evaluator/QueryResultFormatter.h
         src/parser/Tokenizer.cpp
         src/parser/Tokenizer.h
         src/ast/ProcedureNode.cpp
@@ -159,10 +155,6 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/AttrRef.h
         src/query_builder/clauses/with_clauses/WithClauses.cpp
         src/query_builder/clauses/with_clauses/WithClauses.h
-        src/query_evaluator/QueryBooleanResult.cpp
-        src/query_evaluator/QueryBooleanResult.h
-        src/query_evaluator/QueryTupleResult.cpp
-        src/query_evaluator/QueryTupleResult.h
         src/query_builder/commons/WithRef.cpp
         src/parser/constants/ParserConstants.cpp
         src/parser/constants/ParserConstants.h
