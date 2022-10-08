@@ -4,7 +4,9 @@
 
 #include "AffectsTClause.h"
 
-AffectsTClause::AffectsTClause(Ref arg1, Ref arg2) : SuchThatClause(arg1, arg2) {}
+#include <utility>
+
+AffectsTClause::AffectsTClause(Ref arg1, Ref arg2) : SuchThatClause(std::move(arg1), std::move(arg2)) {}
 
 bool AffectsTClause::operator==(const AffectsTClause &other) const {
     auto clause = dynamic_cast<const AffectsTClause*>(&other);

@@ -3,10 +3,12 @@
 //
 
 #include "IfPatternClause.h"
+
+#include <utility>
 #include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_evaluator/IVisitor.h"
 
-IfPatternClause::IfPatternClause(Synonym arg1, Ref arg2) : PatternClause(arg1, arg2) {}
+IfPatternClause::IfPatternClause(Synonym arg1, Ref arg2) : PatternClause(std::move(arg1), std::move(arg2)) {}
 
 bool IfPatternClause::operator==(const IfPatternClause &other) const {
     auto clause = dynamic_cast<const IfPatternClause*>(&other);

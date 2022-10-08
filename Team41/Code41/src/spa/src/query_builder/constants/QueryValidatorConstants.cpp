@@ -22,8 +22,6 @@ namespace QB {
             "Expect pattern clause arg1 to be declared as assign, while or if, got: ";
     const string QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY_PATTERN =
             "Expect pattern clause arg2 to be declared as variable, got ";
-    const string QueryValidatorConstants::PQL_VALIDATION_INVALID_ATTR_NAME =
-            "AttrName is not valid for With Clause: ";
     const string QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY =
             "Invalid design entity: ";
     const string QueryValidatorConstants::PQL_VALIDATION_INVALID_ATTR_REF =

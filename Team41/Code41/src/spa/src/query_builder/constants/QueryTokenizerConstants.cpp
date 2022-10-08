@@ -7,7 +7,7 @@
 namespace QB {
 
      const string QueryTokenizerConstants::STMT = "stmt";
-     const string QueryTokenizerConstants::EMPTY_STR = "";
+     const string QueryTokenizerConstants::EMPTY_STR;
      const string QueryTokenizerConstants::DOUBLE_QUOTE = "\"";
      const string QueryTokenizerConstants::FOLLOWS = "Follows";
      const string QueryTokenizerConstants::PARENT = "Parent";

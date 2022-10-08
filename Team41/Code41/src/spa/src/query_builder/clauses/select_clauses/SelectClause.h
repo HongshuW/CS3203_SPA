@@ -34,12 +34,11 @@ namespace QB {
         //! To store results for single synonym and tuple only;
         shared_ptr<vector<Elem>> returnResults;
         //! For BOOLEAN
-        SelectClause(ReturnType returnType);
+        explicit SelectClause(ReturnType returnType);
         //! For Tuple
         SelectClause(ReturnType returnType, shared_ptr<vector<Elem>> returnResults);
 
         bool isBoolean() const;
-        bool isTuple() const;
 
         static const int ELEM_SYN_IDX = 0;
         static const int ELEM_ATTR_REF_IDX = 1;

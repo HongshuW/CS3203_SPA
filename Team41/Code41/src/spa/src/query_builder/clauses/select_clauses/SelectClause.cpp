@@ -17,10 +17,6 @@ bool SelectClause::isBoolean() const {
     return returnType == ReturnType::BOOLEAN;
 }
 
-bool SelectClause::isTuple() const {
-    return returnType == ReturnType::TUPLE;
-}
-
 bool SelectClause::operator==(const SelectClause& clause) const {
     auto selectClause = dynamic_cast<const SelectClause*>(&clause);
     bool isEqual = selectClause != nullptr && returnType == selectClause->returnType;

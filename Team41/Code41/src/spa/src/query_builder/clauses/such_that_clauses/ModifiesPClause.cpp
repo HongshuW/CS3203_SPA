@@ -4,7 +4,7 @@
 
 #include "ModifiesPClause.h"
 
-ModifiesPClause::ModifiesPClause(Ref arg1, Ref arg2) : SuchThatClause(arg1, arg2) {}
+ModifiesPClause::ModifiesPClause(Ref arg1, Ref arg2) : SuchThatClause(std::move(arg1), std::move(arg2)) {}
 
 bool ModifiesPClause::operator==(const ModifiesPClause &other) const {
     auto clause = dynamic_cast<const ModifiesPClause*>(&other);
