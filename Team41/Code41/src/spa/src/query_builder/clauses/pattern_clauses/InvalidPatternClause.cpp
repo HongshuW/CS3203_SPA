@@ -16,7 +16,7 @@ Table InvalidPatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }
 
-unsigned int InvalidPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
+int InvalidPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
     expect(QueryParserConstants::UNDERSCORE, currIdx, tokens);
     currIdx++;
     if (expect(QueryParserConstants::RIGHT_BRACKET, currIdx, tokens)) {

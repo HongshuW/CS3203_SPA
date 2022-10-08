@@ -16,11 +16,11 @@ namespace QB {
 }
 
 QueryParser::QueryParser(std::vector<std::string> tokens)
-        : query(new Query()), currIdx(0), tokens(std::move(tokens)) {}
+        : query(new Query()), currIdx(QueryParserConstants::ZERO), tokens(std::move(tokens)) {}
 
 string QueryParser::peek() { return tokens[currIdx]; }
 
-string QueryParser::previous() { return tokens[currIdx - 1]; }
+string QueryParser::previous() { return tokens[currIdx - QueryParserConstants::ONE]; }
 
 string QueryParser::pop() {
     string currToken = tokens[currIdx];
@@ -49,7 +49,7 @@ bool QueryParser::expect(const string& s) {
 }
 
 bool QueryParser::parseDeclarations() {
-    unsigned int savedIdx = currIdx;
+    int savedIdx = currIdx;
     std::vector<Synonym> synonymList;
     std::string designEntityStr = pop();
     DesignEntity designEntity;
@@ -181,7 +181,7 @@ void QueryParser::parseSuchThatClause() {
         {RelationType::AFFECTS, make_shared<Affects>()},
         {RelationType::AFFECTS_T, make_shared<AffectsT>()}
     });
-    auto suchThatClauseCreator = SUCH_THAT_CREATORS.at(relationType);
+    const auto& suchThatClauseCreator = SUCH_THAT_CREATORS.at(relationType);
     auto suchThatClause = suchThatClauseCreator->createClause(arg1, arg2);
     query->suchThatClauses->push_back(dynamic_pointer_cast<SuchThatClause>(suchThatClause));
 }

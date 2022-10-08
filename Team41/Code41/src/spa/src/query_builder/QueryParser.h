@@ -47,7 +47,7 @@ namespace QB {
     class QueryParser {
     private:
         shared_ptr<Query> query;
-        unsigned int currIdx;
+        int currIdx;
         vector<string> tokens;
         string peek();
         string previous();

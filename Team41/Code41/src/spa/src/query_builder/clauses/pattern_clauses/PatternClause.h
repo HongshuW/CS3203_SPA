@@ -21,7 +21,7 @@ namespace QB {
         PatternClause(Synonym arg1, Ref arg2);
         ~PatternClause() override = default;
         virtual Table accept(shared_ptr<IVisitor> visitor) override = 0;
-        virtual unsigned int validateSyntaxError(int currIdx, const vector<string>& tokens) = 0;
+        virtual int validateSyntaxError(int currIdx, const vector<string>& tokens) = 0;
         virtual bool expect(const string& s, unsigned int currIdx, const vector<string>& tokens);
         unordered_set<string> getSynonymNames() override;
     };

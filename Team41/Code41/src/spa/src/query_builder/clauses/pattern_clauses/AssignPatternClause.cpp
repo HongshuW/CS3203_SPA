@@ -22,6 +22,6 @@ Table AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }
 
-unsigned int AssignPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
+int AssignPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
     return currIdx;
 }

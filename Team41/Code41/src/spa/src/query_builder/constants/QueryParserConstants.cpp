@@ -24,6 +24,9 @@ namespace QB {
      const string QueryParserConstants::SELECT = "Select";
      const string QueryParserConstants::WITH = "with";
 
+     const int QueryParserConstants::ZERO = 0;
+     const int QueryParserConstants::ONE = 1;
+
      const string QueryParserConstants::PQL_PARSE_EXCEPTION_EMPTY_ASSIGN_EXPRESSION
         = "Expression for assign statement cannot be empty";
      const string QueryParserConstants::PQL_PARSE_EXCEPTION_EXPECT_EXPRESSION = "expression";
