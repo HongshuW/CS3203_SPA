@@ -33,9 +33,6 @@ namespace SourceParser {
 
         static const char DOUBLE_QUOTE_CHAR;
         static const char EQUAL_CHAR;
-        static const char GREATER_THAN_CHAR;
-        static const char SMALLER_THAN_CHAR;
-        static const char EXCLAMATION_MARK_CHAR;
         static const char SINGLE_AND_CHAR;
         static const char BAR_CHAR;
 

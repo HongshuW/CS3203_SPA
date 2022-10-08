@@ -14,7 +14,7 @@ using namespace std;
 namespace SourceParser {
     /**
      * Represents an error that occurs during tokenization of
-     * PQL query string.
+     * source program.
      *
      */
     class SPTokenizeException : public runtime_error {
@@ -24,7 +24,7 @@ namespace SourceParser {
 
     /**
     * Represents an error that occurs during parsing of
-    * PQL tokens to Query object.
+    * source program.
     *
     */
     class SPParseException : public runtime_error {
@@ -34,22 +34,12 @@ namespace SourceParser {
 
     /**
     * Represents an error that occurs during validation of
-    * PQL Query object.
+    * AST produced by parser
     *
     */
     class SPValidationException : public runtime_error {
     public:
         explicit SPValidationException(const string& msg = TokeniserConstants::EMPTY_STR) : runtime_error(msg) {}
-    };
-
-    /**
-    * Represents an error that occurs during validation of
-    * AST
-    *
-    */
-    class SPASTException : public runtime_error {
-    public:
-        explicit SPASTException(const string& msg = TokeniserConstants::EMPTY_STR) : runtime_error(msg) {}
     };
 }
 
