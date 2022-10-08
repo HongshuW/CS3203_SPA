@@ -6,6 +6,7 @@
 #define SPA_EXPRNODEPARSER_H
 
 #include "AST/ExprNode.h"
+#include "parser/constants/ParserConstants.h"
 #include <vector>
 #include <string>
 #include <unordered_set>
@@ -13,23 +14,23 @@
 
 using namespace AST;
 using namespace std;
+using namespace SourceParser;
 
 class ExprNodeParser {
 private:
     shared_ptr<ExprNode> root;
     vector<string> tokens;
-    unsigned int currIdx;
+    int currIdx;
 
     string peek();
     string pop();
-    bool match(string s);
-    bool equals(string s1, string s2);
-    int getPriority(string s);
+    bool match(const string& s);
+    int getPriority(const string& s);
     //! bool to indicate whether we are able to build the tree
-    bool buildTree(string opt, shared_ptr<stack<shared_ptr<ExprNode>>> opd);
+    bool buildTree(const string& opt, const shared_ptr<stack<shared_ptr<ExprNode>>>& opd);
 
 public:
-    ExprNodeParser(vector<string>& tokens);
+    explicit ExprNodeParser(vector<string>& tokens);
     shared_ptr<ExprNode> parse();
 };
 

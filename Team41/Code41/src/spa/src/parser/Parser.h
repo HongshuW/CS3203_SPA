@@ -27,7 +27,7 @@ using namespace AST;
 namespace SourceParser {
     class Parser {
     private:
-        int currIdx = ParserConstants::ZERO;
+        int currIdx;
         vector<string> tokens;
         string peek();
         string previous();
