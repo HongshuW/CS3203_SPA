@@ -3,13 +3,16 @@
 //
 
 #include "ASTValidator.h"
+
+#include <utility>
 #include "SPExceptions.h"
 #include "queue"
 #include "AST/utils/ASTUtils.h"
+#include "parser/constants/ValidatorConstants.h"
 
 using namespace SourceParser;
 
-ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(ast) {}
+ASTValidator::ASTValidator(shared_ptr<ProgramNode> ast): ast(std::move(ast)) {}
 
 void ASTValidator::validateAST() {
     validateProcedureNames();
@@ -18,13 +21,13 @@ void ASTValidator::validateAST() {
 }
 
 void ASTValidator::validateProcedureNames() {
-    for (auto procedure : ast->procedureList) {
+    for (const auto& procedure : ast->procedureList) {
         string procedureName = procedure->procedureName;
         auto iterator = procedureNames.find(procedureName);
         if (iterator != procedureNames.end()) {
             string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                    ParserConstants::SP_AST_EXCEPTION_DUPLICATE_PROCEDURE, procedureName);
-            throw SPASTException(errorMessage);
+                    ValidatorConstants::SP_AST_EXCEPTION_DUPLICATE_PROCEDURE, procedureName);
+            throw SPValidationException(errorMessage);
         }
 
         procedureNames.insert(procedureName);
@@ -33,10 +36,10 @@ void ASTValidator::validateProcedureNames() {
 }
 
 void ASTValidator::validateNodes() {
-    for (auto procedure: ast->procedureList) {
+    for (const auto& procedure: ast->procedureList) {
         string procedureName = procedure->procedureName;
         queue<shared_ptr<StmtNode>> queue;
-        for (auto statement: procedure->stmtList) {
+        for (const auto& statement: procedure->stmtList) {
             queue.push(statement);
         }
 
@@ -47,17 +50,17 @@ void ASTValidator::validateNodes() {
 
             if (nodeType == AST::IF_NODE) {
                 shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-                for (auto childStmtNode: ifNode->ifStmtList) {
+                for (const auto& childStmtNode: ifNode->ifStmtList) {
                     queue.push(childStmtNode);
                 }
-                for (auto childStmtNode: ifNode->elseStmtList) {
+                for (const auto& childStmtNode: ifNode->elseStmtList) {
                     queue.push(childStmtNode);
                 }
             }
 
             if (nodeType == AST::WHILE_NODE) {
                 shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
-                for (auto childStmtNode: whileNode->stmtList) {
+                for (const auto& childStmtNode: whileNode->stmtList) {
                     queue.push(childStmtNode);
                 }
             }
@@ -70,27 +73,27 @@ void ASTValidator::validateNodes() {
     }
 }
 
-void ASTValidator::validateCallNode(shared_ptr<CallNode> callNode, string procedureName) {
+void ASTValidator::validateCallNode(const shared_ptr<CallNode>& callNode, const string& procedureName) {
     string calledProcedure = callNode->procedureName;
 
     if (calledProcedure == procedureName) {
         string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                ParserConstants::SP_AST_EXCEPTION_PROCEDURE_CALLS_ITSELF, procedureName);
-        throw SPASTException(errorMessage);
+                ValidatorConstants::SP_AST_EXCEPTION_PROCEDURE_CALLS_ITSELF, procedureName);
+        throw SPValidationException(errorMessage);
     }
 
     auto iterator = procedureNames.find(procedureName);
     if (iterator == procedureNames.end()) {
         string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedureName);
-        throw SPASTException(errorMessage);
+                ValidatorConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedureName);
+        throw SPValidationException(errorMessage);
     }
 
     auto callsIterator = procedureCalls.find(procedureName);
     if (callsIterator == procedureCalls.end()) {
         string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedureName);
-        throw SPASTException(errorMessage);
+                ValidatorConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedureName);
+        throw SPValidationException(errorMessage);
     }
 
     unordered_set<string> calledProcedures = callsIterator->second;
@@ -104,22 +107,22 @@ void ASTValidator::validateCyclicDependencies() {
         string mainProcedure = unorderedMapIterator.first;
         unordered_set<string> proceduresCalled = unorderedMapIterator.second;
         for (auto &unorderedSetIterator : proceduresCalled) {
-            string procedure = unorderedSetIterator;
+            const string& procedure = unorderedSetIterator;
             calls(procedure, mainProcedure);
         }
     }
 }
 
-void ASTValidator::calls(string procedure, string calledProcedure) {
+void ASTValidator::calls(const string& procedure, const string& calledProcedure) {
     if (procedure == calledProcedure) {
-        throw SPASTException(ParserConstants::SP_AST_EXCEPTION_CYCLIC_DEPENDENCY);
+        throw SPValidationException(ValidatorConstants::SP_AST_EXCEPTION_CYCLIC_DEPENDENCY);
     }
 
     auto callsIterator = procedureCalls.find(procedure);
     if (callsIterator == procedureCalls.end()) {
         string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                ParserConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedure);
-        throw SPASTException(errorMessage);
+                ValidatorConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedure);
+        throw SPValidationException(errorMessage);
     }
     unordered_set<string> calledProcedures = callsIterator->second;
     for (auto &unorderedSetIterator : calledProcedures) {

@@ -21,10 +21,6 @@
 
 using namespace QB;
 namespace AST {
-    //
-// Created by Nafour on 9/9/22.
-//
-
     enum NodeType {ASSIGN_NODE, CALL_NODE, IF_NODE, PRINT_NODE, READ_NODE, WHILE_NODE, CONDEXPR_NODE, EXPR_NODE, PROCEDURE_NODE, PROGRAM_NODE, VARIABLE_NODE};
 
     class ASTUtils {

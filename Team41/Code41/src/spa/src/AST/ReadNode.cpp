@@ -4,11 +4,13 @@
 
 #include "ReadNode.h"
 
+#include <utility>
+
 using namespace AST;
 
-AST::ReadNode::ReadNode(shared_ptr<VariableNode> variableNode) : variableNode(variableNode) {}
+AST::ReadNode::ReadNode(shared_ptr<VariableNode> variableNode) : variableNode(std::move(variableNode)) {}
 
 bool ReadNode::operator==(const ASTNode &node) const {
     auto castedNode = dynamic_cast<const ReadNode*>(&node);
-    return castedNode != 0 && *variableNode == *castedNode->variableNode;
-};
+    return castedNode != nullptr && *variableNode == *castedNode->variableNode;
+}

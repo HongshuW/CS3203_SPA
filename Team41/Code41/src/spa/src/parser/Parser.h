@@ -27,16 +27,13 @@ using namespace AST;
 namespace SourceParser {
     class Parser {
     private:
-        shared_ptr<ASTNode> root;
-        unsigned int currIdx;
+        int currIdx = ParserConstants::ZERO;
         vector<string> tokens;
         string peek();
-        string peekNext();
         string previous();
         string pop();
-        bool match(string s);
-        bool expect(string s);
-        bool equals(string s1, string s2);
+        bool match(const string& s);
+        bool expect(const string& s);
 
         // procedure
         shared_ptr<ProcedureNode> parseProcedureNode();
@@ -58,13 +55,12 @@ namespace SourceParser {
         shared_ptr<CondExprNode> parseCondExprNode(int startIdx);
         shared_ptr<RelExprNode> parseRelExprNode();
         shared_ptr<ExprNode> parseRelFactor(int priority);
-        shared_ptr<ExprNode> parseToken(string curr);
-        shared_ptr<ExprNode> makeExprNode(string curr, shared_ptr<ExprNode> lhs);
-        int parseSymbol(string curr);
+        shared_ptr<ExprNode> parseToken(const string& curr);
+        shared_ptr<ExprNode> makeExprNode(const string& curr, const shared_ptr<ExprNode>& lhs);
+        int parseSymbol(const string& curr);
 
     public:
         explicit Parser(vector<string> tokens);
-        //! returns a ProgramNode at runtime
         shared_ptr<ProgramNode> parse();
     };
 }

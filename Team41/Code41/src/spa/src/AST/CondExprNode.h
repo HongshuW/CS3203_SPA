@@ -21,10 +21,10 @@ namespace AST {
         shared_ptr<CondExprNode> condExprRHS = nullptr;
 
         // x == y
-        CondExprNode(shared_ptr<RelExprNode> relExprNode);
+        explicit CondExprNode(shared_ptr<RelExprNode> relExprNode);
 
         // ! (x == y)
-        CondExprNode(shared_ptr<CondExprNode> condExprLHS);
+        explicit CondExprNode(shared_ptr<CondExprNode> condExprLHS);
 
         // (x == y) && (z == 1)
         CondExprNode(shared_ptr<CondExprNode> condExprLHS, string op, shared_ptr<CondExprNode> condExprRHS);
