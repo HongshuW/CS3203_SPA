@@ -9,7 +9,7 @@
 #include <string>
 #include "utils/Utils.h"
 #include "query_builder/exceptions/Exceptions.h"
-#include "query_builder/constants/QueryTokeniserConstants.h"
+#include "query_builder/constants/QueryTokenizerConstants.h"
 
 using namespace std;
 

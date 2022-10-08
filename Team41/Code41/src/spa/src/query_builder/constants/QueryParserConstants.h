@@ -35,7 +35,6 @@ namespace QB {
         static const string PQL_PARSE_EXCEPTION_EMPTY_ASSIGN_EXPRESSION;
         static const string PQL_PARSE_EXCEPTION_EXPECT_EXPRESSION;
         static const string PQL_PARSE_EXCEPTION_SYNONYM_NOT_DECLARED;
-        static const string PQL_PARSE_EXCEPTION_NOT_SUPPORTED_PATTERN;
         static const string PQL_PARSE_EXCEPTION_EXPECT_SUCH_THAT_OR_PATTERN;
         static const string PQL_PARSE_EXCEPTION_EXPECT_WITH_REF;
         static const string PQL_PARSE_EXCEPTION_EXPECT_REF;
