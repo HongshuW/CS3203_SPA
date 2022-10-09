@@ -10,8 +10,6 @@ add_executable(unit_testing ${srcs}
     src/pkb/TestTable.cpp
     src/pkb/TestDataRetriever.cpp
     src/pkb/TestDataModifier.cpp
-    src/query_evaluator/Dummies/DummyQueryBuilder.cpp
-    src/query_evaluator/Dummies/DummyQueryBuilder.h
     src/query_evaluator/TestDataPreprocessor.cpp
     src/query_evaluator/TestTableCombiner.cpp
     src/query_evaluator/TableComparator.cpp
@@ -39,9 +37,7 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/DEUtils.cpp
     src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.cpp
     src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.h
-    src/design_extractor/DEUtils.h 
-    src/query_evaluator/Dummies/DummyQueries.cpp
-    src/query_evaluator/Dummies/DummyQueries.h
+    src/design_extractor/DEUtils.h
     src/parser/TestExprNodeParser.cpp
     src/parser/TestCondExprParser.cpp
     src/utils/TestUtils.cpp
@@ -59,7 +55,6 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/TestCallsStarExtraction.cpp
     src/design_extractor/TestModifiesPExtraction.cpp
     src/design_extractor/TestUsesPExtraction.cpp
-    src/query_evaluator/TestClauseEvaluator.cpp
     src/CFG/TestCFG.cpp
     src/parser/TestASTValidator.cpp
     src/parser/InvalidProcedureDummies.cpp
