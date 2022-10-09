@@ -5,11 +5,13 @@
 #ifndef SPA_AFFECTSTABLE_H
 #define SPA_AFFECTSTABLE_H
 
+#include "Cachable.h"
 #include "RelationTable.h"
 
-class AffectsTable : public RelationTable {
+class AffectsTable : public Cachable {
 public:
     explicit AffectsTable();
+    void clearCache() override;
 };
 
 

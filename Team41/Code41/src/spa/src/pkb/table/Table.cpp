@@ -57,6 +57,35 @@ shared_ptr<unordered_set<string>> Table::getValuesByKey(string key, int keyColum
     return output;
 }
 
+shared_ptr<Table> Table::getSubTable(int startIndex, int endIndex) {
+    shared_ptr<Table> table = make_shared<Table>(Table());
+    table->header = header;
+    for (int i = startIndex; i < endIndex; i++) {
+        table->appendRow(rows[i]);
+    }
+    return table;
+}
+
+shared_ptr<Table> Table::getSubTableByColumn(string key, int keyColumnNumber) {
+    shared_ptr<Table> table = make_shared<Table>(Table());
+    table->header = header;
+    for (vector<string> row : rows) {
+        if (row[keyColumnNumber] == key) {
+            table->appendRow(row);
+        }
+    }
+    return table;
+}
+
+bool Table::contains(vector<string> row, int startIndex, int endIndex) {
+    for (int i = startIndex; i < endIndex; i++) {
+        if (rows[i] == row) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Table::hasCol(std::string colName) {
     return std::count(header.begin(), header.end(), colName);
 }
@@ -91,7 +120,7 @@ void Table::renameHeader(vector<string> newHeader) {
 }
 
 void Table::dropRows() {
-    this->rows = {};
+    this->rows.clear();
 }
 
 Table Table::dropCol(int colIdx) {

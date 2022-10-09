@@ -25,6 +25,9 @@ public:
     vector<string> getRowByPrimaryKey(string key);
     shared_ptr<unordered_set<string>> getValuesByKey(string key, int keyColumnNumber = 0, int valueColumnNumber = 1);
     int getColIdxByName(string colName);
+    shared_ptr<Table> getSubTable(int startIndex, int endIndex);
+    shared_ptr<Table> getSubTableByColumn(string key, int keyColumnNumber);
+    bool contains(vector<string> row, int startIndex, int endIndex);
 
     // setters
     void renameHeader(vector<string> newHeader);

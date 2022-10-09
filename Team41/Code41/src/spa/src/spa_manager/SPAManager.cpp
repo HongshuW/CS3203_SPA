@@ -13,6 +13,8 @@ void SPAManager::parse(string &filename) {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
         designExtractor.run();
+        cacheManager = make_shared<CacheManager>(
+                CacheManager(make_shared<DesignExtractor>(designExtractor)));
     } catch (const SPValidationException& e) {
         exit(EXIT_SUCCESS);
     } catch (const SPTokenizeException& e) {
@@ -30,6 +32,7 @@ vector<string> SPAManager::evaluate(string& query) {
         auto queryObj = QueryBuilder().buildPQLQuery(query);
         auto dataRetriever = make_shared<DataRetriever>(
                 DataRetriever(pkbStorage));
+        dataRetriever->cacheManager = cacheManager;
         auto ans = QueryEvaluator(dataRetriever).evaluate(queryObj);
         for (const auto& element: ans) {
             results.push_back(element);

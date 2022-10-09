@@ -5,11 +5,12 @@
 #ifndef SPA_NEXTTABLE_H
 #define SPA_NEXTTABLE_H
 
-#include "RelationTable.h"
+#include "Cachable.h"
 
-class NextTable : public RelationTable {
+class NextTable : public Cachable {
 public:
     explicit NextTable();
+    void clearCache() override;
 };
 
 

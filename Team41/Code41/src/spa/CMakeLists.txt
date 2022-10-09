@@ -271,7 +271,25 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/pattern_clauses/InvalidPatternClause.cpp
         src/query_builder/clauses/pattern_clauses/InvalidPatternClause.h
         src/query_builder/relations/pattern_relations/InvalidPattern.cpp
-        src/query_builder/relations/pattern_relations/InvalidPattern.h src/query_evaluator/QueryOptimizer.cpp src/query_evaluator/QueryOptimizer.h src/query_builder/clauses/ConditionalClause.h src/design_extractor/args/StmtNoArgs.cpp src/design_extractor/args/StmtNoArgs.h src/design_extractor/NextExtractor.cpp src/design_extractor/NextExtractor.h src/design_extractor/AffectsExtractor.cpp src/design_extractor/AffectsExtractor.h src/parser/constants/ValidatorConstants.cpp src/parser/constants/ValidatorConstants.h src/query_builder/constants/CommonConstants.cpp src/query_builder/constants/CommonConstants.h)
+        src/query_builder/relations/pattern_relations/InvalidPattern.h
+        src/query_evaluator/QueryOptimizer.cpp
+        src/query_evaluator/QueryOptimizer.h
+        src/query_builder/clauses/ConditionalClause.cpp
+        src/query_builder/clauses/ConditionalClause.h
+        src/design_extractor/args/StmtNoArgs.cpp
+        src/design_extractor/args/StmtNoArgs.h
+        src/design_extractor/NextExtractor.cpp
+        src/design_extractor/NextExtractor.h
+        src/design_extractor/AffectsExtractor.cpp
+        src/design_extractor/AffectsExtractor.h
+        src/pkb/table/Cachable.cpp
+        src/pkb/table/Cachable.h
+        src/cache_manager/CacheManager.cpp
+        src/cache_manager/CacheManager.h
+        src/parser/constants/ValidatorConstants.cpp 
+        src/parser/constants/ValidatorConstants.h 
+        src/query_builder/constants/CommonConstants.cpp 
+        src/query_builder/constants/CommonConstants.h)
 
 
 

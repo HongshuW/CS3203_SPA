@@ -150,23 +150,14 @@ NextTable * PKBStorage::getNext() {
 }
 
 NextTable * PKBStorage::getNextT() {
-    // TODO: change the implementation after DE has implemented the API
-    // if table is empty, query from DE
-    // else, return the table
     return &nextTTable;
 }
 
 AffectsTable * PKBStorage::getAffects() {
-    // TODO: change the implementation after DE has implemented the API
-    // if table is empty, query from DE
-    // else, return the table
     return &affectsTable;
 }
 
 AffectsTable * PKBStorage::getAffectsT() {
-    // TODO: change the implementation after DE has implemented the API
-    // if table is empty, query from DE
-    // else, return the table
     return &affectsTTable;
 }
 
@@ -287,7 +278,7 @@ void PKBStorage::saveIfPattern(vector<string> metainfo) {
 }
 
 void PKBStorage::clearCache() {
-    nextTTable.dropRows();
-    affectsTable.dropRows();
-    affectsTTable.dropRows();
+    nextTTable.clearCache();
+    affectsTable.clearCache();
+    affectsTTable.clearCache();
 }
