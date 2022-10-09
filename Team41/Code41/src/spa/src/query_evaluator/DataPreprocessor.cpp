@@ -8,7 +8,6 @@
 #include <string>
 #include "query_builder/commons/DesignEntity.h"
 #include "QEUtils.h"
-#include "utils/Utils.h"
 #include "TableCombiner.h"
 #include "query_builder/commons/WithRef.h"
 #include "query_builder/clauses/such_that_clauses/FollowsClause.h"
@@ -30,7 +29,6 @@
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/select_clauses/SelectClause.h"
 #include "constants/ClauseVisitorConstants.h"
-#include "QEUtils.h"
 
 using namespace std;
 using namespace QB;
@@ -269,21 +267,7 @@ namespace QE {
                 if (!(ident1 == ident2)) break;
                 return this->filterTableByColValueEquality(table, {FIRST_COL_IDX, SECOND_COL_IDX});
         }
-        bool hasResult = !table.isBodyEmpty();
-
-        //drop unused columns
-        int offset = 0;
-        int n = table.header.size();
-        for (int i = 0; i < n; i++) {
-            int adjustedIdx = i + offset;
-            if (table.header[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) != std::string::npos) {
-                table = table.dropCol(adjustedIdx);
-                offset--;
-            }
-        }
-
-        if (table.isBodyEmpty() && hasResult) return QEUtils::getScalarResponse(hasResult);
-        return table;
+        return dropUnusedColumns(table);
     }
 
     DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever, Declarations declarations)
@@ -317,13 +301,87 @@ namespace QE {
     }
 
     Table DataPreprocessor::getTableByAffects(shared_ptr<AffectsClause> affectsClause) {
-        Table table = dataRetriever->getAffectsTable();
-        return filterSingleClauseResultTable(affectsClause->arg1, affectsClause->arg2, table);
+        Ref ref1 = affectsClause->arg1;
+        Ref ref2 = affectsClause->arg2;
+        RefType ref1Type = getRefType(ref1);
+        RefType ref2Type = getRefType(ref2);
+
+        string col1Name =
+                ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : QEUtils::getColNameByRefType(ref1Type);
+        string col2Name =
+                ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : QEUtils::getColNameByRefType(ref2Type);
+
+        const int FIRST_COL_IDX = 0;
+        const int SECOND_COL_IDX = 1;
+
+        if (ref1Type == QB::RefType::INTEGER && ref2Type == QB::RefType::INTEGER) {
+            auto boolTable = dataRetriever->getAffectsResult(get<int>(ref1),
+                                                           get<int>(ref2));
+            return boolTable.isEqual(ClauseVisitorConstants::TRUE_TABLE)
+                   ? QEUtils::getScalarResponse(true)
+                   : Table();
+        }
+        if (ref1Type == QB::RefType::INTEGER) {
+            auto resultTable = dataRetriever->getAffectedStatements(get<int>(ref1)).dropCol(FIRST_COL_IDX);
+
+            //check if second ref is not a synonym and return result immediately
+            if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            //the second ref must be a synonym
+            resultTable.renameHeader({col2Name});
+            return resultTable;
+        }
+        if (ref2Type == QB::RefType::INTEGER) {
+            auto resultTable = dataRetriever->getAffectingStatements(get<int>(ref2)).dropCol(SECOND_COL_IDX);
+            if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            resultTable.renameHeader({col1Name});
+            return resultTable;
+        }
+        auto resultTable = dataRetriever->getAffectsTable();
+        resultTable.renameHeader({col1Name, col2Name});
+
+        return dropUnusedColumns(resultTable);
     }
 
     Table DataPreprocessor::getTableByAffectsT(shared_ptr<AffectsTClause> affectsTClause) {
-        Table table = dataRetriever->getAffectsTTable();
-        return filterSingleClauseResultTable(affectsTClause->arg1, affectsTClause->arg2, table);
+        Ref ref1 = affectsTClause->arg1;
+        Ref ref2 = affectsTClause->arg2;
+        RefType ref1Type = getRefType(ref1);
+        RefType ref2Type = getRefType(ref2);
+
+        string col1Name =
+                ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : QEUtils::getColNameByRefType(ref1Type);
+        string col2Name =
+                ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : QEUtils::getColNameByRefType(ref2Type);
+
+        const int FIRST_COL_IDX = 0;
+        const int SECOND_COL_IDX = 1;
+
+        if (ref1Type == QB::RefType::INTEGER && ref2Type == QB::RefType::INTEGER) {
+            auto boolTable = dataRetriever->getAffectsTResult(get<int>(ref1),
+                                                           get<int>(ref2));
+            return boolTable.isEqual(ClauseVisitorConstants::TRUE_TABLE)
+                   ? QEUtils::getScalarResponse(true)
+                   : Table();
+        }
+        if (ref1Type == QB::RefType::INTEGER) {
+            auto resultTable = dataRetriever->getAffectedTStatements(get<int>(ref1)).dropCol(FIRST_COL_IDX);
+
+            //check if second ref is not a synonym and return result immediately
+            if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            //the second ref must be a synonym
+            resultTable.renameHeader({col2Name});
+            return resultTable;
+        }
+        if (ref2Type == QB::RefType::INTEGER) {
+            auto resultTable = dataRetriever->getAffectingTStatements(get<int>(ref2)).dropCol(SECOND_COL_IDX);
+            if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            resultTable.renameHeader({col1Name});
+            return resultTable;
+        }
+        auto resultTable = dataRetriever->getAffectsTTable();
+        resultTable.renameHeader({col1Name, col2Name});
+
+        return dropUnusedColumns(resultTable);
     }
 
     Table DataPreprocessor::getTableByCalls(shared_ptr<CallsClause> callsClause) {
@@ -352,8 +410,45 @@ namespace QE {
     }
 
     Table DataPreprocessor::getTableByNextT(shared_ptr<NextTClause> nextTClause) {
-        Table table = dataRetriever->getNextTTable();
-        return filterSingleClauseResultTable(nextTClause->arg1, nextTClause->arg2, table);
+        Ref ref1 = nextTClause->arg1;
+        Ref ref2 = nextTClause->arg2;
+        RefType ref1Type = getRefType(ref1);
+        RefType ref2Type = getRefType(ref2);
+
+        string col1Name =
+                ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : QEUtils::getColNameByRefType(ref1Type);
+        string col2Name =
+                ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : QEUtils::getColNameByRefType(ref2Type);
+
+        const int FIRST_COL_IDX = 0;
+        const int SECOND_COL_IDX = 1;
+
+        if (ref1Type == QB::RefType::INTEGER && ref2Type == QB::RefType::INTEGER) {
+            auto boolTable = dataRetriever->getNextTResult(get<int>(ref1),
+                    get<int>(ref2));
+            return boolTable.isEqual(ClauseVisitorConstants::TRUE_TABLE)
+            ? QEUtils::getScalarResponse(true)
+            : Table();
+        }
+        if (ref1Type == QB::RefType::INTEGER) {
+            auto resultTable = dataRetriever->getNextTStatements(get<int>(ref1)).dropCol(FIRST_COL_IDX);
+
+            //check if second ref is not a synonym and return result immediately
+            if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            //the second ref must be a synonym
+            resultTable.renameHeader({col2Name});
+            return resultTable;
+        }
+        if (ref2Type == QB::RefType::INTEGER) {
+            auto resultTable = dataRetriever->getPreviousTStatements(get<int>(ref2)).dropCol(SECOND_COL_IDX);
+            if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            resultTable.renameHeader({col1Name});
+            return resultTable;
+        }
+        auto resultTable = dataRetriever->getNextTTable();
+        resultTable.renameHeader({col1Name, col2Name});
+
+        return dropUnusedColumns(resultTable);
     }
 
     Table DataPreprocessor::getTableByParent(shared_ptr<ParentClause> parentClause) {
@@ -602,6 +697,24 @@ namespace QE {
             }
         }
         return filteredTable;
+    }
+
+    Table DataPreprocessor::dropUnusedColumns(Table table) {
+        bool hasResult = !table.isBodyEmpty();
+
+        //drop unused columns
+        int offset = 0;
+        int n = table.header.size();
+        for (int i = 0; i < n; i++) {
+            int adjustedIdx = i + offset;
+            if (table.header[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) != std::string::npos) {
+                table = table.dropCol(adjustedIdx);
+                offset--;
+            }
+        }
+        //return a default response if the original table is not empty but no column is used so all are dropped
+        if (table.isBodyEmpty() && hasResult) return QEUtils::getScalarResponse(hasResult);
+        return table;
     }
 
 } // QE

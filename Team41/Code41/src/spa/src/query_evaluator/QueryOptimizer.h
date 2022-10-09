@@ -44,7 +44,6 @@ namespace QE {
     public:
         explicit QueryOptimizer(shared_ptr<Query> query);
         ConnectedClauseGroups optimise();
-        void connectedComponents();
         static const int NO_SYN_GROUP_IDX;
     };
 

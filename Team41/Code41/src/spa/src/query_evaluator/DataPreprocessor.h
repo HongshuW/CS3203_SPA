@@ -30,6 +30,7 @@ namespace QE {
         std::vector<int> intersection(std::vector<int> v1,
                                               std::vector<int> v2);
         void getWithValues(vector<WithRef> withRefs, shared_ptr<vector<Value>> values);
+        Table dropUnusedColumns(Table table);
 
         shared_ptr<DataRetriever> dataRetriever;
         Declarations declarations;
