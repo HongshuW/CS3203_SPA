@@ -47,9 +47,9 @@ public:
     virtual Table getAssignPatternTable(ExpressionSpec expressionSpec);
     virtual Table getIfPatternTable();
     virtual Table getWhilePatternTable();
-    Table getCallsProcedureNames();
-    Table getPrintVariableNames();
-    Table getReadVariableNames();
+    virtual Table getCallsProcedureNames();
+    virtual Table getPrintVariableNames();
+    virtual Table getReadVariableNames();
     virtual DesignEntity getDesignEntityOfStmt(int stmtNumber);
     unordered_set<string> getFollowingStatements(int followedStatement);
     unordered_set<string> getChildrenStatements(int parentStatement);

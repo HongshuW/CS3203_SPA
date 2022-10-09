@@ -7,7 +7,6 @@
 #include "pkb/PKBStorage.h"
 #include "pkb/DataRetriever.h"
 #include "query_evaluator/QueryEvaluator.h"
-#include "query_builder/commons/Query.h"
 #include "../../../unit_testing/src/query_evaluator/QETestUtils.h"
 #include "query_builder/clauses/such_that_clauses/UsesSClause.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesSClause.h"
