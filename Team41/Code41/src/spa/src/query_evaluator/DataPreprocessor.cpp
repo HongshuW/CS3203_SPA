@@ -8,7 +8,6 @@
 #include <string>
 #include "query_builder/commons/DesignEntity.h"
 #include "QEUtils.h"
-#include "utils/Utils.h"
 #include "TableCombiner.h"
 #include "query_builder/commons/WithRef.h"
 #include "query_builder/clauses/such_that_clauses/FollowsClause.h"
@@ -30,7 +29,6 @@
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/select_clauses/SelectClause.h"
 #include "constants/ClauseVisitorConstants.h"
-#include "QEUtils.h"
 
 using namespace std;
 using namespace QB;

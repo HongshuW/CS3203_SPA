@@ -7,7 +7,6 @@
 #include "pkb/PKBStorage.h"
 #include "pkb/DataRetriever.h"
 #include "query_evaluator/QueryEvaluator.h"
-#include "query_builder/commons/Query.h"
 #include "../../../unit_testing/src/query_evaluator/QETestUtils.h"
 #include "query_builder/clauses/such_that_clauses/UsesSClause.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesSClause.h"
@@ -290,6 +289,22 @@ TEST_CASE("Test de-pkb-qe integration") {
 
         auto actual= queryEvaluator->evaluate(query);
         vector<string> expected = {"3"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("print pr; select pr.varName such that Next(pr, 2); from procedure 3") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+
+        Synonym syn1 = Synonym("pr");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->addNext(syn1, 2)
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"x"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
 }

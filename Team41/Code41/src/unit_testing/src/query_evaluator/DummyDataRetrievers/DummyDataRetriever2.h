@@ -31,16 +31,7 @@ public:
      Table getParentTable() override;
      Table getParentTTable() override;
      Table getUsesSTable() override;
-//     Table getUsesPTable() override;
      Table getModifiesSTable() override;
-//     Table getModifiesPTable() override;
-//     Table getCallsTable() override;
-//     Table getCallsTTable() override;
-//     Table getNextTable() override;
-//     Table getNextTTable() override;
-//     Table getAffectsTable() override;
-//     Table getAffectsTTable() override;
-//     Table getAssignPatternTable(ExpressionSpec expressionSpec) override;
      Table getIfPatternTable() override;
      Table getWhilePatternTable() override;
      explicit DummyDataRetriever2(shared_ptr<PKBStorage> pkbStorage);

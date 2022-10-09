@@ -166,3 +166,11 @@ Table DummyDataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {
     return DataRetriever::getAssignPatternTable(expressionSpec);
 }
 
+Table DummyDataRetriever::getNextTStatements(int stmtNo) {
+    Table relationTable = NextTable();
+    relationTable.appendRow({"1", "2"});
+    relationTable.appendRow({"2", "3"});
+    relationTable.appendRow({"1", "3"});
+    return DataRetriever::getNextTStatements(stmtNo);
+}
+

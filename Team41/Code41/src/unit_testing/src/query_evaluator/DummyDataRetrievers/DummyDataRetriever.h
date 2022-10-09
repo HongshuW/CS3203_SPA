@@ -25,11 +25,25 @@ public:
     Table getModifiesPTable() override;
     Table getCallsTable() override;
     Table getCallsTTable() override;
-    Table getNextTable() override;
-    Table getNextTTable() override;
-    Table getAffectsTable() override;
-    Table getAffectsTTable() override;
     Table getAssignPatternTable(ExpressionSpec expressionSpec) override;
+
+    Table getNextTable() override;
+
+    Table getNextTTable() override;
+    Table getNextTStatements(int stmtNo) override;
+    Table getPreviousTStatements(int stmtNo) override;
+    Table getNextTResult(int precedingStatement, int ensuingStatement) override;
+
+    Table getAffectsTable() override;
+    Table getAffectedStatements(int stmtNo) override;
+    Table getAffectingStatements(int stmtNo) override;
+    Table getAffectsResult(int affectingStatement, int affectedStatement) override;
+
+    Table getAffectsTTable() override;
+    Table getAffectedTStatements(int stmtNo) override;
+    Table getAffectingTStatements(int stmtNo) override;
+    Table getAffectsTResult(int affectingStatement, int affectedStatement) override;
+
     DesignEntity getDesignEntityOfStmt(int line_no) override;
     explicit DummyDataRetriever(shared_ptr<PKBStorage> pkbStorage);
 //    explicit DummyDataRetriever();

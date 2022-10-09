@@ -66,7 +66,7 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/TestNextExtraction.cpp
     src/design_extractor/TestNextStarExtraction.cpp
     src/pkb/TestCachable.cpp
-    src/design_extractor/TestConditionalPatternExtractor.cpp)
+    src/design_extractor/TestConditionalPatternExtractor.cpp src/query_evaluator/DummyDataRetrievers/DummyDataRetriever3.cpp src/query_evaluator/DummyDataRetrievers/DummyDataRetriever3.h)
 
 
 target_link_libraries(unit_testing spa)
