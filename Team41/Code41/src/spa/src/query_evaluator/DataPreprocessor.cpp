@@ -30,6 +30,7 @@
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/select_clauses/SelectClause.h"
 #include "constants/ClauseVisitorConstants.h"
+#include "QEUtils.h"
 
 using namespace std;
 using namespace QB;
@@ -115,12 +116,7 @@ namespace QE {
                 withClause->lhsType() == WithRefType::ATTR_REF || withClause->rhsType() == WithRefType::ATTR_REF;
         //if the with clause does not have synonym, dont have to care what's inside since
         //I have checked this clause evaluates to true
-        const string DUMMY_HEADER = "$dummy_header";
-        const string DUMMY_VALUE = "$dummy_value";
-        Table dummyTable = Table();
-        dummyTable.renameHeader({DUMMY_HEADER}) ;
-        dummyTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
-        if (!hasSynonym) return dummyTable;
+        if (!hasSynonym) return QEUtils::getScalarResponse(true);
 
         int intRef;
         string identRef;
@@ -286,15 +282,7 @@ namespace QE {
             }
         }
 
-        if (table.isBodyEmpty() && hasResult) {
-            const string DUMMY_HEADER = "$dummy_header";
-            const string DUMMY_VALUE = "$dummy_value";
-            Table dummyTable = Table();
-            dummyTable.renameHeader({DUMMY_HEADER}) ;
-            dummyTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
-            return dummyTable;
-        }
-
+        if (table.isBodyEmpty() && hasResult) return QEUtils::getScalarResponse(hasResult);
         return table;
     }
 

@@ -13,6 +13,7 @@
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 #include "ConcreteClauseVisitor.h"
 #include "QueryOptimizer.h"
+#include "QEUtils.h"
 
 using namespace QB;
 using namespace QE;
@@ -218,11 +219,7 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(shared_ptr<ConcreteClause
     ccg->erase(QueryOptimizer::NO_SYN_GROUP_IDX);
 
     TableCombiner tableCombiner = TableCombiner();
-    const string DUMMY_HEADER = "$dummy_header";
-    const string DUMMY_VALUE = "$dummy_value";
-    Table resultTable = Table();
-    resultTable.renameHeader({DUMMY_HEADER}) ;
-    resultTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+    Table resultTable = QEUtils::getScalarResponse(false);//fill initial table with non-empty false result
 
     //evaluate the rest of the groups
     for (auto it: *ccg) {
@@ -255,11 +252,7 @@ vector<string> QueryEvaluator::evaluateSelectTupleQuery( shared_ptr<ConcreteClau
     }
 
     TableCombiner tableCombiner = TableCombiner();
-    const string DUMMY_HEADER = "$dummy_header";
-    const string DUMMY_VALUE = "$dummy_value";
-    Table resultTable = Table();
-    resultTable.renameHeader({DUMMY_HEADER}) ;
-    resultTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+    Table resultTable = QEUtils::getScalarResponse(false);
 
     //first evaluate group of clauses without synonyms, and dont have to join table
     for (auto noSynClause: *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {

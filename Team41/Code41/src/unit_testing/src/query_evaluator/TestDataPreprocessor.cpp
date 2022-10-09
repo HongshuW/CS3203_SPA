@@ -152,18 +152,9 @@ TEST_CASE("Test Data Preprocessor") {
         shared_ptr<vector<Declaration>> declarations = make_shared<vector<Declaration>>();
         shared_ptr<QE::DataPreprocessor> dataPreprocessor = make_shared<QE::DataPreprocessor>(dummyDataRetriever, declarations);
         Table actual = dataPreprocessor->getTableByModifiesS(make_shared<ModifiesSClause>(2, Underscore()));
+        Table expected = QE::QEUtils::getScalarResponse(true);
 
-        const string DUMMY_HEADER = "$dummy_header";
-        const string DUMMY_VALUE = "$dummy_value";
-        Table dummyTable = Table();
-        dummyTable.renameHeader({DUMMY_HEADER}) ;
-        dummyTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
-
-        Table expected = TestQE::TableBuilder().setHeaders({QE::QEUtils::getColNameByRefType(QB::RefType::INTEGER),
-                                                            QE::QEUtils::getColNameByRefType(QB::RefType::UNDERSCORE)})
-                ->addRow({"2","dummyVarB"})
-                ->build();
-        REQUIRE(actual.isEqual(dummyTable));
+        REQUIRE(actual.isEqual(expected));
     }
     shared_ptr<PKBStorage> pkbStorage2 = make_shared<PKBStorage>();
     shared_ptr<DummyDataRetriever2> dummyDataRetriever2 = make_shared<DummyDataRetriever2>(pkbStorage2);
