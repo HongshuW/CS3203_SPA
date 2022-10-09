@@ -101,17 +101,17 @@ Select a such that Affects(a, a)
 1 - invalid affects
 procedure p;
 Select BOOLEAN such that Affects(9, p)
-Semantic Error
+SemanticError
 5000
 1 - invalid affects
 print p;
 Select BOOLEAN such that Affects(9, p)
-Semantic Error
+SemanticError
 5000
 1 - invalid affects
 variable v;
 Select BOOLEAN such that Affects(9, v)
-Semantic Error
+SemanticError
 5000
 1 - invalid affects
 while w;
@@ -121,27 +121,27 @@ Semantic Error
 1 - invalid affects
 call c;
 Select BOOLEAN such that Affects(9, c)
-Semantic Error
+SemanticError
 5000
 1 - invalid affects
 if i;
 Select BOOLEAN such that Affects(9, i)
-Semantic Error
+SemanticError
 5000
 1 - invalid affects
 read r;
 Select BOOLEAN such that Affects(9, r)
-Semantic Error
+SemanticError
 5000
 1 - invalid affects
 stmt s;
 Select BOOLEAN such that Affects(9, s)
-Semantic Error
+SemanticError
 5000
 1 - invalid affects
 
 Select BOOLEAN such that Affects(9, "i")
-Semantic Error
+SemanticError
 5000
 
 
