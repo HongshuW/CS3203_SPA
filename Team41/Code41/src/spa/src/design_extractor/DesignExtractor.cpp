@@ -98,6 +98,10 @@ void DesignExtractor::saveRelationToPKB(RelationType relationType) {
                 this->dataModifier->saveCallsT(*iterator);
                 break;
             }
+            case RelationType::NEXT: {
+                this->dataModifier->saveNext(*iterator);
+                break;
+            }
             default:
                 break;
         }
