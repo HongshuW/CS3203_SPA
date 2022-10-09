@@ -13,7 +13,7 @@ bool InvalidPatternClause::operator==(const InvalidPatternClause &other) const {
 }
 
 Table InvalidPatternClause::accept(shared_ptr<IVisitor> visitor) {
-    return visitor->visit(shared_from_this());
+    return Table();
 }
 
 int InvalidPatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {

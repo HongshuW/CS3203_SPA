@@ -13,6 +13,7 @@
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 #include "ConcreteClauseVisitor.h"
 #include "QueryOptimizer.h"
+#include "QEUtils.h"
 
 using namespace QB;
 using namespace QE;
@@ -56,17 +57,6 @@ DesignEntity QueryEvaluator::getDesignEntity(Synonym synonym) {
     }
 
     return static_cast<DesignEntity>(NULL);
-}
-
-std::string QueryEvaluator::join(std::vector<std::string> const &strings, std::string delim)
-{
-    if (strings.empty()) return std::string();
-
-    return std::accumulate(strings.begin() + 1, strings.end(), strings[0],
-                           [&delim](std::string x, std::string y) {
-                               return x + delim + y;
-                           }
-    );
 }
 
 vector<string> QueryEvaluator::removeDup(vector<string> vec) {
@@ -182,20 +172,6 @@ vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vecto
     return removeDup(ans);
 }
 
-int QueryEvaluator::getUnvisitedColIdxByName(const string& colName, ViewedDups viewedDupsMap, const Table& table) {
-    for (int i = 0; i < table.header.size(); i++) {
-        if (viewedDupsMap->find(colName) == viewedDupsMap->end()) {
-            auto set = make_shared<unordered_set<int>>();
-            viewedDupsMap->insert({colName, set});
-        }
-        if (table.header[i] == colName && !viewedDupsMap->at(colName)->count(i)) {
-            viewedDupsMap->at(colName)->insert(i);
-            return i;
-        }
-    }
-    return -1;
-}
-
 vector<string> QueryEvaluator::evaluateSelectBoolQuery(shared_ptr<ConcreteClauseVisitor> clauseVisitor,
                                                        shared_ptr<DataPreprocessor> dataPreprocessor,
                                                        ConnectedClauseGroups ccg) {
@@ -218,11 +194,7 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(shared_ptr<ConcreteClause
     ccg->erase(QueryOptimizer::NO_SYN_GROUP_IDX);
 
     TableCombiner tableCombiner = TableCombiner();
-    const string DUMMY_HEADER = "$dummy_header";
-    const string DUMMY_VALUE = "$dummy_value";
-    Table resultTable = Table();
-    resultTable.renameHeader({DUMMY_HEADER}) ;
-    resultTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+    Table resultTable = QEUtils::getScalarResponse(false);//fill initial table with non-empty false result
 
     //evaluate the rest of the groups
     for (auto it: *ccg) {
@@ -255,11 +227,7 @@ vector<string> QueryEvaluator::evaluateSelectTupleQuery( shared_ptr<ConcreteClau
     }
 
     TableCombiner tableCombiner = TableCombiner();
-    const string DUMMY_HEADER = "$dummy_header";
-    const string DUMMY_VALUE = "$dummy_value";
-    Table resultTable = Table();
-    resultTable.renameHeader({DUMMY_HEADER}) ;
-    resultTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
+    Table resultTable = QEUtils::getScalarResponse(false);
 
     //first evaluate group of clauses without synonyms, and dont have to join table
     for (auto noSynClause: *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {

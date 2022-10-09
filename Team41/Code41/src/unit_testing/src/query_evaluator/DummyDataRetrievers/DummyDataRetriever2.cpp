@@ -138,3 +138,15 @@ Table DummyDataRetriever2::getModifiesSTable() {
     table.appendRow({"7", "y"});
     return table;
 }
+
+Table DummyDataRetriever2::getIfPatternTable() {
+    auto table = PatternTable();
+    table.appendRow({"5", "x"});
+    return table;
+}
+
+Table DummyDataRetriever2::getWhilePatternTable() {
+    auto table = PatternTable();
+    table.appendRow({"3", "y"});
+    return table;
+}
