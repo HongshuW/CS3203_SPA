@@ -292,4 +292,21 @@ TEST_CASE("Test de-pkb-qe integration") {
         vector<string> expected = {"3"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
+    SECTION("print pr; select pr.varName such that Next(pr, 2); from procedure 3") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+
+        Synonym syn1 = Synonym("pr");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->addNext(syn1, 2)
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"x"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
 }
