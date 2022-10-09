@@ -5,7 +5,7 @@
 #include "DummyDataRetriever.h"
 #include "pkb/PKBStorage.h"
 #include "pkb/table/UsesTable.h"
-
+#include "query_evaluator/constants/ClauseVisitorConstants.h"
 /*
  * procedure p1 {
  * 1 dummyVarA = 1;
@@ -167,10 +167,93 @@ Table DummyDataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {
 }
 
 Table DummyDataRetriever::getNextTStatements(int stmtNo) {
-    Table relationTable = NextTable();
-    relationTable.appendRow({"1", "2"});
-    relationTable.appendRow({"2", "3"});
-    relationTable.appendRow({"1", "3"});
-    return DataRetriever::getNextTStatements(stmtNo);
+    if (stmtNo == 1) {
+        Table relationTable = NextTable();
+        relationTable.appendRow({"1", "2"});
+        relationTable.appendRow({"1", "3"});
+        return relationTable;
+    }
+    if (stmtNo == 2) {
+        Table relationTable = NextTable();
+        relationTable.appendRow({"2", "3"});
+        return relationTable;
+    }
+    if (stmtNo == 3) return NextTable();
+
+    return NextTable();
+}
+
+Table DummyDataRetriever::getPreviousTStatements(int stmtNo) {
+    if (stmtNo == 2) {
+        Table relationTable = NextTable();
+        relationTable.appendRow({"1", "2"});
+        return relationTable;
+    }
+    if (stmtNo == 3) {
+        Table relationTable = NextTable();
+        relationTable.appendRow({"2", "3"});
+        relationTable.appendRow({"1", "3"});
+        return relationTable;
+    }
+    return NextTable();
+}
+
+Table DummyDataRetriever::getNextTResult(int precedingStatement, int ensuingStatement) {
+    if ((precedingStatement == 1 && ensuingStatement == 2)
+        || (precedingStatement == 2 && ensuingStatement == 3)
+           || (precedingStatement == 1 && ensuingStatement == 1)) {
+        return QE::ClauseVisitorConstants::TRUE_TABLE;
+    }
+    return QE::ClauseVisitorConstants::FALSE_TABLE;
+}
+
+Table DummyDataRetriever::getAffectedStatements(int stmtNo) {
+    if (stmtNo == 1) {
+        Table relationTable = AffectsTable();
+        relationTable.appendRow({"1", "2"});
+        return relationTable;
+    }
+    return AffectsTable();
+}
+
+Table DummyDataRetriever::getAffectingStatements(int stmtNo) {
+    if (stmtNo == 2) {
+        Table relationTable = AffectsTable();
+        relationTable.appendRow({"1", "2"});
+        return relationTable;
+    }
+    return AffectsTable();
+}
+
+Table DummyDataRetriever::getAffectsResult(int affectingStatement, int affectedStatement) {
+    if ((affectingStatement == 1 && affectedStatement == 2)) {
+        return QE::ClauseVisitorConstants::TRUE_TABLE;
+    }
+    return QE::ClauseVisitorConstants::FALSE_TABLE;
+}
+
+Table DummyDataRetriever::getAffectedTStatements(int stmtNo) {
+    if (stmtNo == 1) {
+        Table relationTable = AffectsTable();
+        relationTable.appendRow({"1", "2"});
+        return relationTable;
+    }
+    return AffectsTable();
+}
+
+Table DummyDataRetriever::getAffectingTStatements(int stmtNo) {
+    if (stmtNo == 2) {
+        Table relationTable = AffectsTable();
+        relationTable.appendRow({"1", "2"});
+        return relationTable;
+    }
+    return AffectsTable();
+}
+
+Table DummyDataRetriever::getAffectsTResult(int affectingStatement, int affectedStatement) {
+    if ((affectingStatement == 1 && affectedStatement == 2)) {
+        return QE::ClauseVisitorConstants::TRUE_TABLE;
+    }
+    return QE::ClauseVisitorConstants::FALSE_TABLE;
 }
 

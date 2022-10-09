@@ -31,9 +31,13 @@ public:
      Table getParentTable() override;
      Table getParentTTable() override;
      Table getUsesSTable() override;
+     Table getUsesPTable() override;
      Table getModifiesSTable() override;
      Table getIfPatternTable() override;
      Table getWhilePatternTable() override;
+     Table getCallsProcedureNames() override;
+     Table getCallsTable() override;
+     Table getCallsTTable() override;
      explicit DummyDataRetriever2(shared_ptr<PKBStorage> pkbStorage);
 };
 

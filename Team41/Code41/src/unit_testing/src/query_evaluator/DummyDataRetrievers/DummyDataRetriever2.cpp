@@ -13,7 +13,7 @@
  *  5       if ( x > 2 ) {
  *  6            x = x + 2
  *          }
- *  7       y = y - 1
+ *  7       y = y - 1 // call p3
  *    }
  *  8  print x
  * }
@@ -34,7 +34,7 @@ Table DummyDataRetriever2::getTableByDesignEntity(DesignEntity designEntity) {
             stmtTable.appendRow({"4", getDesignEntityString(QB::DesignEntity::ASSIGN)});
             stmtTable.appendRow({"5", getDesignEntityString(QB::DesignEntity::IF)});
             stmtTable.appendRow({"6", getDesignEntityString(QB::DesignEntity::ASSIGN)});
-            stmtTable.appendRow({"7", getDesignEntityString(QB::DesignEntity::ASSIGN)});
+            stmtTable.appendRow({"7", getDesignEntityString(QB::DesignEntity::CALL)});
             stmtTable.appendRow({"8", getDesignEntityString(QB::DesignEntity::PRINT)});
 
             return stmtTable;
@@ -122,7 +122,6 @@ Table DummyDataRetriever2::getUsesSTable() {
     table.appendRow({"4", "x"});
     table.appendRow({"5", "x"});
     table.appendRow({"6", "x"});
-    table.appendRow({"7", "y"});
     table.appendRow({"8", "x"});
     return table;
 }
@@ -135,7 +134,6 @@ Table DummyDataRetriever2::getModifiesSTable() {
     table.appendRow({"3", "y"});
     table.appendRow({"4", "x"});
     table.appendRow({"6", "x"});
-    table.appendRow({"7", "y"});
     return table;
 }
 
@@ -148,5 +146,30 @@ Table DummyDataRetriever2::getIfPatternTable() {
 Table DummyDataRetriever2::getWhilePatternTable() {
     auto table = PatternTable();
     table.appendRow({"3", "y"});
+    return table;
+}
+
+Table DummyDataRetriever2::getCallsProcedureNames() {
+    Table table = CallsTable();
+    table.appendRow({"7", "p3"});
+    return table;
+}
+
+Table DummyDataRetriever2::getCallsTable() {
+    Table table = CallsTable();
+    table.appendRow({"p2", "p3"});
+    return table;
+}
+
+Table DummyDataRetriever2::getCallsTTable() {
+    Table table = CallsTable();
+    table.appendRow({"p2", "p3"});
+    return table;
+}
+
+Table DummyDataRetriever2::getUsesPTable() {
+    auto table = UsesTable();
+    table.appendRow({"p2", "y"});
+    table.appendRow({"p2", "x"});
     return table;
 }

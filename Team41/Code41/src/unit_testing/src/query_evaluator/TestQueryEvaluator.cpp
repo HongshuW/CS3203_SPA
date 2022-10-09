@@ -498,7 +498,7 @@ TEST_CASE("Test query evaluator") {
         vector<string> expected = {"5"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
-    SECTION("test select single tuple with empty result: call c; select c") {
+    SECTION("test select single tuple with non-empty result: call c; select c") {
         shared_ptr<Query> query = make_shared<Query>();
         shared_ptr<vector<Declaration>> declarations = make_shared<vector<Declaration>>();
         Synonym syn1 = Synonym("c");
@@ -510,7 +510,7 @@ TEST_CASE("Test query evaluator") {
         query->selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
 
         auto actual = queryEvaluator2.evaluate(query);
-        REQUIRE(QETest::QETestUtils::containsSameElement(actual, EMPTY_RESULT));
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, {"7"}));
     }
     SECTION("test select tuple with two elements: variable v; assign a; select <v, a>") {
         shared_ptr<Query> query = make_shared<Query>();
@@ -528,7 +528,7 @@ TEST_CASE("Test query evaluator") {
         query->selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
 
         auto actual = queryEvaluator2.evaluate(query);
-        vector<string> expected = {"x 4", "x 6", "x 7","y 4", "y 6", "y 7"};
+        vector<string> expected = {"x 4", "x 6", "y 4", "y 6",};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
     SECTION("test select tuple with two elements: variable v; assign a; select <a, v>") {
@@ -547,7 +547,7 @@ TEST_CASE("Test query evaluator") {
         query->selectClause = make_shared<SelectClause>(ReturnType::TUPLE, returnResults);
 
         auto actual = queryEvaluator2.evaluate(query);
-        vector<string> expected = {"4 x", "6 x", "7 x","4 y", "6 y", "7 y"};
+        vector<string> expected = {"4 x", "6 x", "4 y", "6 y"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
     SECTION("test select tuple with two elements: variable v; assign a; select <v, v>") {
@@ -795,19 +795,19 @@ TEST_CASE("Test query evaluator") {
         vector<string> expected = EMPTY_RESULT;
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
-    SECTION("test select four tuple with three clauses: stmt s1, s2; variable v; constant c; select <s1, c, s2, v> such that parent(3, s2) and modifies(s1, 'x') and uses(s2, 'y')" ) {
+    SECTION("test select four tuple with three clauses: stmt s1, s2; variable v; constant c; select <s1, c, s2, v> such that parent(3, cll) and modifies(s1, 'x') and with cll.procname == 'p3'" ) {
         //s2 7
         //s1 1 3 4 6
         // x y
         //0 1 2
         Synonym syn1 = Synonym("s1");
-        Synonym syn2 = Synonym("s2");
+        Synonym syn2 = Synonym("cll");
         Synonym syn3 = Synonym("v");
         Synonym syn4 = Synonym("c");
 
         auto query = make_shared<TestQueryBuilder>()
                 ->addDeclaration(QB::DesignEntity::STMT, syn1)
-                ->addDeclaration(QB::DesignEntity::STMT, syn2)
+                ->addDeclaration(QB::DesignEntity::CALL, syn2)
                 ->addDeclaration(QB::DesignEntity::VARIABLE, syn3)
                 ->addDeclaration(QB::DesignEntity::CONSTANT, syn4)
                 ->addToSelect(syn1)
@@ -816,7 +816,7 @@ TEST_CASE("Test query evaluator") {
                 ->addToSelect(syn3)
                 ->addParent(3, syn2)
                 ->addModifiesS(syn1, Ident("x"))
-                ->addUsesS(syn2, Ident("y"))
+                ->addWith(AttrRef(syn2, QB::AttrName::PROC_NAME), Ident("p3"))
                 ->build();
 
         auto actual = queryEvaluator2.evaluate(query);
@@ -825,4 +825,156 @@ TEST_CASE("Test query evaluator") {
                                     "1 2 7 x", "3 2 7 x", "4 2 7 x", "6 2 7 x", "1 2 7 y", "3 2 7 y", "6 2 7 y", "4 2 7 y"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
+    SECTION("test select return true: select bool such that next(1, 2)") {
+
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addNext(1,2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: select bool such that affect(1, 2)") {
+
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffects(1,2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: select bool such that affect(1, 3)") {
+
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffectsT(1,3)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: stmt s; select <s, s.stmt#> such that next*(1, s)") {
+        Synonym syn1 = Synonym("s");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addNextT(1,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {"2 2", "3 3"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: stmt s; select <s.stmt#, s> such that affect(1, s)") {
+        Synonym syn1 = Synonym("s");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(1,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {"2 2"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: stmt s1, s2; select <s1.stmt#, s2.stmt#> such that affect*(s2, s1)") {
+        Synonym syn1 = Synonym("s1");
+        Synonym syn2 = Synonym("s2");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addDeclaration(QB::DesignEntity::STMT, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(AttrRef(syn2, QB::AttrName::STMT_NUMBER))
+                ->addAffectsT(syn2,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {"2 1"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: procedure p; select p.procname such that uses(p, 'x') and calls(p, 'p3')") {
+        Synonym syn1 = Synonym("p");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PROCEDURE, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::PROC_NAME))
+                ->addUsesP(syn1,Ident("x"))
+                ->addCalls(syn1, Ident("p3"))
+                ->build();
+        auto actual = queryEvaluator2.evaluate(query);
+        vector<string> expected = {"p2"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: procedure p; variable v; select <p.procname, v.varname> such that uses(p, 'y') and calls*(p, 'p3')") {
+        Synonym syn1 = Synonym("p");
+        Synonym syn2 = Synonym("v");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PROCEDURE, syn1)
+                ->addDeclaration(QB::DesignEntity::VARIABLE, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::PROC_NAME))
+                ->addToSelect(AttrRef(syn2, QB::AttrName::VAR_NAME))
+                ->addUsesP(syn1,Ident("y"))
+                ->addCallT(syn1, Ident("p3"))
+                ->build();
+        auto actual = queryEvaluator2.evaluate(query);
+        vector<string> expected = {"p2 x", "p2 y"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: procedure p; variable v; select <p.procname, v> such that follows(1, 2) ") {
+        Synonym syn1 = Synonym("p");
+        Synonym syn2 = Synonym("v");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PROCEDURE, syn1)
+                ->addDeclaration(QB::DesignEntity::VARIABLE, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::PROC_NAME))
+                ->addToSelect(AttrRef(syn2, QB::AttrName::VAR_NAME))
+                ->addFollows(1,2)
+                ->build();
+        auto actual = queryEvaluator2.evaluate(query);
+        vector<string> expected = {"p2 x", "p2 y"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: call cll; variable v; select <cll.procname, v> such that follows(1, 2) ") {
+        Synonym syn1 = Synonym("cll");
+        Synonym syn2 = Synonym("v");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::CALL, syn1)
+                ->addDeclaration(QB::DesignEntity::VARIABLE, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::PROC_NAME))
+                ->addToSelect(AttrRef(syn2, QB::AttrName::VAR_NAME))
+                ->addFollows(1,2)
+                ->build();
+        auto actual = queryEvaluator2.evaluate(query);
+        vector<string> expected = {"p3 x", "p3 y"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: call cll; variable v; select <cll, v> such that follows(1, 2) ") {
+        Synonym syn1 = Synonym("cll");
+        Synonym syn2 = Synonym("v");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::CALL, syn1)
+                ->addDeclaration(QB::DesignEntity::VARIABLE, syn2)
+                ->addToSelect(syn1)
+                ->addToSelect(AttrRef(syn2, QB::AttrName::VAR_NAME))
+                ->addFollows(1,2)
+                ->build();
+        auto actual = queryEvaluator2.evaluate(query);
+        vector<string> expected = {"7 x", "7 y"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: procedure p; variable v; select <p.procname, v> such that uses(p, _) ") {
+        Synonym syn1 = Synonym("p");
+        Synonym syn2 = Synonym("v");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PROCEDURE, syn1)
+                ->addDeclaration(QB::DesignEntity::VARIABLE, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::PROC_NAME))
+                ->addToSelect(AttrRef(syn2, QB::AttrName::VAR_NAME))
+                ->addUsesP(syn1,Underscore())
+                ->build();
+        auto actual = queryEvaluator2.evaluate(query);
+        vector<string> expected = {"p2 x", "p2 y"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+
 }

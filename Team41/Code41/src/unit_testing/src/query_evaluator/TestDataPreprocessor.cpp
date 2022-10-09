@@ -195,7 +195,6 @@ TEST_CASE("Test Data Preprocessor") {
         Table expected = FollowsTable();
         expected.renameHeader({"a"});
         expected.appendRow({ "4"});
-        expected.appendRow({ "7"});
         expected.appendRow({ "6"});
         REQUIRE(actual.isEqual(expected));
     }
@@ -207,7 +206,6 @@ TEST_CASE("Test Data Preprocessor") {
         Table actual = dataPreprocessor2->getTableByUsesS(make_shared<UsesSClause>(syn1_4, Ident("y")));
         Table expected = UsesTable();
         expected.renameHeader({"a"});
-        expected.appendRow({"7"});
         REQUIRE(actual.isEqual(expected));
     }
 }

@@ -193,21 +193,6 @@ namespace QE {
         }
     }
 
-    void QueryOptimizer::connectedComponents() {
-        set<int> s;
-
-        // Traverse all vertices
-        for (int i = 0; i < clauseCount; i++) {
-
-            // Insert all topmost
-            // vertices obtained
-            s.insert(root(parent[i]));
-        }
-
-        // Print count of connected components
-        cout << s.size() << '\n';
-    }
-
     ConnectedClauseGroups QueryOptimizer::getConnectedGroups() {
         ConnectedClauseGroups ccg = make_shared<unordered_map<int, shared_ptr<vector<shared_ptr<ConditionalClause>>>>>();
         ccg->insert({NO_SYN_GROUP_IDX, make_shared<vector<shared_ptr<ConditionalClause>>>()});
