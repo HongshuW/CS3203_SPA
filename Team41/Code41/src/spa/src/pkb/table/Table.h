@@ -27,6 +27,7 @@ public:
     int getColIdxByName(string colName);
     shared_ptr<Table> getSubTable(int startIndex, int endIndex);
     shared_ptr<Table> getSubTableByColumn(string key, int keyColumnNumber);
+    bool contains(vector<string> row, int startIndex, int endIndex);
 
     // setters
     void renameHeader(vector<string> newHeader);

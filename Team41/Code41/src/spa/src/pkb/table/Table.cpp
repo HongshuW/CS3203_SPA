@@ -77,6 +77,15 @@ shared_ptr<Table> Table::getSubTableByColumn(string key, int keyColumnNumber) {
     return table;
 }
 
+bool Table::contains(vector<string> row, int startIndex, int endIndex) {
+    for (int i = startIndex; i < endIndex; i++) {
+        if (rows[i] == row) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Table::hasCol(std::string colName) {
     return std::count(header.begin(), header.end(), colName);
 }

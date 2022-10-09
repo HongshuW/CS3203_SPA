@@ -3,6 +3,7 @@
 //
 
 #include "DataRetriever.h"
+#include "./query_evaluator/constants/ClauseVisitorConstants.h"
 
 DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage) {
     this->pkbStorage = pkbStorage;
@@ -76,7 +77,9 @@ shared_ptr<Table> DataRetriever::getStatementsHelper(Cachable * cachable, vector
         // if all relations are cached, search for the relations queried
         return cachable->getSubTableByColumn(queriedStmt, columnNumber);
     } else {
-        vector<string> range = cachable->getCachedLocation(vector<string>{queriedStmt, Cachable::WILDCARD});
+        vector<string> range = cachable->getCachedLocation(columnNumber == 0
+                ? vector<string>{queriedStmt, Cachable::WILDCARD}
+                : vector<string>{Cachable::WILDCARD, queriedStmt});
         if (range.empty()) {
             // if cache is empty, traverse the cfg to get relations
             shared_ptr<vector<string>> stmts = ((*cacheManager).*func)(stmtNo);
@@ -109,6 +112,48 @@ void DataRetriever::getAllRelationsHelper(Cachable * cachable, CacheManager::ful
         cachable->appendRows(*relations);
         cachable->setAllRelationsStatus(true);
     }
+}
+
+int DataRetriever::getDifference(vector<string> startAndEndIndices) {
+    int startIndex = stoi(startAndEndIndices[0]);
+    int endIndex = stoi(startAndEndIndices[1]);
+    return endIndex - startIndex;
+}
+
+shared_ptr<Table> DataRetriever::getExactRelationHelper(Cachable * cachable, vector<int> stmts,
+                                                        CacheManager::exactGetter func) {
+    int firstStmt = stmts[0];
+    int secondStmt = stmts[1];
+    string first = to_string(firstStmt);
+    string second = to_string(secondStmt);
+    vector<string> row = vector<string>{first, second};
+    bool result = false;
+    if (cachable->areAllRelationsCached()) {
+        // if all relations are cached, search for the queried relation
+        result = cachable->contains(row, 0, cachable->rows.size());
+    } else {
+        vector<string> firstRange = cachable->getCachedLocation(vector<string>{first, Cachable::WILDCARD});
+        vector<string> secondRange = cachable->getCachedLocation(vector<string>{Cachable::WILDCARD, second});
+        if (firstRange.empty() && secondRange.empty()) {
+            // if the relation hasn't been queried before, call DE to find the relation
+            result = ((*cacheManager).*func)(firstStmt, secondStmt);
+            return result
+                ? make_shared<Table>(QE::ClauseVisitorConstants::TRUE_TABLE)
+                : make_shared<Table>(QE::ClauseVisitorConstants::FALSE_TABLE);
+        }
+        // the relation has been queried before, search in cache
+        int firstDifference = firstRange.empty() ? INT_MAX : getDifference(firstRange);
+        int secondDifference = secondRange.empty() ? INT_MAX : getDifference(secondRange);
+        // search in the smaller range
+        if (firstDifference <= secondDifference) {
+            result = cachable->contains(row, stoi(firstRange[0]), stoi(firstRange[1]));
+        } else {
+            result = cachable->contains(row, stoi(secondRange[0]), stoi(secondRange[1]));
+        }
+    }
+    return result
+        ? make_shared<Table>(QE::ClauseVisitorConstants::TRUE_TABLE)
+        : make_shared<Table>(QE::ClauseVisitorConstants::FALSE_TABLE);
 }
 
 /**
@@ -146,6 +191,19 @@ Table DataRetriever::getPreviousTStatements(int stmtNo) {
     int columnNumber = 1;
     return *getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
                                 &CacheManager::getPreviousTStatements);
+}
+
+/**
+ * Check Next*(precedingStatement, ensuingStatement) and return the result in a Table.
+ *
+ * @param precedingStatement The preceding statement queried
+ * @param ensuingStatement The ensuing statement queried
+ * @return whether the Next* relation exists
+ */
+Table DataRetriever::getNextTResult(int precedingStatement, int ensuingStatement) {
+    NextTable * nextTTable = pkbStorage->getNextT();
+    return *getExactRelationHelper(
+            nextTTable, vector<int>{precedingStatement, ensuingStatement}, &CacheManager::getNextTResult);
 }
 
 /**
@@ -197,6 +255,19 @@ Table DataRetriever::getAffectingStatements(int stmtNo) {
 }
 
 /**
+ * Check Affects(affectingStatement, affectedStatement) and return the result in a Table.
+ *
+ * @param affectingStatement The affecting statement queried
+ * @param affectedStatement The affected statement queried
+ * @return whether the Affects relation exists
+ */
+Table DataRetriever::getAffectsResult(int affectingStatement, int affectedStatement) {
+    AffectsTable * affectsTable = pkbStorage->getAffects();
+    return *getExactRelationHelper(
+            affectsTable, vector<int>{affectingStatement, affectedStatement}, &CacheManager::getAffectsResult);
+}
+
+/**
  * Get all statements s such that Affects*(stmtNo, s) is true.
  *
  * @param stmtNo The statement number queried
@@ -220,6 +291,19 @@ Table DataRetriever::getAffectingTStatements(int stmtNo) {
     int columnNumber = 1;
     return *getStatementsHelper(affectsTTable, vector<int>{stmtNo, columnNumber},
                                 &CacheManager::getAffectingTStatements);
+}
+
+/**
+ * Check Affects*(affectingStatement, affectedStatement) and return the result in a Table.
+ *
+ * @param affectingStatement The affecting statement queried
+ * @param affectedStatement The affected statement queried
+ * @return whether the Affects* relation exists
+ */
+Table DataRetriever::getAffectsTResult(int affectingStatement, int affectedStatement) {
+    AffectsTable * affectsTTable = pkbStorage->getAffectsT();
+    return *getExactRelationHelper(
+            affectsTTable, vector<int>{affectingStatement, affectedStatement}, &CacheManager::getAffectsTResult);
 }
 
 Table DataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {

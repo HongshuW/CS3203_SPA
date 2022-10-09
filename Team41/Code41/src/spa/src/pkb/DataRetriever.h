@@ -35,12 +35,15 @@ public:
     virtual Table getNextTTable();
     virtual Table getNextTStatements(int stmtNo);
     virtual Table getPreviousTStatements(int stmtNo);
+    virtual Table getNextTResult(int precedingStatement, int ensuingStatement);
     virtual Table getAffectsTable();
     virtual Table getAffectsTTable();
     virtual Table getAffectedStatements(int stmtNo);
     virtual Table getAffectingStatements(int stmtNo);
+    virtual Table getAffectsResult(int affectingStatement, int affectedStatement);
     virtual Table getAffectedTStatements(int stmtNo);
     virtual Table getAffectingTStatements(int stmtNo);
+    virtual Table getAffectsTResult(int affectingStatement, int affectedStatement);
     virtual Table getAssignPatternTable(ExpressionSpec expressionSpec);
     virtual Table getIfPatternTable();
     virtual Table getWhilePatternTable();
@@ -59,6 +62,8 @@ private:
 
     shared_ptr<Table> getStatementsHelper(Cachable * cachable, vector<int> metaInfo, CacheManager::partialGetter func);
     void getAllRelationsHelper(Cachable * cachable, CacheManager::fullGetter func);
+    int getDifference(vector<string> startAndEndIndices);
+    shared_ptr<Table> getExactRelationHelper(Cachable * cachable, vector<int> stmts, CacheManager::exactGetter func);
 };
 
 #endif //SPA_DATARETRIEVER_H
