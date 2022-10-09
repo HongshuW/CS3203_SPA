@@ -41,8 +41,8 @@ public:
 //     Table getAffectsTable() override;
 //     Table getAffectsTTable() override;
 //     Table getAssignPatternTable(ExpressionSpec expressionSpec) override;
-//     Table getIfPatternTable() override;
-//     Table getWhilePatternTable() override;
+     Table getIfPatternTable() override;
+     Table getWhilePatternTable() override;
      explicit DummyDataRetriever2(shared_ptr<PKBStorage> pkbStorage);
 };
 

@@ -59,17 +59,6 @@ DesignEntity QueryEvaluator::getDesignEntity(Synonym synonym) {
     return static_cast<DesignEntity>(NULL);
 }
 
-std::string QueryEvaluator::join(std::vector<std::string> const &strings, std::string delim)
-{
-    if (strings.empty()) return std::string();
-
-    return std::accumulate(strings.begin() + 1, strings.end(), strings[0],
-                           [&delim](std::string x, std::string y) {
-                               return x + delim + y;
-                           }
-    );
-}
-
 vector<string> QueryEvaluator::removeDup(vector<string> vec) {
     unordered_set<string> ans_set(vec.begin(), vec.end());
     vector<string> ans;
@@ -181,20 +170,6 @@ vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vecto
         }
     }
     return removeDup(ans);
-}
-
-int QueryEvaluator::getUnvisitedColIdxByName(const string& colName, ViewedDups viewedDupsMap, const Table& table) {
-    for (int i = 0; i < table.header.size(); i++) {
-        if (viewedDupsMap->find(colName) == viewedDupsMap->end()) {
-            auto set = make_shared<unordered_set<int>>();
-            viewedDupsMap->insert({colName, set});
-        }
-        if (table.header[i] == colName && !viewedDupsMap->at(colName)->count(i)) {
-            viewedDupsMap->at(colName)->insert(i);
-            return i;
-        }
-    }
-    return -1;
 }
 
 vector<string> QueryEvaluator::evaluateSelectBoolQuery(shared_ptr<ConcreteClauseVisitor> clauseVisitor,

@@ -21,7 +21,6 @@ public:
     Table visit(shared_ptr<QB::IfPatternClause> ifPatternClause) override;
     Table visit(shared_ptr<QB::WhilePatternClause> WhilePatternClause) override;
     Table visit(shared_ptr<QB::AssignPatternClause> assignPatternClause) override;
-    Table visit(shared_ptr<QB::InvalidPatternClause> invalidPatternClause) override;
     /**
      * Visit to with clause checks if there is any synonym in the clause,
      * it will return an empty table if there is no synonym.

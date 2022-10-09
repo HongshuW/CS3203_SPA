@@ -4,6 +4,8 @@
 
 #include "DummyDataRetriever.h"
 #include "pkb/PKBStorage.h"
+#include "pkb/table/UsesTable.h"
+
 /*
  * procedure p1 {
  * 1 dummyVarA = 1;
@@ -11,47 +13,6 @@
  * 3 print dummyVarA
  * }
  */
-
-//Table DummyDataRetriever::getTableByRelationType(RelationType relationType) {
-//    Table relationTable = Table();
-//    relationTable.renameHeader({"$col1", "$col2"});
-//    switch (relationType) {
-//        case QB::RelationType::FOLLOWS: {
-//            relationTable.appendRow({"1", "2"});
-//            relationTable.appendRow({"2", "3"});
-//            break;
-//        }
-//        case QB::RelationType::FOLLOWS_T: {
-//            relationTable.appendRow({"1", "2"});
-//            relationTable.appendRow({"2", "3"});
-//            relationTable.appendRow({"1", "3"});
-//            break;
-//        }
-//        case QB::RelationType::USES_S: {
-//            relationTable.appendRow({"2", "dummyVarA"});
-//            relationTable.appendRow({"3", "dummyVarA"});
-//            break;
-//        }
-//        case QB::RelationType::MODIFIES_S: {
-//            relationTable.appendRow({"1", "dummyVarA"});
-//            relationTable.appendRow({"2", "dummyVarB"});
-//            break;
-//        }
-//        case QB::RelationType::PARENT: {
-//            break;
-//        }
-//        case QB::RelationType::PARENT_T: {
-//            break;
-//
-//        }
-//            //todo: handle USES_P and MODIFIES_P
-//        default: {
-//            break;
-//        }
-//
-//    }
-//    return relationTable;
-//}
 
 DummyDataRetriever::DummyDataRetriever(shared_ptr<PKBStorage> pkbStorage) : DataRetriever(pkbStorage) {
 
@@ -139,7 +100,10 @@ Table DummyDataRetriever::getUsesSTable() {
 }
 
 Table DummyDataRetriever::getUsesPTable() {
-    return Table();
+    Table relationTable = UsesTable();
+    relationTable.appendRow({"p1", "dummyVarA"});
+    relationTable.appendRow({"p1", "dummyVarB"});
+    return relationTable;
 }
 
 Table DummyDataRetriever::getModifiesSTable() {
@@ -150,7 +114,10 @@ Table DummyDataRetriever::getModifiesSTable() {
 }
 
 Table DummyDataRetriever::getModifiesPTable() {
-    return Table();
+    Table relationTable = ModifiesTable();
+    relationTable.appendRow({"p1", "dummyVarA"});
+    relationTable.appendRow({"p1", "dummyVarB"});
+    return relationTable;
 }
 
 Table DummyDataRetriever::getCallsTable() {
@@ -162,19 +129,30 @@ Table DummyDataRetriever::getCallsTTable() {
 }
 
 Table DummyDataRetriever::getNextTable() {
-    return Table();
+    Table relationTable = NextTable();
+    relationTable.appendRow({"1", "2"});
+    relationTable.appendRow({"2", "3"});
+    return relationTable;
 }
 
 Table DummyDataRetriever::getNextTTable() {
-    return Table();
+    Table relationTable = NextTable();
+    relationTable.appendRow({"1", "2"});
+    relationTable.appendRow({"2", "3"});
+    relationTable.appendRow({"1", "3"});
+    return relationTable;
 }
 
 Table DummyDataRetriever::getAffectsTable() {
-    return Table();
+    Table relationTable = AffectsTable();
+    relationTable.appendRow({"1", "2"});
+    return relationTable;
 }
 
 Table DummyDataRetriever::getAffectsTTable() {
-    return Table();
+    Table relationTable = AffectsTable();
+    relationTable.appendRow({"1", "2"});
+    return relationTable;
 }
 
 Table DummyDataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {

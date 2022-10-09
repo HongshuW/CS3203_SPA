@@ -32,8 +32,6 @@ namespace QE {
                                                 shared_ptr<DataPreprocessor> dataPreprocessor,
                                                 ConnectedClauseGroups ccg);
 
-        std::string join(std::vector<std::string> const &strings, std::string delim);
-
         vector<string> removeDup(vector<string> vec);
 
         vector<string>
@@ -43,7 +41,6 @@ namespace QE {
         vector<string> projectResult(Table resultTable, shared_ptr<vector<Elem>> tuple);
 
         typedef shared_ptr<unordered_map<string, shared_ptr<unordered_set<int>>>>  ViewedDups;
-        int getUnvisitedColIdxByName(const string& colName, ViewedDups viewedDupsMap, const Table& table);
 
     public:
         explicit QueryEvaluator(shared_ptr<DataRetriever> dataRetriever);
