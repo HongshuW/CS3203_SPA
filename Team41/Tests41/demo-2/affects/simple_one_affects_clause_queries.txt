@@ -56,7 +56,7 @@ FALSE
 1 - valid affects - one number one assign, select BOOLEAN
 assign a;
 Select BOOLEAN such that Affects(a, 9)
-5, 9
+TRUE
 5000
 1 - valid affects - one number one assign, select assign
 assign a;
@@ -66,27 +66,27 @@ Select a such that Affects(a, 9)
 1 - valid affects - one number one assign, select assign
 assign a;
 Select a such that Affects(a, 14)
-5, 9
+13
 5000
 1 - valid affects - one number one assign, select assign
 assign a;
 Select a such that Affects(7, a)
-11, 13
+7, 15
 5000
 1 - valid affects - one number one assign, select assign
 assign a;
 Select a such that Affects(5, a)
-9
+13
 5000
 1 - valid affects - two different assign, select first
 assign a1, a2;
 Select a1 such that Affects(a1, a2)
-5, 7, 9
+4, 5, 7, 9, 11, 12, 13, 14, 16
 5000
 1 - valid affects - two different assign, select second
 assign a1, a2;
 Select a2 such that Affects(a1, a2)
-none
+7, 9, 11, 13, 14, 15, 17
 5000
 1 - valid affects - two different assign, select tuple
 assign a1, a2;
@@ -116,7 +116,7 @@ SemanticError
 1 - invalid affects
 while w;
 Select BOOLEAN such that Affects(9, w)
-Semantic Error
+SemanticError
 5000
 1 - invalid affects
 call c;
@@ -200,6 +200,10 @@ TRUE
 Select BOOLEAN such that Affects*(12, 15)
 TRUE
 5000
+
+
+
+
 1 - valid Affects* - one number one assign, select BOOLEAN
 assign a;
 Select BOOLEAN such that Affects*(a, 9)
