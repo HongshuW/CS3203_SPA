@@ -8,7 +8,7 @@
 #include "Cachable.h"
 #include "RelationTable.h"
 
-class AffectsTable : public RelationTable, public Cachable {
+class AffectsTable : public Cachable {
 public:
     explicit AffectsTable();
     void clearCache() override;

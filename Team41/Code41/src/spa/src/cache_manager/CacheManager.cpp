@@ -3,19 +3,94 @@
 //
 
 #include "CacheManager.h"
+#include "./design_extractor/args/StmtNoArgs.h"
+
+const int CacheManager::WILDCARD_STMTNO = 0;
 
 CacheManager::CacheManager(shared_ptr<DesignExtractor> designExtractor) {
     this->designExtractor = designExtractor;
 }
 
-list<vector<string>> CacheManager::getNextTRelations() {
-    return designExtractor->getAllNextStarRelations();
+shared_ptr<list<vector<string>>> CacheManager::getNextTRelations() {
+    return make_shared<list<vector<string>>>(designExtractor->getAllNextStarRelations());
 }
 
-list<vector<string>> CacheManager::getAffectsRelations() {
-    return designExtractor->getAllAffectsRelations();
+/**
+ * Get all the statements s such that Next*(stmtNo, s) is true.
+ *
+ * @param stmtNo The statement number queried
+ * @return Next* relations
+ */
+shared_ptr<vector<string>> CacheManager::getNextTStatements(int stmtNo) {
+    StmtNoArgs stmtNoArgs = StmtNoArgs();
+    stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
+    return make_shared<vector<string>>(designExtractor->getNextStarRelations(stmtNoArgs));
 }
 
-list<vector<string>> CacheManager::getAffectsTRelations() {
-    return designExtractor->getAllAffectsStarRelations();
+/**
+ * Get all the statements s such that Next*(s, stmtNo) is true.
+ *
+ * @param stmtNo The statement number queried
+ * @return Next* relations
+ */
+shared_ptr<vector<string>> CacheManager::getPreviousTStatements(int stmtNo) {
+    StmtNoArgs stmtNoArgs = StmtNoArgs();
+    stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
+    return make_shared<vector<string>>(designExtractor->getNextStarRelations(stmtNoArgs));
+}
+
+shared_ptr<list<vector<string>>> CacheManager::getAffectsRelations() {
+    return make_shared<list<vector<string>>>(designExtractor->getAllAffectsRelations());
+}
+
+/**
+ * Get all statements s such that Affects(stmtNo, s) is true.
+ *
+ * @param stmtNo The statement number queried
+ * @return Affects relations
+ */
+shared_ptr<vector<string>> CacheManager::getAffectedStatements(int stmtNo) {
+    StmtNoArgs stmtNoArgs = StmtNoArgs();
+    stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
+    return make_shared<vector<string>>(designExtractor->getAffectsRelations(stmtNoArgs));
+}
+
+/**
+ * Get all statement s such that Affects(s, stmtNo) is true.
+ *
+ * @param stmtNo The statement number queried
+ * @return Affects relations
+ */
+shared_ptr<vector<string>> CacheManager::getAffectingStatements(int stmtNo) {
+    StmtNoArgs stmtNoArgs = StmtNoArgs();
+    stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
+    return make_shared<vector<string>>(designExtractor->getAffectsRelations(stmtNoArgs));
+}
+
+shared_ptr<list<vector<string>>> CacheManager::getAffectsTRelations() {
+    return make_shared<list<vector<string>>>(designExtractor->getAllAffectsStarRelations());
+}
+
+/**
+ * Get all statements s such that Affects*(stmtNo, s) is true.
+ *
+ * @param stmtNo The statement number queried
+ * @return Affects relations
+ */
+shared_ptr<vector<string>> CacheManager::getAffectedTStatements(int stmtNo) {
+    StmtNoArgs stmtNoArgs = StmtNoArgs();
+    stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
+    return make_shared<vector<string>>(designExtractor->getAffectsStarRelations(stmtNoArgs));
+}
+
+/**
+ * Get all statement s such that Affects*(s, stmtNo) is true.
+ *
+ * @param stmtNo The statement number queried
+ * @return Affects relations
+ */
+shared_ptr<vector<string>> CacheManager::getAffectingTStatements(int stmtNo) {
+    StmtNoArgs stmtNoArgs = StmtNoArgs();
+    stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
+    return make_shared<vector<string>>(designExtractor->getAffectsStarRelations(stmtNoArgs));
 }

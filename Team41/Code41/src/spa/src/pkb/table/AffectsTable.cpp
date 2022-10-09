@@ -10,6 +10,7 @@ AffectsTable::AffectsTable() {
 }
 
 void AffectsTable::clearCache() {
-    setQueried(false);
+    clearCacheInformation();
+    setAllRelationsStatus(false);
     dropRows();
 }

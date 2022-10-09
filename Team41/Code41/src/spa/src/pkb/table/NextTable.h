@@ -6,9 +6,8 @@
 #define SPA_NEXTTABLE_H
 
 #include "Cachable.h"
-#include "RelationTable.h"
 
-class NextTable : public RelationTable, public Cachable {
+class NextTable : public Cachable {
 public:
     explicit NextTable();
     void clearCache() override;

@@ -10,6 +10,7 @@ NextTable::NextTable() {
 }
 
 void NextTable::clearCache() {
-    setQueried(false);
+    clearCacheInformation();
+    setAllRelationsStatus(false);
     dropRows();
 }

@@ -13,7 +13,7 @@ TEST_CASE("Test Cachable") {
         nextTTable.appendRow({"2","3"});
         nextTTable.appendRow({"1","3"});
         nextTTable.clearCache();
-        REQUIRE(nextTTable.isQueried() == false);
+        REQUIRE(nextTTable.areAllRelationsCached() == false);
         REQUIRE(nextTTable.rows.size() == 0);
     }
 
@@ -23,7 +23,7 @@ TEST_CASE("Test Cachable") {
         affectsTable.appendRow({"2, 3"});
         affectsTable.appendRow({"3, 4"});
         affectsTable.clearCache();
-        REQUIRE(affectsTable.isQueried() == false);
+        REQUIRE(affectsTable.areAllRelationsCached() == false);
         REQUIRE(affectsTable.rows.size() == 0);
     }
 }

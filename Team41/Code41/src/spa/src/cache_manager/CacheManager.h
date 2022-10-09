@@ -11,13 +11,23 @@ using namespace DE;
 
 class CacheManager {
 public:
+    typedef shared_ptr<vector<string>> (CacheManager::*partialGetter)(int);
+    typedef shared_ptr<list<vector<string>>> (CacheManager::*fullGetter)();
+
+    static const int WILDCARD_STMTNO;
     shared_ptr<DesignExtractor> designExtractor;
 
     explicit CacheManager(shared_ptr<DesignExtractor> designExtractor);
 
-    list<vector<string>> getNextTRelations();
-    list<vector<string>> getAffectsRelations();
-    list<vector<string>> getAffectsTRelations();
+    shared_ptr<list<vector<string>>> getNextTRelations();
+    shared_ptr<vector<string>> getNextTStatements(int stmtNo);
+    shared_ptr<vector<string>> getPreviousTStatements(int stmtNo);
+    shared_ptr<list<vector<string>>> getAffectsRelations();
+    shared_ptr<vector<string>> getAffectedStatements(int stmtNo);
+    shared_ptr<vector<string>> getAffectingStatements(int stmtNo);
+    shared_ptr<list<vector<string>>> getAffectsTRelations();
+    shared_ptr<vector<string>> getAffectedTStatements(int stmtNo);
+    shared_ptr<vector<string>> getAffectingTStatements(int stmtNo);
 };
 
 

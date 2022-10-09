@@ -33,8 +33,14 @@ public:
     virtual Table getCallsTTable();
     virtual Table getNextTable();
     virtual Table getNextTTable();
+    virtual Table getNextTStatements(int stmtNo);
+    virtual Table getPreviousTStatements(int stmtNo);
     virtual Table getAffectsTable();
     virtual Table getAffectsTTable();
+    virtual Table getAffectedStatements(int stmtNo);
+    virtual Table getAffectingStatements(int stmtNo);
+    virtual Table getAffectedTStatements(int stmtNo);
+    virtual Table getAffectingTStatements(int stmtNo);
     virtual Table getAssignPatternTable(ExpressionSpec expressionSpec);
     virtual Table getIfPatternTable();
     virtual Table getWhilePatternTable();
@@ -50,6 +56,9 @@ public:
 
 private:
     shared_ptr<PKBStorage> pkbStorage;
+
+    shared_ptr<Table> getStatementsHelper(Cachable * cachable, vector<int> metaInfo, CacheManager::partialGetter func);
+    void getAllRelationsHelper(Cachable * cachable, CacheManager::fullGetter func);
 };
 
 #endif //SPA_DATARETRIEVER_H
