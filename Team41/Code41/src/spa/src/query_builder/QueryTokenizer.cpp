@@ -10,11 +10,15 @@
 using QB::QueryTokenizer;
 using namespace std;
 
-QueryTokenizer::QueryTokenizer(string query) : currIdx(0), query(std::move(query)){}
+QueryTokenizer::QueryTokenizer(string query) : currIdx(QueryTokenizerConstants::ZERO), query(std::move(query)) {}
+
+bool QueryTokenizer::isWithinBound() {
+    return currIdx < query.length();
+}
 
 char QueryTokenizer::peek() {
     char c;
-    if (currIdx >= query.length()) {
+    if (!isWithinBound()) {
         c = EOF;
     } else {
         c = query[currIdx];
@@ -32,10 +36,10 @@ void QueryTokenizer::processIdent() {
     while (isalnum(peek())) {
         curr += pop();
     }
-    if (curr == QueryTokeniserConstants::STMT && peek() == QueryTokeniserConstants::HASH) {
+    if (curr == QueryTokenizerConstants::STMT && peek() == QueryTokenizerConstants::HASH) {
         curr += pop();
     }
-    if (CLAUSE_SET_WITH_T.count(curr) && peek() == QueryTokeniserConstants::STAR) {
+    if (CLAUSE_SET_WITH_T.count(curr) && peek() == QueryTokenizerConstants::STAR) {
         curr += pop();
     }
     tokens.push_back(curr);
@@ -49,23 +53,23 @@ void QueryTokenizer::processDigit() {
 }
 
 void QueryTokenizer::processString() {
-    tokens.push_back(QueryTokeniserConstants::DOUBLE_QUOTE);
-    curr = QueryTokeniserConstants::EMPTY_STR;
-    while (peek() != QueryTokeniserConstants::DOUBLE_QUOTE_CHAR) {
+    tokens.push_back(QueryTokenizerConstants::DOUBLE_QUOTE);
+    curr = QueryTokenizerConstants::EMPTY_STR;
+    while (peek() != QueryTokenizerConstants::DOUBLE_QUOTE_CHAR) {
         char c = pop();
         if (isspace(c)) continue;
         curr += c;
     }
     tokens.push_back(curr);
-    tokens.push_back(QueryTokeniserConstants::DOUBLE_QUOTE);
+    tokens.push_back(QueryTokenizerConstants::DOUBLE_QUOTE);
     currIdx++;
 }
 
 std::vector<std::string> QueryTokenizer::tokenize() {
     char next;
 
-    while (currIdx < query.length()) {
-        curr = QueryTokeniserConstants::EMPTY_STR;
+    while (isWithinBound()) {
+        curr = QueryTokenizerConstants::EMPTY_STR;
         next = pop();
         if (next == EOF) break;
         curr += next;
@@ -76,12 +80,12 @@ std::vector<std::string> QueryTokenizer::tokenize() {
             processIdent();
         } else if (isdigit(next)) {
             processDigit();
-        } else if (next == QueryTokeniserConstants::DOUBLE_QUOTE_CHAR) {
+        } else if (next == QueryTokenizerConstants::DOUBLE_QUOTE_CHAR) {
             processString();
         } else if (SYMBOL_SET.count(curr)) {
             tokens.push_back(curr);
         } else {
-            throw PQLTokenizeException(QueryTokeniserConstants::PQL_TOKENISE_EXCEPTION_UNEXPECTED_TOKEN + next);
+            throw PQLTokenizeException(QueryTokenizerConstants::PQL_TOKENIZE_EXCEPTION_UNEXPECTED_TOKEN + next);
         }
     }
 

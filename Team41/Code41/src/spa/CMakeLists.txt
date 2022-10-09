@@ -35,10 +35,6 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/Table.h
         src/query_evaluator/QueryEvaluator.cpp
         src/query_evaluator/QueryEvaluator.h
-        src/query_evaluator/QueryResult.cpp
-        src/query_evaluator/QueryResult.h
-        src/query_evaluator/QueryResultFormatter.cpp
-        src/query_evaluator/QueryResultFormatter.h
         src/parser/Tokenizer.cpp
         src/parser/Tokenizer.h
         src/ast/ProcedureNode.cpp
@@ -159,19 +155,15 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/commons/AttrRef.h
         src/query_builder/clauses/with_clauses/WithClauses.cpp
         src/query_builder/clauses/with_clauses/WithClauses.h
-        src/query_evaluator/QueryBooleanResult.cpp
-        src/query_evaluator/QueryBooleanResult.h
-        src/query_evaluator/QueryTupleResult.cpp
-        src/query_evaluator/QueryTupleResult.h
         src/query_builder/commons/WithRef.cpp
         src/parser/constants/ParserConstants.cpp
         src/parser/constants/ParserConstants.h
-        src/parser/constants/TokeniserConstants.cpp
-        src/parser/constants/TokeniserConstants.h
+        src/parser/constants/TokenizerConstants.cpp
+        src/parser/constants/TokenizerConstants.h
         src/utils/ErrorMessageFormatter.cpp
         src/utils/ErrorMessageFormatter.h
-        src/query_builder/constants/QueryTokeniserConstants.cpp
-        src/query_builder/constants/QueryTokeniserConstants.h
+        src/query_builder/constants/QueryTokenizerConstants.cpp
+        src/query_builder/constants/QueryTokenizerConstants.h
         src/query_builder/constants/QueryParserConstants.cpp
         src/query_builder/constants/QueryParserConstants.h
         src/query_builder/commons/WithRef.h
@@ -192,9 +184,7 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/constants/ClauseVisitorConstants.h
         src/query_evaluator/IVisitor.cpp
         src/query_evaluator/IVisitor.h
-        src/query_builder/clauses/IVisitorHost.cpp
         src/query_builder/clauses/IVisitorHost.h
-        src/query_builder/clauses/AbstractClause.cpp
         src/query_builder/clauses/AbstractClause.h
         src/query_evaluator/AbstractClauseVisitor.cpp
         src/query_evaluator/AbstractClauseVisitor.h
@@ -295,7 +285,11 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/Cachable.cpp
         src/pkb/table/Cachable.h
         src/cache_manager/CacheManager.cpp
-        src/cache_manager/CacheManager.h)
+        src/cache_manager/CacheManager.h
+        src/parser/constants/ValidatorConstants.cpp 
+        src/parser/constants/ValidatorConstants.h 
+        src/query_builder/constants/CommonConstants.cpp 
+        src/query_builder/constants/CommonConstants.h)
 
 
 

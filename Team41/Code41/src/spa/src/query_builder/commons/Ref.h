@@ -14,6 +14,7 @@
 #include <unordered_set>
 #include <variant>
 #include <unordered_map>
+#include "query_builder/constants/CommonConstants.h"
 
 using namespace std;
 
@@ -26,17 +27,14 @@ namespace QB {
     };
 
     //! Synonym = 0, Underscore = 1, int = 2, Ident = 3
+
     using Ref = variant<Synonym, Underscore, int, Ident>;
     using RefTypeSet = unordered_set<unsigned int>;
-    static RefTypeSet refIndexSet = {0, 1, 2, 3};
     static RefTypeSet stmtRefIndexSet = {0, 1, 2};
     static RefTypeSet entRefIndexSet = {0, 1, 3};
 
     RefType getRefTypeFromIndex(int index);
-    int getIndexFromRefType(RefType refType);
-    RefType getRefType(Ref ref);
-    //! For printing
-    string refTypeToString(RefType refType);
+    RefType getRefType(const Ref& ref);
 }
 
 #endif //SPA_REF_H

@@ -11,11 +11,7 @@
 namespace QB {
     class Underscore {
     public:
-        bool operator==(const Underscore&) const { return true; }
-        friend std::ostream& operator<<(std::ostream& os, Underscore const& underscore) {
-            os << "_";
-            return os;
-        }
+        bool operator==(const Underscore&) const;
     };
 }  // namespace QE
 

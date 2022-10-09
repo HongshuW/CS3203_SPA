@@ -17,7 +17,7 @@ Table WhilePatternClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }
 
-unsigned int WhilePatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
+int WhilePatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
     expect(QueryParserConstants::UNDERSCORE, currIdx, tokens);
     currIdx++;
     return currIdx;

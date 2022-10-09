@@ -102,8 +102,6 @@ namespace QE {
 
             }
         }
-        cout << clauseCount;
-
     }
 
     bool QueryOptimizer::hasCommonSyn(shared_ptr<ConditionalClause> clause1, shared_ptr<ConditionalClause> clause2) {

@@ -15,7 +15,7 @@ void SPAManager::parse(string &filename) {
         designExtractor.run();
         cacheManager = make_shared<CacheManager>(
                 CacheManager(make_shared<DesignExtractor>(designExtractor)));
-    } catch (const SPASTException& e) {
+    } catch (const SPValidationException& e) {
         exit(EXIT_SUCCESS);
     } catch (const SPTokenizeException& e) {
         exit(EXIT_SUCCESS);

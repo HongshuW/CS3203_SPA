@@ -24,7 +24,7 @@ namespace SourceParser {
          * @param string filename.
          * @return a shared pointer to the root node of the AST tree
          */
-        shared_ptr<ProgramNode> buildAST (string filename);
+        shared_ptr<ProgramNode> buildAST (const string& filename);
     };
 }
 

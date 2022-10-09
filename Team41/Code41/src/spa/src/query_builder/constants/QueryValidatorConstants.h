@@ -23,7 +23,6 @@ namespace QB {
         static const string PQL_VALIDATION_SECOND_ARG_INTEGER;
         static const string PQL_VALIDATION_INVALID_SYNONYM_PATTERN;
         static const string PQL_VALIDATION_INVALID_DESIGN_ENTITY_PATTERN;
-        static const string PQL_VALIDATION_INVALID_ATTR_NAME;
         static const string PQL_VALIDATION_INVALID_DESIGN_ENTITY;
         static const string PQL_VALIDATION_INVALID_ATTR_REF;
         static const string PQL_VALIDATION_DIFFERENT_WTIH_REF;

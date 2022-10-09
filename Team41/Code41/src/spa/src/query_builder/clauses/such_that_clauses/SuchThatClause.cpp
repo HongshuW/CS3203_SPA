@@ -9,7 +9,7 @@
 
 using namespace QB;
 
-SuchThatClause::SuchThatClause(Ref arg1, Ref arg2) : arg1(arg1), arg2(arg2) {}
+SuchThatClause::SuchThatClause(Ref arg1, Ref arg2) : arg1(std::move(arg1)), arg2(std::move(arg2)) {}
 
 unordered_set<string> SuchThatClause::getSynonymNames() {
     unordered_set<string> synonyms = unordered_set<string>();

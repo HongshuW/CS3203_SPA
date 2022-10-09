@@ -3,20 +3,24 @@
 //
 
 #include <string>
-#include <iostream>
+#include <utility>
 #include "Tokenizer.h"
 #include "SPExceptions.h"
-#include "constants/TokeniserConstants.h"
+#include "constants/TokenizerConstants.h"
 #include "utils/ErrorMessageFormatter.h"
 #include "constants/ParserConstants.h"
 using namespace SourceParser;
 using namespace std;
 
-Tokenizer::Tokenizer(std::string source) : currIdx(0), source(source) {};
+Tokenizer::Tokenizer(std::string source) : currIdx(TokenizerConstants::ZERO), source(std::move(source)) {}
+
+bool Tokenizer::isWithinBound() {
+    return currIdx < source.length();
+}
 
 char Tokenizer::peek() {
     char c;
-    if (currIdx >= source.length()) {
+    if (!isWithinBound()) {
         c = EOF;
     } else {
         c = source[currIdx];
@@ -35,13 +39,13 @@ bool Tokenizer::match(char c) {
 }
 
 void Tokenizer::processString() {
-    tokens.push_back(TokeniserConstants::DOUBLE_QUOTE);
-    curr = TokeniserConstants::EMPTY_STR;
-    while (peek() != TokeniserConstants::DOUBLE_QUOTE_CHAR) {
+    tokens.push_back(TokenizerConstants::DOUBLE_QUOTE);
+    curr = TokenizerConstants::EMPTY_STR;
+    while (peek() != TokenizerConstants::DOUBLE_QUOTE_CHAR) {
         curr += pop();
     }
     tokens.push_back(curr);
-    tokens.push_back(TokeniserConstants::DOUBLE_QUOTE);
+    tokens.push_back(TokenizerConstants::DOUBLE_QUOTE);
     currIdx++;
 }
 
@@ -50,7 +54,7 @@ void Tokenizer::processAlNum() {
         curr += pop();
     }
     if (!Utils::isValidName(curr)) {
-        throw SPTokenizeException(TokeniserConstants::INVALID_NAME);
+        throw SPTokenizeException(TokenizerConstants::INVALID_NAME);
     }
     tokens.push_back(curr);
 }
@@ -60,42 +64,37 @@ void Tokenizer::processDigit() {
         curr += pop();
     }
     if (!Utils::isValidNumber(curr)) {
-        throw SPTokenizeException(TokeniserConstants::INVALID_NUMBER);
+        throw SPTokenizeException(TokenizerConstants::INVALID_NUMBER);
     }
     tokens.push_back(curr);
 }
 
 void Tokenizer::processSymbols() {
-    if (curr == TokeniserConstants::EQUAL) {
-        if (match(TokeniserConstants::EQUAL_CHAR)) {
+    const unordered_set<string> ALLOWED_TOKENS_FOR_EQUALITY = {
+            TokenizerConstants::EQUAL,
+            TokenizerConstants::GREATER_THAN,
+            TokenizerConstants::SMALLER_THAN,
+            TokenizerConstants::EXCLAMATION_MARK
+
+    };
+    if (ALLOWED_TOKENS_FOR_EQUALITY.count(curr)) {
+        if (match(TokenizerConstants::EQUAL_CHAR)) {
             curr += pop();
         }
-    } else if (curr == TokeniserConstants::GREATER_THAN) {
-        if (match(TokeniserConstants::EQUAL_CHAR)) {
-            curr += pop();
-        }
-    } else if (curr == TokeniserConstants::SMALLER_THAN) {
-        if (peek() == TokeniserConstants::EQUAL_CHAR) {
-            curr += pop();
-        }
-    } else if (curr == TokeniserConstants::EXCLAMATION_MARK) {
-        if (match(TokeniserConstants::EQUAL_CHAR)) {
-            curr += pop();
-        }
-    } else if (curr == TokeniserConstants::SINGLE_AND) {
-        if (!match(TokeniserConstants::SINGLE_AND_CHAR)) {
-            string errorMessage = ErrorMessageFormatter::formatErrorMessage(ParserConstants::AND_OP, TokeniserConstants::SINGLE_AND);
+    } else if (curr == TokenizerConstants::SINGLE_AND) {
+        if (!match(TokenizerConstants::SINGLE_AND_CHAR)) {
+            string errorMessage = ErrorMessageFormatter::formatErrorMessage(ParserConstants::AND_OP,
+                                                                            TokenizerConstants::SINGLE_AND);
             throw SPTokenizeException(errorMessage);
-        } else {
-            curr += pop();
         }
-    } else if (curr == TokeniserConstants::BAR) {
-        if (!match(TokeniserConstants::BAR_CHAR)) {
-            string errorMessage = ErrorMessageFormatter::formatErrorMessage(ParserConstants::OR_OP, TokeniserConstants::BAR);
+        curr += pop();
+    } else if (curr == TokenizerConstants::BAR) {
+        if (!match(TokenizerConstants::BAR_CHAR)) {
+            string errorMessage = ErrorMessageFormatter::formatErrorMessage(ParserConstants::OR_OP,
+                                                                            TokenizerConstants::BAR);
             throw SPTokenizeException(errorMessage);
-        } else {
-            curr += pop();
         }
+        curr += pop();
     }
     tokens.push_back(curr);
 }
@@ -103,8 +102,8 @@ void Tokenizer::processSymbols() {
 vector<string> Tokenizer::tokenize() {
     char next;
 
-    while (currIdx < source.length()) {
-        curr = TokeniserConstants::EMPTY_STR;
+    while (isWithinBound()) {
+        curr = TokenizerConstants::EMPTY_STR;
         next = pop();
         if (next == EOF) break;
         curr += next;
@@ -114,13 +113,12 @@ vector<string> Tokenizer::tokenize() {
             processAlNum();
         } else if (isdigit(next)) {
             processDigit();
-        } else if (next == TokeniserConstants::DOUBLE_QUOTE_CHAR) {
+        } else if (next == TokenizerConstants::DOUBLE_QUOTE_CHAR) {
             processString();
         } else if (SYMBOL_SET.count(curr)) {
             processSymbols();
         } else {
-            throw SPTokenizeException(TokeniserConstants::UNEXPECTED_TOKEN_MESSAGE +
-                                      std::string(1, next));
+            throw SPTokenizeException(TokenizerConstants::UNEXPECTED_TOKEN_MESSAGE + next);
         }
     }
     return tokens;

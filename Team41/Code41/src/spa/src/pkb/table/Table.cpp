@@ -126,8 +126,6 @@ void Table::dropRows() {
 Table Table::dropCol(int colIdx) {
     if (colIdx >= this->header.size()) return *this;
     Table droppedTable = Table();
-    droppedTable.header = {};
-    droppedTable.rows = {};
 
     for (int i = 0; i < this->header.size(); ++i) {
         if (i != colIdx) {
@@ -142,7 +140,7 @@ Table Table::dropCol(int colIdx) {
                 droppedRow.insert(droppedRow.begin(), this->rows[i][j]);
             }
         }
-        droppedTable.appendRow(droppedRow);
+        if (!droppedRow.empty()) droppedTable.appendRow(droppedRow);
     }
 
     return droppedTable;

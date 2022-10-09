@@ -24,12 +24,6 @@ Table ConcreteClauseVisitor::visit(shared_ptr<QB::WhilePatternClause> whilePatte
     return dataPreprocessor->getWhilePatternTable(whilePatternClause);
 }
 
-//! dummy, should be called
-Table ConcreteClauseVisitor::visit(shared_ptr<QB::InvalidPatternClause> invalidPatternClause) {
-    return Table();
-}
-
-
 Table ConcreteClauseVisitor::visit(shared_ptr<QB::WithClause> withClause) {
     return dataPreprocessor->getTableByWith(withClause);
 }

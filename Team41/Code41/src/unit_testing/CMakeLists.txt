@@ -39,7 +39,8 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/DEUtils.cpp
     src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.cpp
     src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.h
-    src/design_extractor/DEUtils.h src/query_evaluator/Dummies/DummyQueries.cpp
+    src/design_extractor/DEUtils.h 
+    src/query_evaluator/Dummies/DummyQueries.cpp
     src/query_evaluator/Dummies/DummyQueries.h
     src/parser/TestExprNodeParser.cpp
     src/parser/TestCondExprParser.cpp
@@ -63,11 +64,14 @@ add_executable(unit_testing ${srcs}
     src/parser/TestASTValidator.cpp
     src/parser/InvalidProcedureDummies.cpp
     src/parser/InvalidProcedureDummies.h
+    src/query_evaluator/Dummies/TestQueryBuilder.cpp 
+    src/query_evaluator/Dummies/TestQueryBuilder.h
     src/design_extractor/TestAffectsExtraction.cpp
     src/design_extractor/TestAffectsStarExtraction.cpp
     src/design_extractor/TestNextExtraction.cpp
     src/design_extractor/TestNextStarExtraction.cpp
-    src/pkb/TestCachable.cpp)
+    src/pkb/TestCachable.cpp
+    src/design_extractor/TestConditionalPatternExtractor.cpp)
 
 
 target_link_libraries(unit_testing spa)

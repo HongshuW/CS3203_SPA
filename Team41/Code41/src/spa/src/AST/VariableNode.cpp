@@ -3,12 +3,13 @@
 //
 
 #include "VariableNode.h"
-#include "iostream"
+
+#include <utility>
 
 using namespace AST;
 
 VariableNode::VariableNode(string variable)
-        : variable(variable) {
+        : variable(std::move(variable)) {
 }
 
 bool VariableNode::operator==(const ASTNode &node) const  {

@@ -4,10 +4,9 @@
 
 #include "ExprNodeParser.h"
 
-ExprNodeParser::ExprNodeParser(vector<string>& tokens) : tokens(tokens), currIdx(0){};
+ExprNodeParser::ExprNodeParser(vector<string>& tokens) : tokens(tokens), currIdx(ParserConstants::ZERO) {}
 
 string ExprNodeParser::peek() { return tokens[currIdx]; }
-
 
 string ExprNodeParser::pop() {
     string currToken = peek();
@@ -15,40 +14,30 @@ string ExprNodeParser::pop() {
     return currToken;
 }
 
-bool ExprNodeParser::match(string s) {
-    if (peek().compare(s) == 0) {
-        return true;
-    }
-    return false;
+bool ExprNodeParser::match(const string& s) {
+    return peek() == s;
 }
 
-bool ExprNodeParser::equals(string s1, string s2) {
-    if (s1.compare(s2) == 0) {
-        return true;
-    }
-    return false;
-}
-
-int ExprNodeParser::getPriority(string s) {
-    if (equals("*", s) || equals("/", s) || equals("%", s)) {
-        return 2;
-    } else if (equals("-", s) || equals("+", s)) {
-        return 1;
+int ExprNodeParser::getPriority(const string& s) {
+    if (s == ParserConstants::TIMES || s == ParserConstants::DIVIDE || s == ParserConstants::MODULO) {
+        return ParserConstants::TWO;
+    } else if (s == ParserConstants::PLUS || s == ParserConstants::MINUS) {
+        return ParserConstants::ONE;
     } else {
         // "(" or digit or synonym
-        return 0;
+        return ParserConstants::ZERO;
     }
 }
 
-bool ExprNodeParser::buildTree(const string operatorStack, shared_ptr<stack<shared_ptr<ExprNode>>> nodeStack) {
-    shared_ptr<ExprNode> root = make_shared<ExprNode>(operatorStack);
+bool ExprNodeParser::buildTree(const string& operatorStack, const shared_ptr<stack<shared_ptr<ExprNode>>>& nodeStack) {
+    shared_ptr<ExprNode> rootNode = make_shared<ExprNode>(operatorStack);
     if (nodeStack->empty()) return false;
-    root->right = nodeStack->top();
+    rootNode->right = nodeStack->top();
     nodeStack->pop();
     if (nodeStack->empty()) return false;
-    root->left = nodeStack->top();
+    rootNode->left = nodeStack->top();
     nodeStack->pop();
-    nodeStack->push(root);
+    nodeStack->push(rootNode);
     return true;
 }
 
@@ -57,18 +46,18 @@ shared_ptr<ExprNode> ExprNodeParser::parse() {
     shared_ptr<stack<shared_ptr<ExprNode>>> nodeStack = make_shared<stack<shared_ptr<ExprNode>>>();
 
     while (currIdx < tokens.size()) {
-        if (match("(")) {
+        if (match(ParserConstants::LEFT_BRACKET)) {
             operatorStack->push(pop());
-        } else if (match(")")) {
-            // pop ou till "("
-            while (!operatorStack->empty() && !equals("(", operatorStack->top())) {
+        } else if (match(ParserConstants::RIGHT_BRACKET)) {
+            // pop until "("
+            while (!operatorStack->empty() && operatorStack->top() != ParserConstants::LEFT_BRACKET) {
                 buildTree(operatorStack->top(), nodeStack);
                 operatorStack->pop();
             }
             // pop the "(" symbol
             operatorStack->pop();
             pop();
-        } else if (getPriority(peek()) > 0) {
+        } else if (getPriority(peek()) > ParserConstants::ZERO) {
             // is operator
             while (!operatorStack->empty() && getPriority(operatorStack->top()) >= getPriority(peek())) {
                 buildTree(operatorStack->top(), nodeStack);

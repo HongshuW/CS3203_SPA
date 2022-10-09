@@ -11,20 +11,15 @@
 #include <optional>
 #include <regex>
 #include "utils/Utils.h"
+#include "query_builder/constants/CommonConstants.h"
 
 namespace QB {
     class Synonym {
     public:
         std::string synonym;
-        explicit Synonym(std::string synonym);
+        explicit Synonym(const std::string& synonym);
 
         bool operator==(const Synonym& synonym1) const;
-
-        // For printing
-        friend std::ostream& operator<<(std::ostream& os, Synonym const& syn) {
-            os << syn.synonym;
-            return os;
-        }
     };
 }
 

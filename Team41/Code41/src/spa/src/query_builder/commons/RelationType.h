@@ -38,10 +38,6 @@ namespace QB {
     };
 
     RelationType getRelationTypeFromStr(string& str);
-    string getStrFromRelationType(RelationType relationType);
-    pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
-    getSuchThatSynonymArgsTypeFromRelationType(RelationType relationType);
-    pair<RefTypeSet, RefTypeSet> getSuchThatArgsRefTypeFromRelationType(RelationType relationType);
 }
 
 #endif //SPA_RELATIONTYPE_H

@@ -7,9 +7,9 @@
 
 using namespace QB;
 
-Ident::Ident(string identStr) : identStr(identStr) {
+Ident::Ident(const string& identStr) : identStr(identStr) {
     if (!Utils::isValidName(identStr)) {
-        throw PQLParseException("Invalid ident, unexpected token: " + identStr);
+        throw PQLParseException(CommonConstants::PQL_INVALID_IDENT);
     }
 }
 

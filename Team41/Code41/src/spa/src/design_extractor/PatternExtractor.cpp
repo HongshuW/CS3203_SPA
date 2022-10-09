@@ -4,6 +4,7 @@
 
 #include "PatternExtractor.h"
 #include "AST/utils/ASTUtils.h"
+#include <queue>
 namespace DE {
 
     vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>>
@@ -17,7 +18,8 @@ namespace DE {
     }
 
     void PatternExtractor::extractPatternHelper(shared_ptr<ASTNode> node,
-                                                shared_ptr<vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>>> resultVec, shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers) {
+                                                shared_ptr<vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>>> resultVec,
+                                                shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers) {
         NodeType nodeType = ASTUtils::getNodeType(node);
 
         if (nodeType == AST::PROCEDURE_NODE) {
@@ -53,5 +55,157 @@ namespace DE {
             }
         }
 
+    }
+
+    list<vector<string>> PatternExtractor::extractIfPattern(shared_ptr<ProgramNode> programNode) {
+        list<vector<string>> output;
+        auto stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
+        for (auto procedureNode: programNode -> procedureList) {
+            queue<vector<shared_ptr<StmtNode>>> queue;
+            queue.push(procedureNode->stmtList);
+            while(!queue.empty()) {
+                auto stmtList = queue.front();
+                queue.pop();
+                for (auto stmtNode: stmtList) {
+                    NodeType nodeType = ASTUtils::getNodeType(stmtNode);
+                    switch (nodeType) {
+                        case AST::IF_NODE: {
+                            shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+                            int stmtNo = stmtNumbers->at(ifNode);
+                            unordered_set<string> varList = condExprNodeHandler(ifNode->condExpr);
+                            for (string var: varList) {
+                                vector<string> ifEntry;
+                                ifEntry.push_back(to_string(stmtNo));
+                                ifEntry.push_back(var);
+                                output.push_back(ifEntry);
+                            }
+
+                            vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
+                            vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
+                            queue.push(ifStmtList);
+                            queue.push(elseStmtList);
+                            break;
+                        }
+                        case AST::WHILE_NODE: {
+                            shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
+                            vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
+                            queue.push(whileStmtList);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        return output;
+    }
+
+    list<vector<string>> PatternExtractor::extractWhilePattern(shared_ptr<ProgramNode> programNode) {
+        list<vector<string>> output;
+        auto stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
+        for (auto procedureNode: programNode -> procedureList) {
+            queue<vector<shared_ptr<StmtNode>>> queue;
+            queue.push(procedureNode->stmtList);
+            while(!queue.empty()) {
+                auto stmtList = queue.front();
+                queue.pop();
+                for (auto stmtNode: stmtList) {
+                    NodeType nodeType = ASTUtils::getNodeType(stmtNode);
+                    switch (nodeType) {
+                        case AST::WHILE_NODE: {
+                            shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(stmtNode);
+                            int stmtNo = stmtNumbers->at(whileNode);
+                            unordered_set<string> varList = condExprNodeHandler(whileNode->condExpr);
+                            for (string var: varList) {
+                                vector<string> whileEntry;
+                                whileEntry.push_back(to_string(stmtNo));
+                                whileEntry.push_back(var);
+                                output.push_back(whileEntry);
+                            }
+                            vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
+                            queue.push(whileStmtList);
+                            break;
+                        }
+
+                        case AST::IF_NODE: {
+                            shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+                            vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
+                            vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
+                            queue.push(ifStmtList);
+                            queue.push(elseStmtList);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        return output;
+    }
+
+    unordered_set<string> PatternExtractor::condExprNodeHandler(shared_ptr<CondExprNode> condExpr) {
+        vector<shared_ptr<RelExprNode>> relExprNodeList;
+        unordered_set<string> varList;
+
+        if (condExpr->relExprNode) {
+            relExprNodeList.push_back(condExpr->relExprNode);
+        }
+
+        if (condExpr->condExprLHS) {
+            PatternExtractor::getRelExprNodesDFS(condExpr->condExprLHS, relExprNodeList);
+        }
+
+        if (condExpr->condExprRHS) {
+            PatternExtractor::getRelExprNodesDFS(condExpr->condExprRHS, relExprNodeList);
+        }
+
+        for (auto relExpr: relExprNodeList) {
+            relExprNodeHandler(relExpr, varList);
+        }
+        return varList;
+    }
+
+    void PatternExtractor::relExprNodeHandler(shared_ptr<RelExprNode> relExpr,
+                                              unordered_set<string>& varList) {
+        auto exprLHS = relExpr->exprNodeLHS;
+        auto exprRHS = relExpr->exprNodeRHS;
+        exprNodeHandler(exprLHS, varList);
+        exprNodeHandler(exprRHS, varList);
+    }
+
+    void PatternExtractor::exprNodeHandler(shared_ptr<ExprNode> expr,  unordered_set<string>& varList) {
+        getVarFromExprNodesDFS(expr, varList);
+    }
+
+    void PatternExtractor::getVarFromExprNodesDFS(shared_ptr<ExprNode> expr, unordered_set<string>& varList) {
+        if (expr->isVariableNode()) {
+            varList.insert(expr->expr);
+        }
+
+        if (expr->isOperatorNode()) {
+            auto LHS = expr->left;
+            auto RHS = expr->right;
+            getVarFromExprNodesDFS(LHS, varList);
+            getVarFromExprNodesDFS(RHS, varList);
+        }
+    }
+
+    void PatternExtractor::getRelExprNodesDFS(shared_ptr<CondExprNode> condExpr,
+                                              vector<shared_ptr<RelExprNode>> &relExprNodeList) {
+        if(condExpr->relExprNode) {
+            relExprNodeList.push_back(condExpr->relExprNode);
+        }
+
+        if (condExpr->condExprLHS) {
+            getRelExprNodesDFS(condExpr->condExprLHS, relExprNodeList);
+        }
+
+        if (condExpr->condExprRHS) {
+            getRelExprNodesDFS(condExpr->condExprRHS, relExprNodeList);
+        }
     }
 } // DE

@@ -30,6 +30,7 @@
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/select_clauses/SelectClause.h"
 #include "constants/ClauseVisitorConstants.h"
+#include "QEUtils.h"
 
 using namespace std;
 using namespace QB;
@@ -115,12 +116,7 @@ namespace QE {
                 withClause->lhsType() == WithRefType::ATTR_REF || withClause->rhsType() == WithRefType::ATTR_REF;
         //if the with clause does not have synonym, dont have to care what's inside since
         //I have checked this clause evaluates to true
-        const string DUMMY_HEADER = "$dummy_header";
-        const string DUMMY_VALUE = "$dummy_value";
-        Table dummyTable = Table();
-        dummyTable.renameHeader({DUMMY_HEADER}) ;
-        dummyTable.rows = vector<vector<string>>({{DUMMY_VALUE}});
-        if (!hasSynonym) return dummyTable;
+        if (!hasSynonym) return QEUtils::getScalarResponse(true);
 
         int intRef;
         string identRef;
@@ -134,14 +130,14 @@ namespace QE {
 
         for (auto withRef: withRefs) {
             WithRefType withRefType = WithClause::getWithRefType(withRef.index());
-            if (withRefType == QB::WithRefType::INTEGER) intRef = get<WithClause::WITHREF_INT_IDX>(withRef);
+            if (withRefType == QB::WithRefType::INTEGER) intRef = get<WithClause::WITH_REF_INT_IDX>(withRef);
             if (withRefType == QB::WithRefType::IDENT) {
                 isIntType = false;
-                identRef = get<WithClause::WITHREF_IDENT_IDX>(withRef).identStr;
+                identRef = get<WithClause::WITH_REF_IDENT_IDX>(withRef).identStr;
             }
             if (withRefType != WithRefType::ATTR_REF) continue;
 
-            AttrRef attrRef = get<WithClause::WITHREF_ATTR_REF_IDX>(withRef);
+            AttrRef attrRef = get<WithClause::WITH_REF_ATTR_REF_IDX>(withRef);
             DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym);
 
             bool processingNeeded = std::count(notDirectlyAvailDEs.begin(), notDirectlyAvailDEs.end(), designEntity)
@@ -273,12 +269,20 @@ namespace QE {
                 if (!(ident1 == ident2)) break;
                 return this->filterTableByColValueEquality(table, {FIRST_COL_IDX, SECOND_COL_IDX});
         }
+        bool hasResult = !table.isBodyEmpty();
+
         //drop unused columns
-        for (int i = 0; i < table.header.size(); i++) {
-            if (table.header[i].find(Table::DEFAULT_HEADER_PREFIX) != std::string::npos) {
-                table = table.dropCol(i);
+        int offset = 0;
+        int n = table.header.size();
+        for (int i = 0; i < n; i++) {
+            int adjustedIdx = i + offset;
+            if (table.header[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) != std::string::npos) {
+                table = table.dropCol(adjustedIdx);
+                offset--;
             }
         }
+
+        if (table.isBodyEmpty() && hasResult) return QEUtils::getScalarResponse(hasResult);
         return table;
     }
 
@@ -534,15 +538,15 @@ namespace QE {
     void QE::DataPreprocessor::getWithValues(vector<WithRef> withRefs, shared_ptr<vector<Value>> values) {
 
         for (int i = 0; i < withRefs.size(); i++) {
-            if (withRefs[i].index() == WithClause::WITHREF_IDENT_IDX) {
-                values->at(i) = get<WithClause::WITHREF_IDENT_IDX>(withRefs[i]).identStr;
+            if (withRefs[i].index() == WithClause::WITH_REF_IDENT_IDX) {
+                values->at(i) = get<WithClause::WITH_REF_IDENT_IDX>(withRefs[i]).identStr;
                 continue;
             }
-            if (withRefs[i].index() == WithClause::WITHREF_INT_IDX) {
-                values->at(i) = get<WithClause::WITHREF_INT_IDX>(withRefs[i]);
+            if (withRefs[i].index() == WithClause::WITH_REF_INT_IDX) {
+                values->at(i) = get<WithClause::WITH_REF_INT_IDX>(withRefs[i]);
                 continue;
             }
-            //withRefs[i].index() == WithClause::WITHREF_ATTR_REF_IDX
+            //withRefs[i].index() == WithClause::WITH_REF_ATTR_REF_IDX
             AttrRef attrRef = std::get<AttrRef>(withRefs[i]);
             DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym);
             vector<DesignEntity> notDirectlyAvailDEs = {DesignEntity::CALL, DesignEntity::READ,

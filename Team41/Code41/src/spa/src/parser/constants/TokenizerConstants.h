@@ -2,14 +2,14 @@
 // Created by Nafour on 27/9/22.
 //
 
-#ifndef SPA_TOKENISERCONSTANTS_H
-#define SPA_TOKENISERCONSTANTS_H
+#ifndef SPA_TOKENIZERCONSTANTS_H
+#define SPA_TOKENIZERCONSTANTS_H
 #include <string>
 
 using namespace std;
 namespace SourceParser {
 
-    class TokeniserConstants {
+    class TokenizerConstants {
     public:
         static const string EMPTY_STR;
         static const string DOUBLE_QUOTE;
@@ -33,17 +33,16 @@ namespace SourceParser {
 
         static const char DOUBLE_QUOTE_CHAR;
         static const char EQUAL_CHAR;
-        static const char GREATER_THAN_CHAR;
-        static const char SMALLER_THAN_CHAR;
-        static const char EXCLAMATION_MARK_CHAR;
         static const char SINGLE_AND_CHAR;
         static const char BAR_CHAR;
 
         static const string UNEXPECTED_TOKEN_MESSAGE;
         static const string INVALID_NAME;
         static const string INVALID_NUMBER;
+
+        static const unsigned int ZERO;
     };
 
 } // SourceParser
 
-#endif //SPA_TOKENISERCONSTANTS_H
+#endif //SPA_TOKENIZERCONSTANTS_H

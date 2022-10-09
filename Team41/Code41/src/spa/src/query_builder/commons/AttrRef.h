@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include "Synonym.h"
 #include "query_builder/exceptions/Exceptions.h"
+#include "query_builder/constants/CommonConstants.h"
 
 using namespace std;
 using namespace QB;
@@ -34,17 +35,12 @@ namespace QB {
 
         static AttrName getAttrNameFromStr(string& str);
 
-        string getStrOfAttrName();
-        string toString();
+        string getStrOfAttrName() const;
+        string toString() const;
         static string getStrFromAttrName(AttrName& attrName);
         static WithComparingType getWithComparingTypeFromAttrName(AttrName& attrName);
 
         bool operator==(const AttrRef& attrRef1) const;
-        friend std::ostream& operator<<(std::ostream& os, const AttrRef& attrRef) {
-            os << "AttrRef: ";
-            os << attrRef.synonym;
-            return os;
-        };
     };
 
 } // QB
