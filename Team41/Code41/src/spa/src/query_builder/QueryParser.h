@@ -50,7 +50,6 @@ namespace QB {
         int currIdx;
         vector<string> tokens;
         string peek();
-        string previous();
         string pop();
         bool isWithinBound();
         bool expect(const string& s);

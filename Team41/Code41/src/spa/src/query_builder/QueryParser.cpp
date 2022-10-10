@@ -20,8 +20,6 @@ QueryParser::QueryParser(std::vector<std::string> tokens)
 
 string QueryParser::peek() { return tokens[currIdx]; }
 
-string QueryParser::previous() { return tokens[currIdx - QueryParserConstants::ONE]; }
-
 string QueryParser::pop() {
     string currToken = tokens[currIdx];
     currIdx++;
@@ -60,7 +58,6 @@ bool QueryParser::parseDeclarations() {
         currIdx = savedIdx;
         return false;
     }
-
     std::string synonymStr = pop();
     //! Throw syntax error if synonym is invalid
     Synonym synonym = Synonym(synonymStr);

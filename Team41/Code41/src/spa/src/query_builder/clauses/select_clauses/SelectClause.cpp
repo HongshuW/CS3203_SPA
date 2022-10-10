@@ -30,15 +30,6 @@ bool SelectClause::operator==(const SelectClause& clause) const {
     return isEqual;
 }
 
-ostream& SelectClause::print(ostream& os) const {
-    // Print the derived class specific information.
-    os << "Select Clause, return results include: ";
-    for (const auto& result : *(returnResults)) {
-        //TODO: implement this later
-    }
-    return os;
-}
-
 Table SelectClause::accept(shared_ptr<IVisitor> visitor) {
     return visitor->visit(shared_from_this());
 }

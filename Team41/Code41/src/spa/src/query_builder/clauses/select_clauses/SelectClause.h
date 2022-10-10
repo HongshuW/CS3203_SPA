@@ -44,7 +44,6 @@ namespace QB {
         static const int ELEM_ATTR_REF_IDX = 1;
 
         bool operator==(const SelectClause& clause) const;
-        ostream& print(ostream& os) const;
         Table accept(shared_ptr<IVisitor> visitor) override;
     };
 }

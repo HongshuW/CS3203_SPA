@@ -59,11 +59,6 @@ void QueryValidator::validateDesignEntityAttrNamePairSelectClause() const {
         //! Only need to check if it is a AttrRef
         if (!attrRef) return;
         auto declaration = Declaration::findDeclaration(attrRef->synonym, declarations);
-        if (!declaration) {
-            throw PQLValidationException(
-                    QueryValidatorConstants::PQL_VALIDATION_ATTR_REF_NOT_DECLARED +
-                    attrRef->synonym.synonym);
-        }
         unordered_set<AttrName> allowedAttrNameSet =
                 getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
         if (!allowedAttrNameSet.count(attrRef->attrName)) {
@@ -291,17 +286,11 @@ WithComparingType QueryValidator::getWithComparingType(WithRef withRef, const sh
     WithRefType withRefType = getWithRefTypeFromIndex((int) withRef.index());
     //! Default value
     WithComparingType withComparingType = WithComparingType::NAME;
-    switch (withRefType) {
-        case WithRefType::IDENT:
-            withComparingType = WithComparingType::NAME;
-            break;
-        case WithRefType::INTEGER:
-            withComparingType = WithComparingType::INTEGER;
-            break;
-        case WithRefType::ATTR_REF:
-            auto attrRef = get_if<AttrRef>(&withRef);
-            withComparingType = AttrRef::getWithComparingTypeFromAttrName(attrRef->attrName);
-            break;
+    if (withRefType == WithRefType::IDENT) withComparingType = WithComparingType::NAME;
+    if (withRefType == WithRefType::INTEGER) withComparingType = WithComparingType::INTEGER;
+    if (withRefType == WithRefType::ATTR_REF) {
+        auto attrRef = get_if<AttrRef>(&withRef);
+        withComparingType = AttrRef::getWithComparingTypeFromAttrName(attrRef->attrName);
     }
     return withComparingType;
 }

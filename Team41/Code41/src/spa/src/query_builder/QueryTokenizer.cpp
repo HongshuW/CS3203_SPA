@@ -71,7 +71,6 @@ std::vector<std::string> QueryTokenizer::tokenize() {
     while (isWithinBound()) {
         curr = QueryTokenizerConstants::EMPTY_STR;
         next = pop();
-        if (next == EOF) break;
         curr += next;
 
         if (isspace(next)) {
