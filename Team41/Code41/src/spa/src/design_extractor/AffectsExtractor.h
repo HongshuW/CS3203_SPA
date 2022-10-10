@@ -33,6 +33,8 @@ private:
     static unordered_set<string> getAllStmtNoOfAssignNodes(shared_ptr<ProgramNode> programNode);
     static bool isVarModified(string modifiedVar, shared_ptr<ProgramNode> programNode, unordered_set<string> filteredStmtNoList);
     static bool areBothArgsVaild(shared_ptr<ProgramNode> programNode, int start, int end);
+    static vector<string> getIntersectionBetweenAffects(shared_ptr<ProgramNode> programNode, int start, int end);
+
 };
 
 #endif //SPA_AFFECTSEXTRACTOR_H
