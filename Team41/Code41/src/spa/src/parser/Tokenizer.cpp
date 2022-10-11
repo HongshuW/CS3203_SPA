@@ -38,23 +38,9 @@ bool Tokenizer::match(char c) {
     return peek() == c;
 }
 
-void Tokenizer::processString() {
-    tokens.push_back(TokenizerConstants::DOUBLE_QUOTE);
-    curr = TokenizerConstants::EMPTY_STR;
-    while (peek() != TokenizerConstants::DOUBLE_QUOTE_CHAR) {
-        curr += pop();
-    }
-    tokens.push_back(curr);
-    tokens.push_back(TokenizerConstants::DOUBLE_QUOTE);
-    currIdx++;
-}
-
 void Tokenizer::processAlNum() {
     while (isalnum(peek())) {
         curr += pop();
-    }
-    if (!Utils::isValidName(curr)) {
-        throw SPTokenizeException(TokenizerConstants::INVALID_NAME);
     }
     tokens.push_back(curr);
 }
@@ -105,7 +91,6 @@ vector<string> Tokenizer::tokenize() {
     while (isWithinBound()) {
         curr = TokenizerConstants::EMPTY_STR;
         next = pop();
-        if (next == EOF) break;
         curr += next;
         if (isspace(next)) {
             continue;
@@ -113,8 +98,6 @@ vector<string> Tokenizer::tokenize() {
             processAlNum();
         } else if (isdigit(next)) {
             processDigit();
-        } else if (next == TokenizerConstants::DOUBLE_QUOTE_CHAR) {
-            processString();
         } else if (SYMBOL_SET.count(curr)) {
             processSymbols();
         } else {

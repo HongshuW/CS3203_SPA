@@ -156,16 +156,18 @@ TEST_CASE("Test SP Parser") {
     SECTION("Multiple levels of nesting") {
         auto tokens = std::vector<std::string>(
                 {"procedure", "testProcedure", "{", "if", "(", "x", "<=", "100", ")", "then", "{",
-                 "while", "(", "x", "!=", "100", ")", "{", "read", "num1", ";", "}", "}",
+                 "while", "(", "x", "!=", "100", "*", "y", ")", "{", "read", "num1", ";", "}", "}",
                  "else", "{", "print", "x", ";", "}", "}"});
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
 
         auto readNode = make_shared<ReadNode>(make_shared<VariableNode>("num1"));
         auto stmtListInner = vector<shared_ptr<StmtNode>>({readNode});
+        auto condExprNode = make_shared<ExprNode>("*");
+        condExprNode->left = make_shared<ExprNode>("100");
+        condExprNode->right = make_shared<ExprNode>("y");
         auto whileRelExprNode =make_shared<RelExprNode>(make_shared<ExprNode>("x"),
-                                                     "!=",
-                                                     make_shared<ExprNode>("100"));
+                                                     "!=",condExprNode);
         auto whileCondExpr = make_shared<CondExprNode>(whileRelExprNode);
         auto printNode = make_shared<PrintNode>(
                 make_shared<VariableNode>("x"));
@@ -181,6 +183,26 @@ TEST_CASE("Test SP Parser") {
         auto procedure = make_shared<ProcedureNode>("testProcedure", stmtListOuter);
         vector<shared_ptr<ProcedureNode>> procedureList = vector<std::shared_ptr<ProcedureNode>>(
                 {procedure});
+        shared_ptr<ASTNode> expectedProgram = make_shared<ProgramNode>(procedureList);
+        REQUIRE(*testProgram == *expectedProgram);
+    }
+
+    SECTION("2 procedures") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "procedure1", "{", "call", "procedure2", ";", "}",
+                 "procedure", "procedure2", "{", "print", "num2", ";", "}"});
+        Parser parser = Parser(tokens);
+        shared_ptr<ASTNode> testProgram = parser.parse();
+
+        auto callNode = make_shared<CallNode>("procedure2");
+        vector<shared_ptr<StmtNode>> stmtList1 = vector<shared_ptr<StmtNode>>({callNode});
+        auto procedure1 = make_shared<ProcedureNode>("procedure1", stmtList1);
+        auto printNode = make_shared<PrintNode>(
+                make_shared<VariableNode>("num2"));
+        vector<shared_ptr<StmtNode>> stmtList2 = vector<shared_ptr<StmtNode>>({printNode});
+        auto procedure2 = make_shared<ProcedureNode>("procedure2", stmtList2);
+        vector<shared_ptr<ProcedureNode>> procedureList = vector<std::shared_ptr<ProcedureNode>>(
+                {procedure1, procedure2});
         shared_ptr<ASTNode> expectedProgram = make_shared<ProgramNode>(procedureList);
         REQUIRE(*testProgram == *expectedProgram);
     }
@@ -303,6 +325,78 @@ TEST_CASE("Test SP Parser") {
         vector<std::string> tokens = vector<std::string>(
                 {"procedure", "testProcedure", "{", "x", "=", "123", ";", "while", "(", "123x", "<", "123",
                  ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid bracket in if condition, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "123", ";", "if", "{", "x", "<", "123",
+                 "}", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid bracket in while condition, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "123", ";", "while", ";", "x", "<", "123",
+                 "}", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid variable name in read statement, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "read", "123x", ";", "while", "(", "x", "<", "123",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid variable name in print statement, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "print", "123x", ";", "while", "(", "x", "<", "123",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Empty expression in assign statement, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "print", "x", ";", "while", "(", "x", "<", "123",
+                 ")", "{", "x", "=", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid operator in while condition, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "print", "x", ";", "while", "(", "x", ">>", "123",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid operator in if condition, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "123", ";", "if", "(", "x", "123",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Empty condition in if condition, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "testProcedure", "{", "x", "=", "123", ";", "if", "(", "-",
+                 ")", "{", "x", "=", "x", "+", "1", ";", "}", "}"});
+        Parser parser = Parser(tokens);
+        REQUIRE_THROWS_AS(parser.parse(), SPParseException);
+    }
+
+    SECTION("Invalid name in call statement, throw SPParserException") {
+        vector<std::string> tokens = vector<std::string>(
+                {"procedure", "procedure1", "{", "call", "123test", ";", "}",
+                 "procedure", "procedure2", "{", "print", "num2", ";", "}"});
         Parser parser = Parser(tokens);
         REQUIRE_THROWS_AS(parser.parse(), SPParseException);
     }
