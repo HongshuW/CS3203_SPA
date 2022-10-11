@@ -270,30 +270,14 @@ vector<string> AffectsExtractor::extractAffectsStarWithStartAndEnd(shared_ptr<Pr
         return output0;
     }
 
-    auto startArgsOnly = StmtNoArgs();
-    startArgsOnly.setStartStmtNo(startStmtNo);
-
-    auto endArgsOnly = StmtNoArgs();
-    endArgsOnly.setEndStmtNo(endStmtNo);
-
-    vector<string> output1 = AffectsExtractor::extractAffectsWithStartOnly(programNode, startArgsOnly);
-    vector<string> output2 = AffectsExtractor::extractAffectsWithEndOnly(programNode, endArgsOnly);
-    vector<string> output3;
-
     // for Affects*(a1, a2)
     // if there is an intersection between Affects(a1, _) and Affects(_, a2)
     // then Affects*(a1, a2) is valid
 
-    sort(output1.begin(), output1.end());
-    sort(output2.begin(), output2.end());
-
-    set_intersection(output1.begin(), output1.end(),
-                     output2.begin(), output2.end(),
-                     back_inserter(output3));
-
+    vector<string> output1 = AffectsExtractor::getIntersectionBetweenAffects(programNode, startStmtNo, endStmtNo);
     vector<string> ans;
 
-    if (!output3.empty()) {
+    if (!output1.empty()) {
         ans.push_back(to_string(startStmtNo));
         ans.push_back(to_string(endStmtNo));
         return ans;
@@ -524,4 +508,26 @@ bool AffectsExtractor::areBothArgsVaild(shared_ptr<ProgramNode> programNode, int
     }
 
     return true;
+}
+
+vector<string> AffectsExtractor::getIntersectionBetweenAffects(shared_ptr<ProgramNode> programNode,
+                                                               int start, int end) {
+    auto startArgsOnly = StmtNoArgs();
+    startArgsOnly.setStartStmtNo(start);
+
+    auto endArgsOnly = StmtNoArgs();
+    endArgsOnly.setEndStmtNo(end);
+
+    vector<string> affectsWithStart = AffectsExtractor::extractAffectsWithStartOnly(programNode, startArgsOnly);
+    vector<string> affectsWithEnd = AffectsExtractor::extractAffectsWithEndOnly(programNode, endArgsOnly);
+    vector<string> output;
+
+    sort(affectsWithStart.begin(), affectsWithStart.end());
+    sort(affectsWithEnd.begin(), affectsWithEnd.end());
+
+    set_intersection(affectsWithStart.begin(), affectsWithStart.end(),
+                     affectsWithEnd.begin(), affectsWithEnd.end(),
+                     back_inserter(output));
+
+    return output;
 }
