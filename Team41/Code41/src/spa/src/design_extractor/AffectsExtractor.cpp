@@ -518,16 +518,16 @@ vector<string> AffectsExtractor::getIntersectionBetweenAffects(shared_ptr<Progra
     auto endArgsOnly = StmtNoArgs();
     endArgsOnly.setEndStmtNo(end);
 
-    vector<string> output1 = AffectsExtractor::extractAffectsWithStartOnly(programNode, startArgsOnly);
-    vector<string> output2 = AffectsExtractor::extractAffectsWithEndOnly(programNode, endArgsOnly);
-    vector<string> output3;
+    vector<string> affectsWithStart = AffectsExtractor::extractAffectsWithStartOnly(programNode, startArgsOnly);
+    vector<string> affectsWithEnd = AffectsExtractor::extractAffectsWithEndOnly(programNode, endArgsOnly);
+    vector<string> output;
 
-    sort(output1.begin(), output1.end());
-    sort(output2.begin(), output2.end());
+    sort(affectsWithStart.begin(), affectsWithStart.end());
+    sort(affectsWithEnd.begin(), affectsWithEnd.end());
 
-    set_intersection(output1.begin(), output1.end(),
-                     output2.begin(), output2.end(),
-                     back_inserter(output3));
+    set_intersection(affectsWithStart.begin(), affectsWithStart.end(),
+                     affectsWithEnd.begin(), affectsWithEnd.end(),
+                     back_inserter(output));
 
-    return output3;
+    return output;
 }
