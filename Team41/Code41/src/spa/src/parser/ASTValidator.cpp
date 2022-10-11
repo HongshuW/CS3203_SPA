@@ -90,12 +90,6 @@ void ASTValidator::validateCallNode(const shared_ptr<CallNode>& callNode, const 
     }
 
     auto callsIterator = procedureCalls.find(procedureName);
-    if (callsIterator == procedureCalls.end()) {
-        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                ValidatorConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedureName);
-        throw SPValidationException(errorMessage);
-    }
-
     unordered_set<string> calledProcedures = callsIterator->second;
     calledProcedures.insert(calledProcedure);
     callsIterator->second = calledProcedures;
@@ -119,11 +113,6 @@ void ASTValidator::calls(const string& procedure, const string& calledProcedure)
     }
 
     auto callsIterator = procedureCalls.find(procedure);
-    if (callsIterator == procedureCalls.end()) {
-        string errorMessage = ErrorMessageFormatter::formatErrorMessage(
-                ValidatorConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedure);
-        throw SPValidationException(errorMessage);
-    }
     unordered_set<string> calledProcedures = callsIterator->second;
     for (auto &unorderedSetIterator : calledProcedures) {
         return calls(unorderedSetIterator, calledProcedure);
