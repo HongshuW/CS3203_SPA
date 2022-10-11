@@ -82,7 +82,7 @@ void ASTValidator::validateCallNode(const shared_ptr<CallNode>& callNode, const 
         throw SPValidationException(errorMessage);
     }
 
-    auto iterator = procedureNames.find(procedureName);
+    auto iterator = procedureNames.find(calledProcedure);
     if (iterator == procedureNames.end()) {
         string errorMessage = ErrorMessageFormatter::formatErrorMessage(
                 ValidatorConstants::SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND, procedureName);
