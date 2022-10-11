@@ -179,9 +179,32 @@ namespace TestAST {
         vector<shared_ptr<ProcedureNode>> program6_stmtList = vector<shared_ptr<ProcedureNode>>({procedure1_p6, procedure2_p6});
         auto program6 = make_shared<ProgramNode>(program6_stmtList);
 
+        /*procedure duplicateProcedure {
+         * read y;
+         * }
+         *
+         * procedure duplicateProcedure {
+         * read x;
+         * }
+         */
+
+        auto x_p7 = make_shared<VariableNode>("x");
+        auto read_p7 = make_shared<ReadNode>(x_p7);
+        vector<shared_ptr<StmtNode>> stmtList1_p7 = vector<shared_ptr<StmtNode>>({read_p7});
+        auto procedure1_p7 = make_shared<ProcedureNode>("duplicateProcedure", stmtList1_p7);
+
+        auto x2_p7 = make_shared<VariableNode>("y");
+        auto read2_p7 = make_shared<ReadNode>(x2_p7);
+        vector<shared_ptr<StmtNode>> stmtList2_p7 = vector<shared_ptr<StmtNode>>({read2_p7});
+        auto procedure2_p7 = make_shared<ProcedureNode>("duplicateProcedure", stmtList2_p7);
+
+        vector<shared_ptr<ProcedureNode>> program7_stmtList = vector<shared_ptr<ProcedureNode>>({procedure1_p7, procedure2_p7});
+        auto program7 = make_shared<ProgramNode>(program7_stmtList);
+
         vector<shared_ptr<ProgramNode>> programNodes = vector<shared_ptr<ProgramNode>>{program1, program2,
                                                                                        program3, program4,
-                                                                                       program5, program6
+                                                                                       program5, program6,
+                                                                                       program7
                                                                                        };
 
         return programNodes[idx];

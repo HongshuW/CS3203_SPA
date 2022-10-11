@@ -108,4 +108,10 @@ TEST_CASE("Test AST Validator") {
         ASTValidator astValidator = ASTValidator(program);
         REQUIRE_THROWS_AS(astValidator.validateAST(), SPValidationException);
     }
+
+    SECTION("Test invalid AST, duplicate procedure name") {
+        auto program = TestAST::InvalidProcedureDummies::getTestProgramNode(6);
+        ASTValidator astValidator = ASTValidator(program);
+        REQUIRE_THROWS_AS(astValidator.validateAST(), SPValidationException);
+    }
 }
