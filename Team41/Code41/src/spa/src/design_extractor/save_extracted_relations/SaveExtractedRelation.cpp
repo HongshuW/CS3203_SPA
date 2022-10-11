@@ -3,5 +3,3 @@
 //
 
 #include "SaveExtractedRelation.h"
-
-SaveExtractedRelation::SaveExtractedRelation() = default;

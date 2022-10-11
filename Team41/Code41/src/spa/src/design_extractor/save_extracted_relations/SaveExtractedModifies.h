@@ -7,10 +7,11 @@
 
 #include "../../AST/ProgramNode.h"
 #include "../../pkb/DataModifier.h"
+#include "SaveExtractedRelation.h"
 
-class SaveExtractedModifies {
+class SaveExtractedModifies : SaveExtractedRelation {
 public:
-    static void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier);
+    void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
 };
 
 
