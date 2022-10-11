@@ -288,7 +288,7 @@ add_library(spa ${srcs} ${headers}
         src/parser/constants/ValidatorConstants.cpp 
         src/parser/constants/ValidatorConstants.h 
         src/query_builder/constants/CommonConstants.cpp 
-        src/query_builder/constants/CommonConstants.h)
+        src/query_builder/constants/CommonConstants.h src/design_extractor/save_extracted_relations/SaveExtractedRelationVisitor.cpp src/design_extractor/save_extracted_relations/SaveExtractedRelationVisitor.h src/design_extractor/save_extracted_relations/SaveExtractedRelation.cpp src/design_extractor/save_extracted_relations/SaveExtractedRelation.h src/design_extractor/save_extracted_relations/SaveExtractedModifies.cpp src/design_extractor/save_extracted_relations/SaveExtractedModifies.h)
 
 
 
