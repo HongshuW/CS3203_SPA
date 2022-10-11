@@ -22,7 +22,6 @@ namespace AST {
 
         explicit ExprNode(string expr);
 
-        bool isNumberNode() const;
         bool isVariableNode() const;
         bool isOperatorNode() const;
 

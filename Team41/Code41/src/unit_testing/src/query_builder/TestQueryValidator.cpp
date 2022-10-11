@@ -282,7 +282,13 @@ TEST_CASE ("Test Query Validator") {
     }
 
     SECTION ("Test invalid RefType of argument 2 in Pattern Clause") {
-        std::string queryStr = "assign a; procedure s; Select a such that Modifies (a, s) pattern a (1, _)";
+        std::string queryStr = "assign a; Select a pattern a (1, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Test invalid design entity type of argument 2 in Pattern Clause") {
+        std::string queryStr = "assign a; constant c; Select a pattern a (c, _)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
@@ -367,6 +373,12 @@ TEST_CASE ("Test Query Validator") {
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
+    SECTION ("Test invalid Design Entity AttrRef pair in Select Clause") {
+        std::string queryStr = "assign a; Select <a, v.procName> pattern a (_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
     SECTION ("Test undeclared AttrRef in Select Clause") {
         std::string queryStr = "assign a; Select <a, v.value> pattern a (_, _)";
         auto queryBuilder = QueryBuilder();
@@ -379,7 +391,7 @@ TEST_CASE ("Test Query Validator") {
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Test incorrect DesignEntity and AttrName pair in Select Clause") {
+    SECTION ("Test synonym in AttrRef not declared in Select Clause") {
         std::string queryStr = "assign a1, a2; Select <a1.procName, a2> such that Affects (a1, a2)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
@@ -387,6 +399,12 @@ TEST_CASE ("Test Query Validator") {
 
     SECTION ("Test incorrect DesignEntity and AttrName pair in With Clause") {
         std::string queryStr = "assign a1, a2; Select <a1, a2> such that Affects (a1, a2) with a1.value = 2";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Test synonym in AttrRef not declared in With Clause") {
+        std::string queryStr = "procedure p; Select p with x.value = 2";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
@@ -399,6 +417,12 @@ TEST_CASE ("Test Query Validator") {
 
     SECTION ("Invalid Design Entity type of argument 1 in Pattern Clause, throw PQLParseException") {
         std::string queryStr = "variable a; Select a pattern a (_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Invalid Design Entity in CallsT clause") {
+        std::string queryStr = "variable v; Select v such that Calls* (v, _)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
