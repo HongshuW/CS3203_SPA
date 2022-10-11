@@ -38,7 +38,6 @@ namespace SourceParser {
         char peek();
         char pop();
         void processSymbols();
-        void processString();
         void processAlNum();
         void processDigit();
         bool match(char s);

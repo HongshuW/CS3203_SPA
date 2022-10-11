@@ -8,10 +8,6 @@
 
 AST::ExprNode::ExprNode(string expr) : expr(std::move(expr)) {}
 
-bool ExprNode::isNumberNode() const {
-    return Utils::isValidNumber(expr);
-}
-
 bool ExprNode::isVariableNode() const {
     return Utils::isValidName(expr);
 }

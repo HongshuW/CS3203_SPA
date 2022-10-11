@@ -30,7 +30,6 @@ namespace SourceParser {
         int currIdx;
         vector<string> tokens;
         string peek();
-        string previous();
         string pop();
         bool match(const string& s);
         bool expect(const string& s);
