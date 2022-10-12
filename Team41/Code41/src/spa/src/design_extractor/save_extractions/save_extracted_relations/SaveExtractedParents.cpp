@@ -3,7 +3,7 @@
 //
 
 #include "SaveExtractedParents.h"
-#include "../ParentExtractor.h"
+#include "design_extractor/ParentExtractor.h"
 
 using namespace DE;
 

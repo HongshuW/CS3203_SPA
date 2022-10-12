@@ -3,7 +3,7 @@
 //
 
 #include "SaveExtractedAssignPattern.h"
-#include "../PatternExtractor.h"
+#include "design_extractor/PatternExtractor.h"
 
 using namespace DE;
 

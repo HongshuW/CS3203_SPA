@@ -5,7 +5,7 @@
 #ifndef SPA_SAVEEXTRACTEDWHILEPATTERN_H
 #define SPA_SAVEEXTRACTEDWHILEPATTERN_H
 
-#include "../save_extracted_design/SaveExtractedDesign.h"
+#include "design_extractor/save_extractions/save_extracted_design/SaveExtractedDesign.h"
 
 class SaveExtractedWhilePattern : public SaveExtractedDesign {
 public:

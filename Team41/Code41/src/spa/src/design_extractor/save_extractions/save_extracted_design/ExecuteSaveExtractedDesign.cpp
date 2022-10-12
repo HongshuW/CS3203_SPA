@@ -3,16 +3,16 @@
 //
 
 #include "ExecuteSaveExtractedDesign.h"
-#include "design_extractor/save_extracted_relations/SaveExtractedCalls.h"
-#include "design_extractor/save_extracted_relations/SaveExtractedFollows.h"
-#include "design_extractor/save_extracted_relations/SaveExtractedModifies.h"
-#include "design_extractor/save_extracted_relations/SaveExtractedNext.h"
-#include "design_extractor/save_extracted_relations/SaveExtractedUses.h"
-#include "design_extractor/save_extracted_relations/SaveExtractedParents.h"
+#include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedCalls.h"
+#include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedFollows.h"
+#include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedModifies.h"
+#include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedNext.h"
+#include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedUses.h"
+#include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedParents.h"
 
-#include "design_extractor/save_extracted_patterns/SaveExtractedIfPattern.h"
-#include "design_extractor/save_extracted_patterns/SaveExtractedWhilePattern.h"
-#include "design_extractor/save_extracted_patterns/SaveExtractedAssignPattern.h"
+#include "design_extractor/save_extractions/save_extracted_patterns/SaveExtractedIfPattern.h"
+#include "design_extractor/save_extractions/save_extracted_patterns/SaveExtractedWhilePattern.h"
+#include "design_extractor/save_extractions/save_extracted_patterns/SaveExtractedAssignPattern.h"
 
 ExecuteSaveExtractedDesign::ExecuteSaveExtractedDesign(shared_ptr<ProgramNode> programNode,
                                                        shared_ptr<DataModifier> dataModifier) {

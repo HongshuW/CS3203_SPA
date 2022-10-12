@@ -5,9 +5,9 @@
 #ifndef SPA_SAVEEXTRACTEDNEXT_H
 #define SPA_SAVEEXTRACTEDNEXT_H
 
-#include "../../AST/ProgramNode.h"
-#include "../../pkb/DataModifier.h"
-#include "design_extractor/save_extracted_design/SaveExtractedDesign.h"
+#include "AST/ProgramNode.h"
+#include "pkb/DataModifier.h"
+#include "design_extractor/save_extractions/save_extracted_design/SaveExtractedDesign.h"
 
 class SaveExtractedNext : public SaveExtractedDesign {
 public:

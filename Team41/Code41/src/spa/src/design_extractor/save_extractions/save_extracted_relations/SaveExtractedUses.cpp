@@ -3,7 +3,7 @@
 //
 
 #include "SaveExtractedUses.h"
-#include "../UsesExtractor.h"
+#include "design_extractor/UsesExtractor.h"
 
 using namespace DE;
 

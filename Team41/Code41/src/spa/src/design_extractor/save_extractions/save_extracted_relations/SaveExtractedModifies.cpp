@@ -4,7 +4,7 @@
 #include "SaveExtractedModifies.h"
 
 #include <utility>
-#include "../ModifiesExtractor.h"
+#include "design_extractor/ModifiesExtractor.h"
 
 using namespace DE;
 

@@ -3,7 +3,7 @@
 //
 
 #include "SaveExtractedCalls.h"
-#include "../CallsExtractor.h"
+#include "design_extractor/CallsExtractor.h"
 
 void SaveExtractedCalls::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
     list<vector<string>> callsList = *CallsExtractor::extractCalls(programNode);

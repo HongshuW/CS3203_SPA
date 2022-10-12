@@ -8,7 +8,7 @@
 #include <queue>
 #include "EntityExtractor.h"
 #include "PatternExtractor.h"
-#include "design_extractor/save_extracted_design/ExecuteSaveExtractedDesign.h"
+#include "design_extractor/save_extractions/save_extracted_design/ExecuteSaveExtractedDesign.h"
 using namespace AST;
 using namespace DE;
 using namespace std;

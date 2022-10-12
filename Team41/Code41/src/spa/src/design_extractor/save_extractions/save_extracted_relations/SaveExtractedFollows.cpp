@@ -3,7 +3,7 @@
 //
 
 #include "SaveExtractedFollows.h"
-#include "../FollowsExtractor.h"
+#include "design_extractor/FollowsExtractor.h"
 
 void SaveExtractedFollows::save(shared_ptr<AST::ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
     list<vector<string>> followsList = *FollowsExtractor().extractFollows(programNode);

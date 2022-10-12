@@ -3,7 +3,7 @@
 //
 
 #include "SaveExtractedNext.h"
-#include "../NextExtractor.h"
+#include "design_extractor/NextExtractor.h"
 
 void SaveExtractedNext::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
     list<vector<string>> nextList = *NextExtractor::extractNext(programNode);
