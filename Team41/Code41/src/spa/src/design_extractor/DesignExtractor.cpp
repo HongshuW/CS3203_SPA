@@ -7,7 +7,6 @@
 #include "AST/utils/ASTUtils.h"
 #include <queue>
 #include "EntityExtractor.h"
-#include "RelationExtractor.h"
 #include "PatternExtractor.h"
 #include "design_extractor/save_extracted_design/ExecuteSaveExtractedDesign.h"
 using namespace AST;
@@ -20,11 +19,6 @@ shared_ptr<unordered_set<string>> DesignExtractor::extractEntities(DesignEntity 
         this->extractEntitiesFromProcedure(p, result, designEntityType);
     }
     return result;
-}
-
-shared_ptr<list<vector<string>>> DesignExtractor::extractRelations(RelationType relationType) {
-    list<vector<string>> relationList = RelationExtractor::extractRelation(this->programNode, relationType);
-    return make_shared<list<vector<string>>>(relationList);
 }
 
 void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {

@@ -3,7 +3,7 @@
 //
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
-#include "design_extractor/FollowsExtractor.h"
+#include "design_extractor/NextExtractor.h"
 #include "AST/PrintNode.h"
 #include "AST/ReadNode.h"
 #include "AST/IfNode.h"
@@ -24,7 +24,7 @@ TEST_CASE("Test Next Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(0);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::NEXT);
+        auto actual = NextExtractor::extractNext(programNode);
         vector<vector<string>> expected = {};
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -35,7 +35,7 @@ TEST_CASE("Test Next Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(1);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::NEXT);
+        auto actual = NextExtractor::extractNext(programNode);
         vector<vector<string>> expected = { {"1", "2"}, {"2", "3"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -46,7 +46,7 @@ TEST_CASE("Test Next Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(2);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::NEXT);
+        auto actual = NextExtractor::extractNext(programNode);
         vector<vector<string>> expected = { {"1", "2"}, {"2", "3"}, {"3", "4"},
                                             {"3", "6"}, {"4", "5"}, {"5", "7"}, {"6", "7"}};
         REQUIRE(expected.size() == actual->size());
@@ -58,7 +58,7 @@ TEST_CASE("Test Next Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(24);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::NEXT);
+        auto actual = NextExtractor::extractNext(programNode);
         vector<vector<string>> expected = { {"1", "2"}, {"2", "3"},
                                             {"2", "4"}, {"3", "2"} };
         REQUIRE(expected.size() == actual->size());
@@ -70,7 +70,7 @@ TEST_CASE("Test Next Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(4);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::NEXT);
+        auto actual = NextExtractor::extractNext(programNode);
         vector<vector<string>> expected = { {"1", "2"}, {"2", "3"}, {"2", "7"}, {"3", "4"},
                                             {"4", "5"}, {"4", "6"}, {"5", "2"}, {"6", "2"}};
         REQUIRE(expected.size() == actual->size());

@@ -31,7 +31,6 @@ namespace DE {
         explicit DesignExtractor(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode);
         shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
         void run();
-        shared_ptr<list<vector<string>>> extractRelations(RelationType relationType);
 
         vector<string> getNextStarRelations(StmtNoArgs args);
         vector<string> getAffectsRelations(StmtNoArgs args);
