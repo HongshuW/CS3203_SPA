@@ -7,14 +7,14 @@
 
 #include "../../AST/ProgramNode.h"
 #include "../../pkb/DataModifier.h"
-#include "SaveExtractedRelation.h"
+#include "design_extractor/save_extracted_design/SaveExtractedDesign.h"
 
-class SaveExtractedNext : public SaveExtractedRelation {
+class SaveExtractedNext : public SaveExtractedDesign {
 public:
     SaveExtractedNext(shared_ptr<ProgramNode> programNode,
                       shared_ptr<DataModifier> dataModifier)
-                      : SaveExtractedRelation(std::move(programNode),
-                                              std::move(dataModifier)) {};
+                      : SaveExtractedDesign(std::move(programNode),
+                                            std::move(dataModifier)) {};
     void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
 };
 
