@@ -288,7 +288,7 @@ add_library(spa ${srcs} ${headers}
         src/parser/constants/ValidatorConstants.cpp 
         src/parser/constants/ValidatorConstants.h 
         src/query_builder/constants/CommonConstants.cpp 
-        src/query_builder/constants/CommonConstants.h)
+        src/query_builder/constants/CommonConstants.h src/query_evaluator/constants/QueryEvaluatotConstants.cpp src/query_evaluator/constants/QueryEvaluatotConstants.h)
 
 
 
