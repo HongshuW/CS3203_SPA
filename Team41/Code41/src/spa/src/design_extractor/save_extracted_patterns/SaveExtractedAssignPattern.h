@@ -12,7 +12,7 @@ public:
     SaveExtractedAssignPattern(shared_ptr<ProgramNode> programNode,
     shared_ptr<DataModifier> dataModifier)
     : SaveExtractedDesign(std::move(programNode), std::move(dataModifier)) {}
-private:
+
     void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
 };
 

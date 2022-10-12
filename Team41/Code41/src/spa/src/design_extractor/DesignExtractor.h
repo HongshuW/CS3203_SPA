@@ -32,12 +32,6 @@ namespace DE {
         shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
         void run();
         shared_ptr<list<vector<string>>> extractRelations(RelationType relationType);
-        void saveRelationToPKB(RelationType relationType);
-        vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> extractPatterns();
-        list<vector<string>> extractIfPatterns();
-        list<vector<string>> extractWhilePatterns();
-        void savePatternsToPKB();
-        void saveConditionalPatternsToPKB();
 
         vector<string> getNextStarRelations(StmtNoArgs args);
         vector<string> getAffectsRelations(StmtNoArgs args);

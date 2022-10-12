@@ -16,8 +16,9 @@ public:
                                shared_ptr<DataModifier> dataModifier);
     void executeSave();
 private:
-    vector<SaveExtractedDesign*> init();
-    vector<shared_ptr<SaveExtractedDesign>> initRelations(vector<shared_ptr<SaveExtractedDesign>>& output);
+    void initRelations(vector<shared_ptr<SaveExtractedDesign>>& extractedDesignList);
+    void initPatterns(vector<shared_ptr<SaveExtractedDesign>>& extractedDesignList);
+
     shared_ptr<ProgramNode> programNode;
     shared_ptr<DataModifier> dataModifier;
 };

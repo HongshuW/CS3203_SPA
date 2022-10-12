@@ -54,62 +54,6 @@ void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
     }
 }
 
-void DesignExtractor::saveRelationToPKB(RelationType relationType) {
-    list<vector<string>> relations = *this->extractRelations(relationType);
-    auto iterator = relations.begin();
-    while (iterator != relations.end()) {
-        switch (relationType) {
-            case RelationType::PARENT: {
-                this->dataModifier->saveParent(*iterator);
-                break;
-            }
-            case RelationType::PARENT_T: {
-                this->dataModifier->saveParentT(*iterator);
-                break;
-            }
-            case RelationType::FOLLOWS: {
-                this->dataModifier->saveFollows(*iterator);
-                break;
-            }
-            case RelationType::FOLLOWS_T: {
-                this->dataModifier->saveFollowsT(*iterator);
-                break;
-            }
-            case RelationType::MODIFIES_S: {
-                this->dataModifier->saveModifiesS(*iterator);
-                break;
-            }
-            case RelationType::USES_S: {
-                this->dataModifier->saveUsesS(*iterator);
-                break;
-            }
-            case RelationType::USES_P: {
-                this->dataModifier->saveUsesP(*iterator);
-                break;
-            }
-            case RelationType::MODIFIES_P: {
-                this->dataModifier->saveModifiesP(*iterator);
-                break;
-            }
-            case RelationType::CALLS: {
-                this->dataModifier->saveCalls(*iterator);
-                break;
-            }
-            case RelationType::CALLS_T: {
-                this->dataModifier->saveCallsT(*iterator);
-                break;
-            }
-            case RelationType::NEXT: {
-                this->dataModifier->saveNext(*iterator);
-                break;
-            }
-            default:
-                break;
-        }
-        advance(iterator, 1);
-    }
-}
-
 DesignExtractor::DesignExtractor(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
         : dataModifier(dataModifier), programNode(programNode) {
 }
@@ -180,50 +124,11 @@ void DesignExtractor::run() {
     }
     this->dataModifier->saveStatements(payload);
 
-    auto saveRelations = ExecuteSaveExtractedDesign(this->programNode, this->dataModifier);
-    saveRelations.executeSave();
-
-    //save patterns
-    this->savePatternsToPKB();
-
-    //save if and while patterns
-    this->saveConditionalPatternsToPKB();
+    // save relations and patterns
+    auto saveDesigns = ExecuteSaveExtractedDesign(this->programNode, this->dataModifier);
+    saveDesigns.executeSave();
 }
 
-vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::extractPatterns() {
-    return PatternExtractor::extractPattern(this->programNode);
-}
-
-list<vector<string>> DesignExtractor::extractIfPatterns() {
-    return PatternExtractor::extractIfPattern(this->programNode);
-}
-
-list<vector<string>> DesignExtractor::extractWhilePatterns() {
-    return PatternExtractor::extractWhilePattern(this->programNode);
-}
-
-void DesignExtractor::savePatternsToPKB() {
-    // TODO: generalise this method
-    auto resultList = this->extractPatterns();
-    for (auto resultRow: resultList) {
-        string lineNumStr = to_string(resultRow.first.first);
-        string varName = resultRow.first.second;
-        auto exprNode = resultRow.second->expressionNode;
-        this->dataModifier->saveAssignPattern({lineNumStr, varName}, exprNode);
-    }
-}
-
-void DesignExtractor::saveConditionalPatternsToPKB() {
-    auto ifPatternList = this->extractIfPatterns();
-    for (auto entry: ifPatternList) {
-        dataModifier->saveIfPattern(entry);
-    }
-
-    auto whilePatternList = this->extractWhilePatterns();
-    for (auto entry: whilePatternList) {
-        dataModifier->saveWhilePattern(entry);
-    }
-}
 
 vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
     return NextExtractor::extractNextStar(this->programNode, args);
