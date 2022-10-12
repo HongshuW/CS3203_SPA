@@ -8,6 +8,11 @@ stmt s1, s2;
 Select <s1, s2> such that Follows(s1, s2) with s1.stmt# = 2
 2 28
 5000
+2 - valid with, follows
+stmt s1, s2;
+Select <s1, s2> such that Follows(s1, s2) with s1.stmt# = 2 and s1.stmt# = 2 with s1.stmt# = 2 and s1.stmt# = 2
+2 28
+5000
 3 - valid with, follows
 stmt s1, s2; assign a;
 Select <s1, s2> such that Follows(s1, s2) with s1.stmt# = 2 and a.stmt# = 5
@@ -247,6 +252,16 @@ none
 stmt s1, s2; assign a;
 Select <s1, s2> such that Next(s1, s2) with s1.stmt# = 16 and a.stmt# = 5
 16 15, 16 17
+5000
+50 - valid with, pattern
+stmt s1, s2; assign a; variable v;
+Select a pattern a(v, _) with v.varName = "x5"
+5, 33
+5000
+50 - valid with, pattern
+stmt s1, s2; assign a; variable v;
+Select a pattern a(v, _) with a.stmt# = 5 and a.stmt# = 33
+none
 5000
 51 - invalid with number
 stmt s1;
