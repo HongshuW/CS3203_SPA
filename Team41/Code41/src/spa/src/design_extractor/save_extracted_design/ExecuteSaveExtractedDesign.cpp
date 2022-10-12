@@ -8,6 +8,7 @@
 #include "design_extractor/save_extracted_relations/SaveExtractedModifies.h"
 #include "design_extractor/save_extracted_relations/SaveExtractedNext.h"
 #include "design_extractor/save_extracted_relations/SaveExtractedUses.h"
+#include "design_extractor/save_extracted_relations/SaveExtractedParents.h"
 
 #include "design_extractor/save_extracted_patterns/SaveExtractedIfPattern.h"
 #include "design_extractor/save_extracted_patterns/SaveExtractedWhilePattern.h"
@@ -43,6 +44,9 @@ void ExecuteSaveExtractedDesign::initRelations(vector<shared_ptr<SaveExtractedDe
 
     auto uses = make_shared<SaveExtractedUses>(this->programNode, this->dataModifier);
     extractedDesignList.push_back(uses);
+
+    auto parents = make_shared<SaveExtractedParents>(this->programNode, this->dataModifier);
+    extractedDesignList.push_back(parents);
 }
 
 void ExecuteSaveExtractedDesign::initPatterns(vector<shared_ptr<SaveExtractedDesign>>& extractedDesignList) {
