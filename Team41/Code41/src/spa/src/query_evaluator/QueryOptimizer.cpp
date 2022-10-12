@@ -218,7 +218,7 @@ namespace QE {
 
     ConnectedClauseGroups QueryOptimizer::optimiseSubGroups(ConnectedClauseGroups ccg) {
         //sort
-        for (auto it: *ccg) {
+        for (auto &it: *ccg) {
             if (it.first == NO_SYN_GROUP_IDX) continue;
             shared_ptr<vector<shared_ptr<ConditionalClause>>> sortedVec = make_shared<vector<shared_ptr<ConditionalClause>>>();
             auto clauseGroupVec = it.second;
@@ -264,6 +264,7 @@ namespace QE {
     }
 
     int QueryOptimizer::getMinClauseIdFromGroup(SubgroupClauses clauses) {
+        if (clauses->size() == 1) return clauseIdMap.at(clauses->at(0));
         //pick first vertex with min edge cost:
         int minEdgeCost = INF;
         int x_first = 0; int y_first = 0;
