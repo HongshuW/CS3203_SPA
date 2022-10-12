@@ -12,12 +12,11 @@
 
 class ExecuteSaveExtractedRelation {
 public:
-    ExecuteSaveExtractedRelation() = default;
     ExecuteSaveExtractedRelation(shared_ptr<ProgramNode> programNode,
                                  shared_ptr<DataModifier> dataModifier);
     void executeSave();
 private:
-    vector<SaveExtractedRelation*> init(SaveExtractedRelation relations);
+    vector<SaveExtractedRelation*> init();
     shared_ptr<ProgramNode> programNode;
     shared_ptr<DataModifier> dataModifier;
 };

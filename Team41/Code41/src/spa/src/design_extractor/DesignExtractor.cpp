@@ -9,6 +9,7 @@
 #include "EntityExtractor.h"
 #include "RelationExtractor.h"
 #include "PatternExtractor.h"
+#include "save_extracted_relations/ExecuteSaveExtractedRelation.h"
 using namespace AST;
 using namespace DE;
 using namespace std;
@@ -180,20 +181,23 @@ void DesignExtractor::run() {
     this->dataModifier->saveStatements(payload);
 
     //save relations
-    auto relationsToSave = vector<RelationType>{RelationType::PARENT,
-                                                RelationType::PARENT_T,
-                                                RelationType::FOLLOWS,
-                                                RelationType::FOLLOWS_T,
-                                                RelationType::USES_S,
-                                                RelationType::MODIFIES_S,
-                                                RelationType::USES_P,
-                                                RelationType::MODIFIES_P,
-                                                RelationType::CALLS,
-                                                RelationType::CALLS_T,
-                                                RelationType::NEXT};
-    for (auto relationType: relationsToSave) {
-        this->saveRelationToPKB(relationType);
-    }
+//    auto relationsToSave = vector<RelationType>{RelationType::PARENT,
+//                                                RelationType::PARENT_T,
+//                                                RelationType::FOLLOWS,
+//                                                RelationType::FOLLOWS_T,
+//                                                RelationType::USES_S,
+//                                                RelationType::MODIFIES_S,
+//                                                RelationType::USES_P,
+//                                                RelationType::MODIFIES_P,
+//                                                RelationType::CALLS,
+//                                                RelationType::CALLS_T,
+//                                                RelationType::NEXT};
+//    for (auto relationType: relationsToSave) {
+//        this->saveRelationToPKB(relationType);
+//    }
+
+    auto saveRelations = ExecuteSaveExtractedRelation(this->programNode, this->dataModifier);
+    saveRelations.executeSave();
 
     //save patterns
     this->savePatternsToPKB();

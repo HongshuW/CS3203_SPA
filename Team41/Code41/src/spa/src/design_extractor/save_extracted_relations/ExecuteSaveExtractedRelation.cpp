@@ -15,7 +15,7 @@ ExecuteSaveExtractedRelation::ExecuteSaveExtractedRelation(shared_ptr<ProgramNod
     this->dataModifier = dataModifier;
 }
 
-vector<SaveExtractedRelation*> ExecuteSaveExtractedRelation::init(SaveExtractedRelation relations) {
+vector<SaveExtractedRelation*> ExecuteSaveExtractedRelation::init() {
     vector<SaveExtractedRelation*> extractedRelationList;
 
     auto* calls = new SaveExtractedCalls(programNode, dataModifier);
@@ -34,6 +34,13 @@ vector<SaveExtractedRelation*> ExecuteSaveExtractedRelation::init(SaveExtractedR
     extractedRelationList.push_back(uses);
 
     return extractedRelationList;
+}
+
+void ExecuteSaveExtractedRelation::executeSave() {
+    vector<SaveExtractedRelation*> extractedRelationList = this->init();
+    for (auto relation: extractedRelationList) {
+        relation->save(this->programNode, this->dataModifier);
+    }
 }
 
 
