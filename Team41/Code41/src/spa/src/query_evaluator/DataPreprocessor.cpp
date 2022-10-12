@@ -416,14 +416,6 @@ namespace QE {
         RefType ref1Type = getRefType(ref1);
         RefType ref2Type = getRefType(ref2);
 
-        string col1Name =
-                ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : QEUtils::getColNameByRefType(ref1Type);
-        string col2Name =
-                ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : QEUtils::getColNameByRefType(ref2Type);
-
-        const int FIRST_COL_IDX = 0;
-        const int SECOND_COL_IDX = 1;
-
         if (ref1Type == QB::RefType::INTEGER && ref2Type == QB::RefType::INTEGER) {
             auto boolTable = dataRetriever->getNextTResult(get<int>(ref1),
                     get<int>(ref2));
@@ -431,23 +423,17 @@ namespace QE {
             ? QEUtils::getScalarResponse(true)
             : Table();
         }
+        Table resultTable = Table();
         if (ref1Type == QB::RefType::INTEGER) {
-            auto resultTable = dataRetriever->getNextTStatements(get<int>(ref1)).dropCol(FIRST_COL_IDX);
-
+            resultTable = dataRetriever->getNextTStatements(get<int>(ref1));
             //check if second ref is not a synonym and return result immediately
             if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
-            //the second ref must be a synonym
-            resultTable.renameHeader({col2Name});
-            return resultTable;
-        }
-        if (ref2Type == QB::RefType::INTEGER) {
-            auto resultTable = dataRetriever->getPreviousTStatements(get<int>(ref2)).dropCol(SECOND_COL_IDX);
+        } else if (ref2Type == QB::RefType::INTEGER) {
+            resultTable = dataRetriever->getPreviousTStatements(get<int>(ref2));
             if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
-            resultTable.renameHeader({col1Name});
-            return resultTable;
+        } else {
+            resultTable = dataRetriever->getNextTTable();
         }
-        auto resultTable = dataRetriever->getNextTTable();
-        resultTable.renameHeader({col1Name, col2Name});
         return filterSingleClauseResultTable(ref1, ref2, resultTable);
     }
 
