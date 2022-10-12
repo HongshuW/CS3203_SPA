@@ -14,9 +14,12 @@
 #include "ConcreteClauseVisitor.h"
 #include "QueryOptimizer.h"
 #include "QEUtils.h"
+#include "constants/QueryEvaluatotConstants.h"
 
 using namespace QB;
 using namespace QE;
+auto &attrsToFilter = QueryEvaluatotConstants::attrsToFilter;
+auto &entitiesToFilter = QueryEvaluatotConstants::entitiesToFilter;
 
 const vector<string> FALSE_RESULT = {"FALSE"};
 const vector<string> TRUE_RESULT = {"TRUE"};
@@ -84,18 +87,17 @@ QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vecto
 
             DesignEntity designEntity = getDesignEntity(attrRef.synonym);
             int synColIdx = resultTable.getColIdxByName(attrRef.synonym.synonym);
+            bool filterNeeded = std::count(entitiesToFilter.begin(), entitiesToFilter.end(), designEntity)
+                                    && std::count(attrsToFilter.begin(), attrsToFilter.end(), attrRef.attrName);
 
             if (synColIdx == COL_DOES_NOT_EXIST) {
                 //this table has only one col
                 Table intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity);
 
                 if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
-                vector<DesignEntity> notDirectlyAvailEntities = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
-                vector<AttrName> notDirectlyAvailAttrNames = {AttrName::PROC_NAME, AttrName::VAR_NAME};
-                bool processingNeeded = std::count(notDirectlyAvailEntities.begin(), notDirectlyAvailEntities.end(), designEntity)
-                                        && std::count(notDirectlyAvailAttrNames.begin(), notDirectlyAvailAttrNames.end(), attrRef.attrName);
 
-                if (processingNeeded) {
+
+                if (filterNeeded) {
                     if (designEntity == QB::DesignEntity::CALL) intermediateTable = dataPreprocessor->getCallsProcedureTable();
                     if (designEntity == QB::DesignEntity::PRINT) intermediateTable = dataPreprocessor->getPrintVariableTable();
                     if (designEntity == QB::DesignEntity::READ) intermediateTable = dataPreprocessor->getReadVariableTable();
@@ -112,9 +114,7 @@ QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vecto
                 if (resultTable.isBodyEmpty())  return EMPTY_RESULT;
             } else {
                 //synonym name exists in the table but synonym attribute is not
-                const vector<DesignEntity> entitiesToFilter = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
-                bool needFilter = std::find(entitiesToFilter.begin(), entitiesToFilter.end(), designEntity) != entitiesToFilter.end();
-                if (needFilter) {
+                if (filterNeeded) {
                    Table intermediateTable;
                    if (designEntity == QB::DesignEntity::CALL) intermediateTable = dataPreprocessor->getCallsProcedureTable();
                    if (designEntity == QB::DesignEntity::READ) intermediateTable = dataPreprocessor->getReadVariableTable();
