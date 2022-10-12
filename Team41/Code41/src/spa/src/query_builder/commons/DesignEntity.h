@@ -44,6 +44,10 @@ namespace QB {
             DesignEntity::VARIABLE
     };
 
+    const unordered_set<DesignEntity> ASSIGN_SYNONYM = {
+            DesignEntity::ASSIGN
+    };
+
     DesignEntity getDesignEntity(string&);
     string getDesignEntityString(DesignEntity);
     unordered_set<AttrName> getAllowedAttrNameSetFromDesignEntity(DesignEntity designEntity);

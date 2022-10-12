@@ -57,7 +57,7 @@ void QueryValidator::validateDesignEntityAttrNamePairSelectClause() const {
     for (auto &elem : *elemList) {
         auto attrRef = get_if<AttrRef>(&elem);
         //! Only need to check if it is a AttrRef
-        if (!attrRef) return;
+        if (!attrRef) continue;
         auto declaration = Declaration::findDeclaration(attrRef->synonym, declarations);
         unordered_set<AttrName> allowedAttrNameSet =
                 getAllowedAttrNameSetFromDesignEntity(declaration->getDesignEntity());
