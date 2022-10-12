@@ -10,8 +10,11 @@
 
 class SaveExtractedRelation {
 public:
-    virtual ~SaveExtractedRelation() = default;
+    SaveExtractedRelation(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier);
     virtual void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) = 0;
+private:
+    shared_ptr<ProgramNode> programNode;
+    shared_ptr<DataModifier> dataModifier;
 };
 
 

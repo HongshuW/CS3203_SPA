@@ -2,24 +2,21 @@
 // Created by Aaron on 12/10/22.
 //
 
-#ifndef SPA_SAVEEXTRACTEDUSES_H
-#define SPA_SAVEEXTRACTEDUSES_H
-
-#include <utility>
+#ifndef SPA_SAVEEXTRACTEDNEXT_H
+#define SPA_SAVEEXTRACTEDNEXT_H
 
 #include "../../AST/ProgramNode.h"
 #include "../../pkb/DataModifier.h"
 #include "SaveExtractedRelation.h"
 
-class SaveExtractedUses : public SaveExtractedRelation {
+class SaveExtractedNext : public SaveExtractedRelation {
 public:
-    SaveExtractedUses(shared_ptr<ProgramNode> programNode,
+    SaveExtractedNext(shared_ptr<ProgramNode> programNode,
                       shared_ptr<DataModifier> dataModifier)
                       : SaveExtractedRelation(std::move(programNode),
                                               std::move(dataModifier)) {};
     void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
-
 };
 
 
-#endif //SPA_SAVEEXTRACTEDUSES_H
+#endif //SPA_SAVEEXTRACTEDNEXT_H
