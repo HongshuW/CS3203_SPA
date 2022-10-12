@@ -107,8 +107,6 @@ add_library(spa ${srcs} ${headers}
         src/parser/ASTBuilder.h
         src/utils/Utils.cpp
         src/utils/Utils.h
-        src/design_extractor/RelationExtractor.cpp
-        src/design_extractor/RelationExtractor.h
         src/utils/ExprNodeParser.cpp
         src/utils/ExprNodeParser.h
         src/design_extractor/FollowsExtractor.cpp

@@ -9,8 +9,8 @@
 using namespace DE;
 
 void SaveExtractedModifies::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
-    list<vector<string>> modifiesSList = *ModifiesExtractor::extractModifiesS(std::move(programNode));
-    list<vector<string>> modifiesPList = *ModifiesExtractor::extractModifiesP(std::move(programNode));
+    list<vector<string>> modifiesSList = *ModifiesExtractor::extractModifiesS(programNode);
+    list<vector<string>> modifiesPList = *ModifiesExtractor::extractModifiesP(programNode);
 
     for (auto entry: modifiesSList) {
         dataModifier->saveModifiesS(entry);
