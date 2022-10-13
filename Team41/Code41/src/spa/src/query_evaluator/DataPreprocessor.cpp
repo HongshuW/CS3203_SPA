@@ -29,19 +29,20 @@
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/select_clauses/SelectClause.h"
 #include "constants/ClauseVisitorConstants.h"
+#include "constants/QueryEvaluatotConstants.h"
 
 using namespace std;
 using namespace QB;
 namespace QE {
 
-    vector<DesignEntity> notDirectlyAvailDEs = {DesignEntity::CALL, DesignEntity::READ, DesignEntity::PRINT};
-    vector<AttrName> notDirectlyAvailAttrs = {AttrName::PROC_NAME, AttrName::VAR_NAME};
+    auto &entitiesToFilter = QueryEvaluatotConstants::entitiesToFilter;
+    auto &attrsToFilter = QueryEvaluatotConstants::attrsToFilter;
 
     Table DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
         const int FIRST_COL_IDX = 0;
-        vector<DesignEntity> directlyAvailEntities = {DesignEntity::STMT, DesignEntity::CONSTANT,
-                                                      DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
-        if (count(directlyAvailEntities.begin(), directlyAvailEntities.end(), designEntity)) {
+        const vector<DesignEntity> AVAIL_ENTITIES = {DesignEntity::STMT, DesignEntity::CONSTANT,
+                                                     DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
+        if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) {
             Table resultTable = this->dataRetriever->getTableByDesignEntity(designEntity);
             for (int i = 1; i < resultTable.header.size(); i++) {
                 resultTable = resultTable.dropCol(i);
@@ -61,9 +62,9 @@ namespace QE {
 
     Table
     DataPreprocessor::filerTableByDesignEntity(const Table &table, int colIdx, DesignEntity designEntity) {
-        vector<DesignEntity> directlyAvailEntities = {DesignEntity::STMT, DesignEntity::CONSTANT,
-                                                      DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
-        if (count(directlyAvailEntities.begin(), directlyAvailEntities.end(), designEntity)) return table;
+        vector<DesignEntity> AVAIL_ENTITIES = {DesignEntity::STMT, DesignEntity::CONSTANT,
+                                               DesignEntity::VARIABLE, DesignEntity::PROCEDURE};
+        if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) return table;
         Table filteredTable = Table();
         filteredTable.header = table.header;
         for (auto row: table.rows) {
@@ -99,9 +100,9 @@ namespace QE {
     }
 
     vector<string> DataPreprocessor::getEntityNames(DesignEntity designEntity) {
-        vector<DesignEntity> directlyAvailEntities = {DesignEntity::CONSTANT, DesignEntity::VARIABLE,
-                                                      DesignEntity::PROCEDURE};
-        if (count(directlyAvailEntities.begin(), directlyAvailEntities.end(), designEntity)) {
+        vector<DesignEntity> AVAIL_ENTITIES = {DesignEntity::CONSTANT, DesignEntity::VARIABLE,
+                                               DesignEntity::PROCEDURE};
+        if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) {
             int ENTITY_NAME_COL_IDX = 0;
             auto table = this->dataRetriever->getTableByDesignEntity(designEntity);
             return table.getColumnByName(table.header[ENTITY_NAME_COL_IDX]);
@@ -138,8 +139,8 @@ namespace QE {
             AttrRef attrRef = get<WithClause::WITH_REF_ATTR_REF_IDX>(withRef);
             DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym);
 
-            bool processingNeeded = std::count(notDirectlyAvailDEs.begin(), notDirectlyAvailDEs.end(), designEntity)
-                                    && std::count(notDirectlyAvailAttrs.begin(), notDirectlyAvailAttrs.end(),
+            bool processingNeeded = std::count(entitiesToFilter.begin(), entitiesToFilter.end(), designEntity)
+                                    && std::count(attrsToFilter.begin(), attrsToFilter.end(),
                                                   attrRef.attrName);
 
             const int TABLE_HEADER_SIZE = 2;
@@ -415,14 +416,6 @@ namespace QE {
         RefType ref1Type = getRefType(ref1);
         RefType ref2Type = getRefType(ref2);
 
-        string col1Name =
-                ref1Type == QB::RefType::SYNONYM ? get<Synonym>(ref1).synonym : QEUtils::getColNameByRefType(ref1Type);
-        string col2Name =
-                ref2Type == QB::RefType::SYNONYM ? get<Synonym>(ref2).synonym : QEUtils::getColNameByRefType(ref2Type);
-
-        const int FIRST_COL_IDX = 0;
-        const int SECOND_COL_IDX = 1;
-
         if (ref1Type == QB::RefType::INTEGER && ref2Type == QB::RefType::INTEGER) {
             auto boolTable = dataRetriever->getNextTResult(get<int>(ref1),
                     get<int>(ref2));
@@ -430,25 +423,18 @@ namespace QE {
             ? QEUtils::getScalarResponse(true)
             : Table();
         }
+        Table resultTable = Table();
         if (ref1Type == QB::RefType::INTEGER) {
-            auto resultTable = dataRetriever->getNextTStatements(get<int>(ref1)).dropCol(FIRST_COL_IDX);
-
+            resultTable = dataRetriever->getNextTStatements(get<int>(ref1));
             //check if second ref is not a synonym and return result immediately
             if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
-            //the second ref must be a synonym
-            resultTable.renameHeader({col2Name});
-            return resultTable;
-        }
-        if (ref2Type == QB::RefType::INTEGER) {
-            auto resultTable = dataRetriever->getPreviousTStatements(get<int>(ref2)).dropCol(SECOND_COL_IDX);
+        } else if (ref2Type == QB::RefType::INTEGER) {
+            resultTable = dataRetriever->getPreviousTStatements(get<int>(ref2));
             if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
-            resultTable.renameHeader({col1Name});
-            return resultTable;
+        } else {
+            resultTable = dataRetriever->getNextTTable();
         }
-        auto resultTable = dataRetriever->getNextTTable();
-        resultTable.renameHeader({col1Name, col2Name});
-
-        return dropUnusedColumns(resultTable);
+        return filterSingleClauseResultTable(ref1, ref2, resultTable);
     }
 
     Table DataPreprocessor::getTableByParent(shared_ptr<ParentClause> parentClause) {
@@ -507,14 +493,9 @@ namespace QE {
                     return Table();
                 }
 
-                vector<DesignEntity> notDirectlyAvailEntities = {DesignEntity::CALL, DesignEntity::READ,
-                                                                 DesignEntity::PRINT};
-                vector<AttrName> notDirectlyAvailAttrNames = {AttrName::PROC_NAME, AttrName::VAR_NAME};
-
-
                 bool processingNeeded =
-                        std::count(notDirectlyAvailEntities.begin(), notDirectlyAvailEntities.end(), designEntity)
-                        && std::count(notDirectlyAvailAttrNames.begin(), notDirectlyAvailAttrNames.end(),
+                        std::count(entitiesToFilter.begin(), entitiesToFilter.end(), designEntity)
+                        && std::count(attrsToFilter.begin(), attrsToFilter.end(),
                                       attrRef.attrName);
 
                 if (processingNeeded) {
@@ -644,11 +625,9 @@ namespace QE {
             //withRefs[i].index() == WithClause::WITH_REF_ATTR_REF_IDX
             AttrRef attrRef = std::get<AttrRef>(withRefs[i]);
             DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym);
-            vector<DesignEntity> notDirectlyAvailDEs = {DesignEntity::CALL, DesignEntity::READ,
-                                                        DesignEntity::PRINT};
-            vector<AttrName> notDirectlyAvailAttrs = {AttrName::PROC_NAME, AttrName::VAR_NAME};
-            bool processingNeeded = std::count(notDirectlyAvailDEs.begin(), notDirectlyAvailDEs.end(), designEntity)
-                                    && std::count(notDirectlyAvailAttrs.begin(), notDirectlyAvailAttrs.end(),
+
+            bool processingNeeded = std::count(entitiesToFilter.begin(), entitiesToFilter.end(), designEntity)
+                                    && std::count(attrsToFilter.begin(), attrsToFilter.end(),
                                                   attrRef.attrName);
             if (!processingNeeded) {
                 if (attrRef.attrName == AttrName::PROC_NAME) {

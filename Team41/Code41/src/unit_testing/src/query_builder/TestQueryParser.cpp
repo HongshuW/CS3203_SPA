@@ -297,13 +297,13 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*clause == NextClause(Synonym("w"), 2));
     }
 
-    SECTION ("while w; Select w such that Affects* (_, w)") {
-        std::string queryStr = "while w; Select w such that Affects* (_, w)";
+    SECTION ("assign w; Select w such that Affects* (_, w)") {
+        std::string queryStr = "assign w; Select w such that Affects* (_, w)";
         auto query = queryBuilder->buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
-                        Declaration(DesignEntity::WHILE, Synonym("w"))});
+                        Declaration(DesignEntity::ASSIGN, Synonym("w"))});
         shared_ptr<vector<Elem>> returnResults = make_shared<vector<Elem>>();
         returnResults->push_back(Synonym("w"));
         REQUIRE(*(query->selectClause) ==
@@ -863,6 +863,11 @@ TEST_CASE ("Test Query Parser") {
 
     SECTION ("Invalid pattern arg2, throw PQLParseException") {
         std::string queryStr = "assign a; Select a pattern a (_, 1)";
+        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
+    }
+
+    SECTION ("Invalid pattern clause, throw PQLParseException") {
+        std::string queryStr = "assign a; stmt s; variable v; Select s pattern Modifies(s, v)";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
     }
 }
