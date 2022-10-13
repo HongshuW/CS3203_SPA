@@ -5,13 +5,13 @@
 #ifndef SPA_SAVEEXTRACTEDASSIGNPATTERN_H
 #define SPA_SAVEEXTRACTEDASSIGNPATTERN_H
 
-#include "design_extractor/save_extractions/save_extracted_design/SaveExtractedDesign.h"
+#include "design_extractor/save_extractions/save_to_pkb/SaveToPKBInterface.h"
 
-class SaveExtractedAssignPattern : public SaveExtractedDesign {
+class SaveExtractedAssignPattern : public SaveToPKBInterface {
 public:
     SaveExtractedAssignPattern(shared_ptr<ProgramNode> programNode,
     shared_ptr<DataModifier> dataModifier)
-    : SaveExtractedDesign(std::move(programNode), std::move(dataModifier)) {}
+    : SaveToPKBInterface(std::move(programNode), std::move(dataModifier)) {}
 
     void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
 };

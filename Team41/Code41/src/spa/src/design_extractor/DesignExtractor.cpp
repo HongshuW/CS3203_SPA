@@ -8,7 +8,7 @@
 #include <queue>
 #include "EntityExtractor.h"
 #include "PatternExtractor.h"
-#include "design_extractor/save_extractions/save_extracted_design/ExecuteSaveExtractedDesign.h"
+#include "design_extractor/save_extractions/save_to_pkb/ExecuteSaveToPKB.h"
 using namespace AST;
 using namespace DE;
 using namespace std;
@@ -119,7 +119,7 @@ void DesignExtractor::run() {
     this->dataModifier->saveStatements(payload);
 
     // save relations and patterns
-    auto saveDesigns = ExecuteSaveExtractedDesign(this->programNode, this->dataModifier);
+    auto saveDesigns = ExecuteSaveToPKB(this->programNode, this->dataModifier);
     saveDesigns.executeSave();
 }
 

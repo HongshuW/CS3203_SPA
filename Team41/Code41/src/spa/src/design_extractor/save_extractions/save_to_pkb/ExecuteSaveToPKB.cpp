@@ -2,7 +2,7 @@
 // Created by Aaron on 12/10/22.
 //
 
-#include "ExecuteSaveExtractedDesign.h"
+#include "ExecuteSaveToPKB.h"
 #include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedCalls.h"
 #include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedFollows.h"
 #include "design_extractor/save_extractions/save_extracted_relations/SaveExtractedModifies.h"
@@ -14,14 +14,14 @@
 #include "design_extractor/save_extractions/save_extracted_patterns/SaveExtractedWhilePattern.h"
 #include "design_extractor/save_extractions/save_extracted_patterns/SaveExtractedAssignPattern.h"
 
-ExecuteSaveExtractedDesign::ExecuteSaveExtractedDesign(shared_ptr<ProgramNode> programNode,
-                                                       shared_ptr<DataModifier> dataModifier) {
+ExecuteSaveToPKB::ExecuteSaveToPKB(shared_ptr<ProgramNode> programNode,
+                                   shared_ptr<DataModifier> dataModifier) {
     this->programNode = programNode;
     this->dataModifier = dataModifier;
 }
 
-void ExecuteSaveExtractedDesign::executeSave() {
-    vector<shared_ptr<SaveExtractedDesign>> extractedDesignList;
+void ExecuteSaveToPKB::executeSave() {
+    vector<shared_ptr<SaveToPKBInterface>> extractedDesignList;
     this->initRelations(extractedDesignList);
     this->initPatterns(extractedDesignList);
     for (const auto& design: extractedDesignList) {
@@ -29,7 +29,7 @@ void ExecuteSaveExtractedDesign::executeSave() {
     }
 }
 
-void ExecuteSaveExtractedDesign::initRelations(vector<shared_ptr<SaveExtractedDesign>>& extractedDesignList) {
+void ExecuteSaveToPKB::initRelations(vector<shared_ptr<SaveToPKBInterface>>& extractedDesignList) {
     auto calls = make_shared<SaveExtractedCalls>(this->programNode, this->dataModifier);
     extractedDesignList.push_back(calls);
 
@@ -49,7 +49,7 @@ void ExecuteSaveExtractedDesign::initRelations(vector<shared_ptr<SaveExtractedDe
     extractedDesignList.push_back(parents);
 }
 
-void ExecuteSaveExtractedDesign::initPatterns(vector<shared_ptr<SaveExtractedDesign>>& extractedDesignList) {
+void ExecuteSaveToPKB::initPatterns(vector<shared_ptr<SaveToPKBInterface>>& extractedDesignList) {
     auto assignPattern = make_shared<SaveExtractedAssignPattern>(this->programNode, this->dataModifier);
     extractedDesignList.push_back(assignPattern);
 

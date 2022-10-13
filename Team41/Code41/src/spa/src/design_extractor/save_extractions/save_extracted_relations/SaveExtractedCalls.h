@@ -7,16 +7,16 @@
 
 #include "AST/ProgramNode.h"
 #include "pkb/DataModifier.h"
-#include "design_extractor/save_extractions/save_extracted_design/SaveExtractedDesign.h"
+#include "design_extractor/save_extractions/save_to_pkb/SaveToPKBInterface.h"
 
-class SaveExtractedCalls : public SaveExtractedDesign { ;
+class SaveExtractedCalls : public SaveToPKBInterface { ;
     void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
 
 public:
     SaveExtractedCalls(shared_ptr<ProgramNode> programNode,
                        shared_ptr<DataModifier> dataModifier)
-                       : SaveExtractedDesign(std::move(programNode),
-                                             std::move(dataModifier)) {}
+                       : SaveToPKBInterface(std::move(programNode),
+                                            std::move(dataModifier)) {}
 };
 
 
