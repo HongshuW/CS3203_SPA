@@ -137,18 +137,16 @@ shared_ptr<Table> DataRetriever::getExactRelationHelper(shared_ptr<Cachable> cac
         if (firstRange.empty() && secondRange.empty()) {
             // if the relation hasn't been queried before, call DE to find the relation
             result = ((*cacheManager).*func)(firstStmt, secondStmt);
-            return result
-                ? make_shared<Table>(QE::ClauseVisitorConstants::TRUE_TABLE)
-                : make_shared<Table>(QE::ClauseVisitorConstants::FALSE_TABLE);
-        }
-        // the relation has been queried before, search in cache
-        int firstDifference = firstRange.empty() ? INT_MAX : getDifference(firstRange);
-        int secondDifference = secondRange.empty() ? INT_MAX : getDifference(secondRange);
-        // search in the smaller range
-        if (firstDifference <= secondDifference) {
-            result = cachable->contains(row, stoi(firstRange[0]), stoi(firstRange[1]));
         } else {
-            result = cachable->contains(row, stoi(secondRange[0]), stoi(secondRange[1]));
+            // the relation has been queried before, search in cache
+            int firstDifference = firstRange.empty() ? INT_MAX : getDifference(firstRange);
+            int secondDifference = secondRange.empty() ? INT_MAX : getDifference(secondRange);
+            // search in the smaller range
+            if (firstDifference <= secondDifference) {
+                result = cachable->contains(row, stoi(firstRange[0]), stoi(firstRange[1]));
+            } else {
+                result = cachable->contains(row, stoi(secondRange[0]), stoi(secondRange[1]));
+            }
         }
     }
     return result
@@ -334,21 +332,6 @@ DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {
     string stmtNumberString = to_string(stmtNumber);
     string type = pkbStorage->getStmtType(stmtNumberString);
     return getDesignEntity(type);
-}
-
-unordered_set<string> DataRetriever::getFollowingStatements(int followedStatement) {
-    string stmtNumberString = to_string(followedStatement);
-    return *pkbStorage->getFollowingStatements(stmtNumberString);
-}
-
-unordered_set<string> DataRetriever::getChildrenStatements(int parentStatement) {
-    string stmtNumberString = to_string(parentStatement);
-    return *pkbStorage->getChildrenStatements(stmtNumberString);
-}
-
-unordered_set<string> DataRetriever::getModifiedVariables(int modifierStatement) {
-    string stmtNumberString = to_string(modifierStatement);
-    return *pkbStorage->getModifiedVariables(stmtNumberString);
 }
 
 void DataRetriever::clearCache() {

@@ -51,9 +51,6 @@ public:
     virtual Table getPrintVariableNames();
     virtual Table getReadVariableNames();
     virtual DesignEntity getDesignEntityOfStmt(int stmtNumber);
-    unordered_set<string> getFollowingStatements(int followedStatement);
-    unordered_set<string> getChildrenStatements(int parentStatement);
-    unordered_set<string> getModifiedVariables(int modifierStatement);
 
     void clearCache();
 
