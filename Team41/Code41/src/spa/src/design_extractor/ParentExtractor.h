@@ -5,9 +5,8 @@
 #ifndef SPA_PARENTEXTRACTOR_H
 #define SPA_PARENTEXTRACTOR_H
 
-#include "RelationExtractor.h"
-
-using namespace DE;
+#include <map>
+#include <list>
 
 namespace DE {
     class ParentExtractor {

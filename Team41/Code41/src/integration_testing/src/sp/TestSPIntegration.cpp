@@ -8,6 +8,12 @@
 #include "parser/Tokenizer.h"
 #include "parser/SPExceptions.h"
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/FollowsExtractor.h"
+#include "design_extractor/UsesExtractor.h"
+#include "design_extractor/ModifiesExtractor.h"
+#include "design_extractor/ParentExtractor.h"
+#include "design_extractor/NextExtractor.h"
+#include "design_extractor/CallsExtractor.h"
 #include "design_extractor/PatternExtractor.h"
 #include "pkb/DataModifier.h"
 #include "query_builder/QueryBuilder.h"
@@ -28,7 +34,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType follows = RelationType::FOLLOWS;
-        auto actual = designExtractor.extractRelations(follows);
+        auto actual = FollowsExtractor().extractFollows(root);
         vector<vector<string>> expected = { {"1", "2"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -43,7 +49,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType follows = RelationType::FOLLOWS;
-        auto actual = designExtractor.extractRelations(follows);
+        auto actual = FollowsExtractor().extractFollows(root);
         vector<vector<string>> expected = { {"1", "2"}, {"2", "3"}};
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -58,7 +64,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType followsT = RelationType::FOLLOWS_T;
-        auto actual = designExtractor.extractRelations(followsT);
+        auto actual = FollowsExtractor().extractFollowsStar(root);
         vector<vector<string>> expected = { {"1", "2"}, {"1", "3"}, {"2", "3"}};
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -73,7 +79,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType follows1 = RelationType::FOLLOWS;
-        auto actual1 = designExtractor.extractRelations(follows1);
+        auto actual1 = FollowsExtractor().extractFollows(root);
         vector<vector<string>> expected1 = { {"1", "2"}};
         REQUIRE(expected1.size() == actual1->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual1, expected1));
@@ -88,7 +94,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType follows1 = RelationType::FOLLOWS;
-        auto actual1 = designExtractor.extractRelations(follows1);
+        auto actual1 = FollowsExtractor().extractFollows(root);
         vector<vector<string>> expected1 = { {"1", "2"}, {"3", "4"}};
         REQUIRE(expected1.size() == actual1->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual1, expected1));
@@ -103,7 +109,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType followst1 = RelationType::FOLLOWS_T;
-        auto actual1 = designExtractor.extractRelations(followst1);
+        auto actual1 = FollowsExtractor().extractFollowsStar(root);
         vector<vector<string>> expected1 = { {"1", "2"}, {"3", "4"}, {"3", "5"}, {"4", "5"}
         };
         REQUIRE(expected1.size() == actual1->size());
@@ -119,7 +125,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType follows1 = RelationType::FOLLOWS;
-        auto actual1 = designExtractor.extractRelations(follows1);
+        auto actual1 = FollowsExtractor().extractFollows(root);
         vector<vector<string>> expected1 = { {"1", "2"}, {"4", "5"}, {"6", "7"}
         };
         REQUIRE(expected1.size() == actual1->size());
@@ -135,7 +141,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType followst1 = RelationType::FOLLOWS_T;
-        auto actual1 = designExtractor.extractRelations(followst1);
+        auto actual1 = FollowsExtractor().extractFollowsStar(root);
         vector<vector<string>> expected1 = { {"1", "2"}, {"1", "8"}, {"2", "8"}, {"4", "5"}, {"6", "7"}
         };
         REQUIRE(expected1.size() == actual1->size());
@@ -151,7 +157,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType modifiesS = RelationType::MODIFIES_S;
-        auto actual = designExtractor.extractRelations(modifiesS);
+        auto actual = ModifiesExtractor::extractModifiesS(root);
         vector<vector<string>> expected = { {"2", "x"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -166,7 +172,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType modifiesS = RelationType::MODIFIES_S;
-        auto actual = designExtractor.extractRelations(modifiesS);
+        auto actual = ModifiesExtractor::extractModifiesS(root);
         vector<vector<string>> expected = { {"2", "x"}, {"3", "z"}, {"4", "a"}, {"5", "c"}};
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -181,7 +187,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType modifiesS = RelationType::MODIFIES_S;
-        auto actual = designExtractor.extractRelations(modifiesS);
+        auto actual = ModifiesExtractor::extractModifiesS(root);
         vector<vector<string>> expected = { {"1", "a"}, {"2", "b"}, {"2", "c"}, {"2", "d"},
                                             {"2", "f"}, {"3", "b"}, {"3", "c"}, {"3", "d"}, {"4", "b"}, {"5", "c"}, {"6", "d"}, {"8", "f"}};
         REQUIRE(expected.size() == actual->size());
@@ -197,7 +203,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType parent = RelationType::PARENT;
-        auto actual = designExtractor.extractRelations(parent);
+        auto actual = ParentExtractor::extractParent(root);
         vector<vector<string>> expected = { };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -212,7 +218,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType parentT = RelationType::PARENT_T;
-        auto actual = designExtractor.extractRelations(parentT);
+        auto actual = ParentExtractor::extractParentT(root);
         vector<vector<string>> expected = { };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -227,7 +233,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType parent = RelationType::PARENT;
-        auto actual = designExtractor.extractRelations(parent);
+        auto actual = ParentExtractor::extractParent(root);
         vector<vector<string>> expected = { {"2", "3"}, {"2", "4"}, {"2", "5"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -242,7 +248,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType parentT = RelationType::PARENT_T;
-        auto actual = designExtractor.extractRelations(parentT);
+        auto actual = ParentExtractor::extractParentT(root);
         vector<vector<string>> expected = { {"2", "3"}, {"2", "4"}, {"2", "5"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -257,7 +263,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType parent = RelationType::PARENT;
-        auto actual = designExtractor.extractRelations(parent);
+        auto actual = ParentExtractor::extractParent(root);
         vector<vector<string>> expected = { {"2", "3"}, {"2", "7"}, {"2", "8"},
                                             {"3", "4"}, {"3", "5"}, {"3", "6"}};
         REQUIRE(expected.size() == actual->size());
@@ -273,7 +279,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType parentT = RelationType::PARENT_T;
-        auto actual = designExtractor.extractRelations(parentT);
+        auto actual = ParentExtractor::extractParentT(root);
         vector<vector<string>> expected = { {"2", "3"}, {"2", "4"}, {"2", "5"}, {"2", "6"}, {"2", "7"}, {"2", "8"},
                                             {"3", "4"}, {"3", "5"}, {"3", "6"} };
         REQUIRE(expected.size() == actual->size());
@@ -289,7 +295,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType usesS = RelationType::USES_S;
-        auto actual = designExtractor.extractRelations(usesS);
+        auto actual = UsesExtractor::extractUsesS(root);
         vector<vector<string>> expected = { {"1", "x"}, {"2", "y"}, {"2", "z"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -304,7 +310,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
         QB::RelationType usesS = RelationType::USES_S;
-        auto actual = designExtractor.extractRelations(usesS);
+        auto actual = UsesExtractor::extractUsesS(root);
         vector<vector<string>> expected = { {"2", "x"}, {"2", "z"}, {"4", "z"}};
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -320,7 +326,7 @@ TEST_CASE("Test SP Integration") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
 
         QB::RelationType usesS = RelationType::USES_S;
-        auto actual = designExtractor.extractRelations(usesS);
+        auto actual = UsesExtractor::extractUsesS(root);
         vector<vector<string>> expected = { {"2", "x"}, {"2", "y"}, {"2", "a"}, {"2", "e"}, {"3", "x"},
                                             {"3", "y"}, {"4", "x"}, {"5", "x"}, {"6", "y"}, {"7", "e"}, {"8", "a"}};
         REQUIRE(expected.size() == actual->size());
@@ -337,7 +343,7 @@ TEST_CASE("Test SP Integration") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
 
         RelationType callS = RelationType::CALLS;
-        auto actual = designExtractor.extractRelations(callS);
+        auto actual = CallsExtractor::extractCalls(root);
         vector<vector<string>> expected = { {"deepNesting", "x23", "23"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementTuple(*actual, expected));
@@ -353,7 +359,7 @@ TEST_CASE("Test SP Integration") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
 
         QB::RelationType callT = RelationType::CALLS_T;
-        auto actual = designExtractor.extractRelations(callT);
+        auto actual = CallsExtractor::extractCallsStar(root);
         vector<vector<string>> expected = { {"deepNesting", "x23"} };
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -367,7 +373,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-        list<vector<string>> actual = designExtractor.extractIfPatterns();
+        list<vector<string>> actual = PatternExtractor::extractIfPattern(root);
         vector<vector<string>> expected = { {"2", "x"} };
         REQUIRE(expected.size() == actual.size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
@@ -381,7 +387,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-        list<vector<string>> actual = designExtractor.extractIfPatterns();
+        list<vector<string>> actual = PatternExtractor::extractIfPattern(root);
         vector<vector<string>> expected = {{"2", "baz"}, {"2", "qux"}, {"2", "quux"},
                                            {"3", "bing"}, {"3", "boom"}, {"3", "qxxx"}};
         REQUIRE(expected.size() == actual.size());
@@ -396,7 +402,7 @@ TEST_CASE("Test SP Integration") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-        list<vector<string>> actual = designExtractor.extractWhilePatterns();
+        list<vector<string>> actual = PatternExtractor::extractWhilePattern(root);
         vector<vector<string>> expected = {{"2", "baz"}, {"2", "qux"}, {"2", "quux"},
                                            {"3", "bing"}, {"3", "boom"}, {"3", "qxxx"},
                                            {"5", "x"}, {"5", "y"}};

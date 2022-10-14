@@ -107,8 +107,6 @@ add_library(spa ${srcs} ${headers}
         src/parser/ASTBuilder.h
         src/utils/Utils.cpp
         src/utils/Utils.h
-        src/design_extractor/RelationExtractor.cpp
-        src/design_extractor/RelationExtractor.h
         src/utils/ExprNodeParser.cpp
         src/utils/ExprNodeParser.h
         src/design_extractor/FollowsExtractor.cpp
@@ -288,7 +286,32 @@ add_library(spa ${srcs} ${headers}
         src/parser/constants/ValidatorConstants.cpp 
         src/parser/constants/ValidatorConstants.h 
         src/query_builder/constants/CommonConstants.cpp 
-        src/query_builder/constants/CommonConstants.h src/query_evaluator/constants/QueryEvaluatotConstants.cpp src/query_evaluator/constants/QueryEvaluatotConstants.h)
+        src/query_builder/constants/CommonConstants.h 
+        src/design_extractor/save_extractions/save_to_pkb/SaveToPKBInterface.cpp 
+        src/design_extractor/save_extractions/save_to_pkb/SaveToPKBInterface.h 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedModifies.cpp 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedModifies.h 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedUses.cpp 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedUses.h 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedFollows.cpp 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedFollows.h 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedCalls.cpp 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedCalls.h 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedNext.cpp 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedNext.h 
+        src/design_extractor/save_extractions/save_to_pkb/ExecuteSaveToPKB.cpp 
+        src/design_extractor/save_extractions/save_to_pkb/ExecuteSaveToPKB.h 
+        src/design_extractor/save_extractions/save_extracted_patterns/SaveExtractedAssignPattern.cpp 
+        src/design_extractor/save_extractions/save_extracted_patterns/SaveExtractedAssignPattern.h 
+        src/design_extractor/save_extractions/save_extracted_patterns/SaveExtractedIfPattern.cpp 
+        src/design_extractor/save_extractions/save_extracted_patterns/SaveExtractedIfPattern.h
+        src/design_extractor/save_extractions/save_extracted_patterns/SaveExtractedWhilePattern.cpp 
+        src/design_extractor/save_extractions/save_extracted_patterns/SaveExtractedWhilePattern.h 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedParents.cpp 
+        src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedParents.h
+        src/query_evaluator/constants/QueryEvaluatotConstants.cpp 
+        src/query_evaluator/constants/QueryEvaluatotConstants.h)
+
 
 
 
