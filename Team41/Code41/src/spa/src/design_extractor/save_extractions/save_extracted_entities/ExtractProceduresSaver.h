@@ -8,6 +8,7 @@
 #include "../save_to_pkb/SaveToPKBInterface.h"
 
 class ExtractProceduresSaver : public SaveToPKBInterface {
+public:
     ExtractProceduresSaver(shared_ptr<ProgramNode> programNode,
     shared_ptr<DataModifier> dataModifier)
     : SaveToPKBInterface(std::move(programNode), std::move(dataModifier)) {}

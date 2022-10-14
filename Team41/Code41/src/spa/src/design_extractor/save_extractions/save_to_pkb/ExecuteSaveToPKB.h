@@ -18,6 +18,7 @@ public:
 private:
     void initRelations(vector<shared_ptr<SaveToPKBInterface>>& extractedDesignList);
     void initPatterns(vector<shared_ptr<SaveToPKBInterface>>& extractedDesignList);
+    void initEntities(vector<shared_ptr<SaveToPKBInterface>>& extractedDesignList);
 
     shared_ptr<ProgramNode> programNode;
     shared_ptr<DataModifier> dataModifier;

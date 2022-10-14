@@ -8,6 +8,7 @@
 #include "../save_to_pkb/SaveToPKBInterface.h"
 
 class ExtractConstantSaver : public SaveToPKBInterface {
+public:
     ExtractConstantSaver(shared_ptr<ProgramNode> programNode,
     shared_ptr<DataModifier> dataModifier)
     : SaveToPKBInterface(std::move(programNode), std::move(dataModifier)) {}

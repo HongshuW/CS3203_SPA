@@ -101,10 +101,10 @@ void DesignExtractor::extractEntitiesFromProcedure(shared_ptr<ProcedureNode> pro
 
 void DesignExtractor::run() {
     //save entities
-    auto entitiesToSave = vector<DesignEntity>{DesignEntity::VARIABLE, DesignEntity::CONSTANT, DesignEntity::PROCEDURE};
-    for (auto designEntity: entitiesToSave) {
-        this->saveEntityToPKB(designEntity);
-    }
+//    auto entitiesToSave = vector<DesignEntity>{DesignEntity::VARIABLE, DesignEntity::CONSTANT, DesignEntity::PROCEDURE};
+//    for (auto designEntity: entitiesToSave) {
+//        this->saveEntityToPKB(designEntity);
+//    }
 
     //save statement lines and types
     shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> nodeToLine = ASTUtils::getNodePtrToLineNumMap(programNode);
@@ -118,7 +118,7 @@ void DesignExtractor::run() {
     }
     this->dataModifier->saveStatements(payload);
 
-    // save relations and patterns
+    // save relations and patterns and entities
     auto saveDesigns = ExecuteSaveToPKB(this->programNode, this->dataModifier);
     saveDesigns.executeSave();
 }
