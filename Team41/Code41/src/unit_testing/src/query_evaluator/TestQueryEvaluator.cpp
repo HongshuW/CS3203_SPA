@@ -976,5 +976,432 @@ TEST_CASE("Test query evaluator") {
         vector<string> expected = {"p2 x", "p2 y"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
-
+    SECTION("test select return tuple: assign a; select <a.stmt#, a> such that affect(1, a)") {
+        Synonym syn1 = Synonym("a");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::ASSIGN, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(1,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {"2 2"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: assign a; select bool such that affect(a, 2)") {
+        Synonym syn1 = Synonym("a");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::ASSIGN, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->setReturnBoolean()
+                ->addAffects(syn1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect(1, pn)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(1,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return false: print pn; select bool such that affect(pn, 2)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->setReturnBoolean()
+                ->addAffects(syn1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect(1, 2)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffects(1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(2, _)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffects(2, Underscore())
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(1, _)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffects(1, Underscore())
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(1, 3)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffects(1, 3)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: assign a; select <a.stmt#, a> such that affect*(1, a)") {
+        Synonym syn1 = Synonym("a");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::ASSIGN, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(1,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {"2 2"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return true: assign a; select bool such that affect*(a, 2)") {
+        Synonym syn1 = Synonym("a");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::ASSIGN, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->setReturnBoolean()
+                ->addAffectsT(syn1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect*(1, pn)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(1,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return false: print pn; select bool such that affect*(pn, 2)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->setReturnBoolean()
+                ->addAffectsT(syn1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect*(1, pn)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(1,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect*(pn, 2)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(syn1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect*(pn, _)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(syn1, Underscore())
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select <rd.stmt#, rd> such that affect*(_, rd)") {
+        Synonym syn1 = Synonym("rd");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::READ, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(Underscore(), syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; print pn; select <pn.stmt#, pn> such that affect*(pn, rd)") {
+        Synonym syn1 = Synonym("rd");
+        Synonym syn2 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::READ, syn1)
+                ->addDeclaration(QB::DesignEntity::PRINT, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(syn2, syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(_, 1)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffectsT(Underscore(), 1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(_, 2)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffectsT(Underscore(), 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(1, 2)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffectsT(1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(1, 3)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffectsT(1, 3)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(2, _)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffectsT(2, Underscore())
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(1, _)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffectsT(1, Underscore())
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect*(_, _)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffectsT(Underscore(), 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        REQUIRE(!actual.empty());
+    }
+    SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect(1, pn)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(1,syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect(pn, 2)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(syn1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect(pn, _)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(syn1, Underscore())
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select <rd.stmt#, rd> such that affect(_, rd)") {
+        Synonym syn1 = Synonym("rd");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::READ, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(Underscore(), syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; print pn; select <pn.stmt#, pn> such that affect(pn, rd)") {
+        Synonym syn1 = Synonym("rd");
+        Synonym syn2 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::READ, syn1)
+                ->addDeclaration(QB::DesignEntity::PRINT, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(syn2, syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: stmt rd; print pn; select <pn.stmt#, pn> such that affect(pn, rd)") {
+        Synonym syn1 = Synonym("rd");
+        Synonym syn2 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addDeclaration(QB::DesignEntity::PRINT, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(syn2, syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; assign pn; select <pn.stmt#, pn> such that affect(pn, rd)") {
+        Synonym syn1 = Synonym("rd");
+        Synonym syn2 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::READ, syn1)
+                ->addDeclaration(QB::DesignEntity::ASSIGN, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(syn2, syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: stmt rd; assign pn; select <pn.stmt#, pn> such that affect*(pn, rd)") {
+        Synonym syn1 = Synonym("rd");
+        Synonym syn2 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addDeclaration(QB::DesignEntity::ASSIGN, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffects(syn2, syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {"2 2"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect(_, 1)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffects(Underscore(), 1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect(_, 2)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffects(Underscore(), 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = TRUE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; select bool such that affect(_, _)") {
+        auto query = make_shared<TestQueryBuilder>()
+                ->setReturnBoolean()
+                ->addAffects(Underscore(), 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        REQUIRE(!actual.empty());
+    }
+    SECTION("test select return tuple: stmt rd; assign pn; select <pn.stmt#, pn> such that affect*(pn, rd)") {
+        Synonym syn1 = Synonym("rd");
+        Synonym syn2 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addDeclaration(QB::DesignEntity::ASSIGN, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(syn2, syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {"2 2"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: stmt rd; print pn; select <pn.stmt#, pn> such that affect*(pn, rd)") {
+        Synonym syn1 = Synonym("rd");
+        Synonym syn2 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addDeclaration(QB::DesignEntity::PRINT, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(syn2, syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("test select return tuple: read rd; assign pn; select <pn.stmt#, pn> such that affect*(pn, rd)") {
+        Synonym syn1 = Synonym("rd");
+        Synonym syn2 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::READ, syn1)
+                ->addDeclaration(QB::DesignEntity::ASSIGN, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addToSelect(syn1)
+                ->addAffectsT(syn2, syn1)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
 }
