@@ -12,7 +12,6 @@ class AbstractClauseVisitor: public IVisitor {
 
 protected:
     shared_ptr<QE::DataPreprocessor> dataPreprocessor;
-    ClauseResult clauseResult;
 
 public:
      explicit AbstractClauseVisitor(shared_ptr<QE::DataPreprocessor> dataPreprocessor);
