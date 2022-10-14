@@ -1256,6 +1256,17 @@ TEST_CASE("Test query evaluator") {
         vector<string> expected = {};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
+    SECTION("test select return false: print pn; select boolean such that affect(pn, 2)") {
+        Synonym syn1 = Synonym("pn");
+        auto query = make_shared<TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->setReturnBoolean()
+                ->addAffects(syn1, 2)
+                ->build();
+        auto actual = queryEvaluator.evaluate(query);
+        vector<string> expected = FALSE_RESULT;
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
     SECTION("test select return tuple: print pn; select <pn.stmt#, pn> such that affect(pn, _)") {
         Synonym syn1 = Synonym("pn");
         auto query = make_shared<TestQueryBuilder>()

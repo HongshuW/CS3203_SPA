@@ -353,7 +353,7 @@ namespace QE {
         if (!isRef1Valid || !isRef2Valid) return EMPTY_RESULT;
         auto resultTable = dataRetriever->getAffectsTable();
         resultTable.renameHeader({col1Name, col2Name});
-
+        resultTable = filterSingleClauseResultTable(ref1, ref2, resultTable);
         return dropUnusedColumns(resultTable);
     }
 
@@ -409,7 +409,7 @@ namespace QE {
 
         auto resultTable = dataRetriever->getAffectsTTable();
         resultTable.renameHeader({col1Name, col2Name});
-
+        resultTable = filterSingleClauseResultTable(ref1, ref2, resultTable);
         return dropUnusedColumns(resultTable);
     }
 
