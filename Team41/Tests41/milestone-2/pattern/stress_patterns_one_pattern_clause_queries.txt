@@ -1,0 +1,220 @@
+1 - valid if pattern
+if i;
+Select i pattern i("x1", _, _)
+1, 2, 3, 14, 15
+5000
+2 - valid if pattern
+if i;
+Select i pattern i("a1", _, _)
+1
+5000
+3 - valid if pattern
+if i;
+Select i pattern i("b1", _, _)
+1
+5000
+4 - valid if pattern
+if i;
+Select i pattern i("c1", _, _)
+none
+5000
+5 - valid if pattern
+if i;
+Select i pattern i("x13", _, _)
+14
+5000
+6 - valid if pattern
+if i;
+Select i pattern i("x6", _, _)
+none
+5000
+7 - valid if pattern
+if i;
+Select i pattern i(_, _, _)
+1, 2, 3, 14, 15
+5000
+8 - valid if pattern
+if i; variable v;
+Select i pattern i(v, _, _)
+1, 2, 3, 14, 15
+5000
+9 - invalid if pattern
+if i; assign a;
+Select i pattern i(a, _, _)
+SemanticError
+5000
+10 - invalid if pattern
+if i; call c;
+Select i pattern i(c, _, _)
+SemanticError
+5000
+11 - invalid if pattern
+if i; read r;
+Select i pattern i(r, _, _)
+SemanticError
+5000
+12 - invalid if pattern
+if i; print p;
+Select i pattern i(p, _, _)
+SemanticError
+5000
+13 - invalid if pattern
+if i;
+Select i pattern i(i, _, _)
+SemanticError
+5000
+14 - invalid if pattern
+if i; procedure p;
+Select i pattern i(p, _, _)
+SemanticError
+5000
+15 - invalid if pattern
+if i; stmt s;
+Select i pattern i(s, _, _)
+SemanticError
+5000
+16 - invalid if pattern
+if i; stmt s;
+Select i pattern i(_, s, _)
+SyntaxError
+5000
+17 - invalid if pattern
+if i; stmt s;
+Select i pattern i(_, _, s)
+SyntaxError
+5000
+18 - invalid if pattern
+if i;
+Select i pattern i(_, "a1", _)
+SyntaxError
+5000
+19 - invalid if pattern
+if i;
+Select i pattern i("a1", _, "a1")
+SyntaxError
+5000
+20 - invalid if pattern
+if i;
+Select i pattern i("_x13_", _, _)
+SyntaxError
+5000
+21 - invalid if pattern
+if i;
+Select i pattern i("a1", _)
+SyntaxError
+5000
+22 - invalid pattern
+assign a;
+Select a pattern a("x1", _, _)
+SyntaxError
+5000
+23 - invalid pattern
+assign a; if i;
+Select a pattern a(i, _, _)
+SyntaxError
+5000
+24 - valid while pattern
+while w;
+Select w pattern w("x1", _)
+4, 6
+5000
+25 - valid while pattern
+while w;
+Select w pattern w("a4", _)
+4, 18
+5000
+26 - valid while pattern
+while w;
+Select w pattern w("x4", _)
+4, 6, 18
+5000
+27 - valid while pattern
+while w;
+Select w pattern w("x2", _)
+4, 6
+5000
+28 - valid while pattern
+while w;
+Select w pattern w("x1", _)
+4, 6
+5000
+29 - valid while pattern
+while w;
+Select w pattern w("a4", _)
+4, 18
+5000
+30 - invalid while pattern
+while w;
+Select w pattern w("10", _)
+SyntaxError
+5000
+31 - valid while pattern
+while w;
+Select w pattern w("x3", _)
+4, 6
+5000
+32 - valid if pattern
+if i;
+Select i pattern i("firstProcedure", _, _)
+14
+5000
+33 - valid while pattern
+while w; variable v;
+Select w pattern w(v, _)
+4, 6, 16, 18
+5000
+34 - invalid while pattern
+while w; assign a;
+Select w pattern w(a, _)
+SemanticError
+5000
+35 - invalid while pattern
+while w; call c;
+Select w pattern w(c, _)
+SemanticError
+5000
+36 - invalid while pattern
+while w; read r;
+Select w pattern w(r, _)
+SemanticError
+5000
+37 - invalid while pattern
+while w; print p;
+Select w pattern w(p, _)
+SemanticError
+5000
+38 - invalid while pattern
+while w;
+Select w pattern w(w, _)
+SemanticError
+5000
+39 - invalid while pattern
+while w; procedure p;
+Select w pattern w(p, _)
+SemanticError
+5000
+40 - invalid while pattern
+while w; stmt s;
+Select w pattern w(s, _)
+SemanticError
+5000
+41 - invalid while pattern
+while w; stmt s;
+Select w pattern w(_, s)
+SyntaxError
+5000
+42 - invalid while pattern
+while w;
+Select w pattern w(_, "a1")
+SyntaxError
+5000
+43 - invalid while pattern
+while w;
+Select w pattern w("a1", "a1")
+SyntaxError
+5000
+44 - invalid while pattern
+while w;
+Select w pattern w("_x13_", _)
+SyntaxError
+5000

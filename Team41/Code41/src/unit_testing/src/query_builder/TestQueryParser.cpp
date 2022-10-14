@@ -870,4 +870,9 @@ TEST_CASE ("Test Query Parser") {
         std::string queryStr = "assign a; stmt s; variable v; Select s pattern Modifies(s, v)";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
     }
+
+    SECTION ("Invalid ident in while clause, throw PQLParseException") {
+        std::string queryStr = "while w; Select w pattern w(\"10\", _)";
+        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
+    }
 }
