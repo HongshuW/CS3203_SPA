@@ -132,7 +132,7 @@ TEST_CASE("Test PKBStorage") {
 
     // Testing of assign patterns
 
-    PatternTable * patternTable = pkbStorage->getAssignPatterns();
+    shared_ptr<PatternTable> patternTable = pkbStorage->getAssignPatterns();
     *patternTable = PatternTable();
 
     // pattern 1: x = x + 1;

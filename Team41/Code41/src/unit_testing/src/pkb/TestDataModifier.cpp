@@ -17,7 +17,7 @@ TEST_CASE("Test Data Modifier") {
 
         pkbStorage->getVariables()->dropRows();
         dataModifier.saveVariables(variables);
-        VariableTable * variableTable = pkbStorage->getVariables();
+        shared_ptr<VariableTable> variableTable = pkbStorage->getVariables();
 
         // check header is set automatically
         REQUIRE(variableTable->header[0] == "$variable_name");
@@ -54,7 +54,7 @@ TEST_CASE("Test Data Modifier") {
         dataModifier.saveParentT(vector<string>{"1", "2"});
         dataModifier.saveParentT(vector<string>{"1", "3"});
         dataModifier.saveParentT(vector<string>{"2", "3"});
-        ParentTable * parentTTable = pkbStorage->getParentT();
+        shared_ptr<ParentTable> parentTTable = pkbStorage->getParentT();
 
         // check header is set automatically
         REQUIRE(parentTTable->header[0] == "$parent_statement");
@@ -101,7 +101,7 @@ TEST_CASE("Test Data Modifier") {
         pattern->left = left;
         pattern->right = right;
         dataModifier.saveAssignPattern(metainfo, pattern);
-        PatternTable * patternTable = pkbStorage->getAssignPatterns();
+        shared_ptr<PatternTable> patternTable = pkbStorage->getAssignPatterns();
 
         // check header is set automatically
         REQUIRE(patternTable->header[0] == "$statement_number");

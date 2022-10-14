@@ -57,8 +57,8 @@ public:
     shared_ptr<Table> getStatements();
     shared_ptr<Table> getPrintVariableNames();
     shared_ptr<Table> getReadVariableNames();
-    VariableTable * getVariables();
-    ConstantTable * getConstants();
+    shared_ptr<VariableTable> getVariables();
+    shared_ptr<ConstantTable> getConstants();
     string getStmtType(string stmtNumber);
     // setters of entities
     void saveProcedures(list<string> procedures);
@@ -68,21 +68,21 @@ public:
     void saveConstants(list<string> constants);
 
     // getters of relations
-    FollowsTable * getFollows();
-    FollowsTable * getFollowsT();
-    ParentTable * getParent();
-    ParentTable * getParentT();
-    UsesTable * getUsesS();
-    UsesTable * getUsesP();
-    ModifiesTable * getModifiesS();
-    ModifiesTable * getModifiesP();
+    shared_ptr<FollowsTable> getFollows();
+    shared_ptr<FollowsTable> getFollowsT();
+    shared_ptr<ParentTable> getParent();
+    shared_ptr<ParentTable> getParentT();
+    shared_ptr<UsesTable> getUsesS();
+    shared_ptr<UsesTable> getUsesP();
+    shared_ptr<ModifiesTable> getModifiesS();
+    shared_ptr<ModifiesTable> getModifiesP();
     shared_ptr<Table> getCalls();
-    CallsTable * getCallsT();
+    shared_ptr<CallsTable> getCallsT();
     shared_ptr<Table> getCallsProcedureNames();
-    NextTable * getNext();
-    NextTable * getNextT();
-    AffectsTable * getAffects();
-    AffectsTable * getAffectsT();
+    shared_ptr<NextTable> getNext();
+    shared_ptr<NextTable> getNextT();
+    shared_ptr<AffectsTable> getAffects();
+    shared_ptr<AffectsTable> getAffectsT();
     shared_ptr<unordered_set<string>> getFollowingStatements(string followedStatement);
     shared_ptr<unordered_set<string>> getChildrenStatements(string parentStatement);
     shared_ptr<unordered_set<string>> getModifiedVariables(string modifierStatement);
@@ -104,9 +104,9 @@ public:
 
     // getters of patterns
     shared_ptr<Table> getMatchedAssignPatterns(ExpressionSpec expressionSpec);
-    PatternTable * getAssignPatterns();
-    PatternTable * getWhilePatterns();
-    PatternTable * getIfPatterns();
+    shared_ptr<PatternTable> getAssignPatterns();
+    shared_ptr<PatternTable> getWhilePatterns();
+    shared_ptr<PatternTable> getIfPatterns();
     // setters of patterns
     void saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
     void saveWhilePattern(vector<string> metainfo);
@@ -116,29 +116,29 @@ public:
 
 private:
     // Entity Tables
-    ProcedureTable procedureTable;
-    StatementTable statementTable;
-    VariableTable variableTable;
-    ConstantTable constantTable;
+    shared_ptr<ProcedureTable> procedureTable;
+    shared_ptr<StatementTable> statementTable;
+    shared_ptr<VariableTable> variableTable;
+    shared_ptr<ConstantTable> constantTable;
     // Relation Tables
-    FollowsTable followsTable;
-    FollowsTable followsTTable;
-    ParentTable parentTable;
-    ParentTable parentTTable;
-    UsesTable usesSTable;
-    UsesTable usesPTable;
-    ModifiesTable modifiesSTable;
-    ModifiesTable modifiesPTable;
-    CallsTable callsTable;
-    CallsTable callsTTable;
-    NextTable nextTable;
-    NextTable nextTTable;
-    AffectsTable affectsTable;
-    AffectsTable affectsTTable;
+    shared_ptr<FollowsTable> followsTable;
+    shared_ptr<FollowsTable> followsTTable;
+    shared_ptr<ParentTable> parentTable;
+    shared_ptr<ParentTable> parentTTable;
+    shared_ptr<UsesTable> usesSTable;
+    shared_ptr<UsesTable> usesPTable;
+    shared_ptr<ModifiesTable> modifiesSTable;
+    shared_ptr<ModifiesTable> modifiesPTable;
+    shared_ptr<CallsTable> callsTable;
+    shared_ptr<CallsTable> callsTTable;
+    shared_ptr<NextTable> nextTable;
+    shared_ptr<NextTable> nextTTable;
+    shared_ptr<AffectsTable> affectsTable;
+    shared_ptr<AffectsTable> affectsTTable;
     // Pattern Tables
-    PatternTable assignPatternTable;
-    PatternTable whilePatternTable;
-    PatternTable ifPatternTable;
+    shared_ptr<PatternTable> assignPatternTable;
+    shared_ptr<PatternTable> whilePatternTable;
+    shared_ptr<PatternTable> ifPatternTable;
 };
 
 
