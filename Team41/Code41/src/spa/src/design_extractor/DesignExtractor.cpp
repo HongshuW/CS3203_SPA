@@ -123,7 +123,6 @@ void DesignExtractor::run() {
     saveDesigns.executeSave();
 }
 
-
 vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
     return NextExtractor::extractNextStar(this->programNode, args);
 }

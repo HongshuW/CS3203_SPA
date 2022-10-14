@@ -105,13 +105,13 @@ namespace DE {
             for (const auto& stmtNode: stmtList) {
                 queue.push(stmtNode);
             }
-
             while (!queue.empty()) {
                 auto node = queue.front();
                 queue.pop();
                 NodeType nodeType = ASTUtils::getNodeType(node);
                 switch (nodeType) {
                     case AST::IF_NODE: {
+                        output.push_back(node);
                         shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(node);
                         for (auto childStmtNode: ifNode->ifStmtList) {
                             queue.push(childStmtNode);
@@ -122,6 +122,7 @@ namespace DE {
                         break;
                     }
                     case AST::WHILE_NODE: {
+                        output.push_back(node);
                         shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(node);
                         for (auto childStmtNode: whileNode->stmtList) {
                             queue.push(childStmtNode);
@@ -135,6 +136,7 @@ namespace DE {
                 }
             }
         }
+        return output;
     }
 
     bool EntityExtractor::is_number(const std::string& s)

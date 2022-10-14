@@ -72,8 +72,7 @@ void ExecuteSaveToPKB::initEntities(vector<shared_ptr<SaveToPKBInterface>>& extr
     auto constants = make_shared<ExtractConstantSaver>(this->programNode, this->dataModifier);
     extractedDesignList.push_back(constants);
 
-    auto procedures = make_shared<ExtractProceduresSaver(this->programNode, this->dataModifier);
+    auto procedures = make_shared<ExtractProceduresSaver>(this->programNode, this->dataModifier);
     extractedDesignList.push_back(procedures);
 }
-
 
