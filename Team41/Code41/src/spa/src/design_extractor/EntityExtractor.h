@@ -14,10 +14,12 @@ using namespace AST;
 using namespace std;
 namespace DE {
     class EntityExtractor {
-        static shared_ptr<unordered_set<string>> extractVariables(shared_ptr<StmtNode> stmtNode);
-        static shared_ptr<unordered_set<string>> extractConstants(shared_ptr<StmtNode> stmtNode);
         static bool is_number(const std::string& s);
     public:
+        static shared_ptr<unordered_set<string>> extractVariables(shared_ptr<StmtNode> stmtNode);
+        static shared_ptr<unordered_set<string>> extractConstants(shared_ptr<StmtNode> stmtNode);
+        static vector<shared_ptr<StmtNode>> extractStmtNodes(shared_ptr<ProgramNode> rootPtr);
+
         static  unordered_set<string> getVariablesFromExprNode(shared_ptr<ExprNode> exprNode);
         static  unordered_set<string> getConstantsFromExprNode(shared_ptr<ExprNode> exprNode);
         static  unordered_set<string> getVariablesFromCondExprNode(shared_ptr<CondExprNode> condExprNode);
