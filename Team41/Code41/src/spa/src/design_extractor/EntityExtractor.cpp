@@ -7,22 +7,6 @@
 #include "utils/Utils.h"
 
 namespace DE {
-    unordered_set<string>
-    EntityExtractor::extractDesignEntity(shared_ptr<StmtNode> node, QB::DesignEntity designEntityType) {
-        unordered_set<string> ans = unordered_set<string>();
-        switch (designEntityType) {
-            case QB::DesignEntity::VARIABLE: {
-                return *extractVariables(node);
-            }
-            case QB::DesignEntity::CONSTANT: {
-                return *extractConstants(node);
-            }
-            default:{
-                break;
-            }
-        }
-        return ans;
-    }
     shared_ptr<unordered_set<string>> EntityExtractor::extractVariables(shared_ptr<StmtNode> stmtNode) {
         shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
 
