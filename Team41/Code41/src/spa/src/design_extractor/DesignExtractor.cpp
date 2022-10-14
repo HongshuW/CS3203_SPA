@@ -6,9 +6,8 @@
 #include "pkb/DataModifier.h"
 #include "AST/utils/ASTUtils.h"
 #include <queue>
-#include "EntityExtractor.h"
 #include "PatternExtractor.h"
-#include "design_extractor/save_extractions/save_to_pkb/ExecuteSaveToPKB.h"
+#include "design_extractor/save_extractions/save_to_pkb/PKBSaverExecutor.h"
 using namespace AST;
 using namespace DE;
 using namespace std;
@@ -32,7 +31,7 @@ void DesignExtractor::run() {
     this->dataModifier->saveStatements(payload);
 
     // save relations and patterns and entities
-    auto saveDesigns = ExecuteSaveToPKB(this->programNode, this->dataModifier);
+    auto saveDesigns = PKBSaverExecutor(this->programNode, this->dataModifier);
     saveDesigns.executeSave();
 }
 

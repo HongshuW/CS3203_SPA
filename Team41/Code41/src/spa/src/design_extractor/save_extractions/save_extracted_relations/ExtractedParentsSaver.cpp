@@ -2,12 +2,12 @@
 // Created by Aaron on 12/10/22.
 //
 
-#include "SaveExtractedParents.h"
+#include "ExtractedParentsSaver.h"
 #include "design_extractor/ParentExtractor.h"
 
 using namespace DE;
 
-void SaveExtractedParents::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
+void ExtractedParentsSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
     list<vector<string>> parentList = *ParentExtractor::extractParent(programNode);
     list<vector<string>> parentStarList = *ParentExtractor::extractParentT(programNode);
 

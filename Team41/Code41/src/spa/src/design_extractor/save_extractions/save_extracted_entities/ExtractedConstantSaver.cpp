@@ -2,12 +2,12 @@
 // Created by Aaron on 14/10/22.
 //
 
-#include "ExtractConstantSaver.h"
+#include "ExtractedConstantSaver.h"
 #include "design_extractor/EntityExtractor.h"
 
 using namespace DE;
 
-void ExtractConstantSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
+void ExtractedConstantSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
     vector<shared_ptr<StmtNode>> stmtNodeList = EntityExtractor::extractStmtNodes(programNode);
     unordered_set<string> output = *EntityExtractor::extractAllConstants(programNode);
 
