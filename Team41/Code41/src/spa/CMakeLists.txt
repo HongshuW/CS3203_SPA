@@ -310,7 +310,7 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedParents.cpp 
         src/design_extractor/save_extractions/save_extracted_relations/SaveExtractedParents.h
         src/query_evaluator/constants/QueryEvaluatotConstants.cpp 
-        src/query_evaluator/constants/QueryEvaluatotConstants.h)
+        src/query_evaluator/constants/QueryEvaluatotConstants.h src/design_extractor/save_extractions/save_extracted_entities/ExtractVariableSaver.cpp src/design_extractor/save_extractions/save_extracted_entities/ExtractVariableSaver.h src/design_extractor/save_extractions/save_extracted_entities/ExtractConstantSaver.cpp src/design_extractor/save_extractions/save_extracted_entities/ExtractConstantSaver.h src/design_extractor/save_extractions/save_extracted_entities/ExtractProceduresSaver.cpp src/design_extractor/save_extractions/save_extracted_entities/ExtractProceduresSaver.h)
 
 
 
