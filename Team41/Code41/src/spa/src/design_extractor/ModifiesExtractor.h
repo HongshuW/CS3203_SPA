@@ -5,9 +5,8 @@
 #ifndef SPA_MODIFIESEXTRACTOR_H
 #define SPA_MODIFIESEXTRACTOR_H
 
-#include "RelationExtractor.h"
-
-using namespace DE;
+#include <set>
+#include <list>
 
 namespace DE {
     class ModifiesExtractor {

@@ -3,6 +3,7 @@
 //
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/CallsExtractor.h"
 #include "AST/PrintNode.h"
 #include "AST/ReadNode.h"
 #include "AST/IfNode.h"
@@ -22,7 +23,7 @@ TEST_CASE("Test CallStar Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(0);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS_T);
+        auto actual = CallsExtractor::extractCallsStar(programNode);
         REQUIRE(actual->empty());
     }
     SECTION("Test CallStar One Procedure") {
@@ -30,7 +31,7 @@ TEST_CASE("Test CallStar Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(10);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS_T);
+        auto actual = CallsExtractor::extractCallsStar(programNode);
         vector<vector<string>> expected = {{"procedure2", "procedure3"}};
         REQUIRE(expected.size() == actual->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -41,7 +42,7 @@ TEST_CASE("Test CallStar Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(12);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS_T);
+        auto actual = CallsExtractor::extractCallsStar(programNode);
         vector<vector<string>> expected = {{"procedure2", "procedure3"}, {"procedure2", "procedure4"},
                                            {"procedure2", "procedure6"},
                                            {"procedure3", "procedure4"}, {"procedure3", "procedure6"}};
@@ -54,7 +55,7 @@ TEST_CASE("Test CallStar Extractor") {
         auto programNode = TestDE::Dummies::getTestProgramNode(13);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::CALLS_T);
+        auto actual = CallsExtractor::extractCallsStar(programNode);
         vector<vector<string>> expected = {{"procedure2", "procedure3"}, {"procedure2", "procedure4"},
                                            {"procedure2", "procedure5"}, {"procedure2", "procedure6"},
                                            {"procedure3", "procedure5"}, {"procedure4", "procedure6"}};
