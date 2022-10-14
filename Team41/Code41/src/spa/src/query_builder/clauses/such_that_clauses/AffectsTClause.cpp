@@ -18,7 +18,7 @@ Table AffectsTClause::accept(shared_ptr<IVisitor> visitor) {
 }
 
 pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>> AffectsTClause::getAllowedArgsSynonym() {
-    return make_pair(ASSIGN_SYNONYM, ASSIGN_SYNONYM);
+    return make_pair(STMT_SYNONYMS, STMT_SYNONYMS);
 }
 
 pair<RefTypeSet, RefTypeSet> AffectsTClause::getAllowedArgsRefType() {

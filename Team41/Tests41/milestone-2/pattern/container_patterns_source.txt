@@ -23,14 +23,14 @@ procedure firstProcedure {
 }
 
 procedure secondProcedure {
-    if ((x13 < 50) && (x1 < x13)) then {
+    if ((x14 < 50) && (x1 < x13)) then {
         if (x2 < x1) then {
-            while (x15 < 0) {
-                print x16;
+            while (x16 < 0) {
+                print x17;
             }
         } else {
             while ((x4 < 20) || (20 >= a4)) {
-                print x18;
+                print x19;
             }
         }
     } else {

@@ -433,10 +433,22 @@ TEST_CASE ("Test Query Validator") {
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Invalid Design Entity in Affects clause, should be 2 assign synonyms") {
-        std::string queryStr = "stmt s1, s2; Select <s1, s2> such that Affects (s1, s2)";
+    SECTION ("Invalid Design Entity in AffectsT clause, should be 2 stmt synonyms") {
+        std::string queryStr = "procedure s1, s2; Select <s1, s2> such that Affects* (s1, s2)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Valid Design Entity in Affects clause, not exception will be thrown") {
+        std::string queryStr = "stmt s1, s2; Select <s1, s2> such that Affects (s1, s2)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
+    }
+
+    SECTION ("Valid Design Entity in AffectsT clause, not exception will be thrown") {
+        std::string queryStr = "print s1; read s2; Select <s1, s2> such that Affects* (s1, s2)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
     }
 
     SECTION ("Invalid match of design entity and AttrName in Select clause") {

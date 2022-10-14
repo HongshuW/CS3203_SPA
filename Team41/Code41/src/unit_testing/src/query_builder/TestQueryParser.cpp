@@ -865,4 +865,9 @@ TEST_CASE ("Test Query Parser") {
         std::string queryStr = "assign a; Select a pattern a (_, 1)";
         REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
     }
+
+    SECTION ("Invalid pattern clause, throw PQLParseException") {
+        std::string queryStr = "assign a; stmt s; variable v; Select s pattern Modifies(s, v)";
+        REQUIRE_THROWS_AS(queryBuilder->buildPQLQuery(queryStr), PQLParseException);
+    }
 }

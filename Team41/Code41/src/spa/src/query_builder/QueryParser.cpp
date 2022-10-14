@@ -231,13 +231,13 @@ ExpressionSpec QueryParser::parseExpressionSpec() {
 
 void QueryParser::parsePatternClause() {
     Synonym arg1 = Synonym(pop());
+    //! Default value
+    DesignEntity de = DesignEntity::STMT;
     auto declaration = Declaration::findDeclaration(arg1, query->declarations);
-    if (!declaration) {
-        throw PQLValidationException(
-                QueryParserConstants::PQL_PARSE_EXCEPTION_SYNONYM_NOT_DECLARED + arg1.synonym);
-    }
     expect(QueryParserConstants::LEFT_BRACKET);
-    DesignEntity de = declaration->getDesignEntity();
+    if (declaration) {
+        de = declaration->getDesignEntity();
+    }
     Ref arg2 = parseRef();
     expect(QueryParserConstants::COMMA);
     const unordered_set<DesignEntity> ALLOWED_DE = {

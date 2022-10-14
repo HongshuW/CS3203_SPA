@@ -6,6 +6,8 @@
 #include "ParentExtractor.h"
 #include <queue>
 
+using namespace DE;
+
 shared_ptr<map<int, vector<int>>> ParentExtractor::extractParentHashmap(shared_ptr<ProgramNode> rootPtr) {
     map<int, vector<int>> parentRelations;
     shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers = ASTUtils::getNodePtrToLineNumMap(rootPtr);

@@ -7,8 +7,8 @@
 #include "AST/utils/ASTUtils.h"
 #include <queue>
 #include "EntityExtractor.h"
-#include "RelationExtractor.h"
 #include "PatternExtractor.h"
+#include "design_extractor/save_extractions/save_to_pkb/ExecuteSaveToPKB.h"
 using namespace AST;
 using namespace DE;
 using namespace std;
@@ -19,11 +19,6 @@ shared_ptr<unordered_set<string>> DesignExtractor::extractEntities(DesignEntity 
         this->extractEntitiesFromProcedure(p, result, designEntityType);
     }
     return result;
-}
-
-shared_ptr<list<vector<string>>> DesignExtractor::extractRelations(RelationType relationType) {
-    list<vector<string>> relationList = RelationExtractor::extractRelation(this->programNode, relationType);
-    return make_shared<list<vector<string>>>(relationList);
 }
 
 void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
@@ -50,62 +45,6 @@ void DesignExtractor::saveEntityToPKB(DesignEntity designEntity) {
         default: {
             break;
         }
-    }
-}
-
-void DesignExtractor::saveRelationToPKB(RelationType relationType) {
-    list<vector<string>> relations = *this->extractRelations(relationType);
-    auto iterator = relations.begin();
-    while (iterator != relations.end()) {
-        switch (relationType) {
-            case RelationType::PARENT: {
-                this->dataModifier->saveParent(*iterator);
-                break;
-            }
-            case RelationType::PARENT_T: {
-                this->dataModifier->saveParentT(*iterator);
-                break;
-            }
-            case RelationType::FOLLOWS: {
-                this->dataModifier->saveFollows(*iterator);
-                break;
-            }
-            case RelationType::FOLLOWS_T: {
-                this->dataModifier->saveFollowsT(*iterator);
-                break;
-            }
-            case RelationType::MODIFIES_S: {
-                this->dataModifier->saveModifiesS(*iterator);
-                break;
-            }
-            case RelationType::USES_S: {
-                this->dataModifier->saveUsesS(*iterator);
-                break;
-            }
-            case RelationType::USES_P: {
-                this->dataModifier->saveUsesP(*iterator);
-                break;
-            }
-            case RelationType::MODIFIES_P: {
-                this->dataModifier->saveModifiesP(*iterator);
-                break;
-            }
-            case RelationType::CALLS: {
-                this->dataModifier->saveCalls(*iterator);
-                break;
-            }
-            case RelationType::CALLS_T: {
-                this->dataModifier->saveCallsT(*iterator);
-                break;
-            }
-            case RelationType::NEXT: {
-                this->dataModifier->saveNext(*iterator);
-                break;
-            }
-            default:
-                break;
-        }
-        advance(iterator, 1);
     }
 }
 
@@ -179,63 +118,11 @@ void DesignExtractor::run() {
     }
     this->dataModifier->saveStatements(payload);
 
-    //save relations
-    auto relationsToSave = vector<RelationType>{RelationType::PARENT,
-                                                RelationType::PARENT_T,
-                                                RelationType::FOLLOWS,
-                                                RelationType::FOLLOWS_T,
-                                                RelationType::USES_S,
-                                                RelationType::MODIFIES_S,
-                                                RelationType::USES_P,
-                                                RelationType::MODIFIES_P,
-                                                RelationType::CALLS,
-                                                RelationType::CALLS_T,
-                                                RelationType::NEXT};
-    for (auto relationType: relationsToSave) {
-        this->saveRelationToPKB(relationType);
-    }
-
-    //save patterns
-    this->savePatternsToPKB();
-
-    //save if and while patterns
-    this->saveConditionalPatternsToPKB();
+    // save relations and patterns
+    auto saveDesigns = ExecuteSaveToPKB(this->programNode, this->dataModifier);
+    saveDesigns.executeSave();
 }
 
-vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> DesignExtractor::extractPatterns() {
-    return PatternExtractor::extractPattern(this->programNode);
-}
-
-list<vector<string>> DesignExtractor::extractIfPatterns() {
-    return PatternExtractor::extractIfPattern(this->programNode);
-}
-
-list<vector<string>> DesignExtractor::extractWhilePatterns() {
-    return PatternExtractor::extractWhilePattern(this->programNode);
-}
-
-void DesignExtractor::savePatternsToPKB() {
-    // TODO: generalise this method
-    auto resultList = this->extractPatterns();
-    for (auto resultRow: resultList) {
-        string lineNumStr = to_string(resultRow.first.first);
-        string varName = resultRow.first.second;
-        auto exprNode = resultRow.second->expressionNode;
-        this->dataModifier->saveAssignPattern({lineNumStr, varName}, exprNode);
-    }
-}
-
-void DesignExtractor::saveConditionalPatternsToPKB() {
-    auto ifPatternList = this->extractIfPatterns();
-    for (auto entry: ifPatternList) {
-        dataModifier->saveIfPattern(entry);
-    }
-
-    auto whilePatternList = this->extractWhilePatterns();
-    for (auto entry: whilePatternList) {
-        dataModifier->saveWhilePattern(entry);
-    }
-}
 
 vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
     return NextExtractor::extractNextStar(this->programNode, args);

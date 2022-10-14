@@ -3,6 +3,7 @@
 //
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/ModifiesExtractor.h"
 #include "DEUtils.h"
 #include "Dummies.h"
 #include <unordered_map>
@@ -18,7 +19,7 @@ TEST_CASE("Test ModifiesP Extraction") {
         auto programNode = TestDE::Dummies::getTestProgramNode(6);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_P);
+        auto actual = ModifiesExtractor::extractModifiesP(programNode);
         vector<vector<string>> expected = { {"procedure1", "x"}, {"procedure1", "y"},
                                             {"procedure2", "x"}, {"procedure2", "y"},
                                             {"procedure2", "w"}, {"procedure2", "foo"}};
@@ -32,7 +33,7 @@ TEST_CASE("Test ModifiesP Extraction") {
         auto programNode = TestDE::Dummies::getTestProgramNode(7);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_P);
+        auto actual = ModifiesExtractor::extractModifiesP(programNode);
         vector<vector<string>> expected = { {"procedure2", "y"}, {"procedure2", "x"}, {"procedure2", "w"},
                                             {"procedure2", "foo"}, {"procedure3", "y"}, {"procedure3", "baz"},
                                             {"procedure3", "w"}, {"procedure3", "foo"}};
@@ -46,7 +47,7 @@ TEST_CASE("Test ModifiesP Extraction") {
         auto programNode = TestDE::Dummies::getTestProgramNode(8);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_P);
+        auto actual = ModifiesExtractor::extractModifiesP(programNode);
         vector<vector<string>> expected = { {"procedure3", "y"}, {"procedure3", "baz"},
                                             {"procedure3", "w"},
                                             {"procedure3", "foo"}, {"procedure5", "x"},
@@ -61,7 +62,7 @@ TEST_CASE("Test ModifiesP Extraction") {
         auto programNode = TestDE::Dummies::getTestProgramNode(9);
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_P);
+        auto actual = ModifiesExtractor::extractModifiesP(programNode);
         vector<vector<string>> expected = {{"procedure1",  "y"}, {"procedure1",  "x"},
                                            {"procedure2",  "w"}, {"procedure2",  "x"},
                                            {"procedure2", "foo"}, {"procedure2", "y"},
@@ -77,7 +78,7 @@ TEST_CASE("Test ModifiesP Extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_P);
+        auto actual = ModifiesExtractor::extractModifiesP(programNode);
         vector<vector<string>> expected = {{"procedure2", "x"}, {"procedure2", "z"},
                                            {"procedure3", "z"}};
         std::list<vector<string>>::iterator it;
@@ -90,7 +91,7 @@ TEST_CASE("Test ModifiesP Extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_P);
+        auto actual = ModifiesExtractor::extractModifiesP(programNode);
         vector<vector<string>> expected = {{"procedure2", "x"}, {"procedure2", "adda"},
                                            {"procedure2", "c"}, {"procedure3", "adda"}, {"procedure3", "c"},
                                            {"procedure4", "c"}};
@@ -104,7 +105,7 @@ TEST_CASE("Test ModifiesP Extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_P);
+        auto actual = ModifiesExtractor::extractModifiesP(programNode);
         vector<vector<string>> expected = {{"procedure2", "x"},
                                            {"procedure2", "abc"}, {"procedure3", "abc"},
                                            {"procedure6", "abc"}};
@@ -118,7 +119,7 @@ TEST_CASE("Test ModifiesP Extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_P);
+        auto actual = ModifiesExtractor::extractModifiesP(programNode);
         vector<vector<string>> expected = {{"procedure2", "x"}, {"procedure2", "oloha"},
                                            {"procedure2", "blabla"}, {"procedure2", "zxcv"},
                                            {"procedure3", "oloha"},
