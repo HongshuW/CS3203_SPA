@@ -106,7 +106,7 @@ SemanticError
 22 - invalid affects
 print p;
 Select BOOLEAN such that Affects(9, p)
-SemanticError
+FALSE
 5000
 23 - invalid affects
 variable v;
@@ -116,27 +116,27 @@ SemanticError
 24 - invalid affects
 while w;
 Select BOOLEAN such that Affects(9, w)
-SemanticError
+FALSE
 5000
 25 - invalid affects
 call c;
 Select BOOLEAN such that Affects(9, c)
-SemanticError
+FALSE
 5000
 26 - invalid affects
 if i;
 Select BOOLEAN such that Affects(9, i)
-SemanticError
+FALSE
 5000
 27 - invalid affects
 read r;
 Select BOOLEAN such that Affects(9, r)
-SemanticError
+FALSE
 5000
 28 - invalid affects
 stmt s;
 Select BOOLEAN such that Affects(9, s)
-SemanticError
+TRUE
 5000
 29 - invalid affects
 
@@ -251,7 +251,7 @@ SemanticError
 51 - invalid Affects*
 print p;
 Select BOOLEAN such that Affects*(9, p)
-SemanticError
+FALSE
 5000
 52 - invalid Affects*
 variable v;
@@ -261,27 +261,27 @@ SemanticError
 53 - invalid Affects*
 while w;
 Select BOOLEAN such that Affects*(9, w)
-SemanticError
+FALSE
 5000
 54 - invalid Affects*
 call c;
 Select BOOLEAN such that Affects*(9, c)
-SemanticError
+FALSE
 5000
 55 - invalid Affects*
 if i;
 Select BOOLEAN such that Affects*(9, i)
-SemanticError
+FALSE
 5000
 56 - invalid Affects*
 read r;
 Select BOOLEAN such that Affects*(9, r)
-SemanticError
+FALSE
 5000
 57 - invalid Affects*
 stmt s;
 Select BOOLEAN such that Affects*(9, s)
-SemanticError
+TRUE
 5000
 58 - invalid Affects*
 
