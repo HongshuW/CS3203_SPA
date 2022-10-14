@@ -352,9 +352,7 @@ namespace QE {
                                && std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref2))));
         if (!isRef1Valid || !isRef2Valid) return EMPTY_RESULT;
         auto resultTable = dataRetriever->getAffectsTable();
-        resultTable.renameHeader({col1Name, col2Name});
-        resultTable = filterSingleClauseResultTable(ref1, ref2, resultTable);
-        return dropUnusedColumns(resultTable);
+        return filterSingleClauseResultTable(ref1, ref2, resultTable);
     }
 
     Table DataPreprocessor::getTableByAffectsT(shared_ptr<AffectsTClause> affectsTClause) {
@@ -408,9 +406,7 @@ namespace QE {
         if (!isRef1Valid || !isRef2Valid) return EMPTY_RESULT;
 
         auto resultTable = dataRetriever->getAffectsTTable();
-        resultTable.renameHeader({col1Name, col2Name});
-        resultTable = filterSingleClauseResultTable(ref1, ref2, resultTable);
-        return dropUnusedColumns(resultTable);
+        return filterSingleClauseResultTable(ref1, ref2, resultTable);
     }
 
     Table DataPreprocessor::getTableByCalls(shared_ptr<CallsClause> callsClause) {
