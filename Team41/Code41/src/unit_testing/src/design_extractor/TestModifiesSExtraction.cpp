@@ -4,6 +4,7 @@
 
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/ModifiesExtractor.h"
 #include "DEUtils.h"
 #include "Dummies.h"
 #include <unordered_map>
@@ -21,7 +22,7 @@ TEST_CASE("Test ModifiesS Extraction") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
-        shared_ptr<list<vector<string>>> actualModifiesSRelations = designExtractor.extractRelations(RelationType::MODIFIES_S);
+        shared_ptr<list<vector<string>>> actualModifiesSRelations = ModifiesExtractor::extractModifiesS(programNode);
         vector<vector<string>> expectedModifiesSRelations;
         REQUIRE(expectedModifiesSRelations.size() == actualModifiesSRelations->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualModifiesSRelations, expectedModifiesSRelations));
@@ -34,7 +35,7 @@ TEST_CASE("Test ModifiesS Extraction") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
-        shared_ptr<list<vector<string>>> actualModifiesSRelations = designExtractor.extractRelations(RelationType::MODIFIES_S);
+        shared_ptr<list<vector<string>>> actualModifiesSRelations = ModifiesExtractor::extractModifiesS(programNode);
         vector<string> expectedModifiesSR1{"2", "y"};
         vector<string> expectedModifiesSR2{"3", "x"};
         vector<vector<string>> expectedModifiesSRelations{expectedModifiesSR1, expectedModifiesSR2};
@@ -49,7 +50,7 @@ TEST_CASE("Test ModifiesS Extraction") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
-        shared_ptr<list<vector<string>>> actualModifiesSRelations = designExtractor.extractRelations(RelationType::MODIFIES_S);
+        shared_ptr<list<vector<string>>> actualModifiesSRelations = ModifiesExtractor::extractModifiesS(programNode);
         vector<string> expectedModifiesSR1{"1", "x"};
         vector<string> expectedModifiesSR2{"2", "x"};
         vector<string> expectedModifiesSR3{"2", "y"};
@@ -70,7 +71,7 @@ TEST_CASE("Test ModifiesS Extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_S);
+        auto actual = ModifiesExtractor::extractModifiesS(programNode);
         vector<vector<string>> expected = {{"2", "z"}, {"3", "x"}, {"5", "z"}};
         std::list<vector<string>>::iterator it;
         REQUIRE(expected.size() == actual->size());
@@ -82,7 +83,7 @@ TEST_CASE("Test ModifiesS Extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_S);
+        auto actual = ModifiesExtractor::extractModifiesS(programNode);
         vector<vector<string>> expected = {{"2", "c"}, {"2", "adda"}, {"3", "c"},
                                            {"4", "x"}, {"6", "adda"}, {"7", "c"},
                                            {"9", "c"}};
@@ -96,7 +97,7 @@ TEST_CASE("Test ModifiesS Extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_S);
+        auto actual = ModifiesExtractor::extractModifiesS(programNode);
         vector<vector<string>> expected = { {"2", "abc"}, {"3", "abc"}, {"6", "x"}, {"9", "abc"},
                                            {"11", "abc"}};
         std::list<vector<string>>::iterator it;
@@ -109,7 +110,7 @@ TEST_CASE("Test ModifiesS Extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
-        auto actual = designExtractor.extractRelations(QB::RelationType::MODIFIES_S);
+        auto actual = ModifiesExtractor::extractModifiesS(programNode);
         vector<vector<string>> expected = {{"2", "oloha"}, {"2", "blabla"}, {"2", "zxcv"},
                                            {"3", "oloha"}, {"3", "blabla"}, {"3", "zxcv"},
                                            {"4", "oloha"}, {"5", "blabla"}, {"5", "zxcv"},

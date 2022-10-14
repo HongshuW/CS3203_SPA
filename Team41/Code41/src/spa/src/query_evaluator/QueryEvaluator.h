@@ -19,6 +19,7 @@ namespace QE {
         shared_ptr<DataRetriever> dataRetriever;
         Declarations declarations;
         shared_ptr<Query> query;
+        vector<string> selected;
 
         DesignEntity getDesignEntity(Synonym synonym);
 
@@ -40,7 +41,7 @@ namespace QE {
 
         vector<string> projectResult(Table resultTable, shared_ptr<vector<Elem>> tuple);
 
-        typedef shared_ptr<unordered_map<string, shared_ptr<unordered_set<int>>>>  ViewedDups;
+        bool isInSelect(vector<string> headers);
 
     public:
         explicit QueryEvaluator(shared_ptr<DataRetriever> dataRetriever);

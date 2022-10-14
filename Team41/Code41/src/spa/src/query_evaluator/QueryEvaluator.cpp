@@ -92,11 +92,7 @@ QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vecto
 
             if (synColIdx == COL_DOES_NOT_EXIST) {
                 //this table has only one col
-                Table intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity);
-
-                if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
-
-
+                Table intermediateTable;
                 if (filterNeeded) {
                     if (designEntity == QB::DesignEntity::CALL) intermediateTable = dataPreprocessor->getCallsProcedureTable();
                     if (designEntity == QB::DesignEntity::PRINT) intermediateTable = dataPreprocessor->getPrintVariableTable();
@@ -104,12 +100,11 @@ QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vecto
                     if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
                     intermediateTable = intermediateTable.dropCol(FIRST_COL_IDX);
                 } else {
-
-                    intermediateTable = intermediateTable.dropCol(SECOND_COL_IDX);
+                    intermediateTable = dataPreprocessor->getAllByDesignEntity(designEntity).dropCol(SECOND_COL_IDX);
+                    if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
                 }
 
                 intermediateTable.renameHeader({attrRef.toString()});
-
                 resultTable = TableCombiner().crossProduct(intermediateTable, resultTable);
                 if (resultTable.isBodyEmpty())  return EMPTY_RESULT;
             } else {
@@ -148,8 +143,9 @@ QueryEvaluator::formatConditionalQueryResult(Table resultTable, shared_ptr<vecto
 
 vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vector<Elem>> tuple) {
     size_t ans_size = resultTable.rows.size();
-    vector<string> ans = vector<string>(ans_size, "");
-    ViewedDups viewedDupsMap = make_shared<unordered_map<string, shared_ptr<unordered_set<int>>>>();
+    const string EMPTY_STRING = "";
+    vector<string> ans = vector<string>(ans_size, EMPTY_STRING);
+    const string SPACE_SEPARATOR = " ";
 
     for (auto elem: *tuple) {
         if (elem.index() == SelectClause::ELEM_SYN_IDX) {
@@ -157,7 +153,7 @@ vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vecto
             int selectedColIdx = resultTable.getColIdxByName(synonym.synonym);
             vector<string> colValues = resultTable.getColumnByIndex(selectedColIdx);
             for (int r = 0; r < ans_size; r++) {
-                ans[r] =  ans[r].empty() ? colValues[r] : ans[r] + " " + colValues[r];
+                ans[r] =  ans[r].empty() ? colValues[r] : ans[r] + SPACE_SEPARATOR + colValues[r];
             }
         } else {
             //elem is a attrRef
@@ -165,7 +161,7 @@ vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vecto
             int selectedColIdx = resultTable.getColIdxByName(attrRef.toString());
             vector<string> colValues = resultTable.getColumnByIndex(selectedColIdx);
             for (int r = 0; r < ans_size; r++) {
-                ans[r] = ans[r].empty() ? colValues[r] : ans[r] + " " + colValues[r];
+                ans[r] = ans[r].empty() ? colValues[r] : ans[r] + SPACE_SEPARATOR + colValues[r];
             }
         }
     }
@@ -214,7 +210,15 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(shared_ptr<ConcreteClause
 }
 
 vector<string> QueryEvaluator::evaluateSelectTupleQuery( shared_ptr<ConcreteClauseVisitor> clauseVisitor, shared_ptr<DataPreprocessor> dataPreprocessor, ConnectedClauseGroups ccg) {
-
+    const int SYN_IDX = 0;
+    //convert selected elem to string
+    for (auto elem: *query->selectClause->returnResults) {
+        if (elem.index() == SYN_IDX) selected.push_back(get<Synonym>(elem).synonym);
+        else {
+            selected.push_back(get<AttrRef>(elem).synonym.synonym);
+            selected.push_back(get<AttrRef>(elem).toString());
+        }
+    }
     bool hasCondition = !query->suchThatClauses->empty() || !query->patternClauses->empty() || !query->withClauses->empty();
     if (!hasCondition) {//no conditional clause
         return this->evaluateNoConditionSelectTupleQuery(query, clauseVisitor);
@@ -245,12 +249,25 @@ vector<string> QueryEvaluator::evaluateSelectTupleQuery( shared_ptr<ConcreteClau
             subGroupResultTable = tableCombiner.joinTable( intermediateTable, subGroupResultTable);
             if (subGroupResultTable.isBodyEmpty()) return EMPTY_RESULT;
         }
+        //no need to join table if headers in the sub result does not appear in the selection
+        if (!isInSelect(subGroupResultTable.header)) continue;
         resultTable = tableCombiner.joinTable(subGroupResultTable, resultTable);
         if (resultTable.isBodyEmpty()) return EMPTY_RESULT;
     }
 
     shared_ptr<vector<Elem>> returnTuple = query->selectClause->returnResults;
     return formatConditionalQueryResult(resultTable, returnTuple, query, dataPreprocessor);
+}
+
+bool QueryEvaluator::isInSelect(vector<string> headers) {
+    //find if there is intersection
+    std::vector<std::string> v3;
+    std::sort(selected.begin(), selected.end());
+    std::sort(headers.begin(), headers.end());
+    std::set_intersection(selected.begin(), selected.end(),
+                          headers.begin(), headers.end(),
+                          back_inserter(v3));
+    return !v3.empty();
 }
 
 

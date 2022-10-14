@@ -4,6 +4,7 @@
 
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/ParentExtractor.h"
 #include "DEUtils.h"
 #include "Dummies.h"
 #include <unordered_map>
@@ -22,13 +23,13 @@ TEST_CASE("Test Parent and Parent* Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         // Test Parent
-        shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
+        shared_ptr<list<vector<string>>> actualParentRelations = ParentExtractor::extractParent(programNode);
         vector<vector<string>> expectedParentRelations;
         REQUIRE(expectedParentRelations.size() == actualParentRelations->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualParentRelations, expectedParentRelations));
 
         // Test Parent*
-        shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
+        shared_ptr<list<vector<string>>> actualParentTRelations = ParentExtractor::extractParentT(programNode);
         vector<vector<string>> expectedParentTRelations;
         REQUIRE(expectedParentTRelations.size() == actualParentTRelations->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualParentTRelations, expectedParentTRelations));
@@ -42,13 +43,13 @@ TEST_CASE("Test Parent and Parent* Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         // Test Parent
-        shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
+        shared_ptr<list<vector<string>>> actualParentRelations = ParentExtractor::extractParent(programNode);
         vector<vector<string>> expectedParentRelations;
         REQUIRE(expectedParentRelations.size() == actualParentRelations->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualParentRelations, expectedParentRelations));
 
         // Test Parent*
-        shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
+        shared_ptr<list<vector<string>>> actualParentTRelations = ParentExtractor::extractParentT(programNode);
         vector<vector<string>> expectedParentTRelations;
         REQUIRE(expectedParentTRelations.size() == actualParentTRelations->size());
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualParentTRelations, expectedParentTRelations));
@@ -62,7 +63,7 @@ TEST_CASE("Test Parent and Parent* Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         // Test Parent
-        shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
+        shared_ptr<list<vector<string>>> actualParentRelations = ParentExtractor::extractParent(programNode);
         vector<string> expectedR1 = {"3", "4"};
         vector<string> expectedR2 = {"3", "5"};
         vector<string> expectedR3 = {"3", "6"};
@@ -71,7 +72,7 @@ TEST_CASE("Test Parent and Parent* Extraction") {
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualParentRelations, expectedParentRelations));
 
         // Test Parent*
-        shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
+        shared_ptr<list<vector<string>>> actualParentTRelations = ParentExtractor::extractParentT(programNode);
         // Parent and Parent* should return the same results, since there are only 2 nesting levels
         vector<vector<string>> expectedParentTRelations = expectedParentRelations;
         REQUIRE(expectedParentTRelations.size() == actualParentTRelations->size());
@@ -86,7 +87,7 @@ TEST_CASE("Test Parent and Parent* Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         // Test Parent
-        shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
+        shared_ptr<list<vector<string>>> actualParentRelations = ParentExtractor::extractParent(programNode);
         vector<string> expectedR1 = {"2", "3"};
         vector<string> expectedR2 = {"2", "4"};
         vector<string> expectedR3 = {"4", "5"};
@@ -96,7 +97,7 @@ TEST_CASE("Test Parent and Parent* Extraction") {
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualParentRelations, expectedParentRelations));
 
         // Test Parent*
-        shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
+        shared_ptr<list<vector<string>>> actualParentTRelations = ParentExtractor::extractParentT(programNode);
         vector<string> expectedR5 = {"2", "5"};
         vector<string> expectedR6 = {"2", "6"};
         vector<vector<string>> expectedParentTRelations{expectedR1, expectedR2, expectedR5, expectedR6, expectedR3, expectedR4};
@@ -112,7 +113,7 @@ TEST_CASE("Test Parent and Parent* Extraction") {
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
         // Test Parent
-        shared_ptr<list<vector<string>>> actualParentRelations = designExtractor.extractRelations(RelationType::PARENT);
+        shared_ptr<list<vector<string>>> actualParentRelations = ParentExtractor::extractParent(programNode);
         vector<string> expectedR1 = {"2", "3"};
         vector<string> expectedR2 = {"2", "4"};
         vector<string> expectedR3 = {"4", "5"};
@@ -123,7 +124,7 @@ TEST_CASE("Test Parent and Parent* Extraction") {
         REQUIRE(TestDE::DEUtils::containsSameElementPair(*actualParentRelations, expectedParentRelations));
 
         // Test Parent*
-        shared_ptr<list<vector<string>>> actualParentTRelations = designExtractor.extractRelations(RelationType::PARENT_T);
+        shared_ptr<list<vector<string>>> actualParentTRelations = ParentExtractor::extractParentT(programNode);
         vector<string> expectedR6 = {"2", "5"};
         vector<string> expectedR7 = {"2", "6"};
         vector<vector<string>> expectedParentTRelations{expectedR1, expectedR2, expectedR3, expectedR4, expectedR5, expectedR6, expectedR7};
