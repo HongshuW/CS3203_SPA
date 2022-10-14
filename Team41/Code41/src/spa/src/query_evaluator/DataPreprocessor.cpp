@@ -302,6 +302,9 @@ namespace QE {
     }
 
     Table DataPreprocessor::getTableByAffects(shared_ptr<AffectsClause> affectsClause) {
+        const vector<DesignEntity> validTypes = {DesignEntity::STMT, DesignEntity::ASSIGN};
+        const Table EMPTY_RESULT = Table();
+
         Ref ref1 = affectsClause->arg1;
         Ref ref2 = affectsClause->arg2;
         RefType ref1Type = getRefType(ref1);
@@ -320,23 +323,34 @@ namespace QE {
                                                            get<int>(ref2));
             return boolTable.isEqual(ClauseVisitorConstants::TRUE_TABLE)
                    ? QEUtils::getScalarResponse(true)
-                   : Table();
+                   : EMPTY_RESULT;
         }
         if (ref1Type == QB::RefType::INTEGER) {
             auto resultTable = dataRetriever->getAffectedStatements(get<int>(ref1)).dropCol(FIRST_COL_IDX);
 
             //check if second ref is not a synonym and return result immediately
-            if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : EMPTY_RESULT;
+            bool isValidType = std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref2)));
+            if (!isValidType) return EMPTY_RESULT;
             //the second ref must be a synonym
             resultTable.renameHeader({col2Name});
             return resultTable;
         }
         if (ref2Type == QB::RefType::INTEGER) {
             auto resultTable = dataRetriever->getAffectingStatements(get<int>(ref2)).dropCol(SECOND_COL_IDX);
-            if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : EMPTY_RESULT;
+            bool isValidType = std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref1)));
+            if (!isValidType) return EMPTY_RESULT;
             resultTable.renameHeader({col1Name});
             return resultTable;
         }
+        bool isRef1Valid = ref1Type == QB::RefType::UNDERSCORE
+                || (ref1Type == QB::RefType::SYNONYM
+                    && std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref1))));
+        bool isRef2Valid = ref2Type == QB::RefType::UNDERSCORE
+                           || (ref2Type == QB::RefType::SYNONYM
+                               && std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref2))));
+        if (!isRef1Valid || !isRef2Valid) return EMPTY_RESULT;
         auto resultTable = dataRetriever->getAffectsTable();
         resultTable.renameHeader({col1Name, col2Name});
 
@@ -344,6 +358,8 @@ namespace QE {
     }
 
     Table DataPreprocessor::getTableByAffectsT(shared_ptr<AffectsTClause> affectsTClause) {
+        const Table EMPTY_RESULT = Table();
+        const vector<DesignEntity> validTypes = {DesignEntity::STMT, DesignEntity::ASSIGN};
         Ref ref1 = affectsTClause->arg1;
         Ref ref2 = affectsTClause->arg2;
         RefType ref1Type = getRefType(ref1);
@@ -362,23 +378,35 @@ namespace QE {
                                                            get<int>(ref2));
             return boolTable.isEqual(ClauseVisitorConstants::TRUE_TABLE)
                    ? QEUtils::getScalarResponse(true)
-                   : Table();
+                   : EMPTY_RESULT;
         }
         if (ref1Type == QB::RefType::INTEGER) {
             auto resultTable = dataRetriever->getAffectedTStatements(get<int>(ref1)).dropCol(FIRST_COL_IDX);
 
             //check if second ref is not a synonym and return result immediately
-            if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            if (ref2Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : EMPTY_RESULT;
+            bool isValidType = std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref2)));
+            if (!isValidType) return EMPTY_RESULT;
             //the second ref must be a synonym
             resultTable.renameHeader({col2Name});
             return resultTable;
         }
         if (ref2Type == QB::RefType::INTEGER) {
             auto resultTable = dataRetriever->getAffectingTStatements(get<int>(ref2)).dropCol(SECOND_COL_IDX);
-            if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : Table();
+            if (ref1Type != QB::RefType::SYNONYM) return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true) : EMPTY_RESULT;
+            bool isValidType = std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref1)));
+            if (!isValidType) return EMPTY_RESULT;
             resultTable.renameHeader({col1Name});
             return resultTable;
         }
+        bool isRef1Valid = ref1Type == QB::RefType::UNDERSCORE
+                           || (ref1Type == QB::RefType::SYNONYM
+                               && std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref1))));
+        bool isRef2Valid = ref2Type == QB::RefType::UNDERSCORE
+                           || (ref2Type == QB::RefType::SYNONYM
+                               && std::count(validTypes.begin(), validTypes.end(), getDesignEntityOfSyn(get<Synonym>(ref2))));
+        if (!isRef1Valid || !isRef2Valid) return EMPTY_RESULT;
+
         auto resultTable = dataRetriever->getAffectsTTable();
         resultTable.renameHeader({col1Name, col2Name});
 
