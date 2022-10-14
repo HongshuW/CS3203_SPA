@@ -139,6 +139,35 @@ namespace DE {
         return output;
     }
 
+    shared_ptr<unordered_set<string>> EntityExtractor::extractAllVariables(shared_ptr<ProgramNode> rootPtr) {
+        vector<shared_ptr<StmtNode>> stmtNodeList = EntityExtractor::extractStmtNodes(rootPtr);
+        shared_ptr<unordered_set<string>> output = make_shared<unordered_set<string>>();
+        for (const auto& stmtNode: stmtNodeList) {
+            auto variableSet = EntityExtractor::extractVariables(stmtNode);
+            output->insert(variableSet->begin(), variableSet->end());
+        }
+        return output;
+    }
+
+    shared_ptr<unordered_set<string>> EntityExtractor::extractAllConstants(shared_ptr<ProgramNode> rootPtr) {
+        vector<shared_ptr<StmtNode>> stmtNodeList = EntityExtractor::extractStmtNodes(rootPtr);
+        shared_ptr<unordered_set<string>> output = make_shared<unordered_set<string>>();
+        for (const auto& stmtNode: stmtNodeList) {
+            auto variableSet = EntityExtractor::extractConstants(stmtNode);
+            output->insert(variableSet->begin(), variableSet->end());
+        }
+        return output;
+    }
+
+    shared_ptr<unordered_set<string>> EntityExtractor::extractAllProcedures(shared_ptr<ProgramNode> rootPtr) {
+        shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
+        auto procedureList = rootPtr->procedureList;
+        for (const auto& procedureNode: procedureList) {
+            set->insert(procedureNode->procedureName);
+        }
+        return set;
+    }
+
     bool EntityExtractor::is_number(const std::string& s)
     {
         std::string::const_iterator it = s.begin();

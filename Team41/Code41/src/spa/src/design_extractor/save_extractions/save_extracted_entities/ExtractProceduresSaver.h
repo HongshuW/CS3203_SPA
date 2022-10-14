@@ -13,7 +13,7 @@ public:
     shared_ptr<DataModifier> dataModifier)
     : SaveToPKBInterface(std::move(programNode), std::move(dataModifier)) {}
 
-    void save(shared_ptr<AST::ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
+    void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
 };
 
 

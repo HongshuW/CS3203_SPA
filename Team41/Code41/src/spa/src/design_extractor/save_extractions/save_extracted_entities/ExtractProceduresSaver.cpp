@@ -8,11 +8,7 @@
 using namespace DE;
 
 void ExtractProceduresSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
-    shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
-    auto procedureList = programNode->procedureList;
-    for (const auto& procedureNode: procedureList) {
-        set->insert(procedureNode->procedureName);
-    }
+    shared_ptr<unordered_set<string>> set = EntityExtractor::extractAllProcedures(programNode);
 
     list<string> entityResultList;
     auto it = entityResultList.begin();

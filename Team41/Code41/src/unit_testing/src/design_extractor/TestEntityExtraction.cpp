@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include "design_extractor/DesignExtractor.h"
 #include "design_extractor/FollowsExtractor.h"
+#include "design_extractor/EntityExtractor.h"
 #include "pkb/DataModifier.h"
 #include "iostream"
 #include "Dummies.h"
@@ -37,15 +38,15 @@ TEST_CASE("Test entity extraction") {
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier, programNode);
 
-        auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
+        auto variables_actual = EntityExtractor::extractAllVariables(programNode);
         unordered_set<string> variables_expected = unordered_set<string>{"x", "y"};
         REQUIRE(variables_expected == *variables_actual);
 
-        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
+        auto constants_actual = EntityExtractor::extractAllConstants(programNode);
         unordered_set<string> constants_expected = unordered_set<string>{"1"};
         REQUIRE(constants_expected == *constants_actual);
 
-        auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
+        auto procedures_actual = EntityExtractor::extractAllProcedures(programNode);
         unordered_set<string> procedures_expected = unordered_set<string>{"procedure1"};
         REQUIRE(constants_expected == *constants_actual);
     }
@@ -90,15 +91,15 @@ TEST_CASE("Test entity extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode2);
-        auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
+        auto variables_actual = EntityExtractor::extractAllVariables(programNode2);
         unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "exprVar"};
         REQUIRE(variables_expected == *variables_actual);
 
-        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
+        auto constants_actual = EntityExtractor::extractAllConstants(programNode2);
         unordered_set<string> constants_expected = unordered_set<string>{"10", "112312341234"};
         REQUIRE(constants_expected == *constants_actual);
 
-        auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
+        auto procedures_actual = EntityExtractor::extractAllProcedures(programNode2);
         unordered_set<string> procedures_expected = unordered_set<string>{"procedure2"};
         REQUIRE(constants_expected == *constants_actual);
     }
@@ -164,16 +165,16 @@ TEST_CASE("Test entity extraction") {
         shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
         shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkbStorage);
         DesignExtractor designExtractor = DesignExtractor(dataModifier,programNode3);
-        auto variables_actual = designExtractor.extractEntities(DesignEntity::VARIABLE);
+        auto variables_actual = EntityExtractor::extractAllVariables(programNode3);
         unordered_set<string> variables_expected = unordered_set<string>{"x", "y","w", "z", "foo", "bar", "baz", "qux", "quux", "haha"};
         REQUIRE(variables_expected == *variables_actual);
 
 
-        auto constants_actual = designExtractor.extractEntities(DesignEntity::CONSTANT);
+        auto constants_actual = EntityExtractor::extractAllConstants(programNode3);
         unordered_set<string> constants_expected = unordered_set<string>{"1", "5", "3"};
         REQUIRE(constants_expected == *constants_actual);
 
-        auto procedures_actual = designExtractor.extractEntities(DesignEntity::PROCEDURE);
+        auto procedures_actual = EntityExtractor::extractAllProcedures(programNode3);
         unordered_set<string> procedures_expected = unordered_set<string>{"procedure3"};
         REQUIRE(constants_expected == *constants_actual);
     }

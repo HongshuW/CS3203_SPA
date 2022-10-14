@@ -9,11 +9,7 @@ using namespace DE;
 
 void ExtractConstantSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
     vector<shared_ptr<StmtNode>> stmtNodeList = EntityExtractor::extractStmtNodes(programNode);
-    unordered_set<string> output = unordered_set<string>();
-    for (const auto& stmtNode: stmtNodeList) {
-        auto variableSet = EntityExtractor::extractConstants(stmtNode);
-        output.insert(variableSet->begin(), variableSet->end());
-    }
+    unordered_set<string> output = *EntityExtractor::extractAllConstants(programNode);
 
     list<string> entityResultList;
     auto it = entityResultList.begin();

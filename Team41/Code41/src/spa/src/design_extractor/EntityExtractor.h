@@ -20,6 +20,10 @@ namespace DE {
         static shared_ptr<unordered_set<string>> extractConstants(shared_ptr<StmtNode> stmtNode);
         static vector<shared_ptr<StmtNode>> extractStmtNodes(shared_ptr<ProgramNode> rootPtr);
 
+        static shared_ptr<unordered_set<string>> extractAllVariables(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<unordered_set<string>> extractAllConstants(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<unordered_set<string>> extractAllProcedures(shared_ptr<ProgramNode> rootPtr);
+
         static  unordered_set<string> getVariablesFromExprNode(shared_ptr<ExprNode> exprNode);
         static  unordered_set<string> getConstantsFromExprNode(shared_ptr<ExprNode> exprNode);
         static  unordered_set<string> getVariablesFromCondExprNode(shared_ptr<CondExprNode> condExprNode);
