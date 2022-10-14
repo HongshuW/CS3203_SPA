@@ -380,8 +380,7 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode(int startIdx) {
         auto condExprNode = parseCondExprNode(startIdx - ParserConstants::ONE);
         expect(ParserConstants::RIGHT_BRACKET);
         return make_shared<CondExprNode>(condExprNode);
-    }
-    else if (peek() == ParserConstants::LEFT_BRACKET) {  // () op ()
+    } else if (peek() == ParserConstants::LEFT_BRACKET) {  // () op ()
         int tempStart = currIdx;
         expect(ParserConstants::LEFT_BRACKET);
         shared_ptr<CondExprNode> condLHS = nullptr;
@@ -412,8 +411,7 @@ shared_ptr<CondExprNode> Parser::parseCondExprNode(int startIdx) {
 
         return std::make_shared<CondExprNode>(std::move(condLHS), op,
                                               std::move(condRHS));
-    }
-    else {  // relExpr
+    } else {  // relExpr
         auto relExpr = parseRelExprNode();
         if (relExpr) {
             return std::make_shared<CondExprNode>(std::move(relExpr));

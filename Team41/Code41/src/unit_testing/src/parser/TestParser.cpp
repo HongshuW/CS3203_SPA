@@ -5,6 +5,7 @@
 #include "catch.hpp"
 
 #include "parser/Parser.h"
+#include "parser/Tokenizer.h"
 #include "parser/SPExceptions.h"
 
 using namespace SourceParser;
@@ -122,9 +123,9 @@ TEST_CASE("Test SP Parser") {
         REQUIRE(*testProgram == *expectedProgram);
     }
 
-    SECTION("1 if statement with complex condition") {
+    SECTION("1 if statement") {
         vector<std::string> tokens = vector<std::string>(
-                {"procedure", "testProcedure", "{", "if", "(", "(", "x", "==", "y", ")", "&&", "(", "z", ">", "2", ")", ")", "then", "{",
+                {"procedure", "testProcedure", "{", "if", "(", "number", ">", "0", ")", "then", "{",
                  "read", "num1", ";", "}", "else", "{", "read", "num2", ";", "}", "}"});
         Parser parser = Parser(tokens);
         shared_ptr<ASTNode> testProgram = parser.parse();
@@ -133,24 +134,34 @@ TEST_CASE("Test SP Parser") {
                 make_shared<VariableNode>("num1"));
         auto readNodeElse = make_shared<ReadNode>(
                 make_shared<VariableNode>("num2"));
-        auto relExprNodeLHS =make_shared<RelExprNode>(make_shared<ExprNode>("x"),
-                                                   "==",
-                                                   make_shared<ExprNode>("y"));
-        auto condExprLHS = make_shared<CondExprNode>(relExprNodeLHS);
-        auto relExprNodeRHS =make_shared<RelExprNode>(make_shared<ExprNode>("z"),
-                                                      ">",
-                                                      make_shared<ExprNode>("2"));
-        auto condExprRHS = make_shared<CondExprNode>(relExprNodeRHS);
-        auto condExprRoot = make_shared<CondExprNode>(condExprLHS, "&&", condExprRHS);
+        auto relExprNode =make_shared<RelExprNode>(make_shared<ExprNode>("number"),
+                                                   ">",
+                                                   make_shared<ExprNode>("0"));
+        auto condExpr = make_shared<CondExprNode>(relExprNode);
         auto stmtListIf = vector<shared_ptr<StmtNode>>({readNode});
         auto stmtListElse = vector<shared_ptr<StmtNode>>({readNodeElse});
-        auto ifNode = make_shared<IfNode>(condExprRoot, stmtListIf, stmtListElse);
+        auto ifNode = make_shared<IfNode>(condExpr, stmtListIf, stmtListElse);
         auto stmtListOuter = vector<shared_ptr<StmtNode>>({ifNode});
         auto procedure = make_shared<ProcedureNode>("testProcedure", stmtListOuter);
         vector<shared_ptr<ProcedureNode>> procedureList = vector<std::shared_ptr<ProcedureNode>>(
                 {procedure});
         shared_ptr<ASTNode> expectedProgram = make_shared<ProgramNode>(procedureList);
         REQUIRE(*testProgram == *expectedProgram);
+    }
+
+    SECTION("1 if statement with complex condition") {
+        std::string source = "procedure testProcedure {"
+                             "if ((x1 <= 1 - (x3 - a4)) || ((!(x4 == 2)) && (x2 != x3 + 1234))) then {"
+                             "x = 1;"
+                             "} else {"
+                             "x = 5;"
+                             "}"
+                             "}";
+
+        Tokenizer tokenizer = Tokenizer(source);
+        auto tokens = tokenizer.tokenize();
+        Parser parser = Parser(tokens);
+        REQUIRE_NOTHROW(parser.parse());
     }
 
     SECTION("Multiple levels of nesting") {
