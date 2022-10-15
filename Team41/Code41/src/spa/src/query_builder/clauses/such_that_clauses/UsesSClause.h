@@ -12,7 +12,7 @@
 
 namespace QB {
 
-    class UsesSClause : public SuchThatClause, public enable_shared_from_this<UsesSClause>, public Validatable {
+    class UsesSClause : public SuchThatClause, public enable_shared_from_this<UsesSClause> {
     public:
         UsesSClause(Ref arg1, Ref arg2);
 
