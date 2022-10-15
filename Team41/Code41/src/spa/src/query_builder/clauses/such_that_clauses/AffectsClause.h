@@ -14,7 +14,7 @@ using namespace QB;
 
 namespace QB {
 
-    class AffectsClause : public SuchThatClause, public enable_shared_from_this<AffectsClause>, public Validatable {
+    class AffectsClause : public SuchThatClause, public enable_shared_from_this<AffectsClause> {
     public:
         AffectsClause(Ref arg1, Ref arg2);
 
