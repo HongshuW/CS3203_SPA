@@ -30,11 +30,10 @@ QueryEvaluator::QueryEvaluator(shared_ptr<DataRetriever> dataRetriever): dataRet
 }
 
 vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
+    dataRetriever->clearCache();
     this->query = query;
     this->declarations = query->declarations;
     shared_ptr<DataPreprocessor> dataPreprocessor = make_shared<DataPreprocessor>(dataRetriever, declarations);
-//    shared_ptr<ClauseVisitor> clauseEvaluator = make_shared<ClauseVisitor>(dataPreprocessor,
-//                                                                           declarations);
     shared_ptr<ConcreteClauseVisitor> concreteClauseVisitor = make_shared<ConcreteClauseVisitor>(dataPreprocessor);
 
     shared_ptr<QueryOptimizer> queryOptimizer = make_shared<QueryOptimizer>(query);
@@ -165,6 +164,7 @@ vector<string> QueryEvaluator::projectResult(Table resultTable, shared_ptr<vecto
             }
         }
     }
+    dataRetriever->clearCache();
     return removeDup(ans);
 }
 
@@ -205,7 +205,7 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(shared_ptr<ConcreteClause
         resultTable = tableCombiner.joinTable(subGroupResultTable, resultTable);
         if (resultTable.isBodyEmpty()) return FALSE_RESULT;
     }
-
+    dataRetriever->clearCache();
     return TRUE_RESULT;
 }
 
