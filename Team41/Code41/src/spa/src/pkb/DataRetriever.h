@@ -51,19 +51,16 @@ public:
     virtual Table getPrintVariableNames();
     virtual Table getReadVariableNames();
     virtual DesignEntity getDesignEntityOfStmt(int stmtNumber);
-    unordered_set<string> getFollowingStatements(int followedStatement);
-    unordered_set<string> getChildrenStatements(int parentStatement);
-    unordered_set<string> getModifiedVariables(int modifierStatement);
 
     void clearCache();
 
 private:
     shared_ptr<PKBStorage> pkbStorage;
 
-    shared_ptr<Table> getStatementsHelper(Cachable * cachable, vector<int> metaInfo, CacheManager::partialGetter func);
-    void getAllRelationsHelper(Cachable * cachable, CacheManager::fullGetter func);
+    shared_ptr<Table> getStatementsHelper(shared_ptr<Cachable> cachable, vector<int> metaInfo, CacheManager::partialGetter func);
+    void getAllRelationsHelper(shared_ptr<Cachable> cachable, CacheManager::fullGetter func);
     int getDifference(vector<string> startAndEndIndices);
-    shared_ptr<Table> getExactRelationHelper(Cachable * cachable, vector<int> stmts, CacheManager::exactGetter func);
+    shared_ptr<Table> getExactRelationHelper(shared_ptr<Cachable> cachable, vector<int> stmts, CacheManager::exactGetter func);
 };
 
 #endif //SPA_DATARETRIEVER_H

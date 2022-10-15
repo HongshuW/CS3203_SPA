@@ -68,7 +68,7 @@ Table DataRetriever::getNextTable() {
     return *pkbStorage->getNext();
 }
 
-shared_ptr<Table> DataRetriever::getStatementsHelper(Cachable * cachable, vector<int> metaInfo,
+shared_ptr<Table> DataRetriever::getStatementsHelper(shared_ptr<Cachable> cachable, vector<int> metaInfo,
                                                      CacheManager::partialGetter func) {
     int stmtNo = metaInfo[0];
     int columnNumber = metaInfo[1];
@@ -102,7 +102,7 @@ shared_ptr<Table> DataRetriever::getStatementsHelper(Cachable * cachable, vector
     }
 }
 
-void DataRetriever::getAllRelationsHelper(Cachable * cachable, CacheManager::fullGetter func) {
+void DataRetriever::getAllRelationsHelper(shared_ptr<Cachable> cachable, CacheManager::fullGetter func) {
     if (!cachable->areAllRelationsCached()) {
         // clear cache before storing all the relations
         cachable->clearCache();
@@ -120,7 +120,7 @@ int DataRetriever::getDifference(vector<string> startAndEndIndices) {
     return endIndex - startIndex;
 }
 
-shared_ptr<Table> DataRetriever::getExactRelationHelper(Cachable * cachable, vector<int> stmts,
+shared_ptr<Table> DataRetriever::getExactRelationHelper(shared_ptr<Cachable> cachable, vector<int> stmts,
                                                         CacheManager::exactGetter func) {
     int firstStmt = stmts[0];
     int secondStmt = stmts[1];
@@ -137,18 +137,16 @@ shared_ptr<Table> DataRetriever::getExactRelationHelper(Cachable * cachable, vec
         if (firstRange.empty() && secondRange.empty()) {
             // if the relation hasn't been queried before, call DE to find the relation
             result = ((*cacheManager).*func)(firstStmt, secondStmt);
-            return result
-                ? make_shared<Table>(QE::ClauseVisitorConstants::TRUE_TABLE)
-                : make_shared<Table>(QE::ClauseVisitorConstants::FALSE_TABLE);
-        }
-        // the relation has been queried before, search in cache
-        int firstDifference = firstRange.empty() ? INT_MAX : getDifference(firstRange);
-        int secondDifference = secondRange.empty() ? INT_MAX : getDifference(secondRange);
-        // search in the smaller range
-        if (firstDifference <= secondDifference) {
-            result = cachable->contains(row, stoi(firstRange[0]), stoi(firstRange[1]));
         } else {
-            result = cachable->contains(row, stoi(secondRange[0]), stoi(secondRange[1]));
+            // the relation has been queried before, search in cache
+            int firstDifference = firstRange.empty() ? INT_MAX : getDifference(firstRange);
+            int secondDifference = secondRange.empty() ? INT_MAX : getDifference(secondRange);
+            // search in the smaller range
+            if (firstDifference <= secondDifference) {
+                result = cachable->contains(row, stoi(firstRange[0]), stoi(firstRange[1]));
+            } else {
+                result = cachable->contains(row, stoi(secondRange[0]), stoi(secondRange[1]));
+            }
         }
     }
     return result
@@ -162,7 +160,7 @@ shared_ptr<Table> DataRetriever::getExactRelationHelper(Cachable * cachable, vec
  * @return all Next* Relations in a Table.
  */
 Table DataRetriever::getNextTTable() {
-    NextTable * nextTTable = pkbStorage->getNextT();
+    shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
     getAllRelationsHelper(nextTTable, &CacheManager::getNextTRelations);
     return *nextTTable;
 }
@@ -174,7 +172,7 @@ Table DataRetriever::getNextTTable() {
  * @return Next* relations in a table
  */
 Table DataRetriever::getNextTStatements(int stmtNo) {
-    NextTable * nextTTable = pkbStorage->getNextT();
+    shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
     int columnNumber = 0;
     return *getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
                                 &CacheManager::getNextTStatements);
@@ -187,7 +185,7 @@ Table DataRetriever::getNextTStatements(int stmtNo) {
  * @return Next* relations in a table
  */
 Table DataRetriever::getPreviousTStatements(int stmtNo) {
-    NextTable * nextTTable = pkbStorage->getNextT();
+    shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
     int columnNumber = 1;
     return *getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
                                 &CacheManager::getPreviousTStatements);
@@ -201,7 +199,7 @@ Table DataRetriever::getPreviousTStatements(int stmtNo) {
  * @return whether the Next* relation exists
  */
 Table DataRetriever::getNextTResult(int precedingStatement, int ensuingStatement) {
-    NextTable * nextTTable = pkbStorage->getNextT();
+    shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
     return *getExactRelationHelper(
             nextTTable, vector<int>{precedingStatement, ensuingStatement}, &CacheManager::getNextTResult);
 }
@@ -212,7 +210,7 @@ Table DataRetriever::getNextTResult(int precedingStatement, int ensuingStatement
  * @return all Affects Relations in a Table.
  */
 Table DataRetriever::getAffectsTable() {
-    AffectsTable * affectsTable = pkbStorage->getAffects();
+    shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
     getAllRelationsHelper(affectsTable, &CacheManager::getAffectsRelations);
     return *affectsTable;
 }
@@ -223,7 +221,7 @@ Table DataRetriever::getAffectsTable() {
  * @return all Affects* Relations in a Table.
  */
 Table DataRetriever::getAffectsTTable() {
-    AffectsTable * affectsTTable = pkbStorage->getAffectsT();
+    shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
     getAllRelationsHelper(affectsTTable, &CacheManager::getAffectsTRelations);
     return *affectsTTable;
 }
@@ -235,7 +233,7 @@ Table DataRetriever::getAffectsTTable() {
  * @return Affects relations in a table
  */
 Table DataRetriever::getAffectedStatements(int stmtNo) {
-    AffectsTable * affectsTable = pkbStorage->getAffects();
+    shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
     int columnNumber = 0;
     return *getStatementsHelper(affectsTable, vector<int>{stmtNo, columnNumber},
                                 &CacheManager::getAffectedStatements);
@@ -248,7 +246,7 @@ Table DataRetriever::getAffectedStatements(int stmtNo) {
  * @return Affects relations in a table
  */
 Table DataRetriever::getAffectingStatements(int stmtNo) {
-    AffectsTable * affectsTable = pkbStorage->getAffects();
+    shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
     int columnNumber = 1;
     return *getStatementsHelper(affectsTable, vector<int>{stmtNo, columnNumber},
                                 &CacheManager::getAffectingStatements);
@@ -262,7 +260,7 @@ Table DataRetriever::getAffectingStatements(int stmtNo) {
  * @return whether the Affects relation exists
  */
 Table DataRetriever::getAffectsResult(int affectingStatement, int affectedStatement) {
-    AffectsTable * affectsTable = pkbStorage->getAffects();
+    shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
     return *getExactRelationHelper(
             affectsTable, vector<int>{affectingStatement, affectedStatement}, &CacheManager::getAffectsResult);
 }
@@ -274,7 +272,7 @@ Table DataRetriever::getAffectsResult(int affectingStatement, int affectedStatem
  * @return Affects* relations in a table
  */
 Table DataRetriever::getAffectedTStatements(int stmtNo) {
-    AffectsTable * affectsTTable = pkbStorage->getAffectsT();
+    shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
     int columnNumber = 0;
     return *getStatementsHelper(affectsTTable, vector<int>{stmtNo, columnNumber},
                                 &CacheManager::getAffectedTStatements);
@@ -287,7 +285,7 @@ Table DataRetriever::getAffectedTStatements(int stmtNo) {
  * @return Affects* relations in a table
  */
 Table DataRetriever::getAffectingTStatements(int stmtNo) {
-    AffectsTable * affectsTTable = pkbStorage->getAffectsT();
+    shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
     int columnNumber = 1;
     return *getStatementsHelper(affectsTTable, vector<int>{stmtNo, columnNumber},
                                 &CacheManager::getAffectingTStatements);
@@ -301,7 +299,7 @@ Table DataRetriever::getAffectingTStatements(int stmtNo) {
  * @return whether the Affects* relation exists
  */
 Table DataRetriever::getAffectsTResult(int affectingStatement, int affectedStatement) {
-    AffectsTable * affectsTTable = pkbStorage->getAffectsT();
+    shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
     return *getExactRelationHelper(
             affectsTTable, vector<int>{affectingStatement, affectedStatement}, &CacheManager::getAffectsTResult);
 }
@@ -334,21 +332,6 @@ DesignEntity DataRetriever::getDesignEntityOfStmt(int stmtNumber) {
     string stmtNumberString = to_string(stmtNumber);
     string type = pkbStorage->getStmtType(stmtNumberString);
     return getDesignEntity(type);
-}
-
-unordered_set<string> DataRetriever::getFollowingStatements(int followedStatement) {
-    string stmtNumberString = to_string(followedStatement);
-    return *pkbStorage->getFollowingStatements(stmtNumberString);
-}
-
-unordered_set<string> DataRetriever::getChildrenStatements(int parentStatement) {
-    string stmtNumberString = to_string(parentStatement);
-    return *pkbStorage->getChildrenStatements(stmtNumberString);
-}
-
-unordered_set<string> DataRetriever::getModifiedVariables(int modifierStatement) {
-    string stmtNumberString = to_string(modifierStatement);
-    return *pkbStorage->getModifiedVariables(stmtNumberString);
 }
 
 void DataRetriever::clearCache() {
