@@ -11,10 +11,6 @@ using namespace SourceParser;
 using SourceParser::Tokenizer;
 using namespace std;
 
-// todo move source program test to a .txt file
-// todo test errors thrown
-// todo test && and ||
-
 TEST_CASE ("Test Tokenizer") {
     SECTION ("test basic source program with one statement") {
         std::string source = "procedure testProcedure {"

@@ -76,7 +76,6 @@ namespace QE {
          * @param designEntity
          * @return
          */
-        //todo: implement call, read and print
         vector<string> getEntityNames(DesignEntity designEntity);
 
         bool hasResult(shared_ptr<WithClause> withClause);
