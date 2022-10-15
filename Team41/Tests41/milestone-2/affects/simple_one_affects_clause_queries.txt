@@ -96,7 +96,7 @@ Select <a1, a2> such that Affects(a1, a2)
 20 - valid affects - two same assign, select assign
 assign a;
 Select a such that Affects(a, a)
-4, 5, 7, 9, 11, 12, 13, 14, 16
+7, 9
 5000
 21 - invalid affects
 procedure p;
@@ -241,7 +241,7 @@ Select <a1, a2> such that Affects*(a1, a2)
 49 - valid Affects* - two same assign, select assign
 assign a;
 Select a such that Affects*(a, a)
-4, 5, 7, 9, 11, 12, 13, 14, 16
+7, 9
 5000
 50 - invalid Affects*
 procedure p;
