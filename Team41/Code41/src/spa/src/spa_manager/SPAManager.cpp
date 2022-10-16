@@ -38,17 +38,17 @@ vector<string> SPAManager::evaluate(string& query) {
             results.push_back(element);
         }
     } catch (const PQLTokenizeException& e) {
-        string errorMessage = "SyntaxError";
-        results.push_back(errorMessage);
+        const string ERROR_MESSAGE = "SyntaxError";
+        results.push_back(ERROR_MESSAGE);
     } catch (const PQLParseException& e) {
-        string errorMessage = "SyntaxError";
-        results.push_back(errorMessage);
+        const string ERROR_MESSAGE = "SyntaxError";
+        results.push_back(ERROR_MESSAGE);
     } catch (const PQLValidationException& e) {
-        string errorMessage = "SemanticError";
-        results.push_back(errorMessage);
+        const string ERROR_MESSAGE = "SemanticError";
+        results.push_back(ERROR_MESSAGE);
     } catch (std::exception& e) {
-        string errorMessage = e.what();
-        results.push_back(errorMessage);
+        const string ERROR_MESSAGE = "SyntaxError";
+        results.push_back(ERROR_MESSAGE);
     }
     return results;
 }
