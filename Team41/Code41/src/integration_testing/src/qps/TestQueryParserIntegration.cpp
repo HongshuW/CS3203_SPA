@@ -1,12 +1,10 @@
 //
-// Created by Xingchen Lin on 28/8/22.
+// Created by Xingchen Lin on 16/10/22.
 //
 
 #include "catch.hpp"
 
 #include "query_builder/QueryBuilder.h"
-#include "query_builder/QueryParser.h"
-#include "query_builder/QueryTokenizer.h"
 #include "query_builder/clauses/select_clauses/SelectClause.h"
 #include "query_builder/relations/such_that_relations/Follows.h"
 #include "query_builder/relations/such_that_relations/FollowsT.h"
@@ -33,11 +31,11 @@
 
 using namespace QB;
 
-TEST_CASE ("Test Query Parser") {
+TEST_CASE ("Test Query Builder Integration") {
     SECTION ("variable v1; Select v1") {
-        auto tokens = vector<string>({"variable", "v1", ";", "Select", "v1"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "variable v1; Select v1";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -48,9 +46,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("stmt a, b, c; Select a") {
-        auto tokens = vector<string>({"stmt", "a", ",", "b", ",", "c", ";", "Select", "a"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "stmt a, b, c; Select a";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 3);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -63,9 +61,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign a; while w; Select a") {
-        auto tokens = vector<string>({"assign", "a", ";", "while", "w", ";", "Select", "a"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; while w; Select a";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -77,10 +75,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("stmt s; Select s such that Parent (s, 12)") {
-        auto tokens = vector<string>({"stmt", "s", ";", "Select", "s", "such", "that", "Parent", "(", "s", ",", "12",
-                                      ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "stmt s; Select s such that Parent (s, 12)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -95,10 +92,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign a; Select a such that Parent* (_, a)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "such", "that", "Parent*", "(", "_", ",", "a",
-                                      ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; Select a such that Parent* (_, a)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -113,10 +109,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("stmt s; Select s such that Follows (6, s)") {
-        auto tokens = vector<string>({"stmt", "s", ";", "Select", "s", "such", "that", "Follows", "(", "6", ",", "s",
-                                      ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "stmt s; Select s such that Follows (6, s)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -131,10 +126,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("stmt s; Select s such that Follows* (s, 6)") {
-        auto tokens = vector<string>({"stmt", "s", ";", "Select", "s", "such", "that", "Follows*", "(", "s", ",", "6",
-                                      ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "stmt s; Select s such that Follows* (s, 6)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -149,10 +143,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("stmt s; Select s such that Follows* (s, _)") {
-        auto tokens = vector<string>({"stmt", "s", ";", "Select", "s", "such", "that", "Follows*", "(", "s", ",", "_",
-                                      ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "stmt s; Select s such that Follows* (s, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -167,10 +160,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign a; Select a such that Uses (a, \"x\")") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "such", "that", "Uses", "(", "a", ",", "\"",
-                                      "x", "\"", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; Select a such that Uses (a, \"x\")";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -185,10 +177,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("variable v; Select v such that Modifies (\"main\", v)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that", "Modifies", "(", "\"",
-                                      "main", "\"", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "variable v; Select v such that Modifies (\"main\", v)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -203,10 +194,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("variable v; Select v such that Modifies (8, v)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that", "Modifies", "(", "8",
-                                      ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "variable v; Select v such that Modifies (8, v)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -221,10 +211,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("stmt s; Select s such that Modifies (s, _)") {
-        auto tokens = vector<string>({"stmt", "s", ";", "Select", "s", "such", "that", "Modifies", "(", "s",
-                                      ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "stmt s; Select s such that Modifies (s, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -239,10 +228,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("procedure p; Select p such that Modifies (p, _)") {
-        auto tokens = vector<string>({"procedure", "p", ";", "Select", "p", "such", "that", "Modifies", "(", "p",
-                                      ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "procedure p; Select p such that Modifies (p, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -257,10 +245,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign a; Select a such that Uses (a, _)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "such", "that", "Uses", "(", "a",
-                                      ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; Select a such that Uses (a, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -275,10 +262,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("procedure p; Select p such that Uses (p, _)") {
-        auto tokens = vector<string>({"procedure", "p", ";", "Select", "p", "such", "that", "Uses", "(", "p",
-                                      ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "procedure p; Select p such that Uses (p, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -293,10 +279,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("procedure p; Select p such that Calls* (p, _)") {
-        auto tokens = vector<string>({"procedure", "p", ";", "Select", "p", "such", "that", "Calls*", "(", "p",
-                                      ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "procedure p; Select p such that Calls* (p, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -311,10 +296,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("while w; Select w such that Next (w, 2)") {
-        auto tokens = vector<string>({"while", "w", ";", "Select", "w", "such", "that", "Next", "(", "w",
-                                      ",", "2", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "while w; Select w such that Next (w, 2)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -329,10 +313,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign w; Select w such that Affects* (_, w)") {
-        auto tokens = vector<string>({"assign", "w", ";", "Select", "w", "such", "that", "Affects*", "(", "_",
-                                      ",", "w", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign w; Select w such that Affects* (_, w)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -347,10 +330,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign a; Select a pattern a (\"test\", _)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern", "a", "(", "\"", "test", "\"",
-                                      ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; Select a pattern a (\"test\", _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -368,10 +350,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign a; Select a pattern a (_, _)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern", "a", "(", "_",
-                                      ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; Select a pattern a (_, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -382,16 +363,15 @@ TEST_CASE ("Test Query Parser") {
                 SelectClause(ReturnType::TUPLE, returnResults));
         AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
         REQUIRE(assignPatternClause ==  AssignPatternClause(
-                        Synonym("a"),
-                        Underscore(),
-                        ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
+                Synonym("a"),
+                Underscore(),
+                ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
     }
 
-    SECTION ("assign a; Select a pattern a (_, _) and a (_, \"x + 1\")") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern", "a", "(", "_", ",", "_", ")",
-                                      "and", "a", "(", "_", ",", "\"", "x + 1", "\"", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+    SECTION ("assign a; Select a pattern a (_, _) and pattern a (_, \"x + 1\")") {
+        std::string queryStr = "assign a; Select a pattern a (_, _) and a (_, \"x + 1\")";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -416,11 +396,10 @@ TEST_CASE ("Test Query Parser") {
                                exprNode)));
     }
 
-    SECTION ("assign a; variable x; Select a pattern a (_, \"x + 1\")") {
-        auto tokens = vector<string>({"assign", "a", ";", "variable", "x", ";", "Select", "a", "pattern", "a",
-                                      "(", "_", ",", "\"", "x + 1", "\"", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+    SECTION ("assign a; variable x;  Select a pattern a (_, \"x + 1\")") {
+        std::string queryStr = "assign a; variable x; Select a pattern a (_, \"x + 1\")";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -435,17 +414,16 @@ TEST_CASE ("Test Query Parser") {
         exprNode->right = make_shared<ExprNode>("1");
         AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
         REQUIRE(assignPatternClause == AssignPatternClause(
-                        Synonym("a"),
-                        Underscore(),
-                        ExpressionSpec(ExpressionSpecType::FULL_MATCH,
-                                       exprNode)));
+                Synonym("a"),
+                Underscore(),
+                ExpressionSpec(ExpressionSpecType::FULL_MATCH,
+                               exprNode)));
     }
 
     SECTION ("assign a; Select a pattern a (_, \"(2 + 1)\")") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern", "a",
-                                      "(", "_", ",", "\"", "(2 + 1)", "\"", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; Select a pattern a (_, \"(2 + 1)\")";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -459,17 +437,16 @@ TEST_CASE ("Test Query Parser") {
         exprNode->right = make_shared<ExprNode>("1");
         AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
         REQUIRE(assignPatternClause == AssignPatternClause(
-                        Synonym("a"),
-                        Underscore(),
-                        ExpressionSpec(ExpressionSpecType::FULL_MATCH,
-                                       exprNode)));
+                Synonym("a"),
+                Underscore(),
+                ExpressionSpec(ExpressionSpecType::FULL_MATCH,
+                               exprNode)));
     }
 
     SECTION ("assign a; variable x; Select a pattern a (_, _\"(x + 1) * 3\"_)") {
-        auto tokens = vector<string>({"assign", "a", ";", "variable", "x", ";", "Select", "a", "pattern", "a",
-                                      "(", "_", ",", "_", "\"", "(x + 1) * 3", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; variable x; Select a pattern a (_, _\"(x + 1) * 3\"_)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -487,18 +464,16 @@ TEST_CASE ("Test Query Parser") {
         exprNode->right = make_shared<ExprNode>("3");
         AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
         REQUIRE(assignPatternClause == AssignPatternClause(
-                        Synonym("a"),
-                        Underscore(),
-                        ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
-                                       exprNode)));
+                Synonym("a"),
+                Underscore(),
+                ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
+                               exprNode)));
     }
 
     SECTION ("assign a; variable v, y; Select a such that Uses (a, \"x\") pattern a (v, _\"y\"_)") {
-        auto tokens = vector<string>({"assign", "a", ";", "variable", "v", ",", "y", ";", "Select", "a", "such", "that",
-                                      "Uses", "(", "a", ",", "\"", "x", "\"", ")", "pattern", "a",
-                                      "(", "v", ",", "_", "\"", "y", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; variable v, y; Select a such that Uses (a, \"x\") pattern a (v, _\"y\"_)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 3);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -522,11 +497,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign a; variable v; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")") {
-        auto tokens = vector<string>({"assign", "a", ";", "variable", "v", ";", "Select", "v",
-                                      "pattern", "a", "(", "v", ",", "_", "\"", "y", "\"", "_", ")",
-                                      "such", "that", "Uses", "(", "a", ",", "\"", "x", "\"", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; variable v; Select v pattern a (v, _\"y\"_) such that Uses (a, \"x\")";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -541,17 +514,16 @@ TEST_CASE ("Test Query Parser") {
         REQUIRE(*clause == UsesSClause(Synonym("a"), Ident("x")));
         AssignPatternClause assignPatternClause = dynamic_cast<AssignPatternClause&>( *(query->patternClauses->at(0)));
         REQUIRE(assignPatternClause ==  AssignPatternClause(
-                        Synonym("a"),
-                        Synonym("v"),
-                        ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
-                                       make_shared<ExprNode>("y"))));
+                Synonym("a"),
+                Synonym("v"),
+                ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
+                               make_shared<ExprNode>("y"))));
     }
 
     SECTION ("if i; variable v; Select v pattern i (v, _, _)") {
-        auto tokens = vector<string>({"if", "i", ";", "variable", "v", ";", "Select", "v",
-                                      "pattern", "i", "(", "v", ",", "_", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "if i; variable v; Select v pattern i (v, _, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -568,10 +540,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("variable v; Select v such that Calls (_, \"testProcedure\")") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that",
-                                      "Calls", "(", "_", ",", "\"", "testProcedure", "\"", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "variable v; Select v such that Calls (_, \"testProcedure\")";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -585,10 +556,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("variable v; Select v such that Calls* (_, _)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that",
-                                      "Calls*", "(", "_", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "variable v; Select v such that Calls* (_, _)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -602,10 +572,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("assign a1, a2; Select <a1.stmt#, a2> such that Affects (a1, a2)") {
-        auto tokens = vector<string>({"assign", "a1", ",", "a2", ";", "Select", "<", "a1", ".", "stmt#", ",", "a2", ">",
-                                      "such", "that", "Affects", "(", "a1", ",", "a2", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a1, a2; Select <a1.stmt#, a2> such that Affects (a1, a2)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -622,9 +591,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("Select BOOLEAN such that Next* (2, 9)") {
-        auto tokens = vector<string>({"Select", "BOOLEAN", "such", "that", "Next*", "(", "2", ",", "9", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "Select BOOLEAN such that Next* (2, 9)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::BOOLEAN));
         REQUIRE(query->suchThatClauses->size() == 1);
@@ -633,10 +602,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("Select BOOLEAN such that Next* (2, 9) and Next (9, 10)") {
-        auto tokens = vector<string>({"Select", "BOOLEAN", "such", "that", "Next*", "(", "2", ",", "9", ")", "and",
-                                      "Next", "(", "9", ",", "10", ")"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "Select BOOLEAN such that Next* (2, 9) and Next (9, 10)";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(*(query->selectClause) ==
                 SelectClause(ReturnType::BOOLEAN));
         REQUIRE(query->suchThatClauses->size() == 2);
@@ -647,10 +615,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("procedure p; variable v; Select p with p.procName = v.varName") {
-        auto tokens = vector<string>({"procedure", "p", ";", "variable", "v", ";", "Select", "p",
-                                      "with", "p", ".", "procName", "=", "v", ".", "varName"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "procedure p; variable v; Select p with p.procName = v.varName";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -668,10 +635,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("procedure p; variable v; Select p with p.procName = \"test\"") {
-        auto tokens = vector<string>({"procedure", "p", ";", "variable", "v", ";", "Select", "p",
-                                      "with", "p", ".", "procName", "=", "\"", "test", "\""});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "procedure p; variable v; Select p with p.procName = \"test\"";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -689,10 +655,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("procedure p; variable v; Select p with 1 = 1") {
-        auto tokens = vector<string>({"procedure", "p", ";", "variable", "v", ";", "Select", "p",
-                                      "with", "1", "=", "1"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "procedure p; variable v; Select p with 1 = 1";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -708,11 +673,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("procedure p; variable v; stmt s; constant c; Select p with p.procName = v.varName and s.stmt# = c.value") {
-        auto tokens = vector<string>({"procedure", "p", ";", "variable", "v", ";", "stmt", "s", ";", "constant", "c",
-                                      ";", "Select", "p", "with", "p", ".", "procName", "=", "v", ".", "varName", "and",
-                                      "s", ".", "stmt#", "=", "c", ".", "value"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "procedure p; variable v; stmt s; constant c; Select p with p.procName = v.varName and s.stmt# = c.value";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 4);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -736,10 +699,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("stmt s; constant c; Select s with s.stmt# = c.value") {
-        auto tokens = vector<string>({"stmt", "s", ";", "constant", "c", ";",
-                                      "Select", "s", "with", "s", ".", "stmt#", "=", "c", ".", "value"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "stmt s; constant c; Select s with s.stmt# = c.value";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -757,11 +719,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("stmt BOOLEAN; constant c; Select <BOOLEAN> with BOOLEAN.stmt# = c.value") {
-        auto tokens = vector<string>({"stmt", "BOOLEAN", ";", "constant", "c", ";",
-                                      "Select", "<", "BOOLEAN", ">", "with", "BOOLEAN", ".", "stmt#", "=",
-                                      "c", ".", "value"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "stmt BOOLEAN; constant c; Select BOOLEAN with BOOLEAN.stmt# = c.value";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 2);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -780,14 +740,10 @@ TEST_CASE ("Test Query Parser") {
 
     SECTION ("assign a; while w; stmt s; Select <a, w> such that Parent* (w, a) and Next* (60, s) pattern w(\"x\", _)"
              "with a.stmt# = s.stmt#") {
-        auto tokens = vector<string>({"assign", "a", ";", "while", "w", ";", "stmt", "s", ";",
-                                      "Select", "<", "a", ",", "w", ">", "such", "that",
-                                      "Parent*", "(", "w", ",", "a", ")",
-                                      "and", "Next*", "(", "60", ",", "s", ")",
-                                      "pattern", "w", "(", "\"", "x", "\"", ",", "_", ")",
-                                      "with", "a", ".", "stmt#", "=", "s", ".", "stmt#"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "assign a; while w; stmt s; Select <a, w> such that Parent* (w, a) and Next* (60, s) "
+                               "pattern w(\"x\", _) with a.stmt# = s.stmt#";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 3);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -817,9 +773,9 @@ TEST_CASE ("Test Query Parser") {
     }
 
     SECTION ("constant c; Select c with c.value = 1") {
-        auto tokens = vector<string>({"constant", "c", ";", "Select", "c", "with", "c", ".", "value", "=", "1"});
-        auto parser = QueryParser(tokens);
-        auto query = parser.parse();
+        std::string queryStr = "constant c; Select c with c.value = 1";
+        auto queryBuilder = QueryBuilder();
+        auto query = queryBuilder.buildPQLQuery(queryStr);
         REQUIRE(query->declarations->size() == 1);
         REQUIRE(*(query->declarations) ==
                 std::vector<Declaration>{
@@ -833,256 +789,231 @@ TEST_CASE ("Test Query Parser") {
                 WithClause(AttrRef(Synonym("c"), AttrName::VALUE), 1));
     }
 
-    SECTION ("'select' is not defined - variable v; select v") {
-        auto tokens = vector<string>({"variable", "v", ";", "select", "v"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("'select' is not defined, throw PQLParseException") {
+        std::string queryStr = "variable v; select v";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Unexpected token ';' - variable v; Select v;") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", ";"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Unexpected token ';', throw PQLParseException") {
+        std::string queryStr = "variable v; Select v;";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("'uses' is not defined - variable v; Select v such that uses (1, v)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that",
-                                      "uses", "(", "1", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("'uses' is not defined, throw PQLParseException") {
+        std::string queryStr = "variable v; Select v such that uses (1, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("'such that' is not found - variable v; Select v Uses (1, v)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "Uses", "(", "1", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("'such that' is not found, throw PQLParseException") {
+        std::string queryStr = "variable v; Select v Uses (1, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("No ';' after declaration - variable v Select v such that Uses (1, v)") {
-        auto tokens = vector<string>({"variable", "v", "Select", "v", "such", "that",
-                                      "Uses", "(", "1", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("no ';' after declaration, throw PQLParseException") {
+        std::string queryStr = "variable v Select v such that Uses (1, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("No ';' after declaration, found ',' - variable v, Select v such that Uses (1, v)") {
-        auto tokens = vector<string>({"variable", "v", ",", "Select", "v", "such", "that",
-                                      "Uses", "(", "1", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("no ';' after declaration, found ',', throw PQLParseException") {
+        std::string queryStr = "variable v, Select v such that Uses (1, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid synonym in Ref arg - variable 123abc;") {
-        auto tokens = vector<string>({"variable", "123abc", ";"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid synonym in Ref arg, throw PQLParseException") {
+        std::string queryStr = "variable 123abc;";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Synonym not declared - variable v; Select v such that Uses (2, 123abc)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that",
-                                      "Uses", "(", "2", ",", "123abc", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid synonym declared, throw PQLParseException") {
+        std::string queryStr = "variable v; Select v such that Uses (2, 123abc)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid number in SuchThat Clause - variable v; Select v such that Uses (0123, v)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that",
-                                      "Uses", "(", "0123", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid number in SuchThat Clause, throw PQLParseException") {
+        std::string queryStr = "variable v; Select v such that Uses (0123, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid Ref in SuchThat Clause - variable v; Select v such that Uses (=, v)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that",
-                                      "Uses", "(", "=", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid Ref in SuchThat Clause, throw PQLParseException") {
+        std::string queryStr = "variable v; Select v such that Uses (=, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid number - stmt BOOLEAN; Select BOOLEAN with 0123 = 0123") {
-        auto tokens = vector<string>({"stmt", "BOOLEAN", ";", "Select", "BOOLEAN", "with", "0123", "=", "0123"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid number, throw PQLParseException") {
+        std::string queryStr = "stmt BOOLEAN; Select BOOLEAN with 0123 = 0123";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid Ref - variable v; Select v such that Uses ((,), v)") {
-        auto tokens = vector<string>({"variable", "v", ";", "Select", "v", "such", "that",
-                                      "Uses", "(", "(", ",", ")", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid Ref, throw PQLParseException") {
+        std::string queryStr = "variable v; Select v such that Uses ((,), v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Empty arg 2 in pattern clause - assign a; Select a pattern a (, _)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern", "a", "(", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Empty arg 2 in pattern clause, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("'Pattern' is not defined - assign a; Select a Pattern a (_, _)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "Pattern", "a", "(", "_", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("'Pattern' is not defined, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a Pattern a (_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid expression (number) - assign a; Select a pattern a (_, 123)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern", "a", "(", "_", ",", "123", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid expression (number), throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, 123)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid expression (synonym) - assign a; Select a pattern a (_, x)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern", "a", "(", "_", ",", "x", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid expression (synonym), throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, x)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid tuple syntax - variable a; Select <a pattern a (_, _)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "<", "a", "pattern",
-                                      "a", "(", "_", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid tuple syntax, throw PQLParseException") {
+        std::string queryStr = "variable a; Select <a pattern a (_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid 'and' connector - if i; Select BOOLEAN such that Follows (9, 10) and pattern i (2, _, _)") {
-        auto tokens = vector<string>({"if", "i", ";", "Select", "BOOLEAN", "such", "that",
-                                      "Follows", "(", "9", ",", "10", ")",
-                                      "and", "pattern", "i", "(", "2", "_", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid 'and' connector, throw PQLParseException") {
+        std::string queryStr = "if i; Select BOOLEAN such that Follows (9, 10) and pattern i (2, _, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid expressionSpec - assign a; Select a pattern a (_, _\" +temp\"_)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern",
-                                      "a", "(", "_", ",", "_", "\"", " +temp", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid expressionSpec, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, _\" +temp\"_)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid expressionSpec - assign a; Select a pattern a (_, _\" temp+ \"_)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern",
-                                      "a", "(", "_", ",", "_", "\"", " temp+", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid expressionSpec, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, _\" temp+ \"_)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Empty expressionSpec - assign a; Select a pattern a (_, \"\")") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern",
-                                      "a", "(", "_", ",", "\"", "\"", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Empty expressionSpec, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, \"\")";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Empty assign expression - assign a; Select a pattern a (_, _\"\"_)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern",
-                                      "a", "(", "_", ",", "_", "\"", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Empty assign expression, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, _\"\"_)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid pattern arg2 - assign a; Select a pattern a (_, 1)") {
-        auto tokens = vector<string>({"assign", "a", ";", "Select", "a", "pattern",
-                                      "a", "(", "_", ",", "1", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid pattern arg2, throw PQLParseException") {
+        std::string queryStr = "assign a; Select a pattern a (_, 1)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid pattern clause - assign a; stmt s; variable v; Select s pattern Modifies(s, v)") {
-        auto tokens = vector<string>({"assign", "a", ";", "stmt", "s", ";", "Select", "s", "pattern",
-                                      "Modifies", "(", "s", ",", "v", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid pattern clause, throw PQLParseException") {
+        std::string queryStr = "assign a; stmt s; variable v; Select s pattern Modifies(s, v)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid ident in while clause - while w; Select w pattern w(\"10\", _)") {
-        auto tokens = vector<string>({"while", "w", ";", "Select", "w", "pattern",
-                                      "w", "(", "\"", "10", "\"", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Invalid ident in while clause, throw PQLParseException") {
+        std::string queryStr = "while w; Select w pattern w(\"10\", _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
+
 
     SECTION ("Negative number - stmt BOOLEAN; Select BOOLEAN with 123 = -123") {
-        auto tokens = vector<string>({"stmt", "BOOLEAN", ";", "Select", "BOOLEAN", "with", "123", "=", "-123"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+        std::string queryStr = "stmt BOOLEAN; Select BOOLEAN with 123 = -123";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLTokenizeException);
     }
 
-    SECTION ("Syntactically Valid query - stmt s; read r; print p; variable v; Select s such that Follows(r, p) pattern a(v, _\"100\"_)") {
-        auto tokens = vector<string>({"stmt", "s", ";", "read", "r", ";", "print", "p", ";", "variable", "v", ";",
-                                      "Select", "s", "such", "that", "Follows", "(", "r", ",", "p", ")",
-                                      "pattern", "a", "(", "v", ",", "_", "\"", "100", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_NOTHROW(parser.parse());
+    SECTION ("Syntactically valid query but semantically invalid"
+             "stmt s; read r; print p; variable v; Select s such that Follows(r, p) pattern a(v, _\"100\"_)") {
+        std::string queryStr = "stmt s; read r; print p; variable v; "
+                               "Select s such that Follows(r, p) pattern a(v, _\"100\"_)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Syntactically Valid query - variable v; assign a; Select v such that Uses(a,v) pattern a(_,_\"2\"_)") {
-        auto tokens = vector<string>({"variable", "v", ";", "assign", "a", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "a", "(", "_", ",", "_", "\"", "2", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_NOTHROW(parser.parse());
+    SECTION ("Invalid query, no error should be thrown"
+             "variable v; assign a; Select v such that Uses(a,v) pattern a(_,_\"2\"_)") {
+        std::string queryStr = "variable v; assign a; Select v such that Uses(a,v) pattern a(_,_\"2\"_)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
     }
 
-    SECTION ("Syntactically Valid query - variable v; Select v such that Uses(a,v) pattern a(_,\"2\")") {
-        auto tokens = vector<string>({"variable", "v", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "a", "(", "_", ",", "\"", "2", "\"", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_NOTHROW(parser.parse());
+    SECTION ("Syntactically valid query but semantically invalid"
+             "variable v; Select v such that Uses(a,v) pattern a(_,\"2\")") {
+        std::string queryStr = "variable v; Select v such that Uses(a,v) pattern a(_,\"2\")";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Syntactically Valid query - variable v; Select v such that Uses(a,v) pattern a(_, _)") {
-        auto tokens = vector<string>({"variable", "v", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "a", "(", "_", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_NOTHROW(parser.parse());
+    SECTION ("Syntactically valid query but semantically invalid"
+             "variable v; Select v such that Uses(a,v) pattern a(_, _)") {
+        std::string queryStr = "variable v; Select v such that Uses(a,v) pattern a(_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Syntactically Valid query - variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _)") {
-        auto tokens = vector<string>({"variable", "v", ";", "procedure", "p", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "v", "(", "p", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_NOTHROW(parser.parse());
+    SECTION ("Syntactically valid query but semantically invalid"
+             "variable v; procedure p; Select v such that Uses(a,v) pattern v(_, _)") {
+        std::string queryStr = "variable v; procedure p; Select v such that Uses(a,v) pattern v(_, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Syntactically Valid query - variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _, _)") {
-        auto tokens = vector<string>({"variable", "v", ";", "procedure", "p", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "v", "(", "p", ",", "_", ",", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_NOTHROW(parser.parse());
+    SECTION ("Syntactically valid query but semantically invalid"
+             "variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _, _)") {
+        std::string queryStr = "variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
-    SECTION ("Invalid expression spec - variable v; assign a; Select v such that Uses(a,v) pattern a(_, _\"+ 2\"_)") {
-        auto tokens = vector<string>({"variable", "v", ";", "assign", "a", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "a", "(", "_", ",", "_", "\"", "+ 2", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Syntactically invalid query"
+             "variable v; assign a; Select v such that Uses(a,v) pattern a(_,_\"+ 2\"_)") {
+        std::string queryStr = "variable v; assign a; Select v such that Uses(a,v) pattern a(_,_\"+ 2\"_)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid while pattern rules - variable v; procedure p; Select v such that Uses(a,v) pattern v(p, 1)") {
-        auto tokens = vector<string>({"variable", "v", ";", "procedure", "p", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "v", "(", "p", ",", "1", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Syntactically invalid query"
+             "variable v; procedure p; Select v such that Uses(a,v) pattern v(p, 1)") {
+        std::string queryStr = "variable v; procedure p; Select v such that Uses(a,v) pattern v(p, 1)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid if pattern rules - variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _, x)") {
-        auto tokens = vector<string>({"variable", "v", ";", "procedure", "p", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "v", "(", "p", ",", "_", ",", "x", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Syntactically invalid query"
+             "variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _, x)") {
+        std::string queryStr = "variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _, x)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 
-    SECTION ("Invalid assign pattern rules - variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _\"\"_)") {
-        auto tokens = vector<string>({"variable", "v", ";", "procedure", "p", ";",
-                                      "Select", "v", "such", "that", "Uses", "(", "a", ",", "v", ")",
-                                      "pattern", "v", "(", "p", ",", "_", "\"", "\"", "_", ")"});
-        auto parser = QueryParser(tokens);
-        REQUIRE_THROWS_AS(parser.parse(), PQLParseException);
+    SECTION ("Syntactically invalid query"
+             "variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _\"\"_)") {
+        std::string queryStr = "variable v; procedure p; Select v such that Uses(a,v) pattern v(p, _\"\"_)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
     }
 }

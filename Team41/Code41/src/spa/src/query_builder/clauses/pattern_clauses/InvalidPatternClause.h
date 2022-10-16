@@ -16,6 +16,11 @@
 #include "query_builder/constants/QueryParserConstants.h"
 #include "utils/ErrorMessageFormatter.h"
 #include "query_builder/exceptions/Exceptions.h"
+#include "utils/ExprNodeParser.h"
+#include "utils/Utils.h"
+#include "query_builder/commons/ExprStringTokenizer.h"
+#include "query_builder/commons/ExpressionSpec.h"
+#include "query_builder/commons/ExpressionSpecType.h"
 
 using namespace QB;
 
@@ -28,6 +33,7 @@ namespace QB {
         bool operator==(const InvalidPatternClause &other) const;
         Table accept(shared_ptr<IVisitor> visitor) override;
         int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
+        int validateExprSpec(int currIdx, const vector<string>& tokens);
     };
 
 } // QB
