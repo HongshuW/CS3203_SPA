@@ -6,4 +6,5 @@
 ../../Code41/cmake-build-debug/src/autotester/autotester multi-clause/deep_nesting_source.txt multi-clause/deep_nesting_multiple_clauses_queries.txt milestone-2-out/multiple-clauses-analysis.xml
 ../../Code41/cmake-build-debug/src/autotester/autotester next/deep_nesting_source.txt next/deep_nesting_one_next_clause_queries.txt milestone-2-out/next-analysis.xml
 ../../Code41/cmake-build-debug/src/autotester/autotester pattern/container_patterns_source.txt pattern/container_patterns_one_pattern_clause_queries.txt milestone-2-out/pattern-analysis.xml
+../../Code41/cmake-build-debug/src/autotester/autotester pattern/stress_patterns_source.txt pattern/stress_patterns_one_pattern_clause_queries.txt milestone-2-out/stress-analysis.xml
 ../../Code41/cmake-build-debug/src/autotester/autotester with/deep_nesting_source.txt with/deep_nesting_one_with_clause_queries.txt milestone-2-out/with-analysis.xml

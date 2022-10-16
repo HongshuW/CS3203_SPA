@@ -989,6 +989,20 @@ TEST_CASE ("Test Query Builder Integration") {
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }
 
+    SECTION ("Syntactically valid query but semantically invalid"
+             "procedure p; Select v pattern v(p, _)") {
+        std::string queryStr = "procedure p; Select v pattern v(p, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Syntactically valid query but semantically invalid"
+             "variable v; procedure p; Select v pattern v(p, _)") {
+        std::string queryStr = "variable v; procedure p; Select v pattern v(p, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
     SECTION ("Syntactically invalid query"
              "variable v; assign a; Select v such that Uses(a,v) pattern a(_,_\"+ 2\"_)") {
         std::string queryStr = "variable v; assign a; Select v such that Uses(a,v) pattern a(_,_\"+ 2\"_)";
