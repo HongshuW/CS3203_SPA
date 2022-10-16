@@ -308,4 +308,38 @@ TEST_CASE("Test de-pkb-qe integration") {
         vector<string> expected = {"x"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
+    SECTION("if ifs; Select ifs pattern('bar',_, _ ) from procedure 3") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+
+        Synonym syn1 = Synonym("ifs");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::IF, syn1)
+                ->addToSelect(syn1)
+                ->addIfPattern(syn1, Ident("bar"))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"3"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("while w; Select w pattern('qux',_, ) from procedure 4") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+
+        Synonym syn1 = Synonym("w");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::WHILE, syn1)
+                ->addToSelect(syn1)
+                ->addWhilePattern(syn1, Ident("qux"))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"5"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
 }
