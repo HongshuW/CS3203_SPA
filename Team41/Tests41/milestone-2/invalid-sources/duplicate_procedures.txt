@@ -1,0 +1,10 @@
+procedure p1 {
+    while (x1 < 0) {
+        print x2;
+    }
+    print x3;
+}
+
+procedure p1 {
+    x4 = 0;
+}

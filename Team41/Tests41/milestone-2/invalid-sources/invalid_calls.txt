@@ -1,0 +1,6 @@
+procedure p1 {
+    while (x1 < 0) {
+        print x2;
+    }
+    call doesNotExist;
+}
