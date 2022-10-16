@@ -5,7 +5,6 @@
 #include "catch.hpp"
 #include "query_builder/QueryBuilder.h"
 #include "query_builder/exceptions/Exceptions.h"
-#include "query_builder/clauses/pattern_clauses/InvalidPatternClause.h"
 
 using namespace QB;
 
@@ -423,6 +422,12 @@ TEST_CASE ("Test Query Validator") {
 
     SECTION ("Invalid Design Entity in CallsT clause") {
         std::string queryStr = "variable v; Select v such that Calls* (v, _)";
+        auto queryBuilder = QueryBuilder();
+        REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+    }
+
+    SECTION ("Invalid Design Entity type of argument 1 in Pattern Clause, throw PQLParseException") {
+        std::string queryStr = "read a; Select a pattern a (\"x\", _)";
         auto queryBuilder = QueryBuilder();
         REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
     }

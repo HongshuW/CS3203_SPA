@@ -9,7 +9,7 @@ add_executable(integration_testing ${srcs}
         ../unit_testing/src/design_extractor/Dummies.h
         ../unit_testing/src/query_evaluator/Dummies/TestQueryBuilder.cpp
         ../unit_testing/src/query_evaluator/Dummies/TestQueryBuilder.h
-        src/sp/TestSPIntegration.cpp src/de-pkb-qe/test1.cpp)
+        src/sp/TestSPIntegration.cpp src/de-pkb-qe/test1.cpp src/qps/TestQueryParserIntegration.cpp)
 
 
 target_link_libraries(integration_testing spa)
