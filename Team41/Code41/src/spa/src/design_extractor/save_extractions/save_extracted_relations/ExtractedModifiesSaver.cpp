@@ -1,14 +1,14 @@
 //
 // Created by Aaron on 11/10/22.
 //
-#include "SaveExtractedModifies.h"
+#include "ExtractedModifiesSaver.h"
 
 #include <utility>
 #include "design_extractor/ModifiesExtractor.h"
 
 using namespace DE;
 
-void SaveExtractedModifies::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
+void ExtractedModifiesSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
     list<vector<string>> modifiesSList = *ModifiesExtractor::extractModifiesS(programNode);
     list<vector<string>> modifiesPList = *ModifiesExtractor::extractModifiesP(programNode);
 

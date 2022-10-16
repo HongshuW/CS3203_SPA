@@ -2,15 +2,15 @@
 // Created by Aaron on 11/10/22.
 //
 
-#ifndef SPA_SAVETOPKBINTERFACE_H
-#define SPA_SAVETOPKBINTERFACE_H
+#ifndef SPA_PKBSAVERINTERFACE_H
+#define SPA_PKBSAVERINTERFACE_H
 
 #include "AST/ProgramNode.h"
 #include "pkb/DataModifier.h"
 
-class SaveToPKBInterface {
+class PKBSaverInterface {
 public:
-    SaveToPKBInterface(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier);
+    PKBSaverInterface(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier);
     virtual void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) = 0;
 private:
     shared_ptr<ProgramNode> programNode;
@@ -18,4 +18,4 @@ private:
 };
 
 
-#endif //SPA_SAVETOPKBINTERFACE_H
+#endif //SPA_PKBSAVERINTERFACE_H

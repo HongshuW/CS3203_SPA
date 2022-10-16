@@ -7,22 +7,6 @@
 #include "utils/Utils.h"
 
 namespace DE {
-    unordered_set<string>
-    EntityExtractor::extractDesignEntity(shared_ptr<StmtNode> node, QB::DesignEntity designEntityType) {
-        unordered_set<string> ans = unordered_set<string>();
-        switch (designEntityType) {
-            case QB::DesignEntity::VARIABLE: {
-                return *extractVariables(node);
-            }
-            case QB::DesignEntity::CONSTANT: {
-                return *extractConstants(node);
-            }
-            default:{
-                break;
-            }
-        }
-        return ans;
-    }
     shared_ptr<unordered_set<string>> EntityExtractor::extractVariables(shared_ptr<StmtNode> stmtNode) {
         shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
 
@@ -94,6 +78,78 @@ namespace DE {
         }
         return set;
 
+    }
+
+    vector<shared_ptr<StmtNode>> EntityExtractor::extractStmtNodes(shared_ptr<ProgramNode> rootPtr) {
+        vector<shared_ptr<StmtNode>> output;
+        auto procedureList = rootPtr->procedureList;
+        for (const auto& proc: procedureList) {
+            auto stmtList = proc->stmtList;
+            queue<shared_ptr<StmtNode>> queue;
+            for (const auto& stmtNode: stmtList) {
+                queue.push(stmtNode);
+            }
+            while (!queue.empty()) {
+                auto node = queue.front();
+                queue.pop();
+                NodeType nodeType = ASTUtils::getNodeType(node);
+                switch (nodeType) {
+                    case AST::IF_NODE: {
+                        output.push_back(node);
+                        shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(node);
+                        for (auto childStmtNode: ifNode->ifStmtList) {
+                            queue.push(childStmtNode);
+                        }
+                        for (auto childStmtNode: ifNode->elseStmtList) {
+                            queue.push(childStmtNode);
+                        }
+                        break;
+                    }
+                    case AST::WHILE_NODE: {
+                        output.push_back(node);
+                        shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(node);
+                        for (auto childStmtNode: whileNode->stmtList) {
+                            queue.push(childStmtNode);
+                        }
+                        break;
+                    }
+                    default: {
+                        output.push_back(node);
+                        break;
+                    }
+                }
+            }
+        }
+        return output;
+    }
+
+    shared_ptr<unordered_set<string>> EntityExtractor::extractAllVariables(shared_ptr<ProgramNode> rootPtr) {
+        vector<shared_ptr<StmtNode>> stmtNodeList = EntityExtractor::extractStmtNodes(rootPtr);
+        shared_ptr<unordered_set<string>> output = make_shared<unordered_set<string>>();
+        for (const auto& stmtNode: stmtNodeList) {
+            auto variableSet = EntityExtractor::extractVariables(stmtNode);
+            output->insert(variableSet->begin(), variableSet->end());
+        }
+        return output;
+    }
+
+    shared_ptr<unordered_set<string>> EntityExtractor::extractAllConstants(shared_ptr<ProgramNode> rootPtr) {
+        vector<shared_ptr<StmtNode>> stmtNodeList = EntityExtractor::extractStmtNodes(rootPtr);
+        shared_ptr<unordered_set<string>> output = make_shared<unordered_set<string>>();
+        for (const auto& stmtNode: stmtNodeList) {
+            auto variableSet = EntityExtractor::extractConstants(stmtNode);
+            output->insert(variableSet->begin(), variableSet->end());
+        }
+        return output;
+    }
+
+    shared_ptr<unordered_set<string>> EntityExtractor::extractAllProcedures(shared_ptr<ProgramNode> rootPtr) {
+        shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
+        auto procedureList = rootPtr->procedureList;
+        for (const auto& procedureNode: procedureList) {
+            set->insert(procedureNode->procedureName);
+        }
+        return set;
     }
 
     bool EntityExtractor::is_number(const std::string& s)

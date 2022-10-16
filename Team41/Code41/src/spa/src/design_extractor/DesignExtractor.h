@@ -22,14 +22,9 @@ namespace DE {
     private:
         shared_ptr<ProgramNode> programNode;
         shared_ptr<DataModifier> dataModifier;
-        void
-        extractEntitiesFromProcedure(shared_ptr<ProcedureNode> procedureNode, shared_ptr<unordered_set<string>> set,
-                                     DesignEntity designEntityType);
-        void saveEntityToPKB(DesignEntity designEntity);
 
     public:
         explicit DesignExtractor(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode);
-        shared_ptr<unordered_set<string>> extractEntities(DesignEntity designEntityType);
         void run();
 
         vector<string> getNextStarRelations(StmtNoArgs args);

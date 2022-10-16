@@ -18,11 +18,16 @@ namespace DE {
         static shared_ptr<unordered_set<string>> extractConstants(shared_ptr<StmtNode> stmtNode);
         static bool is_number(const std::string& s);
     public:
+        static vector<shared_ptr<StmtNode>> extractStmtNodes(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<unordered_set<string>> extractAllVariables(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<unordered_set<string>> extractAllConstants(shared_ptr<ProgramNode> rootPtr);
+        static shared_ptr<unordered_set<string>> extractAllProcedures(shared_ptr<ProgramNode> rootPtr);
+
         static  unordered_set<string> getVariablesFromExprNode(shared_ptr<ExprNode> exprNode);
         static  unordered_set<string> getConstantsFromExprNode(shared_ptr<ExprNode> exprNode);
         static  unordered_set<string> getVariablesFromCondExprNode(shared_ptr<CondExprNode> condExprNode);
         static  unordered_set<string> getConstantsFromCondExprNode(shared_ptr<CondExprNode> condExprNode);
-        static unordered_set<string> extractDesignEntity(shared_ptr<StmtNode> node, QB::DesignEntity designEntityType);
+
         static unordered_map<string, vector<shared_ptr<CallNode>>> extractCallNodesFromProcedures(shared_ptr<ProgramNode> rootPtr);
         static void extractVariablesFromCallNodesInProceduresToList (shared_ptr<CallNode> callNode,
             unordered_map<string, unordered_set<string>> mappedProceduresToVar,
