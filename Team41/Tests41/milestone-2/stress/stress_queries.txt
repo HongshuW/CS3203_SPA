@@ -1,0 +1,105 @@
+1 - next stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8;
+Select s1 such that Next(s1, s2) and Next(s2, s3) and Next(s3, s4) and Next(s4, s5) and Next(s5, s6) and Next(s6, s7) and Next(s7, s8)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 36, 37, 38
+5000
+2 - next stress test [timeout]
+stmt s1, s2, s3, s4, s5, s6, s7, s8;
+Select s1 such that Next*(s1, s2) and Next*(s2, s3) and Next*(s3, s4)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 36, 37, 38
+5000
+3 - next stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8;
+Select s1 such that Next*(s1, s2) and Next*(s2, s3) and Next*(s3, s4) with s1.stmt# = 1
+1
+5000
+4 - affects stress test
+assign a1, a2, a3, a4, a5, a6, a7, a8, a9;
+Select a1 such that Affects(a1, a2) and Affects(a2, a3) and Affects(a3, a4) and Affects(a4, a5) and Affects(a5, a6) and Affects(a6, a7) and Affects(a7, a8) and Affects(a8, a9)
+9, 19, 38
+5000
+5 - affects stress test
+assign a1, a2, a3, a4, a5, a6, a7, a8, a9;
+Select a1 such that Affects(a1, a2) and Affects(a2, a3) and Affects(a3, a4) and Affects(a4, a5) and Affects(a5, a6) and Affects(a6, a7) and Affects(a7, a8) and Affects(a8, a9) with a1.stmt# = 9
+9
+5000
+6 - affects* stress test
+assign a1, a2, a3, a4, a5, a6, a7, a8, a9;
+Select a1 such that Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9)
+9, 19, 38
+5000
+7 - affects* stress test
+assign a1, a2, a3, a4, a5, a6, a7, a8, a9;
+Select a1 such that Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9) with a1.stmt# = 9
+9
+5000
+8 - calls stress test
+procedure p1, p2, p3, p4, p5, p6, p7, p8, p9;
+Select p1 such that Calls(p1, p2) and Calls(p2, p3) and Calls(p3, p4) and Calls(p4, p5) and Calls(p5, p6) and Calls(p6, p7) and Calls(p7, p8) and Calls(p8, p9)
+none
+5000
+9 - calls stress test
+procedure p1, p2, p3, p4, p5, p6, p7, p8, p9;
+Select p1 such that Calls(p1, p2) and Calls(p2, p3) and Calls(p3, p4) and Calls(p4, p5) and Calls(p5, p6) and Calls(p6, p7) and Calls(p7, p8) and Calls(p8, p9) with p1.procName = "deepNesting"
+none
+5000
+10 - follows stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Follows(s1, s2) and Follows(s2, s3) and Follows(s3, s4) and Follows(s4, s5) and Follows(s5, s6) and Follows(s6, s7) and Follows(s8, s9)
+9
+5000
+11 - follows stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Follows(s1, s2) and Follows(s2, s3) and Follows(s3, s4) and Follows(s4, s5) and Follows(s5, s6) and Follows(s6, s7) and Follows(s8, s9) with s1.stmt# = 1
+none
+5000
+12 - follows* stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Follows*(s1, s2) and Follows*(s2, s3) and Follows*(s3, s4) and Follows*(s4, s5) and Follows*(s5, s6) and Follows*(s6, s7) and Follows*(s8, s9)
+9
+5000
+13 - follows* stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Follows*(s1, s2) and Follows*(s2, s3) and Follows*(s3, s4) and Follows*(s4, s5) and Follows*(s5, s6) and Follows*(s6, s7) and Follows*(s8, s9) with s1.stmt# = 1
+none
+5000
+14 - modifies stress test
+variable v1, v2, v3, v4, v5, v6, v7, v8, v9; stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Modifies(s1, v1) and Modifies(s2, v2) and Modifies(s3, v3) and Modifies(s4, v4) and Modifies(s5, v5) and Modifies(s6, v6) and Modifies(s7, v7) and Modifies(s8, v8) and Modifies(s9, v9)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 19, 20, 23, 24, 25, 27, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39
+5000
+15 - modifies stress test
+variable v1, v2, v3, v4, v5, v6, v7, v8, v9; stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Modifies(s1, v1) and Modifies(s2, v2) and Modifies(s3, v3) and Modifies(s4, v4) and Modifies(s5, v5) and Modifies(s6, v6) and Modifies(s7, v7) and Modifies(s8, v8) and Modifies(s9, v9) with s1.stmt# = 1
+1
+5000
+16 - uses stress test
+variable v1, v2, v3, v4, v5, v6, v7, v8, v9; stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Uses(s1, v1) and Uses(s2, v2) and Uses(s3, v3) and Uses(s4, v4) and Uses(s5, v5) and Uses(s6, v6) and Uses(s7, v7) and Uses(s8, v8) and Uses(s9, v9)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28, 29, 30, 32, 33, 34, 35, 37, 38, 39, 40, 41
+5000
+17 - uses stress test
+variable v1, v2, v3, v4, v5, v6, v7, v8, v9; stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Uses(s1, v1) and Uses(s2, v2) and Uses(s3, v3) and Uses(s4, v4) and Uses(s5, v5) and Uses(s6, v6) and Uses(s7, v7) and Uses(s8, v8) and Uses(s9, v9) with s1.stmt# = 1
+1
+5000
+18 - parent stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Parent(s1, s2) and Parent(s2, s3) and Parent(s3, s4) and Parent(s4, s5) and Parent(s5, s6) and Parent(s6, s7) and Parent(s7, s8) and Parent(s8, s9)
+1, 2, 3
+5000
+19 - parent stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Parent(s1, s2) and Parent(s2, s3) and Parent(s3, s4) and Parent(s4, s5) and Parent(s5, s6) and Parent(s6, s7) and Parent(s7, s8) and Parent(s8, s9) with s1.stmt# = 1
+1
+5000
+20 - parent* stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Parent*(s1, s2) and Parent*(s2, s3) and Parent*(s3, s4) and Parent*(s4, s5) and Parent*(s5, s6) and Parent*(s6, s7) and Parent*(s7, s8) and Parent*(s8, s9)
+1, 2, 3
+5000
+21 - parent* stress test
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9;
+Select s1 such that Parent*(s1, s2) and Parent*(s2, s3) and Parent*(s3, s4) and Parent*(s4, s5) and Parent*(s5, s6) and Parent*(s6, s7) and Parent*(s7, s8) and Parent*(s8, s9) with s1.stmt# = 1
+1
+5000
