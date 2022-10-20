@@ -1,0 +1,5 @@
+1 - dummy valid query
+stmt s;
+Select s such that Parent(1, 2)
+none
+5000

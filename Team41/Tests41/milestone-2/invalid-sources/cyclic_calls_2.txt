@@ -1,0 +1,7 @@
+procedure p1 {
+    read x1;
+    print x2;
+    while (x3 < 100) {
+        call p1;
+    }
+}

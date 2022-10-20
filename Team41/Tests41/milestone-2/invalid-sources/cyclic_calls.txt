@@ -1,0 +1,21 @@
+procedure p1 {
+    read x1;
+    print x2;
+    while (x3 < 100) {
+        call p2;
+    }
+}
+
+procedure p2 {
+    x5 = 90;
+    x6 = x5 * 2;
+    call p3;
+}
+
+procedure p3 {
+    if (x8 < 10) then {
+        call p1;
+    } else {
+        print x10;
+    }
+}

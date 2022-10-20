@@ -2,7 +2,7 @@
 # before first execution: chmod 777 
 # remember to build the latest autotester before execution
 # paths to edit
-autotester=../../../Code41/cmake-build-debug/src/autotester/autotester
+autotester=../../../Code41/cmake-build-release/src/autotester/autotester
 # the path for source and query files
 filesPath=./
 # where do you want the output to be located, remember to put analysis.xsl under this path
