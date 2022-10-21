@@ -83,10 +83,12 @@ namespace QE {
         size_t M = clauseIdMap.size();
         const bool value = false;
         const int valueInt = 0;
-        bool visited[M][M];
+        vector<bool> row(M, value);
+        vector<vector<bool>> visited(M, row);
+        //bool visited[M][M];
 
         edgeWeights.resize(M, vector<int>(M, valueInt));
-        std::fill(*visited, *visited + M*M, value);
+        //std::fill(*visited, *visited + M*M, value);
 
         for (auto& it_i: clauseIdMap) {
             auto curr_i = it_i.first;
@@ -185,6 +187,7 @@ namespace QE {
         clause1 = root(clause1);
         clause2 = root(clause2);
         if (clause1 != clause2) { parent[clause2] = clause1; }
+        return clause1;
     }
 
     void QueryOptimizer::processEdges() {
@@ -223,10 +226,11 @@ namespace QE {
             shared_ptr<vector<shared_ptr<ConditionalClause>>> sortedVec = make_shared<vector<shared_ptr<ConditionalClause>>>();
             auto clauseGroupVec = it.second;
             const int V = clauseGroupVec->size();
-            int selected[clauseCount];
-            for (int i = 0; i < clauseCount; i++) {
+            vector<bool> selected(clauseCount, false);
+            //int selected[clauseCount];
+            /*for (int i = 0; i < clauseCount; i++) {
                 selected[i] = false;
-            }
+            }*/
             int no_edge = 0;
 
             //pick first vertex with min edge cost:
