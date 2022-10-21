@@ -85,10 +85,8 @@ namespace QE {
         const int valueInt = 0;
         vector<bool> row(M, value);
         vector<vector<bool>> visited(M, row);
-        //bool visited[M][M];
 
         edgeWeights.resize(M, vector<int>(M, valueInt));
-        //std::fill(*visited, *visited + M*M, value);
 
         for (auto& it_i: clauseIdMap) {
             auto curr_i = it_i.first;
@@ -227,10 +225,6 @@ namespace QE {
             auto clauseGroupVec = it.second;
             const int V = clauseGroupVec->size();
             vector<bool> selected(clauseCount, false);
-            //int selected[clauseCount];
-            /*for (int i = 0; i < clauseCount; i++) {
-                selected[i] = false;
-            }*/
             int no_edge = 0;
 
             //pick first vertex with min edge cost:
