@@ -654,5 +654,200 @@ TEST_CASE("Test de-pkb-qe integration") {
         vector<string> expected = {"x", "y", "z"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
+    SECTION("print pr; read rd; select pr.varname with rd.varname == adda and rd.stmt# == 6 from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("pr");
+        Synonym syn2 = Synonym("rd");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addDeclaration(QB::DesignEntity::READ, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->addWith(AttrRef(syn2, QB::AttrName::VAR_NAME), Ident("adda"))
+                ->addWith(AttrRef(syn2, QB::AttrName::STMT_NUMBER), 6)
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"x", "y", "z"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("print pr; read rd; select pr.varname with rd.varname == adda and rd.stmt# == 6 from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("pr");
+        Synonym syn2 = Synonym("rd");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addDeclaration(QB::DesignEntity::READ, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->addWith(AttrRef(syn2, QB::AttrName::VAR_NAME), Ident("adda"))
+                ->addWith(6, AttrRef(syn2, QB::AttrName::STMT_NUMBER))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"x", "y", "z"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("print pr; read rd; select pr.varname with rd.varname == pr.varname from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("pr");
+        Synonym syn2 = Synonym("rd");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addDeclaration(QB::DesignEntity::READ, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->addWith(AttrRef(syn2, QB::AttrName::VAR_NAME), AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("print pr; read rd; select pr.varname with 'adda' == pr.varname from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("pr");
+        Synonym syn2 = Synonym("rd");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addDeclaration(QB::DesignEntity::READ, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->addWith(Ident("adda" ), AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("print pr; read rd; select pr.varname with adda = adda from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("pr");
+        Synonym syn2 = Synonym("rd");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addDeclaration(QB::DesignEntity::READ, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::VAR_NAME))
+                ->addWith(Ident("adda" ), Ident("adda"))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"x", "y", "z"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("print pr; read rd; select pr.stmt# with adda = adda from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("pr");
+        Synonym syn2 = Synonym("rd");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addDeclaration(QB::DesignEntity::READ, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->addWith(Ident("adda" ), Ident("adda"))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"1", "5", "8"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("print pr; read rd; select pr.stmt#  from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("pr");
+        Synonym syn2 = Synonym("rd");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PRINT, syn1)
+                ->addDeclaration(QB::DesignEntity::READ, syn2)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::STMT_NUMBER))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"1", "5", "8"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("procedure p; select p.procname with p.procname = 'procedure2' from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("p");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::PROCEDURE, syn1)
+                ->addToSelect(AttrRef(syn1, QB::AttrName::PROC_NAME))
+                ->addWith(AttrRef(syn1, QB::AttrName::PROC_NAME), Ident("procedure2"))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"procedure2"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("call cl; select cl with cl.procname = 'procedure4' from procedure 12") {
+        auto pNode = TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
+        designExtractor->run();
+        shared_ptr<CacheManager> cacheManager = make_shared<CacheManager>(
+                CacheManager(designExtractor));
+        dataRetriever->cacheManager = cacheManager;
+
+        Synonym syn1 = Synonym("cl");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::CALL, syn1)
+                ->addToSelect(syn1)
+                ->addWith(AttrRef(syn1, QB::AttrName::PROC_NAME), Ident("procedure4"))
+                ->build();
+
+        auto actual= queryEvaluator->evaluate(query);
+        vector<string> expected = {"3", "7"};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
 
 }
