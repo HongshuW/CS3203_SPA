@@ -8,9 +8,10 @@
 
 using namespace AST;
 
-AST::ReadNode::ReadNode(shared_ptr<VariableNode> variableNode) : variableNode(std::move(variableNode)) {}
+AST::ReadNode::ReadNode(shared_ptr<VariableNode> variableNode)
+    : variableNode(std::move(variableNode)) {}
 
 bool ReadNode::operator==(const ASTNode &node) const {
-    auto castedNode = dynamic_cast<const ReadNode*>(&node);
-    return castedNode != nullptr && *variableNode == *castedNode->variableNode;
+  auto castedNode = dynamic_cast<const ReadNode *>(&node);
+  return castedNode != nullptr && *variableNode == *castedNode->variableNode;
 }

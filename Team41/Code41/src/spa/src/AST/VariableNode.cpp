@@ -8,11 +8,9 @@
 
 using namespace AST;
 
-VariableNode::VariableNode(string variable)
-        : variable(std::move(variable)) {
-}
+VariableNode::VariableNode(string variable) : variable(std::move(variable)) {}
 
-bool VariableNode::operator==(const ASTNode &node) const  {
-    auto castedNode = dynamic_cast<const VariableNode*>(&node);
-    return castedNode != nullptr && variable == castedNode->variable;
+bool VariableNode::operator==(const ASTNode &node) const {
+  auto castedNode = dynamic_cast<const VariableNode *>(&node);
+  return castedNode != nullptr && variable == castedNode->variable;
 }

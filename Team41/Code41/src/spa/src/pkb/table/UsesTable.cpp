@@ -3,8 +3,10 @@
 //
 
 #include "UsesTable.h"
+
 #include "../PKBStorage.h"
 
 UsesTable::UsesTable() {
-    header = vector<string>{PKBStorage::USES_TABLE_COL1_NAME, PKBStorage::USES_TABLE_COL2_NAME};
+  header = vector<string>{PKBStorage::USES_TABLE_COL1_NAME,
+                          PKBStorage::USES_TABLE_COL2_NAME};
 }

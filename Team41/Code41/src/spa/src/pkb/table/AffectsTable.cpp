@@ -3,14 +3,16 @@
 //
 
 #include "AffectsTable.h"
+
 #include "../PKBStorage.h"
 
 AffectsTable::AffectsTable() {
-    header = vector<string>{PKBStorage::AFFECTS_TABLE_COL1_NAME, PKBStorage::AFFECTS_TABLE_COL2_NAME};
+  header = vector<string>{PKBStorage::AFFECTS_TABLE_COL1_NAME,
+                          PKBStorage::AFFECTS_TABLE_COL2_NAME};
 }
 
 void AffectsTable::clearCache() {
-    clearCacheInformation();
-    setAllRelationsStatus(false);
-    dropRows();
+  clearCacheInformation();
+  setAllRelationsStatus(false);
+  dropRows();
 }

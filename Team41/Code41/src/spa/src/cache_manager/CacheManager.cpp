@@ -3,16 +3,18 @@
 //
 
 #include "CacheManager.h"
+
 #include "./design_extractor/args/StmtNoArgs.h"
 
 const int CacheManager::WILDCARD_STMTNO = 0;
 
 CacheManager::CacheManager(shared_ptr<DesignExtractor> designExtractor) {
-    this->designExtractor = designExtractor;
+  this->designExtractor = designExtractor;
 }
 
 shared_ptr<list<vector<string>>> CacheManager::getNextTRelations() {
-    return make_shared<list<vector<string>>>(designExtractor->getAllNextStarRelations());
+  return make_shared<list<vector<string>>>(
+      designExtractor->getAllNextStarRelations());
 }
 
 /**
@@ -22,9 +24,10 @@ shared_ptr<list<vector<string>>> CacheManager::getNextTRelations() {
  * @return Next* relations
  */
 shared_ptr<vector<string>> CacheManager::getNextTStatements(int stmtNo) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
-    return make_shared<vector<string>>(designExtractor->getNextStarRelations(stmtNoArgs));
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
+  return make_shared<vector<string>>(
+      designExtractor->getNextStarRelations(stmtNoArgs));
 }
 
 /**
@@ -34,9 +37,10 @@ shared_ptr<vector<string>> CacheManager::getNextTStatements(int stmtNo) {
  * @return Next* relations
  */
 shared_ptr<vector<string>> CacheManager::getPreviousTStatements(int stmtNo) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
-    return make_shared<vector<string>>(designExtractor->getNextStarRelations(stmtNoArgs));
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
+  return make_shared<vector<string>>(
+      designExtractor->getNextStarRelations(stmtNoArgs));
 }
 
 /**
@@ -46,14 +50,16 @@ shared_ptr<vector<string>> CacheManager::getPreviousTStatements(int stmtNo) {
  * @param ensuingStatement The ensuing statement queried
  * @return whether the Next* relation exists
  */
-bool CacheManager::getNextTResult(int precedingStatement, int ensuingStatement) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(precedingStatement, ensuingStatement);
-    return !designExtractor->getNextStarRelations(stmtNoArgs).empty();
+bool CacheManager::getNextTResult(int precedingStatement,
+                                  int ensuingStatement) {
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(precedingStatement, ensuingStatement);
+  return !designExtractor->getNextStarRelations(stmtNoArgs).empty();
 }
 
 shared_ptr<list<vector<string>>> CacheManager::getAffectsRelations() {
-    return make_shared<list<vector<string>>>(designExtractor->getAllAffectsRelations());
+  return make_shared<list<vector<string>>>(
+      designExtractor->getAllAffectsRelations());
 }
 
 /**
@@ -63,9 +69,10 @@ shared_ptr<list<vector<string>>> CacheManager::getAffectsRelations() {
  * @return Affects relations
  */
 shared_ptr<vector<string>> CacheManager::getAffectedStatements(int stmtNo) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
-    return make_shared<vector<string>>(designExtractor->getAffectsRelations(stmtNoArgs));
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
+  return make_shared<vector<string>>(
+      designExtractor->getAffectsRelations(stmtNoArgs));
 }
 
 /**
@@ -75,9 +82,10 @@ shared_ptr<vector<string>> CacheManager::getAffectedStatements(int stmtNo) {
  * @return Affects relations
  */
 shared_ptr<vector<string>> CacheManager::getAffectingStatements(int stmtNo) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
-    return make_shared<vector<string>>(designExtractor->getAffectsRelations(stmtNoArgs));
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
+  return make_shared<vector<string>>(
+      designExtractor->getAffectsRelations(stmtNoArgs));
 }
 
 /**
@@ -87,14 +95,16 @@ shared_ptr<vector<string>> CacheManager::getAffectingStatements(int stmtNo) {
  * @param affectedStatement The affected statement queried
  * @return whether the Affects relation exists
  */
-bool CacheManager::getAffectsResult(int affectingStatement, int affectedStatement) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(affectingStatement, affectedStatement);
-    return !designExtractor->getAffectsRelations(stmtNoArgs).empty();
+bool CacheManager::getAffectsResult(int affectingStatement,
+                                    int affectedStatement) {
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(affectingStatement, affectedStatement);
+  return !designExtractor->getAffectsRelations(stmtNoArgs).empty();
 }
 
 shared_ptr<list<vector<string>>> CacheManager::getAffectsTRelations() {
-    return make_shared<list<vector<string>>>(designExtractor->getAllAffectsStarRelations());
+  return make_shared<list<vector<string>>>(
+      designExtractor->getAllAffectsStarRelations());
 }
 
 /**
@@ -104,9 +114,10 @@ shared_ptr<list<vector<string>>> CacheManager::getAffectsTRelations() {
  * @return Affects relations
  */
 shared_ptr<vector<string>> CacheManager::getAffectedTStatements(int stmtNo) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
-    return make_shared<vector<string>>(designExtractor->getAffectsStarRelations(stmtNoArgs));
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
+  return make_shared<vector<string>>(
+      designExtractor->getAffectsStarRelations(stmtNoArgs));
 }
 
 /**
@@ -116,9 +127,10 @@ shared_ptr<vector<string>> CacheManager::getAffectedTStatements(int stmtNo) {
  * @return Affects relations
  */
 shared_ptr<vector<string>> CacheManager::getAffectingTStatements(int stmtNo) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
-    return make_shared<vector<string>>(designExtractor->getAffectsStarRelations(stmtNoArgs));
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
+  return make_shared<vector<string>>(
+      designExtractor->getAffectsStarRelations(stmtNoArgs));
 }
 
 /**
@@ -128,8 +140,9 @@ shared_ptr<vector<string>> CacheManager::getAffectingTStatements(int stmtNo) {
  * @param affectedStatement The affected statement queried
  * @return whether the Affects* relation exists
  */
-bool CacheManager::getAffectsTResult(int affectingStatement, int affectedStatement) {
-    StmtNoArgs stmtNoArgs = StmtNoArgs();
-    stmtNoArgs.setStartAndEndStmtNo(affectingStatement, affectedStatement);
-    return !designExtractor->getAffectsStarRelations(stmtNoArgs).empty();
+bool CacheManager::getAffectsTResult(int affectingStatement,
+                                     int affectedStatement) {
+  StmtNoArgs stmtNoArgs = StmtNoArgs();
+  stmtNoArgs.setStartAndEndStmtNo(affectingStatement, affectedStatement);
+  return !designExtractor->getAffectsStarRelations(stmtNoArgs).empty();
 }

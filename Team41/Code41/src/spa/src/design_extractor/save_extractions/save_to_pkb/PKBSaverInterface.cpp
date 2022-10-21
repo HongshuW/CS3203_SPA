@@ -8,6 +8,6 @@
 
 PKBSaverInterface::PKBSaverInterface(shared_ptr<ProgramNode> programNode,
                                      shared_ptr<DataModifier> dataModifier) {
-    this->programNode = std::move(programNode);
-    this->dataModifier = std::move(dataModifier);
+  this->programNode = std::move(programNode);
+  this->dataModifier = std::move(dataModifier);
 }

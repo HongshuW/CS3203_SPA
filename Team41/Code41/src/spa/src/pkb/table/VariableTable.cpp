@@ -3,8 +3,9 @@
 //
 
 #include "VariableTable.h"
+
 #include "../PKBStorage.h"
 
 VariableTable::VariableTable() {
-    header = vector<string>{PKBStorage::VARIABLE_TABLE_COL1_NAME};
+  header = vector<string>{PKBStorage::VARIABLE_TABLE_COL1_NAME};
 }

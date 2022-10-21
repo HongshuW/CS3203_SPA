@@ -2,124 +2,125 @@
 // Created by hongshu wang on 31/8/22.
 //
 
-#include "catch.hpp"
 #include <list>
+
+#include "catch.hpp"
 #include "pkb/table/Table.cpp"
 
 using namespace std;
 
 TEST_CASE("Test Table") {
-    SECTION("Create Table") {
-        vector<string> header{"variable name"};
-        vector<vector<string>> rows;
-        vector<string> row1{"dummyVar1"};
-        vector<string> row2{"dummyVar2"};
-        vector<string> row3{"dummyVar3"};
-        rows.push_back(row1);
-        rows.push_back(row2);
-        rows.push_back(row3);
+  SECTION("Create Table") {
+    vector<string> header{"variable name"};
+    vector<vector<string>> rows;
+    vector<string> row1{"dummyVar1"};
+    vector<string> row2{"dummyVar2"};
+    vector<string> row3{"dummyVar3"};
+    rows.push_back(row1);
+    rows.push_back(row2);
+    rows.push_back(row3);
 
-        // create and initialise table
-        Table variableTable;
-        variableTable.header = header;
-        variableTable.rows = rows;
+    // create and initialise table
+    Table variableTable;
+    variableTable.header = header;
+    variableTable.rows = rows;
 
-        // check header is correct
-        REQUIRE(variableTable.header[0] == "variable name");
+    // check header is correct
+    REQUIRE(variableTable.header[0] == "variable name");
 
-        // iterate through rows in the table
-        REQUIRE(variableTable.rows[0] == row1);
-        REQUIRE(variableTable.rows[1] == row2);
-        REQUIRE(variableTable.rows[2] == row3);
-    }
+    // iterate through rows in the table
+    REQUIRE(variableTable.rows[0] == row1);
+    REQUIRE(variableTable.rows[1] == row2);
+    REQUIRE(variableTable.rows[2] == row3);
+  }
 
-    SECTION("Get Column by Column Name") {
-        vector<string> header{"stmt number", "stmt lhsType"};
-        vector<vector<string>> rows;
-        vector<string> row1{"1", "assign"};
-        vector<string> row2{"2", "while"};
-        vector<string> row3{"3", "read"};
-        rows.push_back(row1);
-        rows.push_back(row2);
-        rows.push_back(row3);
+  SECTION("Get Column by Column Name") {
+    vector<string> header{"stmt number", "stmt lhsType"};
+    vector<vector<string>> rows;
+    vector<string> row1{"1", "assign"};
+    vector<string> row2{"2", "while"};
+    vector<string> row3{"3", "read"};
+    rows.push_back(row1);
+    rows.push_back(row2);
+    rows.push_back(row3);
 
-        // create and initialise table
-        Table stmtTable;
-        stmtTable.header = header;
-        stmtTable.rows = rows;
+    // create and initialise table
+    Table stmtTable;
+    stmtTable.header = header;
+    stmtTable.rows = rows;
 
-        // check statement number column
-        vector<string> stmtNoColumn = stmtTable.getColumnByName("stmt number");
-        REQUIRE(stmtNoColumn[0] == "1");
-        REQUIRE(stmtNoColumn[1] == "2");
-        REQUIRE(stmtNoColumn[2] == "3");
+    // check statement number column
+    vector<string> stmtNoColumn = stmtTable.getColumnByName("stmt number");
+    REQUIRE(stmtNoColumn[0] == "1");
+    REQUIRE(stmtNoColumn[1] == "2");
+    REQUIRE(stmtNoColumn[2] == "3");
 
-        // check statement number column
-        vector<string> stmtTypeColumn = stmtTable.getColumnByName("stmt lhsType");
-        REQUIRE(stmtTypeColumn[0] == "assign");
-        REQUIRE(stmtTypeColumn[1] == "while");
-        REQUIRE(stmtTypeColumn[2] == "read");
+    // check statement number column
+    vector<string> stmtTypeColumn = stmtTable.getColumnByName("stmt lhsType");
+    REQUIRE(stmtTypeColumn[0] == "assign");
+    REQUIRE(stmtTypeColumn[1] == "while");
+    REQUIRE(stmtTypeColumn[2] == "read");
 
-        // test invalid column
-        vector<string> invalidColumn = stmtTable.getColumnByName("dummny column");
-        REQUIRE(invalidColumn.size() == 0);
-    }
+    // test invalid column
+    vector<string> invalidColumn = stmtTable.getColumnByName("dummny column");
+    REQUIRE(invalidColumn.size() == 0);
+  }
 
-    SECTION("Append rows") {
-        vector<string> header{"variable name"};
-        vector<vector<string>> rows;
-        vector<string> row1{"dummyVar1"};
-        vector<string> row2{"dummyVar2"};
-        vector<string> row3{"dummyVar3"};
+  SECTION("Append rows") {
+    vector<string> header{"variable name"};
+    vector<vector<string>> rows;
+    vector<string> row1{"dummyVar1"};
+    vector<string> row2{"dummyVar2"};
+    vector<string> row3{"dummyVar3"};
 
-        // create and initialise table
-        Table variableTable;
-        variableTable.header = header;
-        variableTable.rows = rows;
+    // create and initialise table
+    Table variableTable;
+    variableTable.header = header;
+    variableTable.rows = rows;
 
-        // append rows
-        variableTable.appendRow(row1);
-        variableTable.appendRow(row2);
-        variableTable.appendRow(row3);
+    // append rows
+    variableTable.appendRow(row1);
+    variableTable.appendRow(row2);
+    variableTable.appendRow(row3);
 
-        REQUIRE(variableTable.rows[0] == row1);
-        REQUIRE(variableTable.rows[1] == row2);
-        REQUIRE(variableTable.rows[2] == row3);
-    }
+    REQUIRE(variableTable.rows[0] == row1);
+    REQUIRE(variableTable.rows[1] == row2);
+    REQUIRE(variableTable.rows[2] == row3);
+  }
 
-    SECTION ("Rename header") {
-        vector<string> oldHeader{"typo"};
-        Table variableTable;
-        variableTable.header = oldHeader;
+  SECTION("Rename header") {
+    vector<string> oldHeader{"typo"};
+    Table variableTable;
+    variableTable.header = oldHeader;
 
-        vector<string> newHeader{"variable Table"};
-        variableTable.renameHeader(newHeader);
+    vector<string> newHeader{"variable Table"};
+    variableTable.renameHeader(newHeader);
 
-        REQUIRE(variableTable.header[0] == "variable Table");
-    }
+    REQUIRE(variableTable.header[0] == "variable Table");
+  }
 
-    SECTION("drop header") {
-        Table table = Table();
-        table.header = {"keep", "drop"};
-        table.rows = {{"k1", "d1"}, {"k2", "d2"}, {"k3", "d3"}};
+  SECTION("drop header") {
+    Table table = Table();
+    table.header = {"keep", "drop"};
+    table.rows = {{"k1", "d1"}, {"k2", "d2"}, {"k3", "d3"}};
 
-        Table actual = table.dropCol(1);
-        Table expected = Table();
-        expected.header = {"keep"};
-        expected.rows = {{"k1"}, {"k2"}, {"k3"}};
+    Table actual = table.dropCol(1);
+    Table expected = Table();
+    expected.header = {"keep"};
+    expected.rows = {{"k1"}, {"k2"}, {"k3"}};
 
-        REQUIRE(actual.isEqual(expected));
-    }
+    REQUIRE(actual.isEqual(expected));
+  }
 
-    SECTION("drop rows") {
-        Table actualTable = Table();
-        actualTable.header = {"header"};
-        actualTable.rows = {{"a"}, {"b"}, {"c"}};
-        actualTable.dropRows();
+  SECTION("drop rows") {
+    Table actualTable = Table();
+    actualTable.header = {"header"};
+    actualTable.rows = {{"a"}, {"b"}, {"c"}};
+    actualTable.dropRows();
 
-        Table expectedTable = Table();
-        expectedTable.header = {"header"};
+    Table expectedTable = Table();
+    expectedTable.header = {"header"};
 
-        REQUIRE(actualTable.isEqual(expectedTable));
-    }
+    REQUIRE(actualTable.isEqual(expectedTable));
+  }
 }

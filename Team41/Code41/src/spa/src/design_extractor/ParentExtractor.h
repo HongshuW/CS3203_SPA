@@ -7,6 +7,11 @@
 
 #include <map>
 #include <list>
+#include <vector>
+#include <string>
+#include "AST/ProgramNode.h"
+
+using namespace std;
 
 namespace DE {
     class ParentExtractor {

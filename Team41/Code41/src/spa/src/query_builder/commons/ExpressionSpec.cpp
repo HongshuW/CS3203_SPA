@@ -8,16 +8,17 @@
 
 using namespace QB;
 
-ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType, shared_ptr<ExprNode> exprNode) :
-        expressionSpecType(expressionSpecType),
-        exprNode(std::move(exprNode)) {}
+ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType,
+                               shared_ptr<ExprNode> exprNode)
+    : expressionSpecType(expressionSpecType), exprNode(std::move(exprNode)) {}
 
-ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType) :
-        expressionSpecType(expressionSpecType) {}
+ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType)
+    : expressionSpecType(expressionSpecType) {}
 
 ExpressionSpec::ExpressionSpec() = default;
 
 bool ExpressionSpec::operator==(const ExpressionSpec& expressionSpec) const {
-    return expressionSpecType == expressionSpec.expressionSpecType &&
-           (exprNode == expressionSpec.exprNode || *exprNode == *expressionSpec.exprNode);
+  return expressionSpecType == expressionSpec.expressionSpecType &&
+         (exprNode == expressionSpec.exprNode ||
+          *exprNode == *expressionSpec.exprNode);
 }

@@ -4,5 +4,6 @@
 
 #include "AbstractClauseVisitor.h"
 
-AbstractClauseVisitor::AbstractClauseVisitor(shared_ptr<QE::DataPreprocessor> dataPreprocessor): dataPreprocessor(dataPreprocessor)  {
-}
+AbstractClauseVisitor::AbstractClauseVisitor(
+    shared_ptr<QE::DataPreprocessor> dataPreprocessor)
+    : dataPreprocessor(dataPreprocessor) {}

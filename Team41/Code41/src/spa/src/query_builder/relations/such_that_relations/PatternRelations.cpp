@@ -4,5 +4,4 @@
 
 #include "PatternRelations.h"
 
-namespace QB {
-} // QB
+namespace QB {}  // namespace QB

@@ -5,5 +5,5 @@
 #include "IfPattern.h"
 
 shared_ptr<AbstractClause> IfPattern::createClause(Synonym arg1, Ref arg2) {
-    return make_shared<IfPatternClause>(arg1, arg2);
+  return make_shared<IfPatternClause>(arg1, arg2);
 }

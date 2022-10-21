@@ -10,17 +10,18 @@ using namespace std;
 using namespace QB;
 
 Declaration::Declaration(DesignEntity designEntity, Synonym synonym)
-: designEntity(designEntity), synonym(std::move(synonym)) {}
+    : designEntity(designEntity), synonym(std::move(synonym)) {}
 
-optional<Declaration> Declaration::findDeclaration(Synonym& synonymObj, const shared_ptr<vector<Declaration>>& declarations) {
-    for (auto declaration : *declarations) {
-        if (declaration.getSynonym().synonym == synonymObj.synonym) {
-            return make_optional(declaration);
-        }
+optional<Declaration> Declaration::findDeclaration(
+    Synonym& synonymObj, const shared_ptr<vector<Declaration>>& declarations) {
+  for (auto declaration : *declarations) {
+    if (declaration.getSynonym().synonym == synonymObj.synonym) {
+      return make_optional(declaration);
     }
-    return nullopt;
+  }
+  return nullopt;
 }
 
 bool Declaration::operator==(const Declaration& a2) const {
-    return designEntity == a2.designEntity && synonym == a2.synonym;
+  return designEntity == a2.designEntity && synonym == a2.synonym;
 }
