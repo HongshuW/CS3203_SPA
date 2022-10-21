@@ -3,8 +3,9 @@
 //
 
 #include "ConstantTable.h"
+
 #include "../PKBStorage.h"
 
 ConstantTable::ConstantTable() {
-    header = vector<string>{PKBStorage::CONSTANT_TABLE_COL1_NAME};
+  header = vector<string>{PKBStorage::CONSTANT_TABLE_COL1_NAME};
 }

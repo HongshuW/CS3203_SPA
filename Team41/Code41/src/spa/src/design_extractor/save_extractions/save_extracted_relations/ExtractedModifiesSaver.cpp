@@ -4,21 +4,23 @@
 #include "ExtractedModifiesSaver.h"
 
 #include <utility>
+
 #include "design_extractor/ModifiesExtractor.h"
 
 using namespace DE;
 
-void ExtractedModifiesSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
-    list<vector<string>> modifiesSList = *ModifiesExtractor::extractModifiesS(programNode);
-    list<vector<string>> modifiesPList = *ModifiesExtractor::extractModifiesP(programNode);
+void ExtractedModifiesSaver::save(shared_ptr<ProgramNode> programNode,
+                                  shared_ptr<DataModifier> dataModifier) {
+  list<vector<string>> modifiesSList =
+      *ModifiesExtractor::extractModifiesS(programNode);
+  list<vector<string>> modifiesPList =
+      *ModifiesExtractor::extractModifiesP(programNode);
 
-    for (auto entry: modifiesSList) {
-        dataModifier->saveModifiesS(entry);
-    }
+  for (auto entry : modifiesSList) {
+    dataModifier->saveModifiesS(entry);
+  }
 
-    for (auto entry: modifiesPList) {
-        dataModifier->saveModifiesP(entry);
-    }
+  for (auto entry : modifiesPList) {
+    dataModifier->saveModifiesP(entry);
+  }
 }
-
-

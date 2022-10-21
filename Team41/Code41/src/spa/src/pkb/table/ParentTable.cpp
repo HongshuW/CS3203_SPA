@@ -3,8 +3,10 @@
 //
 
 #include "ParentTable.h"
+
 #include "../PKBStorage.h"
 
 ParentTable::ParentTable() {
-    header = vector<string>{PKBStorage::PARENT_TABLE_COL1_NAME, PKBStorage::PARENT_TABLE_COL2_NAME};
+  header = vector<string>{PKBStorage::PARENT_TABLE_COL1_NAME,
+                          PKBStorage::PARENT_TABLE_COL2_NAME};
 }

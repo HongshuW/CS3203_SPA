@@ -5,5 +5,5 @@
 #include "SuchThatRelations.h"
 
 shared_ptr<AbstractClause> SuchThatRelations::createClause(Ref arg1, Ref arg2) {
-    return nullptr;
+  return nullptr;
 }

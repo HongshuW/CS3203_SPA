@@ -5,7 +5,7 @@
 #include "DataModifier.h"
 
 DataModifier::DataModifier(shared_ptr<PKBStorage> pkbStorage) {
-    this->pkbStorage = pkbStorage;
+  this->pkbStorage = pkbStorage;
 }
 
 /**
@@ -14,16 +14,17 @@ DataModifier::DataModifier(shared_ptr<PKBStorage> pkbStorage) {
  * @param procedures a list of names of procedures
  */
 void DataModifier::saveProcedures(list<string> procedures) {
-    pkbStorage->saveProcedures(procedures);
+  pkbStorage->saveProcedures(procedures);
 }
 
 /**
  * Saves a list of statements to the pkb.
  *
- * @param statements a list of statements, each statement is represented as a vector<string>{<stmt_no>, <stmt_type>}
+ * @param statements a list of statements, each statement is represented as a
+ * vector<string>{<stmt_no>, <stmt_type>}
  */
 void DataModifier::saveStatements(list<vector<std::string>> statements) {
-    pkbStorage->saveStatements(statements);
+  pkbStorage->saveStatements(statements);
 }
 
 /**
@@ -32,7 +33,7 @@ void DataModifier::saveStatements(list<vector<std::string>> statements) {
  * @param variables a list of names of variables
  */
 void DataModifier::saveVariables(list<string> variables) {
-    pkbStorage->saveVariables(variables);
+  pkbStorage->saveVariables(variables);
 }
 
 /**
@@ -41,7 +42,7 @@ void DataModifier::saveVariables(list<string> variables) {
  * @param constants a list of strings representing constant values
  */
 void DataModifier::saveConstants(list<std::string> constants) {
-    pkbStorage->saveConstants(constants);
+  pkbStorage->saveConstants(constants);
 }
 
 /**
@@ -50,7 +51,7 @@ void DataModifier::saveConstants(list<std::string> constants) {
  * @param followsRelation vector<string>{followedStatement, followingStatement}
  */
 void DataModifier::saveFollows(vector<string> followsRelation) {
-    pkbStorage->saveFollows(followsRelation);
+  pkbStorage->saveFollows(followsRelation);
 }
 
 /**
@@ -59,7 +60,7 @@ void DataModifier::saveFollows(vector<string> followsRelation) {
  * @param followsTRelation vector<string>{followedStatement, followingStatement}
  */
 void DataModifier::saveFollowsT(vector<string> followsTRelation) {
-    pkbStorage->saveFollowsT(followsTRelation);
+  pkbStorage->saveFollowsT(followsTRelation);
 }
 
 /**
@@ -68,7 +69,7 @@ void DataModifier::saveFollowsT(vector<string> followsTRelation) {
  * @param parentRelation vector<string>{parentStatement, childStatement}
  */
 void DataModifier::saveParent(vector<string> parentRelation) {
-    pkbStorage->saveParent(parentRelation);
+  pkbStorage->saveParent(parentRelation);
 }
 
 /**
@@ -77,7 +78,7 @@ void DataModifier::saveParent(vector<string> parentRelation) {
  * @param parentTRelation vector<string>{parentStatement, childStatement}
  */
 void DataModifier::saveParentT(vector<string> parentTRelation) {
-    pkbStorage->saveParentT(parentTRelation);
+  pkbStorage->saveParentT(parentTRelation);
 }
 
 /**
@@ -86,7 +87,7 @@ void DataModifier::saveParentT(vector<string> parentTRelation) {
  * @param usesSRelation vector<string>{userStatement, usedEntity}
  */
 void DataModifier::saveUsesS(vector<string> usesSRelation) {
-    pkbStorage->saveUsesS(usesSRelation);
+  pkbStorage->saveUsesS(usesSRelation);
 }
 
 /**
@@ -95,7 +96,7 @@ void DataModifier::saveUsesS(vector<string> usesSRelation) {
  * @param usesPRelation vector<string>{userProcedure, usedEntity}
  */
 void DataModifier::saveUsesP(vector<string> usesPRelation) {
-    pkbStorage->saveUsesP(usesPRelation);
+  pkbStorage->saveUsesP(usesPRelation);
 }
 
 /**
@@ -104,7 +105,7 @@ void DataModifier::saveUsesP(vector<string> usesPRelation) {
  * @param modifiesSRelation vector<string>{modifierStatement, modifiedEntity}
  */
 void DataModifier::saveModifiesS(vector<string> modifiesSRelation) {
-    pkbStorage->saveModifiesS(modifiesSRelation);
+  pkbStorage->saveModifiesS(modifiesSRelation);
 }
 
 /**
@@ -113,16 +114,17 @@ void DataModifier::saveModifiesS(vector<string> modifiesSRelation) {
  * @param modifiesPRelation vector<string>{modifierProcedure, modifiedEntity}
  */
 void DataModifier::saveModifiesP(vector<string> modifiesPRelation) {
-    pkbStorage->saveModifiesP(modifiesPRelation);
+  pkbStorage->saveModifiesP(modifiesPRelation);
 }
 
 /**
  * Saves a Calls relationship to the pkb.
  *
- * @param callsRelation vector<string>{callingProcedure, calledProcedure, statementNumber}
+ * @param callsRelation vector<string>{callingProcedure, calledProcedure,
+ * statementNumber}
  */
 void DataModifier::saveCalls(vector<string> callsRelation) {
-    pkbStorage->saveCalls(callsRelation);
+  pkbStorage->saveCalls(callsRelation);
 }
 
 /**
@@ -131,16 +133,16 @@ void DataModifier::saveCalls(vector<string> callsRelation) {
  * @param callsTRelation vector<string>{callingProcedure, calledProcedure}
  */
 void DataModifier::saveCallsT(vector<string> callsTRelation) {
-    pkbStorage->saveCallsT(callsTRelation);
+  pkbStorage->saveCallsT(callsTRelation);
 }
 
 /**
-  * Saves a Next relationship to the pkb.
-  *
-  * @param nextRelation vector<string>{precedingStatement, ensuingStatement}
-  */
+ * Saves a Next relationship to the pkb.
+ *
+ * @param nextRelation vector<string>{precedingStatement, ensuingStatement}
+ */
 void DataModifier::saveNext(vector<string> nextRelation) {
-    pkbStorage->saveNext(nextRelation);
+  pkbStorage->saveNext(nextRelation);
 }
 
 /**
@@ -149,7 +151,7 @@ void DataModifier::saveNext(vector<string> nextRelation) {
  * @param nextTRelation vector<string>{precedingStatement, ensuingStatement}
  */
 void DataModifier::saveNextT(vector<string> nextTRelation) {
-    pkbStorage->saveNextT(nextTRelation);
+  pkbStorage->saveNextT(nextTRelation);
 }
 
 /**
@@ -158,7 +160,7 @@ void DataModifier::saveNextT(vector<string> nextTRelation) {
  * @param affectsRelation vector<string>{affectingStatement, affectedStatement}
  */
 void DataModifier::saveAffects(vector<string> affectsRelation) {
-    pkbStorage->saveAffects(affectsRelation);
+  pkbStorage->saveAffects(affectsRelation);
 }
 
 /**
@@ -167,11 +169,12 @@ void DataModifier::saveAffects(vector<string> affectsRelation) {
  * @param affectsTRelation vector<string>{affectingStatement, affectedStatement}
  */
 void DataModifier::saveAffectsT(vector<string> affectsTRelation) {
-    pkbStorage->saveAffectsT(affectsTRelation);
+  pkbStorage->saveAffectsT(affectsTRelation);
 }
 
-void DataModifier::saveCFG(string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg) {
-    pkbStorage->saveCFG(procedure, cfg);
+void DataModifier::saveCFG(
+    string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg) {
+  pkbStorage->saveCFG(procedure, cfg);
 }
 
 /**
@@ -180,8 +183,9 @@ void DataModifier::saveCFG(string procedure, shared_ptr<unordered_map<int, unord
  * @param metainfo vector<string>{statementNumber, variableName}
  * @param pattern an expression node representing the pattern
  */
-void DataModifier::saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern) {
-    pkbStorage->saveAssignPattern(metainfo, pattern);
+void DataModifier::saveAssignPattern(vector<string> metainfo,
+                                     shared_ptr<ExprNode> pattern) {
+  pkbStorage->saveAssignPattern(metainfo, pattern);
 }
 
 /**
@@ -190,7 +194,7 @@ void DataModifier::saveAssignPattern(vector<string> metainfo, shared_ptr<ExprNod
  * @param whilePattern vector<string>{statementNumber, variableName}
  */
 void DataModifier::saveWhilePattern(vector<string> whilePattern) {
-    pkbStorage->saveWhilePattern(whilePattern);
+  pkbStorage->saveWhilePattern(whilePattern);
 }
 
 /**
@@ -199,5 +203,5 @@ void DataModifier::saveWhilePattern(vector<string> whilePattern) {
  * @param ifPattern vector<string>{statementNumber, variableName}
  */
 void DataModifier::saveIfPattern(vector<string> ifPattern) {
-    pkbStorage->saveIfPattern(ifPattern);
+  pkbStorage->saveIfPattern(ifPattern);
 }

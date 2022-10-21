@@ -6,17 +6,16 @@
 
 namespace QB {
 
-    unordered_map<int, WithRefType> indexToWithRefTypeMap({
-        {CommonConstants::ZERO, WithRefType::IDENT},
-        {CommonConstants::ONE, WithRefType::INTEGER},
-        {CommonConstants::TWO, WithRefType::ATTR_REF}
-    });
+unordered_map<int, WithRefType> indexToWithRefTypeMap(
+    {{CommonConstants::ZERO, WithRefType::IDENT},
+     {CommonConstants::ONE, WithRefType::INTEGER},
+     {CommonConstants::TWO, WithRefType::ATTR_REF}});
 
-    WithRefType getWithRefTypeFromIndex(int index) {
-        try {
-            return indexToWithRefTypeMap.at(index);
-        } catch (const std::out_of_range& oor) {
-            throw PQLParseException(CommonConstants::PQL_INVALID_WITH_REF_TYPE);
-        }
-    }
+WithRefType getWithRefTypeFromIndex(int index) {
+  try {
+    return indexToWithRefTypeMap.at(index);
+  } catch (const std::out_of_range& oor) {
+    throw PQLParseException(CommonConstants::PQL_INVALID_WITH_REF_TYPE);
+  }
 }
+}  // namespace QB

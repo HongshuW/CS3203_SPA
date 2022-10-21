@@ -4,6 +4,7 @@
 
 #include "PatternRelations.h"
 
-shared_ptr<AbstractClause> PatternRelations::createClause(Synonym arg1, Ref arg2) {
-    return nullptr;
+shared_ptr<AbstractClause> PatternRelations::createClause(Synonym arg1,
+                                                          Ref arg2) {
+  return nullptr;
 }

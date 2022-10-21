@@ -3,17 +3,20 @@
 //
 
 #include "ExtractedCallsSaver.h"
+
 #include "design_extractor/CallsExtractor.h"
 
-void ExtractedCallsSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
-    list<vector<string>> callsList = *CallsExtractor::extractCalls(programNode);
-    list<vector<string>> callsStarList = *CallsExtractor::extractCallsStar(programNode);
+void ExtractedCallsSaver::save(shared_ptr<ProgramNode> programNode,
+                               shared_ptr<DataModifier> dataModifier) {
+  list<vector<string>> callsList = *CallsExtractor::extractCalls(programNode);
+  list<vector<string>> callsStarList =
+      *CallsExtractor::extractCallsStar(programNode);
 
-    for (auto entry: callsList) {
-        dataModifier->saveCalls(entry);
-    }
+  for (auto entry : callsList) {
+    dataModifier->saveCalls(entry);
+  }
 
-    for (auto entry: callsStarList) {
-        dataModifier->saveCallsT(entry);
-    }
+  for (auto entry : callsStarList) {
+    dataModifier->saveCallsT(entry);
+  }
 }

@@ -93,8 +93,8 @@ namespace QE {
             for (auto& it_j: clauseIdMap) {
                 auto curr_j = it_j.first;
                 if ( curr_i == curr_j
-                || !hasCommonSyn(curr_i, curr_j)
-                || visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)]) continue;
+                     || !hasCommonSyn(curr_i, curr_j)
+                     || visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)]) continue;
 
                 visited[clauseIdMap.at(curr_i)][clauseIdMap.at(curr_j)] = true;
                 edges.emplace_back(clauseIdMap.at(curr_i), clauseIdMap.at(curr_j));

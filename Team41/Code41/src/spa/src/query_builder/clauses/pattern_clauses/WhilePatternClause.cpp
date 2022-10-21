@@ -4,21 +4,21 @@
 
 #include "WhilePatternClause.h"
 
+WhilePatternClause::WhilePatternClause(const Synonym& arg1, const Ref& arg2)
+    : PatternClause(arg1, arg2) {}
 
-WhilePatternClause::WhilePatternClause(const Synonym& arg1, const Ref& arg2) : PatternClause(arg1, arg2) {}
-
-bool WhilePatternClause::operator==(const WhilePatternClause &other) const {
-    auto clause = dynamic_cast<const WhilePatternClause*>(&other);
-    return clause != nullptr && arg1 == clause->arg1
-           && arg2 == clause->arg2;
+bool WhilePatternClause::operator==(const WhilePatternClause& other) const {
+  auto clause = dynamic_cast<const WhilePatternClause*>(&other);
+  return clause != nullptr && arg1 == clause->arg1 && arg2 == clause->arg2;
 }
 
 Table WhilePatternClause::accept(shared_ptr<IVisitor> visitor) {
-    return visitor->visit(shared_from_this());
+  return visitor->visit(shared_from_this());
 }
 
-int WhilePatternClause::validateSyntaxError(int currIdx, const vector<string>& tokens) {
-    expect(QueryParserConstants::UNDERSCORE, currIdx, tokens);
-    currIdx++;
-    return currIdx;
+int WhilePatternClause::validateSyntaxError(int currIdx,
+                                            const vector<string>& tokens) {
+  expect(QueryParserConstants::UNDERSCORE, currIdx, tokens);
+  currIdx++;
+  return currIdx;
 }

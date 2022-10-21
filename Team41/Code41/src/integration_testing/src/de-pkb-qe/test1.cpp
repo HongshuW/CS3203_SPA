@@ -208,7 +208,7 @@ TEST_CASE("Test de-pkb-qe integration") {
         vector<string> expected = {"x"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
-    //test such that + with
+        //test such that + with
     SECTION("variable v; print pr; if ifs; Select pr with v.varname = pr.varname and parent*(ifs, pr); from procedure 4") {
         auto pNode = TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
         shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);
@@ -253,7 +253,7 @@ TEST_CASE("Test de-pkb-qe integration") {
         vector<string> expected = {"3"};
         REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
     }
-    //test with clause with constant value
+        //test with clause with constant value
     SECTION("constant c; stmt s;  Select s with c.value = s.stmt# ; from procedure 4") {
         auto pNode = TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
         shared_ptr<DE::DesignExtractor> designExtractor = make_shared<DE::DesignExtractor>(dataModifier, pNode);

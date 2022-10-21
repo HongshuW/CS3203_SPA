@@ -3,11 +3,13 @@
 //
 
 #include "ExtractedNextSaver.h"
+
 #include "design_extractor/NextExtractor.h"
 
-void ExtractedNextSaver::save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) {
-    list<vector<string>> nextList = *NextExtractor::extractNext(programNode);
-    for (auto entry: nextList) {
-        dataModifier->saveNext(entry);
-    }
+void ExtractedNextSaver::save(shared_ptr<ProgramNode> programNode,
+                              shared_ptr<DataModifier> dataModifier) {
+  list<vector<string>> nextList = *NextExtractor::extractNext(programNode);
+  for (auto entry : nextList) {
+    dataModifier->saveNext(entry);
+  }
 }

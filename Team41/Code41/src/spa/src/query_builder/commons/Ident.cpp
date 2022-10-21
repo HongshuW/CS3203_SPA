@@ -3,14 +3,17 @@
 //
 
 #include "Ident.h"
+
 #include "query_builder/exceptions/Exceptions.h"
 
 using namespace QB;
 
 Ident::Ident(const string& identStr) : identStr(identStr) {
-    if (!Utils::isValidName(identStr)) {
-        throw PQLParseException(CommonConstants::PQL_INVALID_IDENT);
-    }
+  if (!Utils::isValidName(identStr)) {
+    throw PQLParseException(CommonConstants::PQL_INVALID_IDENT);
+  }
 }
 
-bool Ident::operator==(const Ident& ident1) const { return identStr == ident1.identStr; }
+bool Ident::operator==(const Ident& ident1) const {
+  return identStr == ident1.identStr;
+}

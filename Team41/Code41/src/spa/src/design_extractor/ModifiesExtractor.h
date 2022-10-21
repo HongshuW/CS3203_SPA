@@ -7,6 +7,12 @@
 
 #include <set>
 #include <list>
+#include <unordered_map>
+#include "AST/ASTNode.h"
+#include "AST/StmtNode.h"
+#include "AST/ProgramNode.h"
+
+using namespace AST;
 
 namespace DE {
     class ModifiesExtractor {

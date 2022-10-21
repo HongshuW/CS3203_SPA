@@ -4,6 +4,4 @@
 
 #include "Underscore.h"
 
-bool QB::Underscore::operator==(const Underscore&) const {
-    return true;
-}
+bool QB::Underscore::operator==(const Underscore&) const { return true; }

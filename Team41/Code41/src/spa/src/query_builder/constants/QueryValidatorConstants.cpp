@@ -5,28 +5,31 @@
 #include "QueryValidatorConstants.h"
 
 namespace QB {
-    const char QueryValidatorConstants::DOT = '.';
-    const string QueryValidatorConstants::PQL_VALIDATION_DUPLICATE_SYNONYM_DECLARATION =
-            "Found duplicated synonym for declaration: ";
-    const string QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED =
-            "Synonym is not declared: ";
-    const string QueryValidatorConstants::PQL_VALIDATION_ATTR_REF_NOT_DECLARED =
-            "AttrRef is not declared: ";
-    const string QueryValidatorConstants::PQL_VALIDATION_INVALID_REF_TYPES =
-            "Argument types do not match the expected RefTypes: ";
-    const string QueryValidatorConstants::PQL_VALIDATION_FIRST_ARG_UNDERSCORE =
-            "First argument cannot be underscore for Uses/Modifies Clause as it leads to ambiguity";
-    const string QueryValidatorConstants::PQL_VALIDATION_SECOND_ARG_INTEGER =
-            "Second argument of Pattern Clause cannot be Integer";
-    const string QueryValidatorConstants::PQL_VALIDATION_INVALID_SYNONYM_PATTERN =
-            "Expect pattern clause arg1 to be declared as assign, while or if, got: ";
-    const string QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY_PATTERN =
-            "Expect pattern clause arg2 to be declared as variable, got ";
-    const string QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY =
-            "Invalid design entity: ";
-    const string QueryValidatorConstants::PQL_VALIDATION_INVALID_ATTR_REF =
-            "Invalid AttrRef: ";
-    const string QueryValidatorConstants::PQL_VALIDATION_DIFFERENT_WTIH_REF =
-            "Two WithRef are different, no comparison can be made";
+const char QueryValidatorConstants::DOT = '.';
+const string
+    QueryValidatorConstants::PQL_VALIDATION_DUPLICATE_SYNONYM_DECLARATION =
+        "Found duplicated synonym for declaration: ";
+const string QueryValidatorConstants::PQL_VALIDATION_SYNONYM_NOT_DECLARED =
+    "Synonym is not declared: ";
+const string QueryValidatorConstants::PQL_VALIDATION_ATTR_REF_NOT_DECLARED =
+    "AttrRef is not declared: ";
+const string QueryValidatorConstants::PQL_VALIDATION_INVALID_REF_TYPES =
+    "Argument types do not match the expected RefTypes: ";
+const string QueryValidatorConstants::PQL_VALIDATION_FIRST_ARG_UNDERSCORE =
+    "First argument cannot be underscore for Uses/Modifies Clause as it leads "
+    "to ambiguity";
+const string QueryValidatorConstants::PQL_VALIDATION_SECOND_ARG_INTEGER =
+    "Second argument of Pattern Clause cannot be Integer";
+const string QueryValidatorConstants::PQL_VALIDATION_INVALID_SYNONYM_PATTERN =
+    "Expect pattern clause arg1 to be declared as assign, while or if, got: ";
+const string
+    QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY_PATTERN =
+        "Expect pattern clause arg2 to be declared as variable, got ";
+const string QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY =
+    "Invalid design entity: ";
+const string QueryValidatorConstants::PQL_VALIDATION_INVALID_ATTR_REF =
+    "Invalid AttrRef: ";
+const string QueryValidatorConstants::PQL_VALIDATION_DIFFERENT_WTIH_REF =
+    "Two WithRef are different, no comparison can be made";
 
-} // QB
+}  // namespace QB
