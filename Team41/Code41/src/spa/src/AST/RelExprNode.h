@@ -11,18 +11,18 @@ using namespace std;
 using namespace AST;
 
 namespace AST {
-    class RelExprNode : public ASTNode {
-    public:
-        shared_ptr<ExprNode> exprNodeLHS;
-        string op;
-        shared_ptr<ExprNode> exprNodeRHS;
+class RelExprNode : public ASTNode {
+ public:
+  shared_ptr<ExprNode> exprNodeLHS;
+  string op;
+  shared_ptr<ExprNode> exprNodeRHS;
 
-        RelExprNode(shared_ptr<ExprNode> exprNodeLHS, string op, shared_ptr<ExprNode> exprNodeRHS);
+  RelExprNode(shared_ptr<ExprNode> exprNodeLHS, string op,
+              shared_ptr<ExprNode> exprNodeRHS);
 
-        bool operator==(const ASTNode& node) const override;
+  bool operator==(const ASTNode& node) const override;
+};
 
-    };
+}  // namespace AST
 
-} // AST
-
-#endif //SPA_RELEXPRNODE_H
+#endif  // SPA_RELEXPRNODE_H

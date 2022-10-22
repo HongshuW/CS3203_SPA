@@ -4,20 +4,20 @@
 
 #ifndef SPA_DUMMIES_H
 #define SPA_DUMMIES_H
+#include <unordered_map>
+
+#include "AST/IfNode.h"
 #include "AST/PrintNode.h"
 #include "AST/ReadNode.h"
-#include "AST/IfNode.h"
 #include "AST/WhileNode.h"
 #include "AST/utils/ASTUtils.h"
-#include <unordered_map>
 namespace TestDE {
 
-    class Dummies {
-    public:
-        static shared_ptr<ProgramNode> getTestProgramNode(int idx);
-    };
+class Dummies {
+ public:
+  static shared_ptr<ProgramNode> getTestProgramNode(int idx);
+};
 
+}  // namespace TestDE
 
-} // TestDE
-
-#endif //SPA_DUMMIES_H
+#endif  // SPA_DUMMIES_H

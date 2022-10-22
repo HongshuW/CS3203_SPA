@@ -8,11 +8,11 @@
 #pragma once
 
 namespace QB {
-    enum class ExpressionSpecType {
-        ANY_MATCH, // _
-        PARTIAL_MATCH, // _"x"_
-        FULL_MATCH // "x"
-    };
+enum class ExpressionSpecType {
+  ANY_MATCH,      // _
+  PARTIAL_MATCH,  // _"x"_
+  FULL_MATCH      // "x"
+};
 }
 
-#endif //SPA_EXPRESSIONSPECTYPE_H
+#endif  // SPA_EXPRESSIONSPECTYPE_H

@@ -6,20 +6,21 @@
 #define SPA_PROGRAMNODE_H
 
 #include <vector>
+
 #include "ASTNode.h"
 #include "ProcedureNode.h"
 
 using namespace std;
 
 namespace AST {
-    class ProgramNode : public ASTNode {
-    public:
-        vector<shared_ptr<ProcedureNode>> procedureList;
+class ProgramNode : public ASTNode {
+ public:
+  vector<shared_ptr<ProcedureNode>> procedureList;
 
-        explicit ProgramNode(vector<shared_ptr<ProcedureNode>> procedureList);
+  explicit ProgramNode(vector<shared_ptr<ProcedureNode>> procedureList);
 
-        bool operator==(const ASTNode& node) const override;
-    };
-}
+  bool operator==(const ASTNode& node) const override;
+};
+}  // namespace AST
 
-#endif //SPA_PROGRAMNODE_H
+#endif  // SPA_PROGRAMNODE_H

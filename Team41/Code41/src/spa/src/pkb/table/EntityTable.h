@@ -7,8 +7,6 @@
 
 #include "Table.h"
 
-class EntityTable : public Table {
-};
+class EntityTable : public Table {};
 
-
-#endif //SPA_ENTITYTABLE_H
+#endif  // SPA_ENTITYTABLE_H

@@ -1,9 +1,0 @@
-procedure testProcedure {
-            x = 0;
-            if ( (x <= x) && (x == x + x * x - x)) then {
-            x = 1;
-            y = 3;
-            } else {
-            x = 5;
-            }
-            }

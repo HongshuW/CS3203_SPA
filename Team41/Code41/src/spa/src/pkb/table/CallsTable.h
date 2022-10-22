@@ -8,19 +8,18 @@
 #include "RelationTable.h"
 
 class CallsTable : public RelationTable {
-public:
-    vector<string> mapHeader;
-    vector<vector<string>> stmtNoProcMap;
+ public:
+  vector<string> mapHeader;
+  vector<vector<string>> stmtNoProcMap;
 
-    explicit CallsTable();
+  explicit CallsTable();
 
-    // getters
-    shared_ptr<Table> getCallsProcedures();
-    shared_ptr<Table> getStmtNoProcMap();
+  // getters
+  shared_ptr<Table> getCallsProcedures();
+  shared_ptr<Table> getStmtNoProcMap();
 
-    // setters
-    void appendRowToSubtables(vector<string> row);
+  // setters
+  void appendRowToSubtables(vector<string> row);
 };
 
-
-#endif //SPA_CALLSTABLE_H
+#endif  // SPA_CALLSTABLE_H

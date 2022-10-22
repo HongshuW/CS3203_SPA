@@ -11,13 +11,12 @@
 using namespace std;
 
 class KeyNotFoundException : public exception {
-public:
-    explicit KeyNotFoundException(string columnName, string key);
-    char * what();
+ public:
+  explicit KeyNotFoundException(string columnName, string key);
+  char* what();
 
-private:
-    string message;
+ private:
+  string message;
 };
 
-
-#endif //SPA_KEYNOTFOUNDEXCEPTION_H
+#endif  // SPA_KEYNOTFOUNDEXCEPTION_H

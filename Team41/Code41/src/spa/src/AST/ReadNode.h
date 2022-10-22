@@ -6,21 +6,21 @@
 #define SPA_READNODE_H
 
 #include "ASTNode.h"
-#include "VariableNode.h"
 #include "StmtNode.h"
+#include "VariableNode.h"
 
 using namespace std;
 using namespace AST;
 
 namespace AST {
-    class ReadNode : public StmtNode {
-    public:
-        shared_ptr<VariableNode> variableNode;
+class ReadNode : public StmtNode {
+ public:
+  shared_ptr<VariableNode> variableNode;
 
-        explicit ReadNode(shared_ptr<VariableNode> variableNode);
+  explicit ReadNode(shared_ptr<VariableNode> variableNode);
 
-        bool operator==(const ASTNode& node) const override;
-    };
-}
+  bool operator==(const ASTNode& node) const override;
+};
+}  // namespace AST
 
-#endif //SPA_READNODE_H
+#endif  // SPA_READNODE_H

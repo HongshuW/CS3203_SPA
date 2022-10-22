@@ -8,9 +8,8 @@
 #include "RelationTable.h"
 
 class FollowsTable : public RelationTable {
-public:
-    explicit FollowsTable();
+ public:
+  explicit FollowsTable();
 };
 
-
-#endif //SPA_FOLLOWSTABLE_H
+#endif  // SPA_FOLLOWSTABLE_H

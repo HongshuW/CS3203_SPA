@@ -4,19 +4,17 @@
 
 #ifndef SPA_ABSTRACTCLAUSEVISITOR_H
 #define SPA_ABSTRACTCLAUSEVISITOR_H
-#include "IVisitor.h"
 #include "DataPreprocessor.h"
+#include "IVisitor.h"
 
-class AbstractClauseVisitor: public IVisitor {
+class AbstractClauseVisitor : public IVisitor {
+ protected:
+  shared_ptr<QE::DataPreprocessor> dataPreprocessor;
 
-
-protected:
-    shared_ptr<QE::DataPreprocessor> dataPreprocessor;
-
-public:
-     explicit AbstractClauseVisitor(shared_ptr<QE::DataPreprocessor> dataPreprocessor);
-    ~AbstractClauseVisitor() override = default;
+ public:
+  explicit AbstractClauseVisitor(
+      shared_ptr<QE::DataPreprocessor> dataPreprocessor);
+  ~AbstractClauseVisitor() override = default;
 };
 
-
-#endif //SPA_ABSTRACTCLAUSEVISITOR_H
+#endif  // SPA_ABSTRACTCLAUSEVISITOR_H

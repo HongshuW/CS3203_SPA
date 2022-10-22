@@ -6,24 +6,24 @@
 #define SPA_ASSIGNNODE_H
 
 #include "ASTNode.h"
-#include "VariableNode.h"
 #include "ExprNode.h"
 #include "StmtNode.h"
+#include "VariableNode.h"
 
 using namespace std;
 using namespace AST;
 
 namespace AST {
-    class AssignNode : public StmtNode {
+class AssignNode : public StmtNode {
+ public:
+  shared_ptr<VariableNode> variableNode;
+  shared_ptr<ExprNode> expressionNode;
 
-    public:
-        shared_ptr<VariableNode> variableNode;
-        shared_ptr<ExprNode> expressionNode;
+  AssignNode(shared_ptr<VariableNode> variableNode,
+             shared_ptr<ExprNode> expressionNode);
 
-        AssignNode(shared_ptr<VariableNode> variableNode, shared_ptr<ExprNode> expressionNode);
+  bool operator==(const ASTNode& node) const override;
+};
+}  // namespace AST
 
-        bool operator==(const ASTNode& node) const override;
-    };
-}
-
-#endif //SPA_ASSIGNNODE_H
+#endif  // SPA_ASSIGNNODE_H

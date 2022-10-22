@@ -7,33 +7,35 @@
 
 #pragma once
 
-#include "ExpressionSpecType.h"
-#include "AST/ExprNode.h"
-#include "string"
-#include "regex"
 #include <ostream>
+
+#include "AST/ExprNode.h"
+#include "ExpressionSpecType.h"
+#include "regex"
+#include "string"
 
 using namespace std;
 using namespace QB;
 
 namespace QB {
 
-    class ExpressionSpec {
-    public:
-        ExpressionSpecType expressionSpecType;
-        shared_ptr<ExprNode> exprNode;
+class ExpressionSpec {
+ public:
+  ExpressionSpecType expressionSpecType;
+  shared_ptr<ExprNode> exprNode;
 
-        ExpressionSpec(ExpressionSpecType expressionSpecType, shared_ptr<ExprNode> exprNode);
+  ExpressionSpec(ExpressionSpecType expressionSpecType,
+                 shared_ptr<ExprNode> exprNode);
 
-        //! Only for ANY_MATCH
-        ExpressionSpec(ExpressionSpecType expressionSpecType);
+  //! Only for ANY_MATCH
+  ExpressionSpec(ExpressionSpecType expressionSpecType);
 
-        // For creating partial AssignPatternClause in QueryParser
-        ExpressionSpec();
+  // For creating partial AssignPatternClause in QueryParser
+  ExpressionSpec();
 
-        bool operator==(const ExpressionSpec& expressionSpec) const;
-    };
+  bool operator==(const ExpressionSpec& expressionSpec) const;
+};
 
-} // QB
+}  // namespace QB
 
-#endif //SPA_EXPRESSIONSPEC_H
+#endif  // SPA_EXPRESSIONSPEC_H

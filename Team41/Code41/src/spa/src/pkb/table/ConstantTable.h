@@ -7,9 +7,8 @@
 
 #include "EntityTable.h"
 class ConstantTable : public EntityTable {
-public:
-    explicit ConstantTable();
+ public:
+  explicit ConstantTable();
 };
 
-
-#endif //SPA_CONSTANTTABLE_H
+#endif  // SPA_CONSTANTTABLE_H

@@ -11,14 +11,14 @@ using namespace std;
 
 namespace SourceParser {
 
-    class ValidatorConstants {
-    public:
-        static const string SP_AST_EXCEPTION_CYCLIC_DEPENDENCY;
-        static const string SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND;
-        static const string SP_AST_EXCEPTION_PROCEDURE_CALLS_ITSELF;
-        static const string SP_AST_EXCEPTION_DUPLICATE_PROCEDURE;
-    };
+class ValidatorConstants {
+ public:
+  static const string SP_AST_EXCEPTION_CYCLIC_DEPENDENCY;
+  static const string SP_AST_EXCEPTION_PROCEDURE_NOT_FOUND;
+  static const string SP_AST_EXCEPTION_PROCEDURE_CALLS_ITSELF;
+  static const string SP_AST_EXCEPTION_DUPLICATE_PROCEDURE;
+};
 
-} // SourceParser
+}  // namespace SourceParser
 
-#endif //SPA_VALIDATORCONSTANTS_H
+#endif  // SPA_VALIDATORCONSTANTS_H

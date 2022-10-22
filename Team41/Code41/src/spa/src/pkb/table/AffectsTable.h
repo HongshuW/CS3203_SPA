@@ -9,10 +9,9 @@
 #include "RelationTable.h"
 
 class AffectsTable : public Cachable {
-public:
-    explicit AffectsTable();
-    void clearCache() override;
+ public:
+  explicit AffectsTable();
+  void clearCache() override;
 };
 
-
-#endif //SPA_AFFECTSTABLE_H
+#endif  // SPA_AFFECTSTABLE_H

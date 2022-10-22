@@ -1,5 +1,0 @@
-procedure testProcedure {
-            print x;
-            x = y + z;
-            z = x + 1;
-            }

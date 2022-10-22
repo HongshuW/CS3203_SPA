@@ -7,19 +7,16 @@
 
 #pragma once
 
-#include "Ident.h"
-#include "AttrRef.h"
 #include <unordered_map>
 #include <variant>
 
-namespace QB {
-    enum class WithRefType {
-        IDENT,
-        INTEGER,
-        ATTR_REF
-    };
-    using WithRef = variant<Ident, int, AttrRef>;
-    WithRefType getWithRefTypeFromIndex(int index);
-} // QB
+#include "AttrRef.h"
+#include "Ident.h"
 
-#endif //SPA_WITHREF_H
+namespace QB {
+enum class WithRefType { IDENT, INTEGER, ATTR_REF };
+using WithRef = variant<Ident, int, AttrRef>;
+WithRefType getWithRefTypeFromIndex(int index);
+}  // namespace QB
+
+#endif  // SPA_WITHREF_H

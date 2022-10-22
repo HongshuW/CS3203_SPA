@@ -11,10 +11,10 @@
 
 namespace QB {
 
-    class WhilePattern : public PatternRelations {
-        shared_ptr<AbstractClause> createClause(Synonym arg1, Ref arg2) override;
-    };
+class WhilePattern : public PatternRelations {
+  shared_ptr<AbstractClause> createClause(Synonym arg1, Ref arg2) override;
+};
 
-} // QB
+}  // namespace QB
 
-#endif //SPA_WHILEPATTERN_H
+#endif  // SPA_WHILEPATTERN_H

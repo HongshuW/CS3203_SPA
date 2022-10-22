@@ -10,11 +10,11 @@
 using namespace std;
 
 namespace AST {
-    class ASTNode {
-    public:
-        virtual ~ASTNode() = default;
-        virtual bool operator==(const ASTNode& node) const = 0;
-    };
-}
+class ASTNode {
+ public:
+  virtual ~ASTNode() = default;
+  virtual bool operator==(const ASTNode& node) const = 0;
+};
+}  // namespace AST
 
-#endif //SPA_ASTNODE_H
+#endif  // SPA_ASTNODE_H

@@ -7,23 +7,25 @@
 #define SPA_AFFECTSTCLAUSE_H
 
 #include "SuchThatClause.h"
-#include "query_evaluator/IVisitor.h"
 #include "Validatable.h"
+#include "query_evaluator/IVisitor.h"
 
 using namespace QB;
 
 namespace QB {
 
-    class AffectsTClause : public SuchThatClause, public enable_shared_from_this<AffectsTClause> {
-    public:
-        AffectsTClause(Ref arg1, Ref arg2);
+class AffectsTClause : public SuchThatClause,
+                       public enable_shared_from_this<AffectsTClause> {
+ public:
+  AffectsTClause(Ref arg1, Ref arg2);
 
-        bool operator==(const AffectsTClause &other) const;
-        Table accept(shared_ptr<IVisitor> visitor) override;
-        pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>> getAllowedArgsSynonym() override;
-        pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;
-    };
+  bool operator==(const AffectsTClause &other) const;
+  Table accept(shared_ptr<IVisitor> visitor) override;
+  pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
+  getAllowedArgsSynonym() override;
+  pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;
+};
 
-} // QB
+}  // namespace QB
 
-#endif //SPA_AFFECTSTCLAUSE_H
+#endif  // SPA_AFFECTSTCLAUSE_H

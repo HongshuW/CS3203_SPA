@@ -7,29 +7,30 @@
 
 #pragma once
 
-#include "query_builder/commons/Ref.h"
+#include "query_builder/clauses/AbstractClause.h"
+#include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_builder/commons/DesignEntity.h"
 #include "query_builder/commons/ExpressionSpec.h"
-#include "query_builder/clauses/pattern_clauses/PatternClause.h"
-#include "query_builder/clauses/AbstractClause.h"
+#include "query_builder/commons/Ref.h"
 #include "query_builder/constants/QueryParserConstants.h"
 
 using namespace QB;
 
 namespace QB {
-    class AssignPatternClause : public PatternClause, public enable_shared_from_this<AssignPatternClause> {
-    public:
-        ExpressionSpec arg3;
+class AssignPatternClause
+    : public PatternClause,
+      public enable_shared_from_this<AssignPatternClause> {
+ public:
+  ExpressionSpec arg3;
 
-        AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
-        // Create a partial AssignPatternClause
-        AssignPatternClause(Synonym arg1, Ref arg2);
+  AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
+  // Create a partial AssignPatternClause
+  AssignPatternClause(Synonym arg1, Ref arg2);
 
-        bool operator==(const AssignPatternClause &other) const;
-        Table accept(shared_ptr<IVisitor> visitor) override;
-        int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
-    };
-}
+  bool operator==(const AssignPatternClause& other) const;
+  Table accept(shared_ptr<IVisitor> visitor) override;
+  int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
+};
+}  // namespace QB
 
-
-#endif //SPA_ASSIGNPATTERNCLAUSE_H
+#endif  // SPA_ASSIGNPATTERNCLAUSE_H

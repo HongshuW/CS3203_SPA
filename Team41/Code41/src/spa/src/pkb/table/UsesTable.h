@@ -8,9 +8,8 @@
 #include "RelationTable.h"
 
 class UsesTable : public RelationTable {
-public:
-    explicit UsesTable();
+ public:
+  explicit UsesTable();
 };
 
-
-#endif //SPA_USESTABLE_H
+#endif  // SPA_USESTABLE_H

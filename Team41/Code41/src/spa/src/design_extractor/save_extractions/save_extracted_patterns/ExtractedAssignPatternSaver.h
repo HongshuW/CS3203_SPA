@@ -8,13 +8,13 @@
 #include "design_extractor/save_extractions/save_to_pkb/PKBSaverInterface.h"
 
 class ExtractedAssignPatternSaver : public PKBSaverInterface {
-public:
-    ExtractedAssignPatternSaver(shared_ptr<ProgramNode> programNode,
-                                shared_ptr<DataModifier> dataModifier)
-    : PKBSaverInterface(std::move(programNode), std::move(dataModifier)) {}
+ public:
+  ExtractedAssignPatternSaver(shared_ptr<ProgramNode> programNode,
+                              shared_ptr<DataModifier> dataModifier)
+      : PKBSaverInterface(std::move(programNode), std::move(dataModifier)) {}
 
-    void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
+  void save(shared_ptr<ProgramNode> programNode,
+            shared_ptr<DataModifier> dataModifier) override;
 };
 
-
-#endif //SPA_EXTRACTEDASSIGNPATTERNSAVER_H
+#endif  // SPA_EXTRACTEDASSIGNPATTERNSAVER_H

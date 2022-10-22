@@ -6,21 +6,20 @@
 #define SPA_PRINTNODE_H
 
 #include "ASTNode.h"
-#include "VariableNode.h"
 #include "StmtNode.h"
+#include "VariableNode.h"
 
 using namespace std;
 
 namespace AST {
-    class PrintNode : public StmtNode {
-    public:
-        shared_ptr<VariableNode> variableNode;
+class PrintNode : public StmtNode {
+ public:
+  shared_ptr<VariableNode> variableNode;
 
-        explicit PrintNode(shared_ptr<VariableNode> variableNode);
+  explicit PrintNode(shared_ptr<VariableNode> variableNode);
 
-        bool operator==(const ASTNode& node) const override;
+  bool operator==(const ASTNode& node) const override;
+};
+}  // namespace AST
 
-    };
-}
-
-#endif //SPA_PRINTNODE_H
+#endif  // SPA_PRINTNODE_H

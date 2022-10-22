@@ -8,14 +8,13 @@
 #include "../save_to_pkb/PKBSaverInterface.h"
 
 class ExtractedConstantSaver : public PKBSaverInterface {
-public:
-    ExtractedConstantSaver(shared_ptr<ProgramNode> programNode,
-                           shared_ptr<DataModifier> dataModifier)
-    : PKBSaverInterface(std::move(programNode), std::move(dataModifier)) {}
+ public:
+  ExtractedConstantSaver(shared_ptr<ProgramNode> programNode,
+                         shared_ptr<DataModifier> dataModifier)
+      : PKBSaverInterface(std::move(programNode), std::move(dataModifier)) {}
 
-    void save(shared_ptr<AST::ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) override;
-
+  void save(shared_ptr<AST::ProgramNode> programNode,
+            shared_ptr<DataModifier> dataModifier) override;
 };
 
-
-#endif //SPA_EXTRACTEDCONSTANTSAVER_H
+#endif  // SPA_EXTRACTEDCONSTANTSAVER_H

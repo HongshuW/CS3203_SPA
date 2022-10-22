@@ -5,21 +5,21 @@
 #ifndef SPA_INVALIDPROCEDUREDUMMIES_H
 #define SPA_INVALIDPROCEDUREDUMMIES_H
 
+#include <unordered_map>
+
+#include "AST/IfNode.h"
 #include "AST/PrintNode.h"
 #include "AST/ReadNode.h"
-#include "AST/IfNode.h"
 #include "AST/WhileNode.h"
 #include "AST/utils/ASTUtils.h"
-#include <unordered_map>
 
 namespace TestAST {
 
-    class InvalidProcedureDummies {
-    public:
-        static shared_ptr<ProgramNode> getTestProgramNode(int idx);
-    };
+class InvalidProcedureDummies {
+ public:
+  static shared_ptr<ProgramNode> getTestProgramNode(int idx);
+};
 
+}  // namespace TestAST
 
-} // TestDE
-
-#endif //SPA_INVALIDPROCEDUREDUMMIES_H
+#endif  // SPA_INVALIDPROCEDUREDUMMIES_H

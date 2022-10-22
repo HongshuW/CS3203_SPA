@@ -8,9 +8,8 @@
 #include "RelationTable.h"
 
 class ModifiesTable : public RelationTable {
-public:
-    explicit ModifiesTable();
+ public:
+  explicit ModifiesTable();
 };
 
-
-#endif //SPA_MODIFIESTABLE_H
+#endif  // SPA_MODIFIESTABLE_H

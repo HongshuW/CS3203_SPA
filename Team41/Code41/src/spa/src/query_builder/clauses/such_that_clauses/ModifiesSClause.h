@@ -7,23 +7,25 @@
 #define SPA_MODIFIESSCLAUSE_H
 
 #include "SuchThatClause.h"
-#include "query_evaluator/IVisitor.h"
 #include "Validatable.h"
+#include "query_evaluator/IVisitor.h"
 
 using namespace QB;
 
 namespace QB {
 
-    class ModifiesSClause : public SuchThatClause, public enable_shared_from_this<ModifiesSClause> {
-    public:
-        ModifiesSClause(Ref arg1, Ref arg2);
+class ModifiesSClause : public SuchThatClause,
+                        public enable_shared_from_this<ModifiesSClause> {
+ public:
+  ModifiesSClause(Ref arg1, Ref arg2);
 
-        bool operator==(const ModifiesSClause &other) const;
-        Table accept(shared_ptr<IVisitor> visitor) override;
-        pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>> getAllowedArgsSynonym() override;
-        pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;
-    };
+  bool operator==(const ModifiesSClause &other) const;
+  Table accept(shared_ptr<IVisitor> visitor) override;
+  pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
+  getAllowedArgsSynonym() override;
+  pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;
+};
 
-} // QB
+}  // namespace QB
 
-#endif //SPA_MODIFIESSCLAUSE_H
+#endif  // SPA_MODIFIESSCLAUSE_H

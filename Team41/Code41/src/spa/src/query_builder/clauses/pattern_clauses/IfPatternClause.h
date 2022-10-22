@@ -7,25 +7,26 @@
 
 #pragma once
 
-#include "query_builder/commons/Synonym.h"
-#include "query_builder/commons/Ref.h"
-#include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_builder/clauses/AbstractClause.h"
+#include "query_builder/clauses/pattern_clauses/PatternClause.h"
+#include "query_builder/commons/Ref.h"
+#include "query_builder/commons/Synonym.h"
 #include "query_builder/constants/QueryParserConstants.h"
 
 using namespace QB;
 
 namespace QB {
 
-    class IfPatternClause : public PatternClause, public enable_shared_from_this<IfPatternClause> {
-    public:
-        IfPatternClause(Synonym arg1, Ref arg2);
+class IfPatternClause : public PatternClause,
+                        public enable_shared_from_this<IfPatternClause> {
+ public:
+  IfPatternClause(Synonym arg1, Ref arg2);
 
-        bool operator==(const IfPatternClause &other) const;
-        Table accept(shared_ptr<IVisitor> visitor) override;
-        int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
-    };
+  bool operator==(const IfPatternClause& other) const;
+  Table accept(shared_ptr<IVisitor> visitor) override;
+  int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
+};
 
-} // QB
+}  // namespace QB
 
-#endif //SPA_IFPATTERNCLAUSE_H
+#endif  // SPA_IFPATTERNCLAUSE_H

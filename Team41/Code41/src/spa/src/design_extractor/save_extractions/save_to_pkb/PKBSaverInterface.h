@@ -9,13 +9,15 @@
 #include "pkb/DataModifier.h"
 
 class PKBSaverInterface {
-public:
-    PKBSaverInterface(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier);
-    virtual void save(shared_ptr<ProgramNode> programNode, shared_ptr<DataModifier> dataModifier) = 0;
-private:
-    shared_ptr<ProgramNode> programNode;
-    shared_ptr<DataModifier> dataModifier;
+ public:
+  PKBSaverInterface(shared_ptr<ProgramNode> programNode,
+                    shared_ptr<DataModifier> dataModifier);
+  virtual void save(shared_ptr<ProgramNode> programNode,
+                    shared_ptr<DataModifier> dataModifier) = 0;
+
+ private:
+  shared_ptr<ProgramNode> programNode;
+  shared_ptr<DataModifier> dataModifier;
 };
 
-
-#endif //SPA_PKBSAVERINTERFACE_H
+#endif  // SPA_PKBSAVERINTERFACE_H

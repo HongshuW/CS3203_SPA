@@ -609,7 +609,7 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"4"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
-  SECTION("assgin a; select a pattern a('x', '0')  from procedure 15") {
+  SECTION("assign a; select a pattern a('x', '0')  from procedure 15") {
     auto pNode =
         TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -634,7 +634,7 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"1"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
-  SECTION("assgin a; select boolean pattern a('x', '0')  from procedure 15") {
+  SECTION("assign a; select boolean pattern a('x', '0')  from procedure 15") {
     auto pNode =
         TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -656,11 +656,11 @@ TEST_CASE("Test de-pkb-qe integration") {
                      ->build();
 
     auto actual = queryEvaluator->evaluate(query);
-    vector<string> expected = TRUE_RESULT;
+    const vector<string>& expected = TRUE_RESULT;
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION(
-      "assgin a; select boolean pattern a('x', '0') and with 1 == 2  from "
+      "assign a; select boolean pattern a('x', '0') and with 1 == 2  from "
       "procedure 15") {
     auto pNode =
         TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
@@ -684,7 +684,7 @@ TEST_CASE("Test de-pkb-qe integration") {
                      ->build();
 
     auto actual = queryEvaluator->evaluate(query);
-    vector<string> expected = FALSE_RESULT;
+    const vector<string>& expected = FALSE_RESULT;
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION(
@@ -708,7 +708,7 @@ TEST_CASE("Test de-pkb-qe integration") {
             ->build();
 
     auto actual = queryEvaluator->evaluate(query);
-    vector<string> expected = TRUE_RESULT;
+    const vector<string>& expected = TRUE_RESULT;
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("print pr; select pr.varname from procedure 12") {

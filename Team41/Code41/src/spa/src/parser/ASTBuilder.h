@@ -5,10 +5,11 @@
 #ifndef SPA_ASTBUILDER_H
 #define SPA_ASTBUILDER_H
 
-#include <string>
-#include <memory>
 #include <fstream>
+#include <memory>
 #include <sstream>
+#include <string>
+
 #include "AST/ProgramNode.h"
 #include "Tokenizer.h"
 
@@ -16,17 +17,16 @@ using namespace std;
 using namespace AST;
 
 namespace SourceParser {
-    class ASTBuilder {
-    public:
-        /**
-         * Takes a filename string and convert it to an AST tree.
-         *
-         * @param string filename.
-         * @return a shared pointer to the root node of the AST tree
-         */
-        shared_ptr<ProgramNode> buildAST (const string& filename);
-    };
-}
+class ASTBuilder {
+ public:
+  /**
+   * Takes a filename string and convert it to an AST tree.
+   *
+   * @param string filename.
+   * @return a shared pointer to the root node of the AST tree
+   */
+  shared_ptr<ProgramNode> buildAST(const string& filename);
+};
+}  // namespace SourceParser
 
-
-#endif //SPA_ASTBUILDER_H
+#endif  // SPA_ASTBUILDER_H

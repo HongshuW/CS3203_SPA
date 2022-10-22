@@ -10,17 +10,18 @@
 #include <iostream>
 #include <optional>
 #include <regex>
-#include "utils/Utils.h"
+
 #include "query_builder/constants/CommonConstants.h"
+#include "utils/Utils.h"
 
 namespace QB {
-    class Synonym {
-    public:
-        std::string synonym;
-        explicit Synonym(const std::string& synonym);
+class Synonym {
+ public:
+  std::string synonym;
+  explicit Synonym(const std::string& synonym);
 
-        bool operator==(const Synonym& synonym1) const;
-    };
-}
+  bool operator==(const Synonym& synonym1) const;
+};
+}  // namespace QB
 
-#endif //SPA_SYNONYM_H
+#endif  // SPA_SYNONYM_H

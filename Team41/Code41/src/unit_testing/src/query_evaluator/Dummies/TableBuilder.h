@@ -5,23 +5,22 @@
 #ifndef SPA_TABLEBUILDER_H
 #define SPA_TABLEBUILDER_H
 #include <vector>
+
 #include "pkb/table/Table.h"
 
 using namespace std;
 namespace TestQE {
 
-    class TableBuilder  {
-        vector<string> header;
-        vector<vector<string>> rows;
-    public:
+class TableBuilder {
+  vector<string> header;
+  vector<vector<string>> rows;
 
-        TableBuilder * setHeaders(vector<string> header);
-        TableBuilder * addRow(vector<string> row);
-        Table build();
+ public:
+  TableBuilder* setHeaders(vector<string> header);
+  TableBuilder* addRow(vector<string> row);
+  Table build();
+};
 
+}  // namespace TestQE
 
-    };
-
-} // TestQE
-
-#endif //SPA_TABLEBUILDER_H
+#endif  // SPA_TABLEBUILDER_H

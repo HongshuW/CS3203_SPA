@@ -7,21 +7,23 @@
 #define SPA_USESSCLAUSE_H
 
 #include "SuchThatClause.h"
-#include "query_evaluator/IVisitor.h"
 #include "Validatable.h"
+#include "query_evaluator/IVisitor.h"
 
 namespace QB {
 
-    class UsesSClause : public SuchThatClause, public enable_shared_from_this<UsesSClause> {
-    public:
-        UsesSClause(Ref arg1, Ref arg2);
+class UsesSClause : public SuchThatClause,
+                    public enable_shared_from_this<UsesSClause> {
+ public:
+  UsesSClause(Ref arg1, Ref arg2);
 
-        bool operator==(const UsesSClause &other) const;
-        Table accept(shared_ptr<IVisitor> visitor) override;
-        pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>> getAllowedArgsSynonym() override;
-        pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;
-    };
+  bool operator==(const UsesSClause &other) const;
+  Table accept(shared_ptr<IVisitor> visitor) override;
+  pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
+  getAllowedArgsSynonym() override;
+  pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;
+};
 
-} // QB
+}  // namespace QB
 
-#endif //SPA_USESSCLAUSE_H
+#endif  // SPA_USESSCLAUSE_H

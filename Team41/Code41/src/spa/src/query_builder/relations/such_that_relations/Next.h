@@ -11,10 +11,10 @@
 using namespace QB;
 
 namespace QB {
-    class Next : public SuchThatRelations {
-    public:
-        shared_ptr<AbstractClause> createClause(Ref arg1, Ref arg2) override;
-    };
-} // QB
+class Next : public SuchThatRelations {
+ public:
+  shared_ptr<AbstractClause> createClause(Ref arg1, Ref arg2) override;
+};
+}  // namespace QB
 
-#endif //SPA_NEXT_H
+#endif  // SPA_NEXT_H

@@ -8,9 +8,8 @@
 #include "RelationTable.h"
 
 class ParentTable : public RelationTable {
-public:
-    explicit ParentTable();
+ public:
+  explicit ParentTable();
 };
 
-
-#endif //SPA_PARENTTABLE_H
+#endif  // SPA_PARENTTABLE_H

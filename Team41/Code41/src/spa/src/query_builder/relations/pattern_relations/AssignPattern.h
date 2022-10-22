@@ -10,10 +10,10 @@
 
 namespace QB {
 
-    class AssignPattern : public PatternRelations {
-        shared_ptr<AbstractClause> createClause(Synonym arg1, Ref arg2) override;
-    };
+class AssignPattern : public PatternRelations {
+  shared_ptr<AbstractClause> createClause(Synonym arg1, Ref arg2) override;
+};
 
-} // QB
+}  // namespace QB
 
-#endif //SPA_ASSIGNPATTERN_H
+#endif  // SPA_ASSIGNPATTERN_H

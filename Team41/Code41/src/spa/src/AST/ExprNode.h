@@ -5,29 +5,30 @@
 #ifndef SPA_EXPRNODE_H
 #define SPA_EXPRNODE_H
 
+#include <string>
+
 #include "ASTNode.h"
 #include "utils/Utils.h"
-#include <string>
 
 using namespace AST;
 using namespace std;
 
 namespace AST {
 
-    class ExprNode : public ASTNode {
-    public:
-        string expr;
-        shared_ptr<ExprNode> left;
-        shared_ptr<ExprNode> right;
+class ExprNode : public ASTNode {
+ public:
+  string expr;
+  shared_ptr<ExprNode> left;
+  shared_ptr<ExprNode> right;
 
-        explicit ExprNode(string expr);
+  explicit ExprNode(string expr);
 
-        bool isVariableNode() const;
-        bool isOperatorNode() const;
+  bool isVariableNode() const;
+  bool isOperatorNode() const;
 
-        bool operator==(const ASTNode& node) const override;
-    };
+  bool operator==(const ASTNode& node) const override;
+};
 
-} // AST
+}  // namespace AST
 
-#endif //SPA_EXPRNODE_H
+#endif  // SPA_EXPRNODE_H

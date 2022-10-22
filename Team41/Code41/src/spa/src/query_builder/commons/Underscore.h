@@ -9,10 +9,10 @@
 #include <iostream>
 
 namespace QB {
-    class Underscore {
-    public:
-        bool operator==(const Underscore&) const;
-    };
-}  // namespace QE
+class Underscore {
+ public:
+  bool operator==(const Underscore&) const;
+};
+}  // namespace QB
 
-#endif //SPA_UNDERSCORE_H
+#endif  // SPA_UNDERSCORE_H

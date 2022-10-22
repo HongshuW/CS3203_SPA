@@ -8,9 +8,8 @@
 #include "EntityTable.h"
 
 class VariableTable : public EntityTable {
-public:
-    explicit VariableTable();
+ public:
+  explicit VariableTable();
 };
 
-
-#endif //SPA_VARIABLETABLE_H
+#endif  // SPA_VARIABLETABLE_H

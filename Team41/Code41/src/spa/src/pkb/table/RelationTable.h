@@ -7,8 +7,6 @@
 
 #include "Table.h"
 
-class RelationTable : public Table {
-};
+class RelationTable : public Table {};
 
-
-#endif //SPA_RELATIONTABLE_H
+#endif  // SPA_RELATIONTABLE_H

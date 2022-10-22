@@ -6,23 +6,24 @@
 #define SPA_CALLNODE_H
 
 #include <memory>
-#include "VariableNode.h"
+
 #include "ASTNode.h"
 #include "StmtNode.h"
+#include "VariableNode.h"
 
 using namespace std;
 
 namespace AST {
 
-    class CallNode : public StmtNode {
-    public:
-        string procedureName;
+class CallNode : public StmtNode {
+ public:
+  string procedureName;
 
-        explicit CallNode(string programName);
+  explicit CallNode(string programName);
 
-        bool operator==(const ASTNode& node) const override;
-    };
+  bool operator==(const ASTNode& node) const override;
+};
 
-} // AST
+}  // namespace AST
 
-#endif //SPA_CALLNODE_H
+#endif  // SPA_CALLNODE_H

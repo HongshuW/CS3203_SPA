@@ -10,19 +10,20 @@
 #include <iostream>
 #include <optional>
 #include <regex>
-#include "utils/Utils.h"
+
 #include "query_builder/constants/CommonConstants.h"
+#include "utils/Utils.h"
 
 using namespace std;
 
 namespace QB {
-    class Ident {
-    public:
-        string identStr;
-        explicit Ident(const string& identStr);
+class Ident {
+ public:
+  string identStr;
+  explicit Ident(const string& identStr);
 
-        bool operator==(const Ident& ident1) const;
-    };
-}
+  bool operator==(const Ident& ident1) const;
+};
+}  // namespace QB
 
-#endif //SPA_IDENT_H
+#endif  // SPA_IDENT_H

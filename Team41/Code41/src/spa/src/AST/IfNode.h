@@ -7,8 +7,9 @@
 
 #include <memory>
 #include <vector>
-#include "CondExprNode.h"
+
 #include "ASTNode.h"
+#include "CondExprNode.h"
 #include "StmtNode.h"
 
 using namespace std;
@@ -16,19 +17,19 @@ using namespace AST;
 
 namespace AST {
 
-    class IfNode : public StmtNode {
-    public:
-        shared_ptr<CondExprNode> condExpr;
-        vector<shared_ptr<StmtNode>> ifStmtList;
-        vector<shared_ptr<StmtNode>> elseStmtList;
+class IfNode : public StmtNode {
+ public:
+  shared_ptr<CondExprNode> condExpr;
+  vector<shared_ptr<StmtNode>> ifStmtList;
+  vector<shared_ptr<StmtNode>> elseStmtList;
 
-        IfNode(shared_ptr<CondExprNode> condExpr,
-               vector<shared_ptr<StmtNode>> ifStmtList,
-               vector<shared_ptr<StmtNode>> elseStmtList);
+  IfNode(shared_ptr<CondExprNode> condExpr,
+         vector<shared_ptr<StmtNode>> ifStmtList,
+         vector<shared_ptr<StmtNode>> elseStmtList);
 
-        bool operator==(const ASTNode& node) const override;
-    };
+  bool operator==(const ASTNode& node) const override;
+};
 
-} // AST
+}  // namespace AST
 
-#endif //SPA_IFNODE_H
+#endif  // SPA_IFNODE_H

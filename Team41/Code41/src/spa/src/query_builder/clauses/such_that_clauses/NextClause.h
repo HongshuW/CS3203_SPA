@@ -7,23 +7,25 @@
 #define SPA_NEXTCLAUSE_H
 
 #include "SuchThatClause.h"
-#include "query_evaluator/IVisitor.h"
 #include "Validatable.h"
+#include "query_evaluator/IVisitor.h"
 
 using namespace QB;
 
 namespace QB {
 
-    class NextClause : public SuchThatClause, public enable_shared_from_this<NextClause> {
-    public:
-        NextClause(Ref arg1, Ref arg2);
+class NextClause : public SuchThatClause,
+                   public enable_shared_from_this<NextClause> {
+ public:
+  NextClause(Ref arg1, Ref arg2);
 
-        bool operator==(const NextClause &other) const;
-        Table accept(shared_ptr<IVisitor> visitor) override;
-        pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>> getAllowedArgsSynonym() override;
-        pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;
-    };
+  bool operator==(const NextClause &other) const;
+  Table accept(shared_ptr<IVisitor> visitor) override;
+  pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
+  getAllowedArgsSynonym() override;
+  pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;
+};
 
-} // QB
+}  // namespace QB
 
-#endif //SPA_NEXTCLAUSE_H
+#endif  // SPA_NEXTCLAUSE_H

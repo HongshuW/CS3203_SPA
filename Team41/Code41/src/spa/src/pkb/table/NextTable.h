@@ -8,10 +8,9 @@
 #include "Cachable.h"
 
 class NextTable : public Cachable {
-public:
-    explicit NextTable();
-    void clearCache() override;
+ public:
+  explicit NextTable();
+  void clearCache() override;
 };
 
-
-#endif //SPA_NEXTTABLE_H
+#endif  // SPA_NEXTTABLE_H

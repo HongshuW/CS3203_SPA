@@ -8,9 +8,10 @@
 #pragma once
 
 #include <string>
-#include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
+
 #include "DesignEntity.h"
 #include "Ref.h"
 
@@ -18,26 +19,26 @@ using namespace std;
 using namespace QB;
 
 namespace QB {
-    enum class RelationType {
-        FOLLOWS,
-        FOLLOWS_T,
-        PARENT,
-        PARENT_T,
-        MODIFIES,
-        MODIFIES_S,
-        MODIFIES_P,
-        USES,
-        USES_S,
-        USES_P,
-        CALLS,
-        CALLS_T,
-        NEXT,
-        NEXT_T,
-        AFFECTS,
-        AFFECTS_T
-    };
+enum class RelationType {
+  FOLLOWS,
+  FOLLOWS_T,
+  PARENT,
+  PARENT_T,
+  MODIFIES,
+  MODIFIES_S,
+  MODIFIES_P,
+  USES,
+  USES_S,
+  USES_P,
+  CALLS,
+  CALLS_T,
+  NEXT,
+  NEXT_T,
+  AFFECTS,
+  AFFECTS_T
+};
 
-    RelationType getRelationTypeFromStr(string& str);
-}
+RelationType getRelationTypeFromStr(string& str);
+}  // namespace QB
 
-#endif //SPA_RELATIONTYPE_H
+#endif  // SPA_RELATIONTYPE_H
