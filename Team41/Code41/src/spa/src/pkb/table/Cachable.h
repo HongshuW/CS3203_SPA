@@ -8,11 +8,11 @@
 #include <string>
 #include <vector>
 
-#include "Table.h"
+#include "RelationTable.h"
 
 using namespace std;
 
-class Cachable : public Table {
+class Cachable : public RelationTable {
  public:
   static const string WILDCARD;
 

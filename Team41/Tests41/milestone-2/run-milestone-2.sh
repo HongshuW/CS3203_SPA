@@ -9,3 +9,4 @@
 ../../Code41/cmake-build-release/src/autotester/autotester pattern/stress_patterns_source.txt pattern/stress_patterns_one_pattern_clause_queries.txt milestone-2-out/pattern-stress-analysis.xml
 ../../Code41/cmake-build-release/src/autotester/autotester stress/deep_nesting_source.txt stress/stress_queries.txt milestone-2-out/stress-analysis.xml
 ../../Code41/cmake-build-release/src/autotester/autotester with/deep_nesting_source.txt with/deep_nesting_one_with_clause_queries.txt milestone-2-out/with-analysis.xml
+../../Code41/cmake-build-release/src/autotester/autotester cache/test_cache_source.txt cache/test_cache_queries.txt milestone-2-out/cache-analysis.xml
