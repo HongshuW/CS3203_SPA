@@ -16,12 +16,13 @@ NextExtractor::NextExtractor(shared_ptr<ProgramNode> programNode) {
 }
 
 void NextExtractor::generateProcCFGMap() {
-    NextExtractor::procCFGMap = make_shared<unordered_map<shared_ptr<ProcedureNode>, CFG>>();
-    vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-    for (shared_ptr<ProcedureNode> procedure : procedureList) {
-        CFG cfg = CFG(*procedure, stmtNumbers);
-        NextExtractor::procCFGMap->insert({procedure, cfg});
-    }
+  NextExtractor::procCFGMap =
+      make_shared<unordered_map<shared_ptr<ProcedureNode>, CFG>>();
+  vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
+  for (shared_ptr<ProcedureNode> procedure : procedureList) {
+    CFG cfg = CFG(*procedure, stmtNumbers);
+    NextExtractor::procCFGMap->insert({procedure, cfg});
+  }
 }
 
 shared_ptr<list<vector<string>>> NextExtractor::extractNext() {
