@@ -9,28 +9,35 @@
 #include "DesignExtractor.h"
 #include "args/StmtNoArgs.h"
 
+typedef shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> StmtNoMap;
+typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
+    FirstLineNoToProcMap;
+typedef shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
+    StmtNoToProcMap;
+typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, CFG>> ProcCFGMap;
+
 class NextExtractor {
  public:
-  static shared_ptr<list<vector<string>>> extractNext(
-      shared_ptr<ProgramNode> programNode);
-  static vector<string> extractNextStar(shared_ptr<ProgramNode> programNode,
-                                        StmtNoArgs args);
-  static list<vector<string>> extractAllNextStarInProgram(
-      shared_ptr<ProgramNode> programNode);
+  explicit NextExtractor(shared_ptr<ProgramNode> programNode);
+  static shared_ptr<list<vector<string>>> extractNext();
+  static vector<string> extractNextStar(StmtNoArgs args);
+  static list<vector<string>> extractAllNextStarInProgram();
 
  private:
-  static vector<string> extractNextStarWithEndOnly(
-      shared_ptr<ProgramNode> programNode, StmtNoArgs args);
-  static vector<string> extractNextStarWithStartOnly(
-      shared_ptr<ProgramNode> programNode, StmtNoArgs args);
-  static vector<string> extractNextStarWithStartAndEnd(
-      shared_ptr<ProgramNode> programNode, StmtNoArgs args);
+  static inline shared_ptr<ProgramNode> programNode;
+  static inline StmtNoMap stmtNumbers;
+  static inline FirstLineNoToProcMap firstLineNumToProcMap;
+  static inline StmtNoToProcMap stmtNoToProcMap;
+  static inline ProcCFGMap procCFGMap;
+  static void generateProcCFGMap();
+  static vector<string> extractNextStarWithEndOnly(StmtNoArgs args);
+  static vector<string> extractNextStarWithStartOnly(StmtNoArgs args);
+  static vector<string> extractNextStarWithStartAndEnd(StmtNoArgs args);
   static void extractNextStarWithStartAndEndDFSHelper(int start, int end,
                                                       CFG cfg,
                                                       vector<string>& ans,
                                                       vector<bool>& visitedArr);
-  static bool areBothArgsVaild(shared_ptr<ProgramNode> programNode, int start,
-                               int end);
+  static bool areBothArgsVaild(int start, int end);
 };
 
 #endif  // SPA_NEXTEXTRACTOR_H

@@ -16,7 +16,9 @@ using namespace std;
 
 DesignExtractor::DesignExtractor(shared_ptr<DataModifier> dataModifier,
                                  shared_ptr<ProgramNode> programNode)
-    : dataModifier(dataModifier), programNode(programNode) {}
+    : dataModifier(dataModifier), programNode(programNode) {
+  NextExtractor nextExtractor = NextExtractor(programNode);
+}
 
 void DesignExtractor::run() {
   // save statement lines and types
@@ -39,7 +41,7 @@ void DesignExtractor::run() {
 }
 
 vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
-  return NextExtractor::extractNextStar(this->programNode, args);
+  return NextExtractor::extractNextStar(args);
 }
 
 vector<string> DE::DesignExtractor::getAffectsRelations(StmtNoArgs args) {
@@ -51,7 +53,7 @@ vector<string> DE::DesignExtractor::getAffectsStarRelations(StmtNoArgs args) {
 }
 
 list<vector<string>> DE::DesignExtractor::getAllNextStarRelations() {
-  return NextExtractor::extractAllNextStarInProgram(this->programNode);
+  return NextExtractor::extractAllNextStarInProgram();
 }
 
 list<vector<string>> DE::DesignExtractor::getAllAffectsRelations() {

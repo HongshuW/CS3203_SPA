@@ -5,15 +5,11 @@
 
 #include "AST/IfNode.h"
 #include "AST/PrintNode.h"
-#include "AST/ReadNode.h"
-#include "AST/WhileNode.h"
-#include "AST/utils/ASTUtils.h"
 #include "DEUtils.h"
 #include "Dummies.h"
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
 #include "design_extractor/NextExtractor.h"
-#include "iostream"
 #include "pkb/DataModifier.h"
 
 using namespace std;
@@ -27,7 +23,7 @@ TEST_CASE("Test Next Extractor") {
         make_shared<DataModifier>(pkbStorage);
     DesignExtractor designExtractor =
         DesignExtractor(dataModifier, programNode);
-    auto actual = NextExtractor::extractNext(programNode);
+    auto actual = NextExtractor::extractNext();
     vector<vector<string>> expected = {};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -40,7 +36,7 @@ TEST_CASE("Test Next Extractor") {
         make_shared<DataModifier>(pkbStorage);
     DesignExtractor designExtractor =
         DesignExtractor(dataModifier, programNode);
-    auto actual = NextExtractor::extractNext(programNode);
+    auto actual = NextExtractor::extractNext();
     vector<vector<string>> expected = {{"1", "2"}, {"2", "3"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -53,7 +49,7 @@ TEST_CASE("Test Next Extractor") {
         make_shared<DataModifier>(pkbStorage);
     DesignExtractor designExtractor =
         DesignExtractor(dataModifier, programNode);
-    auto actual = NextExtractor::extractNext(programNode);
+    auto actual = NextExtractor::extractNext();
     vector<vector<string>> expected = {{"1", "2"}, {"2", "3"}, {"3", "4"},
                                        {"3", "6"}, {"4", "5"}, {"5", "7"},
                                        {"6", "7"}};
@@ -68,7 +64,7 @@ TEST_CASE("Test Next Extractor") {
         make_shared<DataModifier>(pkbStorage);
     DesignExtractor designExtractor =
         DesignExtractor(dataModifier, programNode);
-    auto actual = NextExtractor::extractNext(programNode);
+    auto actual = NextExtractor::extractNext();
     vector<vector<string>> expected = {
         {"1", "2"}, {"2", "3"}, {"2", "4"}, {"3", "2"}};
     REQUIRE(expected.size() == actual->size());
@@ -82,7 +78,7 @@ TEST_CASE("Test Next Extractor") {
         make_shared<DataModifier>(pkbStorage);
     DesignExtractor designExtractor =
         DesignExtractor(dataModifier, programNode);
-    auto actual = NextExtractor::extractNext(programNode);
+    auto actual = NextExtractor::extractNext();
     vector<vector<string>> expected = {{"1", "2"}, {"2", "3"}, {"2", "7"},
                                        {"3", "4"}, {"4", "5"}, {"4", "6"},
                                        {"5", "2"}, {"6", "2"}};

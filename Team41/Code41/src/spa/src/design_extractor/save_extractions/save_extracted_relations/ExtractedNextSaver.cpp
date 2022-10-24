@@ -8,7 +8,7 @@
 
 void ExtractedNextSaver::save(shared_ptr<ProgramNode> programNode,
                               shared_ptr<DataModifier> dataModifier) {
-  list<vector<string>> nextList = *NextExtractor::extractNext(programNode);
+  list<vector<string>> nextList = *NextExtractor::extractNext();
   for (auto entry : nextList) {
     dataModifier->saveNext(entry);
   }

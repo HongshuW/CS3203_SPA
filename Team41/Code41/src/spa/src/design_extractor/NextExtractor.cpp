@@ -5,18 +5,32 @@
 #include "NextExtractor.h"
 
 #include "../AST/utils/ASTUtils.h"
-#include "../CFG/CFG.h"
 
-shared_ptr<list<vector<string>>> NextExtractor::extractNext(
-    shared_ptr<ProgramNode> programNode) {
+NextExtractor::NextExtractor(shared_ptr<ProgramNode> programNode) {
+  NextExtractor::programNode = programNode;
+  NextExtractor::stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
+  NextExtractor::firstLineNumToProcMap =
+      ASTUtils::getFirstLineNumToProcMap(programNode);
+  NextExtractor::stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
+  NextExtractor::generateProcCFGMap();
+}
+
+void NextExtractor::generateProcCFGMap() {
+  NextExtractor::procCFGMap =
+      make_shared<unordered_map<shared_ptr<ProcedureNode>, CFG>>();
   vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-  shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-      ASTUtils::getNodePtrToLineNumMap(programNode);
-  auto firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
+  for (shared_ptr<ProcedureNode> procedure : procedureList) {
+    CFG cfg = CFG(*procedure, stmtNumbers);
+    NextExtractor::procCFGMap->insert({procedure, cfg});
+  }
+}
+
+shared_ptr<list<vector<string>>> NextExtractor::extractNext() {
+  vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
   list<vector<string>> output;
   for (auto procedure : procedureList) {
     int startNum = firstLineNumToProcMap->at(procedure);
-    CFG cfg = CFG(*procedure, stmtNumbers);
+    CFG cfg = procCFGMap->at(procedure);
     int cfgSize = cfg.cfg->size() + startNum;
     for (int i = startNum; i < cfgSize; i++) {
       unordered_set<int> children = cfg.cfg->find(i)->second;
@@ -32,23 +46,16 @@ shared_ptr<list<vector<string>>> NextExtractor::extractNext(
   return make_shared<list<vector<string>>>(output);
 }
 
-vector<string> NextExtractor::extractNextStarWithEndOnly(
-    shared_ptr<ProgramNode> programNode, StmtNoArgs args) {
+vector<string> NextExtractor::extractNextStarWithEndOnly(StmtNoArgs args) {
   auto ans = vector<string>();
-  auto firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
-  shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-      ASTUtils::getNodePtrToLineNumMap(programNode);
-  auto stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
-
   int end = args.getEndStmtNo();
-
   bool invalidEndArg = stmtNoToProcMap->count(end) == 0 && end != 0;
   if (invalidEndArg) {
     return {};
   }
 
   shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(end);
-  CFG cfg = CFG(*procedureNode, stmtNumbers);
+  CFG cfg = procCFGMap->at(procedureNode);
   int startNum = firstLineNumToProcMap->at(procedureNode);
   int endNum = cfg.cfg->size() + startNum;
 
@@ -56,7 +63,7 @@ vector<string> NextExtractor::extractNextStarWithEndOnly(
     StmtNoArgs testArgs;
     testArgs.setStartAndEndStmtNo(i, end);
     vector<string> output =
-        NextExtractor::extractNextStarWithStartAndEnd(programNode, testArgs);
+        NextExtractor::extractNextStarWithStartAndEnd(testArgs);
     if (!output.empty()) {
       ans.push_back(to_string(i));
     }
@@ -65,14 +72,8 @@ vector<string> NextExtractor::extractNextStarWithEndOnly(
   return ans;
 }
 
-vector<string> NextExtractor::extractNextStarWithStartOnly(
-    shared_ptr<ProgramNode> programNode, StmtNoArgs args) {
+vector<string> NextExtractor::extractNextStarWithStartOnly(StmtNoArgs args) {
   auto ans = vector<string>();
-  auto firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
-  shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-      ASTUtils::getNodePtrToLineNumMap(programNode);
-  auto stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
-
   int start = args.getStartStmtNo();
 
   bool invalidStartArg = stmtNoToProcMap->count(start) == 0 && start != 0;
@@ -81,7 +82,7 @@ vector<string> NextExtractor::extractNextStarWithStartOnly(
   }
 
   shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(start);
-  CFG cfg = CFG(*procedureNode, stmtNumbers);
+  CFG cfg = procCFGMap->at(procedureNode);
   int startNum = firstLineNumToProcMap->at(procedureNode);
   int endNum = cfg.cfg->size() + startNum;
 
@@ -89,7 +90,7 @@ vector<string> NextExtractor::extractNextStarWithStartOnly(
     StmtNoArgs testArgs;
     testArgs.setStartAndEndStmtNo(start, i);
     vector<string> output =
-        NextExtractor::extractNextStarWithStartAndEnd(programNode, testArgs);
+        NextExtractor::extractNextStarWithStartAndEnd(testArgs);
     if (!output.empty()) {
       ans.push_back(to_string(i));
     }
@@ -98,22 +99,16 @@ vector<string> NextExtractor::extractNextStarWithStartOnly(
   return ans;
 }
 
-vector<string> NextExtractor::extractNextStarWithStartAndEnd(
-    shared_ptr<ProgramNode> programNode, StmtNoArgs args) {
+vector<string> NextExtractor::extractNextStarWithStartAndEnd(StmtNoArgs args) {
   int start = args.getStartStmtNo();
   int end = args.getEndStmtNo();
-
   auto ans = vector<string>();
-  shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-      ASTUtils::getNodePtrToLineNumMap(programNode);
-  auto stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
-
-  if (!NextExtractor::areBothArgsVaild(programNode, start, end)) {
+  if (!NextExtractor::areBothArgsVaild(start, end)) {
     return {};
   }
 
   shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(start);
-  CFG cfg = CFG(*procedureNode, stmtNumbers);
+  CFG cfg = procCFGMap->at(procedureNode);
   int visitedArrSize = cfg.cfg->size() + start + 1;
   vector<bool> visitedArr;
   for (int i = 0; i < visitedArrSize; i++) {
@@ -155,10 +150,7 @@ void NextExtractor::extractNextStarWithStartAndEndDFSHelper(
   }
 }
 
-bool NextExtractor::areBothArgsVaild(shared_ptr<ProgramNode> programNode,
-                                     int start, int end) {
-  auto stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
-
+bool NextExtractor::areBothArgsVaild(int start, int end) {
   bool invalidStartArg = stmtNoToProcMap->count(start) == 0 && start != 0;
   bool invalidEndArg = stmtNoToProcMap->count(end) == 0 && end != 0;
 
@@ -177,44 +169,38 @@ bool NextExtractor::areBothArgsVaild(shared_ptr<ProgramNode> programNode,
   return true;
 }
 
-vector<string> NextExtractor::extractNextStar(
-    shared_ptr<ProgramNode> programNode, StmtNoArgs args) {
+vector<string> NextExtractor::extractNextStar(StmtNoArgs args) {
   int start = args.getStartStmtNo();
   int end = args.getEndStmtNo();
-
   if (args.startAndEndExists()) {
-    return extractNextStarWithStartAndEnd(programNode, args);
+    return extractNextStarWithStartAndEnd(args);
   }
 
   if (args.startExistsOnly()) {
-    return extractNextStarWithStartOnly(programNode, args);
+    return extractNextStarWithStartOnly(args);
   }
 
   if (args.endExistsOnly()) {
-    return extractNextStarWithEndOnly(programNode, args);
+    return extractNextStarWithEndOnly(args);
   }
 
   vector<string> ans;
   return ans;
 }
 
-list<vector<string>> NextExtractor::extractAllNextStarInProgram(
-    shared_ptr<ProgramNode> programNode) {
+list<vector<string>> NextExtractor::extractAllNextStarInProgram() {
   vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-  shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
-      ASTUtils::getNodePtrToLineNumMap(programNode);
-  auto firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
   list<vector<string>> output;
   for (auto procedure : procedureList) {
     int startNum = firstLineNumToProcMap->at(procedure);
-    CFG cfg = CFG(*procedure, stmtNumbers);
+    CFG cfg = procCFGMap->at(procedure);
     int cfgSize = cfg.cfg->size() + startNum;
     for (int i = startNum; i < cfgSize; i++) {
       for (int j = startNum; j < cfgSize; j++) {
         StmtNoArgs args;
         args.setStartAndEndStmtNo(i, j);
         vector<string> ans =
-            NextExtractor::extractNextStarWithStartAndEnd(programNode, args);
+            NextExtractor::extractNextStarWithStartAndEnd(args);
         if (!ans.empty()) {
           output.push_back(ans);
         }

@@ -163,8 +163,10 @@ Table DataRetriever::getNextTTable() {
 Table DataRetriever::getNextTStatements(int stmtNo) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   int columnNumber = 0;
-  return *getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
-                              &CacheManager::getNextTStatements);
+  shared_ptr<Table> table =
+      getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
+                          &CacheManager::getNextTStatements);
+  return *table;
 }
 
 /**
@@ -176,8 +178,10 @@ Table DataRetriever::getNextTStatements(int stmtNo) {
 Table DataRetriever::getPreviousTStatements(int stmtNo) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   int columnNumber = 1;
-  return *getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
-                              &CacheManager::getPreviousTStatements);
+  shared_ptr<Table> table =
+      getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
+                          &CacheManager::getPreviousTStatements);
+  return *table;
 }
 
 /**
@@ -191,9 +195,10 @@ Table DataRetriever::getPreviousTStatements(int stmtNo) {
 Table DataRetriever::getNextTResult(int precedingStatement,
                                     int ensuingStatement) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
-  return *getExactRelationHelper(
+  shared_ptr<Table> table = getExactRelationHelper(
       nextTTable, vector<int>{precedingStatement, ensuingStatement},
       &CacheManager::getNextTResult);
+  return *table;
 }
 
 /**
