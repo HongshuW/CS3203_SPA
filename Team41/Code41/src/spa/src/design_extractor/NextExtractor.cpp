@@ -8,10 +8,11 @@
 #include "../CFG/CFG.h"
 
 NextExtractor::NextExtractor(shared_ptr<ProgramNode> programNode) {
-    NextExtractor::programNode = programNode;
-    NextExtractor::stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
-    NextExtractor::firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
-    NextExtractor::stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
+  NextExtractor::programNode = programNode;
+  NextExtractor::stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
+  NextExtractor::firstLineNumToProcMap =
+      ASTUtils::getFirstLineNumToProcMap(programNode);
+  NextExtractor::stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
 }
 
 shared_ptr<list<vector<string>>> NextExtractor::extractNext() {
@@ -180,8 +181,7 @@ vector<string> NextExtractor::extractNextStar(StmtNoArgs args) {
 
 list<vector<string>> NextExtractor::extractAllNextStarInProgram() {
   vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-  StmtNoMap stmtNumbers =
-      ASTUtils::getNodePtrToLineNumMap(programNode);
+  StmtNoMap stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
   list<vector<string>> output;
   for (auto procedure : procedureList) {
     int startNum = firstLineNumToProcMap->at(procedure);

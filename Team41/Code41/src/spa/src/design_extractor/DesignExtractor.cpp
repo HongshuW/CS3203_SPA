@@ -17,7 +17,7 @@ using namespace std;
 DesignExtractor::DesignExtractor(shared_ptr<DataModifier> dataModifier,
                                  shared_ptr<ProgramNode> programNode)
     : dataModifier(dataModifier), programNode(programNode) {
-    NextExtractor nextExtractor = NextExtractor(programNode);
+  NextExtractor nextExtractor = NextExtractor(programNode);
 }
 
 void DesignExtractor::run() {
