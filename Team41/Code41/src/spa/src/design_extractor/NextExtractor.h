@@ -14,6 +14,7 @@ typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
     FirstLineNoToProcMap;
 typedef shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
     StmtNoToProcMap;
+typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, CFG>> ProcCFGMap;
 
 class NextExtractor {
  public:
@@ -27,6 +28,8 @@ class NextExtractor {
   static inline StmtNoMap stmtNumbers;
   static inline FirstLineNoToProcMap firstLineNumToProcMap;
   static inline StmtNoToProcMap stmtNoToProcMap;
+  static inline ProcCFGMap procCFGMap;
+  static void generateProcCFGMap();
   static vector<string> extractNextStarWithEndOnly(StmtNoArgs args);
   static vector<string> extractNextStarWithStartOnly(StmtNoArgs args);
   static vector<string> extractNextStarWithStartAndEnd(StmtNoArgs args);

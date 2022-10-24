@@ -4,10 +4,7 @@
 
 #include "DataRetriever.h"
 
-#include <chrono>
-
 #include "./query_evaluator/constants/ClauseVisitorConstants.h"
-using namespace std::chrono;
 
 DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage) {
   this->pkbStorage = pkbStorage;
@@ -152,13 +149,8 @@ shared_ptr<Table> DataRetriever::getExactRelationHelper(
  * @return all Next* Relations in a Table.
  */
 Table DataRetriever::getNextTTable() {
-  auto start = high_resolution_clock::now();
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   getAllRelationsHelper(nextTTable, &CacheManager::getNextTRelations);
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<microseconds>(stop - start);
-  cout << "two wildcards: " << endl;
-  cout << duration.count() << endl;
   return *nextTTable;
 }
 
@@ -169,18 +161,11 @@ Table DataRetriever::getNextTTable() {
  * @return Next* relations in a table
  */
 Table DataRetriever::getNextTStatements(int stmtNo) {
-  auto start = high_resolution_clock::now();
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   int columnNumber = 0;
   shared_ptr<Table> table =
       getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
                           &CacheManager::getNextTStatements);
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<microseconds>(stop - start);
-  cout << "one wildcard (left): " << endl;
-  cout << duration.count() << endl;
-  //  return *getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
-  //                              &CacheManager::getNextTStatements);
   return *table;
 }
 
@@ -191,18 +176,11 @@ Table DataRetriever::getNextTStatements(int stmtNo) {
  * @return Next* relations in a table
  */
 Table DataRetriever::getPreviousTStatements(int stmtNo) {
-  auto start = high_resolution_clock::now();
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   int columnNumber = 1;
   shared_ptr<Table> table =
       getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
                           &CacheManager::getPreviousTStatements);
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<microseconds>(stop - start);
-  cout << "one wildcard (right): " << endl;
-  cout << duration.count() << endl;
-  //  return *getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
-  //                              &CacheManager::getPreviousTStatements);
   return *table;
 }
 
@@ -216,18 +194,10 @@ Table DataRetriever::getPreviousTStatements(int stmtNo) {
  */
 Table DataRetriever::getNextTResult(int precedingStatement,
                                     int ensuingStatement) {
-  auto start = high_resolution_clock::now();
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   shared_ptr<Table> table = getExactRelationHelper(
       nextTTable, vector<int>{precedingStatement, ensuingStatement},
       &CacheManager::getNextTResult);
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<microseconds>(stop - start);
-  cout << "no wildcards: " << endl;
-  cout << duration.count() << endl;
-  //  return *getExactRelationHelper(
-  //      nextTTable, vector<int>{precedingStatement, ensuingStatement},
-  //      &CacheManager::getNextTResult);
   return *table;
 }
 
