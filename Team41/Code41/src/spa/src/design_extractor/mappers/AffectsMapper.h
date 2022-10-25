@@ -25,6 +25,7 @@ class AffectsMapper {
   unordered_map<string, shared_ptr<StmtNode>>
   getStmtNoOfAssignReadAndCallNodesMap();
   unordered_map<string, shared_ptr<StmtNode>> getStmtNoOfAssignNodesMap();
+  unordered_map<string, shared_ptr<StmtNode>> getStmtNoOfWhileNodesMap();
 
  private:
   shared_ptr<ProgramNode> programNode;
@@ -33,6 +34,7 @@ class AffectsMapper {
   unordered_map<int, unordered_set<string>> modifiedVarMap;
   unordered_map<string, shared_ptr<StmtNode>> stmtNoToAssignReadAndCallNodesMap;
   unordered_map<string, shared_ptr<StmtNode>> stmtNoToAssignNodesMap;
+  unordered_map<string, shared_ptr<StmtNode>> stmtNoToWhileNodesMap;
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> nodePtrToLineNumMap;
   shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>> lineNumToProcMap;
 
@@ -43,6 +45,7 @@ class AffectsMapper {
   void initModifiedVarMap();
   void initStmtNoToAssignReadAndCallNodesMap();
   void initStmtNoToAssignNodesMap();
+  void initStmtNoToWhileNodesMap();
   void initNodePtrToLineNumMap();
   void initLineNumToProcMap();
 };

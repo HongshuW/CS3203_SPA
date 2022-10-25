@@ -235,6 +235,49 @@ vector<string> AffectsExtractor::extractAffectsWithStartAndEnd(
     return {};
   }
 
+  //generate possible new paths from while nodes
+  list<vector<string>> tempValidPathsList;
+  for (auto path: validPathsList) {
+    auto stmtNoToWhileNodeMap = affectsMap->getStmtNoOfWhileNodesMap();
+    for (int i = 0; i < path.size(); i++) {
+      string stmtNode = path[i];
+      // if node is while and not the last node in path
+      if (stmtNoToWhileNodeMap.count(stmtNode) != 0
+          && i + 1 < path.size()) {
+        int whileIndex = i;
+        int childIndex = -1;
+        int nextNode = stoi(path[i + 1]);
+        unordered_set<int> whileChildren = cfg.cfg->find(stoi(stmtNode))->second;
+        for (int c: whileChildren) {
+          if (c != nextNode) {
+            for (int j = i + 1; j < path.size(); j++) {
+              if (path[j] == to_string(c)) {
+                childIndex = j;
+                break;
+              }
+            }
+          }
+        }
+
+        //found alternate path
+        if (childIndex != -1) {
+          vector<string> tempValidPath;
+          for (int k = 0; k < whileIndex + 1; k++) {
+            tempValidPath.push_back(path[k]);
+          }
+          for (int l = childIndex; l < path.size(); l++) {
+            tempValidPath.push_back(path[l]);
+          }
+          tempValidPathsList.push_back(tempValidPath);
+        }
+      }
+    }
+  }
+
+  for (auto tempValid: tempValidPathsList) {
+    validPathsList.push_back(tempValid);
+  }
+
   auto stmtNoToAssignReadAndCallMap =
       affectsMap->getStmtNoOfAssignReadAndCallNodesMap();
   // handle visited nodes from paths
@@ -504,20 +547,6 @@ bool AffectsExtractor::hasIntersectionWithinIntermediateRes(
     vector<string> currIntermediateResList =
         AffectsExtractor::extractAffectsWithStartOnly(
             programNode, affectsMap, cfgMap, currStartArgsOnly);
-    auto it = currIntermediateResList.begin();
-    while (it != currIntermediateResList.end()) {
-      if (*it == currEntry) {
-        // infinite loop detected
-        for (auto end : affectsWithEnd) {
-          if (currEntry == end) {
-            return true;
-          }
-        }
-        it = currIntermediateResList.erase(it);
-      } else {
-        it++;
-      }
-    }
 
     if (!currIntermediateResList.empty()) {
       sort(currIntermediateResList.begin(), currIntermediateResList.end());
