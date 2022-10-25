@@ -94,6 +94,7 @@ TEST_CASE("Test AffectsStar Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     vector<string> actual = designExtractor.getAffectsStarRelations(args);
+    sort(actual.begin(), actual.end());
     vector<string> expected = {"2", "3"};
     REQUIRE(actual == expected);
   }
@@ -108,6 +109,7 @@ TEST_CASE("Test AffectsStar Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(3);
     vector<string> actual = designExtractor.getAffectsStarRelations(args);
+    sort(actual.begin(), actual.end());
     vector<string> expected = {"1", "2"};
     REQUIRE(actual == expected);
   }

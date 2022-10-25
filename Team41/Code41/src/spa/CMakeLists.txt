@@ -310,7 +310,16 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/save_extractions/save_extracted_relations/ExtractedParentsSaver.cpp
         src/design_extractor/save_extractions/save_extracted_relations/ExtractedParentsSaver.h
         src/query_evaluator/constants/QueryEvaluatotConstants.cpp 
-        src/query_evaluator/constants/QueryEvaluatotConstants.h src/design_extractor/save_extractions/save_extracted_entities/ExtractedVariableSaver.cpp src/design_extractor/save_extractions/save_extracted_entities/ExtractedVariableSaver.h src/design_extractor/save_extractions/save_extracted_entities/ExtractedConstantSaver.cpp src/design_extractor/save_extractions/save_extracted_entities/ExtractedConstantSaver.h src/design_extractor/save_extractions/save_extracted_entities/ExtractedProceduresSaver.cpp src/design_extractor/save_extractions/save_extracted_entities/ExtractedProceduresSaver.h)
+        src/query_evaluator/constants/QueryEvaluatotConstants.h
+        src/design_extractor/save_extractions/save_extracted_entities/ExtractedVariableSaver.cpp
+        src/design_extractor/save_extractions/save_extracted_entities/ExtractedVariableSaver.h
+        src/design_extractor/save_extractions/save_extracted_entities/ExtractedConstantSaver.cpp
+        src/design_extractor/save_extractions/save_extracted_entities/ExtractedConstantSaver.h
+        src/design_extractor/save_extractions/save_extracted_entities/ExtractedProceduresSaver.cpp
+        src/design_extractor/save_extractions/save_extracted_entities/ExtractedProceduresSaver.h
+        src/design_extractor/mappers/AffectsMapper.cpp src/design_extractor/mappers/AffectsMapper.h
+        src/design_extractor/mappers/CFGMapper.cpp
+        src/design_extractor/mappers/CFGMapper.h)
 
 
 

@@ -4,6 +4,8 @@
 
 #include "ASTUtils.h"
 
+#include <queue>
+
 using namespace QB;
 namespace AST {
 unordered_map<string, NodeType> nodeClassNameToType({
@@ -116,7 +118,6 @@ ASTUtils::getNodePtrToLineNumMap(shared_ptr<ProgramNode> root) {
     curr_line_no =
         getNodePtrToLineNoMapHelper(procedureNode, map, curr_line_no);
   }
-
   return map;
 }
 
@@ -201,6 +202,48 @@ ASTUtils::getFirstLineNumToProcMap(shared_ptr<AST::ProgramNode> root) {
         getNodePtrToLineNoMapHelper(procedureNode, mapping, curr_line_no);
   }
   return output;
+}
+
+shared_ptr<unordered_map<shared_ptr<ProcedureNode>, unordered_set<int>>>
+ASTUtils::getProcToLineNumMap(shared_ptr<ProgramNode> root) {
+  auto lineNumMap = getNodePtrToLineNumMap(root);
+  auto output = unordered_map<shared_ptr<ProcedureNode>, unordered_set<int>>();
+  for (auto proc : root->procedureList) {
+    string procName = proc->procedureName;
+    queue<shared_ptr<StmtNode>> stmtNodeQ;
+    unordered_set<int> lineNumList;
+    for (auto &node : proc->stmtList) {
+      stmtNodeQ.push(node);
+    }
+    while (!stmtNodeQ.empty()) {
+      auto stmtNode = stmtNodeQ.front();
+      stmtNodeQ.pop();
+      int lineNum = lineNumMap->at(stmtNode);
+      lineNumList.insert(lineNum);
+
+      if (getNodeType(stmtNode) == AST::IF_NODE) {
+        shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+        for (auto ifStmt : ifNode->ifStmtList) {
+          stmtNodeQ.push(ifStmt);
+        }
+
+        for (auto elseStmt : ifNode->elseStmtList) {
+          stmtNodeQ.push(elseStmt);
+        }
+      } else if (getNodeType(stmtNode) == AST::WHILE_NODE) {
+        shared_ptr<WhileNode> whileNode =
+            dynamic_pointer_cast<WhileNode>(stmtNode);
+        for (auto stmt : whileNode->stmtList) {
+          stmtNodeQ.push(stmt);
+        }
+      }
+    }
+
+    output.insert(make_pair(proc, lineNumList));
+  }
+
+  return make_shared<
+      unordered_map<shared_ptr<ProcedureNode>, unordered_set<int>>>(output);
 }
 
 }  // namespace AST

@@ -58,6 +58,9 @@ class ASTUtils {
   getLineNumToProcMap(shared_ptr<ProgramNode> root);
   static shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
   getFirstLineNumToProcMap(shared_ptr<ProgramNode> root);
+  static shared_ptr<
+      unordered_map<shared_ptr<ProcedureNode>, unordered_set<int>>>
+  getProcToLineNumMap(shared_ptr<ProgramNode> root);
 };
 
 }  // namespace AST
