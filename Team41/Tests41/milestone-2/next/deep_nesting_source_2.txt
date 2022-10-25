@@ -1,0 +1,60 @@
+procedure deepNesting {
+    x1 = 10;
+    x2 = x1 + x2;
+    print x3;
+
+    if (x4 < x1) then {
+        read x5;
+        print x6;
+    } else {
+        while (x7 < x1) {
+            x8 = x8 * 2;
+            x9 = x8;
+            call deepNesting2;
+
+            while (x11 < 123456) {
+                print x12;
+                print x13;
+                x14 = x12 + x13;
+            }
+
+            while (x15 < 654321) {
+                read x16;
+                print x17;
+                x18 = 10;
+
+                while (x19 < 123) {
+                    while (x20 > 321) {
+                        x21 = x22;
+                        x22 = x21 + 2;
+                        call deepNesting3;
+                    }
+                    read x24;
+                }
+            }
+            print x25;
+        }
+    }
+}
+
+procedure deepNesting2 {
+    while (x26 != 0) {
+        print x27;
+        read x28;
+    }
+    x29 = x28 + 1;
+}
+
+procedure deepNesting3 {
+    read x30;
+    if (x31 <= 0) then {
+        print x32;
+        print x33;
+        print x34;
+    } else {
+        read x35;
+        read x36;
+        read x37;
+    }
+    x38 = 0;
+}

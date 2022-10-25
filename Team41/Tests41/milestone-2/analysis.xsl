@@ -1,160 +1,24 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>autotester</name><parsing_time_taken>6.952000</parsing_time_taken>
+<name>autotester</name><parsing_time_taken>3.677000</parsing_time_taken>
 </info>
 <queries>
 <query>
-<id ReturnTuple="1" Affects="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects">1</id><querystr><![CDATA[assign a1; Select a1 such that Affects(a1, a1)]]></querystr>
-<stuans>5,14,11,9,10,8,4,22,15</stuans>
-<correct>10,11,12,14,15,22,4,5,8,9</correct>
-<time_taken>57.387000</time_taken>
+<id ReturnTuple="1" Next="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid next">1</id><querystr><![CDATA[stmt s1, s2; Select <s1, s2> such that Next(s1, s2)]]></querystr>
+<stuans>37 38,32 33,31 32,30 31,27 28,26 29,26 27,24 19,28 26,23 20,33 34,22 23,21 22,20 21,18 19,16 17,36 37,14 11,25 7,15 16,11 12,13 14,12 13,35 36,15 25,11 15,34 38,31 35,19 20,8 9,19 15,9 10,2 3,4 7,7 8,20 24,10 11,3 4,1 2,5 6,17 18,4 5</stuans>
+<correct></correct>
+<time_taken>2.398000</time_taken>
 <failed>
-<missing>12</missing>
-<additional></additional>
+<missing></missing>
+<additional>1 2,10 11,11 12,11 15,12 13,13 14,14 11,15 16,15 25,16 17,17 18,18 19,19 15,19 20,2 3,20 21,20 24,21 22,22 23,23 20,24 19,25 7,26 27,26 29,27 28,28 26,3 4,30 31,31 32,31 35,32 33,33 34,34 38,35 36,36 37,37 38,4 5,4 7,5 6,7 8,8 9,9 10</additional>
 <summary>
-<expected>10</expected>
-<matched>9</matched>
-<missing>1</missing>
-<additional>0</additional>
-</summary>
-</failed>
-</query>
-<query>
-<id ReturnTuple="1" Affects="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects">1</id><querystr><![CDATA[assign a1, a2; Select <a1, a2> such that Affects(a1, a2)]]></querystr>
-<stuans>10 18,10 15,8 9,5 15,10 16,14 15,8 15,4 5,9 18,11 15,9 15,5 18,15 16,14 16,22 22,4 7,15 18</stuans>
-<correct>10,11,12,14,15,22,4,5,8,9</correct>
-<time_taken>1.871000</time_taken>
-<failed>
-<missing>10,11,12,14,15,22,4,5,8,9</missing>
-<additional>10 15,10 16,10 18,11 15,14 15,14 16,15 16,15 18,22 22,4 5,4 7,5 15,5 18,8 15,8 9,9 15,9 18</additional>
-<summary>
-<expected>10</expected>
+<expected>0</expected>
 <matched>0</matched>
-<missing>10</missing>
-<additional>17</additional>
+<missing>0</missing>
+<additional>42</additional>
 </summary>
 </failed>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects same statement">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(8, 8)]]></querystr>
-<stuans>FALSE</stuans>
-<correct>TRUE</correct>
-<time_taken>1.490000</time_taken>
-<failed>
-<missing>TRUE</missing>
-<additional>FALSE</additional>
-<summary>
-<expected>1</expected>
-<matched>0</matched>
-<missing>1</missing>
-<additional>1</additional>
-</summary>
-</failed>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects same statement">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(15, 15)]]></querystr>
-<stuans>FALSE</stuans>
-<correct>TRUE</correct>
-<time_taken>1.538000</time_taken>
-<failed>
-<missing>TRUE</missing>
-<additional>FALSE</additional>
-<summary>
-<expected>1</expected>
-<matched>0</matched>
-<missing>1</missing>
-<additional>1</additional>
-</summary>
-</failed>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects same statement">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(22, 22)]]></querystr>
-<stuans>TRUE</stuans>
-<correct>TRUE</correct>
-<time_taken>2.116000</time_taken>
-<passed/>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(4, 5)]]></querystr>
-<stuans>TRUE</stuans>
-<correct>True</correct>
-<time_taken>2.083000</time_taken>
-<failed>
-<missing>True</missing>
-<additional>TRUE</additional>
-<summary>
-<expected>1</expected>
-<matched>0</matched>
-<missing>1</missing>
-<additional>1</additional>
-</summary>
-</failed>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(10, 16)]]></querystr>
-<stuans>TRUE</stuans>
-<correct>FALSE</correct>
-<time_taken>1.582000</time_taken>
-<failed>
-<missing>FALSE</missing>
-<additional>TRUE</additional>
-<summary>
-<expected>1</expected>
-<matched>0</matched>
-<missing>1</missing>
-<additional>1</additional>
-</summary>
-</failed>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects in if">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(4, 7)]]></querystr>
-<stuans>TRUE</stuans>
-<correct>TRUE</correct>
-<time_taken>1.335000</time_taken>
-<passed/>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects separate if branches">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(7, 10)]]></querystr>
-<stuans>FALSE</stuans>
-<correct>FALSE</correct>
-<time_taken>1.429000</time_taken>
-<passed/>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects modified in procedure">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(12, 15)]]></querystr>
-<stuans>FALSE</stuans>
-<correct>FALSE</correct>
-<time_taken>1.287000</time_taken>
-<passed/>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects not modified in procedure">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(11, 15)]]></querystr>
-<stuans>TRUE</stuans>
-<correct>TRUE</correct>
-<time_taken>1.242000</time_taken>
-<passed/>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects not modified in procedure">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(10, 15)]]></querystr>
-<stuans>TRUE</stuans>
-<correct>TRUE</correct>
-<time_taken>1.376000</time_taken>
-<passed/>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects in separate procedures">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(13, 15)]]></querystr>
-<stuans>FALSE</stuans>
-<correct>FALSE</correct>
-<time_taken>1.557000</time_taken>
-<passed/>
-</query>
-<query>
-<id Affects="1" ReturnBoolean="1" SuchThat="1" CondNum="3" RelNum="1" comment="valid affects in separate procedures">1</id><querystr><![CDATA[ Select BOOLEAN such that Affects(19, 15)]]></querystr>
-<stuans>FALSE</stuans>
-<correct>FALSE</correct>
-<time_taken>1.254000</time_taken>
-<passed/>
 </query>
 </queries>
 </test_results>

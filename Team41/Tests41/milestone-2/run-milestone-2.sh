@@ -5,6 +5,7 @@
 ../../Code41/cmake-build-release/src/autotester/autotester calls/multiple_procedures_source.txt calls/multiple_procedures_one_calls_clause_queries.txt milestone-2-out/calls-analysis.xml
 ../../Code41/cmake-build-release/src/autotester/autotester multi-clause/deep_nesting_source.txt multi-clause/deep_nesting_multiple_clauses_queries.txt milestone-2-out/multiple-clauses-analysis.xml
 ../../Code41/cmake-build-release/src/autotester/autotester next/deep_nesting_source.txt next/deep_nesting_one_next_clause_queries.txt milestone-2-out/next-analysis.xml
+../../Code41/cmake-build-release/src/autotester/autotester next/deep_nesting_source_2.txt next/deep_nesting_2_one_next_clause_queries.txt milestone-2-out/next-2-analysis.xml
 ../../Code41/cmake-build-release/src/autotester/autotester pattern/container_patterns_source.txt pattern/container_patterns_one_pattern_clause_queries.txt milestone-2-out/pattern-analysis.xml
 ../../Code41/cmake-build-release/src/autotester/autotester pattern/stress_patterns_source.txt pattern/stress_patterns_one_pattern_clause_queries.txt milestone-2-out/pattern-stress-analysis.xml
 ../../Code41/cmake-build-release/src/autotester/autotester stress/deep_nesting_source.txt stress/stress_queries.txt milestone-2-out/stress-analysis.xml
