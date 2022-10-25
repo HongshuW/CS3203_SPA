@@ -235,20 +235,20 @@ vector<string> AffectsExtractor::extractAffectsWithStartAndEnd(
     return {};
   }
 
-  //generate possible new paths from while nodes
+  // generate possible new paths from while nodes
   list<vector<string>> tempValidPathsList;
-  for (auto path: validPathsList) {
+  for (auto path : validPathsList) {
     auto stmtNoToWhileNodeMap = affectsMap->getStmtNoOfWhileNodesMap();
     for (int i = 0; i < path.size(); i++) {
       string stmtNode = path[i];
       // if node is while and not the last node in path
-      if (stmtNoToWhileNodeMap.count(stmtNode) != 0
-          && i + 1 < path.size()) {
+      if (stmtNoToWhileNodeMap.count(stmtNode) != 0 && i + 1 < path.size()) {
         int whileIndex = i;
         int childIndex = -1;
         int nextNode = stoi(path[i + 1]);
-        unordered_set<int> whileChildren = cfg.cfg->find(stoi(stmtNode))->second;
-        for (int c: whileChildren) {
+        unordered_set<int> whileChildren =
+            cfg.cfg->find(stoi(stmtNode))->second;
+        for (int c : whileChildren) {
           if (c != nextNode) {
             for (int j = i + 1; j < path.size(); j++) {
               if (path[j] == to_string(c)) {
@@ -259,7 +259,7 @@ vector<string> AffectsExtractor::extractAffectsWithStartAndEnd(
           }
         }
 
-        //found alternate path
+        // found alternate path
         if (childIndex != -1) {
           vector<string> tempValidPath;
           for (int k = 0; k < whileIndex + 1; k++) {
@@ -274,7 +274,7 @@ vector<string> AffectsExtractor::extractAffectsWithStartAndEnd(
     }
   }
 
-  for (auto tempValid: tempValidPathsList) {
+  for (auto tempValid : tempValidPathsList) {
     validPathsList.push_back(tempValid);
   }
 

@@ -173,7 +173,8 @@ void AffectsMapper::initStmtNoToWhileNodesMap() {
             shared_ptr<WhileNode> whileNode =
                 dynamic_pointer_cast<WhileNode>(stmtNode);
             int stmtNo = stmtNumbers->at(whileNode);
-            stmtNoToWhileNodesMap.insert(make_pair(to_string(stmtNo), whileNode));
+            stmtNoToWhileNodesMap.insert(
+                make_pair(to_string(stmtNo), whileNode));
             vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
             queue.push(whileStmtList);
             break;
