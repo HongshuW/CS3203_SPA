@@ -36,7 +36,7 @@ Table TableCombiner::joinTable(const Table &t1, const Table &t2) {
 
   Table productTable = this->crossProduct(t1, t2);
   Table joinResultTable = Table();
-  auto dupHeaders = this->findDuplicateHeaders(t1.header, t2.header);
+  auto dupHeaders = this->findDuplicateHeadersWithOffset(t1.header, t2.header);
   unordered_set<int> colInxToRemove;
   for (auto dupPair : dupHeaders) {
     colInxToRemove.insert(dupPair[SECOND_DUP_IDX]);
@@ -66,8 +66,8 @@ Table TableCombiner::joinTable(const Table &t1, const Table &t2) {
   return joinResultTable;
 }
 
-vector<vector<int>> TableCombiner::findDuplicateHeaders(vector<string> h1,
-                                                        vector<string> h2) {
+vector<vector<int>> TableCombiner::findDuplicateHeadersWithOffset(
+    vector<string> h1, vector<string> h2) {
   unordered_map<string, int> h1Map;
   vector<vector<int>> ans;
   int h1Offset = h1.size();
@@ -82,5 +82,101 @@ vector<vector<int>> TableCombiner::findDuplicateHeaders(vector<string> h1,
     }
   }
   return ans;
+}
+
+Table TableCombiner::hashJoin(Table &t1, Table &t2) {
+  if (t1.isHeaderEmpty()) return t2;
+  if (t2.isHeaderEmpty()) return t1;
+  int FIRST_DUP_IDX = 0;
+  int SECOND_DUP_IDX = 1;
+
+  int t1Size = t1.rows.size();
+  int t2Size = t2.rows.size();
+  bool isT1Smaller = t1Size <= t2Size;
+  Table *smallerTablePtr = isT1Smaller ? &t1 : &t2;
+  Table *biggerTablePtr = isT1Smaller ? &t2 : &t1;
+
+  auto dupHeaders =
+      this->findDupHeaders(smallerTablePtr->header, biggerTablePtr->header);
+  vector<int> firstColInxToCheck;
+  for (auto dupPair : dupHeaders) {
+    firstColInxToCheck.push_back(dupPair[FIRST_DUP_IDX]);
+  }
+  typedef unordered_map<string, vector<vector<string> *>> RowHashmap;
+  RowHashmap map = unordered_map<string, vector<vector<string> *>>();
+
+  for (auto &row : smallerTablePtr->rows) {
+    string key = createFilterRowKey(row, firstColInxToCheck);
+    if (map.find(key) == map.end()) {
+      map.insert({key, vector<vector<string> *>()});
+    }
+    map.at(key).push_back(&row);
+  }
+  Table resultTable = Table();
+  resultTable.header.insert(resultTable.header.end(),
+                            smallerTablePtr->header.begin(),
+                            smallerTablePtr->header.end());
+
+  vector<int> secondColInxToCheck;
+  for (auto dupPair : dupHeaders) {
+    secondColInxToCheck.push_back(dupPair[SECOND_DUP_IDX]);
+  }
+
+  for (int i = 0; i < biggerTablePtr->header.size(); i++) {
+    bool isDupHeader =
+        std::find(secondColInxToCheck.begin(), secondColInxToCheck.end(), i) !=
+        secondColInxToCheck.end();
+    if (isDupHeader) continue;
+    resultTable.header.push_back(biggerTablePtr->header[i]);
+  }
+
+  for (auto row : isT1Smaller ? t2.rows : t1.rows) {
+    string key = createFilterRowKey(row, secondColInxToCheck);
+    if (map.find(key) == map.end()) continue;
+
+    for (vector<string> *rowToCopy : map.at(key)) {
+      vector<string> rowToInsert = vector<string>();
+      rowToInsert.insert(rowToInsert.end(), rowToCopy->begin(),
+                         rowToCopy->end());
+      for (int i = 0; i < row.size(); i++) {
+        // do not include dup values
+        if (std::find(secondColInxToCheck.begin(), secondColInxToCheck.end(),
+                      i) != secondColInxToCheck.end())
+          continue;
+        rowToInsert.push_back(row[i]);
+      }
+      resultTable.rows.push_back(rowToInsert);
+    }
+  }
+
+  return resultTable;
+}
+
+vector<vector<int>> TableCombiner::findDupHeaders(vector<string> h1,
+                                                  vector<string> h2) {
+  unordered_map<string, int> h1Map;
+  vector<vector<int>> ans;
+  for (int i = 0; i < h1.size(); ++i) {
+    if (h1[i].find("$") != string::npos) continue;  // skip default headers.
+    h1Map.insert({h1[i], i});
+  }
+  for (int i = 0; i < h2.size(); ++i) {
+    if (h1Map.find(h2[i]) != h1Map.end()) {
+      // found dup
+      ans.push_back(vector<int>{h1Map.at(h2[i]), i});
+    }
+  }
+  return ans;
+}
+
+string TableCombiner::createFilterRowKey(const vector<string> &row,
+                                         const vector<int> &colsToCheck) {
+  const string CONCAT_SYM = "#";
+  string key = "";
+  for (int idx : colsToCheck) {
+    key += row[idx];
+    key += CONCAT_SYM;
+  }
+  return key;
 }
 }  // namespace QE

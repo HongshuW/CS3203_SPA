@@ -135,7 +135,7 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
           intermediateTable.renameHeader(
               {attrRef.synonym.synonym, attrRef.toString()});
           resultTable =
-              TableCombiner().joinTable(intermediateTable, resultTable);
+              TableCombiner().hashJoin(intermediateTable, resultTable);
         } else {
           resultTable = resultTable.dupCol(synColIdx, attrRef.toString());
         }
@@ -230,10 +230,10 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(
       Table intermediateTable = subGroupClause->accept(clauseVisitor);
       if (intermediateTable.isBodyEmpty()) return FALSE_RESULT;
       subGroupResultTable =
-          tableCombiner.joinTable(intermediateTable, subGroupResultTable);
+          tableCombiner.hashJoin(intermediateTable, subGroupResultTable);
       if (subGroupResultTable.isBodyEmpty()) return FALSE_RESULT;
     }
-    resultTable = tableCombiner.joinTable(subGroupResultTable, resultTable);
+    resultTable = tableCombiner.hashJoin(subGroupResultTable, resultTable);
     if (resultTable.isBodyEmpty()) return FALSE_RESULT;
   }
   dataRetriever->clearCache();
@@ -284,13 +284,13 @@ vector<string> QueryEvaluator::evaluateSelectTupleQuery(
       Table intermediateTable = subGroupClause->accept(clauseVisitor);
       if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
       subGroupResultTable =
-          tableCombiner.joinTable(intermediateTable, subGroupResultTable);
+          tableCombiner.hashJoin(intermediateTable, subGroupResultTable);
       if (subGroupResultTable.isBodyEmpty()) return EMPTY_RESULT;
     }
     // no need to join table if headers in the sub result does not appear in the
     // selection
     if (!isInSelect(subGroupResultTable.header)) continue;
-    resultTable = tableCombiner.joinTable(subGroupResultTable, resultTable);
+    resultTable = tableCombiner.hashJoin(subGroupResultTable, resultTable);
     if (resultTable.isBodyEmpty()) return EMPTY_RESULT;
   }
 
