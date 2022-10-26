@@ -29,14 +29,15 @@ class NextExtractor {
   static inline FirstLineNoToProcMap firstLineNumToProcMap;
   static inline StmtNoToProcMap stmtNoToProcMap;
   static inline ProcCFGMap procCFGMap;
+
   static void generateProcCFGMap();
-  static vector<string> extractNextStarWithEndOnly(StmtNoArgs args);
-  static vector<string> extractNextStarWithStartOnly(StmtNoArgs args);
+  static vector<string> extractOneWildcard(StmtNoArgs args, bool isStartGiven);
   static vector<string> extractNextStarWithStartAndEnd(StmtNoArgs args);
   static void extractNextStarWithStartAndEndDFSHelper(int start, int end,
                                                       CFG cfg,
                                                       vector<string>& ans,
                                                       vector<bool>& visitedArr);
+  static void extractOneWildcardDFS(CFG cfg);
   static bool areBothArgsVaild(int start, int end);
 };
 
