@@ -1,4 +1,4 @@
-name: CI for Cmake Project - MacOS
+name: CI - MacOS
 
 on:
   pull_request:
@@ -57,3 +57,10 @@ jobs:
         run: |
           cd ../build/src/integration_testing
           ./integration_testing
+          
+      - name: Run Sample System Tests
+        working-directory: ${{github.workspace}}
+        shell: bash
+        run: |
+          cd ../build/src/autotester
+          ./autotester $GITHUB_WORKSPACE/Team41/Code41/tests/Sample_source.txt $GITHUB_WORKSPACE/Team41/Code41/tests/Sample_queries.txt $GITHUB_WORKSPACE/Team41/Code41/tests/out.xml
