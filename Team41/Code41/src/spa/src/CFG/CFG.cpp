@@ -12,9 +12,11 @@ CFG::CFG(ProcedureNode procedureNode,
          shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers) {
   this->stmtNumbers = stmtNumbers;
   this->cfg = make_shared<cfgType>(cfgType());
+  this->reversedCfg = make_shared<cfgType>(cfgType());
 
   vector<shared_ptr<StmtNode>> stmtList = procedureNode.stmtList;
   processStmtList(stmtList);
+  generateReversedCFG();
 }
 
 vector<int> CFG::getStmtNoList(vector<shared_ptr<StmtNode>> stmtList) {
@@ -161,5 +163,30 @@ void CFG::processIfStmtList(int parent, int parentNext,
   }
   if (previousNodeType != AST::IF_NODE) {
     addEdgeToCFG(stmtNoVector[size - 1], next);
+  }
+}
+
+void CFG::generateReversedCFG() {
+  auto cfgIterator = cfg->begin();
+  int stepSize = 1;
+  while (cfgIterator != cfg->end()) {
+    int originalParent = cfgIterator->first;
+    unordered_set<int> originalChildren = cfgIterator->second;
+    for (int child : originalChildren) {
+      // each child become a parent in the reversed cfg
+      auto childPtr = reversedCfg->find(child);
+      if (childPtr == reversedCfg->end()) {
+        // if reversed cfg doesn't contain key, add new key
+        reversedCfg->insert({child, unordered_set<int>()});
+      }
+      childPtr = reversedCfg->find(child);
+      // original parent become a child in the reversed cfg
+      childPtr->second.insert(originalParent);
+    }
+    advance(cfgIterator, stepSize);
+    if (cfgIterator == cfg->end()) {
+      // for the original first stmt, add empty value set
+      reversedCfg->insert({originalParent, unordered_set<int>()});
+    }
   }
 }

@@ -29,7 +29,7 @@ class DesignExtractor {
                            shared_ptr<ProgramNode> programNode);
   void run();
 
-  vector<string> getNextStarRelations(StmtNoArgs args);
+  shared_ptr<vector<string>> getNextStarRelations(StmtNoArgs args);
   vector<string> getAffectsRelations(StmtNoArgs args);
   vector<string> getAffectsStarRelations(StmtNoArgs args);
 

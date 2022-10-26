@@ -71,8 +71,9 @@ TEST_CASE("Test NextStar Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(100);
     args.setEndStmtNo(250);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
-    REQUIRE(actual.empty());
+    shared_ptr<vector<string>> actual =
+        designExtractor.getNextStarRelations(args);
+    REQUIRE(actual->empty());
   }
 
   SECTION("Test Invalid Start and Valid End Arguments") {
@@ -85,8 +86,9 @@ TEST_CASE("Test NextStar Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(-100);
     args.setEndStmtNo(2);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
-    REQUIRE(actual.empty());
+    shared_ptr<vector<string>> actual =
+        designExtractor.getNextStarRelations(args);
+    REQUIRE(actual->empty());
   }
 
   SECTION("Test Valid Start and Invalid End Arguments") {
@@ -99,8 +101,9 @@ TEST_CASE("Test NextStar Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(2000);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
-    REQUIRE(actual.empty());
+    shared_ptr<vector<string>> actual =
+        designExtractor.getNextStarRelations(args);
+    REQUIRE(actual->empty());
   }
 
   SECTION("Test Invalid End Arguments") {
@@ -112,7 +115,7 @@ TEST_CASE("Test NextStar Extractor") {
         DesignExtractor(dataModifier, programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(-4000);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    vector<string> actual = *designExtractor.getNextStarRelations(args);
     vector<string> expected = {};
     REQUIRE(actual == expected);
   }
@@ -127,7 +130,7 @@ TEST_CASE("Test NextStar Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(3);
     args.setEndStmtNo(4);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    vector<string> actual = *designExtractor.getNextStarRelations(args);
     vector<string> expected = {};
     REQUIRE(actual == expected);
   }
@@ -142,7 +145,7 @@ TEST_CASE("Test NextStar Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(6);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    vector<string> actual = *designExtractor.getNextStarRelations(args);
     vector<string> expected = {"1", "6"};
     REQUIRE(actual == expected);
   }
@@ -157,7 +160,7 @@ TEST_CASE("Test NextStar Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(5);
     args.setEndStmtNo(5);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    vector<string> actual = *designExtractor.getNextStarRelations(args);
     vector<string> expected = {"5", "5"};
     REQUIRE(actual == expected);
   }
@@ -171,7 +174,7 @@ TEST_CASE("Test NextStar Extractor") {
         DesignExtractor(dataModifier, programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    vector<string> actual = *designExtractor.getNextStarRelations(args);
     vector<string> expected = {"2", "3", "4", "5", "6", "7"};
     REQUIRE(
         TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
@@ -186,10 +189,11 @@ TEST_CASE("Test NextStar Extractor") {
         DesignExtractor(dataModifier, programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(5);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    shared_ptr<vector<string>> actual =
+        designExtractor.getNextStarRelations(args);
     vector<string> expected = {"5", "6", "7", "9"};
     REQUIRE(
-        TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
+        TestDE::DEUtils::vectorStringContainsSameElements(*actual, expected));
   }
 
   SECTION(
@@ -203,10 +207,11 @@ TEST_CASE("Test NextStar Extractor") {
         DesignExtractor(dataModifier, programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(8);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    shared_ptr<vector<string>> actual =
+        designExtractor.getNextStarRelations(args);
     vector<string> expected = {"8", "9", "10"};
     REQUIRE(
-        TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
+        TestDE::DEUtils::vectorStringContainsSameElements(*actual, expected));
   }
 
   SECTION("Test Valid End Only Arguments Through Double Nested Statements") {
@@ -218,7 +223,7 @@ TEST_CASE("Test NextStar Extractor") {
         DesignExtractor(dataModifier, programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(7);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    vector<string> actual = *designExtractor.getNextStarRelations(args);
     vector<string> expected = {"1", "2", "3", "4", "5", "6"};
     REQUIRE(
         TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
@@ -233,10 +238,11 @@ TEST_CASE("Test NextStar Extractor") {
         DesignExtractor(dataModifier, programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(6);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    shared_ptr<vector<string>> actual =
+        designExtractor.getNextStarRelations(args);
     vector<string> expected = {"1", "2", "3"};
     REQUIRE(
-        TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
+        TestDE::DEUtils::vectorStringContainsSameElements(*actual, expected));
   }
 
   SECTION("Test Valid End Only Arguments With Last Stmt No Of Procedure") {
@@ -248,9 +254,10 @@ TEST_CASE("Test NextStar Extractor") {
         DesignExtractor(dataModifier, programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(9);
-    vector<string> actual = designExtractor.getNextStarRelations(args);
+    shared_ptr<vector<string>> actual =
+        designExtractor.getNextStarRelations(args);
     vector<string> expected = {"1", "2", "3", "4", "5", "6", "7", "8"};
     REQUIRE(
-        TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
+        TestDE::DEUtils::vectorStringContainsSameElements(*actual, expected));
   }
 }

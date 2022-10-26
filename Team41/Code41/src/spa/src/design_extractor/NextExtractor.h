@@ -20,7 +20,7 @@ class NextExtractor {
  public:
   explicit NextExtractor(shared_ptr<ProgramNode> programNode);
   static shared_ptr<list<vector<string>>> extractNext();
-  static vector<string> extractNextStar(StmtNoArgs args);
+  static shared_ptr<vector<string>> extractNextStar(StmtNoArgs args);
   static list<vector<string>> extractAllNextStarInProgram();
 
  private:
@@ -31,14 +31,14 @@ class NextExtractor {
   static inline ProcCFGMap procCFGMap;
 
   static void generateProcCFGMap();
-  static vector<string> extractOneWildcard(StmtNoArgs args, bool isStartGiven);
-  static vector<string> extractNextStarWithStartAndEnd(StmtNoArgs args);
-  static void extractNextStarWithStartAndEndDFSHelper(int start, int end,
-                                                      CFG cfg,
-                                                      vector<string>& ans,
-                                                      vector<bool>& visitedArr);
-  static void extractOneWildcardDFS(CFG cfg);
-  static bool areBothArgsVaild(int start, int end);
+  static shared_ptr<vector<string>> extractNoWildcard(StmtNoArgs args);
+  static shared_ptr<vector<string>> extractOneWildcard(StmtNoArgs args,
+                                                       bool isStartGiven);
+  static bool checkNoWildcardBFS(int start, int end, CFG cfg);
+  static shared_ptr<vector<string>> extractOneWildcardDFS(CFG cfg,
+                                                          int startingStmt,
+                                                          bool isStartGiven);
+  static bool areBothArgsValid(int start, int end);
 };
 
 #endif  // SPA_NEXTEXTRACTOR_H

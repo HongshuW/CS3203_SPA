@@ -40,7 +40,8 @@ void DesignExtractor::run() {
   saveDesigns.executeSave();
 }
 
-vector<string> DE::DesignExtractor::getNextStarRelations(StmtNoArgs args) {
+shared_ptr<vector<string>> DE::DesignExtractor::getNextStarRelations(
+    StmtNoArgs args) {
   return NextExtractor::extractNextStar(args);
 }
 

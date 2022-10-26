@@ -4,6 +4,8 @@
 
 #include "NextExtractor.h"
 
+#include <queue>
+
 #include "../AST/utils/ASTUtils.h"
 
 NextExtractor::NextExtractor(shared_ptr<ProgramNode> programNode) {
@@ -46,94 +48,90 @@ shared_ptr<list<vector<string>>> NextExtractor::extractNext() {
   return make_shared<list<vector<string>>>(output);
 }
 
-void NextExtractor::extractOneWildcardDFS(CFG cfg) {
-  // TODO: implement O(n) algorithm
+bool NextExtractor::checkNoWildcardBFS(int start, int end, CFG cfg) {
+  // use bfs to avoid checking extremely long path without correct answer
+  unordered_set<int> visited = unordered_set<int>();
+  queue<int> bfsQueue = queue<int>();
+  bfsQueue.push(start);
+  // bfs
+  while (!bfsQueue.empty()) {
+    // get first element from stack and mark it as visited
+    int stmt = bfsQueue.front();
+    bfsQueue.pop();
+    unordered_set<int> children = cfg.cfg->find(stmt)->second;
+    for (int child : children) {
+      if (child == end) {
+        return true;
+      }
+      if (visited.find(child) == visited.end()) {
+        // if child hasn't been visited, push it to the stack
+        bfsQueue.push(child);
+        visited.insert(child);
+      }
+    }
+  }
+  return false;
 }
 
-vector<string> NextExtractor::extractOneWildcard(StmtNoArgs args,
-                                                 bool isStartGiven) {
-  vector<string> result = vector<string>();
+shared_ptr<vector<string>> NextExtractor::extractNoWildcard(StmtNoArgs args) {
+  int start = args.getStartStmtNo();
+  int end = args.getEndStmtNo();
+  shared_ptr<vector<string>> output =
+      make_shared<vector<string>>(vector<string>());
+  if (!NextExtractor::areBothArgsValid(start, end)) {
+    return output;
+  }
+  shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(start);
+  CFG cfg = procCFGMap->at(procedureNode);
+  if (checkNoWildcardBFS(start, end, cfg)) {
+    output->push_back(to_string(start));
+    output->push_back(to_string(end));
+  }
+  return output;
+}
+
+shared_ptr<vector<string>> NextExtractor::extractOneWildcardDFS(
+    CFG cfg, int startingPoint, bool isStartGiven) {
+  shared_ptr<vector<string>> output =
+      make_shared<vector<string>>(vector<string>());
+  unordered_set<int> visited = unordered_set<int>();
+  stack<int> dfsStack = stack<int>();
+  dfsStack.push(startingPoint);
+  // dfs
+  while (!dfsStack.empty()) {
+    // get first element from stack and mark it as visited
+    int stmt = dfsStack.top();
+    dfsStack.pop();
+    unordered_set<int> children = isStartGiven
+                                      ? cfg.cfg->find(stmt)->second
+                                      : cfg.reversedCfg->find(stmt)->second;
+    for (int child : children) {
+      if (visited.find(child) == visited.end()) {
+        // if child hasn't been visited, push to stack and record it in output
+        dfsStack.push(child);
+        output->push_back(to_string(child));
+        visited.insert(child);
+      }
+    }
+  }
+  return output;
+}
+
+shared_ptr<vector<string>> NextExtractor::extractOneWildcard(
+    StmtNoArgs args, bool isStartGiven) {
   int startingPoint =
       isStartGiven ? args.getStartStmtNo() : args.getEndStmtNo();
   bool invalidArg =
       stmtNoToProcMap->count(startingPoint) == 0 && startingPoint != 0;
   if (invalidArg) {
-    return {};
+    return make_shared<vector<string>>(vector<string>());
   }
   shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(startingPoint);
   CFG cfg = procCFGMap->at(procedureNode);
-  int startNum = firstLineNumToProcMap->at(procedureNode);
-  int endNum = cfg.cfg->size() + startNum;
-
-  for (int i = startNum; i < endNum; i++) {
-    StmtNoArgs testArgs;
-    if (isStartGiven) {
-      testArgs.setStartAndEndStmtNo(startingPoint, i);
-    } else {
-      testArgs.setStartAndEndStmtNo(i, startingPoint);
-    }
-    vector<string> output =
-        NextExtractor::extractNextStarWithStartAndEnd(testArgs);
-    if (!output.empty()) {
-      result.push_back(to_string(i));
-    }
-  }
-
-  return result;
+  return extractOneWildcardDFS(cfg, startingPoint, isStartGiven);
 }
 
-vector<string> NextExtractor::extractNextStarWithStartAndEnd(StmtNoArgs args) {
-  int start = args.getStartStmtNo();
-  int end = args.getEndStmtNo();
-  auto ans = vector<string>();
-  if (!NextExtractor::areBothArgsVaild(start, end)) {
-    return {};
-  }
-
-  shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(start);
-  CFG cfg = procCFGMap->at(procedureNode);
-  int visitedArrSize = cfg.cfg->size() + start + 1;
-  vector<bool> visitedArr;
-  for (int i = 0; i < visitedArrSize; i++) {
-    visitedArr.push_back(false);
-  }
-
-  NextExtractor::extractNextStarWithStartAndEndDFSHelper(start, end, cfg, ans,
-                                                         visitedArr);
-  if (!ans.empty()) {
-    ans = vector<string>();
-    ans.push_back(to_string(start));
-    ans.push_back(to_string(end));
-  }
-  return ans;
-}
-
-void NextExtractor::extractNextStarWithStartAndEndDFSHelper(
-    int start, int end, CFG cfg, vector<string>& ans,
-    vector<bool>& visitedArr) {
-  unordered_set<int> children = cfg.cfg->find(start)->second;
-  if (!children.empty()) {
-    for (int stmtNo : children) {
-      if (stmtNo == end) {
-        ans.push_back(to_string(end));
-        return;
-      } else if (stmtNo > start) {
-        extractNextStarWithStartAndEndDFSHelper(stmtNo, end, cfg, ans,
-                                                visitedArr);
-      }
-
-      else if (stmtNo <= start) {
-        if (!visitedArr.at(stmtNo)) {
-          visitedArr.at(stmtNo) = true;
-          extractNextStarWithStartAndEndDFSHelper(stmtNo, end, cfg, ans,
-                                                  visitedArr);
-        }
-      }
-    }
-  }
-}
-
-bool NextExtractor::areBothArgsVaild(int start, int end) {
+bool NextExtractor::areBothArgsValid(int start, int end) {
   bool invalidStartArg = stmtNoToProcMap->count(start) == 0 && start != 0;
   bool invalidEndArg = stmtNoToProcMap->count(end) == 0 && end != 0;
 
@@ -152,11 +150,9 @@ bool NextExtractor::areBothArgsVaild(int start, int end) {
   return true;
 }
 
-vector<string> NextExtractor::extractNextStar(StmtNoArgs args) {
-  int start = args.getStartStmtNo();
-  int end = args.getEndStmtNo();
+shared_ptr<vector<string>> NextExtractor::extractNextStar(StmtNoArgs args) {
   if (args.startAndEndExists()) {
-    return extractNextStarWithStartAndEnd(args);
+    return extractNoWildcard(args);
   }
 
   if (args.startExistsOnly()) {
@@ -167,8 +163,7 @@ vector<string> NextExtractor::extractNextStar(StmtNoArgs args) {
     return extractOneWildcard(args, false);
   }
 
-  vector<string> ans;
-  return ans;
+  return make_shared<vector<string>>(vector<string>());
 }
 
 list<vector<string>> NextExtractor::extractAllNextStarInProgram() {
@@ -179,17 +174,14 @@ list<vector<string>> NextExtractor::extractAllNextStarInProgram() {
     CFG cfg = procCFGMap->at(procedure);
     int cfgSize = cfg.cfg->size() + startNum;
     for (int i = startNum; i < cfgSize; i++) {
-      for (int j = startNum; j < cfgSize; j++) {
-        StmtNoArgs args;
-        args.setStartAndEndStmtNo(i, j);
-        vector<string> ans =
-            NextExtractor::extractNextStarWithStartAndEnd(args);
-        if (!ans.empty()) {
-          output.push_back(ans);
-        }
+      StmtNoArgs args = StmtNoArgs();
+      args.setStartStmtNo(i);
+      vector<string> nextTStmts =
+          *NextExtractor::extractOneWildcard(args, true);
+      for (string nextTStmt : nextTStmts) {
+        output.push_back(vector<string>{to_string(i), nextTStmt});
       }
     }
   }
-
   return output;
 }

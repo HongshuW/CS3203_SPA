@@ -16,6 +16,7 @@ typedef unordered_map<int, unordered_set<int>> cfgType;
 class CFG {
  public:
   shared_ptr<cfgType> cfg;
+  shared_ptr<cfgType> reversedCfg;
 
   explicit CFG(
       ProcedureNode procedureNode,
@@ -32,6 +33,7 @@ class CFG {
   void processWhileStmtList(int parent, vector<shared_ptr<StmtNode>> stmtList);
   void processIfStmtList(int parent, int parentNext,
                          vector<shared_ptr<StmtNode>> stmtList);
+  void generateReversedCFG();
 };
 
 #endif  // SPA_CFG_H
