@@ -33,7 +33,7 @@ class EntitiesExtractor : public AbstractDesignExtractor {
   EntitiesExtractor(shared_ptr<DataModifier> dataModifier,
                     shared_ptr<ProgramNode> programNode);
 
-		shared_ptr<ExtractorResult> extract() override;
+  shared_ptr<ExtractorResult> extract() override;
 
  protected:
   void save(shared_ptr<ExtractorResult> result) override;
