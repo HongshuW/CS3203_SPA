@@ -7,13 +7,16 @@
 
 #include "AST/CallNode.h"
 #include "design_extractor/AbstractDesignExtractor.h"
+#include "design_extractor/extractors/EntitiesExtractor.h"
+#include "design_extractor/utils/DesignExtractorUtils.h"
+#include "AST/utils/ASTUtils.h"
 
 namespace DE {
 
 		class CallsTRelationExtractor : public AbstractDesignExtractor {
 		private:
 				shared_ptr<list<vector<string>>> extractCallsStar(
-								shared_ptr<ProgramNode> programNode);
+								const shared_ptr<ProgramNode>& programNode);
 		public:
 				CallsTRelationExtractor(shared_ptr<DataModifier> dataModifier,
 															 shared_ptr<ProgramNode> programNode);

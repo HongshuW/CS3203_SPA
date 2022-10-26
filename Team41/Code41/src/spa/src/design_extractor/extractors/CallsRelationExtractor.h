@@ -16,7 +16,7 @@ namespace DE {
 		class CallsRelationExtractor : public AbstractDesignExtractor {
 		private:
 				shared_ptr<list<vector<string>>> extractCalls(
-								shared_ptr<ProgramNode> programNode);
+								const shared_ptr<ProgramNode>& programNode);
 		public:
 				CallsRelationExtractor(shared_ptr<DataModifier> dataModifier,
 				shared_ptr<ProgramNode> programNode);

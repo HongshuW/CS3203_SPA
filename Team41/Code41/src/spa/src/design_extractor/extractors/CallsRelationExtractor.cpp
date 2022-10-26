@@ -4,26 +4,27 @@
 
 #include "CallsRelationExtractor.h"
 
+#include <utility>
+
 namespace DE {
 		CallsRelationExtractor::CallsRelationExtractor(shared_ptr<DataModifier> dataModifier,
 																									 shared_ptr<ProgramNode> programNode) : AbstractDesignExtractor(
-						dataModifier, programNode) {
+						std::move(dataModifier), std::move(programNode)) {
 
 		}
 
 		void CallsRelationExtractor::extract() {
 			shared_ptr<list<vector<string>>> extractedRelations = extractCalls(programNode);
-
 		}
 
 		void CallsRelationExtractor::save() {
 			shared_ptr<list<vector<string>>> callsList = extractCalls(programNode);
-			for (auto entry : *callsList) {
+			for (const auto& entry : *callsList) {
 				dataModifier->saveCalls(entry);
 			}
 		}
 
-		shared_ptr<list<vector<string>>> CallsRelationExtractor::extractCalls(shared_ptr<ProgramNode> programNode) {
+		shared_ptr<list<vector<string>>> CallsRelationExtractor::extractCalls(const shared_ptr<ProgramNode>& programNode) {
 			list<vector<string>> output;
 			DesignExtractorUtils designExtractorUtils = DesignExtractorUtils();
 			auto mappedCallNodesToProcedures =
@@ -33,7 +34,7 @@ namespace DE {
 			for (auto& it : mappedCallNodesToProcedures) {
 				string name = it.first;
 				vector<shared_ptr<CallNode>> listOfCallNodes = it.second;
-				for (auto callNode : listOfCallNodes) {
+				for (const auto& callNode : listOfCallNodes) {
 					vector<string> callsEntry;
 					string callNodeName = callNode->procedureName;
 					callsEntry.push_back(name);
