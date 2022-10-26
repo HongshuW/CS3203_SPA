@@ -8,14 +8,16 @@
 #include "design_extractor/AbstractDesignExtractor.h"
 namespace DE {
 
-    class UsesRelationExtractor : public AbstractDesignExtractor {
-    public:
-        explicit UsesRelationExtractor(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode);
-        void extract() override;
-    protected:
-        void save() override;
-    };
+class UsesRelationExtractor : public AbstractDesignExtractor {
+ public:
+  explicit UsesRelationExtractor(shared_ptr<DataModifier> dataModifier,
+                                 shared_ptr<ProgramNode> programNode);
+  void extract() override;
 
-} // DE
+ protected:
+  void save() override;
+};
 
-#endif //SPA_USESRELATIONEXTRACTOR_H
+}  // namespace DE
+
+#endif  // SPA_USESRELATIONEXTRACTOR_H

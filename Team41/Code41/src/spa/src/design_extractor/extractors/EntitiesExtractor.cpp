@@ -5,12 +5,9 @@
 #include "EntitiesExtractor.h"
 
 namespace DE {
-    EntitiesExtractor::EntitiesExtractor(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-            : AbstractDesignExtractor(dataModifier, programNode) {
+EntitiesExtractor::EntitiesExtractor(shared_ptr<DataModifier> dataModifier,
+                                     shared_ptr<ProgramNode> programNode)
+    : AbstractDesignExtractor(dataModifier, programNode) {}
 
-    }
-
-    void EntitiesExtractor::extract() {
-
-    }
-} // DE
+void EntitiesExtractor::extract() {}
+}  // namespace DE
