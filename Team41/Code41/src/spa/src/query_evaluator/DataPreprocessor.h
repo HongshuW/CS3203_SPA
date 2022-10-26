@@ -22,19 +22,18 @@ namespace QE {
 using Value = variant<string, int, vector<int>, vector<string>>;
 
 class DataPreprocessor {
-  Table filerTableByDesignEntity(const Table& table, int colIdx,
-                                 DesignEntity designEntity);
-  Table filterTableByColValueEquality(const Table& table,
-                                      const vector<int>& comparedCols);
-  Table filerTableByColumnIdx(const Table& table, int colIdx,
-                              const string& value);
+  void filerTableByDesignEntity(Table& table, int colIdx,
+                                DesignEntity designEntity);
+  void filterTableByColValueEquality(Table& table,
+                                     const vector<int>& comparedCols);
+  void filerTableByColumnIdx(Table& table, int colIdx, const string& value);
   DesignEntity getDesignEntityOfSyn(Synonym synonym);
   std::vector<std::string> intersection(std::vector<std::string> v1,
                                         std::vector<std::string> v2);
   std::vector<int> intersection(std::vector<int> v1, std::vector<int> v2);
   void getWithValues(vector<WithRef> withRefs,
                      shared_ptr<vector<Value>> values);
-  Table dropUnusedColumns(Table table);
+  void dropUnusedColumns(Table& table);
 
   shared_ptr<DataRetriever> dataRetriever;
   Declarations declarations;
@@ -67,7 +66,7 @@ class DataPreprocessor {
   Table getReadVariableTable();
   Table getPrintVariableTable();
 
-  Table filterSingleClauseResultTable(Ref ref1, Ref ref2, Table table);
+  void filterSingleClauseResultTable(Ref ref1, Ref ref2, Table& table);
   /**
    * Used for with clause evaluation
    * Valid paras: stmt, read, print, call, while, if assign

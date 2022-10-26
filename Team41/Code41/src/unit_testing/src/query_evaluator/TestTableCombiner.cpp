@@ -21,7 +21,7 @@ TEST_CASE("Test table combiner") {
                    ->addRow({"4", "corge"})
                    ->build();
     Table empty = Table();
-    Table actual = myTableCombiner.joinTable(t1, empty);
+    Table actual = myTableCombiner.hashJoin(t1, empty);
     Table expected = t1;
     REQUIRE(actual.isEqual(expected));
   }
@@ -45,7 +45,7 @@ TEST_CASE("Test table combiner") {
     expected.rows.push_back(vector<string>{"4"});
 
     TableCombiner tableCombiner = TableCombiner();
-    Table testResultTable = tableCombiner.joinTable(t1, t2);
+    Table testResultTable = tableCombiner.hashJoin(t1, t2);
     TableComparator tableComparator = TableComparator();
 
     REQUIRE(tableComparator.isEqual(testResultTable, expected) == true);
@@ -74,7 +74,7 @@ TEST_CASE("Test table combiner") {
     expected.rows.push_back(vector<string>{"3", "baz", "7"});
 
     TableCombiner tableCombiner = TableCombiner();
-    Table testResultTable = tableCombiner.joinTable(t1, t2);
+    Table testResultTable = tableCombiner.hashJoin(t1, t2);
     TableComparator tableComparator = TableComparator();
 
     REQUIRE(tableComparator.isEqual(testResultTable, expected) == true);
@@ -102,7 +102,7 @@ TEST_CASE("Test table combiner") {
                          ->build();
 
     TableCombiner tableCombiner = TableCombiner();
-    Table testResultTable = tableCombiner.joinTable(t1, t2);
+    Table testResultTable = tableCombiner.hashJoin(t1, t2);
     TableComparator tableComparator = TableComparator();
 
     REQUIRE(tableComparator.isEqual(testResultTable, expected) == true);
@@ -133,7 +133,7 @@ TEST_CASE("Test table combiner") {
     expected.rows.push_back(vector<string>{"4", "corge"});
 
     TableCombiner tableCombiner = TableCombiner();
-    Table testResultTable = tableCombiner.joinTable(t1, t2);
+    Table testResultTable = tableCombiner.hashJoin(t1, t2);
     TableComparator tableComparator = TableComparator();
 
     REQUIRE(tableComparator.isEqual(testResultTable, expected) == true);
@@ -165,7 +165,7 @@ TEST_CASE("Test table combiner") {
                          ->addRow({"bar", "2", "b", "6", "rab", "f"})
                          ->addRow({"qux", "4", "d", "8", "xuq", "h"})
                          ->build();
-    Table testResult = myTableCombiner.joinTable(t1, t2);
+    Table testResult = myTableCombiner.hashJoin(t1, t2);
     REQUIRE(myTableComparator.isEqual(testResult, expected) == true);
   }
   SECTION(
@@ -193,7 +193,7 @@ TEST_CASE("Test table combiner") {
                          .setHeaders({"$col1", commonCol1Name, "$col2",
                                       commonCol2Name, "$col1", "$col2"})
                          ->build();
-    Table testResult = myTableCombiner.joinTable(t1, t2);
+    Table testResult = myTableCombiner.hashJoin(t1, t2);
     REQUIRE(myTableComparator.isEqual(testResult, expected) == true);
   }
   SECTION("A table joined with an empty table should be itself") {

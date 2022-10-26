@@ -3,6 +3,8 @@
 //
 
 #include "Table.h"
+
+#include <numeric>
 const string Table::DEFAULT_HEADER_PREFIX = "$";
 
 vector<string> Table::getColumnByName(string columnName) {
@@ -120,60 +122,61 @@ void Table::renameHeader(vector<string> newHeader) { header = newHeader; }
 
 void Table::dropRows() { this->rows.clear(); }
 
-Table Table::dropCol(int colIdx) {
-  if (colIdx >= this->header.size()) return *this;
-  Table droppedTable = Table();
-
-  for (int i = 0; i < this->header.size(); ++i) {
-    if (i != colIdx) {
-      droppedTable.header.insert(droppedTable.header.begin(), this->header[i]);
-    }
-  }
-
-  for (int i = 0; i < this->rows.size(); ++i) {
-    vector<string> droppedRow;
-    for (int j = 0; j < this->rows[i].size(); j++) {
-      if (j != colIdx) {
-        droppedRow.insert(droppedRow.begin(), this->rows[i][j]);
-      }
-    }
-    if (!droppedRow.empty()) droppedTable.appendRow(droppedRow);
-  }
-
-  return droppedTable;
-}
-
 bool Table::isEqual(const Table &otherTable) {
   if (header.size() != otherTable.header.size()) return false;
   if (rows.size() != otherTable.rows.size()) return false;
+  // order of the headers must be the same
   for (int i = 0; i < otherTable.header.size(); ++i) {
     if (otherTable.header[i] != header[i]) return false;
   }
+  unordered_set<string> r1_set = unordered_set<string>();
+  unordered_set<string> r2_set = unordered_set<string>();
+
+  auto dash_fold = [](std::string a, string b) {
+    return std::move(a) + '-' + b;
+  };
   for (int i = 0; i < otherTable.rows.size(); ++i) {
-    auto expectedRow = otherTable.rows[i];
-    auto testResultRow = rows[i];
+    auto &expectedRow = otherTable.rows[i];
+    auto &testResultRow = rows[i];
     if (expectedRow.size() != testResultRow.size()) return false;
-    for (int j = 0; j < expectedRow.size(); ++j) {
-      if (expectedRow[j] != testResultRow[j]) return false;
-    }
+    r1_set.insert(std::accumulate(next(expectedRow.begin()), expectedRow.end(),
+                                  expectedRow[0], dash_fold));
+    r2_set.insert(std::accumulate(next(testResultRow.begin()),
+                                  testResultRow.end(), testResultRow[0],
+                                  dash_fold));
   }
-  return true;
+  return r1_set == r2_set;
 }
 
 bool Table::isHeaderEmpty() const { return this->header.empty(); }
 
 bool Table::isBodyEmpty() const { return this->rows.empty(); }
 
-Table Table::dupCol(int colIdx, string dupColName) {
-  if (colIdx >= this->header.size()) return Table();
-  Table resultTable = Table();
-  resultTable.header = this->header;
-  resultTable.rows = this->rows;
-
+void Table::dupCol(int colIdx, string dupColName) {
+  if (colIdx >= this->header.size()) return;
   // append the dup col to the right of the table
-  resultTable.header.push_back(dupColName);
+  header.push_back(dupColName);
   for (int i = 0; i < this->rows.size(); i++) {
-    resultTable.rows[i].push_back(this->rows[i][colIdx]);
+    rows[i].push_back(this->rows[i][colIdx]);
   }
-  return resultTable;
+}
+
+void Table::dropColFromThis(int colIdx) {
+  if (colIdx >= this->header.size()) return;
+  // erase header
+  this->header[colIdx] = this->header[this->header.size() - 1];
+  this->header.erase(this->header.end() - 1);
+  auto rowItr = this->rows.begin();
+
+  while (rowItr != this->rows.end()) {
+    rowItr->at(colIdx) = rowItr->at(rowItr->size() - 1);
+    rowItr->erase(rowItr->end() - 1);
+
+    if (rowItr->empty()) {
+      *rowItr = this->rows[this->rows.size() - 1];
+      this->rows.erase(this->rows.end() - 1);
+    } else {
+      ++rowItr;
+    }
+  }
 }

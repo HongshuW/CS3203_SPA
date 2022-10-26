@@ -110,11 +110,11 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
           if (designEntity == QB::DesignEntity::READ)
             intermediateTable = dataPreprocessor->getReadVariableTable();
           if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
-          intermediateTable = intermediateTable.dropCol(FIRST_COL_IDX);
+          intermediateTable.dropColFromThis(FIRST_COL_IDX);
         } else {
           intermediateTable =
-              dataPreprocessor->getAllByDesignEntity(designEntity)
-                  .dropCol(SECOND_COL_IDX);
+              dataPreprocessor->getAllByDesignEntity(designEntity);
+          intermediateTable.dropColFromThis(SECOND_COL_IDX);
           if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
         }
 
@@ -137,7 +137,7 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
           resultTable =
               TableCombiner().hashJoin(intermediateTable, resultTable);
         } else {
-          resultTable = resultTable.dupCol(synColIdx, attrRef.toString());
+          resultTable.dupCol(synColIdx, attrRef.toString());
         }
       }
     }
