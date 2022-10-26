@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#include <list>
 #include "AST/CallNode.h"
 #include "AST/ProgramNode.h"
 #include "AST/StmtNode.h"
@@ -21,18 +22,31 @@ namespace DE {
 		class DesignExtractorUtils {
 		public:
 			DesignExtractorUtils();
+			  //! For calls
 				unordered_map<string, vector<shared_ptr<CallNode>>>
-				extractCallNodesFromProcedures(shared_ptr<ProgramNode> rootPtr);
+				extractCallNodesFromProcedures(const shared_ptr<ProgramNode>& rootPtr);
 
 				void extractVariablesFromCallNodesInProceduresToList(
-								shared_ptr<CallNode> callNode,
+								const shared_ptr<CallNode>& callNode,
 								unordered_map<string, unordered_set<string>> mappedProceduresToVar,
 								unordered_map<string, vector<shared_ptr<CallNode>>>
 				mappedCallNodesToProcedures,
 				unordered_set<string>& uniqueVarList);
 
 				vector<shared_ptr<StmtNode>> extractIfAndWhileNodesFromProcedures(
-								shared_ptr<ProgramNode> rootPtr);
+								const shared_ptr<ProgramNode>& rootPtr);
+
+				void extractCallStmtRelationshipsToOutput(
+								int stmtNo, const shared_ptr<CallNode>& callNode,
+								unordered_map<string, unordered_set<string>> mappedProceduresToVars,
+								unordered_map<string, vector<shared_ptr<CallNode>>>
+								mappedCallNodesToProcedures,
+								const shared_ptr<list<vector<string>>>& output);
+				void extractCallStmtRelationshipsWithIfAndWhileToOutput(
+								const shared_ptr<ProgramNode>& rootPtr,
+								unordered_map<string, unordered_set<string>> mappedProceduresToVars,
+								unordered_map<string, unordered_set<string>> mappedIfAndWhileToVars,
+								const shared_ptr<list<vector<string>>>& output);
 		};
 
 } // DE

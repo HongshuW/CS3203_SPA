@@ -15,9 +15,9 @@ class AbstractDesignExtractor {
   explicit AbstractDesignExtractor(shared_ptr<DataModifier> dataModifier,
                                    shared_ptr<ProgramNode> programNode);
   virtual ExtractorResult extract() = 0;
+	virtual void save(ExtractorResult result) = 0;
 
  protected:
-  virtual void save(ExtractorResult result) = 0;
   shared_ptr<DataModifier> dataModifier;
   shared_ptr<ProgramNode> programNode;
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers;

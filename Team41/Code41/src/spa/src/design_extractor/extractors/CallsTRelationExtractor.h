@@ -9,6 +9,7 @@
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/extractors/EntitiesExtractor.h"
 #include "design_extractor/utils/DesignExtractorUtils.h"
+#include "design_extractor/results/RelationResult.h"
 #include "AST/utils/ASTUtils.h"
 
 namespace DE {
@@ -20,10 +21,8 @@ namespace DE {
 		public:
 				CallsTRelationExtractor(shared_ptr<DataModifier> dataModifier,
 															 shared_ptr<ProgramNode> programNode);
-				void extract() override;
-
-		protected:
-				void save() override;
+				ExtractorResult extract() override;
+				void save(ExtractorResult result) override;
 		};
 
 } // DE
