@@ -43,6 +43,7 @@ class DesignExtractorUtils {
       unordered_map<string, vector<shared_ptr<CallNode>>>
           mappedCallNodesToProcedures,
       const shared_ptr<list<vector<string>>>& output);
+
   void extractCallStmtRelationshipsWithIfAndWhileToOutput(
       const shared_ptr<ProgramNode>& rootPtr,
       unordered_map<string, unordered_set<string>> mappedProceduresToVars,

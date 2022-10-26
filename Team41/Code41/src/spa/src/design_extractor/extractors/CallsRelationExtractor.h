@@ -15,15 +15,11 @@
 namespace DE {
 
 class CallsRelationExtractor : public AbstractDesignExtractor {
- private:
-  shared_ptr<list<vector<string>>> extractCalls(
-      const shared_ptr<ProgramNode>& programNode);
-
  public:
   CallsRelationExtractor(shared_ptr<DataModifier> dataModifier,
                          shared_ptr<ProgramNode> programNode);
-  ExtractorResult extract() override;
-  void save(ExtractorResult result) override;
+	shared_ptr<ExtractorResult> extract() override;
+  void save(shared_ptr<ExtractorResult> result) override;
 };
 
 }  // namespace DE

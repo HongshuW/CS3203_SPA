@@ -5,6 +5,7 @@
 #include "CallsRelationExtractor.h"
 
 #include <utility>
+#include <memory>
 
 namespace DE {
 CallsRelationExtractor::CallsRelationExtractor(
@@ -13,8 +14,9 @@ CallsRelationExtractor::CallsRelationExtractor(
 
 }
 
-ExtractorResult CallsRelationExtractor::extract() {
-  list<vector<string>> output;
+shared_ptr<ExtractorResult> CallsRelationExtractor::extract() {
+  shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>();
+
   DesignExtractorUtils designExtractorUtils = DesignExtractorUtils();
   auto mappedCallNodesToProcedures =
       designExtractorUtils.extractCallNodesFromProcedures(programNode);
@@ -29,15 +31,15 @@ ExtractorResult CallsRelationExtractor::extract() {
       callsEntry.push_back(name);
       callsEntry.push_back(callNodeName);
       callsEntry.push_back(to_string(stmtNumbers->at(callNode)));
-      output.push_back(callsEntry);
+      output->push_back(callsEntry);
     }
   }
-  return RelationResult(make_shared<list<vector<string>>>(output));
+  return make_shared<RelationResult>(output);
 }
 
-void CallsRelationExtractor::save(ExtractorResult result) {
-  RelationResult callsResult = static_cast<RelationResult&>(result);
-  for (const auto& entry : *callsResult.getResult()) {
+void CallsRelationExtractor::save(shared_ptr<ExtractorResult> result) {
+	shared_ptr<RelationResult> callsResult = static_pointer_cast<RelationResult>(result);
+  for (auto entry : *callsResult->getResult()) {
     dataModifier->saveCalls(entry);
   }
 }

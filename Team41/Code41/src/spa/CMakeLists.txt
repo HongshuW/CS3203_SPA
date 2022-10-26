@@ -328,6 +328,12 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/extractors/CallsRelationExtractor.h
         src/design_extractor/extractors/CallsTRelationExtractor.cpp
         src/design_extractor/extractors/CallsTRelationExtractor.h
+        src/design_extractor/results/RelationResult.cpp
+        src/design_extractor/results/RelationResult.h
+        src/design_extractor/results/AssignPatternResult.cpp
+        src/design_extractor/results/AssignPatternResult.h
+        src/design_extractor/results/ExtractorResult.cpp
+        src/design_extractor/results/ExtractorResult.h
         src/design_extractor/utils/DesignExtractorUtils.cpp
         src/design_extractor/utils/DesignExtractorUtils.h)
 

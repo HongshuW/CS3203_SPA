@@ -22,8 +22,8 @@ class CallsTRelationExtractor : public AbstractDesignExtractor {
  public:
   CallsTRelationExtractor(shared_ptr<DataModifier> dataModifier,
                           shared_ptr<ProgramNode> programNode);
-  ExtractorResult extract() override;
-  void save(ExtractorResult result) override;
+	shared_ptr<ExtractorResult> extract() override;
+  void save(shared_ptr<ExtractorResult> result) override;
 };
 
 }  // namespace DE

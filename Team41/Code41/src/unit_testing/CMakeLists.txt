@@ -66,7 +66,9 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/TestNextExtraction.cpp
     src/design_extractor/TestNextStarExtraction.cpp
     src/pkb/TestCachable.cpp
-    src/design_extractor/TestConditionalPatternExtractor.cpp)
+    src/design_extractor/TestConditionalPatternExtractor.cpp
+        src/design_extractor/TestCallsRelationExtractor.cpp
+        src/design_extractor/TestCallsTRelationExtractor.cpp)
 
 
 target_link_libraries(unit_testing spa)
