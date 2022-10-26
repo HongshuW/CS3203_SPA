@@ -46,57 +46,40 @@ shared_ptr<list<vector<string>>> NextExtractor::extractNext() {
   return make_shared<list<vector<string>>>(output);
 }
 
-vector<string> NextExtractor::extractNextStarWithEndOnly(StmtNoArgs args) {
-  auto ans = vector<string>();
-  int end = args.getEndStmtNo();
-  bool invalidEndArg = stmtNoToProcMap->count(end) == 0 && end != 0;
-  if (invalidEndArg) {
-    return {};
-  }
-
-  shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(end);
-  CFG cfg = procCFGMap->at(procedureNode);
-  int startNum = firstLineNumToProcMap->at(procedureNode);
-  int endNum = cfg.cfg->size() + startNum;
-
-  for (int i = startNum; i < endNum; i++) {
-    StmtNoArgs testArgs;
-    testArgs.setStartAndEndStmtNo(i, end);
-    vector<string> output =
-        NextExtractor::extractNextStarWithStartAndEnd(testArgs);
-    if (!output.empty()) {
-      ans.push_back(to_string(i));
-    }
-  }
-
-  return ans;
+void NextExtractor::extractOneWildcardDFS(CFG cfg) {
+  // TODO: implement O(n) algorithm
 }
 
-vector<string> NextExtractor::extractNextStarWithStartOnly(StmtNoArgs args) {
-  auto ans = vector<string>();
-  int start = args.getStartStmtNo();
-
-  bool invalidStartArg = stmtNoToProcMap->count(start) == 0 && start != 0;
-  if (invalidStartArg) {
+vector<string> NextExtractor::extractOneWildcard(StmtNoArgs args,
+                                                 bool isStartGiven) {
+  vector<string> result = vector<string>();
+  int startingPoint =
+      isStartGiven ? args.getStartStmtNo() : args.getEndStmtNo();
+  bool invalidArg =
+      stmtNoToProcMap->count(startingPoint) == 0 && startingPoint != 0;
+  if (invalidArg) {
     return {};
   }
-
-  shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(start);
+  shared_ptr<ProcedureNode> procedureNode = stmtNoToProcMap->at(startingPoint);
   CFG cfg = procCFGMap->at(procedureNode);
   int startNum = firstLineNumToProcMap->at(procedureNode);
   int endNum = cfg.cfg->size() + startNum;
 
   for (int i = startNum; i < endNum; i++) {
     StmtNoArgs testArgs;
-    testArgs.setStartAndEndStmtNo(start, i);
+    if (isStartGiven) {
+      testArgs.setStartAndEndStmtNo(startingPoint, i);
+    } else {
+      testArgs.setStartAndEndStmtNo(i, startingPoint);
+    }
     vector<string> output =
         NextExtractor::extractNextStarWithStartAndEnd(testArgs);
     if (!output.empty()) {
-      ans.push_back(to_string(i));
+      result.push_back(to_string(i));
     }
   }
 
-  return ans;
+  return result;
 }
 
 vector<string> NextExtractor::extractNextStarWithStartAndEnd(StmtNoArgs args) {
@@ -177,11 +160,11 @@ vector<string> NextExtractor::extractNextStar(StmtNoArgs args) {
   }
 
   if (args.startExistsOnly()) {
-    return extractNextStarWithStartOnly(args);
+    return extractOneWildcard(args, true);
   }
 
   if (args.endExistsOnly()) {
-    return extractNextStarWithEndOnly(args);
+    return extractOneWildcard(args, false);
   }
 
   vector<string> ans;
