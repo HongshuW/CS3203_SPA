@@ -104,7 +104,8 @@ TEST_CASE("Test Table") {
     table.header = {"keep", "drop"};
     table.rows = {{"k1", "d1"}, {"k2", "d2"}, {"k3", "d3"}};
 
-    Table actual = table.dropCol(1);
+    table.dropColFromThis(1);
+    Table actual = table;
     Table expected = Table();
     expected.header = {"keep"};
     expected.rows = {{"k1"}, {"k2"}, {"k3"}};

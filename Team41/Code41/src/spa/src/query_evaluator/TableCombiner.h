@@ -14,9 +14,6 @@ class TableCombiner {
   /**
    * @return pairs of duplicate headers' index in the cross product table
    */
-  vector<vector<int>> findDuplicateHeadersWithOffset(vector<string> h1,
-                                                     vector<string> h2);
-
   vector<vector<int>> findDupHeaders(vector<string> h1, vector<string> h2);
 
   string createFilterRowKey(const vector<string>& row,
@@ -24,7 +21,6 @@ class TableCombiner {
 
  public:
   Table crossProduct(const Table& t1, const Table& t2);
-  Table joinTable(const Table& t1, const Table& t2);
   Table hashJoin(Table& t1, Table& t2);
 };
 

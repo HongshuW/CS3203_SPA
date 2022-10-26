@@ -38,8 +38,8 @@ class Table {
   void addValues(list<string> values);
   void dropRows();
 
-  Table dropCol(int colIdx);
-  Table dupCol(int colIdx, string dupColName = "$dup_col");
+  void dupCol(int colIdx, string dupColName = "$dup_col");
+  void dropColFromThis(int colIdx);
 
   bool hasCol(string colName);
   bool isEqual(const Table &otherTable);
