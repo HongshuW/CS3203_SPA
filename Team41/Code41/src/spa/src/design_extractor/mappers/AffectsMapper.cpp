@@ -18,6 +18,7 @@ AffectsMapper::AffectsMapper(shared_ptr<ProgramNode> programNode) {
   initNodePtrToLineNumMap();
   initLineNumToProcMap();
   initStmtNoToAssignNodesMap();
+  initStmtNoToWhileNodesMap();
 }
 
 void AffectsMapper::initValidArgsMap() {
@@ -157,6 +158,44 @@ void AffectsMapper::initLineNumToProcMap() {
   lineNumToProcMap = ASTUtils::getLineNumToProcMap(programNode);
 }
 
+void AffectsMapper::initStmtNoToWhileNodesMap() {
+  auto stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
+  for (auto procedureNode : programNode->procedureList) {
+    queue<vector<shared_ptr<StmtNode>>> queue;
+    queue.push(procedureNode->stmtList);
+    while (!queue.empty()) {
+      auto stmtList = queue.front();
+      queue.pop();
+      for (auto stmtNode : stmtList) {
+        NodeType nodeType = ASTUtils::getNodeType(stmtNode);
+        switch (nodeType) {
+          case AST::WHILE_NODE: {
+            shared_ptr<WhileNode> whileNode =
+                dynamic_pointer_cast<WhileNode>(stmtNode);
+            int stmtNo = stmtNumbers->at(whileNode);
+            stmtNoToWhileNodesMap.insert(
+                make_pair(to_string(stmtNo), whileNode));
+            vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
+            queue.push(whileStmtList);
+            break;
+          }
+
+          case AST::IF_NODE: {
+            shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+            vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
+            vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
+            queue.push(ifStmtList);
+            queue.push(elseStmtList);
+            break;
+          }
+          default:
+            break;
+        }
+      }
+    }
+  }
+}
+
 unordered_map<string, shared_ptr<StmtNode>>
 AffectsMapper::mapStmtNoToAssignReadAndCallNodes(
     shared_ptr<ProgramNode> programNode) {
@@ -252,4 +291,9 @@ AffectsMapper::getStmtNoOfAssignReadAndCallNodesMap() {
 unordered_map<string, shared_ptr<StmtNode>>
 AffectsMapper::getStmtNoOfAssignNodesMap() {
   return stmtNoToAssignNodesMap;
+}
+
+unordered_map<string, shared_ptr<StmtNode>>
+AffectsMapper::getStmtNoOfWhileNodesMap() {
+  return stmtNoToWhileNodesMap;
 }
