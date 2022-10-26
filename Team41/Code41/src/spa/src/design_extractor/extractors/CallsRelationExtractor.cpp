@@ -12,18 +12,22 @@ namespace DE {
 		}
 
 		void CallsRelationExtractor::extract() {
+			shared_ptr<list<vector<string>>> extractedRelations = extractCalls(programNode);
 
 		}
 
 		void CallsRelationExtractor::save() {
-
+			shared_ptr<list<vector<string>>> callsList = extractCalls(programNode);
+			for (auto entry : *callsList) {
+				dataModifier->saveCalls(entry);
+			}
 		}
 
 		shared_ptr<list<vector<string>>> CallsRelationExtractor::extractCalls(shared_ptr<ProgramNode> programNode) {
 			list<vector<string>> output;
-			EntitiesExtractor entitiesExtractor = EntitiesExtractor(dataModifier, programNode);
+			DesignExtractorUtils designExtractorUtils = DesignExtractorUtils();
 			auto mappedCallNodesToProcedures =
-							entitiesExtractor.extractCallNodesFromProcedures(programNode);
+							designExtractorUtils.extractCallNodesFromProcedures(programNode);
 			shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
 							ASTUtils::getNodePtrToLineNumMap(programNode);
 			for (auto& it : mappedCallNodesToProcedures) {

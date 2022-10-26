@@ -28,17 +28,6 @@ class EntitiesExtractor : public AbstractDesignExtractor {
   unordered_set<string> getConstantsFromCondExprNode(
       shared_ptr<CondExprNode> condExprNode);
 
-  unordered_map<string, vector<shared_ptr<CallNode>>>
-  extractCallNodesFromProcedures(shared_ptr<ProgramNode> rootPtr);
-  void extractVariablesFromCallNodesInProceduresToList(
-      shared_ptr<CallNode> callNode,
-      unordered_map<string, unordered_set<string>> mappedProceduresToVar,
-      unordered_map<string, vector<shared_ptr<CallNode>>>
-          mappedCallNodesToProcedures,
-      unordered_set<string>& uniqueVarList);
-  vector<shared_ptr<StmtNode>> extractIfAndWhileNodesFromProcedures(
-      shared_ptr<ProgramNode> rootPtr);
-
  public:
   EntitiesExtractor(shared_ptr<DataModifier> dataModifier,
                     shared_ptr<ProgramNode> programNode);
