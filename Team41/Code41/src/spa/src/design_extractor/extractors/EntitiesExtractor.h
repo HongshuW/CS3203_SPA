@@ -7,6 +7,7 @@
 #include "AST/CallNode.h"
 #include "AST/CondExprNode.h"
 #include "design_extractor/AbstractDesignExtractor.h"
+#include "design_extractor/results/ExtractorResult.h"
 
 namespace DE {
 
@@ -15,12 +16,10 @@ class EntitiesExtractor : public AbstractDesignExtractor {
       shared_ptr<StmtNode> stmtNode);
   shared_ptr<unordered_set<string>> extractConstants(
       shared_ptr<StmtNode> stmtNode);
-  shared_ptr<unordered_set<string>> extractAllVariables(
-      shared_ptr<ProgramNode> rootPtr);
-  shared_ptr<unordered_set<string>> extractAllConstants(
-      shared_ptr<ProgramNode> rootPtr);
-  shared_ptr<unordered_set<string>> extractAllProcedures(
-      shared_ptr<ProgramNode> rootPtr);
+  vector<shared_ptr<StmtNode>> extractStmtNodes();
+  shared_ptr<unordered_set<string>> extractAllVariables();
+  shared_ptr<unordered_set<string>> extractAllConstants();
+  shared_ptr<unordered_set<string>> extractAllProcedures();
   unordered_set<string> getVariablesFromExprNode(shared_ptr<ExprNode> exprNode);
   unordered_set<string> getConstantsFromExprNode(shared_ptr<ExprNode> exprNode);
   unordered_set<string> getVariablesFromCondExprNode(
@@ -28,13 +27,16 @@ class EntitiesExtractor : public AbstractDesignExtractor {
   unordered_set<string> getConstantsFromCondExprNode(
       shared_ptr<CondExprNode> condExprNode);
 
+  vector<shared_ptr<StmtNode>> stmtNodeList;
+
  public:
   EntitiesExtractor(shared_ptr<DataModifier> dataModifier,
                     shared_ptr<ProgramNode> programNode);
-  void extract() override;
+
+  ExtractorResult extract() override;
 
  protected:
-  void save() override;
+  void save(ExtractorResult result) override;
 };
 
 }  // namespace DE
