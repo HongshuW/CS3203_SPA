@@ -319,7 +319,7 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/save_extractions/save_extracted_entities/ExtractedProceduresSaver.h
         src/design_extractor/mappers/AffectsMapper.cpp src/design_extractor/mappers/AffectsMapper.h
         src/design_extractor/mappers/CFGMapper.cpp
-        src/design_extractor/mappers/CFGMapper.h)
+        src/design_extractor/mappers/CFGMapper.h src/design_extractor/AbstractDesignExtractor.cpp src/design_extractor/AbstractDesignExtractor.h src/design_extractor/extractors/UsesRelationExtractor.cpp src/design_extractor/extractors/UsesRelationExtractor.h src/design_extractor/extractors/EntitiesExtractor.cpp src/design_extractor/extractors/EntitiesExtractor.h)
 
 
 
