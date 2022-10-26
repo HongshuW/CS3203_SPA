@@ -13,6 +13,10 @@
 #include "design_extractor/DesignExtractor.h"
 #include "design_extractor/EntityExtractor.h"
 #include "design_extractor/FollowsExtractor.h"
+#include "design_extractor/extractors/ConstantExtractor.h"
+#include "design_extractor/extractors/ProcedureExtractor.h"
+#include "design_extractor/extractors/VariableExtractor.h"
+#include "design_extractor/results/EntityResult.h"
 #include "iostream"
 #include "pkb/DataModifier.h"
 
@@ -45,18 +49,31 @@ TEST_CASE("Test entity extraction") {
         make_shared<DataModifier>(pkbStorage);
     DesignExtractor designExtractor =
         DesignExtractor(dataModifier, programNode);
+    VariableExtractor variableExtractor =
+        VariableExtractor(dataModifier, programNode);
+    auto variableResult = variableExtractor.extract();
+    auto varEntityResult = static_pointer_cast<EntityResult>(variableResult);
+    auto actual = varEntityResult->getResult();
+    list<string> variables_expected = list<string>{"x", "y"};
+    REQUIRE(variables_expected == *actual);
 
-    auto variables_actual = EntityExtractor::extractAllVariables(programNode);
-    unordered_set<string> variables_expected = unordered_set<string>{"x", "y"};
-    REQUIRE(variables_expected == *variables_actual);
+    ConstantExtractor constantExtractor =
+        ConstantExtractor(dataModifier, programNode);
 
-    auto constants_actual = EntityExtractor::extractAllConstants(programNode);
-    unordered_set<string> constants_expected = unordered_set<string>{"1"};
+    auto constantResult = constantExtractor.extract();
+    auto constantEntityResult =
+        static_pointer_cast<EntityResult>(constantResult);
+    auto constants_actual = constantEntityResult->getResult();
+    list<string> constants_expected = list<string>{"1"};
     REQUIRE(constants_expected == *constants_actual);
 
-    auto procedures_actual = EntityExtractor::extractAllProcedures(programNode);
-    unordered_set<string> procedures_expected =
-        unordered_set<string>{"procedure1"};
+    ProcedureExtractor procedureExtractor =
+        ProcedureExtractor(dataModifier, programNode);
+
+    auto procedures_actual =
+        static_pointer_cast<EntityResult>(procedureExtractor.extract())
+            ->getResult();
+    list<string> procedures_expected = list<string>{"procedure1"};
     REQUIRE(constants_expected == *constants_actual);
   }
   SECTION("variable extraction in nested stmts") {
@@ -111,20 +128,36 @@ TEST_CASE("Test entity extraction") {
         make_shared<DataModifier>(pkbStorage);
     DesignExtractor designExtractor =
         DesignExtractor(dataModifier, programNode2);
-    auto variables_actual = EntityExtractor::extractAllVariables(programNode2);
-    unordered_set<string> variables_expected =
-        unordered_set<string>{"x", "y", "w", "z", "foo", "bar", "exprVar"};
+
+    VariableExtractor varExtractor =
+        VariableExtractor(dataModifier, programNode2);
+    auto variables_actual =
+        static_pointer_cast<EntityResult>(varExtractor.extract())->getResult();
+    list<string> variables_expected =
+        list<string>{"x", "y", "w", "z", "foo", "bar", "exprVar"};
+    variables_actual->sort();
+    variables_expected.sort();
     REQUIRE(variables_expected == *variables_actual);
 
-    auto constants_actual = EntityExtractor::extractAllConstants(programNode2);
-    unordered_set<string> constants_expected =
-        unordered_set<string>{"10", "112312341234"};
+    ConstantExtractor constExtractor =
+        ConstantExtractor(dataModifier, programNode2);
+    auto constants_actual =
+        static_pointer_cast<EntityResult>(constExtractor.extract())
+            ->getResult();
+    list<string> constants_expected = list<string>{"10", "112312341234"};
+    constants_actual->sort();
+    constants_expected.sort();
     REQUIRE(constants_expected == *constants_actual);
+    ProcedureExtractor procedureExtractor =
+        ProcedureExtractor(dataModifier, programNode2);
 
     auto procedures_actual =
-        EntityExtractor::extractAllProcedures(programNode2);
-    unordered_set<string> procedures_expected =
-        unordered_set<string>{"procedure2"};
+        static_pointer_cast<EntityResult>(procedureExtractor.extract())
+            ->getResult();
+    procedures_actual->sort();
+
+    list<string> procedures_expected = list<string>{"procedure2"};
+    procedures_expected.sort();
     REQUIRE(constants_expected == *constants_actual);
   }
   SECTION("Test variable extraction in multiple nested stmts") {
@@ -203,58 +236,35 @@ TEST_CASE("Test entity extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode3);
-    auto variables_actual = EntityExtractor::extractAllVariables(programNode3);
-    unordered_set<string> variables_expected = unordered_set<string>{
+
+    VariableExtractor varExtractor =
+        VariableExtractor(dataModifier, programNode3);
+    auto variables_actual =
+        static_pointer_cast<EntityResult>(varExtractor.extract())->getResult();
+    list<string> variables_expected = list<string>{
         "x", "y", "w", "z", "foo", "bar", "baz", "qux", "quux", "haha"};
+    variables_actual->sort();
+    variables_expected.sort();
     REQUIRE(variables_expected == *variables_actual);
 
-    auto constants_actual = EntityExtractor::extractAllConstants(programNode3);
-    unordered_set<string> constants_expected =
-        unordered_set<string>{"1", "5", "3"};
+    ConstantExtractor constExtractor =
+        ConstantExtractor(dataModifier, programNode3);
+    auto constants_actual =
+        static_pointer_cast<EntityResult>(constExtractor.extract())
+            ->getResult();
+    list<string> constants_expected = list<string>{"1", "5", "3"};
+    constants_actual->sort();
+    constants_expected.sort();
     REQUIRE(constants_expected == *constants_actual);
-
+    ProcedureExtractor procedureExtractor =
+        ProcedureExtractor(dataModifier, programNode3);
     auto procedures_actual =
-        EntityExtractor::extractAllProcedures(programNode3);
-    unordered_set<string> procedures_expected =
-        unordered_set<string>{"procedure3"};
+        static_pointer_cast<EntityResult>(procedureExtractor.extract())
+            ->getResult();
+
+    list<string> procedures_expected = list<string>{"procedure3"};
+    procedures_actual->sort();
+    procedures_expected.sort();
     REQUIRE(constants_expected == *constants_actual);
-  }
-  SECTION("Test multiple procedures") {
-    /*
-     * procedure1 {
-     * 1 print x
-     * 2 read y
-     * 3 if (bar == y + 1) then {
-     * 4 print z} else {
-     * 5 read w}
-     * 6 read foo
-     * }
-     */
-    shared_ptr<StmtNode> printNode =
-        make_shared<PrintNode>(make_shared<VariableNode>("x"));
-    shared_ptr<StmtNode> readNode =
-        make_shared<ReadNode>(make_shared<VariableNode>("y"));
-
-    auto rhs1_p4 = make_shared<ExprNode>("+");
-    rhs1_p4->left = make_shared<ExprNode>("y");
-    rhs1_p4->right = make_shared<ExprNode>("1");
-    shared_ptr<CondExprNode> ifCondExpr = make_shared<CondExprNode>(
-        make_shared<RelExprNode>(make_shared<ExprNode>("bar"), "==", rhs1_p4));
-    shared_ptr<StmtNode> printNode2 =
-        make_shared<PrintNode>(make_shared<VariableNode>("z"));
-    shared_ptr<StmtNode> readNode2 =
-        make_shared<ReadNode>(make_shared<VariableNode>("w"));
-    vector<shared_ptr<StmtNode>> ifStmtList = {printNode2};
-    vector<shared_ptr<StmtNode>> elseStmtList = {readNode2};
-    shared_ptr<StmtNode> ifNode =
-        make_shared<IfNode>(ifCondExpr, ifStmtList, elseStmtList);
-
-    shared_ptr<StmtNode> readNode3 =
-        make_shared<ReadNode>(make_shared<VariableNode>("foo"));
-
-    shared_ptr<ProcedureNode> procedureNode1 = make_shared<ProcedureNode>(
-        ProcedureNode("procedure2", {printNode, readNode, ifNode, readNode3}));
   }
 }

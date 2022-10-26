@@ -283,9 +283,9 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/Cachable.h
         src/cache_manager/CacheManager.cpp
         src/cache_manager/CacheManager.h
-        src/parser/constants/ValidatorConstants.cpp 
-        src/parser/constants/ValidatorConstants.h 
-        src/query_builder/constants/CommonConstants.cpp 
+        src/parser/constants/ValidatorConstants.cpp
+        src/parser/constants/ValidatorConstants.h
+        src/query_builder/constants/CommonConstants.cpp
         src/query_builder/constants/CommonConstants.h
         src/design_extractor/save_extractions/save_to_pkb/PKBSaverInterface.cpp
         src/design_extractor/save_extractions/save_to_pkb/PKBSaverInterface.h
@@ -309,7 +309,7 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/save_extractions/save_extracted_patterns/ExtractedWhilePatternSaver.h
         src/design_extractor/save_extractions/save_extracted_relations/ExtractedParentsSaver.cpp
         src/design_extractor/save_extractions/save_extracted_relations/ExtractedParentsSaver.h
-        src/query_evaluator/constants/QueryEvaluatotConstants.cpp 
+        src/query_evaluator/constants/QueryEvaluatotConstants.cpp
         src/query_evaluator/constants/QueryEvaluatotConstants.h
         src/design_extractor/save_extractions/save_extracted_entities/ExtractedVariableSaver.cpp
         src/design_extractor/save_extractions/save_extracted_entities/ExtractedVariableSaver.h
@@ -319,7 +319,26 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/save_extractions/save_extracted_entities/ExtractedProceduresSaver.h
         src/design_extractor/mappers/AffectsMapper.cpp src/design_extractor/mappers/AffectsMapper.h
         src/design_extractor/mappers/CFGMapper.cpp
-        src/design_extractor/mappers/CFGMapper.h src/design_extractor/AbstractDesignExtractor.cpp src/design_extractor/AbstractDesignExtractor.h src/design_extractor/extractors/EntitiesExtractor.cpp src/design_extractor/extractors/EntitiesExtractor.h src/design_extractor/results/ExtractorResult.cpp src/design_extractor/results/ExtractorResult.h src/design_extractor/results/RelationResult.cpp src/design_extractor/results/RelationResult.h src/design_extractor/results/AssignPatternResult.cpp src/design_extractor/results/AssignPatternResult.h)
+        src/design_extractor/mappers/CFGMapper.h
+        src/design_extractor/AbstractDesignExtractor.cpp
+        src/design_extractor/AbstractDesignExtractor.h
+        src/design_extractor/extractors/EntitiesExtractor.cpp
+        src/design_extractor/extractors/EntitiesExtractor.h
+        src/design_extractor/results/ExtractorResult.cpp
+        src/design_extractor/results/ExtractorResult.h
+        src/design_extractor/results/RelationResult.cpp
+        src/design_extractor/results/RelationResult.h
+        src/design_extractor/results/AssignPatternResult.cpp
+        src/design_extractor/results/AssignPatternResult.h
+        src/design_extractor/extractors/VariableExtractor.cpp
+        src/design_extractor/extractors/VariableExtractor.h
+        src/design_extractor/results/EntityResult.cpp
+        src/design_extractor/results/EntityResult.h
+        src/design_extractor/extractors/ConstantExtractor.cpp
+        src/design_extractor/extractors/ConstantExtractor.h
+        src/design_extractor/extractors/ProcedureExtractor.cpp
+        src/design_extractor/extractors/ProcedureExtractor.h)
+
 
 
 
