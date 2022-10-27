@@ -14,10 +14,11 @@
 namespace DE {
 ModifiesSRelationExtractor::ModifiesSRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(dataModifier, programNode) {
+    : ModifiesRelationExtractor(dataModifier, programNode) {
   ancestors = make_shared<vector<string>>();
   output = make_shared<list<vector<string>>>();
-  initProceduresToModifiedVarsMap();
+  ifWhileStmtNoToModifiedVarsMap =
+      make_shared<unordered_map<string, shared_ptr<unordered_set<string>>>>();
   initIfAndWhileStmtNoToModifiedVarsMap();
 }
 
@@ -160,70 +161,7 @@ void ModifiesSRelationExtractor::insertCallsInIfAndWhileForModifiesS() {
       output);
 }
 
-shared_ptr<unordered_set<string>>
-ModifiesSRelationExtractor::getModifiedVariablesFromProcedure(
-    shared_ptr<ProcedureNode> procedureNode) {
-  shared_ptr<unordered_set<string>> outputVarList =
-      make_shared<unordered_set<string>>();
-  queue<vector<shared_ptr<StmtNode>>> queue;
-  queue.push(procedureNode->stmtList);
-  while (!queue.empty()) {
-    auto stmtList = queue.front();
-    queue.pop();
-    for (auto stmtNode : stmtList) {
-      NodeType nodeType = ASTUtils::getNodeType(stmtNode);
-      switch (nodeType) {
-        case AST::IF_NODE: {
-          shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-          vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
-          vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
-          queue.push(ifStmtList);
-          queue.push(elseStmtList);
-          break;
-        }
-        case AST::WHILE_NODE: {
-          shared_ptr<WhileNode> whileNode =
-              dynamic_pointer_cast<WhileNode>(stmtNode);
-          vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
-          queue.push(whileStmtList);
-          break;
-        }
-
-        case AST::ASSIGN_NODE: {
-          shared_ptr<AssignNode> assignNode =
-              dynamic_pointer_cast<AssignNode>(stmtNode);
-          outputVarList->insert(assignNode->variableNode->variable);
-          break;
-        }
-
-        case AST::READ_NODE: {
-          shared_ptr<ReadNode> readNode =
-              dynamic_pointer_cast<ReadNode>(stmtNode);
-          outputVarList->insert(readNode->variableNode->variable);
-          break;
-        }
-        default:
-          break;
-      }
-    }
-  }
-  return outputVarList;
-}
-
-void ModifiesSRelationExtractor::initProceduresToModifiedVarsMap() {
-  proceduresToModifiedVarsMap =
-      make_shared<unordered_map<string, shared_ptr<unordered_set<string>>>>();
-  for (auto procedure : programNode->procedureList) {
-    string procedureName = procedure->procedureName;
-    shared_ptr<unordered_set<string>> modifiedVariables =
-        getModifiedVariablesFromProcedure(procedure);
-    proceduresToModifiedVarsMap->insert({procedureName, modifiedVariables});
-  }
-}
-
 void ModifiesSRelationExtractor::initIfAndWhileStmtNoToModifiedVarsMap() {
-  ifWhileStmtNoToModifiedVarsMap =
-      make_shared<unordered_map<string, shared_ptr<unordered_set<string>>>>();
   auto ifAndWhileNodeList =
       DesignExtractorUtils::extractIfAndWhileNodesFromProcedures(programNode);
   for (auto node : ifAndWhileNodeList) {

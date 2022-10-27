@@ -7,23 +7,20 @@
 #include <set>
 
 #include "AST/CallNode.h"
-#include "design_extractor/AbstractDesignExtractor.h"
+#include "design_extractor/extractors/ModifiesRelationExtractor.h"
+#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
-typedef shared_ptr<unordered_map<string, shared_ptr<unordered_set<string>>>>
-    StrToSetMap;
-class ModifiesSRelationExtractor : public AbstractDesignExtractor {
+
+class ModifiesSRelationExtractor : public ModifiesRelationExtractor {
   void extractorHelper(shared_ptr<ASTNode> node);
   void insertCallsForModifiesS();
   void insertCallsInIfAndWhileForModifiesS();
-  shared_ptr<unordered_set<string>> getModifiedVariablesFromProcedure(
-      shared_ptr<ProcedureNode> procedureNode);
-  void initProceduresToModifiedVarsMap();
+
   void initIfAndWhileStmtNoToModifiedVarsMap();
 
   shared_ptr<vector<string>> ancestors;
   shared_ptr<list<vector<string>>> output;
-  StrToSetMap proceduresToModifiedVarsMap;
   StrToSetMap ifWhileStmtNoToModifiedVarsMap;
 
  public:

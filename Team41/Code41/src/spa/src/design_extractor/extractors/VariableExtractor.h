@@ -9,17 +9,15 @@
 #include "AST/ProgramNode.h"
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/extractors/EntitiesExtractor.h"
+#include "design_extractor/extractors/interfaces/VariableExtractionInterface.h"
 #include "design_extractor/results/ExtractorResult.h"
 #include "pkb/DataModifier.h"
-
 namespace DE {
 
-class VariableExtractor : public EntitiesExtractor {
+class VariableExtractor : public EntitiesExtractor,
+                          public VariableExtractionInterface {
   shared_ptr<unordered_set<string>> extractVariables(
       shared_ptr<StmtNode> stmtNode);
-  unordered_set<string> getVariablesFromExprNode(shared_ptr<ExprNode> exprNode);
-  unordered_set<string> getVariablesFromCondExprNode(
-      shared_ptr<CondExprNode> condExprNode);
 
  public:
   VariableExtractor(shared_ptr<DataModifier> dataModifier,

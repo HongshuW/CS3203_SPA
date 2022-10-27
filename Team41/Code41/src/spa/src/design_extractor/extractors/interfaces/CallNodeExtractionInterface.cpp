@@ -1,15 +1,13 @@
 //
-// Created by Xingchen Lin on 26/10/22.
+// Created by Nafour on 27/10/22.
 //
 
-#include "DesignExtractorUtils.h"
+#include "CallNodeExtractionInterface.h"
 
 namespace DE {
-DesignExtractorUtils::DesignExtractorUtils() = default;
-
 unordered_map<string, vector<shared_ptr<CallNode>>>
-DesignExtractorUtils::extractCallNodesFromProcedures(
-    const shared_ptr<AST::ProgramNode>& rootPtr) {
+CallNodeExtractionInterface::extractCallNodesFromProcedures(
+    const shared_ptr<ProgramNode>& rootPtr) {
   auto mapCallNodesToProcedures =
       unordered_map<string, vector<shared_ptr<CallNode>>>();
   vector<shared_ptr<ProcedureNode>> procedureList = rootPtr->procedureList;
@@ -57,123 +55,7 @@ DesignExtractorUtils::extractCallNodesFromProcedures(
   return mapCallNodesToProcedures;
 }
 
-shared_ptr<unordered_set<string>>
-DesignExtractorUtils::getModifiedVariablesFromProcedure(
-    shared_ptr<ProcedureNode> procedureNode) {
-  shared_ptr<unordered_set<string>> outputVarList =
-      make_shared<unordered_set<string>>();
-  queue<vector<shared_ptr<StmtNode>>> queue;
-  queue.push(procedureNode->stmtList);
-  while (!queue.empty()) {
-    auto stmtList = queue.front();
-    queue.pop();
-    for (auto stmtNode : stmtList) {
-      NodeType nodeType = ASTUtils::getNodeType(stmtNode);
-      switch (nodeType) {
-        case AST::IF_NODE: {
-          shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-          vector<shared_ptr<StmtNode>> ifStmtList = ifNode->ifStmtList;
-          vector<shared_ptr<StmtNode>> elseStmtList = ifNode->elseStmtList;
-          queue.push(ifStmtList);
-          queue.push(elseStmtList);
-          break;
-        }
-        case AST::WHILE_NODE: {
-          shared_ptr<WhileNode> whileNode =
-              dynamic_pointer_cast<WhileNode>(stmtNode);
-          vector<shared_ptr<StmtNode>> whileStmtList = whileNode->stmtList;
-          queue.push(whileStmtList);
-          break;
-        }
-
-        case AST::ASSIGN_NODE: {
-          shared_ptr<AssignNode> assignNode =
-              dynamic_pointer_cast<AssignNode>(stmtNode);
-          outputVarList->insert(assignNode->variableNode->variable);
-          break;
-        }
-
-        case AST::READ_NODE: {
-          shared_ptr<ReadNode> readNode =
-              dynamic_pointer_cast<ReadNode>(stmtNode);
-          outputVarList->insert(readNode->variableNode->variable);
-          break;
-        }
-        default:
-          break;
-      }
-    }
-  }
-  return outputVarList;
-}
-
-void DesignExtractorUtils::extractVariablesFromCallNodesInProceduresToList(
-    const shared_ptr<AST::CallNode>& callNode,
-    StrToSetMap mappedProceduresToVar,
-    unordered_map<std::string, vector<shared_ptr<AST::CallNode>>>
-        mappedCallNodesToProcedures,
-    unordered_set<std::string>& uniqueVarList) {
-  queue<shared_ptr<CallNode>> queue;
-  queue.push(callNode);
-  while (!queue.empty()) {
-    auto callNodeEntry = queue.front();
-    queue.pop();
-    shared_ptr<unordered_set<string>> usedVarList =
-        make_shared<unordered_set<string>>();
-    if (mappedProceduresToVar->count(callNodeEntry->procedureName)) {
-      usedVarList = mappedProceduresToVar->at(callNodeEntry->procedureName);
-    }
-
-    uniqueVarList.insert(usedVarList->begin(), usedVarList->end());
-
-    if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) != 0) {
-      auto otherCallNodes =
-          mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
-      for (const auto& n : otherCallNodes) {
-        queue.push(n);
-      }
-    }
-  }
-}
-
-vector<shared_ptr<StmtNode>>
-DesignExtractorUtils::extractIfAndWhileNodesFromProcedures(
-    const shared_ptr<AST::ProgramNode>& rootPtr) {
-  vector<shared_ptr<StmtNode>> extractedNodes;
-  for (const auto& procedureNode : rootPtr->procedureList) {
-    queue<vector<shared_ptr<StmtNode>>> queue;
-    queue.push(procedureNode->stmtList);
-    while (!queue.empty()) {
-      auto stmtList = queue.front();
-      queue.pop();
-      for (const auto& stmtNode : stmtList) {
-        NodeType nodeType = ASTUtils::getNodeType(stmtNode);
-        switch (nodeType) {
-          case AST::IF_NODE: {
-            shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-            extractedNodes.push_back(ifNode);
-            queue.push(ifNode->ifStmtList);
-            queue.push(ifNode->elseStmtList);
-            break;
-          }
-          case AST::WHILE_NODE: {
-            shared_ptr<WhileNode> whileNode =
-                dynamic_pointer_cast<WhileNode>(stmtNode);
-            extractedNodes.push_back(whileNode);
-            queue.push(whileNode->stmtList);
-            break;
-          }
-          default:
-            break;
-        }
-      }
-    }
-  }
-
-  return extractedNodes;
-}
-
-void DesignExtractorUtils::extractCallStmtRelationshipsToOutput(
+void CallNodeExtractionInterface::extractCallStmtRelationshipsToOutput(
     int stmtNo, const shared_ptr<CallNode>& callNode,
     StrToSetMap mappedProceduresToVars,
     unordered_map<string, vector<shared_ptr<CallNode>>>
@@ -206,10 +88,11 @@ void DesignExtractorUtils::extractCallStmtRelationshipsToOutput(
   }
 }
 
-void DesignExtractorUtils::extractCallStmtRelationshipsWithIfAndWhileToOutput(
-    const shared_ptr<ProgramNode>& rootPtr, StrToSetMap mappedProceduresToVars,
-    StrToSetMap mappedIfAndWhileToVars,
-    const shared_ptr<list<vector<string>>>& output) {
+void CallNodeExtractionInterface::
+    extractCallStmtRelationshipsWithIfAndWhileToOutput(
+        const shared_ptr<ProgramNode>& rootPtr,
+        StrToSetMap mappedProceduresToVars, StrToSetMap mappedIfAndWhileToVars,
+        const shared_ptr<list<vector<string>>>& output) {
   auto ifAndWhileNodeList = extractIfAndWhileNodesFromProcedures(rootPtr);
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
       ASTUtils::getNodePtrToLineNumMap(rootPtr);
@@ -288,14 +171,40 @@ void DesignExtractorUtils::extractCallStmtRelationshipsWithIfAndWhileToOutput(
   }
 }
 
-shared_ptr<ProcCFGMap> DesignExtractorUtils::generateProcCFGMap(
-    shared_ptr<ProgramNode> programNode, shared_ptr<StmtNumbers> stmtNumbers) {
-  shared_ptr<ProcCFGMap> procCFGMap = make_shared<ProcCFGMap>();
-  vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-  for (const shared_ptr<ProcedureNode>& procedure : procedureList) {
-    CFG cfg = CFG(*procedure, stmtNumbers);
-    procCFGMap->insert({procedure, cfg});
+vector<shared_ptr<StmtNode>>
+CallNodeExtractionInterface::extractIfAndWhileNodesFromProcedures(
+    const shared_ptr<ProgramNode>& rootPtr) {
+  vector<shared_ptr<StmtNode>> extractedNodes;
+  for (const auto& procedureNode : rootPtr->procedureList) {
+    queue<vector<shared_ptr<StmtNode>>> queue;
+    queue.push(procedureNode->stmtList);
+    while (!queue.empty()) {
+      auto stmtList = queue.front();
+      queue.pop();
+      for (const auto& stmtNode : stmtList) {
+        NodeType nodeType = ASTUtils::getNodeType(stmtNode);
+        switch (nodeType) {
+          case AST::IF_NODE: {
+            shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
+            extractedNodes.push_back(ifNode);
+            queue.push(ifNode->ifStmtList);
+            queue.push(ifNode->elseStmtList);
+            break;
+          }
+          case AST::WHILE_NODE: {
+            shared_ptr<WhileNode> whileNode =
+                dynamic_pointer_cast<WhileNode>(stmtNode);
+            extractedNodes.push_back(whileNode);
+            queue.push(whileNode->stmtList);
+            break;
+          }
+          default:
+            break;
+        }
+      }
+    }
   }
-  return procCFGMap;
+
+  return extractedNodes;
 }
 }  // namespace DE

@@ -8,7 +8,10 @@
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
 #include "design_extractor/UsesExtractor.h"
+#include "design_extractor/extractors/UsesSRelationExtractor.h"
+#include "design_extractor/results/RelationResult.h"
 #include "pkb/DataModifier.h"
+
 using namespace std;
 using namespace DE;
 
@@ -18,9 +21,10 @@ TEST_CASE("Test Uses_S Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = UsesExtractor::extractUsesS(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            UsesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     REQUIRE(actual->empty());
   }
   SECTION("test non-nested procedure") {
@@ -28,9 +32,10 @@ TEST_CASE("Test Uses_S Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = UsesExtractor::extractUsesS(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            UsesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "x"}, {"3", "y"}};
     std::list<vector<string>>::iterator it;
     REQUIRE(expected.size() == actual->size());
@@ -41,9 +46,10 @@ TEST_CASE("Test Uses_S Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = UsesExtractor::extractUsesS(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            UsesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "x"}, {"3", "bar"}, {"3", "y"},
                                        {"4", "y"}, {"5", "z"},   {"3", "z"}};
     std::list<vector<string>>::iterator it;
@@ -55,9 +61,10 @@ TEST_CASE("Test Uses_S Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = UsesExtractor::extractUsesS(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            UsesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "x"},    {"3", "bar"},  {"3", "y"},    {"3", "z"},   {"3", "baz"},
         {"3", "qux"},  {"3", "quux"}, {"3", "haha"}, {"4", "z"},   {"5", "qux"},
@@ -73,9 +80,10 @@ TEST_CASE("Test Uses_S Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = UsesExtractor::extractUsesS(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            UsesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "x"}, {"2", "dah"}, {"3", "y"}, {"4", "dah"}};
     std::list<vector<string>>::iterator it;
@@ -88,9 +96,10 @@ TEST_CASE("Test Uses_S Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = UsesExtractor::extractUsesS(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            UsesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "x"}, {"2", "y"}, {"2", "z"}, {"2", "a"}, {"2", "b"}, {"3", "z"},
         {"3", "a"}, {"3", "b"}, {"4", "y"}, {"5", "y"}, {"7", "z"}, {"7", "a"},
@@ -105,9 +114,10 @@ TEST_CASE("Test Uses_S Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = UsesExtractor::extractUsesS(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            UsesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "x"},   {"2", "x"},   {"2", "qwerty"}, {"2", "y"},
         {"2", "z"},   {"2", "xyz"}, {"2", "def"},    {"3", "y"},
@@ -125,9 +135,10 @@ TEST_CASE("Test Uses_S Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = UsesExtractor::extractUsesS(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            UsesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "x"},    {"2", "a"},    {"2", "x"},     {"2", "y"},
         {"2", "b"},    {"2", "asdf"}, {"2", "z"},     {"2", "vvv"},
