@@ -20,8 +20,6 @@ namespace DE {
 
 		class NextRelationExtractor : AbstractDesignExtractor {
 		private:
-				shared_ptr<ProgramNode> programNode;
-				StmtNoMap stmtNumbers;
 				FirstLineNoToProcMap firstLineNumToProcMap;
 				StmtNoToProcMap stmtNoToProcMap;
 				ProcCFGMap procCFGMap;

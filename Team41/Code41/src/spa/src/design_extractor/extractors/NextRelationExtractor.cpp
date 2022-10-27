@@ -12,15 +12,13 @@ namespace DE {
 		NextRelationExtractor::NextRelationExtractor(shared_ptr<DataModifier> dataModifier,
 																				 shared_ptr<ProgramNode> programNode)
 						: AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
-			programNode = programNode;
-			stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
-			firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
 			generateProcCFGMap();
 		}
 
 		shared_ptr<ExtractorResult> NextRelationExtractor::extract() {
 			vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
 			shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>();
+			firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
 			for (const auto& procedure : procedureList) {
 				int startNum = firstLineNumToProcMap->at(procedure);
 				CFG cfg = procCFGMap->at(procedure);
