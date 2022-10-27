@@ -358,6 +358,12 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/extractors/FollowsTRelationExtractor.h
         src/design_extractor/extractors/ModifiesSRelationExtractor.cpp
         src/design_extractor/extractors/ModifiesSRelationExtractor.h
+        src/design_extractor/extractors/ParentRelationExtractor.cpp
+        src/design_extractor/extractors/ParentRelationExtractor.h
+        src/design_extractor/utils/ParentExtractorUtils.cpp
+        src/design_extractor/utils/ParentExtractorUtils.h
+        src/design_extractor/extractors/ParentTRelationExtractor.cpp
+        src/design_extractor/extractors/ParentTRelationExtractor.h
         src/design_extractor/extractors/ModifiesPRelationExtractor.cpp
         src/design_extractor/extractors/ModifiesPRelationExtractor.h
         src/design_extractor/extractors/UsesSRelationExtractor.cpp
