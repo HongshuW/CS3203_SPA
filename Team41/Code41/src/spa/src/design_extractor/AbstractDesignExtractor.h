@@ -9,7 +9,7 @@
 #include "pkb/DataModifier.h"
 
 namespace DE {
-		typedef unordered_map<shared_ptr<StmtNode>, int> StmtNumbers;
+typedef unordered_map<shared_ptr<StmtNode>, int> StmtNumbers;
 
 class AbstractDesignExtractor {
  public:

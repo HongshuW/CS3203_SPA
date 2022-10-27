@@ -21,8 +21,8 @@ using namespace std;
 
 namespace DE {
 
-		typedef unordered_map<shared_ptr<ProcedureNode>, CFG> ProcCFGMap;
-		typedef unordered_map<shared_ptr<StmtNode>, int> StmtNumbers;
+typedef unordered_map<shared_ptr<ProcedureNode>, CFG> ProcCFGMap;
+typedef unordered_map<shared_ptr<StmtNode>, int> StmtNumbers;
 
 class DesignExtractorUtils {
  public:
@@ -38,26 +38,25 @@ class DesignExtractorUtils {
           mappedCallNodesToProcedures,
       unordered_set<string>& uniqueVarList);
 
-	static vector<shared_ptr<StmtNode>> extractIfAndWhileNodesFromProcedures(
+  static vector<shared_ptr<StmtNode>> extractIfAndWhileNodesFromProcedures(
       const shared_ptr<ProgramNode>& rootPtr);
 
-	static void extractCallStmtRelationshipsToOutput(
+  static void extractCallStmtRelationshipsToOutput(
       int stmtNo, const shared_ptr<CallNode>& callNode,
       unordered_map<string, unordered_set<string>> mappedProceduresToVars,
       unordered_map<string, vector<shared_ptr<CallNode>>>
           mappedCallNodesToProcedures,
       const shared_ptr<list<vector<string>>>& output);
 
-	static void extractCallStmtRelationshipsWithIfAndWhileToOutput(
+  static void extractCallStmtRelationshipsWithIfAndWhileToOutput(
       const shared_ptr<ProgramNode>& rootPtr,
       unordered_map<string, unordered_set<string>> mappedProceduresToVars,
       unordered_map<string, unordered_set<string>> mappedIfAndWhileToVars,
       const shared_ptr<list<vector<string>>>& output);
 
-	//! For CFG
-	static shared_ptr<ProcCFGMap> generateProcCFGMap(
-					shared_ptr<ProgramNode> programNode,
-					shared_ptr<StmtNumbers> stmtNumbers);
+  //! For CFG
+  static shared_ptr<ProcCFGMap> generateProcCFGMap(
+      shared_ptr<ProgramNode> programNode, shared_ptr<StmtNumbers> stmtNumbers);
 };
 
 }  // namespace DE
