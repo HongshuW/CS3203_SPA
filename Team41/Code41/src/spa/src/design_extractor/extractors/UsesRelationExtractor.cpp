@@ -4,6 +4,8 @@
 
 #include "UsesRelationExtractor.h"
 
+#include "AST/utils/ASTUtils.h"
+
 namespace DE {
 UsesRelationExtractor::UsesRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)

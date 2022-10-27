@@ -1,12 +1,14 @@
 //
 // Created by Nafour on 27/10/22.
 //
-
 #include "UsesSRelationExtractor.h"
+
+#include <queue>
 
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/results/ExtractorResult.h"
 #include "design_extractor/results/RelationResult.h"
+
 namespace DE {
 UsesSRelationExtractor::UsesSRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)

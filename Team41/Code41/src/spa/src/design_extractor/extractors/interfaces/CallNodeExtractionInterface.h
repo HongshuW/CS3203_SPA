@@ -4,14 +4,17 @@
 
 #ifndef SPA_CALLNODEEXTRACTIONINTERFACE_H
 #define SPA_CALLNODEEXTRACTIONINTERFACE_H
+#include <list>
 #include <string>
 #include <unordered_map>
 
 #include "AST/CallNode.h"
 #include "AST/ProgramNode.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
+
+typedef shared_ptr<unordered_map<string, shared_ptr<unordered_set<string>>>>
+    StrToSetMap;
 
 class CallNodeExtractionInterface {
  public:
@@ -32,6 +35,15 @@ class CallNodeExtractionInterface {
       const shared_ptr<ProgramNode>& rootPtr,
       StrToSetMap mappedProceduresToVars, StrToSetMap mappedIfAndWhileToVars,
       const shared_ptr<list<vector<string>>>& output);
+
+  shared_ptr<unordered_set<string>> getModifiedVariablesFromProcedure(
+      shared_ptr<ProcedureNode> procedureNode);
+
+  void extractVariablesFromCallNodesInProceduresToList(
+      const shared_ptr<CallNode>& callNode, StrToSetMap mappedProceduresToVar,
+      unordered_map<string, vector<shared_ptr<CallNode>>>
+          mappedCallNodesToProcedures,
+      unordered_set<string>& uniqueVarList);
 };
 
 }  // namespace DE

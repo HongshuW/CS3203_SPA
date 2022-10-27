@@ -4,8 +4,6 @@
 
 #include "NextRelationExtractor.h"
 
-#include <utility>
-
 namespace DE {
 NextRelationExtractor::NextRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
@@ -19,7 +17,7 @@ shared_ptr<ExtractorResult> NextRelationExtractor::extract() {
   FirstLineNoToProcMap firstLineNumToProcMap =
       ASTUtils::getFirstLineNumToProcMap(programNode);
   shared_ptr<ProcCFGMap> procCFGMap =
-      DesignExtractorUtils::generateProcCFGMap(programNode, stmtNumbers);
+      generateProcCFGMap(programNode, stmtNumbers);
 
   for (const auto& procedure : procedureList) {
     int startNum = firstLineNumToProcMap->at(procedure);

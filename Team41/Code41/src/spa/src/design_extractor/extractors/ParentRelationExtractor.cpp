@@ -7,8 +7,7 @@
 namespace DE {
 ParentRelationExtractor::ParentRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
-}
+    : ParentCommonExtractor(std::move(dataModifier), std::move(programNode)) {}
 
 shared_ptr<ExtractorResult> ParentRelationExtractor::extract() {
   shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>();

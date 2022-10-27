@@ -16,7 +16,7 @@ void ModifiesRelationExtractor::initProceduresToModifiedVarsMap() {
   for (auto procedure : programNode->procedureList) {
     string procedureName = procedure->procedureName;
     shared_ptr<unordered_set<string>> modifiedVariables =
-        DesignExtractorUtils::getModifiedVariablesFromProcedure(procedure);
+        getModifiedVariablesFromProcedure(procedure);
     proceduresToModifiedVarsMap->insert({procedureName, modifiedVariables});
   }
 }

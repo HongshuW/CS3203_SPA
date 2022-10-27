@@ -4,6 +4,7 @@
 
 #include "CallsTRelationExtractor.h"
 
+#include <queue>
 #include <utility>
 
 namespace DE {
@@ -16,9 +17,8 @@ CallsTRelationExtractor::CallsTRelationExtractor(
 shared_ptr<ExtractorResult> CallsTRelationExtractor::extract() {
   shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>();
 
-  DesignExtractorUtils designExtractorUtils = DesignExtractorUtils();
   auto mappedCallNodesToProcedures =
-      designExtractorUtils.extractCallNodesFromProcedures(programNode);
+      extractCallNodesFromProcedures(programNode);
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
       ASTUtils::getNodePtrToLineNumMap(programNode);
   for (auto& it : mappedCallNodesToProcedures) {
