@@ -343,7 +343,7 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/extractors/ConstantExtractor.cpp
         src/design_extractor/extractors/ConstantExtractor.h
         src/design_extractor/extractors/ProcedureExtractor.cpp
-        src/design_extractor/extractors/ProcedureExtractor.h)
+        src/design_extractor/extractors/ProcedureExtractor.h src/design_extractor/extractors/NextRelationExtractor.cpp src/design_extractor/extractors/NextRelationExtractor.h)
 
 
 
