@@ -357,8 +357,29 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/extractors/FollowsTRelationExtractor.cpp
         src/design_extractor/extractors/FollowsTRelationExtractor.h
         src/design_extractor/extractors/ModifiesSRelationExtractor.cpp
-        src/design_extractor/extractors/ModifiesSRelationExtractor.h)
-
+        src/design_extractor/extractors/ModifiesSRelationExtractor.h
+        src/design_extractor/extractors/ParentRelationExtractor.cpp
+        src/design_extractor/extractors/ParentRelationExtractor.h
+        src/design_extractor/utils/ParentExtractorUtils.cpp
+        src/design_extractor/utils/ParentExtractorUtils.h
+        src/design_extractor/extractors/ParentTRelationExtractor.cpp
+        src/design_extractor/extractors/ParentTRelationExtractor.h
+        src/design_extractor/extractors/ModifiesPRelationExtractor.cpp
+        src/design_extractor/extractors/ModifiesPRelationExtractor.h
+        src/design_extractor/extractors/UsesSRelationExtractor.cpp
+        src/design_extractor/extractors/UsesSRelationExtractor.h
+        src/design_extractor/extractors/interfaces/VariableExtractionInterface.cpp
+        src/design_extractor/extractors/interfaces/VariableExtractionInterface.h
+        src/design_extractor/extractors/interfaces/CallNodeExtractionInterface.cpp
+        src/design_extractor/extractors/interfaces/CallNodeExtractionInterface.h
+        src/design_extractor/extractors/UsesPRelationExtractor.cpp
+        src/design_extractor/extractors/UsesPRelationExtractor.h
+        src/design_extractor/extractors/UsesRelationExtractor.cpp
+        src/design_extractor/extractors/UsesRelationExtractor.h
+        src/design_extractor/extractors/ModifiesRelationExtractor.cpp
+        src/design_extractor/extractors/ModifiesRelationExtractor.h
+        src/design_extractor/extractors/AssignPatternExtractor.cpp
+        src/design_extractor/extractors/AssignPatternExtractor.h src/design_extractor/extractors/IfPatternExtractor.cpp src/design_extractor/extractors/IfPatternExtractor.h src/design_extractor/extractors/IfWhilePatternExtractor.cpp src/design_extractor/extractors/IfWhilePatternExtractor.h src/design_extractor/extractors/WhilePatternExtractor.cpp src/design_extractor/extractors/WhilePatternExtractor.h)
 
 
 

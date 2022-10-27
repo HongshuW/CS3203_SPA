@@ -8,7 +8,7 @@
 
 namespace DE {
 
-class ConstantExtractor : EntitiesExtractor {
+class ConstantExtractor : public EntitiesExtractor {
   shared_ptr<unordered_set<string>> extractConstants(
       shared_ptr<StmtNode> stmtNode);
   unordered_set<string> getConstantsFromExprNode(shared_ptr<ExprNode> exprNode);

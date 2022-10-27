@@ -62,51 +62,6 @@ shared_ptr<unordered_set<string>> VariableExtractor::extractVariables(
   return set;
 }
 
-unordered_set<string> VariableExtractor::getVariablesFromCondExprNode(
-    shared_ptr<CondExprNode> condExprNode) {
-  unordered_set<string> ans;
-  if (!condExprNode) return ans;
-  queue<shared_ptr<CondExprNode>> queue;
-  queue.push(condExprNode);
-
-  while (!queue.empty()) {
-    auto curr = queue.front();
-    queue.pop();
-    if (curr->relExprNode) {
-      auto setL = getVariablesFromExprNode(curr->relExprNode->exprNodeLHS);
-      auto setR = getVariablesFromExprNode(curr->relExprNode->exprNodeRHS);
-      ans.insert(setL.begin(), setL.end());
-      ans.insert(setR.begin(), setR.end());
-    }
-    if (curr->condExprLHS) queue.push(curr->condExprLHS);
-    if (curr->condExprRHS) queue.push(curr->condExprRHS);
-  }
-  return ans;
-}
-
-unordered_set<string> VariableExtractor::getVariablesFromExprNode(
-    shared_ptr<ExprNode> exprNode) {
-  unordered_set<string> ans;
-  if (!exprNode) return ans;
-  queue<shared_ptr<ExprNode>> queue;
-  queue.push(exprNode);
-
-  while (!queue.empty()) {
-    auto currNode = queue.front();
-    queue.pop();
-    if (Utils::isValidName(currNode->expr)) {
-      ans.insert(currNode->expr);
-    }
-    if (currNode->left) {
-      queue.push(currNode->left);
-    }
-    if (currNode->right) {
-      queue.push(currNode->right);
-    }
-  }
-  return ans;
-}
-
 shared_ptr<ExtractorResult> VariableExtractor::extract() {
   shared_ptr<unordered_set<string>> output =
       make_shared<unordered_set<string>>();
