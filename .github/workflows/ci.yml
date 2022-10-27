@@ -40,7 +40,10 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         run: cmake $GITHUB_WORKSPACE/Team41/Code41/ -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
-     
+      - name: Build Project on Mac
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: cmake --build . --config $BUILD_TYPE
           
       - name: Run Unit Tests
         working-directory: ${{github.workspace}}
