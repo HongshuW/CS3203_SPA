@@ -26,8 +26,7 @@ shared_ptr<list<vector<string>>> CacheManager::getNextTRelations() {
 shared_ptr<vector<string>> CacheManager::getNextTStatements(int stmtNo) {
   StmtNoArgs stmtNoArgs = StmtNoArgs();
   stmtNoArgs.setStartAndEndStmtNo(stmtNo, WILDCARD_STMTNO);
-  return make_shared<vector<string>>(
-      designExtractor->getNextStarRelations(stmtNoArgs));
+  return designExtractor->getNextStarRelations(stmtNoArgs);
 }
 
 /**
@@ -39,8 +38,7 @@ shared_ptr<vector<string>> CacheManager::getNextTStatements(int stmtNo) {
 shared_ptr<vector<string>> CacheManager::getPreviousTStatements(int stmtNo) {
   StmtNoArgs stmtNoArgs = StmtNoArgs();
   stmtNoArgs.setStartAndEndStmtNo(WILDCARD_STMTNO, stmtNo);
-  return make_shared<vector<string>>(
-      designExtractor->getNextStarRelations(stmtNoArgs));
+  return designExtractor->getNextStarRelations(stmtNoArgs);
 }
 
 /**
@@ -54,7 +52,7 @@ bool CacheManager::getNextTResult(int precedingStatement,
                                   int ensuingStatement) {
   StmtNoArgs stmtNoArgs = StmtNoArgs();
   stmtNoArgs.setStartAndEndStmtNo(precedingStatement, ensuingStatement);
-  return !designExtractor->getNextStarRelations(stmtNoArgs).empty();
+  return !designExtractor->getNextStarRelations(stmtNoArgs)->empty();
 }
 
 shared_ptr<list<vector<string>>> CacheManager::getAffectsRelations() {
