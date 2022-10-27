@@ -94,5 +94,6 @@ jobs:
 
       - name: Check System Tests
         working-directory: ${{github.workspace}}
+        shell: python
         run: | 
             python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py
