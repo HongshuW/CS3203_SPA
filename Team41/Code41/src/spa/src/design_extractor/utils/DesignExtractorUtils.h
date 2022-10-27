@@ -16,11 +16,12 @@
 #include "AST/StmtNode.h"
 #include "AST/utils/ASTUtils.h"
 #include "CFG/CFG.h"
-#include "design_extractor/extractors/ModifiesSRelationExtractor.h"
 
 using namespace std;
 
 namespace DE {
+typedef shared_ptr<unordered_map<string, shared_ptr<unordered_set<string>>>>
+    StrToSetMap;
 
 typedef unordered_map<shared_ptr<ProcedureNode>, CFG> ProcCFGMap;
 typedef unordered_map<shared_ptr<StmtNode>, int> StmtNumbers;
@@ -33,8 +34,7 @@ class DesignExtractorUtils {
   extractCallNodesFromProcedures(const shared_ptr<ProgramNode>& rootPtr);
 
   static void extractVariablesFromCallNodesInProceduresToList(
-      const shared_ptr<CallNode>& callNode,
-      unordered_map<string, unordered_set<string>> mappedProceduresToVar,
+      const shared_ptr<CallNode>& callNode, StrToSetMap mappedProceduresToVar,
       unordered_map<string, vector<shared_ptr<CallNode>>>
           mappedCallNodesToProcedures,
       unordered_set<string>& uniqueVarList);
@@ -53,6 +53,9 @@ class DesignExtractorUtils {
       const shared_ptr<ProgramNode>& rootPtr,
       StrToSetMap mappedProceduresToVars, StrToSetMap mappedIfAndWhileToVars,
       const shared_ptr<list<vector<string>>>& output);
+
+  static shared_ptr<unordered_set<string>> getModifiedVariablesFromProcedure(
+      shared_ptr<ProcedureNode> procedureNode);
 
   //! For CFG
   static shared_ptr<ProcCFGMap> generateProcCFGMap(
