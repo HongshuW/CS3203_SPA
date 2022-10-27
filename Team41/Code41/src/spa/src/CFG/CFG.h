@@ -17,7 +17,6 @@ class CFG {
  public:
   shared_ptr<cfgType> cfg;
   shared_ptr<cfgType> reversedCfg;
-
   explicit CFG(
       ProcedureNode procedureNode,
       shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers);

@@ -15,11 +15,15 @@
 #include "AST/ProgramNode.h"
 #include "AST/StmtNode.h"
 #include "AST/utils/ASTUtils.h"
+#include "CFG/CFG.h"
 #include "design_extractor/extractors/ModifiesSRelationExtractor.h"
 
 using namespace std;
 
 namespace DE {
+
+typedef unordered_map<shared_ptr<ProcedureNode>, CFG> ProcCFGMap;
+typedef unordered_map<shared_ptr<StmtNode>, int> StmtNumbers;
 
 class DesignExtractorUtils {
  public:
@@ -49,6 +53,10 @@ class DesignExtractorUtils {
       const shared_ptr<ProgramNode>& rootPtr,
       StrToSetMap mappedProceduresToVars, StrToSetMap mappedIfAndWhileToVars,
       const shared_ptr<list<vector<string>>>& output);
+
+  //! For CFG
+  static shared_ptr<ProcCFGMap> generateProcCFGMap(
+      shared_ptr<ProgramNode> programNode, shared_ptr<StmtNumbers> stmtNumbers);
 };
 
 }  // namespace DE
