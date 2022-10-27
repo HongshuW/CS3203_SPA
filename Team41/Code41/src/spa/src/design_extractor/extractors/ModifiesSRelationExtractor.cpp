@@ -5,11 +5,9 @@
 #include "ModifiesSRelationExtractor.h"
 
 #include <queue>
-#include <set>
 
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/results/RelationResult.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 ModifiesSRelationExtractor::ModifiesSRelationExtractor(
@@ -142,28 +140,27 @@ void ModifiesSRelationExtractor::extractorHelper(shared_ptr<ASTNode> node) {
 
 void ModifiesSRelationExtractor::insertCallsForModifiesS() {
   auto mappedCallNodesToProcedures =
-      DE::DesignExtractorUtils::extractCallNodesFromProcedures(programNode);
+      extractCallNodesFromProcedures(programNode);
   for (auto pair : mappedCallNodesToProcedures) {
     vector<shared_ptr<CallNode>> listOfCallNodes = pair.second;
     for (auto callNode : listOfCallNodes) {
       int stmtNo = stmtNumbers->at(callNode);
-      DesignExtractorUtils::extractCallStmtRelationshipsToOutput(
-          stmtNo, callNode, proceduresToModifiedVarsMap,
-          mappedCallNodesToProcedures, output);
+      extractCallStmtRelationshipsToOutput(stmtNo, callNode,
+                                           proceduresToModifiedVarsMap,
+                                           mappedCallNodesToProcedures, output);
     }
   }
   insertCallsInIfAndWhileForModifiesS();
 }
 
 void ModifiesSRelationExtractor::insertCallsInIfAndWhileForModifiesS() {
-  DesignExtractorUtils::extractCallStmtRelationshipsWithIfAndWhileToOutput(
+  extractCallStmtRelationshipsWithIfAndWhileToOutput(
       programNode, proceduresToModifiedVarsMap, ifWhileStmtNoToModifiedVarsMap,
       output);
 }
 
 void ModifiesSRelationExtractor::initIfAndWhileStmtNoToModifiedVarsMap() {
-  auto ifAndWhileNodeList =
-      DesignExtractorUtils::extractIfAndWhileNodesFromProcedures(programNode);
+  auto ifAndWhileNodeList = extractIfAndWhileNodesFromProcedures(programNode);
   for (auto node : ifAndWhileNodeList) {
     auto uniqueVarList = make_shared<unordered_set<string>>();
     int stmtNo = stmtNumbers->at(node);

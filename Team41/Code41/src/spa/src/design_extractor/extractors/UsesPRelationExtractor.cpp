@@ -27,7 +27,7 @@ shared_ptr<ExtractorResult> UsesPRelationExtractor::extract() {
         callNodes = mappedCallNodesToProcedures.at(procedureName);
       }
       for (auto node : callNodes) {
-        DesignExtractorUtils::extractVariablesFromCallNodesInProceduresToList(
+        extractVariablesFromCallNodesInProceduresToList(
             node, proceduresToUsedVarsMap, mappedCallNodesToProcedures,
             uniqueVarList);
       }

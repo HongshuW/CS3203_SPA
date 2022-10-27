@@ -5,17 +5,21 @@
 #ifndef SPA_NEXTRELATIONEXTRACTOR_H
 #define SPA_NEXTRELATIONEXTRACTOR_H
 
+#include <utility>
+
+#include "AST/utils/ASTUtils.h"
 #include "CFG/CFG.h"
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/args/StmtNoArgs.h"
+#include "design_extractor/extractors/interfaces/CFGExtractionInterface.h"
 #include "design_extractor/results/RelationResult.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
     FirstLineNoToProcMap;
 
-class NextRelationExtractor : public AbstractDesignExtractor {
+class NextRelationExtractor : public AbstractDesignExtractor,
+                              public CFGExtractionInterface {
  public:
   NextRelationExtractor(shared_ptr<DataModifier> dataModifier,
                         shared_ptr<ProgramNode> programNode);

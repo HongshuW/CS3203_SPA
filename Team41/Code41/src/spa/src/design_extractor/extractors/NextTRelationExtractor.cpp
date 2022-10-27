@@ -15,8 +15,7 @@ NextTRelationExtractor::NextTRelationExtractor(
 }
 
 void NextTRelationExtractor::initialise() {
-  procCFGMap =
-      DesignExtractorUtils::generateProcCFGMap(programNode, stmtNumbers);
+  procCFGMap = generateProcCFGMap(programNode, stmtNumbers);
   stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
 }
 

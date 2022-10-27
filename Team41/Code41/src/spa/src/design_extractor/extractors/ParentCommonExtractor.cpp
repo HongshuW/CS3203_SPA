@@ -2,10 +2,15 @@
 // Created by Xingchen Lin on 27/10/22.
 //
 
-#include "ParentExtractorUtils.h"
+#include "ParentCommonExtractor.h"
 
 namespace DE {
-shared_ptr<map<int, vector<int>>> ParentExtractorUtils::extractParentHashmap(
+ParentCommonExtractor::ParentCommonExtractor(
+    shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
+    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
+}
+
+shared_ptr<map<int, vector<int>>> ParentCommonExtractor::extractParentHashmap(
     shared_ptr<ProgramNode> rootPtr) {
   map<int, vector<int>> parentRelations;
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =

@@ -7,8 +7,7 @@
 namespace DE {
 ParentTRelationExtractor::ParentTRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
-}
+    : ParentCommonExtractor(std::move(dataModifier), std::move(programNode)) {}
 
 void ParentTRelationExtractor::extractParentTDFS(
     const shared_ptr<map<int, vector<int>>>& parentRelations, int key,

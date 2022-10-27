@@ -7,14 +7,13 @@
 
 #include <map>
 
+#include "ParentCommonExtractor.h"
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/results/RelationResult.h"
-#include "design_extractor/utils/ParentExtractorUtils.h"
 
 namespace DE {
 
-class ParentTRelationExtractor : public AbstractDesignExtractor,
-                                 public ParentExtractorUtils {
+class ParentTRelationExtractor : public ParentCommonExtractor {
  private:
   void extractParentTDFS(
       const shared_ptr<map<int, vector<int>>>& parentRelations, int key,

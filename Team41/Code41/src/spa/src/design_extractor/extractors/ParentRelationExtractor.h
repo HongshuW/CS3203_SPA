@@ -7,14 +7,13 @@
 
 #include <map>
 
+#include "ParentCommonExtractor.h"
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/results/RelationResult.h"
-#include "design_extractor/utils/ParentExtractorUtils.h"
 
 namespace DE {
 
-class ParentRelationExtractor : public AbstractDesignExtractor,
-                                public ParentExtractorUtils {
+class ParentRelationExtractor : public ParentCommonExtractor {
  public:
   ParentRelationExtractor(shared_ptr<DataModifier> dataModifier,
                           shared_ptr<ProgramNode> programNode);

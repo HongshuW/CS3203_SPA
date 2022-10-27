@@ -9,12 +9,13 @@
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/extractors/EntitiesExtractor.h"
+#include "design_extractor/extractors/interfaces/CallNodeExtractionInterface.h"
 #include "design_extractor/results/RelationResult.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 
-class CallsTRelationExtractor : public AbstractDesignExtractor {
+class CallsTRelationExtractor : public AbstractDesignExtractor,
+                                public CallNodeExtractionInterface {
  private:
   shared_ptr<list<vector<string>>> extractCallsStar(
       const shared_ptr<ProgramNode>& programNode);

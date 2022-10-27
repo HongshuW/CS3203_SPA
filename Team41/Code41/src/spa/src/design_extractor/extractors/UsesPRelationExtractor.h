@@ -6,7 +6,6 @@
 #define SPA_USESPRELATIONEXTRACTOR_H
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/extractors/UsesRelationExtractor.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 
