@@ -8,7 +8,11 @@
 #include "DEUtils.h"
 #include "Dummies.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
+#include "design_extractor/extractors/AssignPatternExtractor.h"
+#include "design_extractor/extractors/IfPatternExtractor.h"
+#include "design_extractor/extractors/WhilePatternExtractor.h"
+#include "design_extractor/results/AssignPatternResult.h"
+#include "design_extractor/results/RelationResult.h"
 #include "pkb/DataModifier.h"
 using namespace std;
 using namespace DE;
@@ -37,13 +41,19 @@ TEST_CASE("Test pattern extraction") {
         ProcedureNode("procedure1", {printNode_2, readNode_2, assignNode_2}));
     shared_ptr<ProgramNode> programNode2 =
         make_shared<ProgramNode>(ProgramNode({procedureNode2}));
+    shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier =
+        make_shared<DataModifier>(pkbStorage);
 
-    auto actual = PatternExtractor::extractPattern(programNode2);
+    auto actual =
+        static_pointer_cast<AssignPatternResult>(
+            AssignPatternExtractor(dataModifier, programNode2).extract())
+            ->getResult();
 
     vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> expected = {
         pair(pair(3, "x"), assignNode_2)};
-    REQUIRE(actual.size() == expected.size());
-    REQUIRE(TestDE::DEUtils::isSamePattern(actual, expected));
+    REQUIRE(actual->size() == expected.size());
+    REQUIRE(TestDE::DEUtils::isSamePattern(*actual, expected));
   }
 
   SECTION("test singly nested procedure") {
@@ -104,13 +114,20 @@ TEST_CASE("Test pattern extraction") {
     shared_ptr<ProgramNode> programNode3 =
         make_shared<ProgramNode>(ProgramNode({procedureNode3}));
 
-    auto actual = PatternExtractor::extractPattern(programNode3);
+    shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier =
+        make_shared<DataModifier>(pkbStorage);
+
+    auto actual =
+        static_pointer_cast<AssignPatternResult>(
+            AssignPatternExtractor(dataModifier, programNode3).extract())
+            ->getResult();
 
     vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> expected = {
         pair(pair(4, "x"), assignNode_p3), pair(pair(6, "w"), assignNode2_p3),
         pair(pair(7, "y"), assignNode3_p3)};
-    REQUIRE(actual.size() == expected.size());
-    REQUIRE(TestDE::DEUtils::isSamePattern(actual, expected));
+    REQUIRE(actual->size() == expected.size());
+    REQUIRE(TestDE::DEUtils::isSamePattern(*actual, expected));
   }
 
   SECTION("test doubly nested procedure") {
@@ -168,13 +185,33 @@ TEST_CASE("Test pattern extraction") {
     shared_ptr<ProgramNode> programNode5 =
         make_shared<ProgramNode>(ProgramNode({procedureNode5}));
 
-    auto actual = PatternExtractor::extractPattern(programNode5);
+    shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier =
+        make_shared<DataModifier>(pkbStorage);
+
+    auto actual =
+        static_pointer_cast<AssignPatternResult>(
+            AssignPatternExtractor(dataModifier, programNode5).extract())
+            ->getResult();
 
     vector<pair<pair<int, string>, std::shared_ptr<AssignNode>>> expected = {
         pair(pair(1, "x"), assignNode1_p5), pair(pair(3, "x"), assignNode2_p5),
         pair(pair(5, "y"), assignNode3_p5), pair(pair(6, "y"), assignNode4_p5),
         pair(pair(7, "y"), assignNode5_p5)};
-    REQUIRE(actual.size() == expected.size());
-    REQUIRE(TestDE::DEUtils::isSamePattern(actual, expected));
+    REQUIRE(actual->size() == expected.size());
+    REQUIRE(TestDE::DEUtils::isSamePattern(*actual, expected));
+
+    // test if compiles
+    auto resultIf =
+        static_pointer_cast<RelationResult>(
+            IfPatternExtractor(dataModifier, programNode5).extract())
+            ->getResult();
+    auto resultWhile =
+        static_pointer_cast<RelationResult>(
+            WhilePatternExtractor(dataModifier, programNode5).extract())
+            ->getResult();
+    REQUIRE(TestDE::DEUtils::containsSameElementPair(*resultIf, {{"4", "x"}}));
+    REQUIRE(
+        TestDE::DEUtils::containsSameElementPair(*resultWhile, {{"2", "x"}}));
   }
 }
