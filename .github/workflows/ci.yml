@@ -70,4 +70,4 @@ jobs:
         working-directory: ${{github.workspace}}
         shell: bash
         run: |
-            $GITHUB_WORKSPACE/Team41/Tests41/tests/run-system-test.sh
+            $GITHUB_WORKSPACE/Team41/Tests41/run-system-test.sh
