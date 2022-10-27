@@ -19,6 +19,8 @@
 
 using namespace std;
 using namespace DE;
+#include "design_extractor/extractors/FollowsTRelationExtractor.h"
+#include "design_extractor/results/RelationResult.h"
 
 TEST_CASE("Test FollowsStar Extractor") {
   SECTION("test empty procedure") {
@@ -26,9 +28,10 @@ TEST_CASE("Test FollowsStar Extractor") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = FollowsExtractor().extractFollowsStar(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            FollowsTRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     REQUIRE(actual->empty());
   }
 
@@ -37,9 +40,10 @@ TEST_CASE("Test FollowsStar Extractor") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = FollowsExtractor().extractFollowsStar(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            FollowsTRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "2"}, {"1", "3"}, {"2", "3"}};
     std::list<vector<string>>::iterator it;
     REQUIRE(expected.size() == actual->size());
@@ -51,9 +55,10 @@ TEST_CASE("Test FollowsStar Extractor") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = FollowsExtractor().extractFollowsStar(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            FollowsTRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "2"}, {"1", "3"}, {"1", "7"},
                                        {"2", "3"}, {"2", "7"}, {"3", "7"},
                                        {"4", "5"}};
@@ -67,9 +72,10 @@ TEST_CASE("Test FollowsStar Extractor") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = FollowsExtractor().extractFollowsStar(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            FollowsTRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "2"}, {"1", "3"}, {"1", "9"},
                                        {"2", "3"}, {"2", "9"}, {"3", "9"},
                                        {"4", "5"}, {"6", "7"}};
@@ -83,9 +89,10 @@ TEST_CASE("Test FollowsStar Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(6);
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = FollowsExtractor().extractFollowsStar(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            FollowsTRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "2"},  {"1", "3"}, {"2", "3"},  {"4", "5"},  {"4", "6"},
         {"4", "10"}, {"5", "6"}, {"5", "10"}, {"6", "10"}, {"7", "8"}};
@@ -99,9 +106,10 @@ TEST_CASE("Test FollowsStar Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(7);
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = FollowsExtractor().extractFollowsStar(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            FollowsTRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "2"},  {"1", "3"},  {"1", "7"},   {"2", "3"},   {"2", "7"},
         {"3", "7"},  {"4", "5"},  {"8", "9"},   {"8", "10"},  {"8", "16"},
@@ -116,9 +124,10 @@ TEST_CASE("Test FollowsStar Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(8);
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = FollowsExtractor().extractFollowsStar(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            FollowsTRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "2"},   {"1", "3"},   {"1", "9"},   {"2", "3"},
         {"2", "9"},   {"3", "9"},   {"4", "5"},   {"6", "7"},
@@ -133,9 +142,10 @@ TEST_CASE("Test FollowsStar Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(9);
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
-    auto actual = FollowsExtractor().extractFollowsStar(programNode);
+    auto actual =
+        static_pointer_cast<RelationResult>(
+            FollowsTRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"1", "2"},   {"1", "3"},   {"2", "3"},   {"4", "5"},   {"4", "6"},
         {"4", "10"},  {"5", "6"},   {"5", "10"},  {"6", "10"},  {"7", "8"},

@@ -125,7 +125,7 @@ DesignExtractorUtils::extractIfAndWhileNodesFromProcedures(
 
 void DesignExtractorUtils::extractCallStmtRelationshipsToOutput(
     int stmtNo, const shared_ptr<CallNode>& callNode,
-    unordered_map<string, unordered_set<string>> mappedProceduresToVars,
+    StrToSetMap mappedProceduresToVars,
     unordered_map<string, vector<shared_ptr<CallNode>>>
         mappedCallNodesToProcedures,
     const shared_ptr<list<vector<string>>>& output) {
@@ -134,11 +134,12 @@ void DesignExtractorUtils::extractCallStmtRelationshipsToOutput(
   while (!queue.empty()) {
     auto callNodeEntry = queue.front();
     queue.pop();
-    unordered_set<string> varList;
-    if (mappedProceduresToVars.count(callNodeEntry->procedureName) != 0) {
-      varList = mappedProceduresToVars.at(callNodeEntry->procedureName);
+    shared_ptr<unordered_set<string>> varList =
+        make_shared<unordered_set<string>>();
+    if (mappedProceduresToVars->count(callNodeEntry->procedureName) != 0) {
+      varList = mappedProceduresToVars->at(callNodeEntry->procedureName);
     }
-    for (const auto& var : varList) {
+    for (const auto& var : *varList) {
       vector<string> relationshipCallEntry;
       relationshipCallEntry.push_back(to_string(stmtNo));
       relationshipCallEntry.push_back(var);
@@ -156,9 +157,8 @@ void DesignExtractorUtils::extractCallStmtRelationshipsToOutput(
 }
 
 void DesignExtractorUtils::extractCallStmtRelationshipsWithIfAndWhileToOutput(
-    const shared_ptr<ProgramNode>& rootPtr,
-    unordered_map<string, unordered_set<string>> mappedProceduresToVars,
-    unordered_map<string, unordered_set<string>> mappedIfAndWhileToVars,
+    const shared_ptr<ProgramNode>& rootPtr, StrToSetMap mappedProceduresToVars,
+    StrToSetMap mappedIfAndWhileToVars,
     const shared_ptr<list<vector<string>>>& output) {
   auto ifAndWhileNodeList = extractIfAndWhileNodesFromProcedures(rootPtr);
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
@@ -179,16 +179,18 @@ void DesignExtractorUtils::extractCallStmtRelationshipsWithIfAndWhileToOutput(
         case AST::CALL_NODE: {
           shared_ptr<CallNode> callNode =
               dynamic_pointer_cast<CallNode>(nodeEntry);
-          unordered_set<string> varList;
-          if (mappedProceduresToVars.count(callNode->procedureName) != 0) {
-            varList = mappedProceduresToVars.at(callNode->procedureName);
+          shared_ptr<unordered_set<string>> varList =
+              make_shared<unordered_set<string>>();
+          if (mappedProceduresToVars->count(callNode->procedureName) != 0) {
+            varList = mappedProceduresToVars->at(callNode->procedureName);
           }
-          unordered_set<string> usedVarList;
-          if (mappedIfAndWhileToVars.count(to_string(stmtNo)) != 0) {
-            usedVarList = mappedIfAndWhileToVars.at(to_string(stmtNo));
+          shared_ptr<unordered_set<string>> usedVarList =
+              make_shared<unordered_set<string>>();
+          if (mappedIfAndWhileToVars->count(to_string(stmtNo)) != 0) {
+            usedVarList = mappedIfAndWhileToVars->at(to_string(stmtNo));
           }
-          for (const auto& var : varList) {
-            if (usedVarList.count(var) == 0) {
+          for (const auto& var : *varList) {
+            if (usedVarList->count(var) == 0) {
               uniqueVarList.insert(var);
             }
           }

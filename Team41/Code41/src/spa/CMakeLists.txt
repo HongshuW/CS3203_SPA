@@ -343,7 +343,21 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/extractors/ConstantExtractor.cpp
         src/design_extractor/extractors/ConstantExtractor.h
         src/design_extractor/extractors/ProcedureExtractor.cpp
-        src/design_extractor/extractors/ProcedureExtractor.h src/design_extractor/extractors/NextRelationExtractor.cpp src/design_extractor/extractors/NextRelationExtractor.h src/design_extractor/extractors/NextTRelationExtractor.cpp src/design_extractor/extractors/NextTRelationExtractor.h src/design_extractor/QueryTimeDesignExtractor.cpp src/design_extractor/QueryTimeDesignExtractor.h src/design_extractor/results/QueryTimeResult.cpp src/design_extractor/results/QueryTimeResult.h)
+        src/design_extractor/extractors/ProcedureExtractor.h
+        src/design_extractor/extractors/NextRelationExtractor.cpp
+        src/design_extractor/extractors/NextRelationExtractor.h
+        src/design_extractor/extractors/NextTRelationExtractor.cpp
+        src/design_extractor/extractors/NextTRelationExtractor.h
+        src/design_extractor/QueryTimeDesignExtractor.cpp
+        src/design_extractor/QueryTimeDesignExtractor.h
+        src/design_extractor/results/QueryTimeResult.cpp
+        src/design_extractor/results/QueryTimeResult.h
+        src/design_extractor/extractors/FollowsRelationExtractor.cpp
+        src/design_extractor/extractors/FollowsRelationExtractor.h
+        src/design_extractor/extractors/FollowsTRelationExtractor.cpp
+        src/design_extractor/extractors/FollowsTRelationExtractor.h
+        src/design_extractor/extractors/ModifiesSRelationExtractor.cpp
+        src/design_extractor/extractors/ModifiesSRelationExtractor.h)
 
 
 
