@@ -6,19 +6,19 @@
 
 #include <utility>
 
-#include "../../AST/utils/ASTUtils.h"
-
 namespace DE {
 		NextRelationExtractor::NextRelationExtractor(shared_ptr<DataModifier> dataModifier,
 																				 shared_ptr<ProgramNode> programNode)
 						: AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
-			generateProcCFGMap();
 		}
 
 		shared_ptr<ExtractorResult> NextRelationExtractor::extract() {
 			vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
 			shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>();
-			firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
+
+			FirstLineNoToProcMap firstLineNumToProcMap = ASTUtils::getFirstLineNumToProcMap(programNode);
+			shared_ptr<ProcCFGMap> procCFGMap = DesignExtractorUtils::generateProcCFGMap(programNode, stmtNumbers);
+
 			for (const auto& procedure : procedureList) {
 				int startNum = firstLineNumToProcMap->at(procedure);
 				CFG cfg = procCFGMap->at(procedure);
@@ -42,15 +42,6 @@ namespace DE {
 							static_pointer_cast<RelationResult>(result);
 			for (const auto& entry : *nextResult->getResult()) {
 				dataModifier->saveNext(entry);
-			}
-		}
-
-		void NextRelationExtractor::generateProcCFGMap() {
-			procCFGMap = make_shared<unordered_map<shared_ptr<ProcedureNode>, CFG>>();
-			vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-			for (const shared_ptr<ProcedureNode>& procedure : procedureList) {
-				CFG cfg = CFG(*procedure, stmtNumbers);
-				procCFGMap->insert({procedure, cfg});
 			}
 		}
 

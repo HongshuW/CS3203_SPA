@@ -9,23 +9,13 @@
 #include "CFG/CFG.h"
 #include "design_extractor/args/StmtNoArgs.h"
 #include "design_extractor/results/RelationResult.h"
+#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
-		typedef shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> StmtNoMap;
 		typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
 						FirstLineNoToProcMap;
-		typedef shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
-						StmtNoToProcMap;
-		typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, CFG>> ProcCFGMap;
 
 		class NextRelationExtractor : AbstractDesignExtractor {
-		private:
-				FirstLineNoToProcMap firstLineNumToProcMap;
-				StmtNoToProcMap stmtNoToProcMap;
-				ProcCFGMap procCFGMap;
-
-				void generateProcCFGMap();
-
 		public:
 				NextRelationExtractor(shared_ptr<DataModifier> dataModifier,
 				shared_ptr<ProgramNode> programNode);
