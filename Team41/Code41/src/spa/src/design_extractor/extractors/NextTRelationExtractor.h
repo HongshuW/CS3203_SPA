@@ -17,7 +17,7 @@ typedef unordered_map<int, shared_ptr<ProcedureNode>> StmtNoToProcMap;
 
 namespace DE {
 
-class NextTRelationExtractor : QueryTimeDesignExtractor {
+class NextTRelationExtractor : public QueryTimeDesignExtractor {
  private:
   shared_ptr<StmtNoToProcMap> stmtNoToProcMap;
   shared_ptr<ProcCFGMap> procCFGMap;

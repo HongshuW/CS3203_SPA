@@ -15,7 +15,7 @@ namespace DE {
 typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
     FirstLineNoToProcMap;
 
-class NextRelationExtractor : AbstractDesignExtractor {
+class NextRelationExtractor : public AbstractDesignExtractor {
  public:
   NextRelationExtractor(shared_ptr<DataModifier> dataModifier,
                         shared_ptr<ProgramNode> programNode);
