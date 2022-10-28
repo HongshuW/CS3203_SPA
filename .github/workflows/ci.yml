@@ -100,8 +100,9 @@ jobs:
             echo "::set-output name=status::$output"
         id: check
         
-      - name: Abort If System Tests Fail
-        if: steps.check.outputs.status == 'fail'
-        run: |
-          echo ${{ steps.check.outputs.status }}
-          exit 1
+      - name: Evaulate System Tests Check
+        if: ${{steps.check.outputs.status == 'fail'}}
+        uses: actions/github-script@v3
+        with:
+         script: |
+             core.setFailed('Some system tests failed to pass.')
