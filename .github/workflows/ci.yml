@@ -101,8 +101,8 @@ jobs:
         id: check
         
       - name: Evaulate System Tests Check
-        if: ${{steps.check.outputs.status == 'fail'}}
+        if: ${{steps.check.outputs.status != "pass"}}
         uses: actions/github-script@v3
         with:
          script: |
-             core.setFailed('Some system tests failed to pass.')
+            core.setFailed('Some system tests failed to pass.')
