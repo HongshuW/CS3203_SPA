@@ -4,9 +4,11 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 path_arg = sys.argv[1]
-print(path_arg)
 m2path = path_arg + '/Team41/Tests41/milestone-2/milestone-2-out'
 m1path = path_arg + '/Team41/Tests41/milestone-1/m1-out'
+
+env_file = os.getenv('GITHUB_ENV')
+
 if (os.path.exists(m2path)):
     m2AllPass = True
     m1AllPass = True
@@ -34,9 +36,11 @@ if (os.path.exists(m2path)):
     #                     m1AllPass = False
 
     if m2AllPass == False:
-        print("fail")
+        with open(env_file, "a") as myfile:
+            myfile.write("check_status=fail\n")
     else:
-        print("pass")
+        with open(env_file, "a") as myfile:
+            myfile.write("check_status=pass\n")
 else:
     print("directory does not exist")
     print(m2path)

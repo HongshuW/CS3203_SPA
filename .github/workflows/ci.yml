@@ -94,10 +94,8 @@ jobs:
     
       - name: Run System Tests Check
         working-directory: ${{github.workspace}}
-        run: |
-            echo 'check_status<<EOF' >> $GITHUB_ENV
-            python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE >> $GITHUB_ENV
-            echo 'EOF' >> $GITHUB_ENV
+        run: python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE
+           
     
       - name: Evaulate System Tests Check
         run: |
