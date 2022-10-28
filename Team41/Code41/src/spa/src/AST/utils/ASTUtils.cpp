@@ -172,6 +172,21 @@ int ASTUtils::getNodePtrToLineNoMapHelper(
   return curr_line_no;
 }
 
+shared_ptr<unordered_map<int, shared_ptr<StmtNode>>>
+		ASTUtils::getLineNumToNodePtrMap(shared_ptr<ProgramNode> root) {
+			shared_ptr<unordered_map<int, shared_ptr<StmtNode>>> output =
+							make_shared<unordered_map<int, shared_ptr<StmtNode>>>(
+											unordered_map<int, shared_ptr<StmtNode>>());
+			unordered_map<shared_ptr<StmtNode>, int> nodePtrToLineNumMap =
+							*ASTUtils::getNodePtrToLineNumMap(root);
+			for (auto& pair : nodePtrToLineNumMap) {
+				shared_ptr<StmtNode> nodePtr = pair.first;
+				int lineNum = pair.second;
+				output->insert({lineNum, nodePtr});
+			}
+			return output;
+		}
+
 shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
 ASTUtils::getLineNumToProcMap(shared_ptr<ProgramNode> root) {
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> mapping =
