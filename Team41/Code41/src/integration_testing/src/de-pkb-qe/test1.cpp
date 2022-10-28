@@ -6,6 +6,7 @@
 #include "../../../unit_testing/src/query_evaluator/QETestUtils.h"
 #include "catch.hpp"
 #include "design_extractor/DesignExtractor.h"
+#include "design_extractor/DesignExtractorManager.h"
 #include "pkb/DataRetriever.h"
 #include "pkb/PKBStorage.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesSClause.h"
@@ -17,18 +18,18 @@ TEST_CASE("Test de-pkb-qe integration") {
   const vector<string> TRUE_RESULT = {"TRUE"};
   const vector<string> EMPTY_RESULT = {};
   const int PROGRAM_NODE_IDX_OFFSET = 1;
-  shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
-  shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-  shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
-  shared_ptr<QE::QueryEvaluator> queryEvaluator =
-      make_shared<QE::QueryEvaluator>(dataRetriever);
 
   SECTION("variable v; select v from procedure 2") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(2 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("v");
 
@@ -41,12 +42,18 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"x", "y"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION("variable v; select Boolean from procedure 2: true result") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(2 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("v");
 
@@ -59,14 +66,20 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"TRUE"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION(
       "variable v; select Boolean such that Modifies(2, 'x') from procedure 2: "
       "false result") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(2 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("v");
 
@@ -80,12 +93,18 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"FALSE"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION("variable v; select <v, v> from procedure 2") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(2 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("v");
 
@@ -99,12 +118,18 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"x x", "y y"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION("print pr; select pr with pr.varName = 'x'; from procedure 3") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("pr");
 
@@ -119,13 +144,19 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"1"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION(
       "print pr; select pr.varName such that Uses(pr, 'x'); from procedure 3") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("pr");
 
@@ -139,14 +170,20 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"x"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION(
       "print pr; read rd; select <rd, pr.varName> such that Uses(pr, 'x') and "
       "Modifies(rd, _); from procedure 3") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -166,14 +203,20 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"2 x", "6 x", "7 x"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION(
       "print pr; read rd; variable v; select <rd, pr.varName, v> such that "
       "Uses(pr, _) and Modifies(rd, 'foo'); from procedure 3") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -199,12 +242,18 @@ TEST_CASE("Test de-pkb-qe integration") {
                                "7 z bar", "7 z z",   "7 z w",   "7 z foo"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION("print pr; select pr with pr.varname == 'x'; from procedure 3") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("pr");
 
@@ -219,13 +268,19 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"1"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION(
       "print pr; select pr.varname with pr.varname == 'x'; from procedure 3") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("pr");
 
@@ -240,15 +295,21 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"x"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   // test such that + with
   SECTION(
       "variable v; print pr; if ifs; Select pr with v.varname = pr.varname and "
       "parent*(ifs, pr); from procedure 4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("v");
     Synonym syn2 = Synonym("pr");
@@ -268,14 +329,20 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"4", "7"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION(
       "variable v; print pr; if ifs; Select ifs with v.varname = pr.varname "
       "and parent(ifs, pr); from procedure 4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("v");
     Synonym syn2 = Synonym("pr");
@@ -295,15 +362,21 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"3"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   // test with clause with constant value
   SECTION(
       "constant c; stmt s;  Select s with c.value = s.stmt# ; from procedure "
       "4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("c");
     Synonym syn2 = Synonym("s");
@@ -320,15 +393,21 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"3", "1", "5"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   // test with clause + such that clause with constant value
   SECTION(
       "constant c; stmt s;  Select s with c.value = s.stmt# and such that "
       "parent(s, 4); from procedure 4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("c");
     Synonym syn2 = Synonym("s");
@@ -346,13 +425,19 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"3"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION(
       "print pr; select pr.varName such that Next(pr, 2); from procedure 3") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("pr");
 
@@ -366,12 +451,18 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"x"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION("if ifs; Select ifs pattern('bar',_, _ ) from procedure 3") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(3 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("ifs");
 
@@ -385,12 +476,18 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"3"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION("while w; Select w pattern('qux',_, ) from procedure 4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("w");
 
@@ -404,12 +501,18 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"5"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
   SECTION("stmt s; select s such that Follows(1, s) from procedure 4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("s");
 
@@ -424,11 +527,16 @@ TEST_CASE("Test de-pkb-qe integration") {
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("stmt s; select s such that Follows*(s, 2) from procedure 4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("s");
 
@@ -445,11 +553,16 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "variable v; select v such that usesP('procedure3', v) and uses(4, v) "
       "from procedure 4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("v");
 
@@ -466,11 +579,16 @@ TEST_CASE("Test de-pkb-qe integration") {
   }
   SECTION(
       "procedure p; select p such that modifiesP(p, 'baz')  from procedure 4") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(4 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("p");
 
@@ -486,11 +604,16 @@ TEST_CASE("Test de-pkb-qe integration") {
   }
   SECTION(
       "procedure p, p1; select p such that calls(p, _)  from procedure 11") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(11 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("p");
 
@@ -506,11 +629,16 @@ TEST_CASE("Test de-pkb-qe integration") {
   }
   SECTION(
       "procedure p, p1; select p such that calls*(p, _)  from procedure 11") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(11 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("p");
 
@@ -525,11 +653,16 @@ TEST_CASE("Test de-pkb-qe integration") {
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("stmt s; select s such that next(1, s)  from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractor> designExtractor =
-        make_shared<DE::DesignExtractor>(dataModifier, pNode);
-    designExtractor->run();
+    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+    designExtractorManager->run();
 
     Synonym syn1 = Synonym("s");
 
@@ -543,7 +676,14 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {"2"};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+
+  //! TODO need to change cache manager
   SECTION("stmt s; select s such that next*(1, s)  from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -566,6 +706,11 @@ TEST_CASE("Test de-pkb-qe integration") {
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("stmt s; select s such that affect(1, s)  from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -588,6 +733,11 @@ TEST_CASE("Test de-pkb-qe integration") {
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("stmt s; select s such that affect*(1, s)  from procedure 15") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -610,6 +760,11 @@ TEST_CASE("Test de-pkb-qe integration") {
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("assign a; select a pattern a('x', '0')  from procedure 15") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -635,6 +790,11 @@ TEST_CASE("Test de-pkb-qe integration") {
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("assign a; select boolean pattern a('x', '0')  from procedure 15") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -662,6 +822,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "assign a; select boolean pattern a('x', '0') and with 1 == 2  from "
       "procedure 15") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -689,6 +854,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   }
   SECTION(
       "print pr; select boolean  with pr.varname = 'x'  from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -712,6 +882,11 @@ TEST_CASE("Test de-pkb-qe integration") {
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("print pr; select pr.varname from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -735,6 +910,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "print pr; read rd; select pr.varname with rd.varname == adda from "
       "procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -762,6 +942,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "print pr; read rd; select pr.varname with rd.varname == adda and "
       "rd.stmt# == 6 from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -790,6 +975,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "print pr; read rd; select pr.varname with rd.varname == adda and "
       "rd.stmt# == 6 from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -818,6 +1008,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "print pr; read rd; select pr.varname with rd.varname == pr.varname from "
       "procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -845,6 +1040,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "print pr; read rd; select pr.varname with 'adda' == pr.varname from "
       "procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -872,6 +1072,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "print pr; read rd; select pr.varname with adda = adda from procedure "
       "12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -897,6 +1102,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   }
   SECTION(
       "print pr; read rd; select pr.stmt# with adda = adda from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -921,6 +1131,11 @@ TEST_CASE("Test de-pkb-qe integration") {
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
   SECTION("print pr; read rd; select pr.stmt#  from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -946,6 +1161,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION(
       "procedure p; select p.procname with p.procname = 'procedure2' from "
       "procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =
@@ -970,6 +1190,11 @@ TEST_CASE("Test de-pkb-qe integration") {
   }
   SECTION(
       "call cl; select cl with cl.procname = 'procedure4' from procedure 12") {
+    shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+    shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+    shared_ptr<QE::QueryEvaluator> queryEvaluator =
+        make_shared<QE::QueryEvaluator>(dataRetriever);
     auto pNode =
         TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
     shared_ptr<DE::DesignExtractor> designExtractor =

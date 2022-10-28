@@ -50,7 +50,7 @@ void ParentTRelationExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<RelationResult> parentTResult =
       static_pointer_cast<RelationResult>(result);
   for (const auto& entry : *parentTResult->getResult()) {
-    dataModifier->saveParent(entry);
+    dataModifier->saveParentT(entry);
   }
 }
 }  // namespace DE
