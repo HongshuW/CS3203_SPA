@@ -94,10 +94,10 @@ jobs:
     
       - name: Run System Tests Check
         working-directory: ${{github.workspace}}
-        id: check
-        run: echo "check_status=$(python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE)" >> $GITHUB_OUTPUT
+        run: |
+            echo "check_status=$(python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE)" >> $GITHUB_ENV
     
     
       - name: Evaulate System Tests Check
         run: |
-            if [[ ${{ steps.check.outputs.check_status }} == fail ]]; then exit 0; else exit 1; fi
+            if [[ ${{ env.check_status }} == fail ]]; then exit 0; else exit 1; fi
