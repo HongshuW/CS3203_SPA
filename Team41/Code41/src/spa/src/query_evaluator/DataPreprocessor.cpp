@@ -251,6 +251,7 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
 
       this->filterTableByColValueEquality(table,
                                           {FIRST_COL_IDX, SECOND_COL_IDX});
+      break;
     }
     case RefType::UNDERSCORE:
       break;
@@ -263,6 +264,7 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
       if (int1 != int2) break;
       this->filterTableByColValueEquality(table,
                                           {FIRST_COL_IDX, SECOND_COL_IDX});
+      break;
     }
     case RefType::IDENT:
       Ident ident2 = get<Ident>(ref2);
@@ -273,6 +275,7 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
       if (!(ident1 == ident2)) break;
       this->filterTableByColValueEquality(table,
                                           {FIRST_COL_IDX, SECOND_COL_IDX});
+      break;
   }
   dropUnusedColumns(table);
 }
