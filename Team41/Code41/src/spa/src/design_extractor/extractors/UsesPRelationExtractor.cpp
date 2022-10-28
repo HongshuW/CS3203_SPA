@@ -43,5 +43,11 @@ shared_ptr<ExtractorResult> UsesPRelationExtractor::extract() {
   return make_shared<RelationResult>(output);
 }
 
-void UsesPRelationExtractor::save(shared_ptr<ExtractorResult> result) {}
+void UsesPRelationExtractor::save(shared_ptr<ExtractorResult> result) {
+  shared_ptr<RelationResult> usesPResult =
+      static_pointer_cast<RelationResult>(result);
+  for (const auto& entry : *usesPResult->getResult()) {
+    dataModifier->saveUsesP(entry);
+  }
+}
 }  // namespace DE

@@ -377,7 +377,7 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/extractors/ModifiesRelationExtractor.cpp
         src/design_extractor/extractors/ModifiesRelationExtractor.h
         src/design_extractor/extractors/AssignPatternExtractor.cpp
-        src/design_extractor/extractors/AssignPatternExtractor.h src/design_extractor/extractors/IfPatternExtractor.cpp src/design_extractor/extractors/IfPatternExtractor.h src/design_extractor/extractors/IfWhilePatternExtractor.cpp src/design_extractor/extractors/IfWhilePatternExtractor.h src/design_extractor/extractors/WhilePatternExtractor.cpp src/design_extractor/extractors/WhilePatternExtractor.h src/design_extractor/extractors/interfaces/CFGExtractionInterface.cpp src/design_extractor/extractors/interfaces/CFGExtractionInterface.h)
+        src/design_extractor/extractors/AssignPatternExtractor.h src/design_extractor/extractors/IfPatternExtractor.cpp src/design_extractor/extractors/IfPatternExtractor.h src/design_extractor/extractors/IfWhilePatternExtractor.cpp src/design_extractor/extractors/IfWhilePatternExtractor.h src/design_extractor/extractors/WhilePatternExtractor.cpp src/design_extractor/extractors/WhilePatternExtractor.h src/design_extractor/extractors/interfaces/CFGExtractionInterface.cpp src/design_extractor/extractors/interfaces/CFGExtractionInterface.h src/design_extractor/DesignExtractorManager.cpp src/design_extractor/DesignExtractorManager.h src/design_extractor/DesignExtractorRetriever.cpp src/design_extractor/DesignExtractorRetriever.h)
 
 
 

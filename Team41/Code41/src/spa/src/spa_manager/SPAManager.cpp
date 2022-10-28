@@ -11,11 +11,16 @@ void SPAManager::parse(string& filename) {
   try {
     ASTBuilder astBuilder = ASTBuilder();
     shared_ptr<ProgramNode> programNode = astBuilder.buildAST(filename);
+
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
+    DesignExtractorManager designExtractorManager =
+        DesignExtractorManager(dataModifier, programNode);
+    designExtractorManager.run();
+
+    //! TODO: replace DesignExtractor with DesignExtractorRetriever
     DesignExtractor designExtractor =
         DesignExtractor(dataModifier, programNode);
-    designExtractor.run();
     cacheManager = make_shared<CacheManager>(
         CacheManager(make_shared<DesignExtractor>(designExtractor)));
   } catch (const SPValidationException& e) {
