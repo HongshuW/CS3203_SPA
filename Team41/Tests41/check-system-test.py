@@ -1,9 +1,12 @@
 import os
+import sys
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-m2path = './milestone-2/milestone-2-out'
-m1path = './milestone-1/m1-out'
+path_arg = sys.argv[1]
+print(path_arg)
+m2path = path_arg + '/Team41/Tests41/milestone-2/milestone-2-out'
+m1path = path_arg + '/Team41/Tests41/milestone-1/m1-out'
 if (os.path.exists(m2path) and os.path.exists(m1path)):
     m2AllPass = True
     m1AllPass = True
@@ -37,5 +40,7 @@ if (os.path.exists(m2path) and os.path.exists(m1path)):
         print("pass")
 else:
     print("directory does not exist")
+    print(m1path)
+    print(m2path)
                 
     
