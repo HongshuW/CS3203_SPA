@@ -91,17 +91,13 @@ jobs:
 
       - name: Install Python dependencies
         run: python -m pip install --upgrade pip requests
-
+    
       - name: Run System Tests Check
-        working-directory: ${{github.workspace}}
-        run: | 
-            output=$(python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE)
-            echo "::set-output name=status::$output"
-        id: check
-        
+         working-directory: ${{github.workspace}}
+         id: check
+         run: echo "check_status=$(python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE)" >> $GITHUB_OUTPUT
+    
+    
       - name: Evaulate System Tests Check
-        if: ${{steps.check.outputs.status == 'fail'}}
-        uses: actions/github-script@v3
-        with:
-         script: |
-             core.setFailed('Some system tests failed to pass.')
+        run: |
+            if [[ ${{ steps.check.outputs.check_status }} == fail ]]; then exit 0; else exit 1; fi
