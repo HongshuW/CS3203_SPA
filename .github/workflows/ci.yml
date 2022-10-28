@@ -97,12 +97,12 @@ jobs:
         shell: bash
         run: | 
             output=$(python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE)
-            echo "{status}={$output}" >> $GITHUB_OUTPUT
+            echo "::set-output name=status::$output"
         id: check
         
       - name: Evaulate System Tests Check
-        if: ${{ output.status }} != 'pass'
+        if: ${{steps.check.outputs.status != 'pass'}}
         uses: actions/github-script@v3
         with:
          script: |
-            core.setFailed('Some system tests failed to pass.')
+             core.setFailed('Some system tests failed to pass.')
