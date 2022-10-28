@@ -94,3 +94,11 @@ jobs:
             else
             echo ${{env.pass_message}}            
             exit 0; fi
+            
+      - name: Archive Milestone 2 System Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: milestone-2-system-test-results
+          path: |
+            $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out
+            
