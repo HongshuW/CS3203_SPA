@@ -64,25 +64,13 @@ jobs:
         shell: bash
         run: |
           cd ../build/src/autotester
-          ./autotester $GITHUB_WORKSPACE/Team41/Code41/tests/Sample_source.txt $GITHUB_WORKSPACE/Team41/Code41/tests/Sample_queries.txt $GITHUB_WORKSPACE/Team41/Code41/tests/out.xml
+          $GITHUB_WORKSPACE/Team41/Tests41/run-system-test.sh
           
       - name: Run System Tests
         working-directory: ${{github.workspace}}
         shell: bash
         run: |
-           cd ../build/src/autotester
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/affects/simple_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/affects/simple_one_affects_clause_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/affects-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/affects/simple_source_2.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/affects/simple_2_one_affects_clause_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/affects-2-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/basic-spa/deep_nesting_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/basic-spa/deep_nesting_multiple_clauses_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/basic-spa-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/calls/multiple_procedures_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/calls/multiple_procedures_one_calls_clause_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/calls-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/multi-clause/deep_nesting_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/multi-clause/deep_nesting_multiple_clauses_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/multiple-clauses-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/next/deep_nesting_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/next/deep_nesting_one_next_clause_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/next-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/next/deep_nesting_source_2.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/next/deep_nesting_2_one_next_clause_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/next-2-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/pattern/container_patterns_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/pattern/container_patterns_one_pattern_clause_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/pattern-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/pattern/stress_patterns_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/pattern/stress_patterns_one_pattern_clause_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/pattern-stress-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/stress/deep_nesting_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/stress/stress_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/stress-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/with/deep_nesting_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/with/deep_nesting_one_with_clause_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/with-analysis.xml
-            ./autotester $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/cache/test_cache_source.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/cache/test_cache_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/milestone-2/milestone-2-out/cache-analysis.xml
+          $GITHUB_WORKSPACE/Team41/Tests41/run-system-test.sh  $GITHUB_WORKSPACE
                    
       - name: Setup Python Version For Checking System Tests
         uses: actions/setup-python@v2
@@ -99,4 +87,10 @@ jobs:
     
       - name: Evaulate System Tests Check
         run: |
-            if [[ ${{ env.check_status }} == fail ]]; then exit 0; else exit 1; fi
+            if [[ ${{ env.check_status }} == fail ]]; 
+            then 
+            echo ${{env.fail_message}}
+            exit 1; 
+            else
+            echo ${{env.pass_message}}            
+            exit 0; fi

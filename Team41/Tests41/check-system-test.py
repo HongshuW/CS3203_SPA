@@ -9,6 +9,8 @@ m1path = path_arg + '/Team41/Tests41/milestone-1/m1-out'
 
 env_file = os.getenv('GITHUB_ENV')
 
+failed_files = []
+
 if (os.path.exists(m2path)):
     m2AllPass = True
     m1AllPass = True
@@ -22,6 +24,7 @@ if (os.path.exists(m2path)):
             for query in queries:
                 for q_tag in query:
                     if q_tag.tag == "failed":
+                        failed_files.append(os.path.basename(file))
                         m2AllPass = False
 
     # mydirm1 = Path(m1path)
@@ -36,11 +39,20 @@ if (os.path.exists(m2path)):
     #                     m1AllPass = False
 
     if m2AllPass == False:
+        failed_files = set(failed_files)
+        fail_msg = "fail_message=The system tests that failed are: "
+        for f in failed_files:
+            fail_msg+= "--"
+            fail_msg += f
+            fail_msg += "-- "
         with open(env_file, "a") as myfile:
             myfile.write("check_status=fail\n")
+            myfile.write(fail_msg)
     else:
+        msg = "pass_message=All system tests passed!"
         with open(env_file, "a") as myfile:
             myfile.write("check_status=pass\n")
+            myfile.write(msg)
 else:
     print("directory does not exist")
     print(m2path)
