@@ -96,4 +96,4 @@ jobs:
         working-directory: ${{github.workspace}}
         shell: bash
         run: | 
-            python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py
+            python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE
