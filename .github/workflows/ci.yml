@@ -97,11 +97,11 @@ jobs:
         shell: bash
         run: | 
             output=$(python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE)
-            echo "::set-output name=status::$output"
+            echo "::set-output name=status::${output}"
         id: check
         
       - name: Evaulate System Tests Check
-        if: ${{steps.check.outputs.status != 'pass'}}
+        if: ${{steps.check.outputs.status == 'fail'}}
         uses: actions/github-script@v3
         with:
          script: |
