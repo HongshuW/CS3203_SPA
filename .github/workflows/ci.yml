@@ -94,11 +94,9 @@ jobs:
 
       - name: Run System Tests Check
         working-directory: ${{github.workspace}}
-        shell: bash
         run: | 
             output=$(python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE)
-            echo "${output}"
-            echo "::set-output name=status::${output}"
+            echo "::set-output name=status::$output"
         id: check
         
       - name: Evaulate System Tests Check
