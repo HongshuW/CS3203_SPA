@@ -100,7 +100,7 @@ jobs:
             echo "::set-output name=status::$output"
         id: check
         
-     - name: Abort If System Tests Fail
+      - name: Abort If System Tests Fail
         if: steps.check.outputs.status == 'fail'
         run: |
           echo ${{ steps.check.outputs.status }}
