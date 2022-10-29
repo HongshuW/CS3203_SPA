@@ -11,6 +11,8 @@ AffectsRelationExtractor::AffectsRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
     : QueryTimeDesignExtractor(std::move(dataModifier),
                                std::move(programNode)) {
+  offset = 0;
+  currCFG = nullptr;
   initialize();
 }
 
@@ -32,9 +34,7 @@ void AffectsRelationExtractor::initialize() {
 }
 
 //! DFS the CFG nodes
-void AffectsRelationExtractor::DFS(int curr, CFG cfg,
-                                   shared_ptr<vector<int>> visitCount,
-                                   int offset,
+void AffectsRelationExtractor::DFS(int curr, shared_ptr<vector<int>> visitCount,
                                    unordered_map<string, int> lastModifiedMap) {
   int currNode = curr - offset;
   if (visitCount->at(currNode) >= 2) return;
@@ -48,7 +48,7 @@ void AffectsRelationExtractor::DFS(int curr, CFG cfg,
         static_pointer_cast<AssignNode>(nodePtr);
     unordered_set<string> usedVariables =
         getVariablesFromExprNode(assignNode->expressionNode);
-    for (auto variable : usedVariables) {
+    for (const auto& variable : usedVariables) {
       if (!lastModifiedMap.count(variable)) continue;
       //! Make pair and insert to affectsTable
       vector<string> affectRelation = {to_string(lastModifiedMap.at(variable)),
@@ -74,9 +74,9 @@ void AffectsRelationExtractor::DFS(int curr, CFG cfg,
     }
   }
 
-  unordered_set<int> children = cfg.cfg->find(curr)->second;
+  unordered_set<int> children = currCFG->cfg->find(curr)->second;
   for (auto child : children) {
-    DFS(child, cfg, visitCount, offset, lastModifiedMap);
+    DFS(child, visitCount, lastModifiedMap);
     visitCount->at(child - offset)--;
   }
 }
@@ -91,12 +91,13 @@ shared_ptr<ExtractorResult> AffectsRelationExtractor::extractAllRelations() {
       ASTUtils::getFirstLineNumToProcMap(programNode);
   for (const shared_ptr<ProcedureNode>& procedure : procedureList) {
     int currLineNumber = firstLineNumToProcMap->at(procedure);
-    CFG currCFG = procCFGMap->at(procedure);
-    int visitedSize = currCFG.cfg->size();
+    CFG cfg = procCFGMap->at(procedure);
+    int visitedSize = cfg.cfg->size();
     shared_ptr<vector<int>> visitCount =
         make_shared<vector<int>>(visitedSize, 0);
-    DFS(currLineNumber, currCFG, visitCount, currLineNumber,
-        unordered_map<string, int>());
+    offset = currLineNumber;
+    currCFG = make_shared<CFG>(cfg);
+    DFS(currLineNumber, visitCount, unordered_map<string, int>());
   }
 
   shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>();
