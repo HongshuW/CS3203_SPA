@@ -61,10 +61,8 @@ TEST_CASE("Test SP-DE Integration") {
     astValidator.validateAST();
 
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, root);
+        AffectsRelationExtractor(root);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();

@@ -15,10 +15,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test No Arguments") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(20);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+        AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsTRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -30,10 +28,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test No Arguments With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsTRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -51,15 +47,13 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test Invalid Arguments") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(20);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
 
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1000);
     args.setEndStmtNo(-13);
 
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<QueryTimeResult>(
                       affectsTRelationExtractor.extract(args))
                       ->getResult();
@@ -71,15 +65,13 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test Both Valid Arguments With Simple Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(20);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
 
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(3);
 
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<QueryTimeResult>(
                       affectsTRelationExtractor.extract(args))
                       ->getResult();
@@ -91,14 +83,12 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test Valid Start Arg Only With Simple Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(20);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
 
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
 
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<QueryTimeResult>(
                       affectsTRelationExtractor.extract(args))
                       ->getResult();
@@ -111,14 +101,12 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test Valid End Arg Only With Simple Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(20);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
 
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(3);
 
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<QueryTimeResult>(
                       affectsTRelationExtractor.extract(args))
                       ->getResult();
@@ -131,14 +119,12 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test Valid Start And End Arg Only With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
 
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(12);
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = *static_pointer_cast<QueryTimeResult>(
                        affectsTRelationExtractor.extract(args))
                        ->getResult();
@@ -149,13 +135,11 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test Valid Start Arg Only With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
 
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = *static_pointer_cast<QueryTimeResult>(
                        affectsTRelationExtractor.extract(args))
                        ->getResult();
@@ -167,14 +151,12 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test No Infinity Loop In While Block") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(22);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
 
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(8);
     args.setEndStmtNo(1);
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = *static_pointer_cast<QueryTimeResult>(
                        affectsTRelationExtractor.extract(args))
                        ->getResult();
@@ -186,14 +168,12 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test No Infinity Loop In Empty While Block") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(23);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
 
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(3);
-    AffectsTRelationExtractor affectsTRelationExtractor =
-        AffectsTRelationExtractor(dataModifier, programNode);
+		AffectsTRelationExtractor affectsTRelationExtractor =
+						AffectsTRelationExtractor(programNode);
     auto actual = *static_pointer_cast<QueryTimeResult>(
                        affectsTRelationExtractor.extract(args))
                        ->getResult();

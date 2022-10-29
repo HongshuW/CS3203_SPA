@@ -33,8 +33,7 @@ class AffectsRelationExtractor : AffectsCommonExtractor {
   bool areArgsValid(int start, int end);
 
  public:
-  AffectsRelationExtractor(shared_ptr<DataModifier> dataModifier,
-                           shared_ptr<ProgramNode> programNode);
+  AffectsRelationExtractor(shared_ptr<ProgramNode> programNode);
   shared_ptr<ExtractorResult> extract(StmtNoArgs args) override;
   shared_ptr<ExtractorResult> extractAllRelations() override;
 };

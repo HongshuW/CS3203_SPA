@@ -33,8 +33,7 @@ class AffectsTRelationExtractor : public AffectsCommonExtractor {
   void initAffectsAdjListReversed();
 
  public:
-  AffectsTRelationExtractor(shared_ptr<DataModifier> dataModifier,
-                            shared_ptr<ProgramNode> programNode);
+  AffectsTRelationExtractor(shared_ptr<ProgramNode> programNode);
   shared_ptr<ExtractorResult> extract(StmtNoArgs args) override;
   shared_ptr<ExtractorResult> extractAllRelations() override;
 };

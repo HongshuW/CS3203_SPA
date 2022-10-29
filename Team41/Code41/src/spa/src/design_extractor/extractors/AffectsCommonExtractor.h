@@ -28,8 +28,7 @@ class AffectsCommonExtractor : public QueryTimeDesignExtractor,
                                public CallNodeExtractionInterface,
                                public VariableExtractionInterface {
  protected:
-  AffectsCommonExtractor(shared_ptr<DataModifier> dataModifier,
-                         shared_ptr<ProgramNode> programNode);
+  AffectsCommonExtractor(shared_ptr<ProgramNode> programNode);
   int offset;
   int programSize;
   shared_ptr<CFG> currCFG;

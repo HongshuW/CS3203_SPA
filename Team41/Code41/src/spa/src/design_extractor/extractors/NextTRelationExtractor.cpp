@@ -7,10 +7,8 @@
 #include "NextRelationExtractor.h"
 
 namespace DE {
-NextTRelationExtractor::NextTRelationExtractor(
-    shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : QueryTimeDesignExtractor(std::move(dataModifier),
-                               std::move(programNode)) {
+NextTRelationExtractor::NextTRelationExtractor(shared_ptr<ProgramNode> programNode)
+    : QueryTimeDesignExtractor(std::move(programNode)) {
   initialise();
 }
 

@@ -8,9 +8,8 @@
 #include "design_extractor/results/QueryTimeResult.h"
 
 namespace DE {
-AffectsRelationExtractor::AffectsRelationExtractor(
-    shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AffectsCommonExtractor(std::move(dataModifier), std::move(programNode)) {}
+AffectsRelationExtractor::AffectsRelationExtractor(shared_ptr<ProgramNode> programNode)
+    : AffectsCommonExtractor(std::move(programNode)) {}
 
 bool AffectsRelationExtractor::isModified(string variable, int stmtNo) {
   shared_ptr<StmtNode> stmtNode =

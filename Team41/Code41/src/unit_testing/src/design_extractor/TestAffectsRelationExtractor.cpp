@@ -23,10 +23,8 @@ TEST_CASE("Test Affects Relation Extractor") {
   SECTION("Test No Arguments - procedure 18") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(17);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+        AffectsRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -38,10 +36,8 @@ TEST_CASE("Test Affects Relation Extractor") {
   SECTION("Test No Arguments - procedure 2") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(1);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -53,10 +49,8 @@ TEST_CASE("Test Affects Relation Extractor") {
   SECTION("Test No Arguments - procedure 5") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(4);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -104,10 +98,8 @@ else {
     astValidator.validateAST();
 
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, root);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(root);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -138,10 +130,8 @@ else {
     astValidator.validateAST();
 
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, root);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(root);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -182,10 +172,8 @@ else {
     astValidator.validateAST();
 
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, root);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(root);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -200,10 +188,8 @@ else {
   SECTION("Test No Arguments With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -219,10 +205,8 @@ else {
   SECTION("Test Both Invalid Arguments") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(17);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(-1);
     args.setEndStmtNo(500);
@@ -236,10 +220,8 @@ else {
   SECTION("Test Both Valid Arguments In If Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(17);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(5);
@@ -253,10 +235,8 @@ else {
   SECTION("Test Both Valid Arguments But Invalid Answer In If Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(17);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(5);
     args.setEndStmtNo(1);
@@ -270,10 +250,8 @@ else {
   SECTION("Test Both Valid Arguments With Calls") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(18);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(3);
@@ -287,10 +265,8 @@ else {
   SECTION("Test Both Valid Arguments With Print") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(19);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(3);
@@ -304,10 +280,8 @@ else {
   SECTION("Test Variable Modified In First Arguments Not Used In Second") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(16);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(6);
     args.setEndStmtNo(8);
@@ -321,10 +295,8 @@ else {
   SECTION("Test Start Argument Only In If Statement") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(19);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     vector<string> actual = *static_pointer_cast<QueryTimeResult>(
@@ -337,10 +309,8 @@ else {
   SECTION("Test End Argument Only With Calls") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(18);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(3);
     vector<string> actual = *static_pointer_cast<QueryTimeResult>(
@@ -353,10 +323,8 @@ else {
   SECTION("Test Both Valid Argument With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(6);
     args.setEndStmtNo(6);
@@ -370,10 +338,8 @@ else {
   SECTION("Test End Arguments Only With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(10);
     vector<string> actual = *static_pointer_cast<QueryTimeResult>(
@@ -387,10 +353,8 @@ else {
   SECTION("Test Start Arguments Only With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(2);
     vector<string> actual = *static_pointer_cast<QueryTimeResult>(
@@ -404,10 +368,8 @@ else {
   SECTION("Test Invalid Both Args With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(9);
     args.setEndStmtNo(11);
@@ -422,10 +384,8 @@ else {
   SECTION("Test No Infinity Loop In While Block") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(22);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(8);
     args.setEndStmtNo(1);
@@ -440,10 +400,8 @@ else {
   SECTION("Test Valid Both Args In Nested While Block") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(22);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    AffectsRelationExtractor affectsRelationExtractor =
-        AffectsRelationExtractor(dataModifier, programNode);
+		AffectsRelationExtractor affectsRelationExtractor =
+						AffectsRelationExtractor(programNode);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(8);
     args.setEndStmtNo(7);

@@ -5,9 +5,8 @@
 #include "AffectsCommonExtractor.h"
 
 namespace DE {
-AffectsCommonExtractor::AffectsCommonExtractor(
-    shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : QueryTimeDesignExtractor(dataModifier, programNode) {
+AffectsCommonExtractor::AffectsCommonExtractor(shared_ptr<ProgramNode> programNode)
+    : QueryTimeDesignExtractor(programNode) {
   offset = 0;
   currCFG = nullptr;
   initialize();

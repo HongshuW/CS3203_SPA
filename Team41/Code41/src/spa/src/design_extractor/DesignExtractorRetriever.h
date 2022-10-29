@@ -11,7 +11,9 @@
 
 #include "AST/ProgramNode.h"
 #include "args/StmtNoArgs.h"
-#include "design_extractor/extractors/NextRelationExtractor.h"
+#include "design_extractor/extractors/NextTRelationExtractor.h"
+#include "design_extractor/extractors/AffectsRelationExtractor.h"
+#include "design_extractor/extractors/AffectsTRelationExtractor.h"
 
 using namespace std;
 
@@ -20,9 +22,14 @@ namespace DE {
 class DesignExtractorRetriever {
  private:
   shared_ptr<ProgramNode> programNode;
+	shared_ptr<NextTRelationExtractor> nextTRelationExtractor;
+	shared_ptr<AffectsRelationExtractor> affectsRelationExtractor;
+	shared_ptr<AffectsTRelationExtractor> affectsTRelationExtractor;
+
+	void initialize();
 
  public:
-  explicit DesignExtractorRetriever(shared_ptr<ProgramNode> programNode);
+  explicit DesignExtractorRetriever(shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode);
   //! For query time computation clauses
   //! PKB will call these functions
   shared_ptr<vector<string>> getNextStarRelations(StmtNoArgs args);
