@@ -18,7 +18,7 @@ AffectsTRelationExtractor::AffectsTRelationExtractor(
 
 shared_ptr<ExtractorResult> AffectsTRelationExtractor::extract(
     StmtNoArgs args) {
-    if (affectsTable == nullptr) generateAffectsTable();
+  if (affectsTable == nullptr) generateAffectsTable();
   if (args.startAndEndExists()) {
     if (affectsAdjListPtr == nullptr) initAffectsAdjList();
     return make_shared<QueryTimeResult>(
@@ -38,7 +38,7 @@ shared_ptr<ExtractorResult> AffectsTRelationExtractor::extract(
 }
 
 shared_ptr<ExtractorResult> AffectsTRelationExtractor::extractAllRelations() {
-    if (affectsTable == nullptr) generateAffectsTable();
+  if (affectsTable == nullptr) generateAffectsTable();
   const int EDGE_INDEX_OFFSET = 1;
   for (auto &relation : *affectsTable) {
     int i = stoi(relation[0]) - EDGE_INDEX_OFFSET;

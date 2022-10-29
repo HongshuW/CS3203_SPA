@@ -78,7 +78,7 @@ void AffectsCommonExtractor::DFS(int curr, shared_ptr<vector<int>> visitCount,
 }
 
 void AffectsCommonExtractor::generateAffectsTable() {
-    affectsTable = make_shared<set<vector<string>>>();
+  affectsTable = make_shared<set<vector<string>>>();
   vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
   FirstLineNoToProcMap firstLineNumToProcMap =
       ASTUtils::getFirstLineNumToProcMap(programNode);
@@ -94,7 +94,5 @@ void AffectsCommonExtractor::generateAffectsTable() {
   }
 }
 
-void AffectsCommonExtractor::clearCache() {
-    affectsTable = nullptr;
-}
+void AffectsCommonExtractor::clearCache() { affectsTable = nullptr; }
 }  // namespace DE

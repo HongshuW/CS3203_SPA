@@ -11,7 +11,5 @@ QueryTimeDesignExtractor::QueryTimeDesignExtractor(
   stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
 }
 
-    void QueryTimeDesignExtractor::clearCache() {
-
-    }
+void QueryTimeDesignExtractor::clearCache() {}
 }  // namespace DE
