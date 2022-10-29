@@ -34,8 +34,11 @@ enum NodeType {
   PROGRAM_NODE,
   VARIABLE_NODE
 };
+typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
+        FirstLineNoToProcMap;
 
 class ASTUtils {
+
   static int getNodeLineMappingHelper(
       shared_ptr<ASTNode> node,
       shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> map, int curr_line_no,

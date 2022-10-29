@@ -13,10 +13,9 @@
 #include "design_extractor/args/StmtNoArgs.h"
 #include "design_extractor/extractors/interfaces/CFGExtractionInterface.h"
 #include "design_extractor/results/RelationResult.h"
+#include "AST/utils/ASTUtils.h"
 
 namespace DE {
-typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
-    FirstLineNoToProcMap;
 
 class NextRelationExtractor : public AbstractDesignExtractor,
                               public CFGExtractionInterface {
