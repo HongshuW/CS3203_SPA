@@ -31,7 +31,6 @@ if (os.path.exists(m2path) and os.path.exists(m1path)):
     mydirm1 = Path(m1path)
     for file in mydirm1.glob('*.xml'):
     # parse xml file
-        print(file)
         m1tree = ET.parse(file)
         root = m1tree.getroot()
         for queries in root.findall("queries"):
@@ -42,7 +41,7 @@ if (os.path.exists(m2path) and os.path.exists(m1path)):
                         failed_files.append(m1 + os.path.basename(file))
                         m1AllPass = False
 
-    if m2AllPass == False:
+    if m2AllPass == False or m1AllPass == False:
         failed_files = set(failed_files)
         fail_msg = "fail_message=The system tests that failed are: "
         for f in failed_files:
