@@ -1,4 +1,45 @@
 cd ../build/src/autotester
+
+# milestone 1 tests
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_no_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-no-clause-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_follows_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-one-follows-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_modifies_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-one-modifies-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_parent_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-one-parent-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-one-pattern-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_uses_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-one-uses-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_two_follows_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-two-follows-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_two_modifies_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-two-modifies-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_two_parent_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-two-parent-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_source.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_two_uses_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-two-uses-analysis.xsl
+
+# milestone 1 tests
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_no_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_no-clause-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_follows_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_one-follows-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_modifies_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_one-modifies-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_parent_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_one-parent-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_one-pattern-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_one_uses_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_one-uses-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_two_follows_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_two-follows-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_two_modifies_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_two-modifies-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_two_parent_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_two-parent-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/simple_white_space.txt $1/Team41/Tests41/milestone-1/system-test-1/simple_two_uses_pattern_clause_queries.txt  $1/Team41/Tests41/milestone-1/system-test-out/simple-white-space_two-uses-analysis.xsl
+
+# milestone 1 tests
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_no_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-no-clause-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_one_follows_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-one-follows-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_one_modifies_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-one-modifies-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_one_parent_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-one-parent-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_one_pattern_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-one-pattern-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_one_uses_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-one-uses-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_two_follows_pattern_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-two-follows-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_two_modifies_pattern_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-two-modifies-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_two_parent_pattern_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-two-parent-analysis.xsl
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_source.txt $1/Team41/Tests41/milestone-1/system-test-1/deep_nesting_two_uses_pattern_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/deep-nesting-two-uses-analysis.xsl
+
+# milestone 1 tests
+./autotester $1/Team41/Tests41/milestone-1/system-test-1/long_pattern_source.txt $1/Team41/Tests41/milestone-1/system-test-1/long_pattern_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/long-pattern-analysis.xsl
+
+
 ./autotester $1/Team41/Tests41/milestone-2/affects/simple_source.txt $1/Team41/Tests41/milestone-2/affects/simple_one_affects_clause_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/affects-analysis.xml
 ./autotester $1/Team41/Tests41/milestone-2/affects/simple_source_2.txt $1/Team41/Tests41/milestone-2/affects/simple_2_one_affects_clause_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/affects-2-analysis.xml
 ./autotester $1/Team41/Tests41/milestone-2/basic-spa/deep_nesting_source.txt $1/Team41/Tests41/milestone-2/basic-spa/deep_nesting_multiple_clauses_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/basic-spa-analysis.xml
