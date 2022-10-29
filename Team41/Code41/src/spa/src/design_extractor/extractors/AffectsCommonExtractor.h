@@ -21,7 +21,7 @@ namespace DE {
 typedef unordered_map<int, shared_ptr<ProcedureNode>> StmtNoToProcMap;
 typedef unordered_map<int, shared_ptr<StmtNode>> LineNoToNodePtrMap;
 typedef unordered_map<string, shared_ptr<unordered_set<string>>> ModifiesPMap;
-typedef set<vector<string>> AffectsTable;
+typedef set<vector<string>> AffectsRelationTable;
 
 class AffectsCommonExtractor : public QueryTimeDesignExtractor,
                                public CFGExtractionInterface,
@@ -36,7 +36,7 @@ class AffectsCommonExtractor : public QueryTimeDesignExtractor,
   shared_ptr<LineNoToNodePtrMap> lineNoToNodePtrMap;
   shared_ptr<ProcCFGMap> procCFGMap;
   shared_ptr<ModifiesPMap> modifiesPMap;
-  shared_ptr<AffectsTable> affectsTable;
+  shared_ptr<AffectsRelationTable> affectsTable;
   void initialize();
   void DFS(int curr, shared_ptr<vector<int>> visitCount,
            unordered_map<string, int> LastModifiedMap);

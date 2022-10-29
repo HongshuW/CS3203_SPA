@@ -10,7 +10,7 @@
 #include <memory>
 
 #include "cache_manager/CacheManager.h"
-#include "design_extractor/DesignExtractor.h"
+#include "design_extractor/DesignExtractorRetriever.h"
 #include "design_extractor/DesignExtractorManager.h"
 #include "parser/ASTBuilder.h"
 #include "parser/ASTValidator.h"

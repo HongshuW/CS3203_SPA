@@ -18,11 +18,10 @@ void SPAManager::parse(string& filename) {
         DesignExtractorManager(dataModifier, programNode);
     designExtractorManager.run();
 
-    //! TODO: replace DesignExtractor with DesignExtractorRetriever
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
+		DesignExtractorRetriever designExtractorRetriever =
+						DesignExtractorRetriever(programNode);
     cacheManager = make_shared<CacheManager>(
-        CacheManager(make_shared<DesignExtractor>(designExtractor)));
+        CacheManager(make_shared<DesignExtractorRetriever>(designExtractorRetriever)));
   } catch (const SPValidationException& e) {
     exit(EXIT_SUCCESS);
   } catch (const SPTokenizeException& e) {
