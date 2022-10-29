@@ -78,60 +78,66 @@ TEST_CASE("Test SP-DE Integration") {
 
     // test no wildcards
     for (vector<string> pair : expected) {
-        string first = pair[0];
-        string second = pair[1];
-        StmtNoArgs argsNoWildcard = StmtNoArgs();
-        argsNoWildcard.setStartStmtNo(stoi(first));
-        argsNoWildcard.setEndStmtNo(stoi(second));
-        auto actualNoWildcard = *static_pointer_cast<QueryTimeResult>(
-                affectsRelationExtractor.extract(argsNoWildcard))
-                ->getResult();
-        vector<string> expectedNoWildcard = {first, second};
-        REQUIRE(actualNoWildcard == expectedNoWildcard);
+      string first = pair[0];
+      string second = pair[1];
+      StmtNoArgs argsNoWildcard = StmtNoArgs();
+      argsNoWildcard.setStartStmtNo(stoi(first));
+      argsNoWildcard.setEndStmtNo(stoi(second));
+      auto actualNoWildcard =
+          *static_pointer_cast<QueryTimeResult>(
+               affectsRelationExtractor.extract(argsNoWildcard))
+               ->getResult();
+      vector<string> expectedNoWildcard = {first, second};
+      REQUIRE(actualNoWildcard == expectedNoWildcard);
     }
 
     // test one wildcard with given start
-    unordered_map<string, vector<string>> givenStartMap = unordered_map<string, vector<string>>();
+    unordered_map<string, vector<string>> givenStartMap =
+        unordered_map<string, vector<string>>();
     for (vector<string> pair : expected) {
-        string first = pair[0];
-        string second = pair[1];
-        if (givenStartMap.find(first) == givenStartMap.end()) {
-            givenStartMap.insert({first, vector<string>()});
-        }
-        auto pointer = givenStartMap.find(first);
-        pointer->second.push_back(second);
+      string first = pair[0];
+      string second = pair[1];
+      if (givenStartMap.find(first) == givenStartMap.end()) {
+        givenStartMap.insert({first, vector<string>()});
+      }
+      auto pointer = givenStartMap.find(first);
+      pointer->second.push_back(second);
     }
     for (auto& testcase : givenStartMap) {
-        string start = testcase.first;
-        StmtNoArgs argsStartGiven = StmtNoArgs();
-        argsStartGiven.setStartStmtNo(stoi(start));
-        auto actualStartGiven = *static_pointer_cast<QueryTimeResult>(
-                affectsRelationExtractor.extract(argsStartGiven))
-                ->getResult();
-        vector<string> expectedStartGiven = testcase.second;
-        REQUIRE(TestDE::DEUtils::vectorStringContainsSameElements(actualStartGiven, expectedStartGiven));
+      string start = testcase.first;
+      StmtNoArgs argsStartGiven = StmtNoArgs();
+      argsStartGiven.setStartStmtNo(stoi(start));
+      auto actualStartGiven =
+          *static_pointer_cast<QueryTimeResult>(
+               affectsRelationExtractor.extract(argsStartGiven))
+               ->getResult();
+      vector<string> expectedStartGiven = testcase.second;
+      REQUIRE(TestDE::DEUtils::vectorStringContainsSameElements(
+          actualStartGiven, expectedStartGiven));
     }
 
     // test one wildcard with given end
-    unordered_map<string, vector<string>> givenEndMap = unordered_map<string, vector<string>>();
+    unordered_map<string, vector<string>> givenEndMap =
+        unordered_map<string, vector<string>>();
     for (vector<string> pair : expected) {
-        string first = pair[0];
-        string second = pair[1];
-        if (givenEndMap.find(second) == givenEndMap.end()) {
-            givenEndMap.insert({second, vector<string>()});
-        }
-        auto pointer = givenEndMap.find(second);
-        pointer->second.push_back(first);
+      string first = pair[0];
+      string second = pair[1];
+      if (givenEndMap.find(second) == givenEndMap.end()) {
+        givenEndMap.insert({second, vector<string>()});
+      }
+      auto pointer = givenEndMap.find(second);
+      pointer->second.push_back(first);
     }
     for (auto& testcase : givenEndMap) {
-        string end = testcase.first;
-        StmtNoArgs argsEndGiven = StmtNoArgs();
-        argsEndGiven.setEndStmtNo(stoi(end));
-        auto actualEndGiven = *static_pointer_cast<QueryTimeResult>(
-                affectsRelationExtractor.extract(argsEndGiven))
-                ->getResult();
-        vector<string> expectedEndGiven = testcase.second;
-        REQUIRE(TestDE::DEUtils::vectorStringContainsSameElements(actualEndGiven, expectedEndGiven));
+      string end = testcase.first;
+      StmtNoArgs argsEndGiven = StmtNoArgs();
+      argsEndGiven.setEndStmtNo(stoi(end));
+      auto actualEndGiven = *static_pointer_cast<QueryTimeResult>(
+                                 affectsRelationExtractor.extract(argsEndGiven))
+                                 ->getResult();
+      vector<string> expectedEndGiven = testcase.second;
+      REQUIRE(TestDE::DEUtils::vectorStringContainsSameElements(
+          actualEndGiven, expectedEndGiven));
     }
   }
 }
