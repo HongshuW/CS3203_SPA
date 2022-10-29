@@ -12,8 +12,8 @@
 #include "AST/utils/ASTUtils.h"
 #include "CFG/CFG.h"
 #include "design_extractor/args/StmtNoArgs.h"
-#include "design_extractor/results/RelationResult.h"
 #include "design_extractor/extractors/AffectsCommonExtractor.h"
+#include "design_extractor/results/RelationResult.h"
 
 namespace DE {
 
