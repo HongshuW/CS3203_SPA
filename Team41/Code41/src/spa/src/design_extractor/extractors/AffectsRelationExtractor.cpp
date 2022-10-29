@@ -183,6 +183,9 @@ shared_ptr<vector<string>> AffectsRelationExtractor::extractWithStartGivenDFS(
     dfsStack.pop();
     unordered_set<int> children = cfg.cfg->find(stmt)->second;
     for (int child : children) {
+        if (visited.find(child) != visited.end()) {
+            continue;
+        }
       shared_ptr<StmtNode> childNode = lineNoToNodePtrMap->at(child);
       NodeType nodeType = ASTUtils::getNodeType(childNode);
       if (nodeType == NodeType::ASSIGN_NODE) {
@@ -220,7 +223,7 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
   }
   unordered_set<int> children = cfg.reversedCfg->find(stmt)->second;
   for (int child : children) {
-    if (visited->find(child) == visited->end()) {
+    if (visited->find(child) != visited->end()) {
       // if child has been visited, search other paths
       continue;
     }
@@ -289,6 +292,11 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
       for (string removedVar : setUnion) {
         usedVariables->insert(removedVar);
       }
+    } else if (nodeType == NodeType::IF_NODE || nodeType == NodeType::WHILE_NODE) {
+        extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
+    } else {
+        visited->insert(child);
+        extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
     }
   }
 }
