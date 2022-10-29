@@ -222,9 +222,6 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
       for (string removedVar : setUnion) {
         usedVariables->insert(removedVar);
       }
-    } else if (nodeType == NodeType::IF_NODE ||
-               nodeType == NodeType::WHILE_NODE) {
-      extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
     } else {
       visited->insert(child);
       extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
