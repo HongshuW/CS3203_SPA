@@ -17,7 +17,6 @@ void AffectsCommonExtractor::initialize() {
   lineNoToNodePtrMap = ASTUtils::getLineNumToNodePtrMap(programNode);
   procCFGMap = generateProcCFGMap(programNode, stmtNumbers);
   stmtNoToProcMap = ASTUtils::getLineNumToProcMap(programNode);
-  affectsTable = make_shared<set<vector<string>>>();
 
   // generate modifiesP map
   modifiesPMap =
@@ -79,6 +78,7 @@ void AffectsCommonExtractor::DFS(int curr, shared_ptr<vector<int>> visitCount,
 }
 
 void AffectsCommonExtractor::generateAffectsTable() {
+    affectsTable = make_shared<set<vector<string>>>();
   vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
   FirstLineNoToProcMap firstLineNumToProcMap =
       ASTUtils::getFirstLineNumToProcMap(programNode);
@@ -92,5 +92,9 @@ void AffectsCommonExtractor::generateAffectsTable() {
     currCFG = make_shared<CFG>(cfg);
     DFS(currLineNumber, visitCount, unordered_map<string, int>());
   }
+}
+
+void AffectsCommonExtractor::clearCache() {
+    affectsTable = nullptr;
 }
 }  // namespace DE

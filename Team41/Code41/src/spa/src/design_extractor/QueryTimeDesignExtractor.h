@@ -19,6 +19,7 @@ class QueryTimeDesignExtractor {
   explicit QueryTimeDesignExtractor(shared_ptr<ProgramNode> programNode);
   virtual shared_ptr<ExtractorResult> extract(StmtNoArgs args) = 0;
   virtual shared_ptr<ExtractorResult> extractAllRelations() = 0;
+  virtual void clearCache();
 
  protected:
   shared_ptr<ProgramNode> programNode;
