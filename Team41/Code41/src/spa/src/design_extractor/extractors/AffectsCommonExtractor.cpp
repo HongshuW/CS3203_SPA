@@ -34,7 +34,6 @@ void AffectsCommonExtractor::initialize() {
 void AffectsCommonExtractor::DFS(int curr, shared_ptr<vector<int>> visitCount,
                                  unordered_map<string, int> lastModifiedMap) {
   int currNode = curr - offset;
-  if (visitCount->at(currNode) >= 2) return;
   visitCount->at(currNode)++;
   auto nodePtr = lineNoToNodePtrMap->at(curr);
   auto nodeType = ASTUtils::getNodeType(nodePtr);
@@ -73,6 +72,7 @@ void AffectsCommonExtractor::DFS(int curr, shared_ptr<vector<int>> visitCount,
 
   unordered_set<int> children = currCFG->cfg->find(curr)->second;
   for (auto child : children) {
+    if (visitCount->at(child - offset) >= 2) continue;
     DFS(child, visitCount, lastModifiedMap);
     visitCount->at(child - offset)--;
   }
