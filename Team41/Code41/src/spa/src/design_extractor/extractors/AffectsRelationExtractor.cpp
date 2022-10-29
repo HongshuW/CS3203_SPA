@@ -252,8 +252,9 @@ shared_ptr<vector<string>> AffectsRelationExtractor::extractOneWildcard(
     StmtNoArgs args, bool isStartGiven) {
   int startingPoint =
       isStartGiven ? args.getStartStmtNo() : args.getEndStmtNo();
-  bool invalidArg =
-      stmtNoToProcMap->count(startingPoint) == 0 && startingPoint != 0;
+  NodeType nodeType = ASTUtils::getNodeType(lineNoToNodePtrMap->at(startingPoint));
+  bool invalidArg = (stmtNoToProcMap->count(startingPoint) == 0
+          && startingPoint != 0) || nodeType != NodeType::ASSIGN_NODE;
   if (invalidArg) {
     return make_shared<vector<string>>(vector<string>());
   }
