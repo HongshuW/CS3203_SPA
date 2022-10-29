@@ -223,8 +223,10 @@ else {
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(-1); 		args.setEndStmtNo(500); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // args.setStartStmtNo(-1); 		args.setEndStmtNo(500); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {}; 		REQUIRE(actual == expected);
   //	}
   //
@@ -236,21 +238,25 @@ else {
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(1); 		args.setEndStmtNo(5); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // args.setStartStmtNo(1); 		args.setEndStmtNo(5); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"1", "5"}; 		REQUIRE(actual == expected);
   //	}
   //
   //	SECTION("Test Both Valid Arguments But Invalid Answer In If Procedure")
   //{ 		shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
-  //auto programNode = TestDE::Dummies::getTestProgramNode(17);
+  // auto programNode = TestDE::Dummies::getTestProgramNode(17);
   //		shared_ptr<DataModifier> dataModifier =
   //						make_shared<DataModifier>(pkbStorage);
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(5); 		args.setEndStmtNo(1); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // args.setStartStmtNo(5); 		args.setEndStmtNo(1); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {}; 		REQUIRE(actual == expected);
   //	}
   //
@@ -262,8 +268,10 @@ else {
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(1); 		args.setEndStmtNo(3); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // args.setStartStmtNo(1); 		args.setEndStmtNo(3); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"1", "3"}; 		REQUIRE(actual == expected);
   //	}
   //
@@ -275,21 +283,25 @@ else {
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(1); 		args.setEndStmtNo(3); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // args.setStartStmtNo(1); 		args.setEndStmtNo(3); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"1", "3"}; 		REQUIRE(actual == expected);
   //	}
   //
   //	SECTION("Test Variable Modified In First Arguments Not Used In Second")
   //{ 		shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
-  //auto programNode = TestDE::Dummies::getTestProgramNode(16);
+  // auto programNode = TestDE::Dummies::getTestProgramNode(16);
   //		shared_ptr<DataModifier> dataModifier =
   //						make_shared<DataModifier>(pkbStorage);
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(6); 		args.setEndStmtNo(8); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // args.setStartStmtNo(6); 		args.setEndStmtNo(8); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {}; 		REQUIRE(actual == expected);
   //	}
   //
@@ -302,7 +314,8 @@ else {
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
   // args.setStartStmtNo(1); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"3"}; 		REQUIRE(actual == expected);
   //	}
   //
@@ -315,7 +328,8 @@ else {
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
   // args.setEndStmtNo(3); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"1"}; 		REQUIRE(actual == expected);
   //	}
   //
@@ -327,8 +341,10 @@ else {
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(6); 		args.setEndStmtNo(6); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // args.setStartStmtNo(6); 		args.setEndStmtNo(6); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"6", "6"}; 		REQUIRE(actual == expected);
   //	}
   //
@@ -341,7 +357,8 @@ else {
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
   // args.setEndStmtNo(10); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"1", "2", "4", "6", "8", "9"}; 		REQUIRE(
   //						TestDE::DEUtils::vectorStringContainsSameElements(actual,
   // expected));
@@ -356,9 +373,10 @@ else {
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
   // args.setStartStmtNo(2); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"6", "10"}; 		REQUIRE(
-  //TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
+  // TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
   //	}
   //
   //	SECTION("Test Invalid Both Args With Normal Procedure") {
@@ -369,10 +387,12 @@ else {
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(9); 		args.setEndStmtNo(11); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
-  // {}; 		REQUIRE( 						TestDE::DEUtils::vectorStringContainsSameElements(actual,
-  // expected));
+  // args.setStartStmtNo(9); 		args.setEndStmtNo(11); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
+  // {}; 		REQUIRE(
+  // TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
   //	}
   //
   //	SECTION("Test No Infinity Loop In While Block") {
@@ -383,10 +403,12 @@ else {
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(8); 		args.setEndStmtNo(1); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
-  // {}; 		REQUIRE( 						TestDE::DEUtils::vectorStringContainsSameElements(actual,
-  // expected));
+  // args.setStartStmtNo(8); 		args.setEndStmtNo(1); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
+  // {}; 		REQUIRE(
+  // TestDE::DEUtils::vectorStringContainsSameElements(actual, expected));
   //	}
   //
   //	SECTION("Test Valid Both Args In Nested While Block") {
@@ -397,8 +419,10 @@ else {
   //		DesignExtractor designExtractor =
   //						DesignExtractor(dataModifier,
   // programNode); 		StmtNoArgs args = StmtNoArgs();
-  // args.setStartStmtNo(8); 		args.setEndStmtNo(7); 		vector<string> actual =
-  // designExtractor.getAffectsRelations(args); 		vector<string> expected =
+  // args.setStartStmtNo(8); 		args.setEndStmtNo(7); 		vector<string>
+  // actual =
+  // designExtractor.getAffectsRelations(args); 		vector<string> expected
+  // =
   // {"8", "7"}; 		REQUIRE(actual == expected);
   //	}
 }

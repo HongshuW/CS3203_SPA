@@ -6,7 +6,6 @@
 #include "catch.hpp"
 #include "design_extractor/AffectsExtractor.h"
 #include "design_extractor/DesignExtractor.h"
-#include "design_extractor/PatternExtractor.h"
 #include "parser/ASTValidator.h"
 #include "parser/Parser.h"
 #include "parser/SPExceptions.h"
