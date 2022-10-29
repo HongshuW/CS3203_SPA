@@ -11,11 +11,11 @@
 
 #include "AST/ProgramNode.h"
 #include "args/StmtNoArgs.h"
-#include "design_extractor/extractors/NextTRelationExtractor.h"
 #include "design_extractor/extractors/AffectsRelationExtractor.h"
 #include "design_extractor/extractors/AffectsTRelationExtractor.h"
-#include "design_extractor/results/RelationResult.h"
+#include "design_extractor/extractors/NextTRelationExtractor.h"
 #include "design_extractor/results/QueryTimeResult.h"
+#include "design_extractor/results/RelationResult.h"
 
 using namespace std;
 
@@ -24,11 +24,11 @@ namespace DE {
 class DesignExtractorRetriever {
  private:
   shared_ptr<ProgramNode> programNode;
-	shared_ptr<NextTRelationExtractor> nextTRelationExtractor;
-	shared_ptr<AffectsRelationExtractor> affectsRelationExtractor;
-	shared_ptr<AffectsTRelationExtractor> affectsTRelationExtractor;
+  shared_ptr<NextTRelationExtractor> nextTRelationExtractor;
+  shared_ptr<AffectsRelationExtractor> affectsRelationExtractor;
+  shared_ptr<AffectsTRelationExtractor> affectsTRelationExtractor;
 
-	void initialize();
+  void initialize();
 
  public:
   explicit DesignExtractorRetriever(shared_ptr<ProgramNode> programNode);

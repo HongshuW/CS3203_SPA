@@ -8,7 +8,8 @@
 #include "design_extractor/results/RelationResult.h"
 
 namespace DE {
-AffectsTRelationExtractor::AffectsTRelationExtractor(shared_ptr<ProgramNode> programNode)
+AffectsTRelationExtractor::AffectsTRelationExtractor(
+    shared_ptr<ProgramNode> programNode)
     : AffectsCommonExtractor(programNode) {
   programSize = stmtNumbers->size();
   vector<bool> row(programSize, false);

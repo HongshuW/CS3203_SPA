@@ -10,12 +10,12 @@
 #include "args/StmtNoArgs.h"
 
 class NextExtractor {
-		typedef shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> StmtNoMap;
-		typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
-						FirstLineNoToProcMap;
-		typedef shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
-						StmtNoToProcMap;
-		typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, CFG>> ProcCFGMap;
+  typedef shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> StmtNoMap;
+  typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
+      FirstLineNoToProcMap;
+  typedef shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
+      StmtNoToProcMap;
+  typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, CFG>> ProcCFGMap;
 
  public:
   explicit NextExtractor(shared_ptr<ProgramNode> programNode);

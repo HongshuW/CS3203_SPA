@@ -18,7 +18,8 @@ class CacheManager {
   static const int WILDCARD_STMTNO;
   shared_ptr<DesignExtractorRetriever> designExtractorRetriever;
 
-  explicit CacheManager(shared_ptr<DesignExtractorRetriever> designExtractorRetriever);
+  explicit CacheManager(
+      shared_ptr<DesignExtractorRetriever> designExtractorRetriever);
 
   shared_ptr<list<vector<string>>> getNextTRelations();
   shared_ptr<vector<string>> getNextTStatements(int stmtNo);

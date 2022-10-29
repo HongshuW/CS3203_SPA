@@ -6,7 +6,8 @@
 
 const int CacheManager::WILDCARD_STMTNO = 0;
 
-CacheManager::CacheManager(shared_ptr<DesignExtractorRetriever> designExtractorRetriever) {
+CacheManager::CacheManager(
+    shared_ptr<DesignExtractorRetriever> designExtractorRetriever) {
   this->designExtractorRetriever = designExtractorRetriever;
 }
 
@@ -133,5 +134,6 @@ bool CacheManager::getAffectsTResult(int affectingStatement,
                                      int affectedStatement) {
   StmtNoArgs stmtNoArgs = StmtNoArgs();
   stmtNoArgs.setStartAndEndStmtNo(affectingStatement, affectedStatement);
-  return !designExtractorRetriever->getAffectsStarRelations(stmtNoArgs)->empty();
+  return !designExtractorRetriever->getAffectsStarRelations(stmtNoArgs)
+              ->empty();
 }

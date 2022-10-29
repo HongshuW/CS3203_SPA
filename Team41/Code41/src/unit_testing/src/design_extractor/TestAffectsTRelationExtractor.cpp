@@ -28,8 +28,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
   SECTION("Test No Arguments With Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(21);
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       affectsTRelationExtractor.extractAllRelations())
                       ->getResult();
@@ -52,8 +52,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
     args.setStartStmtNo(1000);
     args.setEndStmtNo(-13);
 
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<QueryTimeResult>(
                       affectsTRelationExtractor.extract(args))
                       ->getResult();
@@ -70,8 +70,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
     args.setStartStmtNo(1);
     args.setEndStmtNo(3);
 
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<QueryTimeResult>(
                       affectsTRelationExtractor.extract(args))
                       ->getResult();
@@ -87,8 +87,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
 
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<QueryTimeResult>(
                       affectsTRelationExtractor.extract(args))
                       ->getResult();
@@ -105,8 +105,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(3);
 
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = static_pointer_cast<QueryTimeResult>(
                       affectsTRelationExtractor.extract(args))
                       ->getResult();
@@ -123,8 +123,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(12);
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = *static_pointer_cast<QueryTimeResult>(
                        affectsTRelationExtractor.extract(args))
                        ->getResult();
@@ -138,8 +138,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
 
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = *static_pointer_cast<QueryTimeResult>(
                        affectsTRelationExtractor.extract(args))
                        ->getResult();
@@ -155,8 +155,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(8);
     args.setEndStmtNo(1);
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = *static_pointer_cast<QueryTimeResult>(
                        affectsTRelationExtractor.extract(args))
                        ->getResult();
@@ -172,8 +172,8 @@ TEST_CASE("Test AffectsT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(3);
-		AffectsTRelationExtractor affectsTRelationExtractor =
-						AffectsTRelationExtractor(programNode);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(programNode);
     auto actual = *static_pointer_cast<QueryTimeResult>(
                        affectsTRelationExtractor.extract(args))
                        ->getResult();

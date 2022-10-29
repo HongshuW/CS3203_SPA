@@ -5,7 +5,8 @@
 #include "QueryTimeDesignExtractor.h"
 
 namespace DE {
-QueryTimeDesignExtractor::QueryTimeDesignExtractor(shared_ptr<ProgramNode> programNode)
+QueryTimeDesignExtractor::QueryTimeDesignExtractor(
+    shared_ptr<ProgramNode> programNode)
     : programNode(programNode) {
   stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
 }

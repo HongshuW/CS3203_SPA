@@ -19,8 +19,7 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test No Arguments In Simple Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(1);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       nextTExtractor.extractAllRelations())
                       ->getResult();
@@ -32,8 +31,7 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test No Arguments In Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(2);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       nextTExtractor.extractAllRelations())
                       ->getResult();
@@ -49,8 +47,7 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test No Arguments With While Statement") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(24);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       nextTExtractor.extractAllRelations())
                       ->getResult();
@@ -67,8 +64,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(100);
     args.setEndStmtNo(250);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -81,8 +77,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(-100);
     args.setEndStmtNo(2);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -95,8 +90,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(2000);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -108,8 +102,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(10);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(-4000);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -123,8 +116,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(3);
     args.setEndStmtNo(4);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -138,8 +130,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(6);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -153,8 +144,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(5);
     args.setEndStmtNo(5);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -167,8 +157,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(2);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -182,8 +171,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(3);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(5);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -199,8 +187,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(13);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(8);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -214,8 +201,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(5);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(7);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -229,8 +215,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(2);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(6);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -244,8 +229,7 @@ TEST_CASE("Test NextT Relation Extractor") {
     auto programNode = TestDE::Dummies::getTestProgramNode(3);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(9);
-		NextTRelationExtractor nextTExtractor =
-						NextTRelationExtractor(programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
