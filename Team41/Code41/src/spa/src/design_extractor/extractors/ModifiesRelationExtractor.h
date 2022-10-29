@@ -5,11 +5,12 @@
 #ifndef SPA_MODIFIESRELATIONEXTRACTOR_H
 #define SPA_MODIFIESRELATIONEXTRACTOR_H
 #include "design_extractor/AbstractDesignExtractor.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
+#include "design_extractor/extractors/interfaces/CallNodeExtractionInterface.h"
 
 namespace DE {
 
-class ModifiesRelationExtractor : public AbstractDesignExtractor {
+class ModifiesRelationExtractor : public AbstractDesignExtractor,
+                                  public CallNodeExtractionInterface {
  protected:
   ModifiesRelationExtractor(shared_ptr<DataModifier> dataModifier,
                             shared_ptr<ProgramNode> programNode);

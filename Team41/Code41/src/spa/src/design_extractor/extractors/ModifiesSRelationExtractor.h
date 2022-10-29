@@ -8,7 +8,6 @@
 
 #include "AST/CallNode.h"
 #include "design_extractor/extractors/ModifiesRelationExtractor.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 

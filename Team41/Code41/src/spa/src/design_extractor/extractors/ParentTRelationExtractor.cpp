@@ -7,8 +7,7 @@
 namespace DE {
 ParentTRelationExtractor::ParentTRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
-}
+    : ParentCommonExtractor(std::move(dataModifier), std::move(programNode)) {}
 
 void ParentTRelationExtractor::extractParentTDFS(
     const shared_ptr<map<int, vector<int>>>& parentRelations, int key,
@@ -51,7 +50,7 @@ void ParentTRelationExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<RelationResult> parentTResult =
       static_pointer_cast<RelationResult>(result);
   for (const auto& entry : *parentTResult->getResult()) {
-    dataModifier->saveParent(entry);
+    dataModifier->saveParentT(entry);
   }
 }
 }  // namespace DE

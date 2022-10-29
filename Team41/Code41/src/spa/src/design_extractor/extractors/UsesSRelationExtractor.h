@@ -7,7 +7,6 @@
 #include "AST/CondExprNode.h"
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/extractors/UsesRelationExtractor.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 

@@ -4,9 +4,8 @@
 
 #ifndef SPA_MODIFIESPRELATIONEXTRACTOR_H
 #define SPA_MODIFIESPRELATIONEXTRACTOR_H
+#include "ModifiesRelationExtractor.h"
 #include "design_extractor/AbstractDesignExtractor.h"
-#include "design_extractor/extractors/ModifiesRelationExtractor.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 

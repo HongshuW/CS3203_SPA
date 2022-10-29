@@ -7,7 +7,6 @@
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/extractors/interfaces/CallNodeExtractionInterface.h"
 #include "design_extractor/extractors/interfaces/VariableExtractionInterface.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 

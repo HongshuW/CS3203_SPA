@@ -9,15 +9,16 @@
 #include "CFG/CFG.h"
 #include "design_extractor/QueryTimeDesignExtractor.h"
 #include "design_extractor/args/StmtNoArgs.h"
+#include "design_extractor/extractors/interfaces/CFGExtractionInterface.h"
 #include "design_extractor/results/QueryTimeResult.h"
 #include "design_extractor/results/RelationResult.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 typedef unordered_map<int, shared_ptr<ProcedureNode>> StmtNoToProcMap;
 
 namespace DE {
 
-class NextTRelationExtractor : public QueryTimeDesignExtractor {
+class NextTRelationExtractor : public QueryTimeDesignExtractor,
+                               public CFGExtractionInterface {
  private:
   shared_ptr<StmtNoToProcMap> stmtNoToProcMap;
   shared_ptr<ProcCFGMap> procCFGMap;

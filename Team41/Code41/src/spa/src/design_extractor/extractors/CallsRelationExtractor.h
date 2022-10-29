@@ -9,12 +9,13 @@
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/AbstractDesignExtractor.h"
 #include "design_extractor/extractors/EntitiesExtractor.h"
+#include "design_extractor/extractors/interfaces/CallNodeExtractionInterface.h"
 #include "design_extractor/results/RelationResult.h"
-#include "design_extractor/utils/DesignExtractorUtils.h"
 
 namespace DE {
 
-class CallsRelationExtractor : public AbstractDesignExtractor {
+class CallsRelationExtractor : public AbstractDesignExtractor,
+                               public CallNodeExtractionInterface {
  public:
   CallsRelationExtractor(shared_ptr<DataModifier> dataModifier,
                          shared_ptr<ProgramNode> programNode);

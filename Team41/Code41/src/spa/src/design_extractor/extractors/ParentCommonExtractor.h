@@ -2,8 +2,8 @@
 // Created by Xingchen Lin on 27/10/22.
 //
 
-#ifndef SPA_PARENTEXTRACTORUTILS_H
-#define SPA_PARENTEXTRACTORUTILS_H
+#ifndef SPA_PARENTCOMMONEXTRACTOR_H
+#define SPA_PARENTCOMMONEXTRACTOR_H
 
 #include <list>
 #include <map>
@@ -13,12 +13,15 @@
 
 #include "AST/ProgramNode.h"
 #include "AST/utils/ASTUtils.h"
+#include "design_extractor/AbstractDesignExtractor.h"
 
 using namespace std;
 namespace DE {
 
-class ParentExtractorUtils {
+class ParentCommonExtractor : public AbstractDesignExtractor {
  protected:
+  ParentCommonExtractor(shared_ptr<DataModifier> dataModifier,
+                        shared_ptr<ProgramNode> programNode);
   //! Only child components can access this method
   shared_ptr<map<int, vector<int>>> extractParentHashmap(
       shared_ptr<ProgramNode> rootPtr);
@@ -26,4 +29,4 @@ class ParentExtractorUtils {
 
 }  // namespace DE
 
-#endif  // SPA_PARENTEXTRACTORUTILS_H
+#endif  // SPA_PARENTCOMMONEXTRACTOR_H

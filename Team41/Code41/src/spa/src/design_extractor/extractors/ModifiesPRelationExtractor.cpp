@@ -13,7 +13,7 @@ ModifiesPRelationExtractor::ModifiesPRelationExtractor(
 shared_ptr<ExtractorResult> ModifiesPRelationExtractor::extract() {
   shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();
   auto mappedCallNodesToProcedures =
-      DesignExtractorUtils::extractCallNodesFromProcedures(programNode);
+      extractCallNodesFromProcedures(programNode);
   for (auto pair : *proceduresToModifiedVarsMap) {
     unordered_set<string> uniqueVarList;
     string procedureName = pair.first;
@@ -27,7 +27,7 @@ shared_ptr<ExtractorResult> ModifiesPRelationExtractor::extract() {
       auto callNodes = mappedCallNodesToProcedures.at(procedureName);
 
       for (auto node : callNodes) {
-        DesignExtractorUtils::extractVariablesFromCallNodesInProceduresToList(
+        extractVariablesFromCallNodesInProceduresToList(
             node, proceduresToModifiedVarsMap, mappedCallNodesToProcedures,
             uniqueVarList);
       }
