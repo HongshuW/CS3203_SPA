@@ -31,6 +31,8 @@ class AffectsRelationExtractor : public QueryTimeDesignExtractor,
                                  public CallNodeExtractionInterface,
                                  public VariableExtractionInterface {
  private:
+  int offset;
+  shared_ptr<CFG> currCFG;
   shared_ptr<StmtNoToProcMap> stmtNoToProcMap;
   shared_ptr<LineNoToNodePtrMap> lineNoToNodePtrMap;
   shared_ptr<ProcCFGMap> procCFGMap;
@@ -39,7 +41,7 @@ class AffectsRelationExtractor : public QueryTimeDesignExtractor,
   shared_ptr<AffectsTable> affectsTable;
 
   void initialize();
-  void DFS(int curr, CFG cfg, shared_ptr<vector<int>> visitCount, int offset,
+  void DFS(int curr, shared_ptr<vector<int>> visitCount,
            unordered_map<string, int> LastModifiedMap);
   bool checkNoWildcardDFS(int start, int end, CFG cfg);
   shared_ptr<vector<string>> extractNoWildcard(StmtNoArgs args);

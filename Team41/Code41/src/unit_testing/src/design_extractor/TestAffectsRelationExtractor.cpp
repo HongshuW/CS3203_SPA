@@ -189,6 +189,12 @@ else {
     auto actual = static_pointer_cast<RelationResult>(
                       affectsRelationExtractor.extractAllRelations())
                       ->getResult();
+    vector<vector<string>> expected = {
+        {"1", "10"},  {"1", "12"},  {"1", "4"},   {"1", "8"},  {"10", "11"},
+        {"10", "12"}, {"11", "12"}, {"13", "14"}, {"2", "10"}, {"2", "6"},
+        {"6", "10"},  {"6", "6"},   {"8", "10"},  {"8", "12"}, {"9", "10"}};
+    REQUIRE(expected.size() == actual->size());
+    REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
   }
 
   SECTION("Test No Arguments With Normal Procedure") {
