@@ -27,6 +27,6 @@ do
 done
 
 #open browser to view result, can comment out
-cd $outputPath
-open http://localhost:8000
-python3 -m http.server 8000
+#cd $outputPath
+#open http://localhost:8000
+#python3 -m http.server 8000

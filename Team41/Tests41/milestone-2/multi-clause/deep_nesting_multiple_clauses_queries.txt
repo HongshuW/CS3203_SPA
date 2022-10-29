@@ -31,7 +31,7 @@ Select <a1, a2> such that Affects(a1, 6) and Affects(5, a2) and Uses(s1, v) and 
 7 - multiple queries Affects Uses Follows Modifies
 assign a1, a2; variable v; stmt s;
 Select <a1, a2> such that Affects*(a1, a2)
-5 6, 9 20, 9 9, 19 19, 38 38
+5 6, 6 6, 9 20, 9 9, 19 19, 38 38
 5000
 8 - multiple queries Affects Uses Follows Modifies
 assign a1, a2; variable v; stmt s;
@@ -51,12 +51,12 @@ Select <a1, v> such that Modifies(a1, v)
 11 - multiple queries Affects Uses Follows Modifies
 assign a1, a2; variable v; stmt s;
 Select <a1, a2, v> such that Affects*(a1, a2) and Uses(a1, v) and Follows(a1, s) and Modifies(a1, v)
-9 20 x9, 9 9 x9, 19 19 x19
+6 6 x6, 9 20 x9, 9 9 x9, 19 19 x19
 5000
 12 - multiple queries Affects Uses Follows Modifies
 assign a1, a2; variable v; stmt s;
 Select <a1, a2, s, v> such that Affects*(a1, a2) and Uses(a1, v) and Follows(a1, s) and Modifies(a1, v)
-9 20 10 x9, 9 9 10 x9, 19 19 20 x19
+6 6 7 x6, 9 20 10 x9, 9 9 10 x9, 19 19 20 x19
 5000
 12 - multiple queries Affects Uses Follows Modifies
 assign a1, a2; variable v; stmt s;
@@ -106,12 +106,12 @@ Select <a, s1> such that Affects(a, s1) pattern a ("x5", _) such that Calls(p, q
 20 - multiple queries
 stmt s1, s2, s3, s4; variable v; procedure p, q; assign a;
 Select <s1, s2, s3, s4> such that Affects(s1, s2) and Calls(p, q) and Next(s3, s4) and Affects(s3, s4)
-5 6 5 6, 9 20 5 6, 9 9 5 6, 19 19 5 6, 38 38 5 6
+6 6 5 6, 5 6 5 6, 9 20 5 6, 9 9 5 6, 19 19 5 6, 38 38 5 6
 5000
 21 - multiple queries
 stmt s, s1, s2, s3, s4; variable v; procedure p, q; assign a;
 Select <s1, s2, s3, s4> such that Affects*(s1, s2) and Calls(p, q) and Next(s3, s4) and Affects*(s3, s4) with s.stmt# = 1
-5 6 5 6, 9 20 5 6, 9 9 5 6, 19 19 5 6, 38 38 5 6
+6 6 5 6, 5 6 5 6, 9 20 5 6, 9 9 5 6, 19 19 5 6, 38 38 5 6
 5000
 22 - multiple queries
 stmt s, s1, s2, s3, s4; variable v; procedure p, q; assign a;
