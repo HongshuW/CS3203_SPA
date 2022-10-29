@@ -41,18 +41,18 @@ class AffectsRelationExtractor : public QueryTimeDesignExtractor,
   void initialize();
   void DFS(int curr, CFG cfg, shared_ptr<vector<int>> visitCount, int offset,
            unordered_map<string, int> LastModifiedMap);
-    bool checkNoWildcardDFS(int start, int end, CFG cfg);
-    shared_ptr<vector<string>> extractNoWildcard(StmtNoArgs args);
-    shared_ptr<vector<string>> extractWithStartGivenDFS(CFG cfg, int start);
-    void extractWithEndBTHelper(CFG cfg, int stmt,
-                                shared_ptr<vector<string>> output,
-                                shared_ptr<unordered_set<string>> usedVariables,
-                                shared_ptr<unordered_set<int>> visited);
-    shared_ptr<vector<string>> extractWithEndGivenBackTracking(CFG cfg, int end);
-    shared_ptr<vector<string>> extractOneWildcard(StmtNoArgs args,
-                                                  bool isStartGiven);
-    bool isModified(string variable, int stmtNo);
-    bool areArgsValid(int start, int end);
+  bool checkNoWildcardDFS(int start, int end, CFG cfg);
+  shared_ptr<vector<string>> extractNoWildcard(StmtNoArgs args);
+  shared_ptr<vector<string>> extractWithStartGivenDFS(CFG cfg, int start);
+  void extractWithEndBTHelper(CFG cfg, int stmt,
+                              shared_ptr<vector<string>> output,
+                              shared_ptr<unordered_set<string>> usedVariables,
+                              shared_ptr<unordered_set<int>> visited);
+  shared_ptr<vector<string>> extractWithEndGivenBackTracking(CFG cfg, int end);
+  shared_ptr<vector<string>> extractOneWildcard(StmtNoArgs args,
+                                                bool isStartGiven);
+  bool isModified(string variable, int stmtNo);
+  bool areArgsValid(int start, int end);
 
  public:
   AffectsRelationExtractor(shared_ptr<DataModifier> dataModifier,
