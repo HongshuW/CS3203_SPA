@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - master
-      - ci-system-test
 
 env:
     BUILD_TYPE: Release
