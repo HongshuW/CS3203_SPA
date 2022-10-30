@@ -3,6 +3,7 @@
 //
 
 #include "RelationResult.h"
+
 #include <vector>
 
 using namespace std;

@@ -3,6 +3,7 @@
 //
 
 #include "QueryTimeResult.h"
+
 #include <vector>
 using namespace std;
 
