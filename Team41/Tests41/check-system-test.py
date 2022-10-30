@@ -23,7 +23,7 @@ if (os.path.exists(m2path) and os.path.exists(m1path)):
         for queries in root.findall("queries"):
             for query in queries:
                 for q_tag in query:
-                    if q_tag.tag == "failed":
+                    if q_tag.tag == "failed" or q_tag.tag == "timeout" or q_tag.tag == "exception" or q_tag.tag == "crash":
                         m2 = "milestone-2-out/"
                         failed_files.append(m2 + os.path.basename(file))
                         m2AllPass = False
@@ -36,7 +36,7 @@ if (os.path.exists(m2path) and os.path.exists(m1path)):
         for queries in root.findall("queries"):
             for query in queries:
                 for q_tag in query:
-                    if q_tag.tag == "failed":
+                    if q_tag.tag == "failed" or q_tag.tag == "timeout" or q_tag.tag == "exception" or q_tag.tag == "crash":
                         m1 = "system-test-out/"
                         failed_files.append(m1 + os.path.basename(file))
                         m1AllPass = False
