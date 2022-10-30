@@ -34,6 +34,8 @@ enum NodeType {
   PROGRAM_NODE,
   VARIABLE_NODE
 };
+typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
+    FirstLineNoToProcMap;
 
 class ASTUtils {
   static int getNodeLineMappingHelper(
@@ -53,6 +55,8 @@ class ASTUtils {
       shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> lineToNode);
   static shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
   getNodePtrToLineNumMap(shared_ptr<ProgramNode> root);
+  static shared_ptr<unordered_map<int, shared_ptr<StmtNode>>>
+  getLineNumToNodePtrMap(shared_ptr<ProgramNode> root);
   static DesignEntity getStmtNodeDesignEntity(shared_ptr<StmtNode> node);
   static shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
   getLineNumToProcMap(shared_ptr<ProgramNode> root);

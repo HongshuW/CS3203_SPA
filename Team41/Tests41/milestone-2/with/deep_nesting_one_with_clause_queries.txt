@@ -331,7 +331,7 @@ none
 67 - valid with, affects
 assign a1, a2;
 Select <a1, a2> such that Affects(a1, a2)
-5 6, 9 9, 9 20, 19 19, 38 38
+5 6, 6 6, 9 9, 9 20, 19 19, 38 38
 5000
 68 - valid with, affects
 assign a1, a2;

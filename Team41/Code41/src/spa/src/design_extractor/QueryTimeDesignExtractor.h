@@ -16,13 +16,12 @@ namespace DE {
 
 class QueryTimeDesignExtractor {
  public:
-  explicit QueryTimeDesignExtractor(shared_ptr<DataModifier> dataModifier,
-                                    shared_ptr<ProgramNode> programNode);
+  explicit QueryTimeDesignExtractor(shared_ptr<ProgramNode> programNode);
   virtual shared_ptr<ExtractorResult> extract(StmtNoArgs args) = 0;
   virtual shared_ptr<ExtractorResult> extractAllRelations() = 0;
+  virtual void clearCache();
 
  protected:
-  shared_ptr<DataModifier> dataModifier;
   shared_ptr<ProgramNode> programNode;
   shared_ptr<StmtNumbers> stmtNumbers;
 };
