@@ -1,45 +1,260 @@
 1
+
+Select BOOLEAN such that Affects(_, _)
+TRUE
+5000
+2
+
+Select BOOLEAN such that Affects(_, _) and Affects(_, _) and Affects(_, _) and Affects(_, _) and Affects(_, _) and Affects(_, _) and Affects(_, _)
+TRUE
+5000
+3
 stmt s;
 Select s such that Affects(s, _)
 none
 5000
-1
+4
+stmt s;
+Select s such that Affects(s, _) and Affects(s, _) and Affects(s, _) and Affects(s, _) and Affects(s, _) and Affects(s, _) and Affects(s, _) and Affects(s, _)
+none
+5000
+5
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects(s1, _) and Affects(s2, _) and Affects(s3, _) and Affects(s4, _) and Affects(s5, _) and Affects(s6, _)
+none
+5000
+6
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects(s1, _) and Affects(s2, _) and Affects(s3, _) and Affects(s4, _) and Affects(s5, _) and Affects(s6, _) and Follows*(s1, s2) and Follows*(s2, s3) and Follows*(s3, s4) and Follows*(s4, s5) and Follows*(s5, s6)
+none
+5000
+7
 stmt s;
 Select s such that Affects(_, s)
 none
 5000
-1
+8
 stmt s;
-Select s such that Affects(s, s)
+Select s such that Affects(_, s)
 none
 5000
-1
+9
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects(_, s1) and Affects(_, s2) and Affects(_, s3) and Affects(_, s4) and Affects(_, s5) and Affects(_, s6)
+none
+5000
+10
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects(_, s1) and Affects(_, s2) and Affects(_, s3) and Affects(_, s4) and Affects(_, s5) and Affects(_, s6) and Follows*(s1, s2) and Follows*(s2, s3) and Follows*(s3, s4) and Follows*(s4, s5) and Follows*(s5, s6)
+none
+5000
+11
+stmt s;
+Select s such that Affects(s, s) and Affects(s, s) and Affects(s, s) and Affects(s, s) and Affects(s, s) and Affects(s, s) and Affects(s, s) and Affects(s, s) and Affects(s, s)
+none
+5000
+12
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects(s1, s2) and Affects(s2, s3) and Affects(s3, s4) and Affects(s4, s5) and Affects(s5, s6)
+none
+5000
+13
 assign a;
 Select a such that Affects(a, _)
 none
 5000
-1
+14
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects(a1, _) and Affects(a2, _) and Affects(a3, _) and Affects(a4, _) and Affects(a5, _) and Affects(a6, _)
+none
+5000
+15
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects(a1, _) and Affects(a2, _) and Affects(a3, _) and Affects(a4, _) and Affects(a5, _) and Affects(a6, _) and Follows*(a1, a2) and Follows*(a2, a3) and Follows*(a3, a4) and Follows*(a4, a5) and Follows*(a5, a6)
+none
+5000
+16
 assign a;
 Select a such that Affects(_, a)
 none
 5000
-1
+17
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects(_, a1) and Affects(_, a2) and Affects(_, a3) and Affects(_, a4) and Affects(_, a5) and Affects(_, a6)
+none
+5000
+18
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects(_, a1) and Affects(_, a2) and Affects(_, a3) and Affects(_, a4) and Affects(_, a5) and Affects(_, a6) and Follows*(a1, a2) and Follows*(a2, a3) and Follows*(a3, a4) and Follows*(a4, a5) and Follows*(a5, a6)
+none
+5000
+19
 assign a;
 Select a such that Affects(a, a)
 none
 5000
-1
+20
+assign a;
+Select a such that Affects(a, a) and Affects(a, a) and Affects(a, a) and Affects(a, a) and Affects(a, a) and Affects(a, a) and Affects(a, a)
+none
+5000
+21
 assign a1, a2;
 Select <a1, a2> such that Affects(a1, a2)
 none
 5000
-1
+22
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects(a1, a2) and Affects(a2, a3) and Affects(a3, a4) and Affects(s4, s5) and Affects(s5, s6)
+none
+5000
+23
 assign a; stmt s
 Select <a, s> such that Affects(a, s)
 none
 5000
-1
+24
 assign a; stmt s
 Select <a, s> such that Affects(s, a)
+none
+5000
+25
+assign a1, a2, a3, a4; stmt s1, s2, s3, s4;
+Select <a1, a2, a3, a4, s1, s2, s3, s4> such that Affects(s1, a1) and Affects(s2, a1) and Affects(a2, a3) and Affects(a3, _) and Affects(s1, a1) and Affects(_, _) and Affects(s3, s4)
+none
+5000
+26
+assign a1, a2, a3, a4; stmt s1, s2, s3, s4;
+Select BOOLEAN such that Affects(a1, a2) and Affects(a2, a4) and Affects(s1, a1) and Affects(s3, s4) and Affects(a3, s4) and Affects(_, _) and Affects(_, s4) and Affects(a3, _)
+none
+5000
+27
+
+Select BOOLEAN such that Affects*(_, _)
+TRUE
+5000
+28
+
+Select BOOLEAN such that Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _)
+TRUE
+5000
+29
+stmt s;
+Select s such that Affects*(s, _)
+none
+5000
+30
+stmt s;
+Select s such that Affects*(s, _) and Affects*(s, _) and Affects*(s, _) and Affects*(s, _) and Affects*(s, _) and Affects*(s, _) and Affects*(s, _) and Affects*(s, _)
+none
+5000
+31
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects*(s1, _) and Affects*(s2, _) and Affects*(s3, _) and Affects*(s4, _) and Affects*(s5, _) and Affects*(s6, _)
+none
+5000
+32
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects*(s1, _) and Affects*(s2, _) and Affects*(s3, _) and Affects*(s4, _) and Affects*(s5, _) and Affects*(s6, _) and Follows*(s1, s2) and Follows*(s2, s3) and Follows*(s3, s4) and Follows*(s4, s5) and Follows*(s5, s6)
+none
+5000
+33
+stmt s;
+Select s such that Affects*(_, s)
+none
+5000
+34
+stmt s;
+Select s such that Affects*(_, s)
+none
+5000
+35
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects*(_, s1) and Affects*(_, s2) and Affects*(_, s3) and Affects*(_, s4) and Affects*(_, s5) and Affects*(_, s6)
+none
+5000
+36
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects*(_, s1) and Affects*(_, s2) and Affects*(_, s3) and Affects*(_, s4) and Affects*(_, s5) and Affects*(_, s6) and Follows*(s1, s2) and Follows*(s2, s3) and Follows*(s3, s4) and Follows*(s4, s5) and Follows*(s5, s6)
+none
+5000
+37
+stmt s;
+Select s such that Affects*(s, s) and Affects*(s, s) and Affects*(s, s) and Affects*(s, s) and Affects*(s, s) and Affects*(s, s) and Affects*(s, s) and Affects*(s, s) and Affects*(s, s)
+none
+5000
+38
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s2, s3, s4, s5, s6> such that Affects*(s1, s2) and Affects*(s2, s3) and Affects*(s3, s4) and Affects*(s4, s5) and Affects*(s5, s6)
+none
+5000
+39
+assign a;
+Select a such that Affects*(a, _)
+none
+5000
+40
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects*(a1, _) and Affects*(a2, _) and Affects*(a3, _) and Affects*(a4, _) and Affects*(a5, _) and Affects*(a6, _)
+none
+5000
+41
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects*(a1, _) and Affects*(a2, _) and Affects*(a3, _) and Affects*(a4, _) and Affects*(a5, _) and Affects*(a6, _) and Follows*(a1, a2) and Follows*(a2, a3) and Follows*(a3, a4) and Follows*(a4, a5) and Follows*(a5, a6)
+none
+5000
+42
+assign a;
+Select a such that Affects*(_, a)
+none
+5000
+43
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects*(_, a1) and Affects*(_, a2) and Affects*(_, a3) and Affects*(_, a4) and Affects*(_, a5) and Affects*(_, a6)
+none
+5000
+44
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects*(_, a1) and Affects*(_, a2) and Affects*(_, a3) and Affects*(_, a4) and Affects*(_, a5) and Affects*(_, a6) and Follows*(a1, a2) and Follows*(a2, a3) and Follows*(a3, a4) and Follows*(a4, a5) and Follows*(a5, a6)
+none
+5000
+45
+assign a;
+Select a such that Affects*(a, a)
+none
+5000
+46
+assign a;
+Select a such that Affects*(a, a) and Affects*(a, a) and Affects*(a, a) and Affects*(a, a) and Affects*(a, a) and Affects*(a, a) and Affects*(a, a)
+none
+5000
+47
+assign a1, a2;
+Select <a1, a2> such that Affects*(a1, a2)
+none
+5000
+48
+assign a1, a2, a3, a4, a5, a6;
+Select <a1, a2, a3, a4, a5, a6> such that Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(s4, s5) and Affects*(s5, s6)
+none
+5000
+49
+assign a; stmt s
+Select <a, s> such that Affects*(a, s)
+none
+5000
+50
+assign a; stmt s
+Select <a, s> such that Affects*(s, a)
+none
+5000
+51
+assign a1, a2, a3, a4; stmt s1, s2, s3, s4;
+Select <a1, a2, a3, a4, s1, s2, s3, s4> such that Affects*(s1, a1) and Affects*(s2, a1) and Affects*(a2, a3) and Affects*(a3, _) and Affects*(s1, a1) and Affects*(_, _) and Affects*(s3, s4)
+none
+5000
+52
+assign a1, a2, a3, a4; stmt s1, s2, s3, s4;
+Select BOOLEAN such that Affects*(a1, a2) and Affects*(a2, a4) and Affects*(s1, a1) and Affects*(s3, s4) and Affects*(a3, s4) and Affects*(_, _) and Affects*(_, s4) and Affects*(a3, _)
 none
 5000
