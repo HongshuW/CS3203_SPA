@@ -34,8 +34,7 @@ class NextTRelationExtractor : public QueryTimeDesignExtractor,
   void initialise();
 
  public:
-  NextTRelationExtractor(shared_ptr<DataModifier> dataModifier,
-                         shared_ptr<ProgramNode> programNode);
+  NextTRelationExtractor(shared_ptr<ProgramNode> programNode);
   shared_ptr<ExtractorResult> extract(StmtNoArgs args) override;
   shared_ptr<ExtractorResult> extractAllRelations() override;
 };
