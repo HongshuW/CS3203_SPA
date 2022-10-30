@@ -4,7 +4,9 @@
 
 #include "Table.h"
 
+#include <algorithm>
 #include <numeric>
+#include <set>
 const string Table::DEFAULT_HEADER_PREFIX = "$";
 
 vector<string> Table::getColumnByName(string columnName) {
@@ -179,4 +181,9 @@ void Table::dropColFromThis(int colIdx) {
       ++rowItr;
     }
   }
+}
+
+void Table::removeDupRow() {
+    std::sort(this->rows.begin(), this->rows.end());
+    this->rows.erase(std::unique(this->rows.begin(), this->rows.end()), this->rows.end());
 }

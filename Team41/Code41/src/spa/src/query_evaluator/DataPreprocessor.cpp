@@ -277,7 +277,8 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
                                           {FIRST_COL_IDX, SECOND_COL_IDX});
       break;
   }
-  dropUnusedColumns(table);
+  bool isDropped = dropUnusedColumns(table);
+  if (isDropped) table.removeDupRow();
 }
 
 DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever,
@@ -799,9 +800,9 @@ void DataPreprocessor::filerTableByColumnIdx(Table &table, int colIdx,
   }
 }
 
-void DataPreprocessor::dropUnusedColumns(Table &table) {
+bool DataPreprocessor::dropUnusedColumns(Table &table) {
   bool hasResult = !table.isBodyEmpty();
-
+  bool isDropped = false;
   // drop unused columns
   int offset = 0;
   int n = table.header.size();
@@ -810,13 +811,14 @@ void DataPreprocessor::dropUnusedColumns(Table &table) {
     if (table.header[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) !=
         std::string::npos) {
       table.dropColFromThis(adjustedIdx);
+      isDropped = true;
       offset--;
     }
   }
   // return a default response if the original table is not empty but no column
   // is used so all are dropped
-  if (table.isBodyEmpty() && hasResult)
-    table = QEUtils::getScalarResponse(hasResult);
+  if (table.isBodyEmpty() && hasResult) table = QEUtils::getScalarResponse(hasResult);
+  return isDropped;
 }
 
 void DataPreprocessor::filerTableByDesignEntity(Table &table, int colIdx,
