@@ -69,12 +69,12 @@ void AffectsCommonExtractor::DFS(int curr, shared_ptr<vector<int>> visitCount,
     }
   }
 
-	if (nodeType == AST::READ_NODE) {
-		shared_ptr<ReadNode> readNode = static_pointer_cast<ReadNode>(nodePtr);
-		string modifiedVar = readNode->variableNode->variable;
-		//! Clear entry in lastModifiedMap
-		lastModifiedMap.erase(modifiedVar);
-	}
+  if (nodeType == AST::READ_NODE) {
+    shared_ptr<ReadNode> readNode = static_pointer_cast<ReadNode>(nodePtr);
+    string modifiedVar = readNode->variableNode->variable;
+    //! Clear entry in lastModifiedMap
+    lastModifiedMap.erase(modifiedVar);
+  }
 
   unordered_set<int> children = currCFG->cfg->find(curr)->second;
   for (auto child : children) {
