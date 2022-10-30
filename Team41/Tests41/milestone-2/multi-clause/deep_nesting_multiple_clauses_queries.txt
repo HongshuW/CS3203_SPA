@@ -6,7 +6,7 @@ Select <s1, a> such that Affects(a1, 6) and Affects(5, a2) and Uses(s1, v) and F
 2 - multiple queries - Affects Affects Uses Follows
 stmt s1, s2; assign a, a1, a2; variable v;
 Select a1 such that Affects(a1, 6)
-5
+5, 6
 5000
 3 - multiple queries - Affects Affects Uses Follows
 stmt s1, s2; assign a, a1, a2; variable v;
