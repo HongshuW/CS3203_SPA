@@ -188,3 +188,26 @@ procedure stress10 {
     }
     x38 = 0;
 }
+
+procedure stress11 {
+    while (x1 < 10) {
+        a1 = a1 + a2 + a3 + s1 + s2 + s3;
+        a2 = a1 + a2 + a3 + s1 + s2 + s3;
+        a3 = a1 + a2 + a3 + s1 + s2 + s3;
+        s1 = s1 / 2;
+        s2 = 100;
+        s3 = a1 + a2 + a3;
+        v1 = 10;
+        v2 = 20;
+        v3 = 30;
+    }
+
+    while (x1 > 10) {
+        z = a1 + a2 + a3;
+        z2 = s1 + s2 + s3;
+        z3 = v1 + v2 + v3;
+    }
+
+    z4 = z + z2 + z3;
+    z5 = a1 + a2 + a3 + s1 + s2 + s3 + v1 + v2 + v3 + z + z2 + z3 + z4;
+}
