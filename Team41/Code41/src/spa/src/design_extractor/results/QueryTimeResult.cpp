@@ -4,6 +4,9 @@
 
 #include "QueryTimeResult.h"
 
+#include <vector>
+using namespace std;
+
 namespace DE {
 QueryTimeResult::QueryTimeResult(shared_ptr<vector<string>> result)
     : result(result) {}
