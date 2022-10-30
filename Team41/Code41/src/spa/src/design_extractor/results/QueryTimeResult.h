@@ -8,7 +8,7 @@
 #include <list>
 #include <memory>
 #include <string>
-
+#include <vector>
 #include "ExtractorResult.h"
 
 using namespace std;
