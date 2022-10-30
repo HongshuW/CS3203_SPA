@@ -101,5 +101,4 @@ void AffectsCommonExtractor::generateAffectsTable() {
   }
 }
 
-void AffectsCommonExtractor::clearCache() { affectsTable = nullptr; }
 }  // namespace DE

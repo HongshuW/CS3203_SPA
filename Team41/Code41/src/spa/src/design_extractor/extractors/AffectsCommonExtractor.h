@@ -41,7 +41,6 @@ class AffectsCommonExtractor : public QueryTimeDesignExtractor,
   void DFS(int curr, shared_ptr<vector<int>> visitCount,
            unordered_map<string, int> LastModifiedMap);
   void generateAffectsTable();
-  void clearCache() override;
 };
 
 }  // namespace DE
