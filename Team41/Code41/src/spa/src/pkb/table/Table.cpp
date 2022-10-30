@@ -184,6 +184,7 @@ void Table::dropColFromThis(int colIdx) {
 }
 
 void Table::removeDupRow() {
-    std::sort(this->rows.begin(), this->rows.end());
-    this->rows.erase(std::unique(this->rows.begin(), this->rows.end()), this->rows.end());
+  std::sort(this->rows.begin(), this->rows.end());
+  this->rows.erase(std::unique(this->rows.begin(), this->rows.end()),
+                   this->rows.end());
 }

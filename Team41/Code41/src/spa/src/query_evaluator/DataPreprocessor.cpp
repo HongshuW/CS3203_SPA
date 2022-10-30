@@ -817,7 +817,8 @@ bool DataPreprocessor::dropUnusedColumns(Table &table) {
   }
   // return a default response if the original table is not empty but no column
   // is used so all are dropped
-  if (table.isBodyEmpty() && hasResult) table = QEUtils::getScalarResponse(hasResult);
+  if (table.isBodyEmpty() && hasResult)
+    table = QEUtils::getScalarResponse(hasResult);
   return isDropped;
 }
 
