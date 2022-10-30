@@ -12,13 +12,32 @@ namespace DE {
 
 class UsesSRelationExtractor : public UsesRelationExtractor {
   unordered_set<string> extractUsesSHelper(
-      shared_ptr<ASTNode> node, shared_ptr<list<vector<string>>> result);
+      shared_ptr<ASTNode> node, shared_ptr<vector<vector<string>>> result,
+      shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers);
+  unordered_map<string, unordered_set<string>> mapProceduresToUsedVariables(
+      shared_ptr<ProgramNode> rootPtr);
 
-  void insertCallsInIfAndWhileForUseS();
-  void insertCallsForUseS();
+  unordered_map<string, unordered_set<string>>
+  mapIfAndWhileStmtNoToUsedVariables(shared_ptr<ProgramNode> rootPtr);
 
-  void initIfAndWhileStmtNoToUsedVarsMap();
-  StrToSetMap ifWhileStmtNoToUsedVarsMap;
+  void insertCallsInIfAndWhileForUseS(shared_ptr<ProgramNode> rootPtr,
+                                      shared_ptr<list<vector<string>>> ans);
+
+  void insertCallsForUseS(shared_ptr<ProgramNode> rootPtr,
+                          shared_ptr<list<vector<string>>> ans);
+
+  void extractCallStmtRelationshipsWithIfAndWhileToOutput(
+      const shared_ptr<ProgramNode>& rootPtr,
+      unordered_map<string, unordered_set<string>> mappedProceduresToVars,
+      unordered_map<string, unordered_set<string>> mappedIfAndWhileToVars,
+      const shared_ptr<list<vector<string>>>& output);
+
+  void extractCallStmtRelationshipsToOutput(
+      int stmtNo, shared_ptr<CallNode> callNode,
+      unordered_map<string, unordered_set<string>> mappedProceduresToVar,
+      unordered_map<string, vector<shared_ptr<CallNode>>>
+          mappedCallNodesToProcedures,
+      shared_ptr<list<vector<string>>> output);
 
  public:
   UsesSRelationExtractor(shared_ptr<DataModifier> dataModifier,

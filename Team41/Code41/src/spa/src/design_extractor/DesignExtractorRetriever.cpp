@@ -7,35 +7,62 @@
 namespace DE {
 DesignExtractorRetriever::DesignExtractorRetriever(
     shared_ptr<ProgramNode> programNode)
-    : programNode(programNode) {}
+    : programNode(programNode) {
+  initialize();
+}
+
+void DesignExtractorRetriever::initialize() {
+  nextTRelationExtractor = make_shared<NextTRelationExtractor>(programNode);
+  affectsRelationExtractor = make_shared<AffectsRelationExtractor>(programNode);
+  affectsTRelationExtractor =
+      make_shared<AffectsTRelationExtractor>(programNode);
+}
 
 shared_ptr<vector<string>> DesignExtractorRetriever::getNextStarRelations(
     StmtNoArgs args) {
-  return shared_ptr<vector<string>>();
-}
-
-shared_ptr<vector<string>> DesignExtractorRetriever::getAffectsRelations(
-    StmtNoArgs args) {
-  return shared_ptr<vector<string>>();
-}
-
-shared_ptr<vector<string>> DesignExtractorRetriever::getAffectsStarRelations(
-    StmtNoArgs args) {
-  return shared_ptr<vector<string>>();
+  auto result = static_pointer_cast<QueryTimeResult>(
+                    nextTRelationExtractor->extract(args))
+                    ->getResult();
+  return result;
 }
 
 shared_ptr<list<vector<string>>>
 DesignExtractorRetriever::getAllNextStarRelations() {
-  return shared_ptr<list<vector<string>>>();
+  auto result = static_pointer_cast<RelationResult>(
+                    nextTRelationExtractor->extractAllRelations())
+                    ->getResult();
+  return result;
+}
+
+shared_ptr<vector<string>> DesignExtractorRetriever::getAffectsRelations(
+    StmtNoArgs args) {
+  auto result = static_pointer_cast<QueryTimeResult>(
+                    affectsRelationExtractor->extract(args))
+                    ->getResult();
+  return result;
 }
 
 shared_ptr<list<vector<string>>>
 DesignExtractorRetriever::getAllAffectsRelations() {
-  return shared_ptr<list<vector<string>>>();
+  auto result = static_pointer_cast<RelationResult>(
+                    affectsRelationExtractor->extractAllRelations())
+                    ->getResult();
+  return result;
+}
+
+shared_ptr<vector<string>> DesignExtractorRetriever::getAffectsStarRelations(
+    StmtNoArgs args) {
+  auto result = static_pointer_cast<QueryTimeResult>(
+                    affectsTRelationExtractor->extract(args))
+                    ->getResult();
+  return result;
 }
 
 shared_ptr<list<vector<string>>>
 DesignExtractorRetriever::getAllAffectsStarRelations() {
-  return shared_ptr<list<vector<string>>>();
+  auto result = static_pointer_cast<RelationResult>(
+                    affectsTRelationExtractor->extractAllRelations())
+                    ->getResult();
+  return result;
 }
 }  // namespace DE
