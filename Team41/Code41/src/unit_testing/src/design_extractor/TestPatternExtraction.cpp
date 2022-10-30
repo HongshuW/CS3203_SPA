@@ -4,7 +4,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "../../spa/src/design_extractor/PatternExtractor.h"
 #include "DEUtils.h"
 #include "Dummies.h"
 #include "catch.hpp"

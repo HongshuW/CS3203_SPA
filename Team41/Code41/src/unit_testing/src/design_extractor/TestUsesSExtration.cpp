@@ -6,8 +6,6 @@
 #include "DEUtils.h"
 #include "Dummies.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/UsesExtractor.h"
 #include "design_extractor/extractors/UsesSRelationExtractor.h"
 #include "design_extractor/results/RelationResult.h"
 #include "pkb/DataModifier.h"

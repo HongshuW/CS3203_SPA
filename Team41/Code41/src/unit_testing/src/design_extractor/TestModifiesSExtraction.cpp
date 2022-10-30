@@ -7,8 +7,6 @@
 #include "DEUtils.h"
 #include "Dummies.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/ModifiesExtractor.h"
 #include "design_extractor/extractors/ModifiesSRelationExtractor.h"
 #include "design_extractor/results/RelationResult.h"
 #include "pkb/DataModifier.h"
@@ -63,13 +61,11 @@ TEST_CASE("Test ModifiesS Extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
 
-    shared_ptr<list<vector<string>>> actualModifiesSRelations =
-        static_pointer_cast<RelationResult>(
-            ModifiesSRelationExtractor(dataModifier, programNode).extract())
-            ->getResult();
+		shared_ptr<list<vector<string>>> actualModifiesSRelations =
+						static_pointer_cast<RelationResult>(
+										ModifiesSRelationExtractor(dataModifier, programNode).extract())
+										->getResult();
     vector<string> expectedModifiesSR1{"1", "x"};
     vector<string> expectedModifiesSR2{"2", "x"};
     vector<string> expectedModifiesSR3{"2", "y"};

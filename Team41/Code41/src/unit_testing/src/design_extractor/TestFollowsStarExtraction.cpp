@@ -5,22 +5,15 @@
 #include <unordered_map>
 
 #include "AST/IfNode.h"
-#include "AST/PrintNode.h"
-#include "AST/ReadNode.h"
-#include "AST/WhileNode.h"
-#include "AST/utils/ASTUtils.h"
 #include "DEUtils.h"
 #include "Dummies.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/FollowsExtractor.h"
-#include "iostream"
 #include "pkb/DataModifier.h"
+#include "design_extractor/extractors/FollowsTRelationExtractor.h"
+#include "design_extractor/results/RelationResult.h"
 
 using namespace std;
 using namespace DE;
-#include "design_extractor/extractors/FollowsTRelationExtractor.h"
-#include "design_extractor/results/RelationResult.h"
 
 TEST_CASE("Test FollowsStar Extractor") {
   SECTION("test empty procedure") {

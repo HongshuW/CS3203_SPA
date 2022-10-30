@@ -25,8 +25,7 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/Dummies.h
     src/design_extractor/TestFollowsExtraction.cpp
     src/design_extractor/TestFollowsStarExtraction.cpp
-    src/design_extractor/TestParentExtraction.cpp
-    src/parser/TestExprNodeParser.cpp
+        src/parser/TestExprNodeParser.cpp
     src/design_extractor/TestUsesSExtration.cpp
     src/design_extractor/DEUtils.cpp
     src/design_extractor/DEUtils.h
@@ -51,9 +50,7 @@ add_executable(unit_testing ${srcs}
     src/query_builder/TestExprStringTokenizer.cpp
     src/pkb/TestPKBStorage.cpp
     src/query_evaluator/TestQueryEvaluator.cpp
-    src/design_extractor/TestCallsExtraction.cpp
-    src/design_extractor/TestCallsStarExtraction.cpp
-    src/design_extractor/TestModifiesPExtraction.cpp
+        src/design_extractor/TestModifiesPExtraction.cpp
     src/design_extractor/TestUsesPExtraction.cpp
     src/CFG/TestCFG.cpp
     src/parser/TestASTValidator.cpp
@@ -61,11 +58,7 @@ add_executable(unit_testing ${srcs}
     src/parser/InvalidProcedureDummies.h
     src/query_evaluator/Dummies/TestQueryBuilder.cpp 
     src/query_evaluator/Dummies/TestQueryBuilder.h
-    src/design_extractor/TestAffectsExtraction.cpp
-    src/design_extractor/TestAffectsStarExtraction.cpp
-    src/design_extractor/TestNextExtraction.cpp
-    src/design_extractor/TestNextStarExtraction.cpp
-    src/pkb/TestCachable.cpp
+        src/pkb/TestCachable.cpp
     src/design_extractor/TestConditionalPatternExtractor.cpp
         src/design_extractor/TestCallsRelationExtractor.cpp
         src/design_extractor/TestCallsTRelationExtractor.cpp

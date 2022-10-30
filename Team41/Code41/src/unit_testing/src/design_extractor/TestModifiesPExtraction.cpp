@@ -6,10 +6,9 @@
 #include "DEUtils.h"
 #include "Dummies.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/ModifiesExtractor.h"
 #include "pkb/DataModifier.h"
 #include "pkb/PKBStorage.h"
+#include "design_extractor/extractors/ModifiesPRelationExtractor.h"
 
 using namespace std;
 using namespace DE;
