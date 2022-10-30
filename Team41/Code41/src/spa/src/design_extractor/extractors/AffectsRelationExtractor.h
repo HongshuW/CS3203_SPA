@@ -23,7 +23,7 @@ class AffectsRelationExtractor : AffectsCommonExtractor {
   shared_ptr<vector<string>> extractNoWildcard(StmtNoArgs args);
   shared_ptr<vector<string>> extractWithStartGivenDFS(CFG cfg, int start);
   void extractWithEndBTHelper(CFG cfg, int stmt,
-                              shared_ptr<vector<string>> output,
+                              shared_ptr<unordered_set<string>> output,
                               shared_ptr<unordered_set<string>> usedVariables,
                               shared_ptr<unordered_set<int>> visited);
   shared_ptr<vector<string>> extractWithEndGivenBackTracking(CFG cfg, int end);

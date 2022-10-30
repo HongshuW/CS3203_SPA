@@ -145,7 +145,7 @@ shared_ptr<vector<string>> AffectsRelationExtractor::extractWithStartGivenDFS(
 }
 
 void AffectsRelationExtractor::extractWithEndBTHelper(
-    CFG cfg, int stmt, shared_ptr<vector<string>> output,
+    CFG cfg, int stmt, shared_ptr<unordered_set<string>> output,
     shared_ptr<unordered_set<string>> usedVariables,
     shared_ptr<unordered_set<int>> visited) {
   if (usedVariables->empty()) {
@@ -167,17 +167,19 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
       if (iterator != usedVariables->end()) {
         // if child (assign) modifies any variable in usedVariables, add it to
         // the output
-        output->push_back(to_string(child));
+        output->insert(to_string(child));
         usedVariables->erase(iterator);
         visited->insert(child);
         // continue to search the path
         extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
         usedVariables->insert(modifiedVar);
+          visited->erase(child);
       } else {
         // if child (assign) doesn't modify any variable in usedVariables,
         // continue searching the path
         visited->insert(child);
         extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
+          visited->erase(child);
       }
     } else if (nodeType == NodeType::READ_NODE) {
       shared_ptr<ReadNode> readNode = dynamic_pointer_cast<ReadNode>(childNode);
@@ -191,11 +193,13 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
         // continue to search the path
         extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
         usedVariables->insert(modifiedVar);
+          visited->erase(child);
       } else {
         // if child (read) doesn't modify any variable in usedVariables,
         // continue searching the path
         visited->insert(child);
         extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
+          visited->erase(child);
       }
     } else if (nodeType == NodeType::CALL_NODE) {
       // TODO: try to optimize this part
@@ -218,6 +222,7 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
       visited->insert(child);
       // continue to search the path
       extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
+        visited->erase(child);
       // add back variables removed
       for (string removedVar : setUnion) {
         usedVariables->insert(removedVar);
@@ -225,14 +230,15 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
     } else {
       visited->insert(child);
       extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
+        visited->erase(child);
     }
   }
 }
 
 shared_ptr<vector<string>>
 AffectsRelationExtractor::extractWithEndGivenBackTracking(CFG cfg, int end) {
-  shared_ptr<vector<string>> output =
-      make_shared<vector<string>>(vector<string>());
+    shared_ptr<unordered_set<string>> output =
+      make_shared<unordered_set<string>>(unordered_set<string>());
   shared_ptr<AssignNode> endNode =
       dynamic_pointer_cast<AssignNode>(lineNoToNodePtrMap->at(end));
   shared_ptr<unordered_set<string>> usedVariables =
@@ -242,7 +248,9 @@ AffectsRelationExtractor::extractWithEndGivenBackTracking(CFG cfg, int end) {
       make_shared<unordered_set<int>>(unordered_set<int>());
   // back tracking
   extractWithEndBTHelper(cfg, end, output, usedVariables, visited);
-  return output;
+  shared_ptr<vector<string>> outputVector = make_shared<vector<string>>(vector<string>());
+  outputVector->insert(outputVector->end(), output->begin(), output->end());
+  return outputVector;
 }
 
 shared_ptr<vector<string>> AffectsRelationExtractor::extractOneWildcard(
