@@ -6,8 +6,10 @@
 
 namespace DE {
 QueryTimeDesignExtractor::QueryTimeDesignExtractor(
-    shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : dataModifier(dataModifier), programNode(programNode) {
+    shared_ptr<ProgramNode> programNode)
+    : programNode(programNode) {
   stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
 }
+
+void QueryTimeDesignExtractor::clearCache() {}
 }  // namespace DE

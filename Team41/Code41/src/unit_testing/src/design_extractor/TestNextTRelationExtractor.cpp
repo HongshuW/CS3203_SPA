@@ -19,10 +19,7 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test No Arguments In Simple Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(1);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       nextTExtractor.extractAllRelations())
                       ->getResult();
@@ -34,10 +31,7 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test No Arguments In Normal Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(2);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       nextTExtractor.extractAllRelations())
                       ->getResult();
@@ -53,10 +47,7 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test No Arguments With While Statement") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(24);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual = static_pointer_cast<RelationResult>(
                       nextTExtractor.extractAllRelations())
                       ->getResult();
@@ -70,13 +61,10 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Invalid Start and End Arguments") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(1);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(100);
     args.setEndStmtNo(250);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -86,13 +74,10 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Invalid Start and Valid End Arguments") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(1);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(-100);
     args.setEndStmtNo(2);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -102,13 +87,10 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid Start and Invalid End Arguments") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(1);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(2000);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -118,12 +100,9 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Invalid End Arguments") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(10);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(-4000);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -134,13 +113,10 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid Start and End Arguments But Different Procedures") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(10);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(3);
     args.setEndStmtNo(4);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -151,13 +127,10 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid Start and End Arguments") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(2);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
     args.setEndStmtNo(6);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -168,13 +141,10 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid Start and End Arguments In While Statement") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(3);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(5);
     args.setEndStmtNo(5);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -185,12 +155,9 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid Start Only Arguments In If Statement") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(2);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(1);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -202,12 +169,9 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid Start Only Arguments In While Statement") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(3);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(5);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -221,12 +185,9 @@ TEST_CASE("Test NextT Relation Extractor") {
       "Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(13);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setStartStmtNo(8);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -238,12 +199,9 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid End Only Arguments Through Double Nested Statements") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(5);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(7);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -255,12 +213,9 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid End Only Arguments In If Statement") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(2);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(6);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();
@@ -272,12 +227,9 @@ TEST_CASE("Test NextT Relation Extractor") {
   SECTION("Test Valid End Only Arguments With Last Stmt No Of Procedure") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     auto programNode = TestDE::Dummies::getTestProgramNode(3);
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
     StmtNoArgs args = StmtNoArgs();
     args.setEndStmtNo(9);
-    NextTRelationExtractor nextTExtractor =
-        NextTRelationExtractor(dataModifier, programNode);
+    NextTRelationExtractor nextTExtractor = NextTRelationExtractor(programNode);
     auto actual =
         static_pointer_cast<QueryTimeResult>(nextTExtractor.extract(args))
             ->getResult();

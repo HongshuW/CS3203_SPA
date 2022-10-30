@@ -3,7 +3,7 @@ stmt s1, s2, s3, s4, s5, s6, s7, s8;
 Select s1 such that Next(s1, s2) and Next(s2, s3) and Next(s3, s4) and Next(s4, s5) and Next(s5, s6) and Next(s6, s7) and Next(s7, s8)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 36, 37, 38
 5000
-2 - next stress test [timeout]
+2 - next stress test
 stmt s1, s2, s3, s4, s5, s6, s7, s8;
 Select s1 such that Next*(s1, s2) and Next*(s2, s3) and Next*(s3, s4)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 36, 37, 38
@@ -16,7 +16,7 @@ Select s1 such that Next*(s1, s2) and Next*(s2, s3) and Next*(s3, s4) with s1.st
 4 - affects stress test
 assign a1, a2, a3, a4, a5, a6, a7, a8, a9;
 Select a1 such that Affects(a1, a2) and Affects(a2, a3) and Affects(a3, a4) and Affects(a4, a5) and Affects(a5, a6) and Affects(a6, a7) and Affects(a7, a8) and Affects(a8, a9)
-9, 19, 38
+5, 6, 9, 19, 38
 5000
 5 - affects stress test
 assign a1, a2, a3, a4, a5, a6, a7, a8, a9;
@@ -26,7 +26,7 @@ Select a1 such that Affects(a1, a2) and Affects(a2, a3) and Affects(a3, a4) and 
 6 - affects* stress test
 assign a1, a2, a3, a4, a5, a6, a7, a8, a9;
 Select a1 such that Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9)
-9, 19, 38
+5, 6, 9, 19, 38
 5000
 7 - affects* stress test
 assign a1, a2, a3, a4, a5, a6, a7, a8, a9;
