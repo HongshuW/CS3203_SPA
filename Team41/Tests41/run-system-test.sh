@@ -52,3 +52,6 @@ cd ../build/src/autotester
 ./autotester $1/Team41/Tests41/milestone-2/stress/deep_nesting_source.txt $1/Team41/Tests41/milestone-2/stress/stress_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/stress-analysis.xml
 ./autotester $1/Team41/Tests41/milestone-2/with/deep_nesting_source.txt $1/Team41/Tests41/milestone-2/with/deep_nesting_one_with_clause_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/with-analysis.xml
 ./autotester $1/Team41/Tests41/milestone-2/cache/test_cache_source.txt $1/Team41/Tests41/milestone-2/cache/test_cache_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/cache-analysis.xml
+
+./autotester $1/Team41/Tests41/milestone-2/corner-cases/corner_case1_source.txt $1/Team41/Tests41/milestone-2/corner-cases/corner_case1_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/corner-cases-analysis.xml
+
