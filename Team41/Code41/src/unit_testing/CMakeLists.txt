@@ -23,17 +23,16 @@ add_executable(unit_testing ${srcs}
     src/design_extractor/TestEntityExtraction.cpp
     src/design_extractor/Dummies.cpp
     src/design_extractor/Dummies.h
-    src/design_extractor/TestFollowsExtraction.cpp
-    src/design_extractor/TestFollowsStarExtraction.cpp
-    src/design_extractor/TestParentExtraction.cpp
-    src/parser/TestExprNodeParser.cpp
-    src/design_extractor/TestUsesSExtration.cpp
+        src/design_extractor/TestFollowsRelationExtractor.cpp
+        src/design_extractor/TestFollowsTRelationExtractor.cpp
+        src/parser/TestExprNodeParser.cpp
+        src/design_extractor/TestUsesSRelationExtractor.cpp
     src/design_extractor/DEUtils.cpp
     src/design_extractor/DEUtils.h
-    src/design_extractor/TestModifiesSExtraction.cpp
+        src/design_extractor/TestModifiesSRelationExtractor.cpp
     src/parser/TestExprNodeParser.cpp
     src/parser/TestCondExprParser.cpp src/utils/TestUtils.cpp
-    src/design_extractor/TestUsesSExtration.cpp
+        src/design_extractor/TestUsesSRelationExtractor.cpp
     src/design_extractor/DEUtils.cpp
     src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.cpp
     src/query_evaluator/DummyDataRetrievers/DummyDataRetriever2.h
@@ -51,21 +50,15 @@ add_executable(unit_testing ${srcs}
     src/query_builder/TestExprStringTokenizer.cpp
     src/pkb/TestPKBStorage.cpp
     src/query_evaluator/TestQueryEvaluator.cpp
-    src/design_extractor/TestCallsExtraction.cpp
-    src/design_extractor/TestCallsStarExtraction.cpp
-    src/design_extractor/TestModifiesPExtraction.cpp
-    src/design_extractor/TestUsesPExtraction.cpp
+        src/design_extractor/TestModifiesPRelationExtractor.cpp
+        src/design_extractor/TestUsesPRelationExtractor.cpp
     src/CFG/TestCFG.cpp
     src/parser/TestASTValidator.cpp
     src/parser/InvalidProcedureDummies.cpp
     src/parser/InvalidProcedureDummies.h
     src/query_evaluator/Dummies/TestQueryBuilder.cpp 
     src/query_evaluator/Dummies/TestQueryBuilder.h
-    src/design_extractor/TestAffectsExtraction.cpp
-    src/design_extractor/TestAffectsStarExtraction.cpp
-    src/design_extractor/TestNextExtraction.cpp
-    src/design_extractor/TestNextStarExtraction.cpp
-    src/pkb/TestCachable.cpp
+        src/pkb/TestCachable.cpp
     src/design_extractor/TestConditionalPatternExtractor.cpp
         src/design_extractor/TestCallsRelationExtractor.cpp
         src/design_extractor/TestCallsTRelationExtractor.cpp

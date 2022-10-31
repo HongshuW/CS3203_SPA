@@ -4,8 +4,8 @@
 
 #include "../../../unit_testing/src/design_extractor/DEUtils.h"
 #include "catch.hpp"
-#include "design_extractor/CallsExtractor.h"
-#include "parser/ASTBuilder.h"
+#include "design_extractor/extractors/CallsRelationExtractor.h"
+#include "design_extractor/extractors/CallsTRelationExtractor.h"
 #include "parser/ASTValidator.h"
 #include "parser/Parser.h"
 #include "parser/SPExceptions.h"
@@ -78,8 +78,10 @@ TEST_CASE("Test Calls Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = CallsExtractor::extractCalls(root);
+    CallsRelationExtractor callsExtractor =
+        CallsRelationExtractor(dataModifier, root);
+    auto actual = static_pointer_cast<RelationResult>(callsExtractor.extract())
+                      ->getResult();
     vector<vector<string>> expected = {{"deepNesting", "x23", "23"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementTuple(*actual, expected));
@@ -96,8 +98,10 @@ TEST_CASE("Test Calls Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = CallsExtractor::extractCallsStar(root);
+    CallsTRelationExtractor callsTExtractor =
+        CallsTRelationExtractor(dataModifier, root);
+    auto actual = static_pointer_cast<RelationResult>(callsTExtractor.extract())
+                      ->getResult();
     vector<vector<string>> expected = {{"deepNesting", "x23"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));

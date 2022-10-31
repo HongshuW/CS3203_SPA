@@ -4,8 +4,9 @@
 
 #include "../../../unit_testing/src/design_extractor/DEUtils.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/PatternExtractor.h"
+#include "design_extractor/extractors/IfPatternExtractor.h"
+#include "design_extractor/extractors/WhilePatternExtractor.h"
+#include "design_extractor/results/RelationResult.h"
 #include "parser/ASTValidator.h"
 #include "parser/Parser.h"
 #include "parser/SPExceptions.h"
@@ -39,8 +40,11 @@ TEST_CASE("Test Conditional Pattern Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    list<vector<string>> actual = PatternExtractor::extractIfPattern(root);
+    IfPatternExtractor ifPatternExtractor =
+        IfPatternExtractor(dataModifier, root);
+    auto actual =
+        *static_pointer_cast<RelationResult>(ifPatternExtractor.extract())
+             ->getResult();
     vector<vector<string>> expected = {{"2", "x"}};
     REQUIRE(expected.size() == actual.size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(actual, expected));
@@ -73,8 +77,11 @@ TEST_CASE("Test Conditional Pattern Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    list<vector<string>> actual = PatternExtractor::extractIfPattern(root);
+    IfPatternExtractor ifPatternExtractor =
+        IfPatternExtractor(dataModifier, root);
+    auto actual =
+        *static_pointer_cast<RelationResult>(ifPatternExtractor.extract())
+             ->getResult();
     vector<vector<string>> expected = {{"2", "baz"},  {"2", "qux"},
                                        {"2", "quux"}, {"3", "bing"},
                                        {"3", "boom"}, {"3", "qxxx"}};
@@ -108,8 +115,11 @@ TEST_CASE("Test Conditional Pattern Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    list<vector<string>> actual = PatternExtractor::extractWhilePattern(root);
+    WhilePatternExtractor whilePatternExtractor =
+        WhilePatternExtractor(dataModifier, root);
+    auto actual =
+        *static_pointer_cast<RelationResult>(whilePatternExtractor.extract())
+             ->getResult();
     vector<vector<string>> expected = {
         {"2", "baz"},  {"2", "qux"},  {"2", "quux"}, {"3", "bing"},
         {"3", "boom"}, {"3", "qxxx"}, {"5", "x"},    {"5", "y"}};
