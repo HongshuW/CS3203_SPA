@@ -117,7 +117,7 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
           intermediateTable.dropColFromThis(SECOND_COL_IDX);
           if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
         }
-
+        intermediateTable.removeDupRow();
         intermediateTable.renameHeader({attrRef.toString()});
         resultTable =
             TableCombiner().crossProduct(intermediateTable, resultTable);
