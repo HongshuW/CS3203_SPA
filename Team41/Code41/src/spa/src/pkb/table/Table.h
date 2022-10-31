@@ -40,6 +40,7 @@ class Table {
 
   void dupCol(int colIdx, string dupColName = "$dup_col");
   void dropColFromThis(int colIdx);
+  void removeDupRow();
 
   bool hasCol(string colName);
   bool isEqual(const Table &otherTable);

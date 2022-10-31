@@ -2,10 +2,10 @@
 // Created by Aaron on 23/10/22.
 //
 
-#include "../../../unit_testing/src/design_extractor/DEUtils.h"
 #include "catch.hpp"
-#include "design_extractor/AffectsExtractor.h"
-#include "design_extractor/DesignExtractor.h"
+#include "design_extractor/extractors/AffectsRelationExtractor.h"
+#include "design_extractor/extractors/AffectsTRelationExtractor.h"
+#include "design_extractor/results/QueryTimeResult.h"
 #include "parser/ASTValidator.h"
 #include "parser/Parser.h"
 #include "parser/SPExceptions.h"
@@ -35,12 +35,13 @@ TEST_CASE("Test Affects Integration") {
     astValidator.validateAST();
 
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(root);
     StmtNoArgs args = StmtNoArgs();
     args.setStartAndEndStmtNo(1, 4);
-    vector<string> actual = designExtractor.getAffectsStarRelations(args);
+    auto actual = *static_pointer_cast<QueryTimeResult>(
+                       affectsTRelationExtractor.extract(args))
+                       ->getResult();
     vector<string> expected = {"1", "4"};
     REQUIRE(actual == expected);
   }
@@ -70,12 +71,13 @@ TEST_CASE("Test Affects Integration") {
     astValidator.validateAST();
 
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(root);
     StmtNoArgs args = StmtNoArgs();
     args.setStartAndEndStmtNo(4, 7);
-    vector<string> actual = designExtractor.getAffectsStarRelations(args);
+    auto actual = *static_pointer_cast<QueryTimeResult>(
+                       affectsTRelationExtractor.extract(args))
+                       ->getResult();
     vector<string> expected = {"4", "7"};
     REQUIRE(actual == expected);
   }
@@ -109,12 +111,13 @@ TEST_CASE("Test Affects Integration") {
     astValidator.validateAST();
 
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(root);
     StmtNoArgs args = StmtNoArgs();
     args.setStartAndEndStmtNo(4, 9);
-    vector<string> actual = designExtractor.getAffectsStarRelations(args);
+    auto actual = *static_pointer_cast<QueryTimeResult>(
+                       affectsTRelationExtractor.extract(args))
+                       ->getResult();
     vector<string> expected = {"4", "9"};
     REQUIRE(actual == expected);
   }
@@ -142,8 +145,11 @@ TEST_CASE("Test Affects Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    list<vector<string>> actual = designExtractor.getAllAffectsStarRelations();
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(root);
+    auto actual = *static_pointer_cast<RelationResult>(
+                       affectsTRelationExtractor.extractAllRelations())
+                       ->getResult();
     list<vector<string>> expected = {
         {"2", "2"}, {"2", "3"}, {"2", "4"}, {"3", "2"}, {"3", "3"},
         {"3", "4"}, {"4", "2"}, {"4", "3"}, {"4", "4"}, {"5", "5"}};
@@ -232,12 +238,13 @@ TEST_CASE("Test Affects Integration") {
     astValidator.validateAST();
 
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
-    shared_ptr<DataModifier> dataModifier =
-        make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
+    AffectsTRelationExtractor affectsTRelationExtractor =
+        AffectsTRelationExtractor(root);
     StmtNoArgs args = StmtNoArgs();
     args.setStartAndEndStmtNo(6, 6);
-    vector<string> actual = designExtractor.getAffectsStarRelations(args);
+    auto actual = *static_pointer_cast<QueryTimeResult>(
+                       affectsTRelationExtractor.extract(args))
+                       ->getResult();
     vector<string> expected = {"6", "6"};
     REQUIRE(actual == expected);
   }

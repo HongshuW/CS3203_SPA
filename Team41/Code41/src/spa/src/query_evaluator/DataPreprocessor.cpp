@@ -44,12 +44,12 @@ Table DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
   const vector<DesignEntity> AVAIL_ENTITIES = {
       DesignEntity::STMT, DesignEntity::CONSTANT, DesignEntity::VARIABLE,
       DesignEntity::PROCEDURE};
+  const int SECOND_COL = 1;
   if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) {
     Table resultTable =
         this->dataRetriever->getTableByDesignEntity(designEntity);
-    for (int i = 1; i < resultTable.header.size(); i++) {
-      resultTable.dropColFromThis(i);
-    }
+    resultTable.dropColFromThis(SECOND_COL);
+    resultTable.removeDupRow();
     return resultTable;
   }
 
@@ -57,9 +57,8 @@ Table DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
   Table resultTable =
       this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT);
   this->filerTableByDesignEntity(resultTable, FIRST_COL_IDX, designEntity);
-  for (int i = 1; i < resultTable.header.size(); i++) {
-    resultTable.dropColFromThis(i);
-  }
+  resultTable.dropColFromThis(SECOND_COL);
+  resultTable.removeDupRow();
   return resultTable;
 }
 
@@ -135,9 +134,9 @@ Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
       if (table.isBodyEmpty()) return Table();
       const int FIRST_COL_IDX = 0;
       const int DROP_COL_FROM = 1;
-      for (int i = DROP_COL_FROM; i < table.header.size(); i++) {
-        table.dropColFromThis(i);
-      }
+
+      table.dropColFromThis(DROP_COL_FROM);
+      table.removeDupRow();
       // get two identical cols with different names
       table.dupCol(FIRST_COL_IDX);
       table.renameHeader({attrRef.synonym.synonym, attrRef.toString()});
@@ -277,7 +276,8 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
                                           {FIRST_COL_IDX, SECOND_COL_IDX});
       break;
   }
-  dropUnusedColumns(table);
+  bool isDropped = dropUnusedColumns(table);
+  if (isDropped) table.removeDupRow();
 }
 
 DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever,
@@ -355,7 +355,7 @@ Table DataPreprocessor::getTableByAffects(
   if (ref1Type == QB::RefType::INTEGER) {
     auto resultTable = dataRetriever->getAffectedStatements(get<int>(ref1));
     resultTable.dropColFromThis(FIRST_COL_IDX);
-
+    resultTable.removeDupRow();
     // check if second ref is not a synonym and return result immediately
     if (ref2Type != QB::RefType::SYNONYM)
       return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
@@ -370,6 +370,7 @@ Table DataPreprocessor::getTableByAffects(
   if (ref2Type == QB::RefType::INTEGER) {
     auto resultTable = dataRetriever->getAffectingStatements(get<int>(ref2));
     resultTable.dropColFromThis(SECOND_COL_IDX);
+    resultTable.removeDupRow();
     if (ref1Type != QB::RefType::SYNONYM)
       return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
                                         : EMPTY_RESULT;
@@ -423,6 +424,7 @@ Table DataPreprocessor::getTableByAffectsT(
   if (ref1Type == QB::RefType::INTEGER) {
     auto resultTable = dataRetriever->getAffectedTStatements(get<int>(ref1));
     resultTable.dropColFromThis(FIRST_COL_IDX);
+    resultTable.removeDupRow();
     // check if second ref is not a synonym and return result immediately
     if (ref2Type != QB::RefType::SYNONYM)
       return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
@@ -437,6 +439,7 @@ Table DataPreprocessor::getTableByAffectsT(
   if (ref2Type == QB::RefType::INTEGER) {
     auto resultTable = dataRetriever->getAffectingTStatements(get<int>(ref2));
     resultTable.dropColFromThis(SECOND_COL_IDX);
+    resultTable.removeDupRow();
     if (ref1Type != QB::RefType::SYNONYM)
       return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
                                         : EMPTY_RESULT;
@@ -799,9 +802,9 @@ void DataPreprocessor::filerTableByColumnIdx(Table &table, int colIdx,
   }
 }
 
-void DataPreprocessor::dropUnusedColumns(Table &table) {
+bool DataPreprocessor::dropUnusedColumns(Table &table) {
   bool hasResult = !table.isBodyEmpty();
-
+  bool isDropped = false;
   // drop unused columns
   int offset = 0;
   int n = table.header.size();
@@ -810,6 +813,7 @@ void DataPreprocessor::dropUnusedColumns(Table &table) {
     if (table.header[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) !=
         std::string::npos) {
       table.dropColFromThis(adjustedIdx);
+      isDropped = true;
       offset--;
     }
   }
@@ -817,6 +821,7 @@ void DataPreprocessor::dropUnusedColumns(Table &table) {
   // is used so all are dropped
   if (table.isBodyEmpty() && hasResult)
     table = QEUtils::getScalarResponse(hasResult);
+  return isDropped;
 }
 
 void DataPreprocessor::filerTableByDesignEntity(Table &table, int colIdx,

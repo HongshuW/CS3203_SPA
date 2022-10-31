@@ -41,8 +41,6 @@ add_library(spa ${srcs} ${headers}
         src/ast/ProcedureNode.h
         src/parser/Parser.cpp
         src/parser/Parser.h
-        src/design_extractor/DesignExtractor.cpp
-        src/design_extractor/DesignExtractor.h
         src/query_builder/commons/Ident.h
         src/query_builder/commons/Ident.cpp
         src/query_evaluator/DataPreprocessor.cpp
@@ -96,8 +94,6 @@ add_library(spa ${srcs} ${headers}
         src/AST/StmtNode.h
         src/AST/utils/ASTUtils.cpp
         src/AST/utils/ASTUtils.h
-        src/design_extractor/EntityExtractor.cpp
-        src/design_extractor/EntityExtractor.h
         src/pkb/exception/KeyNotFoundException.cpp
         src/pkb/exception/KeyNotFoundException.h
         src/AST/StmtNode.h
@@ -109,14 +105,6 @@ add_library(spa ${srcs} ${headers}
         src/utils/Utils.h
         src/utils/ExprNodeParser.cpp
         src/utils/ExprNodeParser.h
-        src/design_extractor/FollowsExtractor.cpp
-        src/design_extractor/FollowsExtractor.h
-        src/design_extractor/ParentExtractor.cpp
-        src/design_extractor/ParentExtractor.h
-        src/design_extractor/ModifiesExtractor.cpp
-        src/design_extractor/ModifiesExtractor.h
-        src/design_extractor/UsesExtractor.cpp
-        src/design_extractor/UsesExtractor.h
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
         src/query_evaluator/QEUtils.cpp
@@ -127,8 +115,6 @@ add_library(spa ${srcs} ${headers}
         src/utils/ExprNodeParser.h
         src/AST/RelExprNode.cpp
         src/AST/RelExprNode.h
-        src/design_extractor/PatternExtractor.cpp
-        src/design_extractor/PatternExtractor.h
         src/query_builder/clauses/pattern_clauses/PatternClause.h
         src/query_builder/commons/ExpressionSpec.cpp
         src/query_builder/commons/ExpressionSpec.h
@@ -165,12 +151,9 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/constants/QueryParserConstants.cpp
         src/query_builder/constants/QueryParserConstants.h
         src/query_builder/commons/WithRef.h
-        src/design_extractor/CallsExtractor.cpp
-        src/design_extractor/CallsExtractor.h
         src/query_builder/commons/Underscore.cpp
         src/query_builder/constants/QueryValidatorConstants.cpp
         src/query_builder/constants/QueryValidatorConstants.h
-        src/design_extractor/CallsExtractor.h
         src/query_builder/clauses/pattern_clauses/IfPatternClause.cpp
         src/query_builder/clauses/pattern_clauses/IfPatternClause.h
         src/query_builder/clauses/pattern_clauses/WhilePatternClause.cpp
@@ -275,10 +258,6 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/ConditionalClause.h
         src/design_extractor/args/StmtNoArgs.cpp
         src/design_extractor/args/StmtNoArgs.h
-        src/design_extractor/NextExtractor.cpp
-        src/design_extractor/NextExtractor.h
-        src/design_extractor/AffectsExtractor.cpp
-        src/design_extractor/AffectsExtractor.h
         src/pkb/table/Cachable.cpp
         src/pkb/table/Cachable.h
         src/cache_manager/CacheManager.cpp
@@ -287,39 +266,8 @@ add_library(spa ${srcs} ${headers}
         src/parser/constants/ValidatorConstants.h
         src/query_builder/constants/CommonConstants.cpp
         src/query_builder/constants/CommonConstants.h
-        src/design_extractor/save_extractions/save_to_pkb/PKBSaverInterface.cpp
-        src/design_extractor/save_extractions/save_to_pkb/PKBSaverInterface.h
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedModifiesSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedModifiesSaver.h
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedUsesSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedUsesSaver.h
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedFollowsSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedFollowsSaver.h
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedCallsSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedCallsSaver.h
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedNextSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedNextSaver.h
-        src/design_extractor/save_extractions/save_to_pkb/PKBSaverExecutor.cpp
-        src/design_extractor/save_extractions/save_to_pkb/PKBSaverExecutor.h
-        src/design_extractor/save_extractions/save_extracted_patterns/ExtractedAssignPatternSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_patterns/ExtractedAssignPatternSaver.h
-        src/design_extractor/save_extractions/save_extracted_patterns/ExtractedIfPatternSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_patterns/ExtractedIfPatternSaver.h
-        src/design_extractor/save_extractions/save_extracted_patterns/ExtractedWhilePatternSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_patterns/ExtractedWhilePatternSaver.h
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedParentsSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_relations/ExtractedParentsSaver.h
         src/query_evaluator/constants/QueryEvaluatotConstants.cpp
         src/query_evaluator/constants/QueryEvaluatotConstants.h
-        src/design_extractor/save_extractions/save_extracted_entities/ExtractedVariableSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_entities/ExtractedVariableSaver.h
-        src/design_extractor/save_extractions/save_extracted_entities/ExtractedConstantSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_entities/ExtractedConstantSaver.h
-        src/design_extractor/save_extractions/save_extracted_entities/ExtractedProceduresSaver.cpp
-        src/design_extractor/save_extractions/save_extracted_entities/ExtractedProceduresSaver.h
-        src/design_extractor/mappers/AffectsMapper.cpp src/design_extractor/mappers/AffectsMapper.h
-        src/design_extractor/mappers/CFGMapper.cpp
-        src/design_extractor/mappers/CFGMapper.h
         src/design_extractor/AbstractDesignExtractor.cpp
         src/design_extractor/AbstractDesignExtractor.h
         src/design_extractor/extractors/EntitiesExtractor.cpp

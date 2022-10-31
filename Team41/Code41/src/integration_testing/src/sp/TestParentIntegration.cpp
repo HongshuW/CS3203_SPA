@@ -4,8 +4,8 @@
 
 #include "../../../unit_testing/src/design_extractor/DEUtils.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/ParentExtractor.h"
+#include "design_extractor/extractors/ParentRelationExtractor.h"
+#include "design_extractor/extractors/ParentTRelationExtractor.h"
 #include "parser/ASTValidator.h"
 #include "parser/Parser.h"
 #include "parser/SPExceptions.h"
@@ -36,8 +36,11 @@ TEST_CASE("Test Parent Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ParentExtractor::extractParent(root);
+    ParentRelationExtractor parentRelationExtractor =
+        ParentRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(parentRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -62,8 +65,11 @@ TEST_CASE("Test Parent Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ParentExtractor::extractParentT(root);
+    ParentTRelationExtractor parentTRelationExtractor =
+        ParentTRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(parentTRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -93,8 +99,11 @@ TEST_CASE("Test Parent Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ParentExtractor::extractParent(root);
+    ParentRelationExtractor parentRelationExtractor =
+        ParentRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(parentRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"2", "3"}, {"2", "4"}, {"2", "5"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -124,8 +133,11 @@ TEST_CASE("Test Parent Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ParentExtractor::extractParentT(root);
+    ParentTRelationExtractor parentTRelationExtractor =
+        ParentTRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(parentTRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"2", "3"}, {"2", "4"}, {"2", "5"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -159,8 +171,11 @@ TEST_CASE("Test Parent Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ParentExtractor::extractParent(root);
+    ParentRelationExtractor parentRelationExtractor =
+        ParentRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(parentRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"2", "3"}, {"2", "7"}, {"2", "8"},
                                        {"3", "4"}, {"3", "5"}, {"3", "6"}};
     REQUIRE(expected.size() == actual->size());
@@ -195,8 +210,11 @@ TEST_CASE("Test Parent Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ParentExtractor::extractParentT(root);
+    ParentTRelationExtractor parentTRelationExtractor =
+        ParentTRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(parentTRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"2", "3"}, {"2", "4"}, {"2", "5"},
                                        {"2", "6"}, {"2", "7"}, {"2", "8"},
                                        {"3", "4"}, {"3", "5"}, {"3", "6"}};

@@ -8,16 +8,11 @@
 #include "AST/ReadNode.h"
 #include "AST/WhileNode.h"
 #include "AST/utils/ASTUtils.h"
-#include "Dummies.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/EntityExtractor.h"
-#include "design_extractor/FollowsExtractor.h"
 #include "design_extractor/extractors/ConstantExtractor.h"
 #include "design_extractor/extractors/ProcedureExtractor.h"
 #include "design_extractor/extractors/VariableExtractor.h"
 #include "design_extractor/results/EntityResult.h"
-#include "iostream"
 #include "pkb/DataModifier.h"
 
 using namespace std;
@@ -47,8 +42,6 @@ TEST_CASE("Test entity extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode);
     VariableExtractor variableExtractor =
         VariableExtractor(dataModifier, programNode);
     auto variableResult = variableExtractor.extract();
@@ -126,8 +119,6 @@ TEST_CASE("Test entity extraction") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor =
-        DesignExtractor(dataModifier, programNode2);
 
     VariableExtractor varExtractor =
         VariableExtractor(dataModifier, programNode2);
