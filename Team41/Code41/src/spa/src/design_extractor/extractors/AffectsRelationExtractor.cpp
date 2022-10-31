@@ -309,6 +309,7 @@ shared_ptr<ExtractorResult> AffectsRelationExtractor::extract(StmtNoArgs args) {
 }
 
 shared_ptr<ExtractorResult> AffectsRelationExtractor::extractAllRelations() {
+    clearCache();
   generateAffectsTable();
 
   shared_ptr<list<vector<string>>> output = make_shared<list<vector<string>>>();
