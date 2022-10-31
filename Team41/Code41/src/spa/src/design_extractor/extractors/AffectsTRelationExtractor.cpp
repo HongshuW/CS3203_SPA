@@ -18,8 +18,8 @@ AffectsTRelationExtractor::AffectsTRelationExtractor(
 
 shared_ptr<ExtractorResult> AffectsTRelationExtractor::extract(
     StmtNoArgs args) {
-    clearCache();
-    generateAffectsTable();
+  clearCache();
+  generateAffectsTable();
 
   shared_ptr<vector<string>> result = make_shared<vector<string>>();
   if (args.startAndEndExists()) {
@@ -38,7 +38,7 @@ shared_ptr<ExtractorResult> AffectsTRelationExtractor::extract(
 }
 
 shared_ptr<ExtractorResult> AffectsTRelationExtractor::extractAllRelations() {
-    clearCache();
+  clearCache();
   generateAffectsTable();
   const int EDGE_INDEX_OFFSET = 1;
   for (auto &relation : *affectsTable) {
@@ -149,8 +149,8 @@ void AffectsTRelationExtractor::extractWithEndGivenDFS(
 }
 
 void AffectsTRelationExtractor::clearCache() {
-    affectsAdjListPtr = nullptr;
-    affectsAdjListReversedPtr = nullptr;
-    affectsTable = nullptr;
+  affectsAdjListPtr = nullptr;
+  affectsAdjListReversedPtr = nullptr;
+  affectsTable = nullptr;
 }
 }  // namespace DE
