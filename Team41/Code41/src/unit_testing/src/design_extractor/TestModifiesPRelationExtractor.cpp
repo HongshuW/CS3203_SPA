@@ -6,13 +6,13 @@
 #include "DEUtils.h"
 #include "Dummies.h"
 #include "catch.hpp"
+#include "design_extractor/extractors/ModifiesPRelationExtractor.h"
 #include "pkb/DataModifier.h"
 #include "pkb/PKBStorage.h"
-#include "design_extractor/extractors/ModifiesPRelationExtractor.h"
 
 using namespace std;
 using namespace DE;
-#include "design_extractor/extractors/ModifiesPRelationExtractor.h"
+
 #include "design_extractor/results/RelationResult.h"
 TEST_CASE("Test ModifiesP Extraction") {
   SECTION("test non-nested + singly-nested procedures") {

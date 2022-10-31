@@ -62,10 +62,10 @@ TEST_CASE("Test ModifiesS Extraction") {
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
 
-		shared_ptr<list<vector<string>>> actualModifiesSRelations =
-						static_pointer_cast<RelationResult>(
-										ModifiesSRelationExtractor(dataModifier, programNode).extract())
-										->getResult();
+    shared_ptr<list<vector<string>>> actualModifiesSRelations =
+        static_pointer_cast<RelationResult>(
+            ModifiesSRelationExtractor(dataModifier, programNode).extract())
+            ->getResult();
     vector<string> expectedModifiesSR1{"1", "x"};
     vector<string> expectedModifiesSR2{"2", "x"};
     vector<string> expectedModifiesSR3{"2", "y"};
