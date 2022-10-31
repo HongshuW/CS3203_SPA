@@ -4,12 +4,13 @@
 
 #include "../../../unit_testing/src/design_extractor/DEUtils.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/ModifiesExtractor.h"
+#include "design_extractor/extractors/ModifiesSRelationExtractor.h"
+#include "design_extractor/results/RelationResult.h"
 #include "parser/ASTValidator.h"
 #include "parser/Parser.h"
 #include "parser/SPExceptions.h"
 #include "parser/Tokenizer.h"
+#include "pkb/DataModifier.h"
 
 using namespace SourceParser;
 using namespace std;
@@ -35,8 +36,11 @@ TEST_CASE("Test Modifies Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ModifiesExtractor::extractModifiesS(root);
+    ModifiesSRelationExtractor modifiesSRelationExtractor =
+        ModifiesSRelationExtractor(dataModifier, root);
+    auto actual = static_pointer_cast<RelationResult>(
+                      modifiesSRelationExtractor.extract())
+                      ->getResult();
     vector<vector<string>> expected = {{"2", "x"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -64,8 +68,11 @@ TEST_CASE("Test Modifies Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ModifiesExtractor::extractModifiesS(root);
+    ModifiesSRelationExtractor modifiesSRelationExtractor =
+        ModifiesSRelationExtractor(dataModifier, root);
+    auto actual = static_pointer_cast<RelationResult>(
+                      modifiesSRelationExtractor.extract())
+                      ->getResult();
     vector<vector<string>> expected = {
         {"2", "x"}, {"3", "z"}, {"4", "a"}, {"5", "c"}};
     REQUIRE(expected.size() == actual->size());
@@ -100,8 +107,11 @@ TEST_CASE("Test Modifies Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = ModifiesExtractor::extractModifiesS(root);
+    ModifiesSRelationExtractor modifiesSRelationExtractor =
+        ModifiesSRelationExtractor(dataModifier, root);
+    auto actual = static_pointer_cast<RelationResult>(
+                      modifiesSRelationExtractor.extract())
+                      ->getResult();
     vector<vector<string>> expected = {
         {"1", "a"}, {"2", "b"}, {"2", "c"}, {"2", "d"}, {"2", "f"}, {"3", "b"},
         {"3", "c"}, {"3", "d"}, {"4", "b"}, {"5", "c"}, {"6", "d"}, {"8", "f"}};

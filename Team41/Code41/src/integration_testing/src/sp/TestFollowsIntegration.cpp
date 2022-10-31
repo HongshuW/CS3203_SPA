@@ -4,8 +4,8 @@
 
 #include "../../../unit_testing/src/design_extractor/DEUtils.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/FollowsExtractor.h"
+#include "design_extractor/extractors/FollowsRelationExtractor.h"
+#include "design_extractor/extractors/FollowsTRelationExtractor.h"
 #include "parser/ASTValidator.h"
 #include "parser/Parser.h"
 #include "parser/SPExceptions.h"
@@ -36,8 +36,11 @@ TEST_CASE("Test Follows Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = FollowsExtractor().extractFollows(root);
+    FollowsRelationExtractor followsExtractor =
+        FollowsRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(followsExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "2"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -63,8 +66,11 @@ TEST_CASE("Test Follows Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = FollowsExtractor().extractFollows(root);
+    FollowsRelationExtractor followsExtractor =
+        FollowsRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(followsExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "2"}, {"2", "3"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -90,8 +96,11 @@ TEST_CASE("Test Follows Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = FollowsExtractor().extractFollowsStar(root);
+    FollowsTRelationExtractor followsTExtractor =
+        FollowsTRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(followsTExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "2"}, {"1", "3"}, {"2", "3"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -120,8 +129,11 @@ TEST_CASE("Test Follows Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual1 = FollowsExtractor().extractFollows(root);
+    FollowsRelationExtractor followsExtractor =
+        FollowsRelationExtractor(dataModifier, root);
+    auto actual1 =
+        static_pointer_cast<RelationResult>(followsExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected1 = {{"1", "2"}};
     REQUIRE(expected1.size() == actual1->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual1, expected1));
@@ -151,8 +163,11 @@ TEST_CASE("Test Follows Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual1 = FollowsExtractor().extractFollows(root);
+    FollowsRelationExtractor followsExtractor =
+        FollowsRelationExtractor(dataModifier, root);
+    auto actual1 =
+        static_pointer_cast<RelationResult>(followsExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected1 = {{"1", "2"}, {"3", "4"}};
     REQUIRE(expected1.size() == actual1->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual1, expected1));
@@ -183,8 +198,11 @@ TEST_CASE("Test Follows Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual1 = FollowsExtractor().extractFollowsStar(root);
+    FollowsTRelationExtractor followsTExtractor =
+        FollowsTRelationExtractor(dataModifier, root);
+    auto actual1 =
+        static_pointer_cast<RelationResult>(followsTExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected1 = {
         {"1", "2"}, {"3", "4"}, {"3", "5"}, {"4", "5"}};
     REQUIRE(expected1.size() == actual1->size());
@@ -218,8 +236,11 @@ TEST_CASE("Test Follows Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual1 = FollowsExtractor().extractFollows(root);
+    FollowsRelationExtractor followsExtractor =
+        FollowsRelationExtractor(dataModifier, root);
+    auto actual1 =
+        static_pointer_cast<RelationResult>(followsExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected1 = {{"1", "2"}, {"4", "5"}, {"6", "7"}};
     REQUIRE(expected1.size() == actual1->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual1, expected1));
@@ -253,8 +274,11 @@ TEST_CASE("Test Follows Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual1 = FollowsExtractor().extractFollowsStar(root);
+    FollowsTRelationExtractor followsTExtractor =
+        FollowsTRelationExtractor(dataModifier, root);
+    auto actual1 =
+        static_pointer_cast<RelationResult>(followsTExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected1 = {
         {"1", "2"}, {"1", "8"}, {"2", "8"}, {"4", "5"}, {"6", "7"}};
     REQUIRE(expected1.size() == actual1->size());

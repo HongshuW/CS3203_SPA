@@ -4,8 +4,8 @@
 
 #include "../../../unit_testing/src/design_extractor/DEUtils.h"
 #include "catch.hpp"
-#include "design_extractor/DesignExtractor.h"
-#include "design_extractor/UsesExtractor.h"
+#include "design_extractor/extractors/UsesSRelationExtractor.h"
+#include "design_extractor/results/RelationResult.h"
 #include "parser/ASTValidator.h"
 #include "parser/Parser.h"
 #include "parser/SPExceptions.h"
@@ -36,8 +36,11 @@ TEST_CASE("Test Uses Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = UsesExtractor::extractUsesS(root);
+    UsesSRelationExtractor usesSRelationExtractor =
+        UsesSRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(usesSRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"1", "x"}, {"2", "y"}, {"2", "z"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -67,8 +70,11 @@ TEST_CASE("Test Uses Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = UsesExtractor::extractUsesS(root);
+    UsesSRelationExtractor usesSRelationExtractor =
+        UsesSRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(usesSRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {{"2", "x"}, {"2", "z"}, {"4", "z"}};
     REQUIRE(expected.size() == actual->size());
     REQUIRE(TestDE::DEUtils::containsSameElementPair(*actual, expected));
@@ -102,8 +108,11 @@ TEST_CASE("Test Uses Integration") {
     shared_ptr<PKBStorage> pkbStorage = make_shared<PKBStorage>(PKBStorage());
     shared_ptr<DataModifier> dataModifier =
         make_shared<DataModifier>(pkbStorage);
-    DesignExtractor designExtractor = DesignExtractor(dataModifier, root);
-    auto actual = UsesExtractor::extractUsesS(root);
+    UsesSRelationExtractor usesSRelationExtractor =
+        UsesSRelationExtractor(dataModifier, root);
+    auto actual =
+        static_pointer_cast<RelationResult>(usesSRelationExtractor.extract())
+            ->getResult();
     vector<vector<string>> expected = {
         {"2", "x"}, {"2", "y"}, {"2", "a"}, {"2", "e"}, {"3", "x"}, {"3", "y"},
         {"4", "x"}, {"5", "x"}, {"6", "y"}, {"7", "e"}, {"8", "a"}};

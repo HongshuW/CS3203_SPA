@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "design_extractor/DesignExtractor.h"
 #include "parser/ASTBuilder.h"
 #include "parser/Parser.h"
 #include "parser/Tokenizer.h"
