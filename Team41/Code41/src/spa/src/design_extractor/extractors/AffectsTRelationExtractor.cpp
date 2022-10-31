@@ -18,27 +18,28 @@ AffectsTRelationExtractor::AffectsTRelationExtractor(
 
 shared_ptr<ExtractorResult> AffectsTRelationExtractor::extract(
     StmtNoArgs args) {
-  if (affectsTable == nullptr) generateAffectsTable();
+  clearCache();
+  generateAffectsTable();
+
+  shared_ptr<vector<string>> result = make_shared<vector<string>>();
   if (args.startAndEndExists()) {
-    if (affectsAdjListPtr == nullptr) initAffectsAdjList();
-    return make_shared<QueryTimeResult>(
-        extractNoWildcard(args.getStartStmtNo(), args.getEndStmtNo()));
+    initAffectsAdjList();
+    result = extractNoWildcard(args.getStartStmtNo(), args.getEndStmtNo());
   }
   if (args.startExistsOnly()) {
-    if (affectsAdjListPtr == nullptr) initAffectsAdjList();
-    return make_shared<QueryTimeResult>(
-        extractWithStartGiven(args.getStartStmtNo()));
+    initAffectsAdjList();
+    result = extractWithStartGiven(args.getStartStmtNo());
   }
   if (args.endExistsOnly()) {
-    if (affectsAdjListReversedPtr == nullptr) initAffectsAdjListReversed();
-    return make_shared<QueryTimeResult>(
-        extractWithEndGiven(args.getEndStmtNo()));
+    initAffectsAdjListReversed();
+    result = extractWithEndGiven(args.getEndStmtNo());
   }
-  return make_shared<QueryTimeResult>(make_shared<vector<string>>());
+  return make_shared<QueryTimeResult>(result);
 }
 
 shared_ptr<ExtractorResult> AffectsTRelationExtractor::extractAllRelations() {
-  if (affectsTable == nullptr) generateAffectsTable();
+  clearCache();
+  generateAffectsTable();
   const int EDGE_INDEX_OFFSET = 1;
   for (auto &relation : *affectsTable) {
     int i = stoi(relation[0]) - EDGE_INDEX_OFFSET;
@@ -145,5 +146,11 @@ void AffectsTRelationExtractor::extractWithEndGivenDFS(
     result->push_back(to_string(neighbor));
     extractWithEndGivenDFS(neighbor, end, result, visited);
   }
+}
+
+void AffectsTRelationExtractor::clearCache() {
+  affectsAdjListPtr = nullptr;
+  affectsAdjListReversedPtr = nullptr;
+  affectsTable = nullptr;
 }
 }  // namespace DE

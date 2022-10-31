@@ -31,6 +31,7 @@ class AffectsTRelationExtractor : public AffectsCommonExtractor {
                               shared_ptr<unordered_set<int>> visited);
   void initAffectsAdjList();
   void initAffectsAdjListReversed();
+  void clearCache() override;
 
  public:
   AffectsTRelationExtractor(shared_ptr<ProgramNode> programNode);
