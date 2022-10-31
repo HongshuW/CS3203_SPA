@@ -118,7 +118,6 @@ TEST_CASE("Test Data Preprocessor") {
                          .setHeaders({"a"})
                          ->addRow({"1"})
                          ->addRow({"2"})
-                         ->addRow({"1"})
                          ->build();
     REQUIRE(actual.isEqual(expected) == true);
   }
