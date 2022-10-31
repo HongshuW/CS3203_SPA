@@ -33,7 +33,7 @@ class DataPreprocessor {
   std::vector<int> intersection(std::vector<int> v1, std::vector<int> v2);
   void getWithValues(vector<WithRef> withRefs,
                      shared_ptr<vector<Value>> values);
-  void dropUnusedColumns(Table& table);
+  bool dropUnusedColumns(Table& table);
 
   shared_ptr<DataRetriever> dataRetriever;
   Declarations declarations;
