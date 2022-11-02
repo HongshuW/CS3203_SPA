@@ -25,7 +25,7 @@ vector<vector<string>> Table::getRows() const { return this->rows; }
 vector<vector<string>> *Table::getRowsPointer() { return &rows; }
 
 const vector<vector<string>> *Table::getRowsPointerReadOnly() const {
-    return &rows;
+  return &rows;
 }
 
 vector<string> Table::getColumnByName(string columnName) {

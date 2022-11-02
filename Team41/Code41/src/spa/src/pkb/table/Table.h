@@ -27,8 +27,8 @@ class Table {
   // getters
   vector<string> getHeader() const;
   vector<vector<string>> getRows() const;
-  vector<vector<string>>* getRowsPointer();
-  const vector<vector<string>>* getRowsPointerReadOnly() const;
+  vector<vector<string>> *getRowsPointer();
+  const vector<vector<string>> *getRowsPointerReadOnly() const;
   vector<string> getRowByIndex(int index);
   vector<string> getColumnByName(string columnName);
   vector<string> getColumnByIndex(int index);
@@ -43,7 +43,7 @@ class Table {
   int getNumberOfRows();
   int getNumberOfColumns();
   bool hasCol(string colName);
-  bool isEqual(const Table& otherTable);
+  bool isEqual(const Table &otherTable);
   bool isHeaderEmpty() const;
   bool isBodyEmpty() const;
 
