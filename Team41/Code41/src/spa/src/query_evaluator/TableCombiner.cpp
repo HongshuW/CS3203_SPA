@@ -51,7 +51,7 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
   typedef unordered_map<string, vector<vector<string> *>> RowHashmap;
   RowHashmap map = unordered_map<string, vector<vector<string> *>>();
 
-  vector<vector<string>> * smallerTableRows = smallerTablePtr->getRowsPointer();
+  vector<vector<string>> *smallerTableRows = smallerTablePtr->getRowsPointer();
   for (auto &row : *smallerTableRows) {
     string key = createFilterRowKey(row, firstColInxToCheck);
     if (map.find(key) == map.end()) {
@@ -73,8 +73,7 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
         std::find(secondColInxToCheck.begin(), secondColInxToCheck.end(), i) !=
         secondColInxToCheck.end();
     if (isDupHeader) continue;
-    resultTable.insertIntoHeader(
-        vector<string>{biggerTableHeaders[i]});
+    resultTable.insertIntoHeader(vector<string>{biggerTableHeaders[i]});
   }
 
   for (auto &row : *biggerTablePtr->getRowsPointer()) {
@@ -100,7 +99,7 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
 }
 
 vector<vector<int>> TableCombiner::findDupHeaders(const vector<string> &h1,
-                                                 const vector<string> &h2) {
+                                                  const vector<string> &h2) {
   unordered_map<string, int> h1Map;
   vector<vector<int>> ans;
   for (int i = 0; i < h1.size(); ++i) {
@@ -119,7 +118,6 @@ vector<vector<int>> TableCombiner::findDupHeaders(const vector<string> &h1,
 
 string TableCombiner::createFilterRowKey(const vector<string> &row,
                                          const vector<int> &colsToCheck) {
-
   string key = "";
   for (int idx : colsToCheck) {
     key += row[idx];
