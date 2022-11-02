@@ -34,11 +34,9 @@ const string QueryParserConstants::PQL_PARSE_EXCEPTION_EXPECT_EXPRESSION =
 const string QueryParserConstants::PQL_PARSE_EXCEPTION_EXPECT_REF = "Ref";
 const string QueryParserConstants::PQL_PARSE_EXCEPTION_EXPECT_WITH_REF =
     "WithRef";
-const string QueryParserConstants::PQL_PARSE_EXCEPTION_SYNONYM_NOT_DECLARED =
-    "Synonym is not declared for Pattern Clause: ";
 const string
     QueryParserConstants::PQL_PARSE_EXCEPTION_EXPECT_SUCH_THAT_OR_PATTERN =
         "such that or pattern clause";
-const string QueryParserConstants::PQL_PARSE_EXCEPTION_INVALID_PATTERN_SYNTAX =
-    "Invalid syntax for pattern clause";
+const string QueryParserConstants::PQL_VALIDATION_INVALID_REF_TYPES =
+    "Invalid ref type";
 }  // namespace QB

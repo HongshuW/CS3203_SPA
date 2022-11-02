@@ -238,21 +238,8 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/relations/such_that_relations/Uses.h
         src/query_builder/relations/such_that_relations/Modifies.cpp
         src/query_builder/relations/such_that_relations/Modifies.h
-        src/query_builder/relations/pattern_relations/IfPattern.cpp
-        src/query_builder/relations/pattern_relations/IfPattern.h
-        src/query_builder/relations/pattern_relations/WhilePattern.cpp
-        src/query_builder/relations/pattern_relations/WhilePattern.h
-        src/query_builder/relations/pattern_relations/AssignPattern.cpp
-        src/query_builder/relations/pattern_relations/AssignPattern.h
-        src/query_builder/relations/pattern_relations/PatternRelations.cpp
-        src/query_builder/relations/pattern_relations/PatternRelations.h
         src/parser/ASTValidator.cpp
         src/parser/ASTValidator.h
-        src/query_builder/relations/pattern_relations/PatternRelations.h
-        src/query_builder/clauses/pattern_clauses/InvalidPatternClause.cpp
-        src/query_builder/clauses/pattern_clauses/InvalidPatternClause.h
-        src/query_builder/relations/pattern_relations/InvalidPattern.cpp
-        src/query_builder/relations/pattern_relations/InvalidPattern.h
         src/query_evaluator/QueryOptimizer.cpp
         src/query_evaluator/QueryOptimizer.h
         src/query_builder/clauses/ConditionalClause.h
@@ -325,7 +312,7 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/extractors/ModifiesRelationExtractor.cpp
         src/design_extractor/extractors/ModifiesRelationExtractor.h
         src/design_extractor/extractors/AssignPatternExtractor.cpp
-        src/design_extractor/extractors/AssignPatternExtractor.h src/design_extractor/extractors/IfPatternExtractor.cpp src/design_extractor/extractors/IfPatternExtractor.h src/design_extractor/extractors/IfWhilePatternExtractor.cpp src/design_extractor/extractors/IfWhilePatternExtractor.h src/design_extractor/extractors/WhilePatternExtractor.cpp src/design_extractor/extractors/WhilePatternExtractor.h src/design_extractor/extractors/interfaces/CFGExtractionInterface.cpp src/design_extractor/extractors/interfaces/CFGExtractionInterface.h src/design_extractor/DesignExtractorManager.cpp src/design_extractor/DesignExtractorManager.h src/design_extractor/DesignExtractorRetriever.cpp src/design_extractor/DesignExtractorRetriever.h src/design_extractor/extractors/AffectsRelationExtractor.cpp src/design_extractor/extractors/AffectsRelationExtractor.h src/design_extractor/extractors/AffectsCommonExtractor.cpp src/design_extractor/extractors/AffectsCommonExtractor.h src/design_extractor/extractors/AffectsTRelationExtractor.cpp src/design_extractor/extractors/AffectsTRelationExtractor.h)
+        src/design_extractor/extractors/AssignPatternExtractor.h src/design_extractor/extractors/IfPatternExtractor.cpp src/design_extractor/extractors/IfPatternExtractor.h src/design_extractor/extractors/IfWhilePatternExtractor.cpp src/design_extractor/extractors/IfWhilePatternExtractor.h src/design_extractor/extractors/WhilePatternExtractor.cpp src/design_extractor/extractors/WhilePatternExtractor.h src/design_extractor/extractors/interfaces/CFGExtractionInterface.cpp src/design_extractor/extractors/interfaces/CFGExtractionInterface.h src/design_extractor/DesignExtractorManager.cpp src/design_extractor/DesignExtractorManager.h src/design_extractor/DesignExtractorRetriever.cpp src/design_extractor/DesignExtractorRetriever.h src/design_extractor/extractors/AffectsRelationExtractor.cpp src/design_extractor/extractors/AffectsRelationExtractor.h src/design_extractor/extractors/AffectsCommonExtractor.cpp src/design_extractor/extractors/AffectsCommonExtractor.h src/design_extractor/extractors/AffectsTRelationExtractor.cpp src/design_extractor/extractors/AffectsTRelationExtractor.h src/query_builder/clauses/pattern_clauses/DummyPatternClause.cpp src/query_builder/clauses/pattern_clauses/DummyPatternClause.h)
 
 
 

@@ -37,6 +37,7 @@ class QueryTokenizerConstants {
   static const char HASH;
   static const char STAR;
   static const char DOUBLE_QUOTE_CHAR;
+  static const char RIGHT_BRACKET_CHAR;
 
   static const string PQL_TOKENIZE_EXCEPTION_UNEXPECTED_TOKEN;
   static const string QPL_EXPR_STRING_INVALID_PARENTHESES;

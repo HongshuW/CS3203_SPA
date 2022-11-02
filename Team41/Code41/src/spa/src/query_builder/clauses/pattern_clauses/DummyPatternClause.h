@@ -1,9 +1,9 @@
 //
-// Created by Xingchen Lin on 28/9/22.
+// Created by Xingchen Lin on 2/11/22.
 //
 
-#ifndef SPA_ASSIGNPATTERNCLAUSE_H
-#define SPA_ASSIGNPATTERNCLAUSE_H
+#ifndef SPA_DUMMYPATTERNCLAUSE_H
+#define SPA_DUMMYPATTERNCLAUSE_H
 
 #pragma once
 
@@ -17,20 +17,20 @@
 using namespace QB;
 
 namespace QB {
-class AssignPatternClause
-    : public PatternClause,
-      public enable_shared_from_this<AssignPatternClause> {
+class DummyPatternClause : public PatternClause,
+                           public enable_shared_from_this<DummyPatternClause> {
  public:
   ExpressionSpec arg3;
+  bool isArg3Underscore;
+  bool isArg4Underscore;
 
-  AssignPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
-  // Create a partial AssignPatternClause
-  AssignPatternClause(Synonym arg1, Ref arg2);
+  DummyPatternClause(Synonym arg1, Ref arg2, ExpressionSpec arg3);
+  DummyPatternClause(Synonym arg1, Ref arg2);
 
-  bool operator==(const AssignPatternClause& other) const;
+  bool operator==(const DummyPatternClause& other) const;
   Table accept(shared_ptr<IVisitor> visitor) override;
   void validateSyntaxError() override;
 };
 }  // namespace QB
 
-#endif  // SPA_ASSIGNPATTERNCLAUSE_H
+#endif  // SPA_DUMMYPATTERNCLAUSE_H
