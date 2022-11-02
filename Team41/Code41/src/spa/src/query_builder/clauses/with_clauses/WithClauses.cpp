@@ -39,3 +39,14 @@ unordered_set<string> WithClause::getSynonymNames() {
     synonyms.insert(get<AttrRef>(rhs).synonym.synonym);
   return synonyms;
 }
+
+int WithClause::getValueRefCount() {
+  int count = 0;
+  if (lhs.index() == WithClause::WITH_REF_IDENT_IDX ||
+      lhs.index() == WithClause::WITH_REF_INT_IDX)
+    count++;
+  if (rhs.index() == WithClause::WITH_REF_IDENT_IDX ||
+      rhs.index() == WithClause::WITH_REF_INT_IDX)
+    count++;
+  return count;
+}
