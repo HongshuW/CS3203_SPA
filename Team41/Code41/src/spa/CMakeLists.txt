@@ -238,17 +238,8 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/relations/such_that_relations/Uses.h
         src/query_builder/relations/such_that_relations/Modifies.cpp
         src/query_builder/relations/such_that_relations/Modifies.h
-        src/query_builder/relations/pattern_relations/IfPattern.cpp
-        src/query_builder/relations/pattern_relations/IfPattern.h
-        src/query_builder/relations/pattern_relations/WhilePattern.cpp
-        src/query_builder/relations/pattern_relations/WhilePattern.h
-        src/query_builder/relations/pattern_relations/AssignPattern.cpp
-        src/query_builder/relations/pattern_relations/AssignPattern.h
-        src/query_builder/relations/pattern_relations/PatternRelations.cpp
-        src/query_builder/relations/pattern_relations/PatternRelations.h
         src/parser/ASTValidator.cpp
         src/parser/ASTValidator.h
-        src/query_builder/relations/pattern_relations/PatternRelations.h
         src/query_evaluator/QueryOptimizer.cpp
         src/query_evaluator/QueryOptimizer.h
         src/query_builder/clauses/ConditionalClause.h
