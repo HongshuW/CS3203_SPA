@@ -21,17 +21,15 @@ TEST_CASE("Test Table") {
     rows.push_back(row3);
 
     // create and initialise table
-    Table variableTable;
-    variableTable.header = header;
-    variableTable.rows = rows;
+    Table variableTable = Table(header, rows);
 
     // check header is correct
-    REQUIRE(variableTable.header[0] == "variable name");
+    REQUIRE(variableTable.getHeader()[0] == "variable name");
 
     // iterate through rows in the table
-    REQUIRE(variableTable.rows[0] == row1);
-    REQUIRE(variableTable.rows[1] == row2);
-    REQUIRE(variableTable.rows[2] == row3);
+    REQUIRE(variableTable.getRows()[0] == row1);
+    REQUIRE(variableTable.getRows()[1] == row2);
+    REQUIRE(variableTable.getRows()[2] == row3);
   }
 
   SECTION("Get Column by Column Name") {
@@ -45,9 +43,7 @@ TEST_CASE("Test Table") {
     rows.push_back(row3);
 
     // create and initialise table
-    Table stmtTable;
-    stmtTable.header = header;
-    stmtTable.rows = rows;
+    Table stmtTable = Table(header, rows);
 
     // check statement number column
     vector<string> stmtNoColumn = stmtTable.getColumnByName("stmt number");
@@ -74,53 +70,45 @@ TEST_CASE("Test Table") {
     vector<string> row3{"dummyVar3"};
 
     // create and initialise table
-    Table variableTable;
-    variableTable.header = header;
-    variableTable.rows = rows;
+    Table variableTable = Table(header, rows);
 
     // append rows
     variableTable.appendRow(row1);
     variableTable.appendRow(row2);
     variableTable.appendRow(row3);
 
-    REQUIRE(variableTable.rows[0] == row1);
-    REQUIRE(variableTable.rows[1] == row2);
-    REQUIRE(variableTable.rows[2] == row3);
+    REQUIRE(variableTable.getRows()[0] == row1);
+    REQUIRE(variableTable.getRows()[1] == row2);
+    REQUIRE(variableTable.getRows()[2] == row3);
   }
 
   SECTION("Rename header") {
     vector<string> oldHeader{"typo"};
     Table variableTable;
-    variableTable.header = oldHeader;
+    variableTable.getHeader() = oldHeader;
 
     vector<string> newHeader{"variable Table"};
     variableTable.renameHeader(newHeader);
 
-    REQUIRE(variableTable.header[0] == "variable Table");
+    REQUIRE(variableTable.getHeader()[0] == "variable Table");
   }
 
   SECTION("drop header") {
-    Table table = Table();
-    table.header = {"keep", "drop"};
-    table.rows = {{"k1", "d1"}, {"k2", "d2"}, {"k3", "d3"}};
+    Table table = Table({"keep", "drop"}, {{"k1", "d1"}, {"k2", "d2"}, {"k3", "d3"}});
 
     table.dropColFromThis(1);
     Table actual = table;
-    Table expected = Table();
-    expected.header = {"keep"};
-    expected.rows = {{"k1"}, {"k2"}, {"k3"}};
+    Table expected = Table({"keep"}, {{"k1"}, {"k2"}, {"k3"}});
 
     REQUIRE(actual.isEqual(expected));
   }
 
   SECTION("drop rows") {
-    Table actualTable = Table();
-    actualTable.header = {"header"};
-    actualTable.rows = {{"a"}, {"b"}, {"c"}};
+    Table actualTable = Table({"header"}, {{"a"}, {"b"}, {"c"}});
     actualTable.dropRows();
 
     Table expectedTable = Table();
-    expectedTable.header = {"header"};
+    expectedTable.renameHeader({"header"});
 
     REQUIRE(actualTable.isEqual(expectedTable));
   }

@@ -7,5 +7,5 @@
 #include "../PKBStorage.h"
 
 VariableTable::VariableTable() {
-  header = vector<string>{PKBStorage::VARIABLE_TABLE_COL1_NAME};
+  renameHeader(vector<string>{PKBStorage::VARIABLE_TABLE_COL1_NAME});
 }

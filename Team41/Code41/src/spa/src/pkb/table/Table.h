@@ -14,12 +14,21 @@
 using namespace std;
 
 class Table {
+private:
+    vector<string> header;
+    vector<vector<string>> rows;
+
  public:
-  vector<string> header;
-  vector<vector<string>> rows;
-  int primaryKeyColumnIndex = 0;
+    int primaryKeyColumnIndex = 0;
+
+    explicit Table(vector<string> header, vector<vector<string>> rows);
+    explicit Table();
 
   // getters
+  vector<string> getHeader() const;
+  vector<vector<string>> getRows() const;
+  vector<vector<string>>* getRowsPointer();
+  vector<string> getRowByIndex(int index);
   vector<string> getColumnByName(string columnName);
   vector<string> getColumnByIndex(int index);
   vector<string> getRowByPrimaryKey(string key);
@@ -30,22 +39,24 @@ class Table {
   shared_ptr<Table> getSubTable(int startIndex, int endIndex);
   shared_ptr<Table> getSubTableByColumn(string key, int keyColumnNumber);
   bool contains(vector<string> row, int startIndex, int endIndex);
+  int getNumberOfRows();
+  int getNumberOfColumns();
+    bool hasCol(string colName);
+    bool isEqual(const Table &otherTable);
+    bool isHeaderEmpty() const;
+    bool isBodyEmpty() const;
 
   // setters
   void renameHeader(vector<string> newHeader);
   void appendRow(vector<string> row);
   void appendRows(list<vector<string>> rows);
+  void setRows(vector<vector<string>> rows);
   void addValues(list<string> values);
   void dropRows();
-
+  void insertIntoHeader(vector<string> headerToInsert);
   void dupCol(int colIdx, string dupColName = "$dup_col");
   void dropColFromThis(int colIdx);
   void removeDupRow();
-
-  bool hasCol(string colName);
-  bool isEqual(const Table &otherTable);
-  bool isHeaderEmpty() const;
-  bool isBodyEmpty() const;
 
   static const string DEFAULT_HEADER_PREFIX;
 };

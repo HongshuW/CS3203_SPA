@@ -13,16 +13,16 @@ Table TableCombiner::crossProduct(const Table &t1, const Table &t2) {
   if (t1.isHeaderEmpty()) return t2;
   if (t2.isHeaderEmpty()) return t1;
   Table productTable = Table();
-  productTable.header.insert(productTable.header.end(), t1.header.begin(),
-                             t1.header.end());
-  productTable.header.insert(productTable.header.end(), t2.header.begin(),
-                             t2.header.end());
-  for (auto row1 : t1.rows) {
-    for (auto row2 : t2.rows) {
+  productTable.insertIntoHeader(t1.getHeader());
+  productTable.insertIntoHeader(t2.getHeader());
+  vector<vector<string>> t1Rows = t1.getRows();
+  vector<vector<string>> t2Rows = t2.getRows();
+  for (auto row1 : t1Rows) {
+    for (auto row2 : t2Rows) {
       auto productRow = vector<string>();
       productRow.insert(productRow.begin(), row2.begin(), row2.end());
       productRow.insert(productRow.begin(), row1.begin(), row1.end());
-      productTable.rows.push_back(productRow);
+      productTable.appendRow(productRow);
     }
   }
   return productTable;
@@ -34,14 +34,14 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
   int FIRST_DUP_IDX = 0;
   int SECOND_DUP_IDX = 1;
 
-  int t1Size = t1.rows.size();
-  int t2Size = t2.rows.size();
+  int t1Size = t1.getNumberOfRows();
+  int t2Size = t2.getNumberOfRows();
   bool isT1Smaller = t1Size <= t2Size;
   Table *smallerTablePtr = isT1Smaller ? &t1 : &t2;
   Table *biggerTablePtr = isT1Smaller ? &t2 : &t1;
 
   auto dupHeaders =
-      this->findDupHeaders(smallerTablePtr->header, biggerTablePtr->header);
+      this->findDupHeaders(smallerTablePtr->getHeader(), biggerTablePtr->getHeader());
   vector<int> firstColInxToCheck;
   for (auto dupPair : dupHeaders) {
     firstColInxToCheck.push_back(dupPair[FIRST_DUP_IDX]);
@@ -49,7 +49,8 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
   typedef unordered_map<string, vector<vector<string> *>> RowHashmap;
   RowHashmap map = unordered_map<string, vector<vector<string> *>>();
 
-  for (auto &row : smallerTablePtr->rows) {
+  vector<vector<string>> smallerTableRows = smallerTablePtr->getRows();
+  for (auto &row : smallerTableRows) {
     string key = createFilterRowKey(row, firstColInxToCheck);
     if (map.find(key) == map.end()) {
       map.insert({key, vector<vector<string> *>()});
@@ -57,24 +58,24 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
     map.at(key).push_back(&row);
   }
   Table resultTable = Table();
-  resultTable.header.insert(resultTable.header.end(),
-                            smallerTablePtr->header.begin(),
-                            smallerTablePtr->header.end());
+  resultTable.insertIntoHeader(smallerTablePtr->getHeader());
 
   vector<int> secondColInxToCheck;
   for (auto dupPair : dupHeaders) {
     secondColInxToCheck.push_back(dupPair[SECOND_DUP_IDX]);
   }
 
-  for (int i = 0; i < biggerTablePtr->header.size(); i++) {
+  for (int i = 0; i < biggerTablePtr->getNumberOfColumns(); i++) {
     bool isDupHeader =
         std::find(secondColInxToCheck.begin(), secondColInxToCheck.end(), i) !=
         secondColInxToCheck.end();
     if (isDupHeader) continue;
-    resultTable.header.push_back(biggerTablePtr->header[i]);
+    resultTable.insertIntoHeader({biggerTablePtr->getHeader()[i]});
   }
 
-  for (auto row : isT1Smaller ? t2.rows : t1.rows) {
+  vector<vector<string>> t1Rows = t1.getRows();
+  vector<vector<string>> t2Rows = t2.getRows();
+  for (auto row : isT1Smaller ? t2Rows : t1Rows) {
     string key = createFilterRowKey(row, secondColInxToCheck);
     if (map.find(key) == map.end()) continue;
 
@@ -89,7 +90,7 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
           continue;
         rowToInsert.push_back(row[i]);
       }
-      resultTable.rows.push_back(rowToInsert);
+      resultTable.appendRow(rowToInsert);
     }
   }
 

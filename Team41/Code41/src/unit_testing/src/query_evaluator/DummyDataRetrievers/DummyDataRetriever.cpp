@@ -42,9 +42,7 @@ Table DummyDataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
       for (const string& variable : variables) {
         rows.push_back(vector<string>{variable});
       }
-      Table variableTable;
-      variableTable.rows = rows;
-      variableTable.header = header;
+      Table variableTable = Table(header, rows);
       return variableTable;
     }
     case QB::DesignEntity::STMT: {
