@@ -7,6 +7,6 @@
 #include "../PKBStorage.h"
 
 ModifiesTable::ModifiesTable() {
-    renameHeader(vector<string>{PKBStorage::MODIFIES_TABLE_COL1_NAME,
-                          PKBStorage::MODIFIES_TABLE_COL2_NAME});
+  renameHeader(vector<string>{PKBStorage::MODIFIES_TABLE_COL1_NAME,
+                              PKBStorage::MODIFIES_TABLE_COL2_NAME});
 }

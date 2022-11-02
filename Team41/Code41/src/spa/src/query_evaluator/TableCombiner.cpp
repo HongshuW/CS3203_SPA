@@ -40,8 +40,8 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
   Table *smallerTablePtr = isT1Smaller ? &t1 : &t2;
   Table *biggerTablePtr = isT1Smaller ? &t2 : &t1;
 
-  auto dupHeaders =
-      this->findDupHeaders(smallerTablePtr->getHeader(), biggerTablePtr->getHeader());
+  auto dupHeaders = this->findDupHeaders(smallerTablePtr->getHeader(),
+                                         biggerTablePtr->getHeader());
   vector<int> firstColInxToCheck;
   for (auto dupPair : dupHeaders) {
     firstColInxToCheck.push_back(dupPair[FIRST_DUP_IDX]);

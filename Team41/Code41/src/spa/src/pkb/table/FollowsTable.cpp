@@ -7,6 +7,6 @@
 #include "../PKBStorage.h"
 
 FollowsTable::FollowsTable() {
-    renameHeader(vector<string>{PKBStorage::FOLLOWS_TABLE_COL1_NAME,
-                          PKBStorage::FOLLOWS_TABLE_COL2_NAME});
+  renameHeader(vector<string>{PKBStorage::FOLLOWS_TABLE_COL1_NAME,
+                              PKBStorage::FOLLOWS_TABLE_COL2_NAME});
 }

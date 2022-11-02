@@ -8,7 +8,7 @@
 
 CallsTable::CallsTable() {
   renameHeader(vector<string>{PKBStorage::CALLS_TABLE_COL1_NAME,
-                          PKBStorage::CALLS_TABLE_COL2_NAME});
+                              PKBStorage::CALLS_TABLE_COL2_NAME});
   mapHeader = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME,
                              PKBStorage::CALLS_TABLE_COL2_NAME};
 }
@@ -22,7 +22,8 @@ void CallsTable::appendRowToSubtables(vector<string> row) {
 }
 
 shared_ptr<Table> CallsTable::getCallsProcedures() {
-  shared_ptr<Table> table = make_shared<Table>(Table(this->getHeader(), this->getRows()));
+  shared_ptr<Table> table =
+      make_shared<Table>(Table(this->getHeader(), this->getRows()));
   return table;
 }
 

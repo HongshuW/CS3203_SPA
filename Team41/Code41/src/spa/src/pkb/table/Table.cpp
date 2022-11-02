@@ -9,26 +9,20 @@
 const string Table::DEFAULT_HEADER_PREFIX = "$";
 
 Table::Table(vector<string> header, vector<vector<string>> rows) {
-    this->header = header;
-    this->rows = rows;
+  this->header = header;
+  this->rows = rows;
 }
 
 Table::Table() {
-    this->header = vector<string>();
-    this->rows = vector<vector<string>>();
+  this->header = vector<string>();
+  this->rows = vector<vector<string>>();
 }
 
-vector<string> Table::getHeader() const {
-    return this->header;
-}
+vector<string> Table::getHeader() const { return this->header; }
 
-vector<vector<string>> Table::getRows() const {
-    return this->rows;
-}
+vector<vector<string>> Table::getRows() const { return this->rows; }
 
-vector<vector<string>>* Table::getRowsPointer() {
-    return &rows;
-}
+vector<vector<string>> *Table::getRowsPointer() { return &rows; }
 
 vector<string> Table::getColumnByName(string columnName) {
   int numOfColumns = header.size();
@@ -114,13 +108,9 @@ bool Table::contains(vector<string> row, int startIndex, int endIndex) {
   return false;
 }
 
-int Table::getNumberOfRows() {
-    return rows.size();
-}
+int Table::getNumberOfRows() { return rows.size(); }
 
-int Table::getNumberOfColumns() {
-    return header.size();
-}
+int Table::getNumberOfColumns() { return header.size(); }
 
 bool Table::hasCol(std::string colName) {
   return std::count(header.begin(), header.end(), colName);
@@ -137,9 +127,7 @@ void Table::appendRows(list<vector<string>> rows) {
   }
 }
 
-void Table::setRows(vector<vector<string>> rows) {
-    this->rows = rows;
-}
+void Table::setRows(vector<vector<string>> rows) { this->rows = rows; }
 
 void Table::addValues(list<string> values) {
   // used in tables with one column only
@@ -158,7 +146,8 @@ void Table::renameHeader(vector<string> newHeader) { header = newHeader; }
 void Table::dropRows() { this->rows.clear(); }
 
 void Table::insertIntoHeader(vector<string> headerToInsert) {
-    this->header.insert(this->header.end(), headerToInsert.begin(), headerToInsert.end());
+  this->header.insert(this->header.end(), headerToInsert.begin(),
+                      headerToInsert.end());
 }
 
 bool Table::isEqual(const Table &otherTable) {

@@ -184,7 +184,7 @@ void DataPreprocessor::filterTableByColValueEquality(
 
   filteredTable.renameHeader(table.getHeader());
 
-  vector<vector<string>>* rowsPtr = table.getRowsPointer();
+  vector<vector<string>> *rowsPtr = table.getRowsPointer();
   auto rowItr = rowsPtr->begin();
   while (rowItr != rowsPtr->end()) {
     unordered_set<string> set;
@@ -792,7 +792,7 @@ void DataPreprocessor::filerTableByColumnIdx(Table &table, int colIdx,
                                              const string &value) {
   Table filteredTable = Table();
   filteredTable.renameHeader(table.getHeader());
-  vector<vector<string>>* rowsPtr = table.getRowsPointer();
+  vector<vector<string>> *rowsPtr = table.getRowsPointer();
   auto rowItr = rowsPtr->begin();
   while (rowItr != rowsPtr->end()) {
     if (rowItr->at(colIdx) == value) {
@@ -832,7 +832,7 @@ void DataPreprocessor::filerTableByDesignEntity(Table &table, int colIdx,
       DesignEntity::STMT, DesignEntity::CONSTANT, DesignEntity::VARIABLE,
       DesignEntity::PROCEDURE};
   if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) return;
-  vector<vector<string>>* rowsPtr = table.getRowsPointer();
+  vector<vector<string>> *rowsPtr = table.getRowsPointer();
   auto rowItr = rowsPtr->begin();
 
   while (rowItr != rowsPtr->end()) {
@@ -845,7 +845,8 @@ void DataPreprocessor::filerTableByDesignEntity(Table &table, int colIdx,
     }
     // the stmt in the row does not match the given design entity type， erase
     // the row from the table
-    *rowItr = (*rowsPtr)[table.getNumberOfRows() - 1];  // overwrite this row with the last row
+    *rowItr = (*rowsPtr)[table.getNumberOfRows() -
+                         1];             // overwrite this row with the last row
     rowsPtr->erase(rowsPtr->end() - 1);  // erase the last row
   }
 }

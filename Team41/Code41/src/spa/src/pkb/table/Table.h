@@ -14,15 +14,15 @@
 using namespace std;
 
 class Table {
-private:
-    vector<string> header;
-    vector<vector<string>> rows;
+ private:
+  vector<string> header;
+  vector<vector<string>> rows;
 
  public:
-    int primaryKeyColumnIndex = 0;
+  int primaryKeyColumnIndex = 0;
 
-    explicit Table(vector<string> header, vector<vector<string>> rows);
-    explicit Table();
+  explicit Table(vector<string> header, vector<vector<string>> rows);
+  explicit Table();
 
   // getters
   vector<string> getHeader() const;
@@ -41,10 +41,10 @@ private:
   bool contains(vector<string> row, int startIndex, int endIndex);
   int getNumberOfRows();
   int getNumberOfColumns();
-    bool hasCol(string colName);
-    bool isEqual(const Table &otherTable);
-    bool isHeaderEmpty() const;
-    bool isBodyEmpty() const;
+  bool hasCol(string colName);
+  bool isEqual(const Table& otherTable);
+  bool isHeaderEmpty() const;
+  bool isBodyEmpty() const;
 
   // setters
   void renameHeader(vector<string> newHeader);

@@ -8,5 +8,5 @@
 
 UsesTable::UsesTable() {
   renameHeader(vector<string>{PKBStorage::USES_TABLE_COL1_NAME,
-                          PKBStorage::USES_TABLE_COL2_NAME});
+                              PKBStorage::USES_TABLE_COL2_NAME});
 }

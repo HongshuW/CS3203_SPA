@@ -94,7 +94,8 @@ TEST_CASE("Test Table") {
   }
 
   SECTION("drop header") {
-    Table table = Table({"keep", "drop"}, {{"k1", "d1"}, {"k2", "d2"}, {"k3", "d3"}});
+    Table table =
+        Table({"keep", "drop"}, {{"k1", "d1"}, {"k2", "d2"}, {"k3", "d3"}});
 
     table.dropColFromThis(1);
     Table actual = table;

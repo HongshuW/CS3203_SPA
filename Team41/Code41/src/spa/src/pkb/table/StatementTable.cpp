@@ -9,7 +9,7 @@
 
 StatementTable::StatementTable() {
   renameHeader(vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME,
-                          PKBStorage::STATEMENT_TABLE_COL2_NAME});
+                              PKBStorage::STATEMENT_TABLE_COL2_NAME});
   printedVarsHeader = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME,
                                      PKBStorage::VARIABLE_TABLE_COL1_NAME};
   readVarsHeader = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME,
@@ -19,13 +19,15 @@ StatementTable::StatementTable() {
 string StatementTable::getStatementType(string stmtNumber) {
   vector<string> row = getRowByPrimaryKey(stmtNumber);
   if (row.empty()) {
-    throw new KeyNotFoundException(getHeader()[primaryKeyColumnIndex], stmtNumber);
+    throw new KeyNotFoundException(getHeader()[primaryKeyColumnIndex],
+                                   stmtNumber);
   }
   return row[statementTypeColumn];
 }
 
 shared_ptr<Table> StatementTable::getStatements() {
-  shared_ptr<Table> table = make_shared<Table>(Table(this->getHeader(), this->getRows()));
+  shared_ptr<Table> table =
+      make_shared<Table>(Table(this->getHeader(), this->getRows()));
   return table;
 }
 

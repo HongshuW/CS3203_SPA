@@ -5,8 +5,10 @@
 #include "TableComparator.h"
 
 bool TableComparator::isEqual(Table testResultTable, Table expected) {
-  if (testResultTable.getNumberOfColumns() != expected.getNumberOfColumns()) return false;
-  if (testResultTable.getNumberOfRows() != expected.getNumberOfRows()) return false;
+  if (testResultTable.getNumberOfColumns() != expected.getNumberOfColumns())
+    return false;
+  if (testResultTable.getNumberOfRows() != expected.getNumberOfRows())
+    return false;
   for (int i = 0; i < expected.getNumberOfColumns(); ++i) {
     if (expected.getHeader()[i] != testResultTable.getHeader()[i]) return false;
   }
