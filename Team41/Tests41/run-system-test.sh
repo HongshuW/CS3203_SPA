@@ -39,7 +39,7 @@ cd ../build/src/autotester
 # milestone 1 tests
 ./autotester $1/Team41/Tests41/milestone-1/system-test-1/long_pattern_source.txt $1/Team41/Tests41/milestone-1/system-test-1/long_pattern_clause_queries.txt $1/Team41/Tests41/milestone-1/system-test-out/long-pattern-analysis.xml
 
-
+#milestone 2 tests
 ./autotester $1/Team41/Tests41/milestone-2/affects/simple_source.txt $1/Team41/Tests41/milestone-2/affects/simple_one_affects_clause_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/affects-analysis.xml
 ./autotester $1/Team41/Tests41/milestone-2/affects/simple_source_2.txt $1/Team41/Tests41/milestone-2/affects/simple_2_one_affects_clause_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/affects-2-analysis.xml
 ./autotester $1/Team41/Tests41/milestone-2/basic-spa/deep_nesting_source.txt $1/Team41/Tests41/milestone-2/basic-spa/deep_nesting_multiple_clauses_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/basic-spa-analysis.xml
@@ -52,5 +52,8 @@ cd ../build/src/autotester
 ./autotester $1/Team41/Tests41/milestone-2/stress/deep_nesting_source.txt $1/Team41/Tests41/milestone-2/stress/stress_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/stress-analysis.xml
 ./autotester $1/Team41/Tests41/milestone-2/with/deep_nesting_source.txt $1/Team41/Tests41/milestone-2/with/deep_nesting_one_with_clause_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/with-analysis.xml
 ./autotester $1/Team41/Tests41/milestone-2/cache/test_cache_source.txt $1/Team41/Tests41/milestone-2/cache/test_cache_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/cache-analysis.xml
-
 ./autotester $1/Team41/Tests41/milestone-2/corner-cases/corner_case1_source.txt $1/Team41/Tests41/milestone-2/corner-cases/corner_case1_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/corner-cases-analysis.xml
+
+#milestone 3 tests
+./autotester $1/Team41/Tests41/milestone-2/cache/test_cache_source.txt $1/Team41/Tests41/milestone-3/stress/stress_source.txt $1/Team41/Tests41/milestone-3/stress/stress_affects_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/analysis.xml
+./autotester $1/Team41/Tests41/milestone-2/cache/test_cache_source.txt $1/Team41/Tests41/milestone-3/stress/stress_source.txt $1/Team41/Tests41/milestone-3/stress/stress_affects_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/analysis.xml
