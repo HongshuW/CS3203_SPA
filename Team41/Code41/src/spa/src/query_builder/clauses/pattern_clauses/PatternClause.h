@@ -26,6 +26,7 @@ class PatternClause : public ConditionalClause {
   virtual bool expect(const string& s, unsigned int currIdx,
                       const vector<string>& tokens);
   unordered_set<string> getSynonymNames() override;
+  int getValueRefCount() override;
 };
 }  // namespace QB
 

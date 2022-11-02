@@ -35,3 +35,11 @@ unordered_set<string> PatternClause::getSynonymNames() {
     synonyms.insert(get<Synonym>(arg2).synonym);
   return synonyms;
 }
+
+int PatternClause::getValueRefCount() {
+  int count = 0;
+  if (getRefType(arg2) == RefType::INTEGER ||
+      getRefType(arg2) == RefType::IDENT)
+    count++;
+  return count;
+}
