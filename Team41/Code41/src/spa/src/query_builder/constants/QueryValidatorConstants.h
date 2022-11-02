@@ -22,6 +22,7 @@ class QueryValidatorConstants {
   static const string PQL_VALIDATION_FIRST_ARG_UNDERSCORE;
   static const string PQL_VALIDATION_SECOND_ARG_INTEGER;
   static const string PQL_VALIDATION_INVALID_SYNONYM_PATTERN;
+	static const string	PQL_VALIDATION_INVALID_PATTERN_SYNTAX;
   static const string PQL_VALIDATION_INVALID_DESIGN_ENTITY_PATTERN;
   static const string PQL_VALIDATION_INVALID_DESIGN_ENTITY;
   static const string PQL_VALIDATION_INVALID_ATTR_REF;

@@ -243,11 +243,14 @@ void QueryParser::parsePatternClause() {
 	auto patternClause = make_shared<DummyPatternClause>(arg1, arg2);
 	if (match(QueryParserConstants::UNDERSCORE)) {
 		if (match(QueryParserConstants::RIGHT_BRACKET)) {
-			//! Correct while pattern
+			//! Correct while pattern or correct assign pattern with ANY_MATCH
+			patternClause->isArg3Underscore = true;
 			currIdx--;
 		} else if (match(QueryParserConstants::COMMA)) {
+			patternClause->isArg3Underscore = true;
 			//! Correct if pattern
 			expect(QueryParserConstants::UNDERSCORE);
+			patternClause->isArg4Underscore = true;
 		} else {
 			//! May be expressionSpec
 			currIdx--;

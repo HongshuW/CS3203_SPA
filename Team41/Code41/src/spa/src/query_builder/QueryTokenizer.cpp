@@ -60,6 +60,11 @@ void QueryTokenizer::processString() {
   while (peek() != QueryTokenizerConstants::DOUBLE_QUOTE_CHAR) {
     char c = pop();
     if (isspace(c)) continue;
+		if (c == EOF) {
+			throw PQLTokenizeException(
+							QueryTokenizerConstants::PQL_TOKENIZE_EXCEPTION_UNEXPECTED_TOKEN +
+							c);
+		}
     curr += c;
   }
   tokens.push_back(curr);

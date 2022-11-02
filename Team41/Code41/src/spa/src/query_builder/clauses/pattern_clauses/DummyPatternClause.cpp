@@ -10,10 +10,12 @@
 
 DummyPatternClause::DummyPatternClause(Synonym arg1, Ref arg2,
 																				 ExpressionSpec arg3)
-				: PatternClause(std::move(arg1), std::move(arg2)), arg3(std::move(arg3)) {}
+				: PatternClause(std::move(arg1), std::move(arg2)), arg3(std::move(arg3)),
+				isArg3Underscore(false), isArg4Underscore(false) {}
 
 DummyPatternClause::DummyPatternClause(Synonym arg1, Ref arg2)
-				: PatternClause(std::move(arg1), std::move(arg2)), arg3(ExpressionSpec()) {}
+				: PatternClause(std::move(arg1), std::move(arg2)), arg3(ExpressionSpec()),
+					isArg3Underscore(false), isArg4Underscore(false) {}
 
 bool DummyPatternClause::operator==(const DummyPatternClause& other) const {
 	auto clause = dynamic_cast<const DummyPatternClause*>(&other);
@@ -23,4 +25,8 @@ bool DummyPatternClause::operator==(const DummyPatternClause& other) const {
 
 Table DummyPatternClause::accept(shared_ptr<IVisitor> visitor) {
 	return Table();
+}
+
+void DummyPatternClause::validateSyntaxError() {
+
 }

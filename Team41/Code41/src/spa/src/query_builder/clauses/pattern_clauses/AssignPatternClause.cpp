@@ -24,3 +24,7 @@ bool AssignPatternClause::operator==(const AssignPatternClause& other) const {
 Table AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
+
+void AssignPatternClause::validateSyntaxError() {
+
+}

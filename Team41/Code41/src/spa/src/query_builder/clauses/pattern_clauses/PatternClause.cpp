@@ -30,3 +30,6 @@ unordered_set<string> PatternClause::getSynonymNames() {
     synonyms.insert(get<Synonym>(arg2).synonym);
   return synonyms;
 }
+
+void PatternClause::validateSyntaxError() {
+}

@@ -26,6 +26,7 @@ class WhilePatternClause : public PatternClause,
 
   bool operator==(const WhilePatternClause& other) const;
   Table accept(shared_ptr<IVisitor> visitor) override;
+	void validateSyntaxError() override;
 };
 
 }  // namespace QB

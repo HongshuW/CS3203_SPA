@@ -29,6 +29,7 @@ class AssignPatternClause
 
   bool operator==(const AssignPatternClause& other) const;
   Table accept(shared_ptr<IVisitor> visitor) override;
+	void validateSyntaxError() override;
 };
 }  // namespace QB
 

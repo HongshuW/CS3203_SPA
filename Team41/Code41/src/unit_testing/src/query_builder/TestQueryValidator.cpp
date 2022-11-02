@@ -617,4 +617,97 @@ TEST_CASE("Test Query Validator") {
     REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
                       PQLValidationException);
   }
+
+	SECTION("Valid assign pattern but invalid design entity type") {
+		std::string queryStr =
+						"if i; Select i pattern i (\"test\", _)";
+		auto queryBuilder = QueryBuilder();
+
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+											PQLValidationException);
+	}
+
+	SECTION("Valid assign pattern but invalid design entity type") {
+		std::string queryStr =
+						"while w; Select w pattern w(\"test\", \"x + 1\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+											PQLValidationException);
+	}
+
+	SECTION("Valid assign/while pattern but invalid design entity type") {
+		std::string queryStr =
+						"stmt w; Select w pattern w(_, _)";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+											PQLValidationException);
+	}
+
+	SECTION("Valid assign/while pattern but invalid design entity type") {
+		std::string queryStr =
+						"if i; Select i pattern i(_, _)";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+											PQLValidationException);
+	}
+
+	SECTION("Valid if pattern but invalid design entity type") {
+		std::string queryStr =
+						"while w; Select w pattern w(_, _, _)";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+											PQLValidationException);
+	}
+
+	SECTION("Valid if pattern") {
+		std::string queryStr =
+						"if i; Select i pattern i(_, _, _)";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
+	}
+
+	SECTION("Valid assign pattern - any match") {
+		std::string queryStr =
+						"assign a; Select a pattern a(_, _)";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
+	}
+
+	SECTION("Valid assign pattern - full match") {
+		std::string queryStr =
+						"assign a; Select a pattern a (_, \"x + 1\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
+	}
+
+	SECTION("Valid assign pattern - partial match") {
+		std::string queryStr =
+						"assign a; Select a pattern a (_, _\"x + 1 - y\"_)";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
+	}
+
+	SECTION("Invalid pattern - syntax error") {
+		std::string queryStr =
+						"while w; Select w pattern w(\"test\", _, \"x + y\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+											PQLParseException);
+	}
+
+	SECTION("Invalid pattern - syntax error") {
+		std::string queryStr =
+						"if i; Select i pattern i(\"a\", _, \"x + y\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+											PQLParseException);
+	}
+
+	SECTION("Empty expression in pattern") {
+		std::string queryStr =
+						"assign a; Select a pattern a(\"test\", \"\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+											PQLParseException);
+	}
 }

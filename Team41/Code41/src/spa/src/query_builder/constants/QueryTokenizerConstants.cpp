@@ -29,6 +29,7 @@ const int QueryTokenizerConstants::ZERO = 0;
 const char QueryTokenizerConstants::HASH = '#';
 const char QueryTokenizerConstants::STAR = '*';
 const char QueryTokenizerConstants::DOUBLE_QUOTE_CHAR = '"';
+const char QueryTokenizerConstants::RIGHT_BRACKET_CHAR = ')';
 
 const string QueryTokenizerConstants::PQL_TOKENIZE_EXCEPTION_UNEXPECTED_TOKEN =
     "Unexpected token ";

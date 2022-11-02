@@ -473,4 +473,28 @@ TEST_CASE("Test Query Tokenizer") {
     QueryTokenizer tokenizer = QueryTokenizer(query);
     REQUIRE_THROWS_AS(tokenizer.tokenize(), PQLTokenizeException);
   }
+
+	SECTION("Test incomplete expression in assign") {
+		std::string query = "assign a; Select a pattern a(\"test\", \")";
+		QueryTokenizer tokenizer = QueryTokenizer(query);
+		REQUIRE_THROWS_AS(tokenizer.tokenize(), PQLTokenizeException);
+	}
+
+	SECTION("Empty expression in assign, no error should be thrown") {
+		std::string query = "assign a; Select a pattern a(\"test\", \"\")";
+		QueryTokenizer tokenizer = QueryTokenizer(query);
+		REQUIRE_NOTHROW(tokenizer.tokenize());
+	}
+
+	SECTION("Invalid ident") {
+		std::string query = "assign a; Select a pattern a(\"test, \"x + 1\")";
+		QueryTokenizer tokenizer = QueryTokenizer(query);
+		REQUIRE_THROWS_AS(tokenizer.tokenize(), PQLTokenizeException);
+	}
+
+	SECTION("Invalid ident") {
+		std::string query = "assign a; Select a pattern a(\"test, _)";
+		QueryTokenizer tokenizer = QueryTokenizer(query);
+		REQUIRE_THROWS_AS(tokenizer.tokenize(), PQLTokenizeException);
+	}
 }
