@@ -98,20 +98,20 @@ if i;
 Select i pattern i("_x13_", _, _)
 SyntaxError
 5000
-21 - invalid if pattern
+21 - invalid if pattern, semantic error
 if i;
 Select i pattern i("a1", _)
-SyntaxError
+SemanticError
 5000
-22 - invalid pattern
+22 - invalid pattern, semantic error
 assign a;
 Select a pattern a("x1", _, _)
-SyntaxError
+SemanticError
 5000
 23 - invalid pattern
 assign a; if i;
 Select a pattern a(i, _, _)
-SyntaxError
+SemanticError
 5000
 24 - valid while pattern
 while w;
@@ -206,7 +206,7 @@ SyntaxError
 42 - invalid while pattern
 while w;
 Select w pattern w(_, "a1")
-SyntaxError
+SemanticError
 5000
 43 - invalid while pattern
 while w;
@@ -223,7 +223,7 @@ variable v; procedure p;
 Select v pattern v(p, _)
 SemanticError
 5000
-46 - invalid pattern - synonym not declared
+46 - invalid pattern - synonym not declared [SHOULD BE SYNTAXERROR?]
 constant c;
 Select v pattern v(c, _)
 SemanticError
