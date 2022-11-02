@@ -75,7 +75,7 @@ vector<int> DataPreprocessor::getStmtNumsByDesignEntity(
     DesignEntity designEntity) {
   Table table = this->getAllByDesignEntity(designEntity);
   int STMT_NO_COL_IDX = 0;
-  auto stmtNums = table.getColumnByName(table.header[STMT_NO_COL_IDX]);
+  auto stmtNums = table.getColumnByName(table.getHeader()[STMT_NO_COL_IDX]);
   vector<int> ans;
   for (const auto &string : stmtNums) {
     ans.push_back(stoi(string));
@@ -89,7 +89,7 @@ vector<string> DataPreprocessor::getEntityNames(DesignEntity designEntity) {
   if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) {
     int ENTITY_NAME_COL_IDX = 0;
     auto table = this->dataRetriever->getTableByDesignEntity(designEntity);
-    return table.getColumnByName(table.header[ENTITY_NAME_COL_IDX]);
+    return table.getColumnByName(table.getHeader()[ENTITY_NAME_COL_IDX]);
   }
   return vector<string>();
 }
@@ -182,10 +182,11 @@ void DataPreprocessor::filterTableByColValueEquality(
     Table &table, const vector<int> &comparedCols) {
   Table filteredTable = Table();
 
-  filteredTable.renameHeader(table.header);
+  filteredTable.renameHeader(table.getHeader());
 
-  auto rowItr = table.rows.begin();
-  while (rowItr != table.rows.end()) {
+  vector<vector<string>> *rowsPtr = table.getRowsPointer();
+  auto rowItr = rowsPtr->begin();
+  while (rowItr != rowsPtr->end()) {
     unordered_set<string> set;
     for (int colIdx : comparedCols) {
       set.insert(rowItr->at(colIdx));
@@ -194,8 +195,8 @@ void DataPreprocessor::filterTableByColValueEquality(
       ++rowItr;
       continue;
     }
-    *rowItr = table.rows[table.rows.size() - 1];
-    table.rows.erase(table.rows.end() - 1);
+    *rowItr = (*rowsPtr)[table.getNumberOfRows() - 1];
+    rowsPtr->erase(rowsPtr->end() - 1);
   }
 }
 
@@ -610,7 +611,7 @@ Table DataPreprocessor::getNoConditionSelectClauseResult(
           intermediateTable = getReadVariableTable();
         if (intermediateTable.isBodyEmpty()) return Table();
       } else {
-        for (int i = 1; i < intermediateTable.header.size(); i++) {
+        for (int i = 1; i < intermediateTable.getNumberOfColumns(); i++) {
           intermediateTable.dropColFromThis(i);
         }
         const int FIRST_COL_IDX = 0;
@@ -790,15 +791,16 @@ void QE::DataPreprocessor::getWithValues(vector<WithRef> withRefs,
 void DataPreprocessor::filerTableByColumnIdx(Table &table, int colIdx,
                                              const string &value) {
   Table filteredTable = Table();
-  filteredTable.header = table.header;
-  auto rowItr = table.rows.begin();
-  while (rowItr != table.rows.end()) {
+  filteredTable.renameHeader(table.getHeader());
+  vector<vector<string>> *rowsPtr = table.getRowsPointer();
+  auto rowItr = rowsPtr->begin();
+  while (rowItr != rowsPtr->end()) {
     if (rowItr->at(colIdx) == value) {
       ++rowItr;
       continue;
     }
-    *rowItr = table.rows[table.rows.size() - 1];
-    table.rows.erase(table.rows.end() - 1);
+    *rowItr = (*rowsPtr)[table.getNumberOfRows() - 1];
+    rowsPtr->erase(rowsPtr->end() - 1);
   }
 }
 
@@ -807,10 +809,10 @@ bool DataPreprocessor::dropUnusedColumns(Table &table) {
   bool isDropped = false;
   // drop unused columns
   int offset = 0;
-  int n = table.header.size();
+  int n = table.getNumberOfColumns();
   for (int i = 0; i < n; i++) {
     int adjustedIdx = i + offset;
-    if (table.header[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) !=
+    if (table.getHeader()[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) !=
         std::string::npos) {
       table.dropColFromThis(adjustedIdx);
       isDropped = true;
@@ -830,9 +832,10 @@ void DataPreprocessor::filerTableByDesignEntity(Table &table, int colIdx,
       DesignEntity::STMT, DesignEntity::CONSTANT, DesignEntity::VARIABLE,
       DesignEntity::PROCEDURE};
   if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) return;
-  auto rowItr = table.rows.begin();
+  vector<vector<string>> *rowsPtr = table.getRowsPointer();
+  auto rowItr = rowsPtr->begin();
 
-  while (rowItr != table.rows.end()) {
+  while (rowItr != rowsPtr->end()) {
     string val = rowItr->at(colIdx);
     DesignEntity entityType =
         this->dataRetriever->getDesignEntityOfStmt(stoi(val));
@@ -842,9 +845,9 @@ void DataPreprocessor::filerTableByDesignEntity(Table &table, int colIdx,
     }
     // the stmt in the row does not match the given design entity type， erase
     // the row from the table
-    *rowItr = table.rows[table.rows.size() -
-                         1];  // overwrite this row with the last row
-    table.rows.erase(table.rows.end() - 1);  // erase the last row
+    *rowItr = (*rowsPtr)[table.getNumberOfRows() -
+                         1];             // overwrite this row with the last row
+    rowsPtr->erase(rowsPtr->end() - 1);  // erase the last row
   }
 }
 

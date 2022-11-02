@@ -16,11 +16,11 @@ TEST_CASE("Test PKBStorage") {
     pkbStorage->saveVariables(variables);
 
     // check header is set automatically
-    REQUIRE(pkbStorage->getVariables()->header[0] == "$variable_name");
+    REQUIRE(pkbStorage->getVariables()->getHeader()[0] == "$variable_name");
 
     // check variables are added
-    REQUIRE(pkbStorage->getVariables()->rows[0][0] == "dummyVarA");
-    REQUIRE(pkbStorage->getVariables()->rows[1][0] == "dummyVarB");
+    REQUIRE(pkbStorage->getVariables()->getRows()[0][0] == "dummyVarA");
+    REQUIRE(pkbStorage->getVariables()->getRows()[1][0] == "dummyVarB");
   }
 
   SECTION("Save statements, UsesS, ModifiesS -> check statementTable") {
@@ -37,14 +37,14 @@ TEST_CASE("Test PKBStorage") {
     shared_ptr<Table> stmtsTable = pkbStorage->getStatements();
 
     // check header is set automatically
-    REQUIRE(stmtsTable->header[0] == "$statement_number");
-    REQUIRE(stmtsTable->header[1] == "$statement_type");
+    REQUIRE(stmtsTable->getHeader()[0] == "$statement_number");
+    REQUIRE(stmtsTable->getHeader()[1] == "$statement_type");
 
     // check statements are added
-    REQUIRE(stmtsTable->rows[0][0] == "1");
-    REQUIRE(stmtsTable->rows[0][1] == "while");
-    REQUIRE(stmtsTable->rows[1][0] == "2");
-    REQUIRE(stmtsTable->rows[1][1] == "read");
+    REQUIRE(stmtsTable->getRows()[0][0] == "1");
+    REQUIRE(stmtsTable->getRows()[0][1] == "while");
+    REQUIRE(stmtsTable->getRows()[1][0] == "2");
+    REQUIRE(stmtsTable->getRows()[1][1] == "read");
 
     // save UsesS
     vector<string> u1 = vector<string>{"1", "used_in_while"};
@@ -55,12 +55,12 @@ TEST_CASE("Test PKBStorage") {
     shared_ptr<Table> printedVars = pkbStorage->getPrintVariableNames();
 
     // check header is set automatically
-    REQUIRE(printedVars->header[0] == "$statement_number");
-    REQUIRE(printedVars->header[1] == "$variable_name");
+    REQUIRE(printedVars->getHeader()[0] == "$statement_number");
+    REQUIRE(printedVars->getHeader()[1] == "$variable_name");
 
     // check printed variables are added
-    REQUIRE(printedVars->rows[0][0] == "3");
-    REQUIRE(printedVars->rows[0][1] == "printed");
+    REQUIRE(printedVars->getRows()[0][0] == "3");
+    REQUIRE(printedVars->getRows()[0][1] == "printed");
 
     // save ModifiesS
     vector<string> m1 = vector<string>{"1", "modified_in_while"};
@@ -71,12 +71,12 @@ TEST_CASE("Test PKBStorage") {
     shared_ptr<Table> readVars = pkbStorage->getReadVariableNames();
 
     // check header is set automatically
-    REQUIRE(readVars->header[0] == "$statement_number");
-    REQUIRE(readVars->header[1] == "$variable_name");
+    REQUIRE(readVars->getHeader()[0] == "$statement_number");
+    REQUIRE(readVars->getHeader()[1] == "$variable_name");
 
     // check read variables are added
-    REQUIRE(readVars->rows[0][0] == "2");
-    REQUIRE(readVars->rows[0][1] == "read");
+    REQUIRE(readVars->getRows()[0][0] == "2");
+    REQUIRE(readVars->getRows()[0][1] == "read");
   }
 
   SECTION("Save parent") {
@@ -87,14 +87,14 @@ TEST_CASE("Test PKBStorage") {
     pkbStorage->saveParent(s2);
 
     // check header is set automatically
-    REQUIRE(pkbStorage->getParent()->header[0] == "$parent_statement");
-    REQUIRE(pkbStorage->getParent()->header[1] == "$child_statement");
+    REQUIRE(pkbStorage->getParent()->getHeader()[0] == "$parent_statement");
+    REQUIRE(pkbStorage->getParent()->getHeader()[1] == "$child_statement");
 
     // check relationships are added
-    REQUIRE(pkbStorage->getParent()->rows[0][0] == "1");
-    REQUIRE(pkbStorage->getParent()->rows[0][1] == "2");
-    REQUIRE(pkbStorage->getParent()->rows[1][0] == "2");
-    REQUIRE(pkbStorage->getParent()->rows[1][1] == "3");
+    REQUIRE(pkbStorage->getParent()->getRows()[0][0] == "1");
+    REQUIRE(pkbStorage->getParent()->getRows()[0][1] == "2");
+    REQUIRE(pkbStorage->getParent()->getRows()[1][0] == "2");
+    REQUIRE(pkbStorage->getParent()->getRows()[1][1] == "3");
   }
 
   SECTION("Save calls") {
@@ -110,24 +110,24 @@ TEST_CASE("Test PKBStorage") {
     shared_ptr<Table> stmtNoProcMap = pkbStorage->getCallsProcedureNames();
 
     // check header is set automatically
-    REQUIRE(procedures->header[0] == "$calling_procedure");
-    REQUIRE(procedures->header[1] == "$called_procedure");
-    REQUIRE(stmtNoProcMap->header[0] == "$statement_number");
-    REQUIRE(stmtNoProcMap->header[1] == "$called_procedure");
+    REQUIRE(procedures->getHeader()[0] == "$calling_procedure");
+    REQUIRE(procedures->getHeader()[1] == "$called_procedure");
+    REQUIRE(stmtNoProcMap->getHeader()[0] == "$statement_number");
+    REQUIRE(stmtNoProcMap->getHeader()[1] == "$called_procedure");
 
     // check relationships are added
-    REQUIRE(procedures->rows[0][0] == "p1");
-    REQUIRE(procedures->rows[0][1] == "p2");
-    REQUIRE(procedures->rows[1][0] == "p1");
-    REQUIRE(procedures->rows[1][1] == "p3");
-    REQUIRE(procedures->rows[2][0] == "p2");
-    REQUIRE(procedures->rows[2][1] == "p3");
-    REQUIRE(stmtNoProcMap->rows[0][0] == "1");
-    REQUIRE(stmtNoProcMap->rows[0][1] == "p2");
-    REQUIRE(stmtNoProcMap->rows[1][0] == "2");
-    REQUIRE(stmtNoProcMap->rows[1][1] == "p3");
-    REQUIRE(stmtNoProcMap->rows[2][0] == "10");
-    REQUIRE(stmtNoProcMap->rows[2][1] == "p3");
+    REQUIRE(procedures->getRows()[0][0] == "p1");
+    REQUIRE(procedures->getRows()[0][1] == "p2");
+    REQUIRE(procedures->getRows()[1][0] == "p1");
+    REQUIRE(procedures->getRows()[1][1] == "p3");
+    REQUIRE(procedures->getRows()[2][0] == "p2");
+    REQUIRE(procedures->getRows()[2][1] == "p3");
+    REQUIRE(stmtNoProcMap->getRows()[0][0] == "1");
+    REQUIRE(stmtNoProcMap->getRows()[0][1] == "p2");
+    REQUIRE(stmtNoProcMap->getRows()[1][0] == "2");
+    REQUIRE(stmtNoProcMap->getRows()[1][1] == "p3");
+    REQUIRE(stmtNoProcMap->getRows()[2][0] == "10");
+    REQUIRE(stmtNoProcMap->getRows()[2][1] == "p3");
   }
 
   // Testing of assign patterns
@@ -165,9 +165,9 @@ TEST_CASE("Test PKBStorage") {
         ExpressionSpec(ExpressionSpecType::FULL_MATCH, pattern1);
     shared_ptr<Table> fullMatchTable =
         pkbStorage->getMatchedAssignPatterns(fullMatch);
-    REQUIRE(fullMatchTable->rows.size() == 1);
-    REQUIRE(fullMatchTable->rows[0][0] == "1");
-    REQUIRE(fullMatchTable->rows[0][1] == "x");
+    REQUIRE(fullMatchTable->getNumberOfRows() == 1);
+    REQUIRE(fullMatchTable->getRows()[0][0] == "1");
+    REQUIRE(fullMatchTable->getRows()[0][1] == "x");
   }
 
   SECTION("Test FULL_MATCH: mismatchedPattern (negative)") {
@@ -175,7 +175,7 @@ TEST_CASE("Test PKBStorage") {
         ExpressionSpec(ExpressionSpecType::FULL_MATCH, mismatchedPattern);
     shared_ptr<Table> fullMatchTable =
         pkbStorage->getMatchedAssignPatterns(fullMatch);
-    REQUIRE(fullMatchTable->rows.empty());
+    REQUIRE(fullMatchTable->getRows().empty());
   }
 
   SECTION("Test PARTIAL_MATCH: pattern1 (positive)") {
@@ -183,11 +183,11 @@ TEST_CASE("Test PKBStorage") {
         ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, pattern1);
     shared_ptr<Table> partialMatchTable =
         pkbStorage->getMatchedAssignPatterns(partialMatch);
-    REQUIRE(partialMatchTable->rows.size() == 2);
-    REQUIRE(partialMatchTable->rows[0][0] == "1");
-    REQUIRE(partialMatchTable->rows[0][1] == "x");
-    REQUIRE(partialMatchTable->rows[1][0] == "2");
-    REQUIRE(partialMatchTable->rows[1][1] == "y");
+    REQUIRE(partialMatchTable->getNumberOfRows() == 2);
+    REQUIRE(partialMatchTable->getRows()[0][0] == "1");
+    REQUIRE(partialMatchTable->getRows()[0][1] == "x");
+    REQUIRE(partialMatchTable->getRows()[1][0] == "2");
+    REQUIRE(partialMatchTable->getRows()[1][1] == "y");
   }
 
   SECTION("Test PARTIAL_MATCH: mismatchedPattern (negative)") {
@@ -195,17 +195,17 @@ TEST_CASE("Test PKBStorage") {
         ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, mismatchedPattern);
     shared_ptr<Table> partialMatchTable =
         pkbStorage->getMatchedAssignPatterns(partialMatch);
-    REQUIRE(partialMatchTable->rows.empty());
+    REQUIRE(partialMatchTable->getRows().empty());
   }
 
   SECTION("Test wildcard (positive)") {
     ExpressionSpec anyMatch = ExpressionSpec(ExpressionSpecType::ANY_MATCH);
     shared_ptr<Table> anyMatchTable =
         pkbStorage->getMatchedAssignPatterns(anyMatch);
-    REQUIRE(anyMatchTable->rows.size() == 2);
-    REQUIRE(anyMatchTable->rows[0][0] == "1");
-    REQUIRE(anyMatchTable->rows[0][1] == "x");
-    REQUIRE(anyMatchTable->rows[1][0] == "2");
-    REQUIRE(anyMatchTable->rows[1][1] == "y");
+    REQUIRE(anyMatchTable->getNumberOfRows() == 2);
+    REQUIRE(anyMatchTable->getRows()[0][0] == "1");
+    REQUIRE(anyMatchTable->getRows()[0][1] == "x");
+    REQUIRE(anyMatchTable->getRows()[1][0] == "2");
+    REQUIRE(anyMatchTable->getRows()[1][1] == "y");
   }
 }
