@@ -12,7 +12,8 @@ namespace QE {
 
 const string CONCAT_SYM = "@";
 
-shared_ptr<Table> TableCombiner::crossProduct(shared_ptr<Table> t1, shared_ptr<Table> t2) {
+shared_ptr<Table> TableCombiner::crossProduct(shared_ptr<Table> t1,
+                                              shared_ptr<Table> t2) {
   if (t1->isHeaderEmpty()) return t2;
   if (t2->isHeaderEmpty()) return t1;
   auto productTable = make_shared<Table>();
@@ -30,7 +31,8 @@ shared_ptr<Table> TableCombiner::crossProduct(shared_ptr<Table> t1, shared_ptr<T
   return productTable;
 }
 
-shared_ptr<Table> TableCombiner::hashJoin(shared_ptr<Table> t1, shared_ptr<Table> t2) {
+shared_ptr<Table> TableCombiner::hashJoin(shared_ptr<Table> t1,
+                                          shared_ptr<Table> t2) {
   if (t1->isHeaderEmpty()) return t2;
   if (t2->isHeaderEmpty()) return t1;
   int FIRST_DUP_IDX = 0;
@@ -40,7 +42,7 @@ shared_ptr<Table> TableCombiner::hashJoin(shared_ptr<Table> t1, shared_ptr<Table
   int t2Size = t2->getNumberOfRows();
   bool isT1Smaller = t1Size <= t2Size;
   auto smallerTablePtr = isT1Smaller ? t1 : t2;
-    auto biggerTablePtr = isT1Smaller ? t2 : t1;
+  auto biggerTablePtr = isT1Smaller ? t2 : t1;
 
   auto dupHeaders = this->findDupHeaders(smallerTablePtr->getHeader(),
                                          biggerTablePtr->getHeader());

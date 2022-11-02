@@ -28,7 +28,7 @@ class DummyPatternClause : public PatternClause,
   DummyPatternClause(Synonym arg1, Ref arg2);
 
   bool operator==(const DummyPatternClause& other) const;
- shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
+  shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
 };
 }  // namespace QB
 

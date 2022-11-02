@@ -20,7 +20,7 @@ class ModifiesSClause : public SuchThatClause,
   ModifiesSClause(Ref arg1, Ref arg2);
 
   bool operator==(const ModifiesSClause &other) const;
-    shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
+  shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
   pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
   getAllowedArgsSynonym() override;
   pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;

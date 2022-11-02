@@ -20,7 +20,7 @@ class ParentClause : public SuchThatClause,
   ParentClause(Ref arg1, Ref arg2);
 
   bool operator==(const ParentClause &other) const;
-    shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
+  shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
   pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
   getAllowedArgsSynonym() override;
   pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;

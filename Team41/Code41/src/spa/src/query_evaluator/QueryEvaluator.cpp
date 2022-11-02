@@ -76,8 +76,8 @@ vector<string> QueryEvaluator::removeDup(vector<string> vec) {
 }
 
 vector<string> QueryEvaluator::formatConditionalQueryResult(
-        shared_ptr<Table> resultTable, shared_ptr<vector<Elem>> tuple, shared_ptr<Query> query,
-        shared_ptr<DataPreprocessor> dataPreprocessor) {
+    shared_ptr<Table> resultTable, shared_ptr<vector<Elem>> tuple,
+    shared_ptr<Query> query, shared_ptr<DataPreprocessor> dataPreprocessor) {
   if (query->selectClause->returnType == QB::ReturnType::BOOLEAN)
     return resultTable->isBodyEmpty() ? FALSE_RESULT : TRUE_RESULT;
 
@@ -225,7 +225,7 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(
   // evaluate the rest of the groups
   for (auto it : *ccg) {
     // eval each subgroup
-      shared_ptr<Table> subGroupResultTable = make_shared<Table>();
+    shared_ptr<Table> subGroupResultTable = make_shared<Table>();
     for (auto subGroupClause : *it.second) {
       auto intermediateTable = subGroupClause->accept(clauseVisitor);
       if (intermediateTable->isBodyEmpty()) return FALSE_RESULT;

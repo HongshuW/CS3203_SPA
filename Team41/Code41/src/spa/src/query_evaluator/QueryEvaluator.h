@@ -37,8 +37,8 @@ class QueryEvaluator {
   vector<string> removeDup(vector<string> vec);
 
   vector<string> formatConditionalQueryResult(
-          shared_ptr<Table> resultTable, shared_ptr<vector<Elem>> tuple,
-          shared_ptr<Query> query, shared_ptr<DataPreprocessor> dataPreprocessor);
+      shared_ptr<Table> resultTable, shared_ptr<vector<Elem>> tuple,
+      shared_ptr<Query> query, shared_ptr<DataPreprocessor> dataPreprocessor);
 
   vector<string> projectResult(shared_ptr<Table> resultTable,
                                shared_ptr<vector<Elem>> tuple);
