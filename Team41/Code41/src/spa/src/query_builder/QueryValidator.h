@@ -9,7 +9,11 @@
 
 #include <unordered_set>
 
-#include "query_builder/clauses/pattern_clauses/InvalidPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/DummyPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/PatternClause.h"
+#include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesPClause.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesSClause.h"
 #include "query_builder/clauses/such_that_clauses/UsesPClause.h"
@@ -32,7 +36,6 @@ class QueryValidator {
   void validateSynonymDeclaredSuchThatClause();
   void checkSynonymDeclared(
       Synonym& synonym, const shared_ptr<vector<Declaration>>& declarations);
-  void validateArgRefTypeSuchThatClause() const;
   void validateUsesModifiesNoUnderscoreForFirstArg() const;
   void validateSynonymTypeSuchThatClause();
   void validateSuchThatClause();
@@ -41,7 +44,6 @@ class QueryValidator {
       const shared_ptr<vector<Declaration>>& declarations);
   void validateSynonymDeclaredPatternClause();
   void validateAllowedDesignEntityPatternClause();
-  void validateArgRefTypePatternClause() const;
   void validateArg2DesignEntityPatternClause() const;
   void validatePatternClause();
   void checkDesignEntityAttrNamePair(

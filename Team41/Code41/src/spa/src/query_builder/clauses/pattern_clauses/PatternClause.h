@@ -21,8 +21,6 @@ class PatternClause : public ConditionalClause {
   PatternClause(Synonym arg1, Ref arg2);
   ~PatternClause() override = default;
   virtual shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override = 0;
-  virtual int validateSyntaxError(int currIdx,
-                                  const vector<string>& tokens) = 0;
   virtual bool expect(const string& s, unsigned int currIdx,
                       const vector<string>& tokens);
   unordered_set<string> getSynonymNames() override;

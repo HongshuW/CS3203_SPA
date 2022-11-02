@@ -98,6 +98,13 @@ jobs:
           path: |
             ${{github.workspace}}/Team41/Tests41/milestone-2/milestone-2-out
             
+      - name: Archive Milestone 3 System Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: milestone-3-system-test-results
+          path: |
+            ${{github.workspace}}/Team41/Tests41/milestone-3/milestone-3-out
+            
       - name: Evaulate System Tests Check
         run: |
             if [[ ${{ env.check_status }} == fail ]]; 

@@ -109,31 +109,6 @@ void QueryValidator::validateSynonymDeclaredSuchThatClause() {
   }
 }
 
-void QueryValidator::validateArgRefTypeSuchThatClause() const {
-  shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses =
-      query->suchThatClauses;
-  shared_ptr<vector<Declaration>> declarations = query->declarations;
-
-  for (const auto& suchThat : *suchThatClauses) {
-    shared_ptr<Validatable> clause =
-        dynamic_pointer_cast<Validatable>(suchThat);
-    pair<RefTypeSet, RefTypeSet> validArgsTypes =
-        clause->getAllowedArgsRefType();
-
-    auto arg1RefIndex = suchThat->arg1.index();
-    auto arg2RefIndex = suchThat->arg2.index();
-
-    RefTypeSet validFirstArgTypes = validArgsTypes.first;
-    RefTypeSet validSecondArgTypes = validArgsTypes.second;
-
-    if (!validFirstArgTypes.count(arg1RefIndex) ||
-        !validSecondArgTypes.count(arg2RefIndex)) {
-      throw PQLParseException(
-          QueryValidatorConstants::PQL_VALIDATION_INVALID_REF_TYPES);
-    }
-  }
-}
-
 void QueryValidator::validateUsesModifiesNoUnderscoreForFirstArg() const {
   shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses =
       query->suchThatClauses;
@@ -197,10 +172,6 @@ void QueryValidator::validateSuchThatClause() {
   validateSynonymDeclaredSuchThatClause();
   //! First arg for Uses and Modifies cannot be Underscore
   validateUsesModifiesNoUnderscoreForFirstArg();
-  //! Validate the correct RefType for such that clause
-  //! e.g. Follows : (stmtRef, stmtRef), UsesS : (stmtRef, entRef)
-  //! Should throw syntax error not semantic error
-  validateArgRefTypeSuchThatClause();
   //! Validate the correct synonym types for such that clause
   validateSynonymTypeSuchThatClause();
 }
@@ -222,26 +193,73 @@ void QueryValidator::validateSynonymDeclaredPatternClause() {
 void QueryValidator::validateAllowedDesignEntityPatternClause() {
   shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses =
       query->patternClauses;
-  for (const auto& patternClause : *patternClauses) {
-    if (dynamic_pointer_cast<InvalidPatternClause>(patternClause)) {
-      throw PQLValidationException(
-          QueryValidatorConstants::PQL_VALIDATION_INVALID_SYNONYM_PATTERN);
-    }
-  }
-}
-
-void QueryValidator::validateArgRefTypePatternClause() const {
-  //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
-  shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses =
-      query->patternClauses;
   shared_ptr<vector<Declaration>> declarations = query->declarations;
-  for (const auto& patternClause : *patternClauses) {
-    auto arg2RefIndex = patternClause->arg2.index();
-    if (!entRefIndexSet.count(arg2RefIndex)) {
-      throw PQLParseException(
-          QueryValidatorConstants::PQL_VALIDATION_SECOND_ARG_INTEGER);
+  const unordered_set<DesignEntity> ALLOWED_DE = {
+      DesignEntity::ASSIGN, DesignEntity::IF, DesignEntity::WHILE};
+
+  shared_ptr<vector<shared_ptr<PatternClause>>> newPatternClauseVector =
+      make_shared<vector<shared_ptr<PatternClause>>>();
+
+  for (auto patternClause : *patternClauses) {
+    auto dummyPatternClause =
+        dynamic_pointer_cast<DummyPatternClause>(patternClause);
+    checkCorrectDesignEntity(dummyPatternClause->arg1, ALLOWED_DE,
+                             declarations);
+    //! If no error is throw, construct the correct pattern clause
+    auto declaration =
+        Declaration::findDeclaration(dummyPatternClause->arg1, declarations);
+    auto designEntity = declaration->getDesignEntity();
+    shared_ptr<PatternClause> newPatternClause = nullptr;
+
+    if (designEntity == DesignEntity::ASSIGN) {
+      //! arg4 cannot be an underscore
+      if (dummyPatternClause->isArg4Underscore) {
+        throw PQLValidationException(
+            QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+      }
+      //! arg3 is an underscore, the expressionSpecType must be ANY_MATCH
+      if (dummyPatternClause->isArg3Underscore &&
+          dummyPatternClause->arg3.expressionSpecType !=
+              ExpressionSpecType::ANY_MATCH) {
+        throw PQLValidationException(
+            QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+      }
+      //! Otherwise the expressionSpecType must be PARTIAL_MATCH or FULL_MATCH
+      //! and exprNode cannot be a nullptr
+      if (dummyPatternClause->arg3.expressionSpecType ==
+              ExpressionSpecType::PARTIAL_MATCH ||
+          dummyPatternClause->arg3.expressionSpecType ==
+              ExpressionSpecType::FULL_MATCH) {
+        if (dummyPatternClause->arg3.exprNode == nullptr) {
+          throw PQLValidationException(
+              QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+        }
+      }
+      newPatternClause = make_shared<AssignPatternClause>(
+          dummyPatternClause->arg1, dummyPatternClause->arg2,
+          dummyPatternClause->arg3);
+    } else if (designEntity == DesignEntity::IF) {
+      //! arg3 and arg4 must be an underscore
+      if (!(dummyPatternClause->isArg3Underscore &&
+            dummyPatternClause->isArg4Underscore)) {
+        throw PQLValidationException(
+            QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+      }
+      newPatternClause = make_shared<IfPatternClause>(dummyPatternClause->arg1,
+                                                      dummyPatternClause->arg2);
+    } else if (designEntity == DesignEntity::WHILE) {
+      //! arg3 must be an underscore and arg4 must not be an underscore
+      if (!(dummyPatternClause->isArg3Underscore &&
+            !dummyPatternClause->isArg4Underscore)) {
+        throw PQLValidationException(
+            QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+      }
+      newPatternClause = make_shared<WhilePatternClause>(
+          dummyPatternClause->arg1, dummyPatternClause->arg2);
     }
+    newPatternClauseVector->push_back(newPatternClause);
   }
+  query->patternClauses = newPatternClauseVector;
 }
 
 void QueryValidator::validateArg2DesignEntityPatternClause() const {
@@ -267,10 +285,8 @@ void QueryValidator::validatePatternClause() {
   //! Validate synonym for arg1 and arg2 are declared
   validateSynonymDeclaredPatternClause();
   //! Validate design entity for arg1 can only be assign, while and if
+  //! create different pattern clauses respectively
   validateAllowedDesignEntityPatternClause();
-  //! Validate the correct RefType for pattern clause arg2
-  //! Should throw syntax error not semantic error
-  validateArgRefTypePatternClause();
   //! Validate if agr2 is a synonym, it must be declared as variable
   validateArg2DesignEntityPatternClause();
 }

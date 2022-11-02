@@ -181,9 +181,11 @@ void QueryParser::parseSuchThatClause() {
            {RelationType::AFFECTS, make_shared<Affects>()},
            {RelationType::AFFECTS_T, make_shared<AffectsT>()}});
   const auto& suchThatClauseCreator = SUCH_THAT_CREATORS.at(relationType);
-  auto suchThatClause = suchThatClauseCreator->createClause(arg1, arg2);
-  query->suchThatClauses->push_back(
-      dynamic_pointer_cast<SuchThatClause>(suchThatClause));
+  auto suchThatClause = dynamic_pointer_cast<SuchThatClause>(
+      suchThatClauseCreator->createClause(arg1, arg2));
+  //! Validate correct ref type for the 2 args in such that clause
+  validateArgRefTypeSuchThatClause(suchThatClause);
+  query->suchThatClauses->push_back(suchThatClause);
 }
 
 bool QueryParser::parseSuchThat() {
@@ -236,41 +238,33 @@ ExpressionSpec QueryParser::parseExpressionSpec() {
 
 void QueryParser::parsePatternClause() {
   Synonym arg1 = Synonym(pop());
-  //! Default value
-  DesignEntity de = DesignEntity::STMT;
-  auto declaration = Declaration::findDeclaration(arg1, query->declarations);
   expect(QueryParserConstants::LEFT_BRACKET);
-  if (declaration) {
-    de = declaration->getDesignEntity();
-  }
   Ref arg2 = parseRef();
+  //! arg2 must be entRef
+  validateArgRefTypePatternClause(arg2);
   expect(QueryParserConstants::COMMA);
-  const unordered_set<DesignEntity> ALLOWED_DE = {
-      DesignEntity::IF, DesignEntity::WHILE, DesignEntity::ASSIGN};
-  const unordered_map<DesignEntity, shared_ptr<PatternRelations>>
-      PATTERN_CREATORS({
-          {DesignEntity::IF, make_shared<IfPattern>()},
-          {DesignEntity::WHILE, make_shared<WhilePattern>()},
-          {DesignEntity::ASSIGN, make_shared<AssignPattern>()},
-      });
 
-  //! Default patternClauseCreator, will change later
-  shared_ptr<PatternRelations> patternClauseCreator =
-      make_shared<PatternRelations>();
-  if (ALLOWED_DE.count(de)) {
-    patternClauseCreator = PATTERN_CREATORS.at(de);
+  auto patternClause = make_shared<DummyPatternClause>(arg1, arg2);
+  if (match(QueryParserConstants::UNDERSCORE)) {
+    if (match(QueryParserConstants::RIGHT_BRACKET)) {
+      //! Correct while pattern or correct assign pattern with ANY_MATCH
+      patternClause->isArg3Underscore = true;
+      currIdx--;
+    } else if (match(QueryParserConstants::COMMA)) {
+      patternClause->isArg3Underscore = true;
+      //! Correct if pattern
+      expect(QueryParserConstants::UNDERSCORE);
+      patternClause->isArg4Underscore = true;
+    } else {
+      //! May be expressionSpec
+      currIdx--;
+      ExpressionSpec arg3 = parseExpressionSpec();
+      patternClause = make_shared<DummyPatternClause>(arg1, arg2, arg3);
+    }
   } else {
-    //! Throw error in Validator
-    patternClauseCreator = make_shared<InvalidPattern>();
-  }
-
-  auto patternClause = dynamic_pointer_cast<PatternClause>(
-      patternClauseCreator->createClause(arg1, arg2));
-  currIdx = patternClause->validateSyntaxError(currIdx, tokens);
-  //! Special case, need to parse ExpressionSpec
-  if (dynamic_pointer_cast<AssignPatternClause>(patternClause)) {
+    //! May be expressionSpec
     ExpressionSpec arg3 = parseExpressionSpec();
-    dynamic_pointer_cast<AssignPatternClause>(patternClause)->arg3 = arg3;
+    patternClause = make_shared<DummyPatternClause>(arg1, arg2, arg3);
   }
   expect(QueryParserConstants::RIGHT_BRACKET);
   query->patternClauses->push_back(patternClause);
@@ -324,6 +318,34 @@ bool QueryParser::parseWith() {
     parseWithClause();
   }
   return true;
+}
+
+void QueryParser::validateArgRefTypeSuchThatClause(
+    shared_ptr<SuchThatClause> suchThatClause) const {
+  shared_ptr<Validatable> clause =
+      dynamic_pointer_cast<Validatable>(suchThatClause);
+  pair<RefTypeSet, RefTypeSet> validArgsTypes = clause->getAllowedArgsRefType();
+
+  auto arg1RefIndex = suchThatClause->arg1.index();
+  auto arg2RefIndex = suchThatClause->arg2.index();
+
+  RefTypeSet validFirstArgTypes = validArgsTypes.first;
+  RefTypeSet validSecondArgTypes = validArgsTypes.second;
+
+  if (!validFirstArgTypes.count(arg1RefIndex) ||
+      !validSecondArgTypes.count(arg2RefIndex)) {
+    throw PQLParseException(
+        QueryParserConstants::PQL_VALIDATION_INVALID_REF_TYPES);
+  }
+}
+
+void QueryParser::validateArgRefTypePatternClause(Ref arg2) const {
+  //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
+  auto arg2RefIndex = arg2.index();
+  if (!entRefIndexSet.count(arg2RefIndex)) {
+    throw PQLParseException(
+        QueryParserConstants::PQL_VALIDATION_INVALID_REF_TYPES);
+  }
 }
 
 shared_ptr<Query> QueryParser::parse() {

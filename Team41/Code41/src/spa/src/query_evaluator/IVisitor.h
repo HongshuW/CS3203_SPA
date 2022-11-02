@@ -13,7 +13,6 @@ class SelectClause;
 class IfPatternClause;
 class WhilePatternClause;
 class AssignPatternClause;
-class InvalidPatternClause;
 class WithClause;
 class FollowsClause;
 class FollowsTClause;

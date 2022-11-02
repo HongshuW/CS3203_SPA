@@ -370,11 +370,11 @@ TEST_CASE("Test Query Parser") {
     returnResults->push_back(Synonym("a"));
     REQUIRE(*(query->selectClause) ==
             SelectClause(ReturnType::TUPLE, returnResults));
-    AssignPatternClause assignPatternClause =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(assignPatternClause ==
-            AssignPatternClause(Synonym("a"), Ident("test"),
-                                ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(Synonym("a"), Ident("test"),
+                               ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
   }
 
   SECTION("assign a; Select a pattern a (_, _)") {
@@ -389,11 +389,11 @@ TEST_CASE("Test Query Parser") {
     returnResults->push_back(Synonym("a"));
     REQUIRE(*(query->selectClause) ==
             SelectClause(ReturnType::TUPLE, returnResults));
-    AssignPatternClause assignPatternClause =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(assignPatternClause ==
-            AssignPatternClause(Synonym("a"), Underscore(),
-                                ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(Synonym("a"), Underscore(),
+                               ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
   }
 
   SECTION("assign a; Select a pattern a (_, _) and a (_, \"x + 1\")") {
@@ -410,18 +410,18 @@ TEST_CASE("Test Query Parser") {
     returnResults->push_back(Synonym("a"));
     REQUIRE(*(query->selectClause) ==
             SelectClause(ReturnType::TUPLE, returnResults));
-    AssignPatternClause assignPatternClause =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(assignPatternClause ==
-            AssignPatternClause(Synonym("a"), Underscore(),
-                                ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
-    AssignPatternClause assignPatternClause2 =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(1)));
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(Synonym("a"), Underscore(),
+                               ExpressionSpec(ExpressionSpecType::ANY_MATCH)));
+    DummyPatternClause dummyPatternClause2 =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(1)));
     shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
     exprNode->left = make_shared<ExprNode>("x");
     exprNode->right = make_shared<ExprNode>("1");
-    REQUIRE(assignPatternClause2 ==
-            AssignPatternClause(
+    REQUIRE(dummyPatternClause2 ==
+            DummyPatternClause(
                 Synonym("a"), Underscore(),
                 ExpressionSpec(ExpressionSpecType::FULL_MATCH, exprNode)));
   }
@@ -444,10 +444,10 @@ TEST_CASE("Test Query Parser") {
     shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
     exprNode->left = make_shared<ExprNode>("x");
     exprNode->right = make_shared<ExprNode>("1");
-    AssignPatternClause assignPatternClause =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(assignPatternClause ==
-            AssignPatternClause(
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(
                 Synonym("a"), Underscore(),
                 ExpressionSpec(ExpressionSpecType::FULL_MATCH, exprNode)));
   }
@@ -468,10 +468,10 @@ TEST_CASE("Test Query Parser") {
     shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("+");
     exprNode->left = make_shared<ExprNode>("2");
     exprNode->right = make_shared<ExprNode>("1");
-    AssignPatternClause assignPatternClause =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(assignPatternClause ==
-            AssignPatternClause(
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(
                 Synonym("a"), Underscore(),
                 ExpressionSpec(ExpressionSpecType::FULL_MATCH, exprNode)));
   }
@@ -497,10 +497,10 @@ TEST_CASE("Test Query Parser") {
     shared_ptr<ExprNode> exprNode = make_shared<ExprNode>("*");
     exprNode->left = exprNodeLeft;
     exprNode->right = make_shared<ExprNode>("3");
-    AssignPatternClause assignPatternClause =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(assignPatternClause ==
-            AssignPatternClause(
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(
                 Synonym("a"), Underscore(),
                 ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH, exprNode)));
   }
@@ -529,13 +529,12 @@ TEST_CASE("Test Query Parser") {
     auto clause =
         dynamic_pointer_cast<UsesSClause>((query->suchThatClauses)->at(0));
     REQUIRE(*clause == UsesSClause(Synonym("a"), Ident("x")));
-    AssignPatternClause assignPatternClause =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(
-        assignPatternClause ==
-        AssignPatternClause(Synonym("a"), Synonym("v"),
-                            ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
-                                           make_shared<ExprNode>("y"))));
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(Synonym("a"), Synonym("v"),
+                               ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
+                                              make_shared<ExprNode>("y"))));
   }
 
   SECTION(
@@ -561,13 +560,12 @@ TEST_CASE("Test Query Parser") {
     auto clause =
         dynamic_pointer_cast<UsesSClause>((query->suchThatClauses)->at(0));
     REQUIRE(*clause == UsesSClause(Synonym("a"), Ident("x")));
-    AssignPatternClause assignPatternClause =
-        dynamic_cast<AssignPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(
-        assignPatternClause ==
-        AssignPatternClause(Synonym("a"), Synonym("v"),
-                            ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
-                                           make_shared<ExprNode>("y"))));
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(Synonym("a"), Synonym("v"),
+                               ExpressionSpec(ExpressionSpecType::PARTIAL_MATCH,
+                                              make_shared<ExprNode>("y"))));
   }
 
   SECTION("if i; variable v; Select v pattern i (v, _, _)") {
@@ -585,9 +583,10 @@ TEST_CASE("Test Query Parser") {
     returnResults->push_back(Synonym("v"));
     REQUIRE(*(query->selectClause) ==
             SelectClause(ReturnType::TUPLE, returnResults));
-    IfPatternClause ifPatternClause =
-        dynamic_cast<IfPatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(ifPatternClause == IfPatternClause(Synonym("i"), Synonym("v")));
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause ==
+            DummyPatternClause(Synonym("i"), Synonym("v")));
   }
 
   SECTION("variable v; Select v such that Calls (_, \"testProcedure\")") {
@@ -845,9 +844,9 @@ TEST_CASE("Test Query Parser") {
         dynamic_pointer_cast<NextTClause>((query->suchThatClauses)->at(1));
     REQUIRE(*clause2 == NextTClause(60, Synonym("s")));
     REQUIRE(query->patternClauses->size() == 1);
-    WhilePatternClause whilePatternClause =
-        dynamic_cast<WhilePatternClause&>(*(query->patternClauses->at(0)));
-    REQUIRE(whilePatternClause == WhilePatternClause(Synonym("w"), Ident("x")));
+    DummyPatternClause dummyPatternClause =
+        dynamic_cast<DummyPatternClause&>(*(query->patternClauses->at(0)));
+    REQUIRE(dummyPatternClause == DummyPatternClause(Synonym("w"), Ident("x")));
     REQUIRE(query->withClauses->size() == 1);
     AttrRef lhs = AttrRef(Synonym("a"), AttrName::STMT_NUMBER);
     AttrRef rhs = AttrRef(Synonym("s"), AttrName::STMT_NUMBER);
