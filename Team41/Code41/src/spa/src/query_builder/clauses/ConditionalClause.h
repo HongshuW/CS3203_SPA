@@ -13,6 +13,7 @@ using namespace std;
 class ConditionalClause : public AbstractClause {
  public:
   virtual unordered_set<string> getSynonymNames() = 0;
+  virtual int getValueRefCount() = 0;
 };
 
 #endif  // SPA_CONDITIONALCLAUSE_H

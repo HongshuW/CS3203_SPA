@@ -29,7 +29,6 @@ class DummyPatternClause : public PatternClause,
 
   bool operator==(const DummyPatternClause& other) const;
   Table accept(shared_ptr<IVisitor> visitor) override;
-  void validateSyntaxError() override;
 };
 }  // namespace QB
 

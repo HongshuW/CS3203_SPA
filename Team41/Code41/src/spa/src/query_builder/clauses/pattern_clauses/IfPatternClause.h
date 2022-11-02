@@ -24,7 +24,6 @@ class IfPatternClause : public PatternClause,
 
   bool operator==(const IfPatternClause& other) const;
   Table accept(shared_ptr<IVisitor> visitor) override;
-  void validateSyntaxError() override;
 };
 
 }  // namespace QB

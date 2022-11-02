@@ -22,12 +22,30 @@ namespace QE {
 using Value = variant<string, int, vector<int>, vector<string>>;
 
 class DataPreprocessor {
+ private:
   void filerTableByDesignEntity(Table& table, int colIdx,
                                 DesignEntity designEntity);
   void filterTableByColValueEquality(Table& table,
                                      const vector<int>& comparedCols);
   void filerTableByColumnIdx(Table& table, int colIdx, const string& value);
+  void filterSingleClauseResultTable(Ref ref1, Ref ref2, Table& table);
   DesignEntity getDesignEntityOfSyn(Synonym synonym);
+
+  /**
+   * Used for with clause evaluation
+   * Valid paras: stmt, read, print, call, while, if assign
+   * @param designEntity
+   * @return
+   */
+  vector<int> getStmtNumsByDesignEntity(DesignEntity designEntity);
+
+  /**
+   * Used for with clause evaluation
+   * Valid paras: procedure, variable, call, read, print
+   * @param designEntity
+   * @return
+   */
+  vector<string> getEntityNames(DesignEntity designEntity);
   std::vector<std::string> intersection(std::vector<std::string> v1,
                                         std::vector<std::string> v2);
   std::vector<int> intersection(std::vector<int> v1, std::vector<int> v2);
@@ -65,23 +83,6 @@ class DataPreprocessor {
   Table getCallsProcedureTable();
   Table getReadVariableTable();
   Table getPrintVariableTable();
-
-  void filterSingleClauseResultTable(Ref ref1, Ref ref2, Table& table);
-  /**
-   * Used for with clause evaluation
-   * Valid paras: stmt, read, print, call, while, if assign
-   * @param designEntity
-   * @return
-   */
-  vector<int> getStmtNumsByDesignEntity(DesignEntity designEntity);
-
-  /**
-   * Used for with clause evaluation
-   * Valid paras: procedure, variable, call, read, print
-   * @param designEntity
-   * @return
-   */
-  vector<string> getEntityNames(DesignEntity designEntity);
 
   bool hasResult(shared_ptr<WithClause> withClause);
 };
