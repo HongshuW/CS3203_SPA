@@ -20,12 +20,12 @@ TEST_CASE("Test Data Modifier") {
     shared_ptr<VariableTable> variableTable = pkbStorage->getVariables();
 
     // check header is set automatically
-    REQUIRE(variableTable->header[0] == "$variable_name");
+    REQUIRE(variableTable->getHeader()[0] == "$variable_name");
 
     // check variables are added
-    REQUIRE(variableTable->rows[0][0] == "dummyVarX");
-    REQUIRE(variableTable->rows[1][0] == "dummyVarY");
-    REQUIRE(variableTable->rows[2][0] == "dummyVarZ");
+    REQUIRE(variableTable->getRows()[0][0] == "dummyVarX");
+    REQUIRE(variableTable->getRows()[1][0] == "dummyVarY");
+    REQUIRE(variableTable->getRows()[2][0] == "dummyVarZ");
   }
 
   SECTION("Save statements") {
@@ -40,14 +40,14 @@ TEST_CASE("Test Data Modifier") {
     shared_ptr<Table> statementTable = pkbStorage->getStatements();
 
     // check header is set automatically
-    REQUIRE(statementTable->header[0] == "$statement_number");
-    REQUIRE(statementTable->header[1] == "$statement_type");
+    REQUIRE(statementTable->getHeader()[0] == "$statement_number");
+    REQUIRE(statementTable->getHeader()[1] == "$statement_type");
 
     // check statements are added
-    REQUIRE(statementTable->rows[0][0] == "3");
-    REQUIRE(statementTable->rows[0][1] == "assign");
-    REQUIRE(statementTable->rows[1][0] == "4");
-    REQUIRE(statementTable->rows[1][1] == "if");
+    REQUIRE(statementTable->getRows()[0][0] == "3");
+    REQUIRE(statementTable->getRows()[0][1] == "assign");
+    REQUIRE(statementTable->getRows()[1][0] == "4");
+    REQUIRE(statementTable->getRows()[1][1] == "if");
   }
 
   SECTION("Save parentT") {
@@ -57,16 +57,16 @@ TEST_CASE("Test Data Modifier") {
     shared_ptr<ParentTable> parentTTable = pkbStorage->getParentT();
 
     // check header is set automatically
-    REQUIRE(parentTTable->header[0] == "$parent_statement");
-    REQUIRE(parentTTable->header[1] == "$child_statement");
+    REQUIRE(parentTTable->getHeader()[0] == "$parent_statement");
+    REQUIRE(parentTTable->getHeader()[1] == "$child_statement");
 
     // check relationships are added
-    REQUIRE(parentTTable->rows[0][0] == "1");
-    REQUIRE(parentTTable->rows[0][1] == "2");
-    REQUIRE(parentTTable->rows[1][0] == "1");
-    REQUIRE(parentTTable->rows[1][1] == "3");
-    REQUIRE(parentTTable->rows[2][0] == "2");
-    REQUIRE(parentTTable->rows[2][1] == "3");
+    REQUIRE(parentTTable->getRows()[0][0] == "1");
+    REQUIRE(parentTTable->getRows()[0][1] == "2");
+    REQUIRE(parentTTable->getRows()[1][0] == "1");
+    REQUIRE(parentTTable->getRows()[1][1] == "3");
+    REQUIRE(parentTTable->getRows()[2][0] == "2");
+    REQUIRE(parentTTable->getRows()[2][1] == "3");
   }
 
   SECTION("Save calls relation") {
@@ -77,20 +77,20 @@ TEST_CASE("Test Data Modifier") {
     shared_ptr<Table> stmtNoProcMap = pkbStorage->getCallsProcedureNames();
 
     // check header is set automatically
-    REQUIRE(procedures->header[0] == "$calling_procedure");
-    REQUIRE(procedures->header[1] == "$called_procedure");
-    REQUIRE(stmtNoProcMap->header[0] == "$statement_number");
-    REQUIRE(stmtNoProcMap->header[1] == "$called_procedure");
+    REQUIRE(procedures->getHeader()[0] == "$calling_procedure");
+    REQUIRE(procedures->getHeader()[1] == "$called_procedure");
+    REQUIRE(stmtNoProcMap->getHeader()[0] == "$statement_number");
+    REQUIRE(stmtNoProcMap->getHeader()[1] == "$called_procedure");
 
     // check relationships are added
-    REQUIRE(procedures->rows[0][0] == "proc1");
-    REQUIRE(procedures->rows[0][1] == "proc2");
-    REQUIRE(procedures->rows[1][0] == "proc2");
-    REQUIRE(procedures->rows[1][1] == "proc3");
-    REQUIRE(stmtNoProcMap->rows[0][0] == "5");
-    REQUIRE(stmtNoProcMap->rows[0][1] == "proc2");
-    REQUIRE(stmtNoProcMap->rows[1][0] == "12");
-    REQUIRE(stmtNoProcMap->rows[1][1] == "proc3");
+    REQUIRE(procedures->getRows()[0][0] == "proc1");
+    REQUIRE(procedures->getRows()[0][1] == "proc2");
+    REQUIRE(procedures->getRows()[1][0] == "proc2");
+    REQUIRE(procedures->getRows()[1][1] == "proc3");
+    REQUIRE(stmtNoProcMap->getRows()[0][0] == "5");
+    REQUIRE(stmtNoProcMap->getRows()[0][1] == "proc2");
+    REQUIRE(stmtNoProcMap->getRows()[1][0] == "12");
+    REQUIRE(stmtNoProcMap->getRows()[1][1] == "proc3");
   }
 
   SECTION("Save assign pattern") {
@@ -104,12 +104,12 @@ TEST_CASE("Test Data Modifier") {
     shared_ptr<PatternTable> patternTable = pkbStorage->getAssignPatterns();
 
     // check header is set automatically
-    REQUIRE(patternTable->header[0] == "$statement_number");
-    REQUIRE(patternTable->header[1] == "$variable_name");
+    REQUIRE(patternTable->getHeader()[0] == "$statement_number");
+    REQUIRE(patternTable->getHeader()[1] == "$variable_name");
 
     // check pattern is added
-    REQUIRE(patternTable->rows[0][0] == "1");
-    REQUIRE(patternTable->rows[0][1] == "x");
+    REQUIRE(patternTable->getRows()[0][0] == "1");
+    REQUIRE(patternTable->getRows()[0][1] == "x");
     REQUIRE(patternTable->patternColumn[0] == pattern);
   }
 }

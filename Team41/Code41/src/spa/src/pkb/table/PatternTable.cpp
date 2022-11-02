@@ -7,8 +7,8 @@
 #include "../PKBStorage.h"
 
 PatternTable::PatternTable() {
-  header = vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME,
-                          PKBStorage::VARIABLE_TABLE_COL1_NAME};
+  renameHeader(vector<string>{PKBStorage::STATEMENT_TABLE_COL1_NAME,
+                              PKBStorage::VARIABLE_TABLE_COL1_NAME});
 }
 
 bool PatternTable::isSubExpression(shared_ptr<ExprNode> pattern,
@@ -37,9 +37,9 @@ shared_ptr<Table> PatternTable::getMatchedPatterns(
   shared_ptr<ExprNode> queriedPattern = expressionSpec.exprNode;
   int size = patternColumn.size();
   Table outputTable = Table();
-  outputTable.header = this->header;
+  outputTable.renameHeader(this->getHeader());
   for (int i = 0; i < size; i++) {
-    vector<string> metainfo = rows[i];
+    vector<string> metainfo = this->getRows()[i];
     shared_ptr<ExprNode> pattern = patternColumn[i];
     if (expressionSpecType == ExpressionSpecType::ANY_MATCH) {
       outputTable.appendRow(metainfo);
