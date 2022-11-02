@@ -15,7 +15,7 @@ failed_files = []
 if (os.path.exists(m2path) and os.path.exists(m1path) and os.path.exists(m3path)):
     m2AllPass = True
     m1AllPass = True
-    m3allPass = True
+    m3AllPass = True
    
     mydirm2 = Path(m2path)
     for file in mydirm2.glob('*.xml'):
