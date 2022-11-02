@@ -42,6 +42,8 @@ class QueryParserConstants {
   static const string PQL_PARSE_EXCEPTION_EXPECT_WITH_REF;
   static const string PQL_PARSE_EXCEPTION_EXPECT_REF;
   static const string PQL_PARSE_EXCEPTION_INVALID_PATTERN_SYNTAX;
+  static const string PQL_VALIDATION_INVALID_REF_TYPES;
+  static const string PQL_VALIDATION_SECOND_ARG_INTEGER;
 };
 
 }  // namespace QB

@@ -36,7 +36,6 @@ class QueryValidator {
   void validateSynonymDeclaredSuchThatClause();
   void checkSynonymDeclared(
       Synonym& synonym, const shared_ptr<vector<Declaration>>& declarations);
-  void validateArgRefTypeSuchThatClause() const;
   void validateUsesModifiesNoUnderscoreForFirstArg() const;
   void validateSynonymTypeSuchThatClause();
   void validateSuchThatClause();
@@ -45,7 +44,6 @@ class QueryValidator {
       const shared_ptr<vector<Declaration>>& declarations);
   void validateSynonymDeclaredPatternClause();
   void validateAllowedDesignEntityPatternClause();
-  void validateArgRefTypePatternClause() const;
   void validateArg2DesignEntityPatternClause() const;
   void validatePatternClause();
   void checkDesignEntityAttrNamePair(

@@ -181,9 +181,11 @@ void QueryParser::parseSuchThatClause() {
            {RelationType::AFFECTS, make_shared<Affects>()},
            {RelationType::AFFECTS_T, make_shared<AffectsT>()}});
   const auto& suchThatClauseCreator = SUCH_THAT_CREATORS.at(relationType);
-  auto suchThatClause = suchThatClauseCreator->createClause(arg1, arg2);
-  query->suchThatClauses->push_back(
-      dynamic_pointer_cast<SuchThatClause>(suchThatClause));
+  auto suchThatClause = dynamic_pointer_cast<SuchThatClause>(
+      suchThatClauseCreator->createClause(arg1, arg2));
+  //! Validate correct ref type for the 2 args in such that clause
+  validateArgRefTypeSuchThatClause(suchThatClause);
+  query->suchThatClauses->push_back(suchThatClause);
 }
 
 bool QueryParser::parseSuchThat() {
@@ -238,6 +240,8 @@ void QueryParser::parsePatternClause() {
   Synonym arg1 = Synonym(pop());
   expect(QueryParserConstants::LEFT_BRACKET);
   Ref arg2 = parseRef();
+  //! arg2 must be entRef
+  validateArgRefTypePatternClause(arg2);
   expect(QueryParserConstants::COMMA);
 
   auto patternClause = make_shared<DummyPatternClause>(arg1, arg2);
@@ -314,6 +318,34 @@ bool QueryParser::parseWith() {
     parseWithClause();
   }
   return true;
+}
+
+void QueryParser::validateArgRefTypeSuchThatClause(
+    shared_ptr<SuchThatClause> suchThatClause) const {
+  shared_ptr<Validatable> clause =
+      dynamic_pointer_cast<Validatable>(suchThatClause);
+  pair<RefTypeSet, RefTypeSet> validArgsTypes = clause->getAllowedArgsRefType();
+
+  auto arg1RefIndex = suchThatClause->arg1.index();
+  auto arg2RefIndex = suchThatClause->arg2.index();
+
+  RefTypeSet validFirstArgTypes = validArgsTypes.first;
+  RefTypeSet validSecondArgTypes = validArgsTypes.second;
+
+  if (!validFirstArgTypes.count(arg1RefIndex) ||
+      !validSecondArgTypes.count(arg2RefIndex)) {
+    throw PQLParseException(
+        QueryParserConstants::PQL_VALIDATION_INVALID_REF_TYPES);
+  }
+}
+
+void QueryParser::validateArgRefTypePatternClause(Ref arg2) const {
+  //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
+  auto arg2RefIndex = arg2.index();
+  if (!entRefIndexSet.count(arg2RefIndex)) {
+    throw PQLParseException(
+        QueryParserConstants::PQL_VALIDATION_INVALID_REF_TYPES);
+  }
 }
 
 shared_ptr<Query> QueryParser::parse() {

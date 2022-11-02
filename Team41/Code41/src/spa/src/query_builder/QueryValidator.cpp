@@ -109,31 +109,6 @@ void QueryValidator::validateSynonymDeclaredSuchThatClause() {
   }
 }
 
-void QueryValidator::validateArgRefTypeSuchThatClause() const {
-  shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses =
-      query->suchThatClauses;
-  shared_ptr<vector<Declaration>> declarations = query->declarations;
-
-  for (const auto& suchThat : *suchThatClauses) {
-    shared_ptr<Validatable> clause =
-        dynamic_pointer_cast<Validatable>(suchThat);
-    pair<RefTypeSet, RefTypeSet> validArgsTypes =
-        clause->getAllowedArgsRefType();
-
-    auto arg1RefIndex = suchThat->arg1.index();
-    auto arg2RefIndex = suchThat->arg2.index();
-
-    RefTypeSet validFirstArgTypes = validArgsTypes.first;
-    RefTypeSet validSecondArgTypes = validArgsTypes.second;
-
-    if (!validFirstArgTypes.count(arg1RefIndex) ||
-        !validSecondArgTypes.count(arg2RefIndex)) {
-      throw PQLParseException(
-          QueryValidatorConstants::PQL_VALIDATION_INVALID_REF_TYPES);
-    }
-  }
-}
-
 void QueryValidator::validateUsesModifiesNoUnderscoreForFirstArg() const {
   shared_ptr<vector<shared_ptr<SuchThatClause>>> suchThatClauses =
       query->suchThatClauses;
@@ -197,10 +172,6 @@ void QueryValidator::validateSuchThatClause() {
   validateSynonymDeclaredSuchThatClause();
   //! First arg for Uses and Modifies cannot be Underscore
   validateUsesModifiesNoUnderscoreForFirstArg();
-  //! Validate the correct RefType for such that clause
-  //! e.g. Follows : (stmtRef, stmtRef), UsesS : (stmtRef, entRef)
-  //! Should throw syntax error not semantic error
-  validateArgRefTypeSuchThatClause();
   //! Validate the correct synonym types for such that clause
   validateSynonymTypeSuchThatClause();
 }
@@ -291,20 +262,6 @@ void QueryValidator::validateAllowedDesignEntityPatternClause() {
   query->patternClauses = newPatternClauseVector;
 }
 
-void QueryValidator::validateArgRefTypePatternClause() const {
-  //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
-  shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses =
-      query->patternClauses;
-  shared_ptr<vector<Declaration>> declarations = query->declarations;
-  for (const auto& patternClause : *patternClauses) {
-    auto arg2RefIndex = patternClause->arg2.index();
-    if (!entRefIndexSet.count(arg2RefIndex)) {
-      throw PQLParseException(
-          QueryValidatorConstants::PQL_VALIDATION_SECOND_ARG_INTEGER);
-    }
-  }
-}
-
 void QueryValidator::validateArg2DesignEntityPatternClause() const {
   //! Validate if agr2 is a synonym, it must be declared as variable
   shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses =
@@ -330,9 +287,6 @@ void QueryValidator::validatePatternClause() {
   //! Validate design entity for arg1 can only be assign, while and if
   //! create different pattern clauses respectively
   validateAllowedDesignEntityPatternClause();
-  //! Validate the correct RefType for pattern clause arg2
-  //! Should throw syntax error not semantic error
-  validateArgRefTypePatternClause();
   //! Validate if agr2 is a synonym, it must be declared as variable
   validateArg2DesignEntityPatternClause();
 }

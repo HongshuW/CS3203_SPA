@@ -65,138 +65,6 @@ TEST_CASE("Test Query Validator") {
   }
 
   SECTION(
-      "Test wrong first arg RefType in Follows Clause, first arg cannot be "
-      "Ident") {
-    std::string queryStr = "stmt v; Select v such that Follows (\"main\", v)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong first arg RefType in Follows* Clause, first arg cannot be "
-      "Ident") {
-    std::string queryStr = "stmt v; Select v such that Follows* (\"west\", v)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Follows Clause, first second cannot be "
-      "Ident") {
-    std::string queryStr = "stmt v; Select v such that Follows (v, \"main\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Follows* Clause, second arg cannot be "
-      "Ident") {
-    std::string queryStr = "stmt v; Select v such that Follows* (v, \"west\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong first arg RefType in Parent Clause, first arg cannot be "
-      "Ident") {
-    std::string queryStr = "if i; Select i such that Parent (\"main\", i)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong first arg RefType in Parent* Clause, first arg cannot be "
-      "Ident") {
-    std::string queryStr = "if i; Select i such that Parent* (\"main\", i)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Parent Clause, second arg cannot be "
-      "Ident") {
-    std::string queryStr = "if i; Select i such that Parent (i, \"main\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Parent* Clause, second arg cannot be "
-      "Ident") {
-    std::string queryStr = "if i; Select i such that Parent* (i, \"main\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Uses_S Clause (first arg is Integer), "
-      "second arg cannot be Integer") {
-    std::string queryStr = "variable v; Select v such that Uses (1, 2)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Uses_S Clause (first arg is "
-      "non-procedure synonym, "
-      "second arg cannot be Integer") {
-    std::string queryStr = "variable v; Select v such that Uses (v, 2)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Uses_P Clause (first arg is Ident), "
-      "second arg cannot be Integer") {
-    std::string queryStr = "variable v; Select v such that Uses (\"main\", 2)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Uses_P Clause (first arg is procedure "
-      "synonym), "
-      "second arg cannot be Integer") {
-    std::string queryStr = "procedure p; Select p such that Uses (p, 2)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Uses_S Clause (first arg is Integer), "
-      "second arg cannot be Integer") {
-    std::string queryStr = "variable v; Select v such that Uses (1, 2)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Uses_S Clause (first arg is "
-      "non-procedure synonym, "
-      "second arg cannot be Integer") {
-    std::string queryStr = "variable v; Select v such that Uses (v, 2)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Uses_P Clause (first arg is Ident), "
-      "second arg cannot be Integer") {
-    std::string queryStr = "variable v; Select v such that Uses (\"main\", 2)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Uses_P Clause (first arg is procedure "
-      "synonym), "
-      "second arg cannot be Integer") {
-    std::string queryStr = "procedure p; Select p such that Uses (p, 2)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
       "Test wrong first arg synonym lhsType in Follows Clause, first arg "
       "cannot be procedure synonym") {
     std::string queryStr = "procedure p; Select p such that Follows (p, _)";
@@ -380,12 +248,6 @@ TEST_CASE("Test Query Validator") {
                       PQLValidationException);
   }
 
-  SECTION("Test invalid RefType of argument 2 in Pattern Clause") {
-    std::string queryStr = "assign a; Select a pattern a (1, _)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
   SECTION("Test invalid design entity type of argument 2 in Pattern Clause") {
     std::string queryStr = "assign a; constant c; Select a pattern a (c, _)";
     auto queryBuilder = QueryBuilder();
@@ -410,64 +272,16 @@ TEST_CASE("Test Query Validator") {
     REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
   }
 
-  SECTION(
-      "Test wrong first arg RefType in Calls Clause, first arg cannot be "
-      "Integer") {
-    std::string queryStr = "procedure p; Select p such that Calls (1, p)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Calls* Clause, second arg cannot be "
-      "Integer") {
-    std::string queryStr = "procedure p; Select p such that Calls* (p, 4)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
   SECTION("Test correct args RefType in Next Clause") {
     std::string queryStr = "assign a; Select a such that Next (a, 3)";
     auto queryBuilder = QueryBuilder();
     REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
   }
 
-  SECTION(
-      "Test wrong first arg RefType in Next Clause, first arg cannot be "
-      "Ident") {
-    std::string queryStr = "assign a; Select a such that Next (\"main\", a)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Calls* Clause, second arg cannot be "
-      "Ident") {
-    std::string queryStr = "while w; Select w such that Next* (w, \"test\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
   SECTION("Test correct args RefType in Affects* Clause") {
     std::string queryStr = "assign a; Select a such that Next (a, _)";
     auto queryBuilder = QueryBuilder();
     REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
-  }
-
-  SECTION(
-      "Test wrong first arg RefType in Affects Clause, first arg cannot be "
-      "Ident") {
-    std::string queryStr = "assign a; Select a such that Affects (\"main\", a)";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION(
-      "Test wrong second arg RefType in Affects* Clause, second arg cannot be "
-      "Ident") {
-    std::string queryStr = "while w; Select w such that Affects* (w, \"test\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
   }
 
   SECTION(
@@ -554,7 +368,7 @@ TEST_CASE("Test Query Validator") {
 
   SECTION(
       "Invalid Design Entity type of argument 1 in Pattern Clause, throw "
-      "PQLParseException") {
+      "PQLValidationException") {
     std::string queryStr = "variable a; Select a pattern a (_, _)";
     auto queryBuilder = QueryBuilder();
     REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
@@ -570,7 +384,7 @@ TEST_CASE("Test Query Validator") {
 
   SECTION(
       "Invalid Design Entity type of argument 1 in Pattern Clause, throw "
-      "PQLParseException") {
+      "PQLValidationException") {
     std::string queryStr = "read a; Select a pattern a (\"x\", _)";
     auto queryBuilder = QueryBuilder();
     REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
@@ -678,9 +492,12 @@ TEST_CASE("Test Query Validator") {
     REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
   }
 
-	SECTION("Calls can be treated as synonym - Semantic Error") {
-		std::string queryStr = "stmt s; procedure p; assign a; Select s pattern a(_, _\"x\"_) and Calls(p, \"Helper\")";
-		auto queryBuilder = QueryBuilder();
-		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
-	}
+  SECTION("Calls can be treated as synonym - Semantic Error") {
+    std::string queryStr =
+        "stmt s; procedure p; assign a; Select s pattern a(_, _\"x\"_) and "
+        "Calls(p, \"Helper\")";
+    auto queryBuilder = QueryBuilder();
+    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr),
+                      PQLValidationException);
+  }
 }

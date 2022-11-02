@@ -64,6 +64,9 @@ class QueryParser {
   void parseWithClause();
   bool parseWith();
   WithRef parseWithRef();
+  void validateArgRefTypeSuchThatClause(
+      shared_ptr<SuchThatClause> suchThat) const;
+  void validateArgRefTypePatternClause(Ref arg2) const;
 
  public:
   //! Parse tokens to Query object, throw Syntax Error if encounter
