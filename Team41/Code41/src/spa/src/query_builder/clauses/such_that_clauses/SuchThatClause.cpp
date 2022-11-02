@@ -21,10 +21,10 @@ unordered_set<string> SuchThatClause::getSynonymNames() {
 }
 
 int SuchThatClause::getValueRefCount() {
-    int count = 0;
-    RefType ref1Type = getRefType(arg1);
-    RefType ref2Type = getRefType(arg2);
-    if (ref1Type == RefType::INTEGER || ref1Type == RefType::IDENT) count++;
-    if (ref2Type == RefType::INTEGER || ref2Type == RefType::IDENT) count++;
-    return count;
+  int count = 0;
+  RefType ref1Type = getRefType(arg1);
+  RefType ref2Type = getRefType(arg2);
+  if (ref1Type == RefType::INTEGER || ref1Type == RefType::IDENT) count++;
+  if (ref2Type == RefType::INTEGER || ref2Type == RefType::IDENT) count++;
+  return count;
 }

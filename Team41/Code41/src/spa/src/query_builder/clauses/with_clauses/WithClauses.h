@@ -32,7 +32,7 @@ class WithClause : public ConditionalClause,
   bool operator==(const WithClause& clause) const;
   Table accept(shared_ptr<IVisitor> visitor) override;
   unordered_set<string> getSynonymNames() override;
-    int getValueRefCount() override;
+  int getValueRefCount() override;
 };
 
 }  // namespace QB

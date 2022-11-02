@@ -37,7 +37,9 @@ unordered_set<string> PatternClause::getSynonymNames() {
 }
 
 int PatternClause::getValueRefCount() {
-    int count = 0;
-    if (getRefType(arg2) == RefType::INTEGER || getRefType(arg2) == RefType::IDENT) count++;
-    return count;
+  int count = 0;
+  if (getRefType(arg2) == RefType::INTEGER ||
+      getRefType(arg2) == RefType::IDENT)
+    count++;
+  return count;
 }
