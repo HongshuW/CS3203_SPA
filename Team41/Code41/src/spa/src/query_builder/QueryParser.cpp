@@ -236,42 +236,29 @@ ExpressionSpec QueryParser::parseExpressionSpec() {
 
 void QueryParser::parsePatternClause() {
   Synonym arg1 = Synonym(pop());
-  //! Default value
-  DesignEntity de = DesignEntity::STMT;
-  auto declaration = Declaration::findDeclaration(arg1, query->declarations);
   expect(QueryParserConstants::LEFT_BRACKET);
-  if (declaration) {
-    de = declaration->getDesignEntity();
-  }
   Ref arg2 = parseRef();
   expect(QueryParserConstants::COMMA);
-  const unordered_set<DesignEntity> ALLOWED_DE = {
-      DesignEntity::IF, DesignEntity::WHILE, DesignEntity::ASSIGN};
-  const unordered_map<DesignEntity, shared_ptr<PatternRelations>>
-      PATTERN_CREATORS({
-          {DesignEntity::IF, make_shared<IfPattern>()},
-          {DesignEntity::WHILE, make_shared<WhilePattern>()},
-          {DesignEntity::ASSIGN, make_shared<AssignPattern>()},
-      });
 
-  //! Default patternClauseCreator, will change later
-  shared_ptr<PatternRelations> patternClauseCreator =
-      make_shared<PatternRelations>();
-  if (ALLOWED_DE.count(de)) {
-    patternClauseCreator = PATTERN_CREATORS.at(de);
-  } else {
-    //! Throw error in Validator
-    patternClauseCreator = make_shared<InvalidPattern>();
-  }
-
-  auto patternClause = dynamic_pointer_cast<PatternClause>(
-      patternClauseCreator->createClause(arg1, arg2));
-  currIdx = patternClause->validateSyntaxError(currIdx, tokens);
-  //! Special case, need to parse ExpressionSpec
-  if (dynamic_pointer_cast<AssignPatternClause>(patternClause)) {
-    ExpressionSpec arg3 = parseExpressionSpec();
-    dynamic_pointer_cast<AssignPatternClause>(patternClause)->arg3 = arg3;
-  }
+	auto patternClause = make_shared<DummyPatternClause>(arg1, arg2);
+	if (match(QueryParserConstants::UNDERSCORE)) {
+		if (match(QueryParserConstants::RIGHT_BRACKET)) {
+			//! Correct while pattern
+			currIdx--;
+		} else if (match(QueryParserConstants::COMMA)) {
+			//! Correct if pattern
+			expect(QueryParserConstants::UNDERSCORE);
+		} else {
+			//! May be expressionSpec
+			currIdx--;
+			ExpressionSpec arg3 = parseExpressionSpec();
+			patternClause = make_shared<DummyPatternClause>(arg1, arg2, arg3);
+		}
+	} else {
+		//! May be expressionSpec
+		ExpressionSpec arg3 = parseExpressionSpec();
+		patternClause = make_shared<DummyPatternClause>(arg1, arg2, arg3);
+	}
   expect(QueryParserConstants::RIGHT_BRACKET);
   query->patternClauses->push_back(patternClause);
 }

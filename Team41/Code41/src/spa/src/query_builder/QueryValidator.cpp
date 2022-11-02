@@ -222,12 +222,30 @@ void QueryValidator::validateSynonymDeclaredPatternClause() {
 void QueryValidator::validateAllowedDesignEntityPatternClause() {
   shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses =
       query->patternClauses;
-  for (const auto& patternClause : *patternClauses) {
-    if (dynamic_pointer_cast<InvalidPatternClause>(patternClause)) {
-      throw PQLValidationException(
-          QueryValidatorConstants::PQL_VALIDATION_INVALID_SYNONYM_PATTERN);
-    }
+	shared_ptr<vector<Declaration>> declarations = query->declarations;
+	const unordered_set<DesignEntity> ALLOWED_DE = {
+					DesignEntity::ASSIGN, DesignEntity::IF, DesignEntity::WHILE
+	};
+
+	shared_ptr<vector<shared_ptr<PatternClause>>> newPatternClauseVector = make_shared<vector<shared_ptr<PatternClause>>>();
+
+  for (auto patternClause : *patternClauses) {
+		checkCorrectDesignEntity( patternClause->arg1, ALLOWED_DE, declarations);
+		//! If no error is throw, construct the correct pattern clause
+		auto declaration = Declaration::findDeclaration(patternClause->arg1, declarations);
+		auto designEntity = declaration->getDesignEntity();
+		shared_ptr<PatternClause> newPatternClause = nullptr;
+		if (designEntity == DesignEntity::ASSIGN) {
+			auto dummyPatternClause = dynamic_pointer_cast<DummyPatternClause>(patternClause);
+			newPatternClause = make_shared<AssignPatternClause>(dummyPatternClause->arg1, dummyPatternClause->arg2, dummyPatternClause->arg3);
+		} else if (designEntity == DesignEntity::IF) {
+			newPatternClause = make_shared<IfPatternClause>(patternClause->arg1, patternClause->arg2);
+		} else if (designEntity == DesignEntity::WHILE) {
+			newPatternClause = make_shared<WhilePatternClause>(patternClause->arg1, patternClause->arg2);
+		}
+		newPatternClauseVector->push_back(newPatternClause);
   }
+	query->patternClauses = newPatternClauseVector;
 }
 
 void QueryValidator::validateArgRefTypePatternClause() const {
@@ -267,6 +285,7 @@ void QueryValidator::validatePatternClause() {
   //! Validate synonym for arg1 and arg2 are declared
   validateSynonymDeclaredPatternClause();
   //! Validate design entity for arg1 can only be assign, while and if
+  //! create different pattern clauses respectively
   validateAllowedDesignEntityPatternClause();
   //! Validate the correct RefType for pattern clause arg2
   //! Should throw syntax error not semantic error

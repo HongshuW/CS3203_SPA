@@ -20,14 +20,3 @@ bool IfPatternClause::operator==(const IfPatternClause& other) const {
 Table IfPatternClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
-
-int IfPatternClause::validateSyntaxError(int currIdx,
-                                         const vector<string>& tokens) {
-  expect(QueryParserConstants::UNDERSCORE, currIdx, tokens);
-  currIdx++;
-  expect(QueryParserConstants::COMMA, currIdx, tokens);
-  currIdx++;
-  expect(QueryParserConstants::UNDERSCORE, currIdx, tokens);
-  currIdx++;
-  return currIdx;
-}

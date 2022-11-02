@@ -9,15 +9,19 @@
 
 #include <unordered_set>
 
-#include "query_builder/clauses/pattern_clauses/InvalidPatternClause.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesPClause.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesSClause.h"
 #include "query_builder/clauses/such_that_clauses/UsesPClause.h"
 #include "query_builder/clauses/such_that_clauses/UsesSClause.h"
 #include "query_builder/clauses/such_that_clauses/Validatable.h"
+#include "query_builder/clauses/pattern_clauses/DummyPatternClause.h"
 #include "query_builder/commons/Query.h"
 #include "query_builder/commons/WithRef.h"
 #include "query_builder/constants/QueryValidatorConstants.h"
+#include "query_builder/relations/pattern_relations/PatternRelations.h"
+#include "query_builder/relations/pattern_relations/AssignPattern.h"
+#include "query_builder/relations/pattern_relations/IfPattern.h"
+#include "query_builder/relations/pattern_relations/WhilePattern.h"
 
 using namespace std;
 
