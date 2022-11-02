@@ -19,11 +19,7 @@ TableBuilder* TableBuilder::addRow(vector<string> row) {
 }
 
 Table TableBuilder::build() {
-  Table table = Table();
-  table.header = this->header;
-  for (auto row : this->rows) {
-    table.rows.push_back(row);
-  }
+  Table table = Table(this->header, this->rows);
   return table;
 }
 }  // namespace TestQE

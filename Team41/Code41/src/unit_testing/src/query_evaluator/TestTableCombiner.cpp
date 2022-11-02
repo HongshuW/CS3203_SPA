@@ -29,20 +29,20 @@ TEST_CASE("Test table combiner") {
     string commonHeaderName = "v";
     Table t1 = Table();
     Table t2 = Table();
-    t1.header = vector<string>{commonHeaderName};
+    t1.renameHeader(vector<string>{commonHeaderName});
     auto t1Col1 = vector<string>{"1", "2", "3", "4"};
 
-    t2.header = vector<string>{commonHeaderName};
+    t2.renameHeader(vector<string>{commonHeaderName});
     auto t2Col1 = vector<string>{"3", "4", "5", "6"};
 
     for (int i = 0; i < t1Col1.size(); ++i) {
-      t1.rows.push_back(vector<string>{t1Col1[i]});
-      t2.rows.push_back(vector<string>{t2Col1[i]});
+      t1.appendRow(vector<string>{t1Col1[i]});
+      t2.appendRow(vector<string>{t2Col1[i]});
     }
     Table expected = Table();
-    expected.header = vector<string>{commonHeaderName};
-    expected.rows.push_back(vector<string>{"3"});
-    expected.rows.push_back(vector<string>{"4"});
+    expected.renameHeader(vector<string>{commonHeaderName});
+    expected.appendRow(vector<string>{"3"});
+    expected.appendRow(vector<string>{"4"});
 
     TableCombiner tableCombiner = TableCombiner();
     Table testResultTable = tableCombiner.hashJoin(t1, t2);
@@ -69,9 +69,9 @@ TEST_CASE("Test table combiner") {
                    ->addRow({"8", "quux"})
                    ->build();
     Table expected = Table();
-    expected.header = vector<string>{"$col1", commonHeaderName, "$col2"};
-    expected.rows.push_back(vector<string>{"2", "bar", "5"});
-    expected.rows.push_back(vector<string>{"3", "baz", "7"});
+    expected.renameHeader(vector<string>{"$col1", commonHeaderName, "$col2"});
+    expected.appendRow(vector<string>{"2", "bar", "5"});
+    expected.appendRow(vector<string>{"3", "baz", "7"});
 
     TableCombiner tableCombiner = TableCombiner();
     Table testResultTable = tableCombiner.hashJoin(t1, t2);
@@ -115,22 +115,22 @@ TEST_CASE("Test table combiner") {
     Table t1 = Table();
     Table t2 = Table();
 
-    t1.header = vector<string>{commonCol1Name, commonCol2Name};
+    t1.renameHeader(vector<string>{commonCol1Name, commonCol2Name});
     auto t1Col1 = vector<string>{"1", "2", "3", "4"};
     auto t1Col2 = vector<string>{"foo", "bar", "baz", "corge"};
 
-    t2.header = vector<string>{commonCol1Name, commonCol2Name};
+    t2.renameHeader(vector<string>{commonCol1Name, commonCol2Name});
     auto t2Col1 = vector<string>{"2", "3", "4", "5"};
     auto t2Col2 = vector<string>{"bar", "foo", "corge", "baz"};
 
     for (int i = 0; i < t1Col1.size(); ++i) {
-      t1.rows.push_back(vector<string>{t1Col1[i], t1Col2[i]});
-      t2.rows.push_back(vector<string>{t2Col1[i], t2Col2[i]});
+      t1.appendRow(vector<string>{t1Col1[i], t1Col2[i]});
+      t2.appendRow(vector<string>{t2Col1[i], t2Col2[i]});
     }
     Table expected = Table();
-    expected.header = vector<string>{commonCol1Name, commonCol2Name};
-    expected.rows.push_back(vector<string>{"2", "bar"});
-    expected.rows.push_back(vector<string>{"4", "corge"});
+    expected.renameHeader(vector<string>{commonCol1Name, commonCol2Name});
+    expected.appendRow(vector<string>{"2", "bar"});
+    expected.appendRow(vector<string>{"4", "corge"});
 
     TableCombiner tableCombiner = TableCombiner();
     Table testResultTable = tableCombiner.hashJoin(t1, t2);
@@ -214,20 +214,20 @@ TEST_CASE("Test table combiner") {
     string commonHeaderName = "v";
     Table t1 = Table();
     Table t2 = Table();
-    t1.header = vector<string>{commonHeaderName};
+    t1.renameHeader(vector<string>{commonHeaderName});
     auto t1Col1 = vector<string>{"1", "2", "3", "4"};
 
-    t2.header = vector<string>{commonHeaderName};
+    t2.renameHeader(vector<string>{commonHeaderName});
     auto t2Col1 = vector<string>{"3", "4", "5", "6"};
 
     for (int i = 0; i < t1Col1.size(); ++i) {
-      t1.rows.push_back(vector<string>{t1Col1[i]});
-      t2.rows.push_back(vector<string>{t2Col1[i]});
+      t1.appendRow(vector<string>{t1Col1[i]});
+      t2.appendRow(vector<string>{t2Col1[i]});
     }
     Table expected = Table();
-    expected.header = vector<string>{commonHeaderName};
-    expected.rows.push_back(vector<string>{"3"});
-    expected.rows.push_back(vector<string>{"4"});
+    expected.renameHeader(vector<string>{commonHeaderName});
+    expected.appendRow(vector<string>{"3"});
+    expected.appendRow(vector<string>{"4"});
 
     TableCombiner tableCombiner = TableCombiner();
     Table testResultTable = tableCombiner.hashJoin(t1, t2);
@@ -255,9 +255,9 @@ TEST_CASE("Test table combiner") {
                    ->addRow({"8", "quux"})
                    ->build();
     Table expected = Table();
-    expected.header = vector<string>{"$col1", commonHeaderName, "$col2"};
-    expected.rows.push_back(vector<string>{"2", "bar", "5"});
-    expected.rows.push_back(vector<string>{"3", "baz", "7"});
+    expected.renameHeader(vector<string>{"$col1", commonHeaderName, "$col2"});
+    expected.appendRow(vector<string>{"2", "bar", "5"});
+    expected.appendRow(vector<string>{"3", "baz", "7"});
 
     TableCombiner tableCombiner = TableCombiner();
     Table testResultTable = tableCombiner.hashJoin(t1, t2);
@@ -301,22 +301,22 @@ TEST_CASE("Test table combiner") {
     Table t1 = Table();
     Table t2 = Table();
 
-    t1.header = vector<string>{commonCol1Name, commonCol2Name};
+    t1.renameHeader(vector<string>{commonCol1Name, commonCol2Name});
     auto t1Col1 = vector<string>{"1", "2", "3", "4"};
     auto t1Col2 = vector<string>{"foo", "bar", "baz", "corge"};
 
-    t2.header = vector<string>{commonCol1Name, commonCol2Name};
+    t2.renameHeader(vector<string>{commonCol1Name, commonCol2Name});
     auto t2Col1 = vector<string>{"2", "3", "4", "5"};
     auto t2Col2 = vector<string>{"bar", "foo", "corge", "baz"};
 
     for (int i = 0; i < t1Col1.size(); ++i) {
-      t1.rows.push_back(vector<string>{t1Col1[i], t1Col2[i]});
-      t2.rows.push_back(vector<string>{t2Col1[i], t2Col2[i]});
+      t1.appendRow(vector<string>{t1Col1[i], t1Col2[i]});
+      t2.appendRow(vector<string>{t2Col1[i], t2Col2[i]});
     }
     Table expected = Table();
-    expected.header = vector<string>{commonCol1Name, commonCol2Name};
-    expected.rows.push_back(vector<string>{"2", "bar"});
-    expected.rows.push_back(vector<string>{"4", "corge"});
+    expected.renameHeader(vector<string>{commonCol1Name, commonCol2Name});
+    expected.appendRow(vector<string>{"2", "bar"});
+    expected.appendRow(vector<string>{"4", "corge"});
 
     TableCombiner tableCombiner = TableCombiner();
     Table testResultTable = tableCombiner.hashJoin(t1, t2);

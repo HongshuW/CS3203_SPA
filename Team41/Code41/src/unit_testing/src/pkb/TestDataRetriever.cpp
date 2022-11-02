@@ -105,8 +105,8 @@ TEST_CASE("Test Data Retriever") {
 
     dataRetriever.clearCache();
 
-    REQUIRE(pkbStorage->getNextT()->rows.size() == 0);
-    REQUIRE(pkbStorage->getAffects()->rows.size() == 0);
-    REQUIRE(pkbStorage->getAffectsT()->rows.size() == 0);
+    REQUIRE(pkbStorage->getNextT()->getNumberOfRows() == 0);
+    REQUIRE(pkbStorage->getAffects()->getNumberOfRows() == 0);
+    REQUIRE(pkbStorage->getAffectsT()->getNumberOfRows() == 0);
   }
 }
