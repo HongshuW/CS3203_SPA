@@ -35,8 +35,10 @@ const vector<string> highCostRelations = {
     typeid(AffectsTClause).name(),  typeid(FollowsTClause).name(),
     typeid(ParentTClause).name(),   typeid(CallsTClause).name(),
     typeid(ModifiesPClause).name(), typeid(UsesPClause).name()};
-const int default_cost = 100;
-
+const int DEFAULT_COST = 100;
+const int SMALL_COST_MAGNITUDE = 5;
+const int MEDIUM_COST_MAGNITUDE = 10;
+const int LARGE_COST_MAGNITUdE = 15;
 QueryOptimizer::QueryOptimizer(shared_ptr<Query> query) : query(query) {
   initMaps();
   initParent();
@@ -112,30 +114,38 @@ bool QueryOptimizer::hasCommonSyn(shared_ptr<ConditionalClause> clause1,
 
 int QueryOptimizer::calculateEdgeWeight(shared_ptr<ConditionalClause> clause1,
                                         shared_ptr<ConditionalClause> clause2) {
-  int curr_cost = default_cost;
-
+  int curr_cost = DEFAULT_COST;
+  const int SYN_COUNT_THRESHOLD = 1;
+  const int IDENT_OR_INT_COUNT_THRESHOLD = 1;
   // reduce cost for clauses with only one synonym
-  if (clause1->getSynonymNames().size() <= 1) curr_cost -= 10;
-  if (clause2->getSynonymNames().size() <= 1) curr_cost -= 10;
+  if (clause1->getSynonymNames().size() <= SYN_COUNT_THRESHOLD) {
+      curr_cost -= SMALL_COST_MAGNITUDE;
+      //reduce cost for clauses with an ident/int value since filtering can be done to reduce table size
+      if (clause1->getValueRefCount() >= IDENT_OR_INT_COUNT_THRESHOLD) curr_cost -= SMALL_COST_MAGNITUDE;
+  }
+  if (clause2->getSynonymNames().size() <= SYN_COUNT_THRESHOLD) {
+      curr_cost -= SMALL_COST_MAGNITUDE;
+      if (clause2->getValueRefCount() >= IDENT_OR_INT_COUNT_THRESHOLD) curr_cost -= SMALL_COST_MAGNITUDE;
+  }
 
   // reduce cost for clauses with less number of results
   if (std::find(lowCostRelations.begin(), lowCostRelations.end(),
                 typeid(*clause1).name()) != lowCostRelations.end()) {
-    curr_cost -= 10;
+    curr_cost -= MEDIUM_COST_MAGNITUDE;
   }
   if (std::find(lowCostRelations.begin(), lowCostRelations.end(),
                 typeid(*clause2).name()) != lowCostRelations.end()) {
-    curr_cost -= 10;
+    curr_cost -= MEDIUM_COST_MAGNITUDE;
   }
 
   // increase cost for clauses with high number of results
   if (std::find(highCostRelations.begin(), highCostRelations.end(),
                 typeid(*clause1).name()) != highCostRelations.end()) {
-    curr_cost += 20;
+    curr_cost += LARGE_COST_MAGNITUdE;
   }
   if (std::find(highCostRelations.begin(), highCostRelations.end(),
                 typeid(*clause2).name()) != highCostRelations.end()) {
-    curr_cost += 20;
+    curr_cost += LARGE_COST_MAGNITUdE;
   }
 
   return curr_cost;
@@ -144,30 +154,39 @@ int QueryOptimizer::calculateEdgeWeight(shared_ptr<ConditionalClause> clause1,
 int QueryOptimizer::getLowerCostClause(int x, int y) {
   auto clause1 = idClauseMap.at(x);
   auto clause2 = idClauseMap.at(y);
-  int cl1Cost = default_cost;
-  int cl2Cost = default_cost;
+  int cl1Cost = DEFAULT_COST;
+  int cl2Cost = DEFAULT_COST;
 
-  if (clause1->getSynonymNames().size() <= 1) cl1Cost -= 10;
-  if (clause2->getSynonymNames().size() <= 1) cl1Cost -= 10;
+    const int SYN_COUNT_THRESHOLD = 1;
+    const int IDENT_OR_INT_COUNT_THRESHOLD = 1;
+
+  if (clause1->getSynonymNames().size() <= SYN_COUNT_THRESHOLD) {
+      cl1Cost -= SMALL_COST_MAGNITUDE;
+      if (clause1->getValueRefCount() >= IDENT_OR_INT_COUNT_THRESHOLD) cl1Cost -= SMALL_COST_MAGNITUDE;
+  }
+  if (clause2->getSynonymNames().size() <= SYN_COUNT_THRESHOLD) {
+      cl2Cost -= SMALL_COST_MAGNITUDE;
+      if (clause2->getValueRefCount() >= IDENT_OR_INT_COUNT_THRESHOLD) cl2Cost -= SMALL_COST_MAGNITUDE;
+  }
 
   // reduce cost for clauses with less number of results
   if (std::find(lowCostRelations.begin(), lowCostRelations.end(),
                 typeid(*clause1).name()) != lowCostRelations.end()) {
-    cl1Cost -= 10;
+    cl1Cost -= MEDIUM_COST_MAGNITUDE;
   }
   if (std::find(lowCostRelations.begin(), lowCostRelations.end(),
                 typeid(*clause2).name()) != lowCostRelations.end()) {
-    cl2Cost -= 10;
+    cl2Cost -= MEDIUM_COST_MAGNITUDE;
   }
 
   // increase cost for clauses with high number of results
   if (std::find(highCostRelations.begin(), highCostRelations.end(),
                 typeid(*clause1).name()) != highCostRelations.end()) {
-    cl1Cost += 20;
+    cl1Cost += LARGE_COST_MAGNITUdE;
   }
   if (std::find(highCostRelations.begin(), highCostRelations.end(),
                 typeid(*clause2).name()) != highCostRelations.end()) {
-    cl2Cost += 20;
+    cl2Cost += LARGE_COST_MAGNITUdE;
   }
 
   return cl1Cost > cl2Cost ? y : x;
