@@ -678,22 +678,9 @@ TEST_CASE("Test Query Validator") {
     REQUIRE_NOTHROW(queryBuilder.buildPQLQuery(queryStr));
   }
 
-  SECTION("Invalid pattern - syntax error") {
-    std::string queryStr =
-        "while w; Select w pattern w(\"test\", _, \"x + y\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION("Invalid pattern - syntax error") {
-    std::string queryStr = "if i; Select i pattern i(\"a\", _, \"x + y\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
-
-  SECTION("Empty expression in pattern") {
-    std::string queryStr = "assign a; Select a pattern a(\"test\", \"\")";
-    auto queryBuilder = QueryBuilder();
-    REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
-  }
+	SECTION("Calls can be treated as synonym - Semantic Error") {
+		std::string queryStr = "stmt s; procedure p; assign a; Select s pattern a(_, _\"x\"_) and Calls(p, \"Helper\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLValidationException);
+	}
 }

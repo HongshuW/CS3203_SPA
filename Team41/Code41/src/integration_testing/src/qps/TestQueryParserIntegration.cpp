@@ -1104,4 +1104,29 @@ TEST_CASE("Test Query Builder Integration") {
     auto queryBuilder = QueryBuilder();
     REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
   }
+
+	SECTION("Invalid pattern - syntax error") {
+		std::string queryStr =
+						"while w; Select w pattern w(\"test\", _, \"x + y\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+	}
+
+	SECTION("Invalid pattern - syntax error") {
+		std::string queryStr = "if i; Select i pattern i(\"a\", _, \"x + y\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+	}
+
+	SECTION("Empty expression in pattern") {
+		std::string queryStr = "assign a; Select a pattern a(\"test\", \"\")";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+	}
+
+	SECTION("Wrong usage of and to connect pattern clause and such that clause - Syntax Error") {
+		std::string queryStr = "assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and Next* (1, a)";
+		auto queryBuilder = QueryBuilder();
+		REQUIRE_THROWS_AS(queryBuilder.buildPQLQuery(queryStr), PQLParseException);
+	}
 }
