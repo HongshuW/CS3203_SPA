@@ -211,7 +211,7 @@ SemanticError
 43 - invalid while pattern
 while w;
 Select w pattern w("a1", "a1")
-SyntaxError
+SemanticError
 5000
 44 - invalid while pattern
 while w;
@@ -223,7 +223,7 @@ variable v; procedure p;
 Select v pattern v(p, _)
 SemanticError
 5000
-46 - invalid pattern - synonym not declared [SHOULD BE SYNTAXERROR?]
+46 - invalid pattern - synonym not declared
 constant c;
 Select v pattern v(c, _)
 SemanticError
