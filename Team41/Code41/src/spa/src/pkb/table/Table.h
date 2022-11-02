@@ -28,6 +28,7 @@ class Table {
   vector<string> getHeader() const;
   vector<vector<string>> getRows() const;
   vector<vector<string>>* getRowsPointer();
+  const vector<vector<string>>* getRowsPointerReadOnly() const;
   vector<string> getRowByIndex(int index);
   vector<string> getColumnByName(string columnName);
   vector<string> getColumnByIndex(int index);
@@ -48,12 +49,12 @@ class Table {
 
   // setters
   void renameHeader(vector<string> newHeader);
-  void appendRow(vector<string> row);
-  void appendRows(list<vector<string>> rows);
-  void setRows(vector<vector<string>> rows);
+  void appendRow(const vector<string> &row);
+  void appendRows(const list<vector<string>> &rows);
+  void setRows(const vector<vector<string>> &rows);
   void addValues(list<string> values);
   void dropRows();
-  void insertIntoHeader(vector<string> headerToInsert);
+  void insertIntoHeader(const vector<string> &headerToInsert);
   void dupCol(int colIdx, string dupColName = "$dup_col");
   void dropColFromThis(int colIdx);
   void removeDupRow();

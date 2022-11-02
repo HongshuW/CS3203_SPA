@@ -24,6 +24,10 @@ vector<vector<string>> Table::getRows() const { return this->rows; }
 
 vector<vector<string>> *Table::getRowsPointer() { return &rows; }
 
+const vector<vector<string>> *Table::getRowsPointerReadOnly() const {
+    return &rows;
+}
+
 vector<string> Table::getColumnByName(string columnName) {
   int numOfColumns = header.size();
   for (int i = 0; i < numOfColumns; i++) {
@@ -116,9 +120,9 @@ bool Table::hasCol(std::string colName) {
   return std::count(header.begin(), header.end(), colName);
 }
 
-void Table::appendRow(vector<string> row) { rows.push_back(row); }
+void Table::appendRow(const vector<string> &row) { rows.push_back(row); }
 
-void Table::appendRows(list<vector<string>> rows) {
+void Table::appendRows(const list<vector<string>> &rows) {
   auto rowsIterator = rows.begin();
   int stepSize = 1;
   while (rowsIterator != rows.end()) {
@@ -127,7 +131,7 @@ void Table::appendRows(list<vector<string>> rows) {
   }
 }
 
-void Table::setRows(vector<vector<string>> rows) { this->rows = rows; }
+void Table::setRows(const vector<vector<string>> &rows) { this->rows = rows; }
 
 void Table::addValues(list<string> values) {
   // used in tables with one column only
@@ -145,7 +149,7 @@ void Table::renameHeader(vector<string> newHeader) { header = newHeader; }
 
 void Table::dropRows() { this->rows.clear(); }
 
-void Table::insertIntoHeader(vector<string> headerToInsert) {
+void Table::insertIntoHeader(const vector<string> &headerToInsert) {
   this->header.insert(this->header.end(), headerToInsert.begin(),
                       headerToInsert.end());
 }

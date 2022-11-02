@@ -15,10 +15,10 @@ Table TableCombiner::crossProduct(const Table &t1, const Table &t2) {
   Table productTable = Table();
   productTable.insertIntoHeader(t1.getHeader());
   productTable.insertIntoHeader(t2.getHeader());
-  vector<vector<string>> t1Rows = t1.getRows();
-  vector<vector<string>> t2Rows = t2.getRows();
-  for (auto row1 : t1Rows) {
-    for (auto row2 : t2Rows) {
+  const vector<vector<string>>* t1Rows = t1.getRowsPointerReadOnly();
+  const vector<vector<string>>* t2Rows = t2.getRowsPointerReadOnly();
+  for (auto row1 : *t1Rows) {
+    for (auto row2 : *t2Rows) {
       auto productRow = vector<string>();
       productRow.insert(productRow.begin(), row2.begin(), row2.end());
       productRow.insert(productRow.begin(), row1.begin(), row1.end());
@@ -70,12 +70,12 @@ Table TableCombiner::hashJoin(Table &t1, Table &t2) {
         std::find(secondColInxToCheck.begin(), secondColInxToCheck.end(), i) !=
         secondColInxToCheck.end();
     if (isDupHeader) continue;
-    resultTable.insertIntoHeader({biggerTablePtr->getHeader()[i]});
+    resultTable.insertIntoHeader(vector<string>{biggerTablePtr->getHeader()[i]});
   }
 
-  vector<vector<string>> t1Rows = t1.getRows();
-  vector<vector<string>> t2Rows = t2.getRows();
-  for (auto row : isT1Smaller ? t2Rows : t1Rows) {
+  vector<vector<string>>* t1Rows = t1.getRowsPointer();
+  vector<vector<string>>* t2Rows = t2.getRowsPointer();
+  for (auto row : isT1Smaller ? *t2Rows : *t1Rows) {
     string key = createFilterRowKey(row, secondColInxToCheck);
     if (map.find(key) == map.end()) continue;
 
