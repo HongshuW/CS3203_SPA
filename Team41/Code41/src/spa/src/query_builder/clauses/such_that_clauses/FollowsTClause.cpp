@@ -12,7 +12,7 @@ bool FollowsTClause::operator==(const FollowsTClause &other) const {
   return clause != nullptr && arg1 == clause->arg1 && arg2 == clause->arg2;
 }
 
-Table FollowsTClause::accept(shared_ptr<IVisitor> visitor) {
+shared_ptr<Table> FollowsTClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
 

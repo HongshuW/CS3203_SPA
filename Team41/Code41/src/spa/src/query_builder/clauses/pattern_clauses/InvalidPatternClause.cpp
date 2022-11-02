@@ -12,8 +12,8 @@ bool InvalidPatternClause::operator==(const InvalidPatternClause& other) const {
   return clause != nullptr && arg1 == clause->arg1 && arg2 == clause->arg2;
 }
 
-Table InvalidPatternClause::accept(shared_ptr<IVisitor> visitor) {
-  return Table();
+shared_ptr<Table> InvalidPatternClause::accept(shared_ptr<IVisitor> visitor) {
+  return make_shared<Table>();
 }
 
 int InvalidPatternClause::validateSyntaxError(int currIdx,

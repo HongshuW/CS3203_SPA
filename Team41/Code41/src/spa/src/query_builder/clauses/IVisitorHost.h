@@ -13,7 +13,7 @@ class IVisitor;
 class IVisitorHost {
  public:
   virtual ~IVisitorHost() = default;
-  virtual Table accept(shared_ptr<IVisitor> visitor) = 0;
+  virtual shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) = 0;
 };
 
 #endif  // SPA_IVISITORHOST_H

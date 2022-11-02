@@ -39,26 +39,26 @@ namespace QE {
 auto &entitiesToFilter = QueryEvaluatotConstants::entitiesToFilter;
 auto &attrsToFilter = QueryEvaluatotConstants::attrsToFilter;
 
-Table DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
+shared_ptr<Table> DataPreprocessor::getAllByDesignEntity(DesignEntity designEntity) {
   const int FIRST_COL_IDX = 0;
   const vector<DesignEntity> AVAIL_ENTITIES = {
       DesignEntity::STMT, DesignEntity::CONSTANT, DesignEntity::VARIABLE,
       DesignEntity::PROCEDURE};
   const int SECOND_COL = 1;
   if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) {
-    Table resultTable =
-        this->dataRetriever->getTableByDesignEntity(designEntity);
-    resultTable.dropColFromThis(SECOND_COL);
-    resultTable.removeDupRow();
+    auto resultTable =
+        make_shared<Table>(this->dataRetriever->getTableByDesignEntity(designEntity));
+    resultTable->dropColFromThis(SECOND_COL);
+    resultTable->removeDupRow();
     return resultTable;
   }
 
   // assign, call, print, if, while , read
-  Table resultTable =
-      this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT);
+  auto resultTable =
+      make_shared<Table>(this->dataRetriever->getTableByDesignEntity(QB::DesignEntity::STMT));
   this->filerTableByDesignEntity(resultTable, FIRST_COL_IDX, designEntity);
-  resultTable.dropColFromThis(SECOND_COL);
-  resultTable.removeDupRow();
+  resultTable->dropColFromThis(SECOND_COL);
+  resultTable->removeDupRow();
   return resultTable;
 }
 
@@ -73,9 +73,9 @@ DesignEntity DataPreprocessor::getDesignEntityOfSyn(Synonym synonym) {
 
 vector<int> DataPreprocessor::getStmtNumsByDesignEntity(
     DesignEntity designEntity) {
-  Table table = this->getAllByDesignEntity(designEntity);
+  auto table = this->getAllByDesignEntity(designEntity);
   int STMT_NO_COL_IDX = 0;
-  auto stmtNums = table.getColumnByName(table.getHeader()[STMT_NO_COL_IDX]);
+  auto stmtNums = table->getColumnByName(table->getHeader()[STMT_NO_COL_IDX]);
   vector<int> ans;
   for (const auto &string : stmtNums) {
     ans.push_back(stoi(string));
@@ -94,7 +94,7 @@ vector<string> DataPreprocessor::getEntityNames(DesignEntity designEntity) {
   return vector<string>();
 }
 
-Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
+shared_ptr<Table> DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
   bool hasSynonym = withClause->lhsType() == WithRefType::ATTR_REF ||
                     withClause->rhsType() == WithRefType::ATTR_REF;
   // if the with clause does not have synonym, dont have to care what's inside
@@ -106,7 +106,7 @@ Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
   bool isIntType = true;
 
   vector<WithRef> withRefs = {withClause->lhs, withClause->rhs};
-  Table resultTable = Table();
+  auto resultTable = make_shared<Table>();
   vector<int> comparedCols = {};
   int colOffSet = 0;
 
@@ -130,16 +130,16 @@ Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
 
     const int TABLE_HEADER_SIZE = 2;
     if (!processingNeeded) {
-      Table table = getAllByDesignEntity(designEntity);
-      if (table.isBodyEmpty()) return Table();
+      auto table = getAllByDesignEntity(designEntity);
+      if (table->isBodyEmpty()) return make_shared<Table>();
       const int FIRST_COL_IDX = 0;
       const int DROP_COL_FROM = 1;
 
-      table.dropColFromThis(DROP_COL_FROM);
-      table.removeDupRow();
+      table->dropColFromThis(DROP_COL_FROM);
+      table->removeDupRow();
       // get two identical cols with different names
-      table.dupCol(FIRST_COL_IDX);
-      table.renameHeader({attrRef.synonym.synonym, attrRef.toString()});
+      table->dupCol(FIRST_COL_IDX);
+      table->renameHeader({attrRef.synonym.synonym, attrRef.toString()});
       resultTable = TableCombiner().crossProduct(resultTable, table);
 
       // since two cols are identical, compare either is alright
@@ -148,15 +148,15 @@ Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
     } else {
       const int ATTR_NAME_COL_INX = 1;
 
-      Table intermediateTable;  // get results
+      auto intermediateTable = make_shared<Table>();  // get results
       if (designEntity == QB::DesignEntity::CALL)
-        intermediateTable = dataRetriever->getCallsProcedureNames();
+        intermediateTable = make_shared<Table>(dataRetriever->getCallsProcedureNames());
       if (designEntity == QB::DesignEntity::READ)
-        intermediateTable = dataRetriever->getReadVariableNames();
+        intermediateTable = make_shared<Table>(dataRetriever->getReadVariableNames());
       if (designEntity == QB::DesignEntity::PRINT)
-        intermediateTable = dataRetriever->getPrintVariableNames();
+        intermediateTable = make_shared<Table>(dataRetriever->getPrintVariableNames());
 
-      intermediateTable.renameHeader(
+      intermediateTable->renameHeader(
           {attrRef.synonym.synonym, attrRef.toString()});
       resultTable =
           TableCombiner().crossProduct(resultTable, intermediateTable);
@@ -179,12 +179,12 @@ Table DataPreprocessor::getTableByWith(shared_ptr<WithClause> withClause) {
 }
 
 void DataPreprocessor::filterTableByColValueEquality(
-    Table &table, const vector<int> &comparedCols) {
+        shared_ptr<Table> table, const vector<int> &comparedCols) {
   Table filteredTable = Table();
 
-  filteredTable.renameHeader(table.getHeader());
+  filteredTable.renameHeader(table->getHeader());
 
-  vector<vector<string>> *rowsPtr = table.getRowsPointer();
+  vector<vector<string>> *rowsPtr = table->getRowsPointer();
   auto rowItr = rowsPtr->begin();
   while (rowItr != rowsPtr->end()) {
     unordered_set<string> set;
@@ -195,13 +195,13 @@ void DataPreprocessor::filterTableByColValueEquality(
       ++rowItr;
       continue;
     }
-    *rowItr = (*rowsPtr)[table.getNumberOfRows() - 1];
+    *rowItr = (*rowsPtr)[table->getNumberOfRows() - 1];
     rowsPtr->erase(rowsPtr->end() - 1);
   }
 }
 
 void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
-                                                     Table &table) {
+                                                     shared_ptr<Table> table) {
   // RefType can be synonym, integer, underscore or string
   RefType ref1Type = getRefType(ref1);
   RefType ref2Type = getRefType(ref2);
@@ -213,7 +213,7 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
                         : QEUtils::getColNameByRefType(ref2Type);
 
   vector<string> newHeaders = vector<string>{col1Name, col2Name};
-  table.renameHeader(newHeaders);
+  table->renameHeader(newHeaders);
 
   const int FIRST_COL_IDX = 0;
   const int SECOND_COL_IDX = 1;
@@ -278,58 +278,58 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
       break;
   }
   bool isDropped = dropUnusedColumns(table);
-  if (isDropped) table.removeDupRow();
+  if (isDropped) table->removeDupRow();
 }
 
 DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever,
                                    Declarations declarations)
     : dataRetriever(dataRetriever), declarations(declarations) {}
 
-Table DataPreprocessor::getTableByAssignPattern(
+shared_ptr<Table> DataPreprocessor::getTableByAssignPattern(
     shared_ptr<QB::AssignPatternClause> assignPatternClause) {
-  Table table = dataRetriever->getAssignPatternTable(assignPatternClause->arg3);
+  auto table = make_shared<Table>(dataRetriever->getAssignPatternTable(assignPatternClause->arg3));
   filterSingleClauseResultTable(assignPatternClause->arg1,
                                 assignPatternClause->arg2, table);
   return table;
 }
 
-Table DataPreprocessor::getIfPatternTable(
+shared_ptr<Table> DataPreprocessor::getIfPatternTable(
     shared_ptr<QB::IfPatternClause> ifPatternClause) {
-  Table table = dataRetriever->getIfPatternTable();
+  auto table = make_shared<Table>(dataRetriever->getIfPatternTable());
   filterSingleClauseResultTable(ifPatternClause->arg1, ifPatternClause->arg2,
                                 table);
   return table;
 }
 
-Table DataPreprocessor::getWhilePatternTable(
+shared_ptr<Table> DataPreprocessor::getWhilePatternTable(
     shared_ptr<WhilePatternClause> whilePatternClause) {
-  Table table = dataRetriever->getWhilePatternTable();
+  auto table = make_shared<Table>(dataRetriever->getWhilePatternTable());
   filterSingleClauseResultTable(whilePatternClause->arg1,
                                 whilePatternClause->arg2, table);
   return table;
 }
 
-Table DataPreprocessor::getTableByFollows(
+shared_ptr<Table> DataPreprocessor::getTableByFollows(
     shared_ptr<FollowsClause> followsClause) {
-  Table table = dataRetriever->getFollowsTable();
+  auto table = make_shared<Table>(dataRetriever->getFollowsTable());
   filterSingleClauseResultTable(followsClause->arg1, followsClause->arg2,
                                 table);
   return table;
 }
 
-Table DataPreprocessor::getTableByFollowsT(
+shared_ptr<Table> DataPreprocessor::getTableByFollowsT(
     shared_ptr<FollowsTClause> followsTClause) {
-  Table table = dataRetriever->getFollowsTTable();
+  auto table = make_shared<Table>(dataRetriever->getFollowsTTable());
   filterSingleClauseResultTable(followsTClause->arg1, followsTClause->arg2,
                                 table);
   return table;
 }
 
-Table DataPreprocessor::getTableByAffects(
+shared_ptr<Table> DataPreprocessor::getTableByAffects(
     shared_ptr<AffectsClause> affectsClause) {
   const vector<DesignEntity> validTypes = {DesignEntity::STMT,
                                            DesignEntity::ASSIGN};
-  const Table EMPTY_RESULT = Table();
+    const shared_ptr<Table> EMPTY_RESULT = make_shared<Table>();
 
   Ref ref1 = affectsClause->arg1;
   Ref ref2 = affectsClause->arg2;
@@ -354,31 +354,31 @@ Table DataPreprocessor::getTableByAffects(
                : EMPTY_RESULT;
   }
   if (ref1Type == QB::RefType::INTEGER) {
-    auto resultTable = dataRetriever->getAffectedStatements(get<int>(ref1));
-    resultTable.dropColFromThis(FIRST_COL_IDX);
-    resultTable.removeDupRow();
+    auto resultTable = make_shared<Table>(dataRetriever->getAffectedStatements(get<int>(ref1)));
+    resultTable->dropColFromThis(FIRST_COL_IDX);
+    resultTable->removeDupRow();
     // check if second ref is not a synonym and return result immediately
     if (ref2Type != QB::RefType::SYNONYM)
-      return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
+      return !resultTable->isBodyEmpty() ? QEUtils::getScalarResponse(true)
                                         : EMPTY_RESULT;
     bool isValidType = std::count(validTypes.begin(), validTypes.end(),
                                   getDesignEntityOfSyn(get<Synonym>(ref2)));
     if (!isValidType) return EMPTY_RESULT;
     // the second ref must be a synonym
-    resultTable.renameHeader({col2Name});
+    resultTable->renameHeader({col2Name});
     return resultTable;
   }
   if (ref2Type == QB::RefType::INTEGER) {
-    auto resultTable = dataRetriever->getAffectingStatements(get<int>(ref2));
-    resultTable.dropColFromThis(SECOND_COL_IDX);
-    resultTable.removeDupRow();
+    auto resultTable = make_shared<Table>(dataRetriever->getAffectingStatements(get<int>(ref2)));
+    resultTable->dropColFromThis(SECOND_COL_IDX);
+    resultTable->removeDupRow();
     if (ref1Type != QB::RefType::SYNONYM)
-      return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
+      return !resultTable->isBodyEmpty() ? QEUtils::getScalarResponse(true)
                                         : EMPTY_RESULT;
     bool isValidType = std::count(validTypes.begin(), validTypes.end(),
                                   getDesignEntityOfSyn(get<Synonym>(ref1)));
     if (!isValidType) return EMPTY_RESULT;
-    resultTable.renameHeader({col1Name});
+    resultTable->renameHeader({col1Name});
     return resultTable;
   }
   bool isRef1Valid = ref1Type == QB::RefType::UNDERSCORE ||
@@ -390,14 +390,14 @@ Table DataPreprocessor::getTableByAffects(
                       std::count(validTypes.begin(), validTypes.end(),
                                  getDesignEntityOfSyn(get<Synonym>(ref2))));
   if (!isRef1Valid || !isRef2Valid) return EMPTY_RESULT;
-  auto resultTable = dataRetriever->getAffectsTable();
+  auto resultTable = make_shared<Table>(dataRetriever->getAffectsTable());
   filterSingleClauseResultTable(ref1, ref2, resultTable);
   return resultTable;
 }
 
-Table DataPreprocessor::getTableByAffectsT(
+shared_ptr<Table> DataPreprocessor::getTableByAffectsT(
     shared_ptr<AffectsTClause> affectsTClause) {
-  const Table EMPTY_RESULT = Table();
+  const shared_ptr<Table> EMPTY_RESULT = make_shared<Table>();
   const vector<DesignEntity> validTypes = {DesignEntity::STMT,
                                            DesignEntity::ASSIGN};
   Ref ref1 = affectsTClause->arg1;
@@ -423,31 +423,31 @@ Table DataPreprocessor::getTableByAffectsT(
                : EMPTY_RESULT;
   }
   if (ref1Type == QB::RefType::INTEGER) {
-    auto resultTable = dataRetriever->getAffectedTStatements(get<int>(ref1));
-    resultTable.dropColFromThis(FIRST_COL_IDX);
-    resultTable.removeDupRow();
+    auto resultTable = make_shared<Table>(dataRetriever->getAffectedTStatements(get<int>(ref1)));
+    resultTable->dropColFromThis(FIRST_COL_IDX);
+    resultTable->removeDupRow();
     // check if second ref is not a synonym and return result immediately
     if (ref2Type != QB::RefType::SYNONYM)
-      return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
+      return !resultTable->isBodyEmpty() ? QEUtils::getScalarResponse(true)
                                         : EMPTY_RESULT;
     bool isValidType = std::count(validTypes.begin(), validTypes.end(),
                                   getDesignEntityOfSyn(get<Synonym>(ref2)));
     if (!isValidType) return EMPTY_RESULT;
     // the second ref must be a synonym
-    resultTable.renameHeader({col2Name});
+    resultTable->renameHeader({col2Name});
     return resultTable;
   }
   if (ref2Type == QB::RefType::INTEGER) {
-    auto resultTable = dataRetriever->getAffectingTStatements(get<int>(ref2));
-    resultTable.dropColFromThis(SECOND_COL_IDX);
-    resultTable.removeDupRow();
+    auto resultTable = make_shared<Table>(dataRetriever->getAffectingTStatements(get<int>(ref2)));
+    resultTable->dropColFromThis(SECOND_COL_IDX);
+    resultTable->removeDupRow();
     if (ref1Type != QB::RefType::SYNONYM)
-      return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
+      return !resultTable->isBodyEmpty() ? QEUtils::getScalarResponse(true)
                                         : EMPTY_RESULT;
     bool isValidType = std::count(validTypes.begin(), validTypes.end(),
                                   getDesignEntityOfSyn(get<Synonym>(ref1)));
     if (!isValidType) return EMPTY_RESULT;
-    resultTable.renameHeader({col1Name});
+    resultTable->renameHeader({col1Name});
     return resultTable;
   }
   bool isRef1Valid = ref1Type == QB::RefType::UNDERSCORE ||
@@ -460,47 +460,47 @@ Table DataPreprocessor::getTableByAffectsT(
                                  getDesignEntityOfSyn(get<Synonym>(ref2))));
   if (!isRef1Valid || !isRef2Valid) return EMPTY_RESULT;
 
-  auto resultTable = dataRetriever->getAffectsTTable();
+  auto resultTable = make_shared<Table>(dataRetriever->getAffectsTTable());
   filterSingleClauseResultTable(ref1, ref2, resultTable);
   return resultTable;
 }
 
-Table DataPreprocessor::getTableByCalls(shared_ptr<CallsClause> callsClause) {
-  Table table = dataRetriever->getCallsTable();
+shared_ptr<Table> DataPreprocessor::getTableByCalls(shared_ptr<CallsClause> callsClause) {
+  auto table = make_shared<Table>(dataRetriever->getCallsTable());
   filterSingleClauseResultTable(callsClause->arg1, callsClause->arg2, table);
   return table;
 }
 
-Table DataPreprocessor::getTableByCallsT(
+shared_ptr<Table> DataPreprocessor::getTableByCallsT(
     shared_ptr<CallsTClause> callsTClause) {
-  Table table = dataRetriever->getCallsTTable();
+  auto table = make_shared<Table>(dataRetriever->getCallsTTable());
   filterSingleClauseResultTable(callsTClause->arg1, callsTClause->arg2, table);
   return table;
 }
 
-Table DataPreprocessor::getTableByModifiesP(
+shared_ptr<Table> DataPreprocessor::getTableByModifiesP(
     shared_ptr<ModifiesPClause> modifiesPClause) {
-  Table table = dataRetriever->getModifiesPTable();
+  auto table = make_shared<Table>(dataRetriever->getModifiesPTable());
   filterSingleClauseResultTable(modifiesPClause->arg1, modifiesPClause->arg2,
                                 table);
   return table;
 }
 
-Table DataPreprocessor::getTableByModifiesS(
+shared_ptr<Table> DataPreprocessor::getTableByModifiesS(
     shared_ptr<ModifiesSClause> modifiesSClause) {
-  Table table = dataRetriever->getModifiesSTable();
+  auto table = make_shared<Table>(dataRetriever->getModifiesSTable());
   filterSingleClauseResultTable(modifiesSClause->arg1, modifiesSClause->arg2,
                                 table);
   return table;
 }
 
-Table DataPreprocessor::getTableByNext(shared_ptr<NextClause> nextClause) {
-  Table table = dataRetriever->getNextTable();
+shared_ptr<Table> DataPreprocessor::getTableByNext(shared_ptr<NextClause> nextClause) {
+  auto table = make_shared<Table>(dataRetriever->getNextTable());
   filterSingleClauseResultTable(nextClause->arg1, nextClause->arg2, table);
   return table;
 }
 
-Table DataPreprocessor::getTableByNextT(shared_ptr<NextTClause> nextTClause) {
+shared_ptr<Table> DataPreprocessor::getTableByNextT(shared_ptr<NextTClause> nextTClause) {
   Ref ref1 = nextTClause->arg1;
   Ref ref2 = nextTClause->arg2;
   RefType ref1Type = getRefType(ref1);
@@ -511,89 +511,89 @@ Table DataPreprocessor::getTableByNextT(shared_ptr<NextTClause> nextTClause) {
         dataRetriever->getNextTResult(get<int>(ref1), get<int>(ref2));
     return boolTable.isEqual(ClauseVisitorConstants::TRUE_TABLE)
                ? QEUtils::getScalarResponse(true)
-               : Table();
+               : make_shared<Table>();
   }
-  Table resultTable = Table();
+  auto resultTable = make_shared<Table>();
   if (ref1Type == QB::RefType::INTEGER) {
-    resultTable = dataRetriever->getNextTStatements(get<int>(ref1));
+    resultTable = make_shared<Table>(dataRetriever->getNextTStatements(get<int>(ref1)));
     // check if second ref is not a synonym and return result immediately
     if (ref2Type != QB::RefType::SYNONYM)
-      return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
-                                        : Table();
+      return !resultTable->isBodyEmpty() ? QEUtils::getScalarResponse(true)
+                                        : make_shared<Table>();
   } else if (ref2Type == QB::RefType::INTEGER) {
-    resultTable = dataRetriever->getPreviousTStatements(get<int>(ref2));
+    resultTable = make_shared<Table>(dataRetriever->getPreviousTStatements(get<int>(ref2)));
     if (ref1Type != QB::RefType::SYNONYM)
-      return !resultTable.isBodyEmpty() ? QEUtils::getScalarResponse(true)
-                                        : Table();
+      return !resultTable->isBodyEmpty() ? QEUtils::getScalarResponse(true)
+                                        : make_shared<Table>();
   } else {
-    resultTable = dataRetriever->getNextTTable();
+    resultTable = make_shared<Table>(dataRetriever->getNextTTable());
   }
   filterSingleClauseResultTable(ref1, ref2, resultTable);
   return resultTable;
 }
 
-Table DataPreprocessor::getTableByParent(
+shared_ptr<Table> DataPreprocessor::getTableByParent(
     shared_ptr<ParentClause> parentClause) {
-  Table table = dataRetriever->getParentTable();
+  auto table = make_shared<Table>(dataRetriever->getParentTable());
   filterSingleClauseResultTable(parentClause->arg1, parentClause->arg2, table);
   return table;
 }
 
-Table DataPreprocessor::getTableByParentT(
+shared_ptr<Table> DataPreprocessor::getTableByParentT(
     shared_ptr<ParentTClause> parentTClause) {
-  Table table = dataRetriever->getParentTTable();
+  auto table = make_shared<Table>(dataRetriever->getParentTTable());
   filterSingleClauseResultTable(parentTClause->arg1, parentTClause->arg2,
                                 table);
   return table;
 }
 
-Table DataPreprocessor::getTableByUsesP(shared_ptr<UsesPClause> usesPClause) {
-  Table table = dataRetriever->getUsesPTable();
+shared_ptr<Table> DataPreprocessor::getTableByUsesP(shared_ptr<UsesPClause> usesPClause) {
+  auto table = make_shared<Table>(dataRetriever->getUsesPTable());
   filterSingleClauseResultTable(usesPClause->arg1, usesPClause->arg2, table);
   return table;
 }
 
-Table DataPreprocessor::getTableByUsesS(shared_ptr<UsesSClause> usesSClause) {
-  Table table = dataRetriever->getUsesSTable();
+shared_ptr<Table> DataPreprocessor::getTableByUsesS(shared_ptr<UsesSClause> usesSClause) {
+  auto table = make_shared<Table>(dataRetriever->getUsesSTable());
   filterSingleClauseResultTable(usesSClause->arg1, usesSClause->arg2, table);
   return table;
 }
 
-Table DataPreprocessor::getCallsProcedureTable() {
-  return dataRetriever->getCallsProcedureNames();
+shared_ptr<Table> DataPreprocessor::getCallsProcedureTable() {
+  return make_shared<Table>(dataRetriever->getCallsProcedureNames());
 }
 
-Table DataPreprocessor::getReadVariableTable() {
-  return dataRetriever->getReadVariableNames();
+shared_ptr<Table> DataPreprocessor::getReadVariableTable() {
+  return make_shared<Table>(dataRetriever->getReadVariableNames());
 }
 
-Table DataPreprocessor::getPrintVariableTable() {
-  return dataRetriever->getPrintVariableNames();
+shared_ptr<Table> DataPreprocessor::getPrintVariableTable() {
+  return make_shared<Table>(dataRetriever->getPrintVariableNames());
 }
 
-Table DataPreprocessor::getNoConditionSelectClauseResult(
+shared_ptr<Table> DataPreprocessor::getNoConditionSelectClauseResult(
     shared_ptr<SelectClause> selectClause) {
   TableCombiner tableCombiner = TableCombiner();
-  Table resultTable;
+  auto resultTable = make_shared<Table>();
   for (auto elem : *selectClause->returnResults) {
     if (elem.index() == SelectClause::ELEM_SYN_IDX) {
       Synonym synonym = std::get<SelectClause::ELEM_SYN_IDX>(elem);
       DesignEntity designEntity = getDesignEntityOfSyn(synonym);
 
-      Table intermediateTable = getAllByDesignEntity(designEntity);
-      if (intermediateTable.isBodyEmpty()) {
-        return Table();
+      auto intermediateTable = getAllByDesignEntity(designEntity);
+      if (intermediateTable->isBodyEmpty()) {
+        return make_shared<Table>();
       }
-      intermediateTable.renameHeader({synonym.synonym});
+      intermediateTable->renameHeader({synonym.synonym});
       resultTable = tableCombiner.crossProduct(resultTable, intermediateTable);
     } else {
       // elem is a attrRef
       AttrRef attrRef = std::get<AttrRef>(elem);
       DesignEntity designEntity = getDesignEntityOfSyn(attrRef.synonym);
-      Table intermediateTable = getAllByDesignEntity(designEntity);
+      auto intermediateTable = getAllByDesignEntity(designEntity);
 
-      if (intermediateTable.isBodyEmpty()) {
-        return Table();
+      if (intermediateTable->isBodyEmpty()) {
+        return make_shared<Table>();
       }
 
       bool processingNeeded =
@@ -609,15 +609,15 @@ Table DataPreprocessor::getNoConditionSelectClauseResult(
           intermediateTable = getPrintVariableTable();
         if (designEntity == QB::DesignEntity::READ)
           intermediateTable = getReadVariableTable();
-        if (intermediateTable.isBodyEmpty()) return Table();
+        if (intermediateTable->isBodyEmpty()) return make_shared<Table>();
       } else {
-        for (int i = 1; i < intermediateTable.getNumberOfColumns(); i++) {
-          intermediateTable.dropColFromThis(i);
+        for (int i = 1; i < intermediateTable->getNumberOfColumns(); i++) {
+          intermediateTable->dropColFromThis(i);
         }
         const int FIRST_COL_IDX = 0;
-        intermediateTable.dupCol(FIRST_COL_IDX);
+        intermediateTable->dupCol(FIRST_COL_IDX);
       }
-      intermediateTable.renameHeader(
+      intermediateTable->renameHeader(
           {attrRef.synonym.synonym, attrRef.toString()});
       resultTable = tableCombiner.crossProduct(intermediateTable, resultTable);
     }
@@ -771,68 +771,73 @@ void QE::DataPreprocessor::getWithValues(vector<WithRef> withRefs,
       values->at(i) = constVals;
     } else {
       if (attrRef.attrName == AttrName::PROC_NAME) {
-        values->at(i) = getCallsProcedureTable().getColumnByName(
+        values->at(i) = getCallsProcedureTable()->getColumnByName(
             PKBStorage::CALLS_TABLE_COL2_NAME);
       }
       if (attrRef.attrName == QB::AttrName::VAR_NAME &&
           designEntity == QB::DesignEntity::READ) {
-        values->at(i) = getReadVariableTable().getColumnByName(
+        values->at(i) = getReadVariableTable()->getColumnByName(
             PKBStorage::VARIABLE_TABLE_COL1_NAME);
       }
       if (attrRef.attrName == QB::AttrName::VAR_NAME &&
           designEntity == QB::DesignEntity::PRINT) {
-        values->at(i) = getPrintVariableTable().getColumnByName(
+        values->at(i) = getPrintVariableTable()->getColumnByName(
             PKBStorage::VARIABLE_TABLE_COL1_NAME);
       }
     }
   }
 }
 
-void DataPreprocessor::filerTableByColumnIdx(Table &table, int colIdx,
+void DataPreprocessor::filerTableByColumnIdx(shared_ptr<Table> table, int colIdx,
                                              const string &value) {
   Table filteredTable = Table();
-  filteredTable.renameHeader(table.getHeader());
-  vector<vector<string>> *rowsPtr = table.getRowsPointer();
+  filteredTable.renameHeader(table->getHeader());
+  vector<vector<string>> *rowsPtr = table->getRowsPointer();
   auto rowItr = rowsPtr->begin();
   while (rowItr != rowsPtr->end()) {
     if (rowItr->at(colIdx) == value) {
       ++rowItr;
       continue;
     }
-    *rowItr = (*rowsPtr)[table.getNumberOfRows() - 1];
+    *rowItr = (*rowsPtr)[table->getNumberOfRows() - 1];
     rowsPtr->erase(rowsPtr->end() - 1);
   }
 }
 
-bool DataPreprocessor::dropUnusedColumns(Table &table) {
-  bool hasResult = !table.isBodyEmpty();
+bool DataPreprocessor::dropUnusedColumns(shared_ptr<Table> table) {
+  bool hasResult = !table->isBodyEmpty();
   bool isDropped = false;
   // drop unused columns
   int offset = 0;
-  int n = table.getNumberOfColumns();
+  int n = table->getNumberOfColumns();
   for (int i = 0; i < n; i++) {
     int adjustedIdx = i + offset;
-    if (table.getHeader()[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) !=
+    if (table->getHeader()[adjustedIdx].find(Table::DEFAULT_HEADER_PREFIX) !=
         std::string::npos) {
-      table.dropColFromThis(adjustedIdx);
+      table->dropColFromThis(adjustedIdx);
       isDropped = true;
       offset--;
     }
   }
   // return a default response if the original table is not empty but no column
   // is used so all are dropped
-  if (table.isBodyEmpty() && hasResult)
-    table = QEUtils::getScalarResponse(hasResult);
+  if (table->isBodyEmpty() && hasResult) {
+      auto dummy = QEUtils::getScalarResponse(hasResult);
+      table->renameHeader(dummy->getHeader());
+      for (auto & row: *dummy->getRowsPointer()) {
+          table->appendRow(row);
+      }
+  }
   return isDropped;
 }
 
-void DataPreprocessor::filerTableByDesignEntity(Table &table, int colIdx,
+void DataPreprocessor::filerTableByDesignEntity(shared_ptr<Table> table, int colIdx,
                                                 DesignEntity designEntity) {
   vector<DesignEntity> AVAIL_ENTITIES = {
       DesignEntity::STMT, DesignEntity::CONSTANT, DesignEntity::VARIABLE,
       DesignEntity::PROCEDURE};
   if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) return;
-  vector<vector<string>> *rowsPtr = table.getRowsPointer();
+  vector<vector<string>> *rowsPtr = table->getRowsPointer();
   auto rowItr = rowsPtr->begin();
 
   while (rowItr != rowsPtr->end()) {
@@ -845,7 +850,7 @@ void DataPreprocessor::filerTableByDesignEntity(Table &table, int colIdx,
     }
     // the stmt in the row does not match the given design entity type， erase
     // the row from the table
-    *rowItr = (*rowsPtr)[table.getNumberOfRows() -
+    *rowItr = (*rowsPtr)[table->getNumberOfRows() -
                          1];             // overwrite this row with the last row
     rowsPtr->erase(rowsPtr->end() - 1);  // erase the last row
   }

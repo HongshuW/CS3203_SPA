@@ -13,7 +13,7 @@ class QEUtils {
  public:
   static unordered_map<QB::RefType, string> refTypeToColNameMap;
   static string getColNameByRefType(QB::RefType refType);
-  static Table getScalarResponse(bool hasResult);
+  static shared_ptr<Table> getScalarResponse(bool hasResult);
 };
 
 }  // namespace QE

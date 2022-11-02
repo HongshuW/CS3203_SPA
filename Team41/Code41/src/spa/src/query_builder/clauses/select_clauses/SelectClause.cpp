@@ -32,6 +32,6 @@ bool SelectClause::operator==(const SelectClause& clause) const {
   return isEqual;
 }
 
-Table SelectClause::accept(shared_ptr<IVisitor> visitor) {
+shared_ptr<Table> SelectClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }

@@ -33,7 +33,7 @@ class InvalidPatternClause
   InvalidPatternClause(const Synonym& arg1, const Ref& arg2);
 
   bool operator==(const InvalidPatternClause& other) const;
-  Table accept(shared_ptr<IVisitor> visitor) override;
+    shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
   int validateSyntaxError(int currIdx, const vector<string>& tokens) override;
   int validateExprSpec(int currIdx, const vector<string>& tokens);
 };
