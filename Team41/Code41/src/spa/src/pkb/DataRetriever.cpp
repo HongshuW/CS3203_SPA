@@ -63,12 +63,12 @@ shared_ptr<Table> DataRetriever::getStatementsHelper(
     if (range.empty()) {
       // if cache is empty, traverse the cfg to get relations
       shared_ptr<vector<string>> stmts = ((*cacheManager).*func)(stmtNo);
-      int startIndex = cachable->rows.size();
+      int startIndex = cachable->getNumberOfRows();
       for (string s : *stmts) {
         cachable->appendRow(columnNumber == 0 ? vector<string>{queriedStmt, s}
                                               : vector<string>{s, queriedStmt});
       }
-      int endIndex = cachable->rows.size();
+      int endIndex = cachable->getNumberOfRows();
       cachable->setQueried(
           columnNumber == 0
               ? vector<string>{queriedStmt, Cachable::WILDCARD,
@@ -113,7 +113,7 @@ shared_ptr<Table> DataRetriever::getExactRelationHelper(
   bool result = false;
   if (cachable->areAllRelationsCached()) {
     // if all relations are cached, search for the queried relation
-    result = cachable->contains(row, 0, cachable->rows.size());
+    result = cachable->contains(row, 0, cachable->getNumberOfRows());
   } else {
     vector<string> firstRange =
         cachable->getCachedLocation(vector<string>{first, Cachable::WILDCARD});
