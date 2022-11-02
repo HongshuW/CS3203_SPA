@@ -15,7 +15,8 @@ ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType,
 ExpressionSpec::ExpressionSpec(ExpressionSpecType expressionSpecType)
     : expressionSpecType(expressionSpecType) {}
 
-ExpressionSpec::ExpressionSpec() = default;
+ExpressionSpec::ExpressionSpec()
+    : expressionSpecType(ExpressionSpecType::ANY_MATCH) {}
 
 bool ExpressionSpec::operator==(const ExpressionSpec& expressionSpec) const {
   return expressionSpecType == expressionSpec.expressionSpecType &&
