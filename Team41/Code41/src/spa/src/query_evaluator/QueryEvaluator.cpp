@@ -166,7 +166,7 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
 
 vector<string> QueryEvaluator::projectResult(Table resultTable,
                                              shared_ptr<vector<Elem>> tuple) {
-  size_t ans_size = resultTable.rows.size();
+  size_t ans_size = resultTable.getNumberOfRows();
   const string EMPTY_STRING = "";
   vector<string> ans = vector<string>(ans_size, EMPTY_STRING);
   const string SPACE_SEPARATOR = " ";
@@ -289,7 +289,7 @@ vector<string> QueryEvaluator::evaluateSelectTupleQuery(
     }
     // no need to join table if headers in the sub result does not appear in the
     // selection
-    if (!isInSelect(subGroupResultTable.header)) continue;
+    if (!isInSelect(subGroupResultTable.getHeader())) continue;
     resultTable = tableCombiner.hashJoin(subGroupResultTable, resultTable);
     if (resultTable.isBodyEmpty()) return EMPTY_RESULT;
   }

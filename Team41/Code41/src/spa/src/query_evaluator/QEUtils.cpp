@@ -20,9 +20,7 @@ Table QEUtils::getScalarResponse(bool hasResult) {
 
   const string HEADER = "$dummy_header";
   const string VALUE = hasResult ? TRUE : FALSE;
-  Table resultTable = Table();
-  resultTable.renameHeader({HEADER});
-  resultTable.rows = vector<vector<string>>({{VALUE}});
+  Table resultTable = Table({HEADER}, vector<vector<string>>({{VALUE}}));
   return resultTable;
 }
 

@@ -14,7 +14,7 @@ TEST_CASE("Test Cachable") {
     nextTTable.appendRow({"1", "3"});
     nextTTable.clearCache();
     REQUIRE(nextTTable.areAllRelationsCached() == false);
-    REQUIRE(nextTTable.rows.size() == 0);
+    REQUIRE(nextTTable.getNumberOfRows() == 0);
   }
 
   SECTION("Test affects and affects* clear cache") {
@@ -24,6 +24,6 @@ TEST_CASE("Test Cachable") {
     affectsTable.appendRow({"3, 4"});
     affectsTable.clearCache();
     REQUIRE(affectsTable.areAllRelationsCached() == false);
-    REQUIRE(affectsTable.rows.size() == 0);
+    REQUIRE(affectsTable.getNumberOfRows() == 0);
   }
 }

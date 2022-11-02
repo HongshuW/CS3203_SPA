@@ -66,7 +66,7 @@ Table DummyDataRetriever2::getTableByDesignEntity(DesignEntity designEntity) {
 
 DesignEntity DummyDataRetriever2::getDesignEntityOfStmt(int stmtNumber) {
   auto de = getDesignEntity(this->getTableByDesignEntity(QB::DesignEntity::STMT)
-                                .rows[stmtNumber - 1][1]);
+                                .getRows()[stmtNumber - 1][1]);
   return de;
 }
 
