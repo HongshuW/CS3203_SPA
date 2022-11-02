@@ -103,7 +103,7 @@ jobs:
         with:
           name: milestone-3-system-test-results
           path: |
-            ${{github.workspace}}/Team41/Tests41/milestone-2/milestone-3-out
+            ${{github.workspace}}/Team41/Tests41/milestone-3/milestone-3-out
             
       - name: Evaulate System Tests Check
         run: |
