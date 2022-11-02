@@ -55,5 +55,5 @@ cd ../build/src/autotester
 ./autotester $1/Team41/Tests41/milestone-2/corner-cases/corner_case1_source.txt $1/Team41/Tests41/milestone-2/corner-cases/corner_case1_queries.txt $1/Team41/Tests41/milestone-2/milestone-2-out/corner-cases-analysis.xml
 
 #milestone 3 tests
-./autotester $1/Team41/Tests41/milestone-3/stress/stress_source.txt $1/Team41/Tests41/milestone-3/stress/stress_affects_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/analysis.xml
-./autotester $1/Team41/Tests41/milestone-3/stress/stress_source.txt $1/Team41/Tests41/milestone-3/stress/stress_next_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/analysis.xml
+./autotester $1/Team41/Tests41/milestone-3/stress/stress_source.txt $1/Team41/Tests41/milestone-3/stress/stress_affects_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/stress_affects_analysis.xml
+./autotester $1/Team41/Tests41/milestone-3/stress/stress_source.txt $1/Team41/Tests41/milestone-3/stress/stress_next_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/stress_next_analysis.xml
