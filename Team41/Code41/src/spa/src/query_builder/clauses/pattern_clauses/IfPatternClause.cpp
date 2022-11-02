@@ -21,6 +21,4 @@ Table IfPatternClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
 
-void IfPatternClause::validateSyntaxError() {
-
-}
+void IfPatternClause::validateSyntaxError() {}

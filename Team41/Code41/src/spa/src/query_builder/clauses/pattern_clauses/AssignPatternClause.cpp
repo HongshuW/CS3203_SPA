@@ -25,6 +25,4 @@ Table AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
 
-void AssignPatternClause::validateSyntaxError() {
-
-}
+void AssignPatternClause::validateSyntaxError() {}

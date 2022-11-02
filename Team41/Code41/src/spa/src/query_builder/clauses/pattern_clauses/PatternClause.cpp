@@ -31,5 +31,4 @@ unordered_set<string> PatternClause::getSynonymNames() {
   return synonyms;
 }
 
-void PatternClause::validateSyntaxError() {
-}
+void PatternClause::validateSyntaxError() {}

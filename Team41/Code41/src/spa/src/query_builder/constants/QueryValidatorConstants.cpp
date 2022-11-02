@@ -23,7 +23,7 @@ const string QueryValidatorConstants::PQL_VALIDATION_SECOND_ARG_INTEGER =
 const string QueryValidatorConstants::PQL_VALIDATION_INVALID_SYNONYM_PATTERN =
     "Expect pattern clause arg1 to be declared as assign, while or if, got: ";
 const string QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX =
-						"Invalid pattern syntax";
+    "Invalid pattern syntax";
 const string
     QueryValidatorConstants::PQL_VALIDATION_INVALID_DESIGN_ENTITY_PATTERN =
         "Expect pattern clause arg2 to be declared as variable, got ";

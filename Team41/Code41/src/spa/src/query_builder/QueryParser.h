@@ -9,9 +9,9 @@
 
 #include "constants/QueryParserConstants.h"
 #include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/DummyPatternClause.h"
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
-#include "query_builder/clauses/pattern_clauses/DummyPatternClause.h"
 #include "query_builder/clauses/with_clauses/WithClauses.h"
 #include "query_builder/commons/ExprStringTokenizer.h"
 #include "query_builder/commons/ExpressionSpec.h"

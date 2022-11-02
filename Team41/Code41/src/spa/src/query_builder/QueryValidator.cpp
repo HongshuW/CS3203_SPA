@@ -222,54 +222,73 @@ void QueryValidator::validateSynonymDeclaredPatternClause() {
 void QueryValidator::validateAllowedDesignEntityPatternClause() {
   shared_ptr<vector<shared_ptr<PatternClause>>> patternClauses =
       query->patternClauses;
-	shared_ptr<vector<Declaration>> declarations = query->declarations;
-	const unordered_set<DesignEntity> ALLOWED_DE = {
-					DesignEntity::ASSIGN, DesignEntity::IF, DesignEntity::WHILE
-	};
+  shared_ptr<vector<Declaration>> declarations = query->declarations;
+  const unordered_set<DesignEntity> ALLOWED_DE = {
+      DesignEntity::ASSIGN, DesignEntity::IF, DesignEntity::WHILE};
 
-	shared_ptr<vector<shared_ptr<PatternClause>>> newPatternClauseVector = make_shared<vector<shared_ptr<PatternClause>>>();
+  shared_ptr<vector<shared_ptr<PatternClause>>> newPatternClauseVector =
+      make_shared<vector<shared_ptr<PatternClause>>>();
 
   for (auto patternClause : *patternClauses) {
-		auto dummyPatternClause = dynamic_pointer_cast<DummyPatternClause>(patternClause);
-		checkCorrectDesignEntity( dummyPatternClause->arg1, ALLOWED_DE, declarations);
-		//! If no error is throw, construct the correct pattern clause
-		auto declaration = Declaration::findDeclaration(dummyPatternClause->arg1, declarations);
-		auto designEntity = declaration->getDesignEntity();
-		shared_ptr<PatternClause> newPatternClause = nullptr;
+    auto dummyPatternClause =
+        dynamic_pointer_cast<DummyPatternClause>(patternClause);
+    checkCorrectDesignEntity(dummyPatternClause->arg1, ALLOWED_DE,
+                             declarations);
+    //! If no error is throw, construct the correct pattern clause
+    auto declaration =
+        Declaration::findDeclaration(dummyPatternClause->arg1, declarations);
+    auto designEntity = declaration->getDesignEntity();
+    shared_ptr<PatternClause> newPatternClause = nullptr;
 
-		if (designEntity == DesignEntity::ASSIGN) {
-			//! arg4 cannot be an underscore
-			if (dummyPatternClause->isArg4Underscore) {
-				throw PQLValidationException(QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
-			}
-			//! arg3 is an underscore, the expressionSpecType must be ANY_MATCH
-			if (dummyPatternClause->isArg3Underscore && dummyPatternClause->arg3.expressionSpecType != ExpressionSpecType::ANY_MATCH) {
-				throw PQLValidationException(QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
-			}
-			//! Otherwise the expressionSpecType must be PARTIAL_MATCH or FULL_MATCH and exprNode cannot be a nullptr
-			if (dummyPatternClause->arg3.expressionSpecType == ExpressionSpecType::PARTIAL_MATCH ||
-							dummyPatternClause->arg3.expressionSpecType == ExpressionSpecType::FULL_MATCH) {
-				if (dummyPatternClause->arg3.exprNode == nullptr) {
-					throw PQLValidationException(QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
-				}
-			}
-			newPatternClause = make_shared<AssignPatternClause>(dummyPatternClause->arg1, dummyPatternClause->arg2, dummyPatternClause->arg3);
-		} else if (designEntity == DesignEntity::IF) {
-			//! arg3 and arg4 must be an underscore
-			if (!(dummyPatternClause->isArg3Underscore && dummyPatternClause->isArg4Underscore)) {
-				throw PQLValidationException(QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
-			}
-			newPatternClause = make_shared<IfPatternClause>(dummyPatternClause->arg1, dummyPatternClause->arg2);
-		} else if (designEntity == DesignEntity::WHILE) {
-			//! arg3 must be an underscore and arg4 must not be an underscore
-			if (!(dummyPatternClause->isArg3Underscore && !dummyPatternClause->isArg4Underscore)) {
-				throw PQLValidationException(QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
-			}
-			newPatternClause = make_shared<WhilePatternClause>(dummyPatternClause->arg1, dummyPatternClause->arg2);
-		}
-		newPatternClauseVector->push_back(newPatternClause);
+    if (designEntity == DesignEntity::ASSIGN) {
+      //! arg4 cannot be an underscore
+      if (dummyPatternClause->isArg4Underscore) {
+        throw PQLValidationException(
+            QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+      }
+      //! arg3 is an underscore, the expressionSpecType must be ANY_MATCH
+      if (dummyPatternClause->isArg3Underscore &&
+          dummyPatternClause->arg3.expressionSpecType !=
+              ExpressionSpecType::ANY_MATCH) {
+        throw PQLValidationException(
+            QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+      }
+      //! Otherwise the expressionSpecType must be PARTIAL_MATCH or FULL_MATCH
+      //! and exprNode cannot be a nullptr
+      if (dummyPatternClause->arg3.expressionSpecType ==
+              ExpressionSpecType::PARTIAL_MATCH ||
+          dummyPatternClause->arg3.expressionSpecType ==
+              ExpressionSpecType::FULL_MATCH) {
+        if (dummyPatternClause->arg3.exprNode == nullptr) {
+          throw PQLValidationException(
+              QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+        }
+      }
+      newPatternClause = make_shared<AssignPatternClause>(
+          dummyPatternClause->arg1, dummyPatternClause->arg2,
+          dummyPatternClause->arg3);
+    } else if (designEntity == DesignEntity::IF) {
+      //! arg3 and arg4 must be an underscore
+      if (!(dummyPatternClause->isArg3Underscore &&
+            dummyPatternClause->isArg4Underscore)) {
+        throw PQLValidationException(
+            QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+      }
+      newPatternClause = make_shared<IfPatternClause>(dummyPatternClause->arg1,
+                                                      dummyPatternClause->arg2);
+    } else if (designEntity == DesignEntity::WHILE) {
+      //! arg3 must be an underscore and arg4 must not be an underscore
+      if (!(dummyPatternClause->isArg3Underscore &&
+            !dummyPatternClause->isArg4Underscore)) {
+        throw PQLValidationException(
+            QueryValidatorConstants::PQL_VALIDATION_INVALID_PATTERN_SYNTAX);
+      }
+      newPatternClause = make_shared<WhilePatternClause>(
+          dummyPatternClause->arg1, dummyPatternClause->arg2);
+    }
+    newPatternClauseVector->push_back(newPatternClause);
   }
-	query->patternClauses = newPatternClauseVector;
+  query->patternClauses = newPatternClauseVector;
 }
 
 void QueryValidator::validateArgRefTypePatternClause() const {

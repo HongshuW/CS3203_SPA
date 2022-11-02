@@ -16,6 +16,4 @@ Table WhilePatternClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
 
-void WhilePatternClause::validateSyntaxError() {
-}
-
+void WhilePatternClause::validateSyntaxError() {}

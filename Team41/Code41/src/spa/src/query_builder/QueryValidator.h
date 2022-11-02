@@ -9,16 +9,16 @@
 
 #include <unordered_set>
 
+#include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/DummyPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
+#include "query_builder/clauses/pattern_clauses/PatternClause.h"
+#include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesPClause.h"
 #include "query_builder/clauses/such_that_clauses/ModifiesSClause.h"
 #include "query_builder/clauses/such_that_clauses/UsesPClause.h"
 #include "query_builder/clauses/such_that_clauses/UsesSClause.h"
 #include "query_builder/clauses/such_that_clauses/Validatable.h"
-#include "query_builder/clauses/pattern_clauses/DummyPatternClause.h"
-#include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
-#include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
-#include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
-#include "query_builder/clauses/pattern_clauses/PatternClause.h"
 #include "query_builder/commons/Query.h"
 #include "query_builder/commons/WithRef.h"
 #include "query_builder/constants/QueryValidatorConstants.h"

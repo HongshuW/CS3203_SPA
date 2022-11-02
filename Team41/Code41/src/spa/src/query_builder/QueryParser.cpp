@@ -240,28 +240,28 @@ void QueryParser::parsePatternClause() {
   Ref arg2 = parseRef();
   expect(QueryParserConstants::COMMA);
 
-	auto patternClause = make_shared<DummyPatternClause>(arg1, arg2);
-	if (match(QueryParserConstants::UNDERSCORE)) {
-		if (match(QueryParserConstants::RIGHT_BRACKET)) {
-			//! Correct while pattern or correct assign pattern with ANY_MATCH
-			patternClause->isArg3Underscore = true;
-			currIdx--;
-		} else if (match(QueryParserConstants::COMMA)) {
-			patternClause->isArg3Underscore = true;
-			//! Correct if pattern
-			expect(QueryParserConstants::UNDERSCORE);
-			patternClause->isArg4Underscore = true;
-		} else {
-			//! May be expressionSpec
-			currIdx--;
-			ExpressionSpec arg3 = parseExpressionSpec();
-			patternClause = make_shared<DummyPatternClause>(arg1, arg2, arg3);
-		}
-	} else {
-		//! May be expressionSpec
-		ExpressionSpec arg3 = parseExpressionSpec();
-		patternClause = make_shared<DummyPatternClause>(arg1, arg2, arg3);
-	}
+  auto patternClause = make_shared<DummyPatternClause>(arg1, arg2);
+  if (match(QueryParserConstants::UNDERSCORE)) {
+    if (match(QueryParserConstants::RIGHT_BRACKET)) {
+      //! Correct while pattern or correct assign pattern with ANY_MATCH
+      patternClause->isArg3Underscore = true;
+      currIdx--;
+    } else if (match(QueryParserConstants::COMMA)) {
+      patternClause->isArg3Underscore = true;
+      //! Correct if pattern
+      expect(QueryParserConstants::UNDERSCORE);
+      patternClause->isArg4Underscore = true;
+    } else {
+      //! May be expressionSpec
+      currIdx--;
+      ExpressionSpec arg3 = parseExpressionSpec();
+      patternClause = make_shared<DummyPatternClause>(arg1, arg2, arg3);
+    }
+  } else {
+    //! May be expressionSpec
+    ExpressionSpec arg3 = parseExpressionSpec();
+    patternClause = make_shared<DummyPatternClause>(arg1, arg2, arg3);
+  }
   expect(QueryParserConstants::RIGHT_BRACKET);
   query->patternClauses->push_back(patternClause);
 }
