@@ -38,7 +38,7 @@ TEST_CASE("Test Data Preprocessor") {
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn2)});
 
     auto followsCl = make_shared<FollowsClause>(syn1, syn2);
-    Table actual = dataPreprocessor->getTableByFollows(followsCl);
+    Table actual = *dataPreprocessor->getTableByFollows(followsCl);
 
     Table expected = TestQE::TableBuilder()
                          .setHeaders({"a1", "a2"})
@@ -57,7 +57,7 @@ TEST_CASE("Test Data Preprocessor") {
     Synonym syn2 = Synonym("p");
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn1)});
     declarations->push_back({Declaration(QB::DesignEntity::PRINT, syn2)});
-    Table actual = dataPreprocessor->getTableByFollows(
+    Table actual = *dataPreprocessor->getTableByFollows(
         make_shared<FollowsClause>(syn1, syn2));
 
     Table expected = TestQE::TableBuilder()
@@ -75,7 +75,7 @@ TEST_CASE("Test Data Preprocessor") {
         make_shared<QE::DataPreprocessor>(dummyDataRetriever, declarations);
     Synonym syn2 = Synonym("a2");
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn2)});
-    Table actual = dataPreprocessor->getTableByFollowsT(
+    Table actual = *dataPreprocessor->getTableByFollowsT(
         make_shared<FollowsTClause>(Underscore(), syn2));
 
     Table expected =
@@ -93,7 +93,7 @@ TEST_CASE("Test Data Preprocessor") {
     Synonym syn2 = Synonym("p");
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn1)});
     declarations->push_back({Declaration(QB::DesignEntity::PRINT, syn2)});
-    Table actual = dataPreprocessor->getTableByFollowsT(
+    Table actual = *dataPreprocessor->getTableByFollowsT(
         make_shared<FollowsTClause>(syn1, syn2));
 
     Table expected = TestQE::TableBuilder()
@@ -111,7 +111,7 @@ TEST_CASE("Test Data Preprocessor") {
         make_shared<QE::DataPreprocessor>(dummyDataRetriever, declarations);
     Synonym syn1 = Synonym("a");
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn1)});
-    Table actual = dataPreprocessor->getTableByFollowsT(
+    Table actual = *dataPreprocessor->getTableByFollowsT(
         make_shared<FollowsTClause>(syn1, Underscore()));
 
     Table expected = TestQE::TableBuilder()
@@ -129,7 +129,7 @@ TEST_CASE("Test Data Preprocessor") {
         make_shared<QE::DataPreprocessor>(dummyDataRetriever, declarations);
     Synonym syn1 = Synonym("a");
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn1)});
-    Table actual = dataPreprocessor->getTableByFollowsT(
+    Table actual = *dataPreprocessor->getTableByFollowsT(
         make_shared<FollowsTClause>(syn1, 3));
 
     Table expected = TestQE::TableBuilder()
@@ -148,7 +148,7 @@ TEST_CASE("Test Data Preprocessor") {
         make_shared<QE::DataPreprocessor>(dummyDataRetriever, declarations);
     Synonym syn2 = Synonym("a2");
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn2)});
-    Table actual = dataPreprocessor->getTableByFollowsT(
+    Table actual = *dataPreprocessor->getTableByFollowsT(
         make_shared<FollowsTClause>(1, syn2));
 
     Table expected =
@@ -166,7 +166,7 @@ TEST_CASE("Test Data Preprocessor") {
     Synonym syn2 = Synonym("v");
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn1)});
     declarations->push_back({Declaration(QB::DesignEntity::VARIABLE, syn2)});
-    Table actual = dataPreprocessor->getTableByModifiesS(
+    Table actual = *dataPreprocessor->getTableByModifiesS(
         make_shared<ModifiesSClause>(syn1, syn2));
 
     Table expected = TestQE::TableBuilder()
@@ -185,7 +185,7 @@ TEST_CASE("Test Data Preprocessor") {
         make_shared<QE::DataPreprocessor>(dummyDataRetriever, declarations);
     Synonym syn1 = Synonym("a");
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn1)});
-    Table actual = dataPreprocessor->getTableByModifiesS(
+    Table actual = *dataPreprocessor->getTableByModifiesS(
         make_shared<ModifiesSClause>(syn1, Ident("dummyVarA")));
 
     Table expected =
@@ -199,11 +199,11 @@ TEST_CASE("Test Data Preprocessor") {
         make_shared<vector<Declaration>>();
     shared_ptr<QE::DataPreprocessor> dataPreprocessor =
         make_shared<QE::DataPreprocessor>(dummyDataRetriever, declarations);
-    Table actual = dataPreprocessor->getTableByModifiesS(
+    auto actual = dataPreprocessor->getTableByModifiesS(
         make_shared<ModifiesSClause>(2, Underscore()));
-    Table expected = QE::QEUtils::getScalarResponse(true);
+    Table expected = *QE::QEUtils::getScalarResponse(true);
 
-    REQUIRE(actual.isEqual(expected));
+    REQUIRE(actual->isEqual(expected));
   }
   shared_ptr<PKBStorage> pkbStorage2 = make_shared<PKBStorage>();
   shared_ptr<DummyDataRetriever2> dummyDataRetriever2 =
@@ -220,7 +220,7 @@ TEST_CASE("Test Data Preprocessor") {
     declarations->push_back({Declaration(QB::DesignEntity::ASSIGN, syn2)});
     shared_ptr<QE::DataPreprocessor> dataPreprocessor2 =
         make_shared<QE::DataPreprocessor>(dummyDataRetriever2, declarations);
-    Table actual = dataPreprocessor2->getTableByFollows(
+    Table actual = *dataPreprocessor2->getTableByFollows(
         make_shared<FollowsClause>(syn1, syn2));
     REQUIRE(actual.isBodyEmpty());
   }
@@ -234,7 +234,7 @@ TEST_CASE("Test Data Preprocessor") {
     shared_ptr<QE::DataPreprocessor> dataPreprocessor2 =
         make_shared<QE::DataPreprocessor>(dummyDataRetriever2, declarations_2);
 
-    Table actual = dataPreprocessor2->getTableByFollowsT(
+    Table actual = *dataPreprocessor2->getTableByFollowsT(
         make_shared<FollowsTClause>(1, syn2_2));
     Table expected = FollowsTable();
     expected.renameHeader({"w"});
@@ -251,7 +251,7 @@ TEST_CASE("Test Data Preprocessor") {
     shared_ptr<QE::DataPreprocessor> dataPreprocessor2 =
         make_shared<QE::DataPreprocessor>(dummyDataRetriever2, declarations_3);
 
-    Table actual = dataPreprocessor2->getTableByParent(
+    Table actual = *dataPreprocessor2->getTableByParent(
         make_shared<ParentClause>(Underscore(), syn2_3));
     Table expected = FollowsTable();
     expected.renameHeader({"a"});
@@ -267,7 +267,7 @@ TEST_CASE("Test Data Preprocessor") {
     declarations_4->push_back({Declaration(QB::DesignEntity::ASSIGN, syn1_4)});
     shared_ptr<QE::DataPreprocessor> dataPreprocessor2 =
         make_shared<QE::DataPreprocessor>(dummyDataRetriever2, declarations_4);
-    Table actual = dataPreprocessor2->getTableByUsesS(
+    Table actual = *dataPreprocessor2->getTableByUsesS(
         make_shared<UsesSClause>(syn1_4, Ident("y")));
     Table expected = UsesTable();
     expected.renameHeader({"a"});

@@ -27,7 +27,7 @@ bool WithClause::operator==(const WithClause& clause) const {
          rhs == withClause->rhs;
 }
 
-Table WithClause::accept(shared_ptr<IVisitor> visitor) {
+shared_ptr<Table> WithClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
 

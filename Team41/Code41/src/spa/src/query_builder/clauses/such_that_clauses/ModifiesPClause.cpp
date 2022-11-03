@@ -12,7 +12,7 @@ bool ModifiesPClause::operator==(const ModifiesPClause &other) const {
   return clause != nullptr && arg1 == clause->arg1 && arg2 == clause->arg2;
 }
 
-Table ModifiesPClause::accept(shared_ptr<IVisitor> visitor) {
+shared_ptr<Table> ModifiesPClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
 

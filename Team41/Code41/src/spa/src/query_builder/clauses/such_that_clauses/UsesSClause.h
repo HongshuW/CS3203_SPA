@@ -18,7 +18,7 @@ class UsesSClause : public SuchThatClause,
   UsesSClause(Ref arg1, Ref arg2);
 
   bool operator==(const UsesSClause &other) const;
-  Table accept(shared_ptr<IVisitor> visitor) override;
+  shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
   pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>
   getAllowedArgsSynonym() override;
   pair<RefTypeSet, RefTypeSet> getAllowedArgsRefType() override;

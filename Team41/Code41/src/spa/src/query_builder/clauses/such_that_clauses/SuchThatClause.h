@@ -20,7 +20,7 @@ class SuchThatClause : public ConditionalClause, public Validatable {
   Ref arg2;
   SuchThatClause(Ref arg1, Ref arg2);
   ~SuchThatClause() override = default;
-  Table accept(shared_ptr<IVisitor> visitor) override = 0;
+  shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override = 0;
   unordered_set<string> getSynonymNames() override;
   int getValueRefCount() override;
   pair<unordered_set<DesignEntity>, unordered_set<DesignEntity>>

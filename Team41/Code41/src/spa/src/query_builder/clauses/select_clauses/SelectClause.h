@@ -43,7 +43,7 @@ class SelectClause : public AbstractClause,
   static const int ELEM_ATTR_REF_IDX = 1;
 
   bool operator==(const SelectClause& clause) const;
-  Table accept(shared_ptr<IVisitor> visitor) override;
+  shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
 };
 }  // namespace QB
 

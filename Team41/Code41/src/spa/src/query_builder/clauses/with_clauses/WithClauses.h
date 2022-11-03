@@ -30,7 +30,7 @@ class WithClause : public ConditionalClause,
   WithClause(WithRef lhs, WithRef rhs);
 
   bool operator==(const WithClause& clause) const;
-  Table accept(shared_ptr<IVisitor> visitor) override;
+  shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
   unordered_set<string> getSynonymNames() override;
   int getValueRefCount() override;
 };
