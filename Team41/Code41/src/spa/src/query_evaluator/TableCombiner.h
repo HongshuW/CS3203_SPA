@@ -14,14 +14,15 @@ class TableCombiner {
   /**
    * @return pairs of duplicate headers' index in the cross product table
    */
-  vector<vector<int>> findDupHeaders(vector<string> h1, vector<string> h2);
+  vector<vector<int>> findDupHeaders(const vector<string>& h1,
+                                     const vector<string>& h2);
 
   string createFilterRowKey(const vector<string>& row,
                             const vector<int>& colsToCheck);
 
  public:
-  Table crossProduct(const Table& t1, const Table& t2);
-  Table hashJoin(Table& t1, Table& t2);
+  shared_ptr<Table> crossProduct(shared_ptr<Table> t1, shared_ptr<Table> t2);
+  shared_ptr<Table> hashJoin(shared_ptr<Table> t1, shared_ptr<Table> t2);
 };
 
 }  // namespace QE

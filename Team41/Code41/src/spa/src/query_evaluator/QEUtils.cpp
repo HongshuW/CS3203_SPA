@@ -14,14 +14,14 @@ string QEUtils::getColNameByRefType(QB::RefType refType) {
   return refTypeToColNameMap.at(refType);
 }
 
-Table QEUtils::getScalarResponse(bool hasResult) {
+shared_ptr<Table> QEUtils::getScalarResponse(bool hasResult) {
   const string TRUE = "TRUE";
   const string FALSE = "FALSE";
 
   const string HEADER = "$dummy_header";
   const string VALUE = hasResult ? TRUE : FALSE;
   Table resultTable = Table({HEADER}, vector<vector<string>>({{VALUE}}));
-  return resultTable;
+  return make_shared<Table>(resultTable);
 }
 
 }  // namespace QE

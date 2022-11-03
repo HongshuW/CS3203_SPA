@@ -27,8 +27,6 @@ bool DummyPatternClause::operator==(const DummyPatternClause& other) const {
          arg3 == clause->arg3;
 }
 
-Table DummyPatternClause::accept(shared_ptr<IVisitor> visitor) {
-  return Table();
+shared_ptr<Table> DummyPatternClause::accept(shared_ptr<IVisitor> visitor) {
+  return nullptr;
 }
-
-void DummyPatternClause::validateSyntaxError() {}

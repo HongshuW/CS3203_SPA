@@ -27,7 +27,7 @@ bool WithClause::operator==(const WithClause& clause) const {
          rhs == withClause->rhs;
 }
 
-Table WithClause::accept(shared_ptr<IVisitor> visitor) {
+shared_ptr<Table> WithClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
 
@@ -38,4 +38,15 @@ unordered_set<string> WithClause::getSynonymNames() {
   if (getWithRefType(rhs.index()) == WithRefType::ATTR_REF)
     synonyms.insert(get<AttrRef>(rhs).synonym.synonym);
   return synonyms;
+}
+
+int WithClause::getValueRefCount() {
+  int count = 0;
+  if (lhs.index() == WithClause::WITH_REF_IDENT_IDX ||
+      lhs.index() == WithClause::WITH_REF_INT_IDX)
+    count++;
+  if (rhs.index() == WithClause::WITH_REF_IDENT_IDX ||
+      rhs.index() == WithClause::WITH_REF_INT_IDX)
+    count++;
+  return count;
 }

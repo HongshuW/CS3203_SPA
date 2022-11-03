@@ -21,8 +21,6 @@ bool AssignPatternClause::operator==(const AssignPatternClause& other) const {
          arg3 == clause->arg3;
 }
 
-Table AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
+shared_ptr<Table> AssignPatternClause::accept(shared_ptr<IVisitor> visitor) {
   return visitor->visit(shared_from_this());
 }
-
-void AssignPatternClause::validateSyntaxError() {}

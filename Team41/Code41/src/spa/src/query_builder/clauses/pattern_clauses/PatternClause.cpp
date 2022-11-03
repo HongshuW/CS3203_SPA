@@ -31,4 +31,10 @@ unordered_set<string> PatternClause::getSynonymNames() {
   return synonyms;
 }
 
-void PatternClause::validateSyntaxError() {}
+int PatternClause::getValueRefCount() {
+  int count = 0;
+  if (getRefType(arg2) == RefType::INTEGER ||
+      getRefType(arg2) == RefType::IDENT)
+    count++;
+  return count;
+}

@@ -28,8 +28,7 @@ class AssignPatternClause
   AssignPatternClause(Synonym arg1, Ref arg2);
 
   bool operator==(const AssignPatternClause& other) const;
-  Table accept(shared_ptr<IVisitor> visitor) override;
-  void validateSyntaxError() override;
+  shared_ptr<Table> accept(shared_ptr<IVisitor> visitor) override;
 };
 }  // namespace QB
 

@@ -22,51 +22,17 @@ namespace QE {
 using Value = variant<string, int, vector<int>, vector<string>>;
 
 class DataPreprocessor {
-  void filerTableByDesignEntity(Table& table, int colIdx,
+ private:
+  void filerTableByDesignEntity(shared_ptr<Table> table, int colIdx,
                                 DesignEntity designEntity);
-  void filterTableByColValueEquality(Table& table,
+  void filterTableByColValueEquality(shared_ptr<Table> table,
                                      const vector<int>& comparedCols);
-  void filerTableByColumnIdx(Table& table, int colIdx, const string& value);
+  void filerTableByColumnIdx(shared_ptr<Table> table, int colIdx,
+                             const string& value);
+  void filterSingleClauseResultTable(Ref ref1, Ref ref2,
+                                     shared_ptr<Table> table);
   DesignEntity getDesignEntityOfSyn(Synonym synonym);
-  std::vector<std::string> intersection(std::vector<std::string> v1,
-                                        std::vector<std::string> v2);
-  std::vector<int> intersection(std::vector<int> v1, std::vector<int> v2);
-  void getWithValues(vector<WithRef> withRefs,
-                     shared_ptr<vector<Value>> values);
-  bool dropUnusedColumns(Table& table);
 
-  shared_ptr<DataRetriever> dataRetriever;
-  Declarations declarations;
-
- public:
-  explicit DataPreprocessor(shared_ptr<DataRetriever> dataRetriever,
-                            Declarations declarations);
-  Table getAllByDesignEntity(DesignEntity designEntity);
-  Table getNoConditionSelectClauseResult(shared_ptr<SelectClause> selectClause);
-  Table getTableByAffects(shared_ptr<AffectsClause> affectsClause);
-  Table getTableByAffectsT(shared_ptr<AffectsTClause> affectsTClause);
-  Table getTableByCalls(shared_ptr<CallsClause> callsClause);
-  Table getTableByCallsT(shared_ptr<CallsTClause> callsTClause);
-  Table getTableByFollows(shared_ptr<FollowsClause> followsClause);
-  Table getTableByFollowsT(shared_ptr<FollowsTClause> followsTClause);
-  Table getTableByModifiesP(shared_ptr<ModifiesPClause> modifiesPClause);
-  Table getTableByModifiesS(shared_ptr<ModifiesSClause> modifiesSClause);
-  Table getTableByNext(shared_ptr<NextClause> nextClause);
-  Table getTableByNextT(shared_ptr<NextTClause> nextTClause);
-  Table getTableByParent(shared_ptr<ParentClause> parentClause);
-  Table getTableByParentT(shared_ptr<ParentTClause> parentTClause);
-  Table getTableByUsesP(shared_ptr<UsesPClause> usesPClause);
-  Table getTableByUsesS(shared_ptr<UsesSClause> usesSClause);
-  Table getTableByWith(shared_ptr<WithClause> withClause);
-  Table getTableByAssignPattern(
-      shared_ptr<QB::AssignPatternClause> assignPatternClause);
-  Table getIfPatternTable(shared_ptr<QB::IfPatternClause> ifPatternClause);
-  Table getWhilePatternTable(shared_ptr<WhilePatternClause> whilePatternClause);
-  Table getCallsProcedureTable();
-  Table getReadVariableTable();
-  Table getPrintVariableTable();
-
-  void filterSingleClauseResultTable(Ref ref1, Ref ref2, Table& table);
   /**
    * Used for with clause evaluation
    * Valid paras: stmt, read, print, call, while, if assign
@@ -82,6 +48,50 @@ class DataPreprocessor {
    * @return
    */
   vector<string> getEntityNames(DesignEntity designEntity);
+  std::vector<std::string> intersection(std::vector<std::string> v1,
+                                        std::vector<std::string> v2);
+  std::vector<int> intersection(std::vector<int> v1, std::vector<int> v2);
+  void getWithValues(vector<WithRef> withRefs,
+                     shared_ptr<vector<Value>> values);
+  bool dropUnusedColumns(shared_ptr<Table> table);
+
+  shared_ptr<DataRetriever> dataRetriever;
+  Declarations declarations;
+
+ public:
+  explicit DataPreprocessor(shared_ptr<DataRetriever> dataRetriever,
+                            Declarations declarations);
+  shared_ptr<Table> getAllByDesignEntity(DesignEntity designEntity);
+  shared_ptr<Table> getNoConditionSelectClauseResult(
+      shared_ptr<SelectClause> selectClause);
+  shared_ptr<Table> getTableByAffects(shared_ptr<AffectsClause> affectsClause);
+  shared_ptr<Table> getTableByAffectsT(
+      shared_ptr<AffectsTClause> affectsTClause);
+  shared_ptr<Table> getTableByCalls(shared_ptr<CallsClause> callsClause);
+  shared_ptr<Table> getTableByCallsT(shared_ptr<CallsTClause> callsTClause);
+  shared_ptr<Table> getTableByFollows(shared_ptr<FollowsClause> followsClause);
+  shared_ptr<Table> getTableByFollowsT(
+      shared_ptr<FollowsTClause> followsTClause);
+  shared_ptr<Table> getTableByModifiesP(
+      shared_ptr<ModifiesPClause> modifiesPClause);
+  shared_ptr<Table> getTableByModifiesS(
+      shared_ptr<ModifiesSClause> modifiesSClause);
+  shared_ptr<Table> getTableByNext(shared_ptr<NextClause> nextClause);
+  shared_ptr<Table> getTableByNextT(shared_ptr<NextTClause> nextTClause);
+  shared_ptr<Table> getTableByParent(shared_ptr<ParentClause> parentClause);
+  shared_ptr<Table> getTableByParentT(shared_ptr<ParentTClause> parentTClause);
+  shared_ptr<Table> getTableByUsesP(shared_ptr<UsesPClause> usesPClause);
+  shared_ptr<Table> getTableByUsesS(shared_ptr<UsesSClause> usesSClause);
+  shared_ptr<Table> getTableByWith(shared_ptr<WithClause> withClause);
+  shared_ptr<Table> getTableByAssignPattern(
+      shared_ptr<QB::AssignPatternClause> assignPatternClause);
+  shared_ptr<Table> getIfPatternTable(
+      shared_ptr<QB::IfPatternClause> ifPatternClause);
+  shared_ptr<Table> getWhilePatternTable(
+      shared_ptr<WhilePatternClause> whilePatternClause);
+  shared_ptr<Table> getCallsProcedureTable();
+  shared_ptr<Table> getReadVariableTable();
+  shared_ptr<Table> getPrintVariableTable();
 
   bool hasResult(shared_ptr<WithClause> withClause);
 };

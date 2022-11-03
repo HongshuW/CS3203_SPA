@@ -53,7 +53,7 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
 
 vector<string> QueryEvaluator::evaluateNoConditionSelectTupleQuery(
     shared_ptr<Query> query, shared_ptr<ConcreteClauseVisitor> clauseVisitor) {
-  Table resultTable = query->selectClause->accept(clauseVisitor);
+  auto resultTable = query->selectClause->accept(clauseVisitor);
   vector<string> ans =
       projectResult(resultTable, query->selectClause->returnResults);
   return removeDup(ans);
@@ -76,10 +76,10 @@ vector<string> QueryEvaluator::removeDup(vector<string> vec) {
 }
 
 vector<string> QueryEvaluator::formatConditionalQueryResult(
-    Table resultTable, shared_ptr<vector<Elem>> tuple, shared_ptr<Query> query,
-    shared_ptr<DataPreprocessor> dataPreprocessor) {
+    shared_ptr<Table> resultTable, shared_ptr<vector<Elem>> tuple,
+    shared_ptr<Query> query, shared_ptr<DataPreprocessor> dataPreprocessor) {
   if (query->selectClause->returnType == QB::ReturnType::BOOLEAN)
-    return resultTable.isBodyEmpty() ? FALSE_RESULT : TRUE_RESULT;
+    return resultTable->isBodyEmpty() ? FALSE_RESULT : TRUE_RESULT;
 
   // cartesian product for any missing synonym
   const int COL_DOES_NOT_EXIST = -1;
@@ -88,12 +88,12 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
   for (auto elem : *tuple) {
     if (elem.index() == SelectClause::ELEM_ATTR_REF_IDX) {
       AttrRef attrRef = std::get<AttrRef>(elem);
-      int attrNameColIdx = resultTable.getColIdxByName(attrRef.toString());
+      int attrNameColIdx = resultTable->getColIdxByName(attrRef.toString());
 
       if (attrNameColIdx != COL_DOES_NOT_EXIST) continue;
 
       DesignEntity designEntity = getDesignEntity(attrRef.synonym);
-      int synColIdx = resultTable.getColIdxByName(attrRef.synonym.synonym);
+      int synColIdx = resultTable->getColIdxByName(attrRef.synonym.synonym);
       bool filterNeeded = std::count(entitiesToFilter.begin(),
                                      entitiesToFilter.end(), designEntity) &&
                           std::count(attrsToFilter.begin(), attrsToFilter.end(),
@@ -101,7 +101,7 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
 
       if (synColIdx == COL_DOES_NOT_EXIST) {
         // this table has only one col
-        Table intermediateTable;
+        auto intermediateTable = make_shared<Table>();
         if (filterNeeded) {
           if (designEntity == QB::DesignEntity::CALL)
             intermediateTable = dataPreprocessor->getCallsProcedureTable();
@@ -109,53 +109,53 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
             intermediateTable = dataPreprocessor->getPrintVariableTable();
           if (designEntity == QB::DesignEntity::READ)
             intermediateTable = dataPreprocessor->getReadVariableTable();
-          if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
-          intermediateTable.dropColFromThis(FIRST_COL_IDX);
+          if (intermediateTable->isBodyEmpty()) return EMPTY_RESULT;
+          intermediateTable->dropColFromThis(FIRST_COL_IDX);
         } else {
           intermediateTable =
               dataPreprocessor->getAllByDesignEntity(designEntity);
-          intermediateTable.dropColFromThis(SECOND_COL_IDX);
-          if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
+          intermediateTable->dropColFromThis(SECOND_COL_IDX);
+          if (intermediateTable->isBodyEmpty()) return EMPTY_RESULT;
         }
-        intermediateTable.removeDupRow();
-        intermediateTable.renameHeader({attrRef.toString()});
+        intermediateTable->removeDupRow();
+        intermediateTable->renameHeader({attrRef.toString()});
         resultTable =
             TableCombiner().crossProduct(intermediateTable, resultTable);
-        if (resultTable.isBodyEmpty()) return EMPTY_RESULT;
+        if (resultTable->isBodyEmpty()) return EMPTY_RESULT;
       } else {
         // synonym name exists in the table but synonym attribute is not
         if (filterNeeded) {
-          Table intermediateTable;
+          auto intermediateTable = make_shared<Table>();
           if (designEntity == QB::DesignEntity::CALL)
             intermediateTable = dataPreprocessor->getCallsProcedureTable();
           if (designEntity == QB::DesignEntity::READ)
             intermediateTable = dataPreprocessor->getReadVariableTable();
           if (designEntity == QB::DesignEntity::PRINT)
             intermediateTable = dataPreprocessor->getPrintVariableTable();
-          intermediateTable.renameHeader(
+          intermediateTable->renameHeader(
               {attrRef.synonym.synonym, attrRef.toString()});
           resultTable =
               TableCombiner().hashJoin(intermediateTable, resultTable);
         } else {
-          resultTable.dupCol(synColIdx, attrRef.toString());
+          resultTable->dupCol(synColIdx, attrRef.toString());
         }
       }
     }
     if (elem.index() == SelectClause::ELEM_SYN_IDX) {
       Synonym synonym = std::get<SelectClause::ELEM_SYN_IDX>(elem);
       // check for existence
-      int colIdx = resultTable.getColIdxByName(synonym.synonym);
+      int colIdx = resultTable->getColIdxByName(synonym.synonym);
 
       if (colIdx == COL_DOES_NOT_EXIST) {
         DesignEntity designEntity = getDesignEntity(synonym);
-        Table intermediateTable =
+        auto intermediateTable =
             dataPreprocessor->getAllByDesignEntity(designEntity);
-        if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
+        if (intermediateTable->isBodyEmpty()) return EMPTY_RESULT;
 
-        intermediateTable.renameHeader({synonym.synonym});
+        intermediateTable->renameHeader({synonym.synonym});
         resultTable =
             TableCombiner().crossProduct(intermediateTable, resultTable);
-        if (resultTable.isBodyEmpty()) return EMPTY_RESULT;
+        if (resultTable->isBodyEmpty()) return EMPTY_RESULT;
       }
     }
   }
@@ -164,9 +164,9 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
   return projectResult(resultTable, tuple);
 }
 
-vector<string> QueryEvaluator::projectResult(Table resultTable,
+vector<string> QueryEvaluator::projectResult(shared_ptr<Table> resultTable,
                                              shared_ptr<vector<Elem>> tuple) {
-  size_t ans_size = resultTable.getNumberOfRows();
+  size_t ans_size = resultTable->getNumberOfRows();
   const string EMPTY_STRING = "";
   vector<string> ans = vector<string>(ans_size, EMPTY_STRING);
   const string SPACE_SEPARATOR = " ";
@@ -174,8 +174,8 @@ vector<string> QueryEvaluator::projectResult(Table resultTable,
   for (auto elem : *tuple) {
     if (elem.index() == SelectClause::ELEM_SYN_IDX) {
       Synonym synonym = std::get<SelectClause::ELEM_SYN_IDX>(elem);
-      int selectedColIdx = resultTable.getColIdxByName(synonym.synonym);
-      vector<string> colValues = resultTable.getColumnByIndex(selectedColIdx);
+      int selectedColIdx = resultTable->getColIdxByName(synonym.synonym);
+      vector<string> colValues = resultTable->getColumnByIndex(selectedColIdx);
       for (int r = 0; r < ans_size; r++) {
         ans[r] = ans[r].empty() ? colValues[r]
                                 : ans[r] + SPACE_SEPARATOR + colValues[r];
@@ -183,8 +183,8 @@ vector<string> QueryEvaluator::projectResult(Table resultTable,
     } else {
       // elem is a attrRef
       AttrRef attrRef = std::get<AttrRef>(elem);
-      int selectedColIdx = resultTable.getColIdxByName(attrRef.toString());
-      vector<string> colValues = resultTable.getColumnByIndex(selectedColIdx);
+      int selectedColIdx = resultTable->getColIdxByName(attrRef.toString());
+      vector<string> colValues = resultTable->getColumnByIndex(selectedColIdx);
       for (int r = 0; r < ans_size; r++) {
         ans[r] = ans[r].empty() ? colValues[r]
                                 : ans[r] + SPACE_SEPARATOR + colValues[r];
@@ -212,29 +212,29 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(
 
   // first evaluate group of clauses without synonyms
   for (auto noSynClause : *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
-    Table intermediateTable = noSynClause->accept(clauseVisitor);
-    if (intermediateTable.isBodyEmpty()) return FALSE_RESULT;
+    auto intermediateTable = noSynClause->accept(clauseVisitor);
+    if (intermediateTable->isBodyEmpty()) return FALSE_RESULT;
   }
   // erase group of clauses without synonyms after evaluation
   ccg->erase(QueryOptimizer::NO_SYN_GROUP_IDX);
 
   TableCombiner tableCombiner = TableCombiner();
-  Table resultTable = QEUtils::getScalarResponse(
+  auto resultTable = QEUtils::getScalarResponse(
       false);  // fill initial table with non-empty false result
 
   // evaluate the rest of the groups
   for (auto it : *ccg) {
     // eval each subgroup
-    Table subGroupResultTable;
+    shared_ptr<Table> subGroupResultTable = make_shared<Table>();
     for (auto subGroupClause : *it.second) {
-      Table intermediateTable = subGroupClause->accept(clauseVisitor);
-      if (intermediateTable.isBodyEmpty()) return FALSE_RESULT;
+      auto intermediateTable = subGroupClause->accept(clauseVisitor);
+      if (intermediateTable->isBodyEmpty()) return FALSE_RESULT;
       subGroupResultTable =
           tableCombiner.hashJoin(intermediateTable, subGroupResultTable);
-      if (subGroupResultTable.isBodyEmpty()) return FALSE_RESULT;
+      if (subGroupResultTable->isBodyEmpty()) return FALSE_RESULT;
     }
     resultTable = tableCombiner.hashJoin(subGroupResultTable, resultTable);
-    if (resultTable.isBodyEmpty()) return FALSE_RESULT;
+    if (resultTable->isBodyEmpty()) return FALSE_RESULT;
   }
   dataRetriever->clearCache();
   return TRUE_RESULT;
@@ -267,31 +267,31 @@ vector<string> QueryEvaluator::evaluateSelectTupleQuery(
   }
 
   TableCombiner tableCombiner = TableCombiner();
-  Table resultTable = QEUtils::getScalarResponse(false);
+  auto resultTable = QEUtils::getScalarResponse(false);
 
   // first evaluate group of clauses without synonyms, and dont have to join
   // table
   for (auto noSynClause : *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
-    Table intermediateTable = noSynClause->accept(clauseVisitor);
-    if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
+    auto intermediateTable = noSynClause->accept(clauseVisitor);
+    if (intermediateTable->isBodyEmpty()) return EMPTY_RESULT;
   }
   ccg->erase(QueryOptimizer::NO_SYN_GROUP_IDX);
 
   for (auto it : *ccg) {
     // eval each subgroup
-    Table subGroupResultTable;
+    auto subGroupResultTable = make_shared<Table>();
     for (auto subGroupClause : *it.second) {
-      Table intermediateTable = subGroupClause->accept(clauseVisitor);
-      if (intermediateTable.isBodyEmpty()) return EMPTY_RESULT;
+      auto intermediateTable = subGroupClause->accept(clauseVisitor);
+      if (intermediateTable->isBodyEmpty()) return EMPTY_RESULT;
       subGroupResultTable =
           tableCombiner.hashJoin(intermediateTable, subGroupResultTable);
-      if (subGroupResultTable.isBodyEmpty()) return EMPTY_RESULT;
+      if (subGroupResultTable->isBodyEmpty()) return EMPTY_RESULT;
     }
     // no need to join table if headers in the sub result does not appear in the
     // selection
-    if (!isInSelect(subGroupResultTable.getHeader())) continue;
+    if (!isInSelect(subGroupResultTable->getHeader())) continue;
     resultTable = tableCombiner.hashJoin(subGroupResultTable, resultTable);
-    if (resultTable.isBodyEmpty()) return EMPTY_RESULT;
+    if (resultTable->isBodyEmpty()) return EMPTY_RESULT;
   }
 
   shared_ptr<vector<Elem>> returnTuple = query->selectClause->returnResults;
