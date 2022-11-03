@@ -60,8 +60,8 @@ Select a such that Affects*(11, a)
 5000
 13 - comment
 assign a;
-Select a pattern a("z", _"x+i"_)
-none
+Select a pattern a("z", _"x+i")
+SyntaxError
 5000
 14 - comment
 assign a;
