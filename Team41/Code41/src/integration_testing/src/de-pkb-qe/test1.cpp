@@ -680,19 +680,18 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION("stmt s; select s such that next*(1, s)  from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("s");
 
@@ -709,19 +708,18 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION("stmt s; select s such that affect(1, s)  from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("s");
 
@@ -739,19 +737,18 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION("stmt s; select s such that affect*(1, s)  from procedure 15") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("s");
 
@@ -768,19 +765,18 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION("assign a; select a pattern a('x', '0')  from procedure 15") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("a");
 
@@ -800,19 +796,18 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION("assign a; select boolean pattern a('x', '0')  from procedure 15") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("a");
 
@@ -834,19 +829,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "procedure 15") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(15 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("a");
 
@@ -868,19 +862,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "print pr; select boolean  with pr.varname = 'x'  from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
 
@@ -898,19 +891,18 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION("print pr; select pr.varname from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
 
@@ -928,19 +920,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -962,19 +953,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "rd.stmt# == 6 from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -997,19 +987,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "rd.stmt# == 6 from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -1032,19 +1021,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -1066,19 +1054,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -1100,19 +1087,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -1132,19 +1118,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "print pr; read rd; select pr.stmt# with adda = adda from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -1163,19 +1148,18 @@ TEST_CASE("Test de-pkb-qe integration") {
   SECTION("print pr; read rd; select pr.stmt#  from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("pr");
     Synonym syn2 = Synonym("rd");
@@ -1195,19 +1179,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("p");
 
@@ -1226,19 +1209,18 @@ TEST_CASE("Test de-pkb-qe integration") {
       "call cl; select cl with cl.procname = 'procedure4' from procedure 12") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
-    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+    shared_ptr<DataRetriever> dataRetriever = make_shared<DataRetriever>(pkb, cacheManager);
     shared_ptr<QE::QueryEvaluator> queryEvaluator =
         make_shared<QE::QueryEvaluator>(dataRetriever);
-    auto pNode =
-        TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
-    shared_ptr<DE::DesignExtractorManager> designExtractorManager =
-        make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
-    designExtractorManager->run();
-    shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
-        make_shared<DE::DesignExtractorRetriever>(pNode);
-    shared_ptr<CacheManager> cacheManager =
-        make_shared<CacheManager>(CacheManager(designExtractorRetriever));
-    dataRetriever->cacheManager = cacheManager;
 
     Synonym syn1 = Synonym("cl");
 
