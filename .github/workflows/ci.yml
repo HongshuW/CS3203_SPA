@@ -63,7 +63,7 @@ jobs:
         shell: bash
         run: |
            cd ../build/src/autotester
-           ./autotester $GITHUB_WORKSPACE/Team41/Code41/tests/Sample_source.txt $GITHUB_WORKSPACE/Team41/Code41/tests/Sample_queries.txt $GITHUB_WORKSPACE/Team41/Code41/tests/out.xml
+           ./autotester $GITHUB_WORKSPACE/Team41/Tests41/Sample_source.txt $GITHUB_WORKSPACE/Team41/Tests41/Sample_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/sample-out/out.xml
          
       - name: Run System Tests
         working-directory: ${{github.workspace}}

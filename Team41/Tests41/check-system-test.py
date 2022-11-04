@@ -4,7 +4,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 path_arg = sys.argv[1]
-samplepath =  path_arg + '/Team41/Code41/tests'
+samplepath =  path_arg + '/Team41/Tests41/sample-out'
 m2path = path_arg + '/Team41/Tests41/milestone-2/milestone-2-out'
 m1path = path_arg + '/Team41/Tests41/milestone-1/system-test-out'
 m3path = path_arg + '/Team41/Tests41/milestone-3/milestone-3-out'
