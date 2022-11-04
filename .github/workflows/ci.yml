@@ -63,7 +63,7 @@ jobs:
         shell: bash
         run: |
            cd ../build/src/autotester
-           ./autotester $GITHUB_WORKSPACE/Team41/Code41/tests/Sample_source.txt $GITHUB_WORKSPACE/Team41/Code41/tests/Sample_queries.txt $GITHUB_WORKSPACE/Team41/Code41/tests/out.xml
+           ./autotester $GITHUB_WORKSPACE/Team41/Tests41/Sample_source.txt $GITHUB_WORKSPACE/Team41/Tests41/Sample_queries.txt $GITHUB_WORKSPACE/Team41/Tests41/sample-out/out.xml
          
       - name: Run System Tests
         working-directory: ${{github.workspace}}
@@ -83,6 +83,12 @@ jobs:
         working-directory: ${{github.workspace}}
         run: python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE
         
+      - name: Archive Sample System Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: sample-system-test-results
+          path: |
+            ${{github.workspace}}/Team41/Tests41/sample-out
         
       - name: Archive Milestone 1 System Test Results
         uses: actions/upload-artifact@v3
