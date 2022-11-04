@@ -67,7 +67,8 @@ Table DataRetriever::getNextTTable() {
 Table DataRetriever::getNextTStatements(int stmtNo) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   int columnNumber = 0;
-  shared_ptr<Table> table = cacheManager->getNextTStatements(nextTTable, stmtNo);
+  shared_ptr<Table> table =
+      cacheManager->getNextTStatements(nextTTable, stmtNo);
   return *table;
 }
 
@@ -80,7 +81,8 @@ Table DataRetriever::getNextTStatements(int stmtNo) {
 Table DataRetriever::getPreviousTStatements(int stmtNo) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   int columnNumber = 1;
-  shared_ptr<Table> table = cacheManager->getPreviousTStatements(nextTTable, stmtNo);
+  shared_ptr<Table> table =
+      cacheManager->getPreviousTStatements(nextTTable, stmtNo);
   return *table;
 }
 
@@ -95,7 +97,8 @@ Table DataRetriever::getPreviousTStatements(int stmtNo) {
 Table DataRetriever::getNextTResult(int precedingStatement,
                                     int ensuingStatement) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
-  shared_ptr<Table> table = cacheManager->getNextTResult(nextTTable, precedingStatement, ensuingStatement);
+  shared_ptr<Table> table = cacheManager->getNextTResult(
+      nextTTable, precedingStatement, ensuingStatement);
   return *table;
 }
 
@@ -129,7 +132,8 @@ Table DataRetriever::getAffectsTTable() {
  */
 Table DataRetriever::getAffectedStatements(int stmtNo) {
   shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
-  shared_ptr<Table> table = cacheManager->getAffectedStatements(affectsTable, stmtNo);
+  shared_ptr<Table> table =
+      cacheManager->getAffectedStatements(affectsTable, stmtNo);
   return *table;
 }
 
@@ -141,7 +145,8 @@ Table DataRetriever::getAffectedStatements(int stmtNo) {
  */
 Table DataRetriever::getAffectingStatements(int stmtNo) {
   shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
-  shared_ptr<Table> table = cacheManager->getAffectingStatements(affectsTable, stmtNo);
+  shared_ptr<Table> table =
+      cacheManager->getAffectingStatements(affectsTable, stmtNo);
   return *table;
 }
 
@@ -156,7 +161,8 @@ Table DataRetriever::getAffectingStatements(int stmtNo) {
 Table DataRetriever::getAffectsResult(int affectingStatement,
                                       int affectedStatement) {
   shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
-  shared_ptr<Table> table = cacheManager->getAffectsResult(affectsTable, affectingStatement, affectedStatement);
+  shared_ptr<Table> table = cacheManager->getAffectsResult(
+      affectsTable, affectingStatement, affectedStatement);
   return *table;
 }
 
@@ -168,7 +174,8 @@ Table DataRetriever::getAffectsResult(int affectingStatement,
  */
 Table DataRetriever::getAffectedTStatements(int stmtNo) {
   shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
-  shared_ptr<Table> table = cacheManager->getAffectedTStatements(affectsTTable, stmtNo);
+  shared_ptr<Table> table =
+      cacheManager->getAffectedTStatements(affectsTTable, stmtNo);
   return *table;
 }
 
@@ -180,7 +187,8 @@ Table DataRetriever::getAffectedTStatements(int stmtNo) {
  */
 Table DataRetriever::getAffectingTStatements(int stmtNo) {
   shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
-  shared_ptr<Table> table = cacheManager->getAffectingTStatements(affectsTTable, stmtNo);
+  shared_ptr<Table> table =
+      cacheManager->getAffectingTStatements(affectsTTable, stmtNo);
   return *table;
 }
 
@@ -195,7 +203,8 @@ Table DataRetriever::getAffectingTStatements(int stmtNo) {
 Table DataRetriever::getAffectsTResult(int affectingStatement,
                                        int affectedStatement) {
   shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
-  shared_ptr<Table> table = cacheManager->getAffectsTResult(affectsTTable, affectingStatement, affectedStatement);
+  shared_ptr<Table> table = cacheManager->getAffectsTResult(
+      affectsTTable, affectingStatement, affectedStatement);
   return *table;
 }
 
