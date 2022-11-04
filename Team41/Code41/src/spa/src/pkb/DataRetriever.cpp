@@ -47,102 +47,6 @@ Table DataRetriever::getCallsTTable() { return *pkbStorage->getCallsT(); }
 
 Table DataRetriever::getNextTable() { return *pkbStorage->getNext(); }
 
-shared_ptr<Table> DataRetriever::getStatementsHelper(
-    shared_ptr<Cachable> cachable, vector<int> metaInfo,
-    CacheManager::partialGetter func) {
-  int stmtNo = metaInfo[0];
-  int columnNumber = metaInfo[1];
-  string queriedStmt = to_string(stmtNo);
-  if (cachable->areAllRelationsCached()) {
-    // if all relations are cached, search for the relations queried
-    return cachable->getSubTableByColumn(queriedStmt, columnNumber);
-  } else {
-    vector<string> range = cachable->getCachedLocation(
-        columnNumber == 0 ? vector<string>{queriedStmt, Cachable::WILDCARD}
-                          : vector<string>{Cachable::WILDCARD, queriedStmt});
-    if (range.empty()) {
-      // if cache is empty, traverse the cfg to get relations
-      shared_ptr<vector<string>> stmts = ((*cacheManager).*func)(stmtNo);
-      int startIndex = cachable->getNumberOfRows();
-      for (string s : *stmts) {
-        cachable->appendRow(columnNumber == 0 ? vector<string>{queriedStmt, s}
-                                              : vector<string>{s, queriedStmt});
-      }
-      int endIndex = cachable->getNumberOfRows();
-      cachable->setQueried(
-          columnNumber == 0
-              ? vector<string>{queriedStmt, Cachable::WILDCARD,
-                               to_string(startIndex), to_string(endIndex)}
-              : vector<string>{Cachable::WILDCARD, queriedStmt,
-                               to_string(startIndex), to_string(endIndex)});
-      return cachable->getSubTable(startIndex, endIndex);
-    } else {
-      // if cache is not empty, load cache
-      return cachable->getSubTable(stoi(range[0]), stoi(range[1]));
-    }
-  }
-}
-
-void DataRetriever::getAllRelationsHelper(shared_ptr<Cachable> cachable,
-                                          CacheManager::fullGetter func) {
-  if (!cachable->areAllRelationsCached()) {
-    // clear cache before storing all the relations
-    cachable->clearCache();
-    cachable->dropRows();
-    // store all the relations
-    shared_ptr<list<vector<string>>> relations = ((*cacheManager).*func)();
-    cachable->appendRows(*relations);
-    cachable->setAllRelationsStatus(true);
-  }
-}
-
-int DataRetriever::getDifference(vector<string> startAndEndIndices) {
-  int startIndex = stoi(startAndEndIndices[0]);
-  int endIndex = stoi(startAndEndIndices[1]);
-  return endIndex - startIndex;
-}
-
-shared_ptr<Table> DataRetriever::getExactRelationHelper(
-    shared_ptr<Cachable> cachable, vector<int> stmts,
-    CacheManager::exactGetter func) {
-  int firstStmt = stmts[0];
-  int secondStmt = stmts[1];
-  string first = to_string(firstStmt);
-  string second = to_string(secondStmt);
-  vector<string> row = vector<string>{first, second};
-  bool result = false;
-  if (cachable->areAllRelationsCached()) {
-    // if all relations are cached, search for the queried relation
-    result = cachable->contains(row, 0, cachable->getNumberOfRows());
-  } else {
-    vector<string> firstRange =
-        cachable->getCachedLocation(vector<string>{first, Cachable::WILDCARD});
-    vector<string> secondRange =
-        cachable->getCachedLocation(vector<string>{Cachable::WILDCARD, second});
-    if (firstRange.empty() && secondRange.empty()) {
-      // if the relation hasn't been queried before, call DE to find the
-      // relation
-      result = ((*cacheManager).*func)(firstStmt, secondStmt);
-    } else {
-      // the relation has been queried before, search in cache
-      int firstDifference =
-          firstRange.empty() ? INT_MAX : getDifference(firstRange);
-      int secondDifference =
-          secondRange.empty() ? INT_MAX : getDifference(secondRange);
-      // search in the smaller range
-      if (firstDifference <= secondDifference) {
-        result =
-            cachable->contains(row, stoi(firstRange[0]), stoi(firstRange[1]));
-      } else {
-        result =
-            cachable->contains(row, stoi(secondRange[0]), stoi(secondRange[1]));
-      }
-    }
-  }
-  return result ? make_shared<Table>(QE::ClauseVisitorConstants::TRUE_TABLE)
-                : make_shared<Table>(QE::ClauseVisitorConstants::FALSE_TABLE);
-}
-
 /**
  * Get all Next* Relations.
  *
@@ -150,8 +54,8 @@ shared_ptr<Table> DataRetriever::getExactRelationHelper(
  */
 Table DataRetriever::getNextTTable() {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
-  getAllRelationsHelper(nextTTable, &CacheManager::getNextTRelations);
-  return *nextTTable;
+  shared_ptr<Table> table = cacheManager->getNextTTable(nextTTable);
+  return *table;
 }
 
 /**
@@ -164,8 +68,7 @@ Table DataRetriever::getNextTStatements(int stmtNo) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   int columnNumber = 0;
   shared_ptr<Table> table =
-      getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
-                          &CacheManager::getNextTStatements);
+      cacheManager->getNextTStatements(nextTTable, stmtNo);
   return *table;
 }
 
@@ -179,8 +82,7 @@ Table DataRetriever::getPreviousTStatements(int stmtNo) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
   int columnNumber = 1;
   shared_ptr<Table> table =
-      getStatementsHelper(nextTTable, vector<int>{stmtNo, columnNumber},
-                          &CacheManager::getPreviousTStatements);
+      cacheManager->getPreviousTStatements(nextTTable, stmtNo);
   return *table;
 }
 
@@ -195,9 +97,8 @@ Table DataRetriever::getPreviousTStatements(int stmtNo) {
 Table DataRetriever::getNextTResult(int precedingStatement,
                                     int ensuingStatement) {
   shared_ptr<NextTable> nextTTable = pkbStorage->getNextT();
-  shared_ptr<Table> table = getExactRelationHelper(
-      nextTTable, vector<int>{precedingStatement, ensuingStatement},
-      &CacheManager::getNextTResult);
+  shared_ptr<Table> table = cacheManager->getNextTResult(
+      nextTTable, precedingStatement, ensuingStatement);
   return *table;
 }
 
@@ -208,8 +109,8 @@ Table DataRetriever::getNextTResult(int precedingStatement,
  */
 Table DataRetriever::getAffectsTable() {
   shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
-  getAllRelationsHelper(affectsTable, &CacheManager::getAffectsRelations);
-  return *affectsTable;
+  shared_ptr<Table> table = cacheManager->getAffectsTable(affectsTable);
+  return *table;
 }
 
 /**
@@ -219,8 +120,8 @@ Table DataRetriever::getAffectsTable() {
  */
 Table DataRetriever::getAffectsTTable() {
   shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
-  getAllRelationsHelper(affectsTTable, &CacheManager::getAffectsTRelations);
-  return *affectsTTable;
+  shared_ptr<Table> table = cacheManager->getAffectsTTable(affectsTTable);
+  return *table;
 }
 
 /**
@@ -231,9 +132,9 @@ Table DataRetriever::getAffectsTTable() {
  */
 Table DataRetriever::getAffectedStatements(int stmtNo) {
   shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
-  int columnNumber = 0;
-  return *getStatementsHelper(affectsTable, vector<int>{stmtNo, columnNumber},
-                              &CacheManager::getAffectedStatements);
+  shared_ptr<Table> table =
+      cacheManager->getAffectedStatements(affectsTable, stmtNo);
+  return *table;
 }
 
 /**
@@ -244,9 +145,9 @@ Table DataRetriever::getAffectedStatements(int stmtNo) {
  */
 Table DataRetriever::getAffectingStatements(int stmtNo) {
   shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
-  int columnNumber = 1;
-  return *getStatementsHelper(affectsTable, vector<int>{stmtNo, columnNumber},
-                              &CacheManager::getAffectingStatements);
+  shared_ptr<Table> table =
+      cacheManager->getAffectingStatements(affectsTable, stmtNo);
+  return *table;
 }
 
 /**
@@ -260,9 +161,9 @@ Table DataRetriever::getAffectingStatements(int stmtNo) {
 Table DataRetriever::getAffectsResult(int affectingStatement,
                                       int affectedStatement) {
   shared_ptr<AffectsTable> affectsTable = pkbStorage->getAffects();
-  return *getExactRelationHelper(
-      affectsTable, vector<int>{affectingStatement, affectedStatement},
-      &CacheManager::getAffectsResult);
+  shared_ptr<Table> table = cacheManager->getAffectsResult(
+      affectsTable, affectingStatement, affectedStatement);
+  return *table;
 }
 
 /**
@@ -273,9 +174,9 @@ Table DataRetriever::getAffectsResult(int affectingStatement,
  */
 Table DataRetriever::getAffectedTStatements(int stmtNo) {
   shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
-  int columnNumber = 0;
-  return *getStatementsHelper(affectsTTable, vector<int>{stmtNo, columnNumber},
-                              &CacheManager::getAffectedTStatements);
+  shared_ptr<Table> table =
+      cacheManager->getAffectedTStatements(affectsTTable, stmtNo);
+  return *table;
 }
 
 /**
@@ -286,9 +187,9 @@ Table DataRetriever::getAffectedTStatements(int stmtNo) {
  */
 Table DataRetriever::getAffectingTStatements(int stmtNo) {
   shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
-  int columnNumber = 1;
-  return *getStatementsHelper(affectsTTable, vector<int>{stmtNo, columnNumber},
-                              &CacheManager::getAffectingTStatements);
+  shared_ptr<Table> table =
+      cacheManager->getAffectingTStatements(affectsTTable, stmtNo);
+  return *table;
 }
 
 /**
@@ -302,9 +203,9 @@ Table DataRetriever::getAffectingTStatements(int stmtNo) {
 Table DataRetriever::getAffectsTResult(int affectingStatement,
                                        int affectedStatement) {
   shared_ptr<AffectsTable> affectsTTable = pkbStorage->getAffectsT();
-  return *getExactRelationHelper(
-      affectsTTable, vector<int>{affectingStatement, affectedStatement},
-      &CacheManager::getAffectsTResult);
+  shared_ptr<Table> table = cacheManager->getAffectsTResult(
+      affectsTTable, affectingStatement, affectedStatement);
+  return *table;
 }
 
 Table DataRetriever::getAssignPatternTable(ExpressionSpec expressionSpec) {

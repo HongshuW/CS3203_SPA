@@ -146,38 +146,6 @@ void DataModifier::saveNext(vector<string> nextRelation) {
 }
 
 /**
- * Saves a Next* relationship to the pkb.
- *
- * @param nextTRelation vector<string>{precedingStatement, ensuingStatement}
- */
-void DataModifier::saveNextT(vector<string> nextTRelation) {
-  pkbStorage->saveNextT(nextTRelation);
-}
-
-/**
- * Saves an Affects relationship to the pkb.
- *
- * @param affectsRelation vector<string>{affectingStatement, affectedStatement}
- */
-void DataModifier::saveAffects(vector<string> affectsRelation) {
-  pkbStorage->saveAffects(affectsRelation);
-}
-
-/**
- * Saves an Affects* relationship to the pkb.
- *
- * @param affectsTRelation vector<string>{affectingStatement, affectedStatement}
- */
-void DataModifier::saveAffectsT(vector<string> affectsTRelation) {
-  pkbStorage->saveAffectsT(affectsTRelation);
-}
-
-void DataModifier::saveCFG(
-    string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg) {
-  pkbStorage->saveCFG(procedure, cfg);
-}
-
-/**
  * Saves an Assign Pattern to the pkb.
  *
  * @param metainfo vector<string>{statementNumber, variableName}
