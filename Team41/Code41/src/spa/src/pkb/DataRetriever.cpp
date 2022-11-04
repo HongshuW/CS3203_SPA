@@ -4,11 +4,12 @@
 
 #include "DataRetriever.h"
 
-#include "./query_evaluator/constants/ClauseVisitorConstants.h"
+DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage)
+    : pkbStorage(pkbStorage) {}
 
-DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage) {
-  this->pkbStorage = pkbStorage;
-}
+DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage,
+                             shared_ptr<CacheManager> cacheManager)
+    : pkbStorage(pkbStorage), cacheManager(cacheManager) {}
 
 Table DataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
   switch (designEntity) {
