@@ -83,6 +83,12 @@ jobs:
         working-directory: ${{github.workspace}}
         run: python $GITHUB_WORKSPACE/Team41/Tests41/check-system-test.py $GITHUB_WORKSPACE
         
+      - name: Archive Sample System Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: sample-system-test-results
+          path: |
+            ${{github.workspace}}/Team41/Code41/tests
         
       - name: Archive Milestone 1 System Test Results
         uses: actions/upload-artifact@v3
