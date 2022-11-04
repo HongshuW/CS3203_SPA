@@ -16,9 +16,9 @@ using namespace QB;
 
 class DataRetriever {
  public:
-  shared_ptr<CacheManager> cacheManager;
-
   explicit DataRetriever(shared_ptr<PKBStorage> pkbStorage);
+  explicit DataRetriever(shared_ptr<PKBStorage> pkbStorage,
+                         shared_ptr<CacheManager> cacheManager);
 
   virtual Table getTableByDesignEntity(DesignEntity designEntity);
   virtual Table getFollowsTable();
@@ -57,16 +57,7 @@ class DataRetriever {
 
  private:
   shared_ptr<PKBStorage> pkbStorage;
-
-  shared_ptr<Table> getStatementsHelper(shared_ptr<Cachable> cachable,
-                                        vector<int> metaInfo,
-                                        CacheManager::partialGetter func);
-  void getAllRelationsHelper(shared_ptr<Cachable> cachable,
-                             CacheManager::fullGetter func);
-  int getDifference(vector<string> startAndEndIndices);
-  shared_ptr<Table> getExactRelationHelper(shared_ptr<Cachable> cachable,
-                                           vector<int> stmts,
-                                           CacheManager::exactGetter func);
+  shared_ptr<CacheManager> cacheManager;
 };
 
 #endif  // SPA_DATARETRIEVER_H
