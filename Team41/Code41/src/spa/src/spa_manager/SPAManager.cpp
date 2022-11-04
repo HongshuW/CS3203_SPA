@@ -37,7 +37,8 @@ vector<string> SPAManager::evaluate(string& query) {
   vector<string> results;
   try {
     auto queryObj = QueryBuilder().buildPQLQuery(query);
-    auto dataRetriever = make_shared<DataRetriever>(DataRetriever(pkbStorage, cacheManager));
+    auto dataRetriever =
+        make_shared<DataRetriever>(DataRetriever(pkbStorage, cacheManager));
 
     auto ans = QueryEvaluator(dataRetriever).evaluate(queryObj);
     for (const auto& element : ans) {

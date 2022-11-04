@@ -16,8 +16,9 @@ using namespace QB;
 
 class DataRetriever {
  public:
-    explicit DataRetriever(shared_ptr<PKBStorage> pkbStorage);
-  explicit DataRetriever(shared_ptr<PKBStorage> pkbStorage, shared_ptr<CacheManager> cacheManager);
+  explicit DataRetriever(shared_ptr<PKBStorage> pkbStorage);
+  explicit DataRetriever(shared_ptr<PKBStorage> pkbStorage,
+                         shared_ptr<CacheManager> cacheManager);
 
   virtual Table getTableByDesignEntity(DesignEntity designEntity);
   virtual Table getFollowsTable();

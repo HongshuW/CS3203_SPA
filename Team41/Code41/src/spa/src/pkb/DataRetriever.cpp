@@ -4,9 +4,12 @@
 
 #include "DataRetriever.h"
 
-DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage) : pkbStorage(pkbStorage) {}
+DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage)
+    : pkbStorage(pkbStorage) {}
 
-DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage, shared_ptr<CacheManager> cacheManager) : pkbStorage(pkbStorage), cacheManager(cacheManager) {}
+DataRetriever::DataRetriever(shared_ptr<PKBStorage> pkbStorage,
+                             shared_ptr<CacheManager> cacheManager)
+    : pkbStorage(pkbStorage), cacheManager(cacheManager) {}
 
 Table DataRetriever::getTableByDesignEntity(DesignEntity designEntity) {
   switch (designEntity) {
