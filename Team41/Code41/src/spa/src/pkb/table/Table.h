@@ -25,25 +25,24 @@ class Table {
   explicit Table();
 
   // getters
-  [[nodiscard]] vector<string> getHeader() const;
-  [[nodiscard]] vector<vector<string>> getRows() const;
-  vector<vector<string>>* getRowsPointer();
-  [[nodiscard]] const vector<vector<string>>* getRowsPointerReadOnly() const;
-  vector<string> getColumnByName(const string& columnName);
+  vector<string> getHeader() const;
+  vector<vector<string>> getRows() const;
+  vector<vector<string>> *getRowsPointer();
+  const vector<vector<string>> *getRowsPointerReadOnly() const;
+  vector<string> getColumnByName(string columnName);
   vector<string> getColumnByIndex(int index);
-  vector<string> getRowByPrimaryKey(const string& key);
-  shared_ptr<unordered_set<string>> getValuesByKey(const string& key,
-                                                   int keyColumnNumber = 0,
-                                                   int valueColumnNumber = 1);
-  int getColIdxByName(const string& colName);
+  vector<string> getRowByPrimaryKey(string key);
+  int getColIdxByName(string colName);
+
   shared_ptr<Table> getSubTable(int startIndex, int endIndex);
   shared_ptr<Table> getSubTableByColumn(const string& key, int keyColumnNumber);
   bool contains(const vector<string>& row, int startIndex, int endIndex);
   int getNumberOfRows();
   int getNumberOfColumns();
-  bool isEqual(const Table& otherTable);
-  [[nodiscard]] bool isHeaderEmpty() const;
-  [[nodiscard]] bool isBodyEmpty() const;
+
+  bool isEqual(const Table &otherTable);
+  bool isHeaderEmpty() const;
+  bool isBodyEmpty() const;
 
   // setters
   void renameHeader(vector<string> newHeader);

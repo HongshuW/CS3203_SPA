@@ -7,12 +7,14 @@
 
 #include "EntityTable.h"
 class StatementTable : public EntityTable {
- public:
+ private:
   vector<string> printedVarsHeader;
   vector<string> readVarsHeader;
   vector<vector<string>> printedVars;
   vector<vector<string>> readVars;
+  int statementTypeColumn = 1;
 
+ public:
   explicit StatementTable();
 
   // getters
@@ -22,11 +24,8 @@ class StatementTable : public EntityTable {
   [[nodiscard]] shared_ptr<Table> getReadVariables() const;
 
   // setters
-  void addPrintedVar(const vector<string>& printStmtVarPair);
-  void addReadVar(const vector<string>& readStmtVarPair);
-
- private:
-  int statementTypeColumn = 1;
+  void addPrintedVar(vector<string> printStmtVarPair);
+  void addReadVar(vector<string> readStmtVarPair);
 };
 
 #endif  // SPA_STATEMENTTABLE_H

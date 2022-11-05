@@ -110,6 +110,6 @@ TEST_CASE("Test Data Modifier") {
     // check pattern is added
     REQUIRE(patternTable->getRows()[0][0] == "1");
     REQUIRE(patternTable->getRows()[0][1] == "x");
-    REQUIRE(patternTable->patternColumn[0] == pattern);
+    REQUIRE(patternTable->getPatternColumn()[0] == pattern);
   }
 }

@@ -29,7 +29,7 @@ const vector<vector<string>> *Table::getRowsPointerReadOnly() const {
   return &rows;
 }
 
-vector<string> Table::getColumnByName(const string &columnName) {
+vector<string> Table::getColumnByName(string columnName) {
   unsigned long numOfColumns = header.size();
   for (int i = 0; i < numOfColumns; i++) {
     if (header[i] == columnName) {
@@ -40,7 +40,7 @@ vector<string> Table::getColumnByName(const string &columnName) {
   return emptyVector;
 }
 
-int Table::getColIdxByName(const string &colName) {
+int Table::getColIdxByName(string colName) {
   int invalidColumn = -1;
   unsigned long numOfColumns = header.size();
   for (int i = 0; i < numOfColumns; i++) {
@@ -60,7 +60,7 @@ vector<string> Table::getColumnByIndex(int index) {
   return output;
 }
 
-vector<string> Table::getRowByPrimaryKey(const string &key) {
+vector<string> Table::getRowByPrimaryKey(string key) {
   unsigned long size = rows.size();
   for (int i = 0; i < size; i++) {
     if (rows[i][primaryKeyColumnIndex] == key) {
@@ -68,20 +68,6 @@ vector<string> Table::getRowByPrimaryKey(const string &key) {
     }
   }
   return vector<string>{};
-}
-
-shared_ptr<unordered_set<string>> Table::getValuesByKey(const string &key,
-                                                        int keyColumnNumber,
-                                                        int valueColumnNumber) {
-  unsigned long size = rows.size();
-  shared_ptr<unordered_set<string>> output =
-      make_shared<unordered_set<string>>(unordered_set<string>{});
-  for (int i = 0; i < size; i++) {
-    if (rows[i][keyColumnNumber] == key) {
-      output->insert(rows[i][valueColumnNumber]);
-    }
-  }
-  return output;
 }
 
 shared_ptr<Table> Table::getSubTable(int startIndex, int endIndex) {
@@ -114,9 +100,9 @@ bool Table::contains(const vector<string> &row, int startIndex, int endIndex) {
   return false;
 }
 
-int Table::getNumberOfRows() { return (int)rows.size(); }
+int Table::getNumberOfRows() { return (int) rows.size(); }
 
-int Table::getNumberOfColumns() { return (int)header.size(); }
+int Table::getNumberOfColumns() { return header.size(); }
 
 void Table::appendRow(const vector<string> &row) { rows.push_back(row); }
 

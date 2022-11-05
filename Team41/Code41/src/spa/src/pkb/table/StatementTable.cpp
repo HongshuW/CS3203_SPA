@@ -44,10 +44,10 @@ shared_ptr<Table> StatementTable::getReadVariables() const {
   return table;
 }
 
-void StatementTable::addPrintedVar(const vector<string>& printStmtVarPair) {
+void StatementTable::addPrintedVar(vector<string> printStmtVarPair) {
   printedVars.push_back(printStmtVarPair);
 }
 
-void StatementTable::addReadVar(const vector<string>& readStmtVarPair) {
+void StatementTable::addReadVar(vector<string> readStmtVarPair) {
   readVars.push_back(readStmtVarPair);
 }
