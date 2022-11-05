@@ -5,26 +5,11 @@
 #ifndef SPA_PROCEDURETABLE_H
 #define SPA_PROCEDURETABLE_H
 
-#include <unordered_map>
-#include <variant>
-
 #include "EntityTable.h"
-
-typedef variant<string, shared_ptr<unordered_map<int, unordered_set<int>>>>
-    cfgTableRow;
 
 class ProcedureTable : public EntityTable {
  public:
-  vector<string> cfgSubTableHeader;
-  vector<vector<cfgTableRow>> cfgSubTable;
   explicit ProcedureTable();
-
-  // getters
-  shared_ptr<Table> getProcedureNames();
-
-  // setters
-  void saveCFGofProcedure(
-      string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg);
 };
 
 #endif  // SPA_PROCEDURETABLE_H

@@ -55,7 +55,7 @@ class PKBStorage {
   static const string AFFECTS_TABLE_COL2_NAME;
 
   // getters of entities
-  shared_ptr<Table> getProcedures();
+  shared_ptr<ProcedureTable> getProcedures();
   shared_ptr<Table> getStatements();
   shared_ptr<Table> getPrintVariableNames();
   shared_ptr<Table> getReadVariableNames();

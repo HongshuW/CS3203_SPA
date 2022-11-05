@@ -54,8 +54,8 @@ PKBStorage::PKBStorage() {
   ifPatternTable = make_shared<PatternTable>(PatternTable());
 }
 
-shared_ptr<Table> PKBStorage::getProcedures() {
-  return procedureTable->getProcedureNames();
+shared_ptr<ProcedureTable> PKBStorage::getProcedures() {
+  return procedureTable;
 }
 
 shared_ptr<Table> PKBStorage::getStatements() {
