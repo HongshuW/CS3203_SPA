@@ -22,14 +22,10 @@
 #include "query_builder/relations/such_that_relations/CallsT.h"
 #include "query_builder/relations/such_that_relations/Follows.h"
 #include "query_builder/relations/such_that_relations/FollowsT.h"
-#include "query_builder/relations/such_that_relations/ModifiesP.h"
-#include "query_builder/relations/such_that_relations/ModifiesS.h"
 #include "query_builder/relations/such_that_relations/Next.h"
 #include "query_builder/relations/such_that_relations/NextT.h"
 #include "query_builder/relations/such_that_relations/Parent.h"
 #include "query_builder/relations/such_that_relations/ParentT.h"
-#include "query_builder/relations/such_that_relations/UsesP.h"
-#include "query_builder/relations/such_that_relations/UsesS.h"
 
 using namespace QB;
 

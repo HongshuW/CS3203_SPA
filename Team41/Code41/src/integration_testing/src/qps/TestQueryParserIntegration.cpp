@@ -12,6 +12,10 @@
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 #include "query_builder/clauses/pattern_clauses/WhilePatternClause.h"
 #include "query_builder/clauses/select_clauses/SelectClause.h"
+#include "query_builder/clauses/such_that_clauses/UsesPClause.h"
+#include "query_builder/clauses/such_that_clauses/UsesSClause.h"
+#include "query_builder/clauses/such_that_clauses/ModifiesPClause.h"
+#include "query_builder/clauses/such_that_clauses/ModifiesSClause.h"
 #include "query_builder/commons/Ref.h"
 #include "query_builder/exceptions/Exceptions.h"
 #include "query_builder/relations/such_that_relations/Affects.h"
@@ -20,14 +24,10 @@
 #include "query_builder/relations/such_that_relations/CallsT.h"
 #include "query_builder/relations/such_that_relations/Follows.h"
 #include "query_builder/relations/such_that_relations/FollowsT.h"
-#include "query_builder/relations/such_that_relations/ModifiesP.h"
-#include "query_builder/relations/such_that_relations/ModifiesS.h"
 #include "query_builder/relations/such_that_relations/Next.h"
 #include "query_builder/relations/such_that_relations/NextT.h"
 #include "query_builder/relations/such_that_relations/Parent.h"
 #include "query_builder/relations/such_that_relations/ParentT.h"
-#include "query_builder/relations/such_that_relations/UsesP.h"
-#include "query_builder/relations/such_that_relations/UsesS.h"
 
 using namespace QB;
 
