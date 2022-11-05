@@ -202,7 +202,6 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
         visited->erase(child);
       }
     } else if (nodeType == NodeType::CALL_NODE) {
-      // TODO: try to optimize this part
       shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(childNode);
       string procedure = callNode->procedureName;
       shared_ptr<unordered_set<string>> modifiedVariables =

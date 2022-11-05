@@ -69,7 +69,6 @@ shared_ptr<ExtractorResult> ModifiesSRelationExtractor::extract() {
 
   insertCallsForModifiesS();
 
-  // todo: figure out why would there be duplicates
   output->sort();
   output->unique();
   return make_shared<RelationResult>(output);
