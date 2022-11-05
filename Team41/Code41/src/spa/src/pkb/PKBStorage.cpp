@@ -7,7 +7,6 @@
 #include "query_builder/commons/DesignEntity.h"
 
 const string PKBStorage::PROCEDURE_TABLE_COL1_NAME = "$procedure_name";
-const string PKBStorage::PROCEDURE_TABLE_COL2_NAME = "$cfg_ptr";
 const string PKBStorage::STATEMENT_TABLE_COL1_NAME = "$statement_number";
 const string PKBStorage::STATEMENT_TABLE_COL2_NAME = "$statement_type";
 const string PKBStorage::VARIABLE_TABLE_COL1_NAME = "$variable_name";

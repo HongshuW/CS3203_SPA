@@ -34,7 +34,6 @@ class PKBStorage {
 
   // Column Names
   static const string PROCEDURE_TABLE_COL1_NAME;
-  static const string PROCEDURE_TABLE_COL2_NAME;
   static const string STATEMENT_TABLE_COL1_NAME;
   static const string STATEMENT_TABLE_COL2_NAME;
   static const string VARIABLE_TABLE_COL1_NAME;
