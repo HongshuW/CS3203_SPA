@@ -231,7 +231,7 @@ void UsesSRelationExtractor::extractCallStmtRelationshipsWithIfAndWhileToOutput(
     int stmtNo = stmtNumbers->at(node);
     queue<shared_ptr<StmtNode>> queue;
     queue.push(node);
-
+    unordered_set<string> visitedProcs;
     while (!queue.empty()) {
       auto nodeEntry = queue.front();
       queue.pop();
@@ -240,6 +240,8 @@ void UsesSRelationExtractor::extractCallStmtRelationshipsWithIfAndWhileToOutput(
         case AST::CALL_NODE: {
           shared_ptr<CallNode> callNode =
               dynamic_pointer_cast<CallNode>(nodeEntry);
+          if (visitedProcs.count(callNode->procedureName)) continue;
+          visitedProcs.insert(callNode->procedureName);
           unordered_set<string> varList;
           if (mappedProceduresToVars.count(callNode->procedureName) != 0) {
             varList = mappedProceduresToVars.at(callNode->procedureName);
@@ -258,6 +260,7 @@ void UsesSRelationExtractor::extractCallStmtRelationshipsWithIfAndWhileToOutput(
             auto otherCallNodes =
                 mappedCallNodesToProcedures.at(callNode->procedureName);
             for (auto n : otherCallNodes) {
+              if (visitedProcs.count(n->procedureName)) continue;
               queue.push(n);
             }
           }
@@ -315,9 +318,12 @@ void UsesSRelationExtractor::extractCallStmtRelationshipsToOutput(
     shared_ptr<list<vector<string>>> output) {
   queue<shared_ptr<CallNode>> queue;
   queue.push(callNode);
+  unordered_set<string> visitedProcs;
   while (!queue.empty()) {
     auto callNodeEntry = queue.front();
     queue.pop();
+    if (visitedProcs.count(callNodeEntry->procedureName)) continue;
+    visitedProcs.insert(callNodeEntry->procedureName);
     unordered_set<string> varList;
     if (mappedProceduresToVars.count(callNodeEntry->procedureName) != 0) {
       varList = mappedProceduresToVars.at(callNodeEntry->procedureName);
@@ -333,6 +339,7 @@ void UsesSRelationExtractor::extractCallStmtRelationshipsToOutput(
       auto otherCallNodes =
           mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
       for (auto n : otherCallNodes) {
+        if (visitedProcs.count(n->procedureName)) continue;
         queue.push(n);
       }
     }

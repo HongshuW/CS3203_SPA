@@ -26,7 +26,10 @@ shared_ptr<ExtractorResult> UsesPRelationExtractor::extract() {
       if (mappedCallNodesToProcedures.count(procedureName)) {
         callNodes = mappedCallNodesToProcedures.at(procedureName);
       }
+      unordered_set<string> visitedProcs;
       for (auto node : callNodes) {
+        if (visitedProcs.count(node->procedureName)) continue;
+        visitedProcs.insert(node->procedureName);
         extractVariablesFromCallNodesInProceduresToList(
             node, proceduresToUsedVarsMap, mappedCallNodesToProcedures,
             uniqueVarList);

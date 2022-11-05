@@ -66,9 +66,12 @@ void CallNodeExtractionInterface::extractCallStmtRelationshipsToOutput(
     const shared_ptr<list<vector<string>>>& output) {
   queue<shared_ptr<CallNode>> queue;
   queue.push(callNode);
+  unordered_set<string> visitedProcs;
   while (!queue.empty()) {
     auto callNodeEntry = queue.front();
     queue.pop();
+    if (visitedProcs.count(callNodeEntry->procedureName)) continue;
+    visitedProcs.insert(callNodeEntry->procedureName);
     shared_ptr<unordered_set<string>> varList =
         make_shared<unordered_set<string>>();
     if (mappedProceduresToVars->count(callNodeEntry->procedureName) != 0) {
@@ -85,6 +88,7 @@ void CallNodeExtractionInterface::extractCallStmtRelationshipsToOutput(
       auto otherCallNodes =
           mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
       for (const auto& n : otherCallNodes) {
+        if (visitedProcs.count(n->procedureName)) continue;
         queue.push(n);
       }
     }
@@ -106,7 +110,7 @@ void CallNodeExtractionInterface::
     int stmtNo = stmtNumbers->at(node);
     queue<shared_ptr<StmtNode>> queue;
     queue.push(node);
-
+    unordered_set<string> visitedProcs;
     while (!queue.empty()) {
       auto nodeEntry = queue.front();
       queue.pop();
@@ -115,6 +119,8 @@ void CallNodeExtractionInterface::
         case AST::CALL_NODE: {
           shared_ptr<CallNode> callNode =
               dynamic_pointer_cast<CallNode>(nodeEntry);
+          if (visitedProcs.count(callNode->procedureName)) continue;
+          visitedProcs.insert(callNode->procedureName);
           shared_ptr<unordered_set<string>> varList =
               make_shared<unordered_set<string>>();
           if (mappedProceduresToVars->count(callNode->procedureName) != 0) {
@@ -135,6 +141,7 @@ void CallNodeExtractionInterface::
             auto otherCallNodes =
                 mappedCallNodesToProcedures.at(callNode->procedureName);
             for (const auto& n : otherCallNodes) {
+              if (visitedProcs.count(n->procedureName)) continue;
               queue.push(n);
             }
           }
@@ -270,9 +277,12 @@ void CallNodeExtractionInterface::
         unordered_set<std::string>& uniqueVarList) {
   queue<shared_ptr<CallNode>> queue;
   queue.push(callNode);
+  unordered_set<string> visitedProcs;
   while (!queue.empty()) {
     auto callNodeEntry = queue.front();
     queue.pop();
+    if (visitedProcs.count(callNodeEntry->procedureName)) continue;
+    visitedProcs.insert(callNodeEntry->procedureName);
     shared_ptr<unordered_set<string>> usedVarList =
         make_shared<unordered_set<string>>();
     if (mappedProceduresToVar->count(callNodeEntry->procedureName)) {
@@ -285,6 +295,7 @@ void CallNodeExtractionInterface::
       auto otherCallNodes =
           mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
       for (const auto& n : otherCallNodes) {
+        if (visitedProcs.count(n->procedureName)) continue;
         queue.push(n);
       }
     }
