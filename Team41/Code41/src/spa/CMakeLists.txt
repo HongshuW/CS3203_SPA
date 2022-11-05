@@ -47,7 +47,6 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/DataPreprocessor.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
-        src/pkb/table/EntityTable.cpp
         src/pkb/table/EntityTable.h
         src/pkb/table/VariableTable.cpp
         src/pkb/table/VariableTable.h
@@ -57,7 +56,6 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/StatementTable.h
         src/pkb/table/ConstantTable.cpp
         src/pkb/table/ConstantTable.h
-        src/pkb/table/RelationTable.cpp
         src/pkb/table/RelationTable.h
         src/pkb/table/FollowsTable.cpp
         src/pkb/table/FollowsTable.h

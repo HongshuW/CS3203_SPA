@@ -12,7 +12,7 @@ using namespace std;
 
 class KeyNotFoundException : public exception {
  public:
-  explicit KeyNotFoundException(string columnName, string key);
+  explicit KeyNotFoundException(const string& columnName, const string& key);
   char* what();
 
  private:
