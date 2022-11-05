@@ -29,7 +29,7 @@ const vector<vector<string>> *Table::getRowsPointerReadOnly() const {
   return &rows;
 }
 
-vector<string> Table::getColumnByName(string columnName) {
+vector<string> Table::getColumnByName(const string &columnName) {
   unsigned long numOfColumns = header.size();
   for (int i = 0; i < numOfColumns; i++) {
     if (header[i] == columnName) {
@@ -40,7 +40,7 @@ vector<string> Table::getColumnByName(string columnName) {
   return emptyVector;
 }
 
-int Table::getColIdxByName(string colName) {
+int Table::getColIdxByName(const string &colName) {
   int invalidColumn = -1;
   unsigned long numOfColumns = header.size();
   for (int i = 0; i < numOfColumns; i++) {
@@ -60,7 +60,7 @@ vector<string> Table::getColumnByIndex(int index) {
   return output;
 }
 
-vector<string> Table::getRowByPrimaryKey(string key) {
+vector<string> Table::getRowByPrimaryKey(const string &key) {
   unsigned long size = rows.size();
   for (int i = 0; i < size; i++) {
     if (rows[i][primaryKeyColumnIndex] == key) {
@@ -100,9 +100,9 @@ bool Table::contains(const vector<string> &row, int startIndex, int endIndex) {
   return false;
 }
 
-int Table::getNumberOfRows() { return (int) rows.size(); }
+int Table::getNumberOfRows() { return (int)rows.size(); }
 
-int Table::getNumberOfColumns() { return header.size(); }
+int Table::getNumberOfColumns() { return (int)header.size(); }
 
 void Table::appendRow(const vector<string> &row) { rows.push_back(row); }
 

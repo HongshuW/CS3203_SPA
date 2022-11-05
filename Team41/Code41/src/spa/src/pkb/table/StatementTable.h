@@ -24,8 +24,8 @@ class StatementTable : public EntityTable {
   [[nodiscard]] shared_ptr<Table> getReadVariables() const;
 
   // setters
-  void addPrintedVar(vector<string> printStmtVarPair);
-  void addReadVar(vector<string> readStmtVarPair);
+  void addPrintedVar(const vector<string>& printStmtVarPair);
+  void addReadVar(const vector<string>& readStmtVarPair);
 };
 
 #endif  // SPA_STATEMENTTABLE_H
