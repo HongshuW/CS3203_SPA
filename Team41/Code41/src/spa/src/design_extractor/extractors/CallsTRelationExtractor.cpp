@@ -31,12 +31,14 @@ shared_ptr<ExtractorResult> CallsTRelationExtractor::extract() {
       while (!queue.empty()) {
         auto callNodeEntry = queue.front();
         queue.pop();
+        if (reachableCallNodeNames.count(callNodeEntry->procedureName)) continue;
         reachableCallNodeNames.insert(callNodeEntry->procedureName);
         if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) !=
             0) {
           auto otherCallNodes =
               mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
           for (auto n : otherCallNodes) {
+            if (reachableCallNodeNames.count(n->procedureName)) continue;
             queue.push(n);
           }
         }
