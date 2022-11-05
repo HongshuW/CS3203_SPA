@@ -8,9 +8,9 @@
 #include "RelationTable.h"
 
 class CallsTable : public RelationTable {
-private:
-    vector<string> mapHeader;
-    vector<vector<string>> stmtNoProcMap;
+ private:
+  vector<string> mapHeader;
+  vector<vector<string>> stmtNoProcMap;
 
  public:
   explicit CallsTable();
