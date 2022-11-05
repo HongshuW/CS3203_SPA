@@ -31,6 +31,10 @@ bool PatternTable::isSameExpression(shared_ptr<ExprNode> pattern,
          isSameExpression(pattern->right, queriedPattern->right);
 }
 
+const vector<shared_ptr<ExprNode>> & PatternTable::getPatternColumn() {
+    return patternColumn;
+}
+
 shared_ptr<Table> PatternTable::getMatchedPatterns(
     ExpressionSpec expressionSpec) {
   ExpressionSpecType expressionSpecType = expressionSpec.expressionSpecType;
