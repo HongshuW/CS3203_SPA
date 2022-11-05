@@ -52,13 +52,13 @@ CallNodeExtractionInterface::extractCallNodesFromProcedures(
       }
     }
     if (!listOfCallNodes.empty()) {
-        unordered_set<string> visitedProcs;
-        auto listOfCallNodesUnique = vector<shared_ptr<CallNode>>();
-        for (auto & node: listOfCallNodes) {
-            if (visitedProcs.count(node->procedureName)) continue;
-            visitedProcs.insert(node->procedureName);
-            listOfCallNodesUnique.push_back(node);
-        }
+      unordered_set<string> visitedProcs;
+      auto listOfCallNodesUnique = vector<shared_ptr<CallNode>>();
+      for (auto& node : listOfCallNodes) {
+        if (visitedProcs.count(node->procedureName)) continue;
+        visitedProcs.insert(node->procedureName);
+        listOfCallNodesUnique.push_back(node);
+      }
       mapCallNodesToProcedures.insert(make_pair(name, listOfCallNodesUnique));
     }
   }
