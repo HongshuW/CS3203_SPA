@@ -5,6 +5,7 @@
 #include "VariableExtractor.h"
 
 #include <queue>
+#include <utility>
 
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/results/EntityResult.h"
@@ -12,10 +13,10 @@
 namespace DE {
 VariableExtractor::VariableExtractor(shared_ptr<DataModifier> dataModifier,
                                      shared_ptr<ProgramNode> programNode)
-    : EntitiesExtractor(dataModifier, programNode) {}
+    : EntitiesExtractor(std::move(dataModifier), std::move(programNode)) {}
 
 shared_ptr<unordered_set<string>> VariableExtractor::extractVariables(
-    shared_ptr<StmtNode> stmtNode) {
+    const shared_ptr<StmtNode>& stmtNode) {
   shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
 
   NodeType nodeType = ASTUtils::getNodeType(stmtNode);

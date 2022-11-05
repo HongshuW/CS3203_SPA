@@ -4,11 +4,13 @@
 
 #include "ProcedureExtractor.h"
 
+#include <utility>
+
 #include "design_extractor/results/EntityResult.h"
 namespace DE {
 ProcedureExtractor::ProcedureExtractor(shared_ptr<DataModifier> dataModifier,
                                        shared_ptr<ProgramNode> programNode)
-    : EntitiesExtractor(dataModifier, programNode) {}
+    : EntitiesExtractor(std::move(dataModifier), std::move(programNode)) {}
 
 shared_ptr<ExtractorResult> ProcedureExtractor::extract() {
   shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();

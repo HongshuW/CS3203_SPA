@@ -5,6 +5,7 @@
 #include "WhilePatternExtractor.h"
 
 #include <queue>
+#include <utility>
 
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/results/RelationResult.h"
@@ -12,7 +13,7 @@
 namespace DE {
 WhilePatternExtractor::WhilePatternExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : IfWhilePatternExtractor(dataModifier, programNode) {}
+    : IfWhilePatternExtractor(std::move(dataModifier), std::move(programNode)) {}
 
 shared_ptr<ExtractorResult> WhilePatternExtractor::extract() {
   for (auto &procedureNode : programNode->procedureList) {
@@ -21,7 +22,7 @@ shared_ptr<ExtractorResult> WhilePatternExtractor::extract() {
     while (!queue.empty()) {
       auto stmtList = queue.front();
       queue.pop();
-      for (auto stmtNode : stmtList) {
+      for (const auto& stmtNode : stmtList) {
         NodeType nodeType = ASTUtils::getNodeType(stmtNode);
         switch (nodeType) {
           case AST::WHILE_NODE: {
@@ -30,7 +31,7 @@ shared_ptr<ExtractorResult> WhilePatternExtractor::extract() {
             int stmtNo = stmtNumbers->at(whileNode);
             unordered_set<string> varList =
                 condExprNodeHandler(whileNode->condExpr);
-            for (string var : varList) {
+            for (const string& var : varList) {
               vector<string> whileEntry;
               whileEntry.push_back(to_string(stmtNo));
               whileEntry.push_back(var);

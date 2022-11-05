@@ -4,12 +4,14 @@
 
 #include "UsesRelationExtractor.h"
 
+#include <utility>
+
 #include "AST/utils/ASTUtils.h"
 
 namespace DE {
 UsesRelationExtractor::UsesRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(dataModifier, programNode) {
+    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
   output = make_shared<list<vector<string>>>();
   proceduresToUsedVarsMap =
       make_shared<unordered_map<string, shared_ptr<unordered_set<string>>>>();
@@ -17,7 +19,7 @@ UsesRelationExtractor::UsesRelationExtractor(
 }
 
 void UsesRelationExtractor::initProceduresToUsedVarsMap() {
-  for (auto procedureNode : programNode->procedureList) {
+  for (const auto& procedureNode : programNode->procedureList) {
     shared_ptr<list<vector<string>>> result =
         make_shared<list<vector<string>>>();
     extractUsesSHelper(procedureNode, result);
@@ -32,14 +34,14 @@ void UsesRelationExtractor::initProceduresToUsedVarsMap() {
 }
 
 unordered_set<string> UsesRelationExtractor::extractUsesSHelper(
-    shared_ptr<ASTNode> node, shared_ptr<list<vector<string>>> result) {
+    const shared_ptr<ASTNode>& node, const shared_ptr<list<vector<string>>>& result) {
   NodeType nodeType = ASTUtils::getNodeType(node);
 
   if (nodeType == AST::PROCEDURE_NODE) {
     shared_ptr<ProcedureNode> procedureNode1 =
         dynamic_pointer_cast<ProcedureNode>(node);
     unordered_set<string> usedVarsProcedure = unordered_set<string>();
-    for (auto stmtNode : procedureNode1->stmtList) {
+    for (const auto& stmtNode : procedureNode1->stmtList) {
       auto fromChild = extractUsesSHelper(stmtNode, result);
       usedVarsProcedure.insert(fromChild.begin(), fromChild.end());
     }
@@ -58,12 +60,12 @@ unordered_set<string> UsesRelationExtractor::extractUsesSHelper(
       shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(node);
       unordered_set<string> usedVarsIf = unordered_set<string>();
 
-      for (auto child : ifNode->ifStmtList) {
+      for (const auto& child : ifNode->ifStmtList) {
         auto fromChild = extractUsesSHelper(child, result);
         usedVarsIf.insert(fromChild.begin(), fromChild.end());
       }
 
-      for (auto child : ifNode->elseStmtList) {
+      for (const auto& child : ifNode->elseStmtList) {
         auto fromChild = extractUsesSHelper(child, result);
         usedVarsIf.insert(fromChild.begin(), fromChild.end());
       }
@@ -81,7 +83,7 @@ unordered_set<string> UsesRelationExtractor::extractUsesSHelper(
       shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(node);
       unordered_set<string> usedVarsWhile = unordered_set<string>();
 
-      for (auto child : whileNode->stmtList) {
+      for (const auto& child : whileNode->stmtList) {
         auto fromChild = extractUsesSHelper(child, result);
         usedVarsWhile.insert(fromChild.begin(), fromChild.end());
       }
@@ -106,7 +108,7 @@ unordered_set<string> UsesRelationExtractor::extractUsesSHelper(
       return variables;
     }
     default: {
-      return unordered_set<string>();
+      return {};
     }
   }
 }

@@ -4,16 +4,18 @@
 
 #include "UsesPRelationExtractor.h"
 
+#include <utility>
+
 #include "design_extractor/results/RelationResult.h"
 namespace DE {
 UsesPRelationExtractor::UsesPRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : UsesRelationExtractor(dataModifier, programNode) {}
+    : UsesRelationExtractor(std::move(dataModifier), std::move(programNode)) {}
 
 shared_ptr<ExtractorResult> UsesPRelationExtractor::extract() {
   auto mappedCallNodesToProcedures =
       extractCallNodesFromProcedures(programNode);
-  for (auto pair : *proceduresToUsedVarsMap) {
+  for (const auto& pair : *proceduresToUsedVarsMap) {
     unordered_set<string> uniqueVarList = unordered_set<string>();
     string procedureName = pair.first;
     auto currentUsedVarList = pair.second;
@@ -27,7 +29,7 @@ shared_ptr<ExtractorResult> UsesPRelationExtractor::extract() {
         callNodes = mappedCallNodesToProcedures.at(procedureName);
       }
       unordered_set<string> visitedProcs;
-      for (auto node : callNodes) {
+      for (const auto& node : callNodes) {
         if (visitedProcs.count(node->procedureName)) continue;
         visitedProcs.insert(node->procedureName);
         extractVariablesFromCallNodesInProceduresToList(
@@ -36,7 +38,7 @@ shared_ptr<ExtractorResult> UsesPRelationExtractor::extract() {
       }
     }
 
-    for (auto v : uniqueVarList) {
+    for (const auto& v : uniqueVarList) {
       vector<string> usePEntry;
       usePEntry.push_back(procedureName);
       usePEntry.push_back(v);

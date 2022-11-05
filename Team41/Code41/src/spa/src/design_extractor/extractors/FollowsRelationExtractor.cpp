@@ -5,6 +5,7 @@
 #include "FollowsRelationExtractor.h"
 
 #include <queue>
+#include <utility>
 
 #include "AST/ASTNode.h"
 #include "AST/utils/ASTUtils.h"
@@ -12,14 +13,14 @@
 namespace DE {
 FollowsRelationExtractor::FollowsRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(dataModifier, programNode) {
+    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
   initListOfStmtList();
   output = make_shared<list<vector<string>>>();
 }
 
 void FollowsRelationExtractor::initListOfStmtList() {
   vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-  for (auto procedureNode : procedureList) {
+  for (const auto& procedureNode : procedureList) {
     queue<vector<shared_ptr<StmtNode>>> queue;
     queue.push(procedureNode->stmtList);
     // to do: refactor deep nesting
@@ -27,7 +28,7 @@ void FollowsRelationExtractor::initListOfStmtList() {
       auto stmtList = queue.front();
       queue.pop();
       listOfStmtList.push_back(stmtList);
-      for (auto stmtNode : stmtList) {
+      for (const auto& stmtNode : stmtList) {
         NodeType nodeType = ASTUtils::getNodeType(stmtNode);
         switch (nodeType) {
           case AST::IF_NODE: {
@@ -54,19 +55,19 @@ void FollowsRelationExtractor::initListOfStmtList() {
 }
 
 shared_ptr<ExtractorResult> FollowsRelationExtractor::extract() {
-  for (auto stmtList : listOfStmtList) {
+  for (const auto& stmtList : listOfStmtList) {
     extractHelper(stmtList);
   }
   return make_shared<RelationResult>(output);
 }
 
 void FollowsRelationExtractor::extractHelper(
-    vector<shared_ptr<StmtNode>> stmtList) {
+    const vector<shared_ptr<StmtNode>>& stmtList) {
   vector<int> stmtNoList;
   if (stmtList.size() <= 1) {
     return;
   } else {
-    for (auto stmtNode : stmtList) {
+    for (const auto& stmtNode : stmtList) {
       int stmtNo = stmtNumbers->at(stmtNode);
       stmtNoList.push_back(stmtNo);
     }
@@ -86,7 +87,7 @@ void FollowsRelationExtractor::extractHelper(
 void FollowsRelationExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<RelationResult> relationResult =
       static_pointer_cast<RelationResult>(result);
-  for (auto entry : *relationResult->getResult()) {
+  for (const auto& entry : *relationResult->getResult()) {
     dataModifier->saveFollows(entry);
   }
 }

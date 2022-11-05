@@ -6,7 +6,7 @@
 
 namespace DE {
 QueryTimeDesignExtractor::QueryTimeDesignExtractor(
-    shared_ptr<ProgramNode> programNode)
+    const shared_ptr<ProgramNode>& programNode)
     : programNode(programNode) {
   stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
 }

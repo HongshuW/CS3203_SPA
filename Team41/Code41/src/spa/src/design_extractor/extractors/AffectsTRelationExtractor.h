@@ -18,23 +18,23 @@ class AffectsTRelationExtractor : public AffectsCommonExtractor {
 
   shared_ptr<vector<string>> extractNoWildcard(int start, int end);
   bool extractNoWildcardDFS(int curr, int target,
-                            shared_ptr<unordered_set<int>> visited);
+                            const shared_ptr<unordered_set<int>>& visited);
 
   shared_ptr<vector<string>> extractWithStartGiven(int start);
   void extractWithStartGivenDFS(int curr, int start,
-                                shared_ptr<vector<string>> result,
-                                shared_ptr<unordered_set<int>> visited);
+                                const shared_ptr<vector<string>>& result,
+                                const shared_ptr<unordered_set<int>>& visited);
 
   shared_ptr<vector<string>> extractWithEndGiven(int end);
   void extractWithEndGivenDFS(int curr, int end,
-                              shared_ptr<vector<string>> result,
-                              shared_ptr<unordered_set<int>> visited);
+                              const shared_ptr<vector<string>>& result,
+                              const shared_ptr<unordered_set<int>>& visited);
   void initAffectsAdjList();
   void initAffectsAdjListReversed();
   void clearCache() override;
 
  public:
-  AffectsTRelationExtractor(shared_ptr<ProgramNode> programNode);
+  explicit AffectsTRelationExtractor(shared_ptr<ProgramNode> programNode);
   shared_ptr<ExtractorResult> extract(StmtNoArgs args) override;
   shared_ptr<ExtractorResult> extractAllRelations() override;
 };

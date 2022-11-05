@@ -4,9 +4,11 @@
 
 #include "AssignPatternResult.h"
 
+#include <utility>
+
 namespace DE {
 AssignResult AssignPatternResult::getResult() { return result; }
 
 AssignPatternResult::AssignPatternResult(AssignResult result)
-    : result(result) {}
+    : result(std::move(result)) {}
 }  // namespace DE

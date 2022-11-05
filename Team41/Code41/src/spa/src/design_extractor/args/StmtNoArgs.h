@@ -8,20 +8,16 @@
 class StmtNoArgs {
  public:
   StmtNoArgs();
-  int getStartStmtNo() { return startStmtNo; };
-  int getEndStmtNo() { return endStmtNo; }
+  [[nodiscard]] int getStartStmtNo() const;
+  [[nodiscard]] int getEndStmtNo() const;
 
-  void setStartStmtNo(int start) { startStmtNo = start; };
-  void setEndStmtNo(int end) { endStmtNo = end; };
-  void setStartAndEndStmtNo(int start, int end) {
-    startStmtNo = start;
-    endStmtNo = end;
-  }
+  void setStartStmtNo(int start);
+  void setEndStmtNo(int end);
+  void setStartAndEndStmtNo(int start, int end);
 
-  bool startAndEndExists();
-  bool startExistsOnly();
-  bool endExistsOnly();
-  bool noArgsProvided();
+  [[nodiscard]] bool startAndEndExists() const;
+  [[nodiscard]] bool startExistsOnly() const;
+  [[nodiscard]] bool endExistsOnly() const;
 
  private:
   int startStmtNo = 0;

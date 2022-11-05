@@ -14,19 +14,19 @@ class IfWhilePatternExtractor : public AbstractDesignExtractor {
                           shared_ptr<ProgramNode> programNode);
   shared_ptr<list<vector<string>>> output;
 
-  unordered_set<string> condExprNodeHandler(shared_ptr<CondExprNode> condExpr);
+  unordered_set<string> condExprNodeHandler(const shared_ptr<CondExprNode>& condExpr);
 
  private:
-  void relExprNodeHandler(shared_ptr<RelExprNode> relExpr,
+  void relExprNodeHandler(const shared_ptr<RelExprNode>& relExpr,
                           unordered_set<string>& varList);
-  void exprNodeHandler(shared_ptr<ExprNode> expr,
+  void exprNodeHandler(const shared_ptr<ExprNode>& expr,
                        unordered_set<string>& varList);
-  void getRelExprNodesDFS(shared_ptr<CondExprNode> condExpr,
+  void getRelExprNodesDFS(const shared_ptr<CondExprNode>& condExpr,
                           vector<shared_ptr<RelExprNode>>& relExprNodeList);
 
-  void getVarFromExprNodesDFS(shared_ptr<ExprNode> expr,
+  void getVarFromExprNodesDFS(const shared_ptr<ExprNode>& expr,
                               unordered_set<string>& varList);
 };
-};  // namespace DE
+}  // namespace DE
 
 #endif  // SPA_IFWHILEPATTERNEXTRACTOR_H

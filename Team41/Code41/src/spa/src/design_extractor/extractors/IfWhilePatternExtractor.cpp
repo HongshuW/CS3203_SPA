@@ -3,16 +3,18 @@
 //
 
 #include "IfWhilePatternExtractor.h"
+
+#include <utility>
 namespace DE {
 
 IfWhilePatternExtractor::IfWhilePatternExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(dataModifier, programNode) {
+    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
   output = make_shared<list<vector<string>>>();
 }
 
 unordered_set<string> IfWhilePatternExtractor::condExprNodeHandler(
-    shared_ptr<CondExprNode> condExpr) {
+    const shared_ptr<CondExprNode>& condExpr) {
   vector<shared_ptr<RelExprNode>> relExprNodeList;
   unordered_set<string> varList;
 
@@ -28,27 +30,27 @@ unordered_set<string> IfWhilePatternExtractor::condExprNodeHandler(
     getRelExprNodesDFS(condExpr->condExprRHS, relExprNodeList);
   }
 
-  for (auto relExpr : relExprNodeList) {
+  for (const auto& relExpr : relExprNodeList) {
     relExprNodeHandler(relExpr, varList);
   }
   return varList;
 }
 
 void IfWhilePatternExtractor::relExprNodeHandler(
-    shared_ptr<RelExprNode> relExpr, unordered_set<string> &varList) {
+    const shared_ptr<RelExprNode>& relExpr, unordered_set<string> &varList) {
   auto exprLHS = relExpr->exprNodeLHS;
   auto exprRHS = relExpr->exprNodeRHS;
   exprNodeHandler(exprLHS, varList);
   exprNodeHandler(exprRHS, varList);
 }
 
-void IfWhilePatternExtractor::exprNodeHandler(shared_ptr<ExprNode> expr,
+void IfWhilePatternExtractor::exprNodeHandler(const shared_ptr<ExprNode>& expr,
                                               unordered_set<string> &varList) {
   getVarFromExprNodesDFS(expr, varList);
 }
 
 void IfWhilePatternExtractor::getVarFromExprNodesDFS(
-    shared_ptr<ExprNode> expr, unordered_set<string> &varList) {
+    const shared_ptr<ExprNode>& expr, unordered_set<string> &varList) {
   if (expr->isVariableNode()) {
     varList.insert(expr->expr);
   }
@@ -62,7 +64,7 @@ void IfWhilePatternExtractor::getVarFromExprNodesDFS(
 }
 
 void IfWhilePatternExtractor::getRelExprNodesDFS(
-    shared_ptr<CondExprNode> condExpr,
+    const shared_ptr<CondExprNode>& condExpr,
     vector<shared_ptr<RelExprNode>> &relExprNodeList) {
   if (condExpr->relExprNode) {
     relExprNodeList.push_back(condExpr->relExprNode);

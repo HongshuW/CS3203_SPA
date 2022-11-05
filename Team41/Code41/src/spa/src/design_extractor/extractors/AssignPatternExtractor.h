@@ -10,7 +10,7 @@
 namespace DE {
 
 class AssignPatternExtractor : public AbstractDesignExtractor {
-  void extractorHelper(shared_ptr<ASTNode> node);
+  void extractorHelper(const shared_ptr<ASTNode>& node);
   AssignResult output;
 
  public:

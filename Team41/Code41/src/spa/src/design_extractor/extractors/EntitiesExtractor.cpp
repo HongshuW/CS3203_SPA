@@ -5,6 +5,7 @@
 #include "EntitiesExtractor.h"
 
 #include <queue>
+#include <utility>
 
 #include "AST/ASTNode.h"
 #include "AST/utils/ASTUtils.h"
@@ -13,7 +14,7 @@ namespace DE {
 
 EntitiesExtractor::EntitiesExtractor(shared_ptr<DataModifier> dataModifier,
                                      shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(dataModifier, programNode) {
+    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
   stmtNodeList = extractStmtNodes();
 }
 
@@ -34,10 +35,10 @@ vector<shared_ptr<StmtNode>> EntitiesExtractor::extractStmtNodes() {
         case AST::IF_NODE: {
           output.push_back(node);
           shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(node);
-          for (auto childStmtNode : ifNode->ifStmtList) {
+          for (const auto& childStmtNode : ifNode->ifStmtList) {
             queue.push(childStmtNode);
           }
-          for (auto childStmtNode : ifNode->elseStmtList) {
+          for (const auto& childStmtNode : ifNode->elseStmtList) {
             queue.push(childStmtNode);
           }
           break;
@@ -46,7 +47,7 @@ vector<shared_ptr<StmtNode>> EntitiesExtractor::extractStmtNodes() {
           output.push_back(node);
           shared_ptr<WhileNode> whileNode =
               dynamic_pointer_cast<WhileNode>(node);
-          for (auto childStmtNode : whileNode->stmtList) {
+          for (const auto& childStmtNode : whileNode->stmtList) {
             queue.push(childStmtNode);
           }
           break;

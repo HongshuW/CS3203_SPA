@@ -39,7 +39,7 @@ shared_ptr<ExtractorResult> CallsRelationExtractor::extract() {
 void CallsRelationExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<RelationResult> callsResult =
       static_pointer_cast<RelationResult>(result);
-  for (auto entry : *callsResult->getResult()) {
+  for (const auto& entry : *callsResult->getResult()) {
     dataModifier->saveCalls(entry);
   }
 }

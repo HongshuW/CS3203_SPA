@@ -5,16 +5,17 @@
 #include "ConstantExtractor.h"
 
 #include <queue>
+#include <utility>
 
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/results/EntityResult.h"
 namespace DE {
 ConstantExtractor::ConstantExtractor(shared_ptr<DataModifier> dataModifier,
                                      shared_ptr<ProgramNode> programNode)
-    : EntitiesExtractor(dataModifier, programNode) {}
+    : EntitiesExtractor(std::move(dataModifier), std::move(programNode)) {}
 
 shared_ptr<unordered_set<string>> ConstantExtractor::extractConstants(
-    shared_ptr<StmtNode> stmtNode) {
+    const shared_ptr<StmtNode>& stmtNode) {
   shared_ptr<unordered_set<string>> set = make_shared<unordered_set<string>>();
   NodeType nodeType = ASTUtils::getNodeType(stmtNode);
   switch (nodeType) {
@@ -49,7 +50,7 @@ shared_ptr<unordered_set<string>> ConstantExtractor::extractConstants(
 }
 
 unordered_set<string> ConstantExtractor::getConstantsFromExprNode(
-    shared_ptr<ExprNode> exprNode) {
+    const shared_ptr<ExprNode>& exprNode) {
   unordered_set<string> ans;
   if (!exprNode) return ans;
   queue<shared_ptr<ExprNode>> queue;
@@ -72,7 +73,7 @@ unordered_set<string> ConstantExtractor::getConstantsFromExprNode(
 }
 
 unordered_set<string> ConstantExtractor::getConstantsFromCondExprNode(
-    shared_ptr<CondExprNode> condExprNode) {
+    const shared_ptr<CondExprNode>& condExprNode) {
   unordered_set<string> ans;
   if (!condExprNode) return ans;
   queue<shared_ptr<CondExprNode>> queue;

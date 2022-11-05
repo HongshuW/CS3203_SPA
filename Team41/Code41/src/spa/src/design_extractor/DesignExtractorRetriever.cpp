@@ -4,10 +4,12 @@
 
 #include "DesignExtractorRetriever.h"
 
+#include <utility>
+
 namespace DE {
 DesignExtractorRetriever::DesignExtractorRetriever(
     shared_ptr<ProgramNode> programNode)
-    : programNode(programNode) {
+    : programNode(std::move(programNode)) {
   initialize();
 }
 

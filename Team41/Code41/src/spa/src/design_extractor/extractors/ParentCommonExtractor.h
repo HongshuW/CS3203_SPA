@@ -24,7 +24,7 @@ class ParentCommonExtractor : public AbstractDesignExtractor {
                         shared_ptr<ProgramNode> programNode);
   //! Only child components can access this method
   shared_ptr<map<int, vector<int>>> extractParentHashmap(
-      shared_ptr<ProgramNode> rootPtr);
+      const shared_ptr<ProgramNode>& rootPtr);
 };
 
 }  // namespace DE
