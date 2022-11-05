@@ -5,7 +5,7 @@
 #ifndef SPA_SPAMANAGER_H
 #define SPA_SPAMANAGER_H
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <memory>
 
@@ -31,8 +31,6 @@ class SPAManager {
   //! Entry point of the program, each program should have one SPAManager
  private:
   shared_ptr<PKBStorage> pkbStorage;
-  shared_ptr<DataModifier> dataModifier;
-  shared_ptr<DataRetriever> dataRetriever;
   shared_ptr<CacheManager> cacheManager;
 
  public:
