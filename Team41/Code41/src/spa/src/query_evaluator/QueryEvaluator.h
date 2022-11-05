@@ -21,34 +21,34 @@ class QueryEvaluator {
   shared_ptr<Query> query;
   vector<string> selected;
 
-  DesignEntity getDesignEntity(Synonym synonym);
+  DesignEntity getDesignEntity(const Synonym& synonym);
 
   vector<string> evaluateNoConditionSelectTupleQuery(
-      shared_ptr<Query> query, shared_ptr<ConcreteClauseVisitor> clauseVisitor);
+					const shared_ptr<Query>& sharedPtr, const shared_ptr<ConcreteClauseVisitor>& clauseVisitor);
 
   vector<string> evaluateSelectBoolQuery(
-      shared_ptr<ConcreteClauseVisitor> clauseVisitor,
-      shared_ptr<DataPreprocessor> dataPreprocessor, ConnectedClauseGroups ccg);
+      const shared_ptr<ConcreteClauseVisitor>& clauseVisitor,
+      const shared_ptr<DataPreprocessor>& dataPreprocessor, const ConnectedClauseGroups& ccg);
 
   vector<string> evaluateSelectTupleQuery(
-      shared_ptr<ConcreteClauseVisitor> clauseVisitor,
-      shared_ptr<DataPreprocessor> dataPreprocessor, ConnectedClauseGroups ccg);
+      const shared_ptr<ConcreteClauseVisitor>& clauseVisitor,
+      const shared_ptr<DataPreprocessor>& dataPreprocessor, const ConnectedClauseGroups& ccg);
 
   vector<string> removeDup(vector<string> vec);
 
   vector<string> formatConditionalQueryResult(
-      shared_ptr<Table> resultTable, shared_ptr<vector<Elem>> tuple,
-      shared_ptr<Query> query, shared_ptr<DataPreprocessor> dataPreprocessor);
+					shared_ptr<Table> resultTable, const shared_ptr<vector<Elem>>& tuple,
+					const shared_ptr<Query>& sharedPtr, const shared_ptr<DataPreprocessor>& dataPreprocessor);
 
-  vector<string> projectResult(shared_ptr<Table> resultTable,
-                               shared_ptr<vector<Elem>> tuple);
+  vector<string> projectResult(const shared_ptr<Table>& resultTable,
+                               const shared_ptr<vector<Elem>>& tuple);
 
   bool isInSelect(vector<string> headers);
 
  public:
   explicit QueryEvaluator(shared_ptr<DataRetriever> dataRetriever);
 
-  vector<string> evaluate(shared_ptr<Query> query);
+  vector<string> evaluate(const shared_ptr<Query>& queryPtr);
 };
 
 }  // namespace QE

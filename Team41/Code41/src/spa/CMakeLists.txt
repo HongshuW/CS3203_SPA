@@ -161,7 +161,6 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/pattern_clauses/PatternClause.cpp
         src/query_evaluator/constants/ClauseVisitorConstants.cpp
         src/query_evaluator/constants/ClauseVisitorConstants.h
-        src/query_evaluator/IVisitor.cpp
         src/query_evaluator/IVisitor.h
         src/query_builder/clauses/IVisitorHost.h
         src/query_builder/clauses/AbstractClause.h

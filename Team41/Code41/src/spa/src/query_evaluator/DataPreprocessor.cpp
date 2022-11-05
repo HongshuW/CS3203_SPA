@@ -63,8 +63,8 @@ shared_ptr<Table> DataPreprocessor::getAllByDesignEntity(
   return resultTable;
 }
 
-DesignEntity DataPreprocessor::getDesignEntityOfSyn(Synonym synonym) {
-  for (auto d : *declarations) {
+DesignEntity DataPreprocessor::getDesignEntityOfSyn(const Synonym& synonym) {
+  for (const auto& d : *declarations) {
     if (synonym.synonym == d.getSynonym().synonym) {
       return d.getDesignEntity();
     }
@@ -92,14 +92,14 @@ vector<string> DataPreprocessor::getEntityNames(DesignEntity designEntity) {
     auto table = this->dataRetriever->getTableByDesignEntity(designEntity);
     return table.getColumnByName(table.getHeader()[ENTITY_NAME_COL_IDX]);
   }
-  return vector<string>();
+  return {};
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByWith(
-    shared_ptr<WithClause> withClause) {
+    const shared_ptr<WithClause>& withClause) {
   bool hasSynonym = withClause->lhsType() == WithRefType::ATTR_REF ||
                     withClause->rhsType() == WithRefType::ATTR_REF;
-  // if the with clause does not have synonym, dont have to care what's inside
+  // if the with clause does not have synonym, don't have to care what's inside
   // since I have checked this clause evaluates to true
   if (!hasSynonym) return QEUtils::getScalarResponse(true);
 
@@ -113,7 +113,7 @@ shared_ptr<Table> DataPreprocessor::getTableByWith(
   int colOffSet = 0;
 
   for (auto withRef : withRefs) {
-    WithRefType withRefType = WithClause::getWithRefType(withRef.index());
+    WithRefType withRefType = WithClause::getWithRefType((int) withRef.index());
     if (withRefType == QB::WithRefType::INTEGER)
       intRef = get<WithClause::WITH_REF_INT_IDX>(withRef);
     if (withRefType == QB::WithRefType::IDENT) {
@@ -184,7 +184,7 @@ shared_ptr<Table> DataPreprocessor::getTableByWith(
 }
 
 void DataPreprocessor::filterTableByColValueEquality(
-    shared_ptr<Table> table, const vector<int> &comparedCols) {
+    const shared_ptr<Table>& table, const vector<int> &comparedCols) {
   Table filteredTable = Table();
 
   filteredTable.renameHeader(table->getHeader());
@@ -206,7 +206,7 @@ void DataPreprocessor::filterTableByColValueEquality(
 }
 
 void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
-                                                     shared_ptr<Table> table) {
+                                                     const shared_ptr<Table>& table) {
   // RefType can be synonym, integer, underscore or string
   RefType ref1Type = getRefType(ref1);
   RefType ref2Type = getRefType(ref2);
@@ -288,10 +288,10 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
 
 DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever,
                                    Declarations declarations)
-    : dataRetriever(dataRetriever), declarations(declarations) {}
+    : dataRetriever(std::move(dataRetriever)), declarations(std::move(declarations)) {}
 
 shared_ptr<Table> DataPreprocessor::getTableByAssignPattern(
-    shared_ptr<QB::AssignPatternClause> assignPatternClause) {
+    const shared_ptr<QB::AssignPatternClause>& assignPatternClause) {
   auto table = make_shared<Table>(
       dataRetriever->getAssignPatternTable(assignPatternClause->arg3));
   filterSingleClauseResultTable(assignPatternClause->arg1,
@@ -300,7 +300,7 @@ shared_ptr<Table> DataPreprocessor::getTableByAssignPattern(
 }
 
 shared_ptr<Table> DataPreprocessor::getIfPatternTable(
-    shared_ptr<QB::IfPatternClause> ifPatternClause) {
+    const shared_ptr<QB::IfPatternClause>& ifPatternClause) {
   auto table = make_shared<Table>(dataRetriever->getIfPatternTable());
   filterSingleClauseResultTable(ifPatternClause->arg1, ifPatternClause->arg2,
                                 table);
@@ -308,7 +308,7 @@ shared_ptr<Table> DataPreprocessor::getIfPatternTable(
 }
 
 shared_ptr<Table> DataPreprocessor::getWhilePatternTable(
-    shared_ptr<WhilePatternClause> whilePatternClause) {
+    const shared_ptr<WhilePatternClause>& whilePatternClause) {
   auto table = make_shared<Table>(dataRetriever->getWhilePatternTable());
   filterSingleClauseResultTable(whilePatternClause->arg1,
                                 whilePatternClause->arg2, table);
@@ -316,7 +316,7 @@ shared_ptr<Table> DataPreprocessor::getWhilePatternTable(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByFollows(
-    shared_ptr<FollowsClause> followsClause) {
+    const shared_ptr<FollowsClause>& followsClause) {
   auto table = make_shared<Table>(dataRetriever->getFollowsTable());
   filterSingleClauseResultTable(followsClause->arg1, followsClause->arg2,
                                 table);
@@ -324,7 +324,7 @@ shared_ptr<Table> DataPreprocessor::getTableByFollows(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByFollowsT(
-    shared_ptr<FollowsTClause> followsTClause) {
+    const shared_ptr<FollowsTClause>& followsTClause) {
   auto table = make_shared<Table>(dataRetriever->getFollowsTTable());
   filterSingleClauseResultTable(followsTClause->arg1, followsTClause->arg2,
                                 table);
@@ -332,7 +332,7 @@ shared_ptr<Table> DataPreprocessor::getTableByFollowsT(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByAffects(
-    shared_ptr<AffectsClause> affectsClause) {
+    const shared_ptr<AffectsClause>& affectsClause) {
   const vector<DesignEntity> validTypes = {DesignEntity::STMT,
                                            DesignEntity::ASSIGN};
   const shared_ptr<Table> EMPTY_RESULT = make_shared<Table>();
@@ -404,7 +404,7 @@ shared_ptr<Table> DataPreprocessor::getTableByAffects(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByAffectsT(
-    shared_ptr<AffectsTClause> affectsTClause) {
+    const shared_ptr<AffectsTClause>& affectsTClause) {
   const shared_ptr<Table> EMPTY_RESULT = make_shared<Table>();
   const vector<DesignEntity> validTypes = {DesignEntity::STMT,
                                            DesignEntity::ASSIGN};
@@ -476,21 +476,21 @@ shared_ptr<Table> DataPreprocessor::getTableByAffectsT(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByCalls(
-    shared_ptr<CallsClause> callsClause) {
+    const shared_ptr<CallsClause>& callsClause) {
   auto table = make_shared<Table>(dataRetriever->getCallsTable());
   filterSingleClauseResultTable(callsClause->arg1, callsClause->arg2, table);
   return table;
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByCallsT(
-    shared_ptr<CallsTClause> callsTClause) {
+    const shared_ptr<CallsTClause>& callsTClause) {
   auto table = make_shared<Table>(dataRetriever->getCallsTTable());
   filterSingleClauseResultTable(callsTClause->arg1, callsTClause->arg2, table);
   return table;
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByModifiesP(
-    shared_ptr<ModifiesPClause> modifiesPClause) {
+    const shared_ptr<ModifiesPClause>& modifiesPClause) {
   auto table = make_shared<Table>(dataRetriever->getModifiesPTable());
   filterSingleClauseResultTable(modifiesPClause->arg1, modifiesPClause->arg2,
                                 table);
@@ -498,7 +498,7 @@ shared_ptr<Table> DataPreprocessor::getTableByModifiesP(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByModifiesS(
-    shared_ptr<ModifiesSClause> modifiesSClause) {
+    const shared_ptr<ModifiesSClause>& modifiesSClause) {
   auto table = make_shared<Table>(dataRetriever->getModifiesSTable());
   filterSingleClauseResultTable(modifiesSClause->arg1, modifiesSClause->arg2,
                                 table);
@@ -506,14 +506,14 @@ shared_ptr<Table> DataPreprocessor::getTableByModifiesS(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByNext(
-    shared_ptr<NextClause> nextClause) {
+    const shared_ptr<NextClause>& nextClause) {
   auto table = make_shared<Table>(dataRetriever->getNextTable());
   filterSingleClauseResultTable(nextClause->arg1, nextClause->arg2, table);
   return table;
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByNextT(
-    shared_ptr<NextTClause> nextTClause) {
+    const shared_ptr<NextTClause>& nextTClause) {
   Ref ref1 = nextTClause->arg1;
   Ref ref2 = nextTClause->arg2;
   RefType ref1Type = getRefType(ref1);
@@ -548,14 +548,14 @@ shared_ptr<Table> DataPreprocessor::getTableByNextT(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByParent(
-    shared_ptr<ParentClause> parentClause) {
+    const shared_ptr<ParentClause>& parentClause) {
   auto table = make_shared<Table>(dataRetriever->getParentTable());
   filterSingleClauseResultTable(parentClause->arg1, parentClause->arg2, table);
   return table;
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByParentT(
-    shared_ptr<ParentTClause> parentTClause) {
+    const shared_ptr<ParentTClause>& parentTClause) {
   auto table = make_shared<Table>(dataRetriever->getParentTTable());
   filterSingleClauseResultTable(parentTClause->arg1, parentTClause->arg2,
                                 table);
@@ -563,14 +563,14 @@ shared_ptr<Table> DataPreprocessor::getTableByParentT(
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByUsesP(
-    shared_ptr<UsesPClause> usesPClause) {
+    const shared_ptr<UsesPClause>& usesPClause) {
   auto table = make_shared<Table>(dataRetriever->getUsesPTable());
   filterSingleClauseResultTable(usesPClause->arg1, usesPClause->arg2, table);
   return table;
 }
 
 shared_ptr<Table> DataPreprocessor::getTableByUsesS(
-    shared_ptr<UsesSClause> usesSClause) {
+    const shared_ptr<UsesSClause>& usesSClause) {
   auto table = make_shared<Table>(dataRetriever->getUsesSTable());
   filterSingleClauseResultTable(usesSClause->arg1, usesSClause->arg2, table);
   return table;
@@ -589,7 +589,7 @@ shared_ptr<Table> DataPreprocessor::getPrintVariableTable() {
 }
 
 shared_ptr<Table> DataPreprocessor::getNoConditionSelectClauseResult(
-    shared_ptr<SelectClause> selectClause) {
+    const shared_ptr<SelectClause>& selectClause) {
   TableCombiner tableCombiner = TableCombiner();
   auto resultTable = make_shared<Table>();
   for (auto elem : *selectClause->returnResults) {
@@ -642,7 +642,7 @@ shared_ptr<Table> DataPreprocessor::getNoConditionSelectClauseResult(
   return resultTable;
 }
 
-bool DataPreprocessor::hasResult(shared_ptr<WithClause> withClause) {
+bool DataPreprocessor::hasResult(const shared_ptr<WithClause>& withClause) {
   Value valLHS;
   Value valRHS;
 
@@ -657,7 +657,7 @@ bool DataPreprocessor::hasResult(shared_ptr<WithClause> withClause) {
   valRHS = values->at(1);
 
   // compare two values, assumption made: two values are of the same lhsType,
-  // i.e either int or string
+  // e.g. either int or string
   switch (valLHS.index()) {
     case ClauseVisitorConstants::STR_VAL_IDX: {
       string lhsStr = get<ClauseVisitorConstants::STR_VAL_IDX>(valLHS);
@@ -740,7 +740,7 @@ std::vector<int> DataPreprocessor::intersection(std::vector<int> v1,
 }
 
 void QE::DataPreprocessor::getWithValues(vector<WithRef> withRefs,
-                                         shared_ptr<vector<Value>> values) {
+                                         const shared_ptr<vector<Value>>& values) {
   for (int i = 0; i < withRefs.size(); i++) {
     if (withRefs[i].index() == WithClause::WITH_REF_IDENT_IDX) {
       values->at(i) = get<WithClause::WITH_REF_IDENT_IDX>(withRefs[i]).identStr;
@@ -782,7 +782,7 @@ void QE::DataPreprocessor::getWithValues(vector<WithRef> withRefs,
       vector<int> constVals;
       vector<string> strVals =
           get<ClauseVisitorConstants::VECTOR_STR_VAL_IDX>(values->at(i));
-      for (auto strVal : strVals) {
+      for (const auto& strVal : strVals) {
         constVals.push_back(stoi(strVal));
       }
       values->at(i) = constVals;
@@ -805,7 +805,7 @@ void QE::DataPreprocessor::getWithValues(vector<WithRef> withRefs,
   }
 }
 
-void DataPreprocessor::filerTableByColumnIdx(shared_ptr<Table> table,
+void DataPreprocessor::filerTableByColumnIdx(const shared_ptr<Table>& table,
                                              int colIdx, const string &value) {
   Table filteredTable = Table();
   filteredTable.renameHeader(table->getHeader());
@@ -821,7 +821,7 @@ void DataPreprocessor::filerTableByColumnIdx(shared_ptr<Table> table,
   }
 }
 
-bool DataPreprocessor::dropUnusedColumns(shared_ptr<Table> table) {
+bool DataPreprocessor::dropUnusedColumns(const shared_ptr<Table>& table) {
   bool hasResult = !table->isBodyEmpty();
   bool isDropped = false;
   // drop unused columns
@@ -848,7 +848,7 @@ bool DataPreprocessor::dropUnusedColumns(shared_ptr<Table> table) {
   return isDropped;
 }
 
-void DataPreprocessor::filerTableByDesignEntity(shared_ptr<Table> table,
+void DataPreprocessor::filerTableByDesignEntity(const shared_ptr<Table>& table,
                                                 int colIdx,
                                                 DesignEntity designEntity) {
   vector<DesignEntity> AVAIL_ENTITIES = {

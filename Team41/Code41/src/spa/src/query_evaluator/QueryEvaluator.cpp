@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <iterator>
 #include <numeric>
+#include <utility>
 #include <vector>
 
 #include "ConcreteClauseVisitor.h"
@@ -28,23 +29,23 @@ const vector<string> TRUE_RESULT = {"TRUE"};
 const vector<string> EMPTY_RESULT = {};
 
 QueryEvaluator::QueryEvaluator(shared_ptr<DataRetriever> dataRetriever)
-    : dataRetriever(dataRetriever) {}
+    : dataRetriever(std::move(dataRetriever)) {}
 
-vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
+vector<string> QueryEvaluator::evaluate(const shared_ptr<Query>& queryPtr) {
   dataRetriever->clearCache();
-  this->query = query;
-  this->declarations = query->declarations;
+  this->query = queryPtr;
+  this->declarations = queryPtr->declarations;
   shared_ptr<DataPreprocessor> dataPreprocessor =
       make_shared<DataPreprocessor>(dataRetriever, declarations);
   shared_ptr<ConcreteClauseVisitor> concreteClauseVisitor =
       make_shared<ConcreteClauseVisitor>(dataPreprocessor);
 
   shared_ptr<QueryOptimizer> queryOptimizer =
-      make_shared<QueryOptimizer>(query);
+      make_shared<QueryOptimizer>(queryPtr);
   ConnectedClauseGroups ccg = queryOptimizer->optimise();
 
   bool isReturnTypeBool =
-      query->selectClause->returnType == QB::ReturnType::BOOLEAN;
+					queryPtr->selectClause->returnType == QB::ReturnType::BOOLEAN;
   return isReturnTypeBool ? evaluateSelectBoolQuery(concreteClauseVisitor,
                                                     dataPreprocessor, ccg)
                           : evaluateSelectTupleQuery(concreteClauseVisitor,
@@ -52,15 +53,15 @@ vector<string> QueryEvaluator::evaluate(shared_ptr<Query> query) {
 }
 
 vector<string> QueryEvaluator::evaluateNoConditionSelectTupleQuery(
-    shared_ptr<Query> query, shared_ptr<ConcreteClauseVisitor> clauseVisitor) {
-  auto resultTable = query->selectClause->accept(clauseVisitor);
+				const shared_ptr<Query>& sharedPtr, const shared_ptr<ConcreteClauseVisitor>& clauseVisitor) {
+  auto resultTable = sharedPtr->selectClause->accept(clauseVisitor);
   vector<string> ans =
-      projectResult(resultTable, query->selectClause->returnResults);
+      projectResult(resultTable, sharedPtr->selectClause->returnResults);
   return removeDup(ans);
 }
 
-DesignEntity QueryEvaluator::getDesignEntity(Synonym synonym) {
-  for (Declaration d : *declarations) {
+DesignEntity QueryEvaluator::getDesignEntity(const Synonym& synonym) {
+  for (const Declaration& d : *declarations) {
     if (!(synonym.synonym == d.getSynonym().synonym)) continue;
     return d.getDesignEntity();
   }
@@ -76,9 +77,9 @@ vector<string> QueryEvaluator::removeDup(vector<string> vec) {
 }
 
 vector<string> QueryEvaluator::formatConditionalQueryResult(
-    shared_ptr<Table> resultTable, shared_ptr<vector<Elem>> tuple,
-    shared_ptr<Query> query, shared_ptr<DataPreprocessor> dataPreprocessor) {
-  if (query->selectClause->returnType == QB::ReturnType::BOOLEAN)
+				shared_ptr<Table> resultTable, const shared_ptr<vector<Elem>>& tuple,
+				const shared_ptr<Query>& sharedPtr, const shared_ptr<DataPreprocessor>& dataPreprocessor) {
+  if (sharedPtr->selectClause->returnType == QB::ReturnType::BOOLEAN)
     return resultTable->isBodyEmpty() ? FALSE_RESULT : TRUE_RESULT;
 
   // cartesian product for any missing synonym
@@ -164,10 +165,10 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
   return projectResult(resultTable, tuple);
 }
 
-vector<string> QueryEvaluator::projectResult(shared_ptr<Table> resultTable,
-                                             shared_ptr<vector<Elem>> tuple) {
+vector<string> QueryEvaluator::projectResult(const shared_ptr<Table>& resultTable,
+                                             const shared_ptr<vector<Elem>>& tuple) {
   size_t ans_size = resultTable->getNumberOfRows();
-  const string EMPTY_STRING = "";
+  const string EMPTY_STRING;
   vector<string> ans = vector<string>(ans_size, EMPTY_STRING);
   const string SPACE_SEPARATOR = " ";
 
@@ -196,8 +197,8 @@ vector<string> QueryEvaluator::projectResult(shared_ptr<Table> resultTable,
 }
 
 vector<string> QueryEvaluator::evaluateSelectBoolQuery(
-    shared_ptr<ConcreteClauseVisitor> clauseVisitor,
-    shared_ptr<DataPreprocessor> dataPreprocessor, ConnectedClauseGroups ccg) {
+    const shared_ptr<ConcreteClauseVisitor>& clauseVisitor,
+    const shared_ptr<DataPreprocessor>& dataPreprocessor, const ConnectedClauseGroups& ccg) {
   // if no condition, return true
   bool hasCondition = !query->suchThatClauses->empty() ||
                       !query->patternClauses->empty() ||
@@ -205,13 +206,13 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(
   if (!hasCondition) return TRUE_RESULT;
 
   // eval truthiness of with clauses
-  for (auto withClause : *query->withClauses) {
+  for (const auto& withClause : *query->withClauses) {
     bool doesConditionExist = dataPreprocessor->hasResult(withClause);
     if (!doesConditionExist) return FALSE_RESULT;
   }
 
   // first evaluate group of clauses without synonyms
-  for (auto noSynClause : *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
+  for (const auto& noSynClause : *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
     auto intermediateTable = noSynClause->accept(clauseVisitor);
     if (intermediateTable->isBodyEmpty()) return FALSE_RESULT;
   }
@@ -223,10 +224,10 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(
       false);  // fill initial table with non-empty false result
 
   // evaluate the rest of the groups
-  for (auto it : *ccg) {
+  for (const auto& it : *ccg) {
     // eval each subgroup
     shared_ptr<Table> subGroupResultTable = make_shared<Table>();
-    for (auto subGroupClause : *it.second) {
+    for (const auto& subGroupClause : *it.second) {
       auto intermediateTable = subGroupClause->accept(clauseVisitor);
       if (intermediateTable->isBodyEmpty()) return FALSE_RESULT;
       subGroupResultTable =
@@ -241,8 +242,8 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(
 }
 
 vector<string> QueryEvaluator::evaluateSelectTupleQuery(
-    shared_ptr<ConcreteClauseVisitor> clauseVisitor,
-    shared_ptr<DataPreprocessor> dataPreprocessor, ConnectedClauseGroups ccg) {
+    const shared_ptr<ConcreteClauseVisitor>& clauseVisitor,
+    const shared_ptr<DataPreprocessor>& dataPreprocessor, const ConnectedClauseGroups& ccg) {
   const int SYN_IDX = 0;
   // convert selected elem to string
   for (auto elem : *query->selectClause->returnResults) {
@@ -261,7 +262,7 @@ vector<string> QueryEvaluator::evaluateSelectTupleQuery(
   }
 
   // evaluate truthiness of with clauses
-  for (auto withClause : *query->withClauses) {
+  for (const auto& withClause : *query->withClauses) {
     bool doesConditionExist = dataPreprocessor->hasResult(withClause);
     if (!doesConditionExist) return EMPTY_RESULT;
   }
@@ -269,18 +270,18 @@ vector<string> QueryEvaluator::evaluateSelectTupleQuery(
   TableCombiner tableCombiner = TableCombiner();
   auto resultTable = QEUtils::getScalarResponse(false);
 
-  // first evaluate group of clauses without synonyms, and dont have to join
+  // first evaluate group of clauses without synonyms, and don't have to join
   // table
-  for (auto noSynClause : *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
+  for (const auto& noSynClause : *ccg->at(QueryOptimizer::NO_SYN_GROUP_IDX)) {
     auto intermediateTable = noSynClause->accept(clauseVisitor);
     if (intermediateTable->isBodyEmpty()) return EMPTY_RESULT;
   }
   ccg->erase(QueryOptimizer::NO_SYN_GROUP_IDX);
 
-  for (auto it : *ccg) {
+  for (const auto& it : *ccg) {
     // eval each subgroup
     auto subGroupResultTable = make_shared<Table>();
-    for (auto subGroupClause : *it.second) {
+    for (const auto& subGroupClause : *it.second) {
       auto intermediateTable = subGroupClause->accept(clauseVisitor);
       if (intermediateTable->isBodyEmpty()) return EMPTY_RESULT;
       subGroupResultTable =

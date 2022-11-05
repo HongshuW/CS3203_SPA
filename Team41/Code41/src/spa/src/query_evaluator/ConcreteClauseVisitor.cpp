@@ -4,12 +4,14 @@
 
 #include "ConcreteClauseVisitor.h"
 
+#include <utility>
+
 #include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
 #include "query_builder/clauses/such_that_clauses/FollowsClause.h"
 ConcreteClauseVisitor::ConcreteClauseVisitor(
     shared_ptr<QE::DataPreprocessor> dataPreprocessor)
-    : AbstractClauseVisitor(dataPreprocessor) {}
+    : AbstractClauseVisitor(std::move(dataPreprocessor)) {}
 
 // only for no condition select clause
 shared_ptr<Table> ConcreteClauseVisitor::visit(
