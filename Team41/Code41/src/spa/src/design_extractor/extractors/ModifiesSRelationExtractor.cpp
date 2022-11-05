@@ -13,7 +13,8 @@
 namespace DE {
 ModifiesSRelationExtractor::ModifiesSRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : ModifiesRelationExtractor(std::move(dataModifier), std::move(programNode)) {
+    : ModifiesRelationExtractor(std::move(dataModifier),
+                                std::move(programNode)) {
   ancestors = make_shared<vector<string>>();
   output = make_shared<list<vector<string>>>();
   ifWhileStmtNoToModifiedVarsMap =
@@ -75,7 +76,8 @@ shared_ptr<ExtractorResult> ModifiesSRelationExtractor::extract() {
   return make_shared<RelationResult>(output);
 }
 
-void ModifiesSRelationExtractor::extractorHelper(const shared_ptr<ASTNode>& node) {
+void ModifiesSRelationExtractor::extractorHelper(
+    const shared_ptr<ASTNode>& node) {
   NodeType nodeType = ASTUtils::getNodeType(node);
 
   switch (nodeType) {

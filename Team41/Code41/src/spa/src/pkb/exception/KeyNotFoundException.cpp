@@ -4,7 +4,8 @@
 
 #include "KeyNotFoundException.h"
 
-KeyNotFoundException::KeyNotFoundException(const string& columnName, const string& key) {
+KeyNotFoundException::KeyNotFoundException(const string& columnName,
+                                           const string& key) {
   message = "Key " + key + " is not found in column " + columnName + ".";
 }
 

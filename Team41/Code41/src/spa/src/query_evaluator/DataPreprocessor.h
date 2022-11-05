@@ -64,12 +64,15 @@ class DataPreprocessor {
   shared_ptr<Table> getAllByDesignEntity(DesignEntity designEntity);
   shared_ptr<Table> getNoConditionSelectClauseResult(
       const shared_ptr<SelectClause>& selectClause);
-  shared_ptr<Table> getTableByAffects(const shared_ptr<AffectsClause>& affectsClause);
+  shared_ptr<Table> getTableByAffects(
+      const shared_ptr<AffectsClause>& affectsClause);
   shared_ptr<Table> getTableByAffectsT(
       const shared_ptr<AffectsTClause>& affectsTClause);
   shared_ptr<Table> getTableByCalls(const shared_ptr<CallsClause>& callsClause);
-  shared_ptr<Table> getTableByCallsT(const shared_ptr<CallsTClause>& callsTClause);
-  shared_ptr<Table> getTableByFollows(const shared_ptr<FollowsClause>& followsClause);
+  shared_ptr<Table> getTableByCallsT(
+      const shared_ptr<CallsTClause>& callsTClause);
+  shared_ptr<Table> getTableByFollows(
+      const shared_ptr<FollowsClause>& followsClause);
   shared_ptr<Table> getTableByFollowsT(
       const shared_ptr<FollowsTClause>& followsTClause);
   shared_ptr<Table> getTableByModifiesP(
@@ -78,8 +81,10 @@ class DataPreprocessor {
       const shared_ptr<ModifiesSClause>& modifiesSClause);
   shared_ptr<Table> getTableByNext(const shared_ptr<NextClause>& nextClause);
   shared_ptr<Table> getTableByNextT(const shared_ptr<NextTClause>& nextTClause);
-  shared_ptr<Table> getTableByParent(const shared_ptr<ParentClause>& parentClause);
-  shared_ptr<Table> getTableByParentT(const shared_ptr<ParentTClause>& parentTClause);
+  shared_ptr<Table> getTableByParent(
+      const shared_ptr<ParentClause>& parentClause);
+  shared_ptr<Table> getTableByParentT(
+      const shared_ptr<ParentTClause>& parentTClause);
   shared_ptr<Table> getTableByUsesP(const shared_ptr<UsesPClause>& usesPClause);
   shared_ptr<Table> getTableByUsesS(const shared_ptr<UsesSClause>& usesSClause);
   shared_ptr<Table> getTableByWith(const shared_ptr<WithClause>& withClause);

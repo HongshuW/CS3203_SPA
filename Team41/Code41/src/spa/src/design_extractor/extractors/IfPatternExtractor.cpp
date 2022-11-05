@@ -12,7 +12,8 @@
 namespace DE {
 IfPatternExtractor::IfPatternExtractor(shared_ptr<DataModifier> dataModifier,
                                        shared_ptr<ProgramNode> programNode)
-    : IfWhilePatternExtractor(std::move(dataModifier), std::move(programNode)) {}
+    : IfWhilePatternExtractor(std::move(dataModifier), std::move(programNode)) {
+}
 
 shared_ptr<ExtractorResult> IfPatternExtractor::extract() {
   for (const auto& procedureNode : programNode->procedureList) {
@@ -61,7 +62,7 @@ shared_ptr<ExtractorResult> IfPatternExtractor::extract() {
 void IfPatternExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<RelationResult> relationResult =
       static_pointer_cast<RelationResult>(result);
-  for (auto &entry : *relationResult->getResult()) {
+  for (auto& entry : *relationResult->getResult()) {
     dataModifier->saveIfPattern(entry);
   }
 }

@@ -9,7 +9,8 @@
 namespace DE {
 DesignExtractorManager::DesignExtractorManager(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : dataModifier(std::move(dataModifier)), programNode(std::move(programNode)) {}
+    : dataModifier(std::move(dataModifier)),
+      programNode(std::move(programNode)) {}
 
 void DesignExtractorManager::run() {
   // save statement lines and types

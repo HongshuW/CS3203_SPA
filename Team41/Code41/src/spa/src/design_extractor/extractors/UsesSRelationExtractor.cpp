@@ -45,7 +45,8 @@ void UsesSRelationExtractor::save(shared_ptr<ExtractorResult> result) {
 }
 
 unordered_set<string> UsesSRelationExtractor::extractUsesSHelper(
-    const shared_ptr<ASTNode>& node, const shared_ptr<vector<vector<string>>>& result,
+    const shared_ptr<ASTNode>& node,
+    const shared_ptr<vector<vector<string>>>& result,
     const shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>& stmtNumbers) {
   NodeType nodeType = ASTUtils::getNodeType(node);
 
@@ -302,7 +303,8 @@ void UsesSRelationExtractor::extractCallStmtRelationshipsWithIfAndWhileToOutput(
 }
 
 void UsesSRelationExtractor::insertCallsInIfAndWhileForUseS(
-    const shared_ptr<ProgramNode>& rootPtr, const shared_ptr<list<vector<string>>>& ans) {
+    const shared_ptr<ProgramNode>& rootPtr,
+    const shared_ptr<list<vector<string>>>& ans) {
   auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
   auto mappedIfAndWhileStmtNoToUsedVariables =
       mapIfAndWhileStmtNoToUsedVariables(rootPtr);
@@ -348,7 +350,8 @@ void UsesSRelationExtractor::extractCallStmtRelationshipsToOutput(
 }
 
 void UsesSRelationExtractor::insertCallsForUseS(
-    const shared_ptr<ProgramNode>& rootPtr, shared_ptr<list<vector<string>>> ans) {
+    const shared_ptr<ProgramNode>& rootPtr,
+    shared_ptr<list<vector<string>>> ans) {
   auto mappedProceduresToUsedVar = mapProceduresToUsedVariables(rootPtr);
   auto mappedCallNodesToProcedures = extractCallNodesFromProcedures(rootPtr);
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =

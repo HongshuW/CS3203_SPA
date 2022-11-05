@@ -10,7 +10,8 @@
 namespace DE {
 ModifiesPRelationExtractor::ModifiesPRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : ModifiesRelationExtractor(std::move(dataModifier), std::move(programNode)) {}
+    : ModifiesRelationExtractor(std::move(dataModifier),
+                                std::move(programNode)) {}
 
 shared_ptr<ExtractorResult> ModifiesPRelationExtractor::extract() {
   shared_ptr<list<vector<string>>> ans = make_shared<list<vector<string>>>();

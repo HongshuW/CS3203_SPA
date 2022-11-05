@@ -65,14 +65,14 @@ void FollowsTRelationExtractor::extractHelper(
 
     std::sort(stmtNoList.begin(), stmtNoList.end());
     deque<int> entryDeque;
-    for (int &i : stmtNoList) {
+    for (int& i : stmtNoList) {
       entryDeque.push_back(i);
     }
 
     while (!entryDeque.empty()) {
       int front = entryDeque.front();
       entryDeque.pop_front();
-      for (auto &j : entryDeque) {
+      for (auto& j : entryDeque) {
         vector<string> followsEntry;
         followsEntry.push_back(to_string(front));
         followsEntry.push_back(to_string(j));

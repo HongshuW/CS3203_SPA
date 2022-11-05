@@ -19,8 +19,7 @@ StatementTable::StatementTable() {
 string StatementTable::getStatementType(const string& stmtNumber) {
   vector<string> row = getRowByPrimaryKey(stmtNumber);
   if (row.empty()) {
-    throw KeyNotFoundException(getHeader()[primaryKeyColumnIndex],
-                                   stmtNumber);
+    throw KeyNotFoundException(getHeader()[primaryKeyColumnIndex], stmtNumber);
   }
   return row[statementTypeColumn];
 }

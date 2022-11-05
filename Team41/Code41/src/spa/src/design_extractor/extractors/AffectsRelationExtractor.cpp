@@ -40,7 +40,8 @@ bool AffectsRelationExtractor::isModified(const string& variable, int stmtNo) {
   }
 }
 
-bool AffectsRelationExtractor::checkNoWildcardDFS(int start, int end, const CFG& cfg) {
+bool AffectsRelationExtractor::checkNoWildcardDFS(int start, int end,
+                                                  const CFG& cfg) {
   shared_ptr<AssignNode> startNode =
       dynamic_pointer_cast<AssignNode>(lineNoToNodePtrMap->at(start));
   string modifiedVar = startNode->variableNode->variable;
@@ -237,7 +238,8 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
 }
 
 shared_ptr<vector<string>>
-AffectsRelationExtractor::extractWithEndGivenBackTracking(const CFG& cfg, int end) {
+AffectsRelationExtractor::extractWithEndGivenBackTracking(const CFG& cfg,
+                                                          int end) {
   shared_ptr<unordered_set<string>> output =
       make_shared<unordered_set<string>>(unordered_set<string>());
   shared_ptr<AssignNode> endNode =

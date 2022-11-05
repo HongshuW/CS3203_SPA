@@ -24,21 +24,25 @@ class QueryEvaluator {
   DesignEntity getDesignEntity(const Synonym& synonym);
 
   vector<string> evaluateNoConditionSelectTupleQuery(
-					const shared_ptr<Query>& sharedPtr, const shared_ptr<ConcreteClauseVisitor>& clauseVisitor);
+      const shared_ptr<Query>& sharedPtr,
+      const shared_ptr<ConcreteClauseVisitor>& clauseVisitor);
 
   vector<string> evaluateSelectBoolQuery(
       const shared_ptr<ConcreteClauseVisitor>& clauseVisitor,
-      const shared_ptr<DataPreprocessor>& dataPreprocessor, const ConnectedClauseGroups& ccg);
+      const shared_ptr<DataPreprocessor>& dataPreprocessor,
+      const ConnectedClauseGroups& ccg);
 
   vector<string> evaluateSelectTupleQuery(
       const shared_ptr<ConcreteClauseVisitor>& clauseVisitor,
-      const shared_ptr<DataPreprocessor>& dataPreprocessor, const ConnectedClauseGroups& ccg);
+      const shared_ptr<DataPreprocessor>& dataPreprocessor,
+      const ConnectedClauseGroups& ccg);
 
   vector<string> removeDup(vector<string> vec);
 
   vector<string> formatConditionalQueryResult(
-					shared_ptr<Table> resultTable, const shared_ptr<vector<Elem>>& tuple,
-					const shared_ptr<Query>& sharedPtr, const shared_ptr<DataPreprocessor>& dataPreprocessor);
+      shared_ptr<Table> resultTable, const shared_ptr<vector<Elem>>& tuple,
+      const shared_ptr<Query>& sharedPtr,
+      const shared_ptr<DataPreprocessor>& dataPreprocessor);
 
   vector<string> projectResult(const shared_ptr<Table>& resultTable,
                                const shared_ptr<vector<Elem>>& tuple);

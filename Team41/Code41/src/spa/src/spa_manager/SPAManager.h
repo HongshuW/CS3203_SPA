@@ -6,7 +6,6 @@
 #define SPA_SPAMANAGER_H
 
 #include <cstdlib>
-
 #include <memory>
 
 #include "cache_manager/CacheManager.h"

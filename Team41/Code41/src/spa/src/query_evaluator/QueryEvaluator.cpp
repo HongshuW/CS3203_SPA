@@ -21,8 +21,8 @@
 
 using namespace QB;
 using namespace QE;
-auto &attrsToFilter = QueryEvaluatotConstants::attrsToFilter;
-auto &entitiesToFilter = QueryEvaluatotConstants::entitiesToFilter;
+auto& attrsToFilter = QueryEvaluatotConstants::attrsToFilter;
+auto& entitiesToFilter = QueryEvaluatotConstants::entitiesToFilter;
 
 const vector<string> FALSE_RESULT = {"FALSE"};
 const vector<string> TRUE_RESULT = {"TRUE"};
@@ -45,7 +45,7 @@ vector<string> QueryEvaluator::evaluate(const shared_ptr<Query>& queryPtr) {
   ConnectedClauseGroups ccg = queryOptimizer->optimise();
 
   bool isReturnTypeBool =
-					queryPtr->selectClause->returnType == QB::ReturnType::BOOLEAN;
+      queryPtr->selectClause->returnType == QB::ReturnType::BOOLEAN;
   return isReturnTypeBool ? evaluateSelectBoolQuery(concreteClauseVisitor,
                                                     dataPreprocessor, ccg)
                           : evaluateSelectTupleQuery(concreteClauseVisitor,
@@ -53,7 +53,8 @@ vector<string> QueryEvaluator::evaluate(const shared_ptr<Query>& queryPtr) {
 }
 
 vector<string> QueryEvaluator::evaluateNoConditionSelectTupleQuery(
-				const shared_ptr<Query>& sharedPtr, const shared_ptr<ConcreteClauseVisitor>& clauseVisitor) {
+    const shared_ptr<Query>& sharedPtr,
+    const shared_ptr<ConcreteClauseVisitor>& clauseVisitor) {
   auto resultTable = sharedPtr->selectClause->accept(clauseVisitor);
   vector<string> ans =
       projectResult(resultTable, sharedPtr->selectClause->returnResults);
@@ -77,8 +78,9 @@ vector<string> QueryEvaluator::removeDup(vector<string> vec) {
 }
 
 vector<string> QueryEvaluator::formatConditionalQueryResult(
-				shared_ptr<Table> resultTable, const shared_ptr<vector<Elem>>& tuple,
-				const shared_ptr<Query>& sharedPtr, const shared_ptr<DataPreprocessor>& dataPreprocessor) {
+    shared_ptr<Table> resultTable, const shared_ptr<vector<Elem>>& tuple,
+    const shared_ptr<Query>& sharedPtr,
+    const shared_ptr<DataPreprocessor>& dataPreprocessor) {
   if (sharedPtr->selectClause->returnType == QB::ReturnType::BOOLEAN)
     return resultTable->isBodyEmpty() ? FALSE_RESULT : TRUE_RESULT;
 
@@ -165,8 +167,9 @@ vector<string> QueryEvaluator::formatConditionalQueryResult(
   return projectResult(resultTable, tuple);
 }
 
-vector<string> QueryEvaluator::projectResult(const shared_ptr<Table>& resultTable,
-                                             const shared_ptr<vector<Elem>>& tuple) {
+vector<string> QueryEvaluator::projectResult(
+    const shared_ptr<Table>& resultTable,
+    const shared_ptr<vector<Elem>>& tuple) {
   size_t ans_size = resultTable->getNumberOfRows();
   const string EMPTY_STRING;
   vector<string> ans = vector<string>(ans_size, EMPTY_STRING);
@@ -198,7 +201,8 @@ vector<string> QueryEvaluator::projectResult(const shared_ptr<Table>& resultTabl
 
 vector<string> QueryEvaluator::evaluateSelectBoolQuery(
     const shared_ptr<ConcreteClauseVisitor>& clauseVisitor,
-    const shared_ptr<DataPreprocessor>& dataPreprocessor, const ConnectedClauseGroups& ccg) {
+    const shared_ptr<DataPreprocessor>& dataPreprocessor,
+    const ConnectedClauseGroups& ccg) {
   // if no condition, return true
   bool hasCondition = !query->suchThatClauses->empty() ||
                       !query->patternClauses->empty() ||
@@ -243,7 +247,8 @@ vector<string> QueryEvaluator::evaluateSelectBoolQuery(
 
 vector<string> QueryEvaluator::evaluateSelectTupleQuery(
     const shared_ptr<ConcreteClauseVisitor>& clauseVisitor,
-    const shared_ptr<DataPreprocessor>& dataPreprocessor, const ConnectedClauseGroups& ccg) {
+    const shared_ptr<DataPreprocessor>& dataPreprocessor,
+    const ConnectedClauseGroups& ccg) {
   const int SYN_IDX = 0;
   // convert selected elem to string
   for (auto elem : *query->selectClause->returnResults) {

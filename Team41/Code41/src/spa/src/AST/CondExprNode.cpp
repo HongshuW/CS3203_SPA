@@ -9,7 +9,7 @@
 using namespace AST;
 
 CondExprNode::CondExprNode(shared_ptr<RelExprNode> relExprNode)
-    : relExprNode(std::move(relExprNode)){}
+    : relExprNode(std::move(relExprNode)) {}
 
 CondExprNode::CondExprNode(shared_ptr<CondExprNode> condExprLHS)
     : condExprLHS(std::move(condExprLHS)) {}

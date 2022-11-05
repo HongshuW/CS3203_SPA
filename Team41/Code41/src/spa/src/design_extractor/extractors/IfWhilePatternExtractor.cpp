@@ -37,7 +37,7 @@ unordered_set<string> IfWhilePatternExtractor::condExprNodeHandler(
 }
 
 void IfWhilePatternExtractor::relExprNodeHandler(
-    const shared_ptr<RelExprNode>& relExpr, unordered_set<string> &varList) {
+    const shared_ptr<RelExprNode>& relExpr, unordered_set<string>& varList) {
   auto exprLHS = relExpr->exprNodeLHS;
   auto exprRHS = relExpr->exprNodeRHS;
   exprNodeHandler(exprLHS, varList);
@@ -45,12 +45,12 @@ void IfWhilePatternExtractor::relExprNodeHandler(
 }
 
 void IfWhilePatternExtractor::exprNodeHandler(const shared_ptr<ExprNode>& expr,
-                                              unordered_set<string> &varList) {
+                                              unordered_set<string>& varList) {
   getVarFromExprNodesDFS(expr, varList);
 }
 
 void IfWhilePatternExtractor::getVarFromExprNodesDFS(
-    const shared_ptr<ExprNode>& expr, unordered_set<string> &varList) {
+    const shared_ptr<ExprNode>& expr, unordered_set<string>& varList) {
   if (expr->isVariableNode()) {
     varList.insert(expr->expr);
   }
@@ -65,7 +65,7 @@ void IfWhilePatternExtractor::getVarFromExprNodesDFS(
 
 void IfWhilePatternExtractor::getRelExprNodesDFS(
     const shared_ptr<CondExprNode>& condExpr,
-    vector<shared_ptr<RelExprNode>> &relExprNodeList) {
+    vector<shared_ptr<RelExprNode>>& relExprNodeList) {
   if (condExpr->relExprNode) {
     relExprNodeList.push_back(condExpr->relExprNode);
   }

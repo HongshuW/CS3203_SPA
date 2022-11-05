@@ -36,13 +36,14 @@ unordered_map<NodeType, DesignEntity> nodeTypeToDesignEntity({
 });
 
 NodeType ASTUtils::getNodeType(const shared_ptr<ASTNode>& node) {
-		auto& nodeObj = *node;
-		string nodeType = typeid(nodeObj).name();
-		return nodeClassNameToType.at(nodeType);
+  auto& nodeObj = *node;
+  string nodeType = typeid(nodeObj).name();
+  return nodeClassNameToType.at(nodeType);
 }
 
-DesignEntity ASTUtils::getStmtNodeDesignEntity(const shared_ptr<StmtNode>& node) {
-	auto& nodeObj = *node;
+DesignEntity ASTUtils::getStmtNodeDesignEntity(
+    const shared_ptr<StmtNode>& node) {
+  auto& nodeObj = *node;
   string nodeTypeStr = typeid(nodeObj).name();
   NodeType nodeType = nodeClassNameToType.at(nodeTypeStr);
   return nodeTypeToDesignEntity.at(nodeType);

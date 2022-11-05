@@ -26,7 +26,7 @@ shared_ptr<ExtractorResult> AssignPatternExtractor::extract() {
 void AssignPatternExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<AssignPatternResult> resultList =
       static_pointer_cast<AssignPatternResult>(result);
-  for (auto &resultRow : *resultList->getResult()) {
+  for (auto& resultRow : *resultList->getResult()) {
     string lineNumStr = to_string(resultRow.first.first);
     string varName = resultRow.first.second;
     auto exprNode = resultRow.second->expressionNode;
@@ -72,8 +72,8 @@ void AssignPatternExtractor::extractorHelper(const shared_ptr<ASTNode>& node) {
       }
       return;
     }
-		default:
-			return;
+    default:
+      return;
   }
 }
 }  // namespace DE

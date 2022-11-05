@@ -40,8 +40,9 @@ const int DEFAULT_COST = 100;
 const int SMALL_COST_MAGNITUDE = 5;
 const int MEDIUM_COST_MAGNITUDE = 10;
 const int LARGE_COST_MAGNITUDE = 15;
-QueryOptimizer::QueryOptimizer(shared_ptr<Query> query) : query(std::move(query)) {
-	clauseCount = 0;
+QueryOptimizer::QueryOptimizer(shared_ptr<Query> query)
+    : query(std::move(query)) {
+  clauseCount = 0;
   initMaps();
   initParent();
 
@@ -77,7 +78,7 @@ void QueryOptimizer::initMaps() {
     idClauseMap.insert({clauseId, clause});
     clauseId++;
   }
-  clauseCount = (int) clauseIdMap.size();
+  clauseCount = (int)clauseIdMap.size();
 }
 
 void QueryOptimizer::initEdges() {
@@ -105,8 +106,9 @@ void QueryOptimizer::initEdges() {
   }
 }
 
-bool QueryOptimizer::hasCommonSyn(const shared_ptr<ConditionalClause>& clause1,
-                                  const shared_ptr<ConditionalClause>& clause2) {
+bool QueryOptimizer::hasCommonSyn(
+    const shared_ptr<ConditionalClause>& clause1,
+    const shared_ptr<ConditionalClause>& clause2) {
   auto set1 = clause1->getSynonymNames();
   for (const auto& syn : clause2->getSynonymNames()) {
     if (set1.count(syn)) return true;
@@ -114,8 +116,9 @@ bool QueryOptimizer::hasCommonSyn(const shared_ptr<ConditionalClause>& clause1,
   return false;
 }
 
-int QueryOptimizer::calculateEdgeWeight(const shared_ptr<ConditionalClause>& clause1,
-                                        const shared_ptr<ConditionalClause>& clause2) {
+int QueryOptimizer::calculateEdgeWeight(
+    const shared_ptr<ConditionalClause>& clause1,
+    const shared_ptr<ConditionalClause>& clause2) {
   int curr_cost = DEFAULT_COST;
   const int SYN_COUNT_THRESHOLD = 1;
   const int IDENT_OR_INT_COUNT_THRESHOLD = 1;
@@ -254,7 +257,7 @@ ConnectedClauseGroups QueryOptimizer::optimiseSubGroups(
     shared_ptr<vector<shared_ptr<ConditionalClause>>> sortedVec =
         make_shared<vector<shared_ptr<ConditionalClause>>>();
     auto clauseGroupVec = it.second;
-    const int V = (int) clauseGroupVec->size();
+    const int V = (int)clauseGroupVec->size();
     vector<bool> selected(clauseCount, false);
     int no_edge = 0;
 

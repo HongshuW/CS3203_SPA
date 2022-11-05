@@ -14,7 +14,8 @@ class IfWhilePatternExtractor : public AbstractDesignExtractor {
                           shared_ptr<ProgramNode> programNode);
   shared_ptr<list<vector<string>>> output;
 
-  unordered_set<string> condExprNodeHandler(const shared_ptr<CondExprNode>& condExpr);
+  unordered_set<string> condExprNodeHandler(
+      const shared_ptr<CondExprNode>& condExpr);
 
  private:
   void relExprNodeHandler(const shared_ptr<RelExprNode>& relExpr,

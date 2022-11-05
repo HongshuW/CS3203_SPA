@@ -36,8 +36,8 @@ using namespace std;
 using namespace QB;
 namespace QE {
 
-auto &entitiesToFilter = QueryEvaluatotConstants::entitiesToFilter;
-auto &attrsToFilter = QueryEvaluatotConstants::attrsToFilter;
+auto& entitiesToFilter = QueryEvaluatotConstants::entitiesToFilter;
+auto& attrsToFilter = QueryEvaluatotConstants::attrsToFilter;
 
 shared_ptr<Table> DataPreprocessor::getAllByDesignEntity(
     DesignEntity designEntity) {
@@ -78,7 +78,7 @@ vector<int> DataPreprocessor::getStmtNumsByDesignEntity(
   int STMT_NO_COL_IDX = 0;
   auto stmtNums = table->getColumnByName(table->getHeader()[STMT_NO_COL_IDX]);
   vector<int> ans;
-  for (const auto &string : stmtNums) {
+  for (const auto& string : stmtNums) {
     ans.push_back(stoi(string));
   }
   return ans;
@@ -113,7 +113,7 @@ shared_ptr<Table> DataPreprocessor::getTableByWith(
   int colOffSet = 0;
 
   for (auto withRef : withRefs) {
-    WithRefType withRefType = WithClause::getWithRefType((int) withRef.index());
+    WithRefType withRefType = WithClause::getWithRefType((int)withRef.index());
     if (withRefType == QB::WithRefType::INTEGER)
       intRef = get<WithClause::WITH_REF_INT_IDX>(withRef);
     if (withRefType == QB::WithRefType::IDENT) {
@@ -184,12 +184,12 @@ shared_ptr<Table> DataPreprocessor::getTableByWith(
 }
 
 void DataPreprocessor::filterTableByColValueEquality(
-    const shared_ptr<Table>& table, const vector<int> &comparedCols) {
+    const shared_ptr<Table>& table, const vector<int>& comparedCols) {
   Table filteredTable = Table();
 
   filteredTable.renameHeader(table->getHeader());
 
-  vector<vector<string>> *rowsPtr = table->getRowsPointer();
+  vector<vector<string>>* rowsPtr = table->getRowsPointer();
   auto rowItr = rowsPtr->begin();
   while (rowItr != rowsPtr->end()) {
     unordered_set<string> set;
@@ -205,8 +205,8 @@ void DataPreprocessor::filterTableByColValueEquality(
   }
 }
 
-void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
-                                                     const shared_ptr<Table>& table) {
+void DataPreprocessor::filterSingleClauseResultTable(
+    Ref ref1, Ref ref2, const shared_ptr<Table>& table) {
   // RefType can be synonym, integer, underscore or string
   RefType ref1Type = getRefType(ref1);
   RefType ref2Type = getRefType(ref2);
@@ -288,7 +288,8 @@ void DataPreprocessor::filterSingleClauseResultTable(Ref ref1, Ref ref2,
 
 DataPreprocessor::DataPreprocessor(shared_ptr<DataRetriever> dataRetriever,
                                    Declarations declarations)
-    : dataRetriever(std::move(dataRetriever)), declarations(std::move(declarations)) {}
+    : dataRetriever(std::move(dataRetriever)),
+      declarations(std::move(declarations)) {}
 
 shared_ptr<Table> DataPreprocessor::getTableByAssignPattern(
     const shared_ptr<QB::AssignPatternClause>& assignPatternClause) {
@@ -739,8 +740,8 @@ std::vector<int> DataPreprocessor::intersection(std::vector<int> v1,
   return v3;
 }
 
-void QE::DataPreprocessor::getWithValues(vector<WithRef> withRefs,
-                                         const shared_ptr<vector<Value>>& values) {
+void QE::DataPreprocessor::getWithValues(
+    vector<WithRef> withRefs, const shared_ptr<vector<Value>>& values) {
   for (int i = 0; i < withRefs.size(); i++) {
     if (withRefs[i].index() == WithClause::WITH_REF_IDENT_IDX) {
       values->at(i) = get<WithClause::WITH_REF_IDENT_IDX>(withRefs[i]).identStr;
@@ -806,10 +807,10 @@ void QE::DataPreprocessor::getWithValues(vector<WithRef> withRefs,
 }
 
 void DataPreprocessor::filerTableByColumnIdx(const shared_ptr<Table>& table,
-                                             int colIdx, const string &value) {
+                                             int colIdx, const string& value) {
   Table filteredTable = Table();
   filteredTable.renameHeader(table->getHeader());
-  vector<vector<string>> *rowsPtr = table->getRowsPointer();
+  vector<vector<string>>* rowsPtr = table->getRowsPointer();
   auto rowItr = rowsPtr->begin();
   while (rowItr != rowsPtr->end()) {
     if (rowItr->at(colIdx) == value) {
@@ -841,7 +842,7 @@ bool DataPreprocessor::dropUnusedColumns(const shared_ptr<Table>& table) {
   if (table->isBodyEmpty() && hasResult) {
     auto dummy = QEUtils::getScalarResponse(hasResult);
     table->renameHeader(dummy->getHeader());
-    for (auto &row : *dummy->getRowsPointer()) {
+    for (auto& row : *dummy->getRowsPointer()) {
       table->appendRow(row);
     }
   }
@@ -855,7 +856,7 @@ void DataPreprocessor::filerTableByDesignEntity(const shared_ptr<Table>& table,
       DesignEntity::STMT, DesignEntity::CONSTANT, DesignEntity::VARIABLE,
       DesignEntity::PROCEDURE};
   if (count(AVAIL_ENTITIES.begin(), AVAIL_ENTITIES.end(), designEntity)) return;
-  vector<vector<string>> *rowsPtr = table->getRowsPointer();
+  vector<vector<string>>* rowsPtr = table->getRowsPointer();
   auto rowItr = rowsPtr->begin();
 
   while (rowItr != rowsPtr->end()) {

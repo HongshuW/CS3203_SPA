@@ -29,7 +29,7 @@ const vector<vector<string>> *Table::getRowsPointerReadOnly() const {
   return &rows;
 }
 
-vector<string> Table::getColumnByName(const string& columnName) {
+vector<string> Table::getColumnByName(const string &columnName) {
   unsigned long numOfColumns = header.size();
   for (int i = 0; i < numOfColumns; i++) {
     if (header[i] == columnName) {
@@ -40,9 +40,9 @@ vector<string> Table::getColumnByName(const string& columnName) {
   return emptyVector;
 }
 
-int Table::getColIdxByName(const string& colName) {
+int Table::getColIdxByName(const string &colName) {
   int invalidColumn = -1;
-	unsigned long numOfColumns = header.size();
+  unsigned long numOfColumns = header.size();
   for (int i = 0; i < numOfColumns; i++) {
     if (header[i] == colName) {
       return i;
@@ -53,15 +53,15 @@ int Table::getColIdxByName(const string& colName) {
 
 vector<string> Table::getColumnByIndex(int index) {
   vector<string> output;
-	unsigned long size = rows.size();
+  unsigned long size = rows.size();
   for (int i = 0; i < size; i++) {
     output.push_back(rows[i][index]);
   }
   return output;
 }
 
-vector<string> Table::getRowByPrimaryKey(const string& key) {
-	unsigned long size = rows.size();
+vector<string> Table::getRowByPrimaryKey(const string &key) {
+  unsigned long size = rows.size();
   for (int i = 0; i < size; i++) {
     if (rows[i][primaryKeyColumnIndex] == key) {
       return rows[i];
@@ -70,10 +70,10 @@ vector<string> Table::getRowByPrimaryKey(const string& key) {
   return vector<string>{};
 }
 
-shared_ptr<unordered_set<string>> Table::getValuesByKey(const string& key,
+shared_ptr<unordered_set<string>> Table::getValuesByKey(const string &key,
                                                         int keyColumnNumber,
                                                         int valueColumnNumber) {
-	unsigned long size = rows.size();
+  unsigned long size = rows.size();
   shared_ptr<unordered_set<string>> output =
       make_shared<unordered_set<string>>(unordered_set<string>{});
   for (int i = 0; i < size; i++) {
@@ -93,7 +93,8 @@ shared_ptr<Table> Table::getSubTable(int startIndex, int endIndex) {
   return table;
 }
 
-shared_ptr<Table> Table::getSubTableByColumn(const string& key, int keyColumnNumber) {
+shared_ptr<Table> Table::getSubTableByColumn(const string &key,
+                                             int keyColumnNumber) {
   shared_ptr<Table> table = make_shared<Table>(Table());
   table->header = header;
   for (vector<string> row : rows) {
@@ -104,7 +105,7 @@ shared_ptr<Table> Table::getSubTableByColumn(const string& key, int keyColumnNum
   return table;
 }
 
-bool Table::contains(const vector<string>& row, int startIndex, int endIndex) {
+bool Table::contains(const vector<string> &row, int startIndex, int endIndex) {
   for (int i = startIndex; i < endIndex; i++) {
     if (rows[i] == row) {
       return true;
@@ -113,9 +114,9 @@ bool Table::contains(const vector<string>& row, int startIndex, int endIndex) {
   return false;
 }
 
-int Table::getNumberOfRows() { return (int) rows.size(); }
+int Table::getNumberOfRows() { return (int)rows.size(); }
 
-int Table::getNumberOfColumns() { return (int) header.size(); }
+int Table::getNumberOfColumns() { return (int)header.size(); }
 
 void Table::appendRow(const vector<string> &row) { rows.push_back(row); }
 
@@ -128,7 +129,9 @@ void Table::appendRows(const list<vector<string>> &newRows) {
   }
 }
 
-void Table::setRows(const vector<vector<string>> &newRows) { this->rows = newRows; }
+void Table::setRows(const vector<vector<string>> &newRows) {
+  this->rows = newRows;
+}
 
 void Table::addValues(list<string> values) {
   // used in tables with one column only
@@ -142,7 +145,9 @@ void Table::addValues(list<string> values) {
   }
 }
 
-void Table::renameHeader(vector<string> newHeader) { header = std::move(newHeader); }
+void Table::renameHeader(vector<string> newHeader) {
+  header = std::move(newHeader);
+}
 
 void Table::dropRows() { this->rows.clear(); }
 
@@ -161,7 +166,7 @@ bool Table::isEqual(const Table &otherTable) {
   unordered_set<string> r1_set = unordered_set<string>();
   unordered_set<string> r2_set = unordered_set<string>();
 
-  auto dash_fold = [](std::string a, const string& b) {
+  auto dash_fold = [](std::string a, const string &b) {
     return std::move(a) + '-' + b;
   };
   for (int i = 0; i < otherTable.rows.size(); ++i) {
@@ -181,7 +186,7 @@ bool Table::isHeaderEmpty() const { return this->header.empty(); }
 
 bool Table::isBodyEmpty() const { return this->rows.empty(); }
 
-void Table::dupCol(int colIdx, const string& dupColName) {
+void Table::dupCol(int colIdx, const string &dupColName) {
   if (colIdx >= this->header.size()) return;
   // append the dup col to the right of the table
   header.push_back(dupColName);

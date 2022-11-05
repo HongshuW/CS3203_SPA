@@ -12,7 +12,8 @@ namespace DE {
 
 class UsesSRelationExtractor : public UsesRelationExtractor {
   unordered_set<string> extractUsesSHelper(
-      const shared_ptr<ASTNode>& node, const shared_ptr<vector<vector<string>>>& result,
+      const shared_ptr<ASTNode>& node,
+      const shared_ptr<vector<vector<string>>>& result,
       const shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>& stmtNumbers);
   unordered_map<string, unordered_set<string>> mapProceduresToUsedVariables(
       const shared_ptr<ProgramNode>& rootPtr);
@@ -20,8 +21,9 @@ class UsesSRelationExtractor : public UsesRelationExtractor {
   unordered_map<string, unordered_set<string>>
   mapIfAndWhileStmtNoToUsedVariables(const shared_ptr<ProgramNode>& rootPtr);
 
-  void insertCallsInIfAndWhileForUseS(const shared_ptr<ProgramNode>& rootPtr,
-                                      const shared_ptr<list<vector<string>>>& ans);
+  void insertCallsInIfAndWhileForUseS(
+      const shared_ptr<ProgramNode>& rootPtr,
+      const shared_ptr<list<vector<string>>>& ans);
 
   void insertCallsForUseS(const shared_ptr<ProgramNode>& rootPtr,
                           shared_ptr<list<vector<string>>> ans);

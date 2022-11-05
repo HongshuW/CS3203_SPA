@@ -34,7 +34,8 @@ void UsesRelationExtractor::initProceduresToUsedVarsMap() {
 }
 
 unordered_set<string> UsesRelationExtractor::extractUsesSHelper(
-    const shared_ptr<ASTNode>& node, const shared_ptr<list<vector<string>>>& result) {
+    const shared_ptr<ASTNode>& node,
+    const shared_ptr<list<vector<string>>>& result) {
   NodeType nodeType = ASTUtils::getNodeType(node);
 
   if (nodeType == AST::PROCEDURE_NODE) {

@@ -7,7 +7,7 @@
 #include <utility>
 
 Modifies::Modifies(shared_ptr<vector<Declaration>> declarations)
-    : declarations(std::move(declarations)){}
+    : declarations(std::move(declarations)) {}
 
 shared_ptr<AbstractClause> Modifies::createClause(Ref arg1, Ref arg2) {
   if (getRefType(arg1) == RefType::INTEGER) {

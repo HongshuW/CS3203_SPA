@@ -41,7 +41,8 @@ typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
 class ASTUtils {
   static int getNodeLineMappingHelper(
       const shared_ptr<ASTNode>& node,
-      const shared_ptr<unordered_map<shared_ptr<ASTNode>, int>>& map, int curr_line_no,
+      const shared_ptr<unordered_map<shared_ptr<ASTNode>, int>>& map,
+      int curr_line_no,
       const shared_ptr<unordered_map<int, shared_ptr<ASTNode>>>& lineToNode);
   static int getNodePtrToLineNoMapHelper(
       const shared_ptr<ASTNode>& node,

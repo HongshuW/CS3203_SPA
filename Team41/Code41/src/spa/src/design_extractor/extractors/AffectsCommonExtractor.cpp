@@ -10,7 +10,7 @@ namespace DE {
 AffectsCommonExtractor::AffectsCommonExtractor(
     shared_ptr<ProgramNode> programNode)
     : QueryTimeDesignExtractor(std::move(programNode)) {
-	programSize = 0;
+  programSize = 0;
   offset = 0;
   currCFG = nullptr;
   initialize();
@@ -33,7 +33,8 @@ void AffectsCommonExtractor::initialize() {
 }
 
 //! DFS the CFG nodes
-void AffectsCommonExtractor::DFS(int curr, const shared_ptr<vector<int>>& visitCount,
+void AffectsCommonExtractor::DFS(int curr,
+                                 const shared_ptr<vector<int>>& visitCount,
                                  unordered_map<string, int> lastModifiedMap) {
   int currNode = curr - offset;
   visitCount->at(currNode)++;
@@ -95,7 +96,7 @@ void AffectsCommonExtractor::generateAffectsTable() {
   for (const shared_ptr<ProcedureNode>& procedure : procedureList) {
     int currLineNumber = firstLineNumToProcMap->at(procedure);
     CFG cfg = procCFGMap->at(procedure);
-    int visitedSize = (int) cfg.cfg->size();
+    int visitedSize = (int)cfg.cfg->size();
     shared_ptr<vector<int>> visitCount =
         make_shared<vector<int>>(visitedSize, 0);
     offset = currLineNumber;
