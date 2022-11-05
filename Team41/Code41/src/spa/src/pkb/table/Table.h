@@ -29,20 +29,15 @@ class Table {
   vector<vector<string>> getRows() const;
   vector<vector<string>> *getRowsPointer();
   const vector<vector<string>> *getRowsPointerReadOnly() const;
-  vector<string> getRowByIndex(int index);
   vector<string> getColumnByName(string columnName);
   vector<string> getColumnByIndex(int index);
   vector<string> getRowByPrimaryKey(string key);
-  shared_ptr<unordered_set<string>> getValuesByKey(string key,
-                                                   int keyColumnNumber = 0,
-                                                   int valueColumnNumber = 1);
   int getColIdxByName(string colName);
   shared_ptr<Table> getSubTable(int startIndex, int endIndex);
   shared_ptr<Table> getSubTableByColumn(string key, int keyColumnNumber);
   bool contains(vector<string> row, int startIndex, int endIndex);
   int getNumberOfRows();
   int getNumberOfColumns();
-  bool hasCol(string colName);
   bool isEqual(const Table &otherTable);
   bool isHeaderEmpty() const;
   bool isBodyEmpty() const;

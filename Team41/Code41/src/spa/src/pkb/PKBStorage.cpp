@@ -7,7 +7,6 @@
 #include "query_builder/commons/DesignEntity.h"
 
 const string PKBStorage::PROCEDURE_TABLE_COL1_NAME = "$procedure_name";
-const string PKBStorage::PROCEDURE_TABLE_COL2_NAME = "$cfg_ptr";
 const string PKBStorage::STATEMENT_TABLE_COL1_NAME = "$statement_number";
 const string PKBStorage::STATEMENT_TABLE_COL2_NAME = "$statement_type";
 const string PKBStorage::VARIABLE_TABLE_COL1_NAME = "$variable_name";
@@ -54,8 +53,8 @@ PKBStorage::PKBStorage() {
   ifPatternTable = make_shared<PatternTable>(PatternTable());
 }
 
-shared_ptr<Table> PKBStorage::getProcedures() {
-  return procedureTable->getProcedureNames();
+shared_ptr<ProcedureTable> PKBStorage::getProcedures() {
+  return procedureTable;
 }
 
 shared_ptr<Table> PKBStorage::getStatements() {
@@ -80,11 +79,6 @@ string PKBStorage::getStmtType(string stmtNumber) {
 
 void PKBStorage::saveProcedures(list<string> procedures) {
   procedureTable->addValues(procedures);
-}
-
-void PKBStorage::saveCFG(
-    string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg) {
-  procedureTable->saveCFGofProcedure(procedure, cfg);
 }
 
 void PKBStorage::saveStatements(list<vector<string>> statements) {
@@ -132,21 +126,6 @@ shared_ptr<NextTable> PKBStorage::getNextT() { return nextTTable; }
 shared_ptr<AffectsTable> PKBStorage::getAffects() { return affectsTable; }
 
 shared_ptr<AffectsTable> PKBStorage::getAffectsT() { return affectsTTable; }
-
-shared_ptr<unordered_set<string>> PKBStorage::getFollowingStatements(
-    string followedStatement) {
-  return followsTable->getValuesByKey(followedStatement);
-}
-
-shared_ptr<unordered_set<string>> PKBStorage::getChildrenStatements(
-    string parentStatement) {
-  return parentTable->getValuesByKey(parentStatement);
-}
-
-shared_ptr<unordered_set<string>> PKBStorage::getModifiedVariables(
-    string modifierStatement) {
-  return modifiesSTable->getValuesByKey(modifierStatement);
-}
 
 void PKBStorage::saveFollows(vector<string> follows) {
   followsTable->appendRow(follows);

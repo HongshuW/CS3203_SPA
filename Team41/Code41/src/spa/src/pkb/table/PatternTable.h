@@ -13,17 +13,19 @@ using namespace QB;
 
 class PatternTable : public Table {
  private:
+  // header and rows only record meta information about a pattern, a pattern AST
+  // is stored as a pointer
+  vector<shared_ptr<ExprNode>> patternColumn;
+
   bool isSubExpression(shared_ptr<ExprNode> pattern,
                        shared_ptr<ExprNode> queriedPattern);
   bool isSameExpression(shared_ptr<ExprNode> pattern,
                         shared_ptr<ExprNode> queriedPattern);
 
  public:
-  // header and rows only record meta information about a pattern, a pattern AST
-  // is stored as a pointer
-  vector<shared_ptr<ExprNode>> patternColumn;
-
   explicit PatternTable();
+
+  const vector<shared_ptr<ExprNode>> &getPatternColumn();
   shared_ptr<Table> getMatchedPatterns(ExpressionSpec expressionSpec);
   void addPattern(vector<string> metainfo, shared_ptr<ExprNode> pattern);
 };

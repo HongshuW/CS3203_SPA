@@ -69,20 +69,6 @@ vector<string> Table::getRowByPrimaryKey(string key) {
   return vector<string>{};
 }
 
-shared_ptr<unordered_set<string>> Table::getValuesByKey(string key,
-                                                        int keyColumnNumber,
-                                                        int valueColumnNumber) {
-  int size = rows.size();
-  shared_ptr<unordered_set<string>> output =
-      make_shared<unordered_set<string>>(unordered_set<string>{});
-  for (int i = 0; i < size; i++) {
-    if (rows[i][keyColumnNumber] == key) {
-      output->insert(rows[i][valueColumnNumber]);
-    }
-  }
-  return output;
-}
-
 shared_ptr<Table> Table::getSubTable(int startIndex, int endIndex) {
   shared_ptr<Table> table = make_shared<Table>(Table());
   table->header = header;
@@ -115,10 +101,6 @@ bool Table::contains(vector<string> row, int startIndex, int endIndex) {
 int Table::getNumberOfRows() { return rows.size(); }
 
 int Table::getNumberOfColumns() { return header.size(); }
-
-bool Table::hasCol(std::string colName) {
-  return std::count(header.begin(), header.end(), colName);
-}
 
 void Table::appendRow(const vector<string> &row) { rows.push_back(row); }
 

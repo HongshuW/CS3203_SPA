@@ -4,6 +4,8 @@
 
 #ifndef SPA_ABSTRACTDESIGNEXTRACTOR_H
 #define SPA_ABSTRACTDESIGNEXTRACTOR_H
+#include <unordered_map>
+
 #include "AST/ProgramNode.h"
 #include "design_extractor/results/ExtractorResult.h"
 #include "pkb/DataModifier.h"
