@@ -34,37 +34,35 @@ enum NodeType {
   PROGRAM_NODE,
   VARIABLE_NODE
 };
+
 typedef shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
     FirstLineNoToProcMap;
 
 class ASTUtils {
   static int getNodeLineMappingHelper(
-      shared_ptr<ASTNode> node,
-      shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> map, int curr_line_no,
-      shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> lineToNode);
+      const shared_ptr<ASTNode>& node,
+      const shared_ptr<unordered_map<shared_ptr<ASTNode>, int>>& map, int curr_line_no,
+      const shared_ptr<unordered_map<int, shared_ptr<ASTNode>>>& lineToNode);
   static int getNodePtrToLineNoMapHelper(
-      shared_ptr<ASTNode> node,
-      shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> map,
+      const shared_ptr<ASTNode>& node,
+      const shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>& map,
       int curr_line_no);
 
  public:
-  static NodeType getNodeType(shared_ptr<ASTNode> node);
+  static NodeType getNodeType(const shared_ptr<ASTNode>& node);
   static void getNodeLineMapping(
-      shared_ptr<ProgramNode> root,
-      shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> nodeToLine,
-      shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> lineToNode);
+      const shared_ptr<ProgramNode>& root,
+      const shared_ptr<unordered_map<shared_ptr<ASTNode>, int>>& nodeToLine,
+      const shared_ptr<unordered_map<int, shared_ptr<ASTNode>>>& lineToNode);
   static shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
-  getNodePtrToLineNumMap(shared_ptr<ProgramNode> root);
+  getNodePtrToLineNumMap(const shared_ptr<ProgramNode>& root);
   static shared_ptr<unordered_map<int, shared_ptr<StmtNode>>>
-  getLineNumToNodePtrMap(shared_ptr<ProgramNode> root);
-  static DesignEntity getStmtNodeDesignEntity(shared_ptr<StmtNode> node);
+  getLineNumToNodePtrMap(const shared_ptr<ProgramNode>& root);
+  static DesignEntity getStmtNodeDesignEntity(const shared_ptr<StmtNode>& node);
   static shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
-  getLineNumToProcMap(shared_ptr<ProgramNode> root);
+  getLineNumToProcMap(const shared_ptr<ProgramNode>& root);
   static shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
-  getFirstLineNumToProcMap(shared_ptr<ProgramNode> root);
-  static shared_ptr<
-      unordered_map<shared_ptr<ProcedureNode>, unordered_set<int>>>
-  getProcToLineNumMap(shared_ptr<ProgramNode> root);
+  getFirstLineNumToProcMap(const shared_ptr<ProgramNode>& root);
 };
 
 }  // namespace AST

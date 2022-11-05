@@ -18,7 +18,7 @@ class CondExprNode : public ASTNode {
  public:
   shared_ptr<RelExprNode> relExprNode = nullptr;
   shared_ptr<CondExprNode> condExprLHS = nullptr;
-  string op = "";
+  string op;
   shared_ptr<CondExprNode> condExprRHS = nullptr;
 
   // x == y

@@ -9,7 +9,7 @@
 using namespace AST;
 
 CondExprNode::CondExprNode(shared_ptr<RelExprNode> relExprNode)
-    : relExprNode(relExprNode){};
+    : relExprNode(std::move(relExprNode)){}
 
 CondExprNode::CondExprNode(shared_ptr<CondExprNode> condExprLHS)
     : condExprLHS(std::move(condExprLHS)) {}
@@ -31,4 +31,4 @@ bool CondExprNode::operator==(const ASTNode &node) const {
          (condExprRHS == castedNode->condExprRHS ||
           *condExprRHS == *castedNode->condExprRHS) &&
          op == castedNode->op;
-};
+}

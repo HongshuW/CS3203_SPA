@@ -23,8 +23,8 @@ class ExprNode : public ASTNode {
 
   explicit ExprNode(string expr);
 
-  bool isVariableNode() const;
-  bool isOperatorNode() const;
+  [[nodiscard]] bool isVariableNode() const;
+  [[nodiscard]] bool isOperatorNode() const;
 
   bool operator==(const ASTNode& node) const override;
 };

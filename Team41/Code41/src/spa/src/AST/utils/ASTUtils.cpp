@@ -5,8 +5,10 @@
 #include "ASTUtils.h"
 
 #include <queue>
+#include <utility>
 
 using namespace QB;
+
 namespace AST {
 unordered_map<string, NodeType> nodeClassNameToType({
     {typeid(AssignNode).name(), ASSIGN_NODE},
@@ -22,6 +24,7 @@ unordered_map<string, NodeType> nodeClassNameToType({
     {typeid(ExprNode).name(), EXPR_NODE},
 
 });
+
 unordered_map<NodeType, DesignEntity> nodeTypeToDesignEntity({
     {ASSIGN_NODE, DesignEntity::ASSIGN},
     {CALL_NODE, DesignEntity::CALL},
@@ -31,42 +34,43 @@ unordered_map<NodeType, DesignEntity> nodeTypeToDesignEntity({
     {WHILE_NODE, DesignEntity::WHILE},
 
 });
-unordered_set<NodeType> stmtNodeTypes({ASSIGN_NODE, CALL_NODE, PRINT_NODE,
-                                       IF_NODE, READ_NODE, WHILE_NODE});
 
-NodeType ASTUtils::getNodeType(shared_ptr<ASTNode> node) {
-  string nodeType = typeid(*node).name();
-  return nodeClassNameToType.at(nodeType);
+NodeType ASTUtils::getNodeType(const shared_ptr<ASTNode>& node) {
+		auto& nodeObj = *node;
+		string nodeType = typeid(nodeObj).name();
+		return nodeClassNameToType.at(nodeType);
 }
-DesignEntity ASTUtils::getStmtNodeDesignEntity(shared_ptr<StmtNode> node) {
-  string nodeTypeStr = typeid(*node).name();
+
+DesignEntity ASTUtils::getStmtNodeDesignEntity(const shared_ptr<StmtNode>& node) {
+	auto& nodeObj = *node;
+  string nodeTypeStr = typeid(nodeObj).name();
   NodeType nodeType = nodeClassNameToType.at(nodeTypeStr);
   return nodeTypeToDesignEntity.at(nodeType);
 }
 
 void ASTUtils::getNodeLineMapping(
-    shared_ptr<ProgramNode> root,
-    shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> nodeToLine,
-    shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> lineToNode) {
+    const shared_ptr<ProgramNode>& root,
+    const shared_ptr<unordered_map<shared_ptr<ASTNode>, int>>& nodeToLine,
+    const shared_ptr<unordered_map<int, shared_ptr<ASTNode>>>& lineToNode) {
   int curr_line_no = 1;
-  for (auto procedureNode : root->procedureList) {
+  for (const auto& procedureNode : root->procedureList) {
     curr_line_no = getNodeLineMappingHelper(procedureNode, nodeToLine,
                                             curr_line_no, lineToNode);
   }
 }
 
 int ASTUtils::getNodeLineMappingHelper(
-    shared_ptr<ASTNode> node,
-    shared_ptr<unordered_map<shared_ptr<ASTNode>, int>> nodeToLine,
+    const shared_ptr<ASTNode>& node,
+    const shared_ptr<unordered_map<shared_ptr<ASTNode>, int>>& nodeToLine,
     int curr_line_no,
-    shared_ptr<unordered_map<int, shared_ptr<ASTNode>>> lineToNode) {
+    const shared_ptr<unordered_map<int, shared_ptr<ASTNode>>>& lineToNode) {
   NodeType nodeType = ASTUtils::getNodeType(node);
 
   switch (nodeType) {
     case AST::PROCEDURE_NODE: {
       shared_ptr<ProcedureNode> procedureNode =
           dynamic_pointer_cast<ProcedureNode>(node);
-      for (auto childNode : procedureNode->stmtList) {
+      for (const auto& childNode : procedureNode->stmtList) {
         curr_line_no = getNodeLineMappingHelper(childNode, nodeToLine,
                                                 curr_line_no, lineToNode);
       }
@@ -77,11 +81,11 @@ int ASTUtils::getNodeLineMappingHelper(
       nodeToLine->insert({ifNode, curr_line_no});
       lineToNode->insert({curr_line_no, ifNode});
       curr_line_no++;
-      for (auto childNode : ifNode->ifStmtList) {
+      for (const auto& childNode : ifNode->ifStmtList) {
         curr_line_no = getNodeLineMappingHelper(childNode, nodeToLine,
                                                 curr_line_no, lineToNode);
       }
-      for (auto childNode : ifNode->elseStmtList) {
+      for (const auto& childNode : ifNode->elseStmtList) {
         curr_line_no = getNodeLineMappingHelper(childNode, nodeToLine,
                                                 curr_line_no, lineToNode);
       }
@@ -92,7 +96,7 @@ int ASTUtils::getNodeLineMappingHelper(
       nodeToLine->insert({whileNode, curr_line_no});
       lineToNode->insert({curr_line_no, whileNode});
       curr_line_no++;
-      for (auto childNode : whileNode->stmtList) {
+      for (const auto& childNode : whileNode->stmtList) {
         curr_line_no = getNodeLineMappingHelper(childNode, nodeToLine,
                                                 curr_line_no, lineToNode);
       }
@@ -110,11 +114,11 @@ int ASTUtils::getNodeLineMappingHelper(
 }
 
 shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>
-ASTUtils::getNodePtrToLineNumMap(shared_ptr<ProgramNode> root) {
+ASTUtils::getNodePtrToLineNumMap(const shared_ptr<ProgramNode>& root) {
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> map =
       make_shared<unordered_map<shared_ptr<StmtNode>, int>>();
   int curr_line_no = 1;
-  for (auto procedureNode : root->procedureList) {
+  for (const auto& procedureNode : root->procedureList) {
     curr_line_no =
         getNodePtrToLineNoMapHelper(procedureNode, map, curr_line_no);
   }
@@ -122,8 +126,8 @@ ASTUtils::getNodePtrToLineNumMap(shared_ptr<ProgramNode> root) {
 }
 
 int ASTUtils::getNodePtrToLineNoMapHelper(
-    shared_ptr<ASTNode> node,
-    shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> map,
+    const shared_ptr<ASTNode>& node,
+    const shared_ptr<unordered_map<shared_ptr<StmtNode>, int>>& map,
     int curr_line_no) {
   NodeType nodeType = ASTUtils::getNodeType(node);
 
@@ -131,7 +135,7 @@ int ASTUtils::getNodePtrToLineNoMapHelper(
     case AST::PROCEDURE_NODE: {
       shared_ptr<ProcedureNode> procedureNode =
           dynamic_pointer_cast<ProcedureNode>(node);
-      for (auto childNode : procedureNode->stmtList) {
+      for (const auto& childNode : procedureNode->stmtList) {
         curr_line_no =
             getNodePtrToLineNoMapHelper(childNode, map, curr_line_no);
       }
@@ -141,11 +145,11 @@ int ASTUtils::getNodePtrToLineNoMapHelper(
       shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(node);
       map->insert({ifNode, curr_line_no});
       curr_line_no++;
-      for (auto childNode : ifNode->ifStmtList) {
+      for (const auto& childNode : ifNode->ifStmtList) {
         curr_line_no =
             getNodePtrToLineNoMapHelper(childNode, map, curr_line_no);
       }
-      for (auto childNode : ifNode->elseStmtList) {
+      for (const auto& childNode : ifNode->elseStmtList) {
         curr_line_no =
             getNodePtrToLineNoMapHelper(childNode, map, curr_line_no);
       }
@@ -155,7 +159,7 @@ int ASTUtils::getNodePtrToLineNoMapHelper(
       shared_ptr<WhileNode> whileNode = dynamic_pointer_cast<WhileNode>(node);
       map->insert({whileNode, curr_line_no});
       curr_line_no++;
-      for (auto childNode : whileNode->stmtList) {
+      for (const auto& childNode : whileNode->stmtList) {
         curr_line_no =
             getNodePtrToLineNoMapHelper(childNode, map, curr_line_no);
       }
@@ -173,7 +177,7 @@ int ASTUtils::getNodePtrToLineNoMapHelper(
 }
 
 shared_ptr<unordered_map<int, shared_ptr<StmtNode>>>
-ASTUtils::getLineNumToNodePtrMap(shared_ptr<ProgramNode> root) {
+ASTUtils::getLineNumToNodePtrMap(const shared_ptr<ProgramNode>& root) {
   shared_ptr<unordered_map<int, shared_ptr<StmtNode>>> output =
       make_shared<unordered_map<int, shared_ptr<StmtNode>>>(
           unordered_map<int, shared_ptr<StmtNode>>());
@@ -188,13 +192,13 @@ ASTUtils::getLineNumToNodePtrMap(shared_ptr<ProgramNode> root) {
 }
 
 shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>>
-ASTUtils::getLineNumToProcMap(shared_ptr<ProgramNode> root) {
+ASTUtils::getLineNumToProcMap(const shared_ptr<ProgramNode>& root) {
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> mapping =
       make_shared<unordered_map<shared_ptr<StmtNode>, int>>();
   shared_ptr<unordered_map<int, shared_ptr<ProcedureNode>>> output =
       make_shared<unordered_map<int, shared_ptr<ProcedureNode>>>();
   int curr_line_no = 1;
-  for (auto procedureNode : root->procedureList) {
+  for (const auto& procedureNode : root->procedureList) {
     curr_line_no =
         getNodePtrToLineNoMapHelper(procedureNode, mapping, curr_line_no);
     for (int i = 1; i < curr_line_no; i++) {
@@ -205,60 +209,18 @@ ASTUtils::getLineNumToProcMap(shared_ptr<ProgramNode> root) {
 }
 
 shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>>
-ASTUtils::getFirstLineNumToProcMap(shared_ptr<AST::ProgramNode> root) {
+ASTUtils::getFirstLineNumToProcMap(const shared_ptr<AST::ProgramNode>& root) {
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> mapping =
       make_shared<unordered_map<shared_ptr<StmtNode>, int>>();
   shared_ptr<unordered_map<shared_ptr<ProcedureNode>, int>> output =
       make_shared<unordered_map<shared_ptr<ProcedureNode>, int>>();
   int curr_line_no = 1;
-  for (auto procedureNode : root->procedureList) {
+  for (const auto& procedureNode : root->procedureList) {
     output->insert({procedureNode, curr_line_no});
     curr_line_no =
         getNodePtrToLineNoMapHelper(procedureNode, mapping, curr_line_no);
   }
   return output;
-}
-
-shared_ptr<unordered_map<shared_ptr<ProcedureNode>, unordered_set<int>>>
-ASTUtils::getProcToLineNumMap(shared_ptr<ProgramNode> root) {
-  auto lineNumMap = getNodePtrToLineNumMap(root);
-  auto output = unordered_map<shared_ptr<ProcedureNode>, unordered_set<int>>();
-  for (auto proc : root->procedureList) {
-    string procName = proc->procedureName;
-    queue<shared_ptr<StmtNode>> stmtNodeQ;
-    unordered_set<int> lineNumList;
-    for (auto& node : proc->stmtList) {
-      stmtNodeQ.push(node);
-    }
-    while (!stmtNodeQ.empty()) {
-      auto stmtNode = stmtNodeQ.front();
-      stmtNodeQ.pop();
-      int lineNum = lineNumMap->at(stmtNode);
-      lineNumList.insert(lineNum);
-
-      if (getNodeType(stmtNode) == AST::IF_NODE) {
-        shared_ptr<IfNode> ifNode = dynamic_pointer_cast<IfNode>(stmtNode);
-        for (auto ifStmt : ifNode->ifStmtList) {
-          stmtNodeQ.push(ifStmt);
-        }
-
-        for (auto elseStmt : ifNode->elseStmtList) {
-          stmtNodeQ.push(elseStmt);
-        }
-      } else if (getNodeType(stmtNode) == AST::WHILE_NODE) {
-        shared_ptr<WhileNode> whileNode =
-            dynamic_pointer_cast<WhileNode>(stmtNode);
-        for (auto stmt : whileNode->stmtList) {
-          stmtNodeQ.push(stmt);
-        }
-      }
-    }
-
-    output.insert(make_pair(proc, lineNumList));
-  }
-
-  return make_shared<
-      unordered_map<shared_ptr<ProcedureNode>, unordered_set<int>>>(output);
 }
 
 }  // namespace AST
