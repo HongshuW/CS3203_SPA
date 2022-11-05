@@ -31,7 +31,8 @@ shared_ptr<ExtractorResult> CallsTRelationExtractor::extract() {
       while (!queue.empty()) {
         auto callNodeEntry = queue.front();
         queue.pop();
-        if (reachableCallNodeNames.count(callNodeEntry->procedureName)) continue;
+        if (reachableCallNodeNames.count(callNodeEntry->procedureName))
+          continue;
         reachableCallNodeNames.insert(callNodeEntry->procedureName);
         if (mappedCallNodesToProcedures.count(callNodeEntry->procedureName) !=
             0) {

@@ -110,7 +110,7 @@ void CallNodeExtractionInterface::
     int stmtNo = stmtNumbers->at(node);
     queue<shared_ptr<StmtNode>> queue;
     queue.push(node);
-      unordered_set<string> visitedProcs;
+    unordered_set<string> visitedProcs;
     while (!queue.empty()) {
       auto nodeEntry = queue.front();
       queue.pop();
@@ -277,7 +277,7 @@ void CallNodeExtractionInterface::
         unordered_set<std::string>& uniqueVarList) {
   queue<shared_ptr<CallNode>> queue;
   queue.push(callNode);
-    unordered_set<string> visitedProcs;
+  unordered_set<string> visitedProcs;
   while (!queue.empty()) {
     auto callNodeEntry = queue.front();
     queue.pop();
