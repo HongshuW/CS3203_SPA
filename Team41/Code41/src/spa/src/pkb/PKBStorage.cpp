@@ -82,11 +82,6 @@ void PKBStorage::saveProcedures(list<string> procedures) {
   procedureTable->addValues(procedures);
 }
 
-void PKBStorage::saveCFG(
-    string procedure, shared_ptr<unordered_map<int, unordered_set<int>>> cfg) {
-  procedureTable->saveCFGofProcedure(procedure, cfg);
-}
-
 void PKBStorage::saveStatements(list<vector<string>> statements) {
   statementTable->appendRows(statements);
 }
@@ -132,21 +127,6 @@ shared_ptr<NextTable> PKBStorage::getNextT() { return nextTTable; }
 shared_ptr<AffectsTable> PKBStorage::getAffects() { return affectsTable; }
 
 shared_ptr<AffectsTable> PKBStorage::getAffectsT() { return affectsTTable; }
-
-shared_ptr<unordered_set<string>> PKBStorage::getFollowingStatements(
-    string followedStatement) {
-  return followsTable->getValuesByKey(followedStatement);
-}
-
-shared_ptr<unordered_set<string>> PKBStorage::getChildrenStatements(
-    string parentStatement) {
-  return parentTable->getValuesByKey(parentStatement);
-}
-
-shared_ptr<unordered_set<string>> PKBStorage::getModifiedVariables(
-    string modifierStatement) {
-  return modifiesSTable->getValuesByKey(modifierStatement);
-}
 
 void PKBStorage::saveFollows(vector<string> follows) {
   followsTable->appendRow(follows);
