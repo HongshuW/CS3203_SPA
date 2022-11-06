@@ -20,6 +20,8 @@ AffectsTRelationExtractor::AffectsTRelationExtractor(
 
 shared_ptr<ExtractorResult> AffectsTRelationExtractor::extract(
     StmtNoArgs args) {
+  if (!isArgsWithinRange(args))
+    return make_shared<QueryTimeResult>(make_shared<vector<string>>());
   clearCache();
   generateAffectsTable();
 
