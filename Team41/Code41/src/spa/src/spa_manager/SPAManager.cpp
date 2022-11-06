@@ -4,8 +4,10 @@
 
 #include "SPAManager.h"
 
+#include <utility>
+
 SPAManager::SPAManager(shared_ptr<PKBStorage> pkbStorage)
-    : pkbStorage(pkbStorage) {}
+    : pkbStorage(std::move(pkbStorage)) {}
 
 void SPAManager::parse(string& filename) {
   try {

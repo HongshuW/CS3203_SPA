@@ -6,7 +6,6 @@
 
 #include <unordered_set>
 
-#include "iostream"
 using namespace std;
 namespace QE {
 
@@ -120,7 +119,7 @@ vector<vector<int>> TableCombiner::findDupHeaders(const vector<string> &h1,
 
 string TableCombiner::createFilterRowKey(const vector<string> &row,
                                          const vector<int> &colsToCheck) {
-  string key = "";
+  string key;
   for (int idx : colsToCheck) {
     key += row[idx];
     key += CONCAT_SYM;

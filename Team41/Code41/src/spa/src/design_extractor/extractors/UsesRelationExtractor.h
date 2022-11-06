@@ -20,7 +20,8 @@ class UsesRelationExtractor : public AbstractDesignExtractor,
   shared_ptr<list<vector<string>>> output;
 
   unordered_set<string> extractUsesSHelper(
-      shared_ptr<ASTNode> node, shared_ptr<list<vector<string>>> result);
+      const shared_ptr<ASTNode>& node,
+      const shared_ptr<list<vector<string>>>& result);
   void initProceduresToUsedVarsMap();
   StrToSetMap proceduresToUsedVarsMap;
 };

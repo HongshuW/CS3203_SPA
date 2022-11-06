@@ -11,7 +11,7 @@ namespace DE {
 
 class FollowsRelationExtractor : public AbstractDesignExtractor {
   void initListOfStmtList();
-  void extractHelper(vector<shared_ptr<StmtNode>> stmtList);
+  void extractHelper(const vector<shared_ptr<StmtNode>>& stmtList);
   vector<vector<shared_ptr<StmtNode>>> listOfStmtList;
   shared_ptr<list<vector<string>>> output;
 

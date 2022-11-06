@@ -4,10 +4,13 @@
 
 #include "DesignExtractorManager.h"
 
+#include <utility>
+
 namespace DE {
 DesignExtractorManager::DesignExtractorManager(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : dataModifier(dataModifier), programNode(programNode) {}
+    : dataModifier(std::move(dataModifier)),
+      programNode(std::move(programNode)) {}
 
 void DesignExtractorManager::run() {
   // save statement lines and types
@@ -40,7 +43,7 @@ void DesignExtractorManager::saveEntitiesToPKB() {
       make_shared<VariableExtractor>(dataModifier, programNode),
       make_shared<ProcedureExtractor>(dataModifier, programNode)};
 
-  for (auto extractor : entitiesExtractors) {
+  for (const auto& extractor : entitiesExtractors) {
     extractor->save(extractor->extract());
   }
 }
@@ -51,7 +54,7 @@ void DesignExtractorManager::savePatternsToPKB() {
       make_shared<IfPatternExtractor>(dataModifier, programNode),
       make_shared<WhilePatternExtractor>(dataModifier, programNode)};
 
-  for (auto extractor : patternsExtractors) {
+  for (const auto& extractor : patternsExtractors) {
     extractor->save(extractor->extract());
   }
 }
@@ -71,7 +74,7 @@ void DesignExtractorManager::saveRelationsToPKB() {
       make_shared<CallsTRelationExtractor>(dataModifier, programNode),
       make_shared<NextRelationExtractor>(dataModifier, programNode)};
 
-  for (auto extractor : relationsExtractors) {
+  for (const auto& extractor : relationsExtractors) {
     extractor->save(extractor->extract());
   }
 }

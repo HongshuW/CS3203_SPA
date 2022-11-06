@@ -25,7 +25,7 @@ shared_ptr<ExtractorResult> CallsTRelationExtractor::extract() {
     string name = it.first;
     vector<shared_ptr<CallNode>> listOfCallNodes = it.second;
     unordered_set<string> reachableCallNodeNames;
-    for (auto callNode : listOfCallNodes) {
+    for (const auto& callNode : listOfCallNodes) {
       queue<shared_ptr<CallNode>> queue;
       queue.push(callNode);
       while (!queue.empty()) {
@@ -38,14 +38,14 @@ shared_ptr<ExtractorResult> CallsTRelationExtractor::extract() {
             0) {
           auto otherCallNodes =
               mappedCallNodesToProcedures.at(callNodeEntry->procedureName);
-          for (auto n : otherCallNodes) {
+          for (const auto& n : otherCallNodes) {
             if (reachableCallNodeNames.count(n->procedureName)) continue;
             queue.push(n);
           }
         }
       }
     }
-    for (auto nodeNames : reachableCallNodeNames) {
+    for (const auto& nodeNames : reachableCallNodeNames) {
       vector<string> callsEntry;
       callsEntry.push_back(name);
       callsEntry.push_back(nodeNames);
@@ -58,7 +58,7 @@ shared_ptr<ExtractorResult> CallsTRelationExtractor::extract() {
 void CallsTRelationExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<RelationResult> callsTResult =
       static_pointer_cast<RelationResult>(result);
-  for (const auto entry : *callsTResult->getResult()) {
+  for (const auto& entry : *callsTResult->getResult()) {
     dataModifier->saveCallsT(entry);
   }
 }

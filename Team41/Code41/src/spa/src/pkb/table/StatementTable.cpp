@@ -16,11 +16,10 @@ StatementTable::StatementTable() {
                                   PKBStorage::VARIABLE_TABLE_COL1_NAME};
 }
 
-string StatementTable::getStatementType(string stmtNumber) {
+string StatementTable::getStatementType(const string& stmtNumber) {
   vector<string> row = getRowByPrimaryKey(stmtNumber);
   if (row.empty()) {
-    throw new KeyNotFoundException(getHeader()[primaryKeyColumnIndex],
-                                   stmtNumber);
+    throw KeyNotFoundException(getHeader()[primaryKeyColumnIndex], stmtNumber);
   }
   return row[statementTypeColumn];
 }
@@ -31,24 +30,24 @@ shared_ptr<Table> StatementTable::getStatements() {
   return table;
 }
 
-shared_ptr<Table> StatementTable::getPrintedVariables() {
+shared_ptr<Table> StatementTable::getPrintedVariables() const {
   shared_ptr<Table> table = make_shared<Table>(Table());
   table->renameHeader(printedVarsHeader);
   table->setRows(printedVars);
   return table;
 }
 
-shared_ptr<Table> StatementTable::getReadVariables() {
+shared_ptr<Table> StatementTable::getReadVariables() const {
   shared_ptr<Table> table = make_shared<Table>(Table());
   table->renameHeader(readVarsHeader);
   table->setRows(readVars);
   return table;
 }
 
-void StatementTable::addPrintedVar(vector<string> printStmtVarPair) {
+void StatementTable::addPrintedVar(const vector<string>& printStmtVarPair) {
   printedVars.push_back(printStmtVarPair);
 }
 
-void StatementTable::addReadVar(vector<string> readStmtVarPair) {
+void StatementTable::addReadVar(const vector<string>& readStmtVarPair) {
   readVars.push_back(readStmtVarPair);
 }

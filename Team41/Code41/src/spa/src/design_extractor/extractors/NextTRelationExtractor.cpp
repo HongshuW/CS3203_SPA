@@ -44,7 +44,7 @@ shared_ptr<ExtractorResult> NextTRelationExtractor::extractAllRelations() {
   for (const auto& procedure : procedureList) {
     int startNum = firstLineNumToProcMap->at(procedure);
     CFG cfg = procCFGMap->at(procedure);
-    int cfgSize = cfg.cfg->size() + startNum;
+    int cfgSize = (int)cfg.cfg->size() + startNum;
     for (int i = startNum; i < cfgSize; i++) {
       StmtNoArgs args = StmtNoArgs();
       args.setStartStmtNo(i);

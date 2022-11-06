@@ -18,14 +18,14 @@ class StatementTable : public EntityTable {
   explicit StatementTable();
 
   // getters
-  string getStatementType(string stmtNumber);
+  string getStatementType(const string& stmtNumber);
   shared_ptr<Table> getStatements();
-  shared_ptr<Table> getPrintedVariables();
-  shared_ptr<Table> getReadVariables();
+  [[nodiscard]] shared_ptr<Table> getPrintedVariables() const;
+  [[nodiscard]] shared_ptr<Table> getReadVariables() const;
 
   // setters
-  void addPrintedVar(vector<string> printStmtVarPair);
-  void addReadVar(vector<string> readStmtVarPair);
+  void addPrintedVar(const vector<string>& printStmtVarPair);
+  void addReadVar(const vector<string>& readStmtVarPair);
 };
 
 #endif  // SPA_STATEMENTTABLE_H

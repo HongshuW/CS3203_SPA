@@ -30,7 +30,6 @@ class ExpressionSpec {
   //! Only for ANY_MATCH
   ExpressionSpec(ExpressionSpecType expressionSpecType);
 
-  // For creating partial AssignPatternClause in QueryParser
   ExpressionSpec();
 
   bool operator==(const ExpressionSpec& expressionSpec) const;

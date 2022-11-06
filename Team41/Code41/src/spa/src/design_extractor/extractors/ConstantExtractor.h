@@ -10,10 +10,11 @@ namespace DE {
 
 class ConstantExtractor : public EntitiesExtractor {
   shared_ptr<unordered_set<string>> extractConstants(
-      shared_ptr<StmtNode> stmtNode);
-  unordered_set<string> getConstantsFromExprNode(shared_ptr<ExprNode> exprNode);
+      const shared_ptr<StmtNode>& stmtNode);
+  unordered_set<string> getConstantsFromExprNode(
+      const shared_ptr<ExprNode>& exprNode);
   unordered_set<string> getConstantsFromCondExprNode(
-      shared_ptr<CondExprNode> condExprNode);
+      const shared_ptr<CondExprNode>& condExprNode);
 
  public:
   ConstantExtractor(shared_ptr<DataModifier> dataModifier,

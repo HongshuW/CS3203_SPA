@@ -17,7 +17,7 @@ namespace DE {
 class VariableExtractor : public EntitiesExtractor,
                           public VariableExtractionInterface {
   shared_ptr<unordered_set<string>> extractVariables(
-      shared_ptr<StmtNode> stmtNode);
+      const shared_ptr<StmtNode>& stmtNode);
 
  public:
   VariableExtractor(shared_ptr<DataModifier> dataModifier,

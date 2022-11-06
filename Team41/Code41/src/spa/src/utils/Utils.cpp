@@ -10,11 +10,6 @@ const regex NAME_REGEX = std::regex("[a-zA-Z](\\d|[a-zA-Z])*");
 
 const unordered_set<string> Utils::BRACKETS = {"(", ")"};
 const unordered_set<string> Utils::MATH_OPERATORS = {"+", "-", "*", "/", "%"};
-const unordered_set<string> Utils::VALID_TOKENS_REL_EXPR = {">",  ">=", "<",
-                                                            "<=", "==", "!="};
-const unordered_set<string> Utils::VALID_TOKENS_COND_EXPR = {
-    ">", ">=", "<", "<=", "==", "!=", "!",  "+",
-    "-", "*",  "/", "(",  ")",  "&&", "||", "%"};
 
 const char Utils::CHAR_ZERO = '0';
 const string Utils::STRING_ZERO_TO_NINE = "0123456789";

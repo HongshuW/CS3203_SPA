@@ -10,11 +10,11 @@ WithClause::WithClause(WithRef lhs, WithRef rhs)
     : lhs(std::move(lhs)), rhs(std::move(rhs)) {}
 
 WithRefType WithClause::lhsType() const {
-  return getWithRefTypeFromIndex(lhs.index());
+  return getWithRefTypeFromIndex((int)lhs.index());
 }
 
 WithRefType WithClause::rhsType() const {
-  return getWithRefTypeFromIndex(rhs.index());
+  return getWithRefTypeFromIndex((int)rhs.index());
 }
 
 WithRefType WithClause::getWithRefType(int idx) {
@@ -33,9 +33,9 @@ shared_ptr<Table> WithClause::accept(shared_ptr<IVisitor> visitor) {
 
 unordered_set<string> WithClause::getSynonymNames() {
   unordered_set<string> synonyms = unordered_set<string>();
-  if (getWithRefType(lhs.index()) == WithRefType::ATTR_REF)
+  if (getWithRefType((int)lhs.index()) == WithRefType::ATTR_REF)
     synonyms.insert(get<AttrRef>(lhs).synonym.synonym);
-  if (getWithRefType(rhs.index()) == WithRefType::ATTR_REF)
+  if (getWithRefType((int)rhs.index()) == WithRefType::ATTR_REF)
     synonyms.insert(get<AttrRef>(rhs).synonym.synonym);
   return synonyms;
 }

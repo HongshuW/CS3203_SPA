@@ -18,7 +18,7 @@ class Uses : public SuchThatRelations {
   shared_ptr<vector<Declaration>> declarations;
 
  public:
-  Uses(shared_ptr<vector<Declaration>> declarations);
+  explicit Uses(shared_ptr<vector<Declaration>> declarations);
   shared_ptr<AbstractClause> createClause(Ref arg1, Ref arg2) override;
 };
 }  // namespace QB

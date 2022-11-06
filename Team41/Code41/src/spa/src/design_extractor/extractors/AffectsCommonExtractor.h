@@ -28,7 +28,7 @@ class AffectsCommonExtractor : public QueryTimeDesignExtractor,
                                public CallNodeExtractionInterface,
                                public VariableExtractionInterface {
  protected:
-  AffectsCommonExtractor(shared_ptr<ProgramNode> programNode);
+  explicit AffectsCommonExtractor(shared_ptr<ProgramNode> programNode);
   int offset;
   int programSize;
   shared_ptr<CFG> currCFG;
@@ -38,7 +38,7 @@ class AffectsCommonExtractor : public QueryTimeDesignExtractor,
   shared_ptr<ModifiesPMap> modifiesPMap;
   shared_ptr<AffectsRelationTable> affectsTable;
   void initialize();
-  void DFS(int curr, shared_ptr<vector<int>> visitCount,
+  void DFS(int curr, const shared_ptr<vector<int>>& visitCount,
            unordered_map<string, int> LastModifiedMap);
   void generateAffectsTable();
   virtual void clearCache();

@@ -17,7 +17,7 @@ void ParentTRelationExtractor::extractParentTDFS(
   }
   // add current stmt to ancestors
   ancestors.push_back(to_string(key));
-  // pop current stmt's children
+  // pop current statement's children
   vector<int> children = parentRelations->at(key);
   parentRelations->erase(key);
   for (const string& ancestor : ancestors) {

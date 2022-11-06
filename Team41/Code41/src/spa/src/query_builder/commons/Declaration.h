@@ -21,8 +21,8 @@ class Declaration {
  public:
   DesignEntity designEntity;
   Synonym synonym;
-  DesignEntity getDesignEntity() { return designEntity; }
-  Synonym getSynonym() { return synonym; }
+  [[nodiscard]] DesignEntity getDesignEntity() const;
+  [[nodiscard]] Synonym getSynonym() const;
 
   Declaration(DesignEntity designEntity, Synonym synonym);
 

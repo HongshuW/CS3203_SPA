@@ -321,7 +321,7 @@ bool QueryParser::parseWith() {
 }
 
 void QueryParser::validateArgRefTypeSuchThatClause(
-    shared_ptr<SuchThatClause> suchThatClause) const {
+    const shared_ptr<SuchThatClause>& suchThatClause) const {
   shared_ptr<Validatable> clause =
       dynamic_pointer_cast<Validatable>(suchThatClause);
   pair<RefTypeSet, RefTypeSet> validArgsTypes = clause->getAllowedArgsRefType();
@@ -339,7 +339,7 @@ void QueryParser::validateArgRefTypeSuchThatClause(
   }
 }
 
-void QueryParser::validateArgRefTypePatternClause(Ref arg2) const {
+void QueryParser::validateArgRefTypePatternClause(const Ref& arg2) const {
   //! arg2 for pattern clause must be an entRef, e.g. synonym, _ or ident
   auto arg2RefIndex = arg2.index();
   if (!entRefIndexSet.count(arg2RefIndex)) {

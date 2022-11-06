@@ -16,7 +16,7 @@ namespace DE {
 
 class QueryTimeDesignExtractor {
  public:
-  explicit QueryTimeDesignExtractor(shared_ptr<ProgramNode> programNode);
+  explicit QueryTimeDesignExtractor(const shared_ptr<ProgramNode>& programNode);
   virtual shared_ptr<ExtractorResult> extract(StmtNoArgs args) = 0;
   virtual shared_ptr<ExtractorResult> extractAllRelations() = 0;
 

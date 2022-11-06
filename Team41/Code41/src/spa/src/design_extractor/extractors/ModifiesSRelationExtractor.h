@@ -12,7 +12,7 @@
 namespace DE {
 
 class ModifiesSRelationExtractor : public ModifiesRelationExtractor {
-  void extractorHelper(shared_ptr<ASTNode> node);
+  void extractorHelper(const shared_ptr<ASTNode>& node);
   void insertCallsForModifiesS();
   void insertCallsInIfAndWhileForModifiesS();
 

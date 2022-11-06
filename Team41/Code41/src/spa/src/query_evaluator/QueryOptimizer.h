@@ -24,16 +24,16 @@ class QueryOptimizer {
   unordered_map<int, shared_ptr<ConditionalClause>> idClauseMap;
   vector<vector<int>> edgeWeights;
 
-  int getMinClauseIdFromGroup(SubgroupClauses clauses);
+  int getMinClauseIdFromGroup(const SubgroupClauses& clauses);
 
   void initParent();
   void initMaps();
   void initEdges();
 
-  bool hasCommonSyn(shared_ptr<ConditionalClause> clause1,
-                    shared_ptr<ConditionalClause> clause2);
-  int calculateEdgeWeight(shared_ptr<ConditionalClause> clause1,
-                          shared_ptr<ConditionalClause> clause2);
+  bool hasCommonSyn(const shared_ptr<ConditionalClause>& clause1,
+                    const shared_ptr<ConditionalClause>& clause2);
+  int calculateEdgeWeight(const shared_ptr<ConditionalClause>& clause1,
+                          const shared_ptr<ConditionalClause>& clause2);
   int getLowerCostClause(int x, int y);
 
   int root(int clause);

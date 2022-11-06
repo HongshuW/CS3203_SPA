@@ -4,6 +4,8 @@
 
 #include "AffectsRelationExtractor.h"
 
+#include <utility>
+
 #include "NextRelationExtractor.h"
 #include "design_extractor/results/QueryTimeResult.h"
 
@@ -12,7 +14,7 @@ AffectsRelationExtractor::AffectsRelationExtractor(
     shared_ptr<ProgramNode> programNode)
     : AffectsCommonExtractor(std::move(programNode)) {}
 
-bool AffectsRelationExtractor::isModified(string variable, int stmtNo) {
+bool AffectsRelationExtractor::isModified(const string& variable, int stmtNo) {
   shared_ptr<StmtNode> stmtNode =
       dynamic_pointer_cast<StmtNode>(lineNoToNodePtrMap->at(stmtNo));
   NodeType nodeType = ASTUtils::getNodeType(stmtNode);
@@ -38,7 +40,8 @@ bool AffectsRelationExtractor::isModified(string variable, int stmtNo) {
   }
 }
 
-bool AffectsRelationExtractor::checkNoWildcardDFS(int start, int end, CFG cfg) {
+bool AffectsRelationExtractor::checkNoWildcardDFS(int start, int end,
+                                                  const CFG& cfg) {
   shared_ptr<AssignNode> startNode =
       dynamic_pointer_cast<AssignNode>(lineNoToNodePtrMap->at(start));
   string modifiedVar = startNode->variableNode->variable;
@@ -96,7 +99,7 @@ shared_ptr<vector<string>> AffectsRelationExtractor::extractNoWildcard(
 }
 
 shared_ptr<vector<string>> AffectsRelationExtractor::extractWithStartGivenDFS(
-    CFG cfg, int start) {
+    const CFG& cfg, int start) {
   shared_ptr<vector<string>> output =
       make_shared<vector<string>>(vector<string>());
   shared_ptr<AssignNode> startNode =
@@ -145,9 +148,9 @@ shared_ptr<vector<string>> AffectsRelationExtractor::extractWithStartGivenDFS(
 }
 
 void AffectsRelationExtractor::extractWithEndBTHelper(
-    CFG cfg, int stmt, shared_ptr<unordered_set<string>> output,
-    shared_ptr<unordered_set<string>> usedVariables,
-    shared_ptr<unordered_set<int>> visited) {
+    const CFG& cfg, int stmt, const shared_ptr<unordered_set<string>>& output,
+    const shared_ptr<unordered_set<string>>& usedVariables,
+    const shared_ptr<unordered_set<int>>& visited) {
   if (usedVariables->empty()) {
     return;
   }
@@ -202,17 +205,16 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
         visited->erase(child);
       }
     } else if (nodeType == NodeType::CALL_NODE) {
-      // TODO: try to optimize this part
       shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(childNode);
       string procedure = callNode->procedureName;
       shared_ptr<unordered_set<string>> modifiedVariables =
           modifiesPMap->at(procedure);
       unordered_set<string> usedVarCopy = unordered_set<string>();
       unordered_set<string> setUnion = unordered_set<string>();
-      for (string usedVar : *usedVariables) {
+      for (const string& usedVar : *usedVariables) {
         usedVarCopy.insert(usedVar);
       }
-      for (string usedVar : usedVarCopy) {
+      for (const string& usedVar : usedVarCopy) {
         if (modifiedVariables->find(usedVar) != modifiedVariables->end()) {
           // if used variable is modified, remove it from usedVariables
           usedVariables->erase(usedVar);
@@ -224,7 +226,7 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
       extractWithEndBTHelper(cfg, child, output, usedVariables, visited);
       visited->erase(child);
       // add back variables removed
-      for (string removedVar : setUnion) {
+      for (const string& removedVar : setUnion) {
         usedVariables->insert(removedVar);
       }
     } else {
@@ -236,7 +238,8 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
 }
 
 shared_ptr<vector<string>>
-AffectsRelationExtractor::extractWithEndGivenBackTracking(CFG cfg, int end) {
+AffectsRelationExtractor::extractWithEndGivenBackTracking(const CFG& cfg,
+                                                          int end) {
   shared_ptr<unordered_set<string>> output =
       make_shared<unordered_set<string>>(unordered_set<string>());
   shared_ptr<AssignNode> endNode =

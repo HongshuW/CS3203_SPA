@@ -16,9 +16,10 @@ namespace DE {
 
 class VariableExtractionInterface {
  public:
-  unordered_set<string> getVariablesFromExprNode(shared_ptr<ExprNode> exprNode);
+  unordered_set<string> getVariablesFromExprNode(
+      const shared_ptr<ExprNode>& exprNode);
   unordered_set<string> getVariablesFromCondExprNode(
-      shared_ptr<CondExprNode> condExprNode);
+      const shared_ptr<CondExprNode>& condExprNode);
 };
 
 }  // namespace DE

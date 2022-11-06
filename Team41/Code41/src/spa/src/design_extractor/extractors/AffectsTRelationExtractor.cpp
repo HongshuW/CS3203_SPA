@@ -4,14 +4,16 @@
 
 #include "AffectsTRelationExtractor.h"
 
+#include <utility>
+
 #include "design_extractor/results/QueryTimeResult.h"
 #include "design_extractor/results/RelationResult.h"
 
 namespace DE {
 AffectsTRelationExtractor::AffectsTRelationExtractor(
     shared_ptr<ProgramNode> programNode)
-    : AffectsCommonExtractor(programNode) {
-  programSize = stmtNumbers->size();
+    : AffectsCommonExtractor(std::move(programNode)) {
+  programSize = (int)stmtNumbers->size();
   vector<bool> row(programSize, false);
   dp = vector<vector<bool>>(programSize, row);
 }
@@ -87,7 +89,7 @@ shared_ptr<vector<string>> AffectsTRelationExtractor::extractNoWildcard(
 }
 
 bool AffectsTRelationExtractor::extractNoWildcardDFS(
-    int curr, int target, shared_ptr<unordered_set<int>> visited) {
+    int curr, int target, const shared_ptr<unordered_set<int>> &visited) {
   visited->insert(curr);
   bool isFound = false;
   for (auto &neighbor : affectsAdjListPtr->at(curr)) {
@@ -107,8 +109,8 @@ shared_ptr<vector<string>> AffectsTRelationExtractor::extractWithStartGiven(
 }
 
 void AffectsTRelationExtractor::extractWithStartGivenDFS(
-    int curr, int start, shared_ptr<vector<string>> result,
-    shared_ptr<unordered_set<int>> visited) {
+    int curr, int start, const shared_ptr<vector<string>> &result,
+    const shared_ptr<unordered_set<int>> &visited) {
   visited->insert(curr);
   for (auto &neighbor : affectsAdjListPtr->at(curr)) {
     if (neighbor == start) result->push_back(to_string(neighbor));
@@ -137,8 +139,8 @@ void AffectsTRelationExtractor::initAffectsAdjListReversed() {
 }
 
 void AffectsTRelationExtractor::extractWithEndGivenDFS(
-    int curr, int end, shared_ptr<vector<string>> result,
-    shared_ptr<unordered_set<int>> visited) {
+    int curr, int end, const shared_ptr<vector<string>> &result,
+    const shared_ptr<unordered_set<int>> &visited) {
   visited->insert(curr);
   for (auto &neighbor : affectsAdjListReversedPtr->at(curr)) {
     if (neighbor == end) result->push_back(to_string(neighbor));

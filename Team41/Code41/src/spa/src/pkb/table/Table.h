@@ -25,32 +25,34 @@ class Table {
   explicit Table();
 
   // getters
-  vector<string> getHeader() const;
-  vector<vector<string>> getRows() const;
-  vector<vector<string>> *getRowsPointer();
-  const vector<vector<string>> *getRowsPointerReadOnly() const;
-  vector<string> getColumnByName(string columnName);
+  [[nodiscard]] vector<string> getHeader() const;
+  [[nodiscard]] vector<vector<string>> getRows() const;
+  vector<vector<string>>* getRowsPointer();
+  [[nodiscard]] const vector<vector<string>>* getRowsPointerReadOnly() const;
+  vector<string> getColumnByName(const string& columnName);
   vector<string> getColumnByIndex(int index);
-  vector<string> getRowByPrimaryKey(string key);
-  int getColIdxByName(string colName);
+  vector<string> getRowByPrimaryKey(const string& key);
+  int getColIdxByName(const string& colName);
+
   shared_ptr<Table> getSubTable(int startIndex, int endIndex);
-  shared_ptr<Table> getSubTableByColumn(string key, int keyColumnNumber);
-  bool contains(vector<string> row, int startIndex, int endIndex);
+  shared_ptr<Table> getSubTableByColumn(const string& key, int keyColumnNumber);
+  bool contains(const vector<string>& row, int startIndex, int endIndex);
   int getNumberOfRows();
   int getNumberOfColumns();
-  bool isEqual(const Table &otherTable);
-  bool isHeaderEmpty() const;
-  bool isBodyEmpty() const;
+
+  bool isEqual(const Table& otherTable);
+  [[nodiscard]] bool isHeaderEmpty() const;
+  [[nodiscard]] bool isBodyEmpty() const;
 
   // setters
   void renameHeader(vector<string> newHeader);
-  void appendRow(const vector<string> &row);
-  void appendRows(const list<vector<string>> &rows);
-  void setRows(const vector<vector<string>> &rows);
+  void appendRow(const vector<string>& row);
+  void appendRows(const list<vector<string>>& newRows);
+  void setRows(const vector<vector<string>>& newRows);
   void addValues(list<string> values);
   void dropRows();
-  void insertIntoHeader(const vector<string> &headerToInsert);
-  void dupCol(int colIdx, string dupColName = "$dup_col");
+  void insertIntoHeader(const vector<string>& headerToInsert);
+  void dupCol(int colIdx, const string& dupColName = "$dup_col");
   void dropColFromThis(int colIdx);
   void removeDupRow();
 

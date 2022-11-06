@@ -5,6 +5,7 @@
 #include "QueryOptimizer.h"
 
 #include <set>
+#include <utility>
 
 #include "query_builder/clauses/pattern_clauses/AssignPatternClause.h"
 #include "query_builder/clauses/pattern_clauses/IfPatternClause.h"
@@ -39,7 +40,9 @@ const int DEFAULT_COST = 100;
 const int SMALL_COST_MAGNITUDE = 5;
 const int MEDIUM_COST_MAGNITUDE = 10;
 const int LARGE_COST_MAGNITUDE = 15;
-QueryOptimizer::QueryOptimizer(shared_ptr<Query> query) : query(query) {
+QueryOptimizer::QueryOptimizer(shared_ptr<Query> query)
+    : query(std::move(query)) {
+  clauseCount = 0;
   initMaps();
   initParent();
 
@@ -60,22 +63,22 @@ void QueryOptimizer::initParent() {
 
 void QueryOptimizer::initMaps() {
   int clauseId = 0;
-  for (auto clause : *query->suchThatClauses) {
+  for (const auto& clause : *query->suchThatClauses) {
     clauseIdMap.insert({clause, clauseId});
     idClauseMap.insert({clauseId, clause});
     clauseId++;
   }
-  for (auto clause : *query->patternClauses) {
+  for (const auto& clause : *query->patternClauses) {
     clauseIdMap.insert({clause, clauseId});
     idClauseMap.insert({clauseId, clause});
     clauseId++;
   }
-  for (auto clause : *query->withClauses) {
+  for (const auto& clause : *query->withClauses) {
     clauseIdMap.insert({clause, clauseId});
     idClauseMap.insert({clauseId, clause});
     clauseId++;
   }
-  clauseCount = clauseIdMap.size();
+  clauseCount = (int)clauseIdMap.size();
 }
 
 void QueryOptimizer::initEdges() {
@@ -103,8 +106,9 @@ void QueryOptimizer::initEdges() {
   }
 }
 
-bool QueryOptimizer::hasCommonSyn(shared_ptr<ConditionalClause> clause1,
-                                  shared_ptr<ConditionalClause> clause2) {
+bool QueryOptimizer::hasCommonSyn(
+    const shared_ptr<ConditionalClause>& clause1,
+    const shared_ptr<ConditionalClause>& clause2) {
   auto set1 = clause1->getSynonymNames();
   for (const auto& syn : clause2->getSynonymNames()) {
     if (set1.count(syn)) return true;
@@ -112,8 +116,9 @@ bool QueryOptimizer::hasCommonSyn(shared_ptr<ConditionalClause> clause1,
   return false;
 }
 
-int QueryOptimizer::calculateEdgeWeight(shared_ptr<ConditionalClause> clause1,
-                                        shared_ptr<ConditionalClause> clause2) {
+int QueryOptimizer::calculateEdgeWeight(
+    const shared_ptr<ConditionalClause>& clause1,
+    const shared_ptr<ConditionalClause>& clause2) {
   int curr_cost = DEFAULT_COST;
   const int SYN_COUNT_THRESHOLD = 1;
   const int IDENT_OR_INT_COUNT_THRESHOLD = 1;
@@ -131,7 +136,7 @@ int QueryOptimizer::calculateEdgeWeight(shared_ptr<ConditionalClause> clause1,
       curr_cost -= SMALL_COST_MAGNITUDE;
   }
 
-  // reduce cost for clauses with less number of results
+  // reduce cost for clauses with lesser number of results
   if (std::find(lowCostRelations.begin(), lowCostRelations.end(),
                 typeid(*clause1).name()) != lowCostRelations.end()) {
     curr_cost -= MEDIUM_COST_MAGNITUDE;
@@ -174,7 +179,7 @@ int QueryOptimizer::getLowerCostClause(int x, int y) {
       cl2Cost -= SMALL_COST_MAGNITUDE;
   }
 
-  // reduce cost for clauses with less number of results
+  // reduce cost for clauses with lesser number of results
   if (std::find(lowCostRelations.begin(), lowCostRelations.end(),
                 typeid(*clause1).name()) != lowCostRelations.end()) {
     cl1Cost -= MEDIUM_COST_MAGNITUDE;
@@ -227,7 +232,7 @@ ConnectedClauseGroups QueryOptimizer::getConnectedGroups() {
 
   for (int i = 0; i < clauseCount; i++) {
     // clauses without synonyms are grouped together
-    if (idClauseMap.at(i)->getSynonymNames().size() == 0) {
+    if (idClauseMap.at(i)->getSynonymNames().empty()) {
       ccg->at(NO_SYN_GROUP_IDX)->push_back(idClauseMap.at(i));
       continue;
     }
@@ -252,7 +257,7 @@ ConnectedClauseGroups QueryOptimizer::optimiseSubGroups(
     shared_ptr<vector<shared_ptr<ConditionalClause>>> sortedVec =
         make_shared<vector<shared_ptr<ConditionalClause>>>();
     auto clauseGroupVec = it.second;
-    const int V = clauseGroupVec->size();
+    const int V = (int)clauseGroupVec->size();
     vector<bool> selected(clauseCount, false);
     int no_edge = 0;
 
@@ -261,24 +266,21 @@ ConnectedClauseGroups QueryOptimizer::optimiseSubGroups(
     sortedVec->push_back(idClauseMap.at(first));
     selected[first] = true;
 
-    // prim's algo to sort vectors and ensure clauses with connected synonyms
+    // prims algo to sort vectors and ensure clauses with connected synonyms
     // are evaluated together
-    int x;
     int y;
     while (no_edge < V - 1) {
       int min = INF;
-      x = 0;
       y = 0;
 
-      for (auto cl1 : *clauseGroupVec) {
+      for (const auto& cl1 : *clauseGroupVec) {
         int i = clauseIdMap.at(cl1);
         if (!selected[i]) continue;
-        for (auto cl2 : *clauseGroupVec) {
+        for (const auto& cl2 : *clauseGroupVec) {
           int j = clauseIdMap.at(cl2);
           if (selected[j] || !edgeWeights[i][j]) continue;
           if (min < edgeWeights[i][j]) continue;
           min = edgeWeights[i][j];
-          x = i;
           y = j;
         }
       }
@@ -291,15 +293,15 @@ ConnectedClauseGroups QueryOptimizer::optimiseSubGroups(
   return ccg;
 }
 
-int QueryOptimizer::getMinClauseIdFromGroup(SubgroupClauses clauses) {
+int QueryOptimizer::getMinClauseIdFromGroup(const SubgroupClauses& clauses) {
   if (clauses->size() == 1) return clauseIdMap.at(clauses->at(0));
   // pick first vertex with min edge cost:
   int minEdgeCost = INF;
   int x_first = 0;
   int y_first = 0;
-  for (auto cl1 : *clauses) {
+  for (const auto& cl1 : *clauses) {
     int i = clauseIdMap.at(cl1);
-    for (auto cl2 : *clauses) {
+    for (const auto& cl2 : *clauses) {
       if (cl1 == cl2) continue;
       int j = clauseIdMap.at(cl2);
       if (!edgeWeights[i][j] || minEdgeCost < edgeWeights[i][j]) continue;

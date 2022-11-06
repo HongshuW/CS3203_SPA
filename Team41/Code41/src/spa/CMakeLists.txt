@@ -47,7 +47,6 @@ add_library(spa ${srcs} ${headers}
         src/query_evaluator/DataPreprocessor.h
         src/query_evaluator/TableCombiner.cpp
         src/query_evaluator/TableCombiner.h
-        src/pkb/table/EntityTable.cpp
         src/pkb/table/EntityTable.h
         src/pkb/table/VariableTable.cpp
         src/pkb/table/VariableTable.h
@@ -57,7 +56,6 @@ add_library(spa ${srcs} ${headers}
         src/pkb/table/StatementTable.h
         src/pkb/table/ConstantTable.cpp
         src/pkb/table/ConstantTable.h
-        src/pkb/table/RelationTable.cpp
         src/pkb/table/RelationTable.h
         src/pkb/table/FollowsTable.cpp
         src/pkb/table/FollowsTable.h
@@ -163,7 +161,6 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/clauses/pattern_clauses/PatternClause.cpp
         src/query_evaluator/constants/ClauseVisitorConstants.cpp
         src/query_evaluator/constants/ClauseVisitorConstants.h
-        src/query_evaluator/IVisitor.cpp
         src/query_evaluator/IVisitor.h
         src/query_builder/clauses/IVisitorHost.h
         src/query_builder/clauses/AbstractClause.h
@@ -206,22 +203,12 @@ add_library(spa ${srcs} ${headers}
         src/query_builder/relations/such_that_relations/Follows.h
         src/query_builder/relations/such_that_relations/SuchThatRelations.cpp
         src/query_builder/relations/such_that_relations/SuchThatRelations.h
-        src/query_builder/relations/such_that_relations/PatternRelations.cpp
-        src/query_builder/relations/such_that_relations/PatternRelations.h
         src/query_builder/relations/such_that_relations/FollowsT.cpp
         src/query_builder/relations/such_that_relations/FollowsT.h
         src/query_builder/relations/such_that_relations/Parent.cpp
         src/query_builder/relations/such_that_relations/Parent.h
         src/query_builder/relations/such_that_relations/ParentT.cpp
         src/query_builder/relations/such_that_relations/ParentT.h
-        src/query_builder/relations/such_that_relations/UsesS.cpp
-        src/query_builder/relations/such_that_relations/UsesS.h
-        src/query_builder/relations/such_that_relations/UsesP.cpp
-        src/query_builder/relations/such_that_relations/UsesP.h
-        src/query_builder/relations/such_that_relations/ModifiesS.cpp
-        src/query_builder/relations/such_that_relations/ModifiesS.h
-        src/query_builder/relations/such_that_relations/ModifiesP.cpp
-        src/query_builder/relations/such_that_relations/ModifiesP.h
         src/query_builder/relations/such_that_relations/Calls.cpp
         src/query_builder/relations/such_that_relations/Calls.h
         src/query_builder/relations/such_that_relations/CallsT.cpp
@@ -263,7 +250,6 @@ add_library(spa ${srcs} ${headers}
         src/design_extractor/extractors/CallsRelationExtractor.h
         src/design_extractor/extractors/CallsTRelationExtractor.cpp
         src/design_extractor/extractors/CallsTRelationExtractor.h
-        src/design_extractor/results/ExtractorResult.cpp
         src/design_extractor/results/ExtractorResult.h
         src/design_extractor/results/RelationResult.cpp
         src/design_extractor/results/RelationResult.h

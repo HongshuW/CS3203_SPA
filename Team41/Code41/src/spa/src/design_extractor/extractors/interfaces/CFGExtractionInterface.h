@@ -25,7 +25,8 @@ typedef unordered_map<shared_ptr<StmtNode>, int> StmtNumbers;
 class CFGExtractionInterface {
  protected:
   shared_ptr<ProcCFGMap> generateProcCFGMap(
-      shared_ptr<ProgramNode> programNode, shared_ptr<StmtNumbers> stmtNumbers);
+      const shared_ptr<ProgramNode>& programNode,
+      const shared_ptr<StmtNumbers>& stmtNumbers);
 };
 
 }  // namespace DE

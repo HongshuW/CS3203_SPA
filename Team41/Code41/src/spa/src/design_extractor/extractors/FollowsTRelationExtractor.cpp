@@ -5,27 +5,28 @@
 #include "FollowsTRelationExtractor.h"
 
 #include <queue>
+#include <utility>
 
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/results/RelationResult.h"
 namespace DE {
 FollowsTRelationExtractor::FollowsTRelationExtractor(
     shared_ptr<DataModifier> dataModifier, shared_ptr<ProgramNode> programNode)
-    : AbstractDesignExtractor(dataModifier, programNode) {
+    : AbstractDesignExtractor(std::move(dataModifier), std::move(programNode)) {
   initListOfStmtList();
   output = make_shared<list<vector<string>>>();
 }
 
 void FollowsTRelationExtractor::initListOfStmtList() {
   vector<shared_ptr<ProcedureNode>> procedureList = programNode->procedureList;
-  for (auto procedureNode : procedureList) {
+  for (const auto& procedureNode : procedureList) {
     queue<vector<shared_ptr<StmtNode>>> queue;
     queue.push(procedureNode->stmtList);
     while (!queue.empty()) {
       auto stmtList = queue.front();
       queue.pop();
       listOfStmtList.push_back(stmtList);
-      for (auto stmtNode : stmtList) {
+      for (const auto& stmtNode : stmtList) {
         NodeType nodeType = ASTUtils::getNodeType(stmtNode);
         switch (nodeType) {
           case AST::IF_NODE: {
@@ -52,26 +53,26 @@ void FollowsTRelationExtractor::initListOfStmtList() {
 }
 
 void FollowsTRelationExtractor::extractHelper(
-    vector<shared_ptr<StmtNode>> stmtList) {
+    const vector<shared_ptr<StmtNode>>& stmtList) {
   vector<int> stmtNoList;
   if (stmtList.size() <= 1) {
     return;
   } else {
-    for (auto stmtNode : stmtList) {
+    for (const auto& stmtNode : stmtList) {
       int stmtNo = stmtNumbers->at(stmtNode);
       stmtNoList.push_back(stmtNo);
     }
 
     std::sort(stmtNoList.begin(), stmtNoList.end());
     deque<int> entryDeque;
-    for (int &i : stmtNoList) {
+    for (int& i : stmtNoList) {
       entryDeque.push_back(i);
     }
 
     while (!entryDeque.empty()) {
       int front = entryDeque.front();
       entryDeque.pop_front();
-      for (auto &j : entryDeque) {
+      for (auto& j : entryDeque) {
         vector<string> followsEntry;
         followsEntry.push_back(to_string(front));
         followsEntry.push_back(to_string(j));
@@ -82,7 +83,7 @@ void FollowsTRelationExtractor::extractHelper(
 }
 
 shared_ptr<ExtractorResult> FollowsTRelationExtractor::extract() {
-  for (auto stmtList : listOfStmtList) {
+  for (const auto& stmtList : listOfStmtList) {
     extractHelper(stmtList);
   }
   return make_shared<RelationResult>(output);
@@ -91,7 +92,7 @@ shared_ptr<ExtractorResult> FollowsTRelationExtractor::extract() {
 void FollowsTRelationExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<RelationResult> relationResult =
       static_pointer_cast<RelationResult>(result);
-  for (auto entry : *relationResult->getResult()) {
+  for (const auto& entry : *relationResult->getResult()) {
     dataModifier->saveFollowsT(entry);
   }
 }

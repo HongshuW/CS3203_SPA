@@ -8,7 +8,7 @@
 
 namespace DE {
 unordered_set<string> VariableExtractionInterface::getVariablesFromCondExprNode(
-    shared_ptr<CondExprNode> condExprNode) {
+    const shared_ptr<CondExprNode>& condExprNode) {
   unordered_set<string> ans;
   if (!condExprNode) return ans;
   queue<shared_ptr<CondExprNode>> queue;
@@ -30,7 +30,7 @@ unordered_set<string> VariableExtractionInterface::getVariablesFromCondExprNode(
 }
 
 unordered_set<string> VariableExtractionInterface::getVariablesFromExprNode(
-    shared_ptr<ExprNode> exprNode) {
+    const shared_ptr<ExprNode>& exprNode) {
   unordered_set<string> ans;
   if (!exprNode) return ans;
   queue<shared_ptr<ExprNode>> queue;

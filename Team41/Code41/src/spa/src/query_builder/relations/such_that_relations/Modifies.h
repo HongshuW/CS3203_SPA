@@ -18,7 +18,7 @@ class Modifies : public SuchThatRelations {
   shared_ptr<vector<Declaration>> declarations;
 
  public:
-  Modifies(shared_ptr<vector<Declaration>> declarations);
+  explicit Modifies(shared_ptr<vector<Declaration>> declarations);
   shared_ptr<AbstractClause> createClause(Ref arg1, Ref arg2) override;
 };
 }  // namespace QB

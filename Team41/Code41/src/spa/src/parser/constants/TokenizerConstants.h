@@ -12,7 +12,6 @@ namespace SourceParser {
 class TokenizerConstants {
  public:
   static const string EMPTY_STR;
-  static const string DOUBLE_QUOTE;
   static const string EQUAL;
   static const string GREATER_THAN;
   static const string SMALLER_THAN;
@@ -31,16 +30,14 @@ class TokenizerConstants {
   static const string RIGHT_BRACKET;
   static const string SEMICOLON;
 
-  static const char DOUBLE_QUOTE_CHAR;
   static const char EQUAL_CHAR;
   static const char SINGLE_AND_CHAR;
   static const char BAR_CHAR;
 
   static const string UNEXPECTED_TOKEN_MESSAGE;
-  static const string INVALID_NAME;
   static const string INVALID_NUMBER;
 
-  static const unsigned int ZERO;
+  static const int ZERO;
 };
 
 }  // namespace SourceParser

@@ -200,7 +200,7 @@ void QueryValidator::validateAllowedDesignEntityPatternClause() {
   shared_ptr<vector<shared_ptr<PatternClause>>> newPatternClauseVector =
       make_shared<vector<shared_ptr<PatternClause>>>();
 
-  for (auto patternClause : *patternClauses) {
+  for (const auto& patternClause : *patternClauses) {
     auto dummyPatternClause =
         dynamic_pointer_cast<DummyPatternClause>(patternClause);
     checkCorrectDesignEntity(dummyPatternClause->arg1, ALLOWED_DE,
@@ -351,7 +351,7 @@ void QueryValidator::validateSameWithRefWithClause() {
         getWithComparingType(withClause->rhs, withClause);
     if (withComparingTypeLHS != withComparingTypeRHS) {
       throw PQLValidationException(
-          QueryValidatorConstants::PQL_VALIDATION_DIFFERENT_WTIH_REF);
+          QueryValidatorConstants::PQL_VALIDATION_DIFFERENT_WITH_REF);
     }
   }
 }

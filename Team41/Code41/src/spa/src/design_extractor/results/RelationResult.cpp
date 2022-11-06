@@ -4,12 +4,14 @@
 
 #include "RelationResult.h"
 
+#include <utility>
 #include <vector>
 
 using namespace std;
 
 DE::RelationResult::RelationResult(shared_ptr<list<vector<string>>> result)
-    : result(result) {}
+    : result(std::move(result)) {}
+
 shared_ptr<list<vector<string>>> DE::RelationResult::getResult() {
   return result;
 }

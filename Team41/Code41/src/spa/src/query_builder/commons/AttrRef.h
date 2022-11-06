@@ -36,8 +36,8 @@ class AttrRef {
 
   static AttrName getAttrNameFromStr(string& str);
 
-  string getStrOfAttrName() const;
-  string toString() const;
+  [[nodiscard]] string getStrOfAttrName() const;
+  [[nodiscard]] string toString() const;
   static string getStrFromAttrName(AttrName& attrName);
   static WithComparingType getWithComparingTypeFromAttrName(AttrName& attrName);
 

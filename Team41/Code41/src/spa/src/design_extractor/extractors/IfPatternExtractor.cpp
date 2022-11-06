@@ -5,22 +5,24 @@
 #include "IfPatternExtractor.h"
 
 #include <queue>
+#include <utility>
 
 #include "AST/utils/ASTUtils.h"
 #include "design_extractor/results/RelationResult.h"
 namespace DE {
 IfPatternExtractor::IfPatternExtractor(shared_ptr<DataModifier> dataModifier,
                                        shared_ptr<ProgramNode> programNode)
-    : IfWhilePatternExtractor(dataModifier, programNode) {}
+    : IfWhilePatternExtractor(std::move(dataModifier), std::move(programNode)) {
+}
 
 shared_ptr<ExtractorResult> IfPatternExtractor::extract() {
-  for (auto procedureNode : programNode->procedureList) {
+  for (const auto& procedureNode : programNode->procedureList) {
     queue<vector<shared_ptr<StmtNode>>> queue;
     queue.push(procedureNode->stmtList);
     while (!queue.empty()) {
       auto stmtList = queue.front();
       queue.pop();
-      for (auto stmtNode : stmtList) {
+      for (const auto& stmtNode : stmtList) {
         NodeType nodeType = ASTUtils::getNodeType(stmtNode);
         switch (nodeType) {
           case AST::IF_NODE: {
@@ -28,7 +30,7 @@ shared_ptr<ExtractorResult> IfPatternExtractor::extract() {
             int stmtNo = stmtNumbers->at(ifNode);
             unordered_set<string> varList =
                 condExprNodeHandler(ifNode->condExpr);
-            for (string var : varList) {
+            for (const string& var : varList) {
               vector<string> ifEntry;
               ifEntry.push_back(to_string(stmtNo));
               ifEntry.push_back(var);
@@ -60,7 +62,7 @@ shared_ptr<ExtractorResult> IfPatternExtractor::extract() {
 void IfPatternExtractor::save(shared_ptr<ExtractorResult> result) {
   shared_ptr<RelationResult> relationResult =
       static_pointer_cast<RelationResult>(result);
-  for (auto &entry : *relationResult->getResult()) {
+  for (auto& entry : *relationResult->getResult()) {
     dataModifier->saveIfPattern(entry);
   }
 }

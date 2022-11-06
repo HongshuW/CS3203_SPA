@@ -4,8 +4,10 @@
 
 #include "Uses.h"
 
+#include <utility>
+
 Uses::Uses(shared_ptr<vector<Declaration>> declarations)
-    : declarations(declarations){};
+    : declarations(std::move(declarations)) {}
 
 shared_ptr<AbstractClause> Uses::createClause(Ref arg1, Ref arg2) {
   if (getRefType(arg1) == RefType::INTEGER) {

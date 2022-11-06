@@ -11,7 +11,7 @@ ParentCommonExtractor::ParentCommonExtractor(
 }
 
 shared_ptr<map<int, vector<int>>> ParentCommonExtractor::extractParentHashmap(
-    shared_ptr<ProgramNode> rootPtr) {
+    const shared_ptr<ProgramNode>& rootPtr) {
   map<int, vector<int>> parentRelations;
   shared_ptr<unordered_map<shared_ptr<StmtNode>, int>> stmtNumbers =
       ASTUtils::getNodePtrToLineNumMap(rootPtr);
@@ -29,7 +29,7 @@ shared_ptr<map<int, vector<int>>> ParentCommonExtractor::extractParentHashmap(
         vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
         int parent = stmtNumbers->at(ptr);
         vector<int> children;
-        for (shared_ptr<StmtNode> n : stmtList) {
+        for (const shared_ptr<StmtNode>& n : stmtList) {
           queue.push(n);
           int child = stmtNumbers->at(n);
           children.push_back(child);
@@ -44,12 +44,12 @@ shared_ptr<map<int, vector<int>>> ParentCommonExtractor::extractParentHashmap(
         vector<shared_ptr<StmtNode>> elseStmtList = ptr->elseStmtList;
         int parent = stmtNumbers->at(ptr);
         vector<int> children;
-        for (shared_ptr<StmtNode> n : ifStmtList) {
+        for (const shared_ptr<StmtNode>& n : ifStmtList) {
           queue.push(n);
           int child = stmtNumbers->at(n);
           children.push_back(child);
         }
-        for (shared_ptr<StmtNode> n : elseStmtList) {
+        for (const shared_ptr<StmtNode>& n : elseStmtList) {
           queue.push(n);
           int child = stmtNumbers->at(n);
           children.push_back(child);
@@ -63,7 +63,7 @@ shared_ptr<map<int, vector<int>>> ParentCommonExtractor::extractParentHashmap(
         shared_ptr<ProgramNode> ptr =
             dynamic_pointer_cast<ProgramNode>(current);
         vector<shared_ptr<ProcedureNode>> procedureList = ptr->procedureList;
-        for (shared_ptr<ProcedureNode> n : procedureList) {
+        for (const shared_ptr<ProcedureNode>& n : procedureList) {
           queue.push(n);
         }
         break;
@@ -73,7 +73,7 @@ shared_ptr<map<int, vector<int>>> ParentCommonExtractor::extractParentHashmap(
         shared_ptr<ProcedureNode> ptr =
             dynamic_pointer_cast<ProcedureNode>(current);
         vector<shared_ptr<StmtNode>> stmtList = ptr->stmtList;
-        for (shared_ptr<StmtNode> n : stmtList) {
+        for (const shared_ptr<StmtNode>& n : stmtList) {
           queue.push(n);
         }
         break;
