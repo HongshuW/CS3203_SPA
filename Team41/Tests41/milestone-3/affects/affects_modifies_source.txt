@@ -1,0 +1,24 @@
+procedure main {
+    a = 100;
+    x = 10;
+    y = x + 20;
+    call containerProcedure;
+    z = x + y + a;
+}
+
+procedure containerProcedure {
+    call containerProcedure2;
+    y = 20;
+}
+
+procedure containerProcedure2 {
+    call containerProcedure3;
+}
+
+procedure containerProcedure3 {
+    call modifiesX;
+}
+
+procedure modifiesX {
+    x = x * 2;
+}
