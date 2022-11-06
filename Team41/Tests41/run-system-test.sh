@@ -57,3 +57,4 @@ cd ../build/src/autotester
 #milestone 3 tests
 ./autotester $1/Team41/Tests41/milestone-3/stress/stress_source.txt $1/Team41/Tests41/milestone-3/stress/stress_affects_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/stress_affects_analysis.xml
 ./autotester $1/Team41/Tests41/milestone-3/stress/stress_source.txt $1/Team41/Tests41/milestone-3/stress/stress_next_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/stress_next_analysis.xml
+./autotester $1/Team41/Tests41/milestone-3/affects/affects_modifies_source.txt $1/Team41/Tests41/milestone-3/affects/affects_modifies_queries.txt $1/Team41/Tests41/milestone-3/milestone-3-out/affects_modifies_analysis.xml
