@@ -11,4 +11,20 @@ QueryTimeDesignExtractor::QueryTimeDesignExtractor(
   stmtNumbers = ASTUtils::getNodePtrToLineNumMap(programNode);
 }
 
+    bool QueryTimeDesignExtractor::isArgsWithinRange(StmtNoArgs args) {
+        int lo = 1;
+        auto hi = stmtNumbers->size();
+        bool isStartInRange = true;
+        bool isEndInRange = true;
+        if (args.startAndEndExists()) {
+            isStartInRange = args.getStartStmtNo() >= lo && args.getStartStmtNo() <= hi;
+            isEndInRange = args.getEndStmtNo() >= lo && args.getEndStmtNo() <= hi;
+        } else if (args.startExistsOnly()) {
+            isStartInRange = args.getStartStmtNo() >= lo && args.getStartStmtNo() <= hi;
+        } else if (args.endExistsOnly()) {
+            isEndInRange = args.getEndStmtNo() >= lo && args.getEndStmtNo() <= hi;
+        }
+        return isStartInRange && isEndInRange;
+    }
+
 }  // namespace DE

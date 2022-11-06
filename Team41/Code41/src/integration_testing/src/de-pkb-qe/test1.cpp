@@ -736,6 +736,209 @@ TEST_CASE("Test de-pkb-qe integration") {
     vector<string> expected = {};
     REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
   }
+    SECTION("stmt s; select s such that affect(1000, s)  from procedure 12: out of range") {
+        shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+        shared_ptr<DataRetriever> dataRetriever =
+                make_shared<DataRetriever>(pkb, cacheManager);
+        shared_ptr<QE::QueryEvaluator> queryEvaluator =
+                make_shared<QE::QueryEvaluator>(dataRetriever);
+
+        Synonym syn1 = Synonym("s");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(syn1)
+                ->addAffects(1000, syn1)
+                ->build();
+
+        auto actual = queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("stmt s; select s such that affect(s, 1000)  from procedure 12: out of range") {
+        shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+        shared_ptr<DataRetriever> dataRetriever =
+                make_shared<DataRetriever>(pkb, cacheManager);
+        shared_ptr<QE::QueryEvaluator> queryEvaluator =
+                make_shared<QE::QueryEvaluator>(dataRetriever);
+
+        Synonym syn1 = Synonym("s");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(syn1)
+                ->addAffects( syn1, 1000)
+                ->build();
+
+        auto actual = queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("stmt s; select s such that affect(s, 9)  from procedure 12: in range boundary value") {
+        shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+        shared_ptr<DataRetriever> dataRetriever =
+                make_shared<DataRetriever>(pkb, cacheManager);
+        shared_ptr<QE::QueryEvaluator> queryEvaluator =
+                make_shared<QE::QueryEvaluator>(dataRetriever);
+
+        Synonym syn1 = Synonym("s");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(syn1)
+                ->addAffects( syn1, 9)
+                ->build();
+
+        auto actual = queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("stmt s; select s such that affect(s, 10)  from procedure 12: out of range boundary value") {
+        shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+        shared_ptr<DataRetriever> dataRetriever =
+                make_shared<DataRetriever>(pkb, cacheManager);
+        shared_ptr<QE::QueryEvaluator> queryEvaluator =
+                make_shared<QE::QueryEvaluator>(dataRetriever);
+
+        Synonym syn1 = Synonym("s");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(syn1)
+                ->addAffects( syn1, 10)
+                ->build();
+
+        auto actual = queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("stmt s; select s such that affect(s, 10)  from procedure 12: out of range boundary value") {
+        shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+        shared_ptr<DataRetriever> dataRetriever =
+                make_shared<DataRetriever>(pkb, cacheManager);
+        shared_ptr<QE::QueryEvaluator> queryEvaluator =
+                make_shared<QE::QueryEvaluator>(dataRetriever);
+
+        Synonym syn1 = Synonym("s");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(syn1)
+                ->addAffects(  10, syn1)
+                ->build();
+
+        auto actual = queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("stmt s; select s such that affect(s, 10)  from procedure 12: in range boundary value") {
+        shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+        shared_ptr<DataRetriever> dataRetriever =
+                make_shared<DataRetriever>(pkb, cacheManager);
+        shared_ptr<QE::QueryEvaluator> queryEvaluator =
+                make_shared<QE::QueryEvaluator>(dataRetriever);
+
+        Synonym syn1 = Synonym("s");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(syn1)
+                ->addAffects( syn1, 9)
+                ->build();
+
+        auto actual = queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
+    SECTION("stmt s; select s such that affect(1000, 1000)  from procedure 12: in range boundary value") {
+        shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
+        shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
+        auto pNode =
+                TestDE::Dummies::getTestProgramNode(12 - PROGRAM_NODE_IDX_OFFSET);
+        shared_ptr<DE::DesignExtractorManager> designExtractorManager =
+                make_shared<DE::DesignExtractorManager>(dataModifier, pNode);
+        designExtractorManager->run();
+        shared_ptr<DE::DesignExtractorRetriever> designExtractorRetriever =
+                make_shared<DE::DesignExtractorRetriever>(pNode);
+        shared_ptr<CacheManager> cacheManager =
+                make_shared<CacheManager>(CacheManager(designExtractorRetriever));
+        shared_ptr<DataRetriever> dataRetriever =
+                make_shared<DataRetriever>(pkb, cacheManager);
+        shared_ptr<QE::QueryEvaluator> queryEvaluator =
+                make_shared<QE::QueryEvaluator>(dataRetriever);
+
+        Synonym syn1 = Synonym("s");
+
+        auto query = make_shared<TestQE::TestQueryBuilder>()
+                ->addDeclaration(QB::DesignEntity::STMT, syn1)
+                ->addToSelect(syn1)
+                ->addAffects( 1000, 1000)
+                ->build();
+
+        auto actual = queryEvaluator->evaluate(query);
+        vector<string> expected = {};
+        REQUIRE(QETest::QETestUtils::containsSameElement(actual, expected));
+    }
   SECTION("stmt s; select s such that affect*(1, s)  from procedure 15") {
     shared_ptr<PKBStorage> pkb = make_shared<PKBStorage>();
     shared_ptr<DataModifier> dataModifier = make_shared<DataModifier>(pkb);
