@@ -300,8 +300,8 @@ bool AffectsRelationExtractor::areArgsValid(int start, int end) {
 }
 
 shared_ptr<ExtractorResult> AffectsRelationExtractor::extract(StmtNoArgs args) {
-
-  if (!isArgsWithinRange(args)) return make_shared<QueryTimeResult>(make_shared<vector<string>>());
+  if (!isArgsWithinRange(args))
+    return make_shared<QueryTimeResult>(make_shared<vector<string>>());
 
   if (args.startAndEndExists()) {
     return make_shared<QueryTimeResult>(extractNoWildcard(args));

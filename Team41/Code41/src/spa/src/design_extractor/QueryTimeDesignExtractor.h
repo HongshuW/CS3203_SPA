@@ -20,6 +20,7 @@ class QueryTimeDesignExtractor {
   virtual shared_ptr<ExtractorResult> extract(StmtNoArgs args) = 0;
   virtual shared_ptr<ExtractorResult> extractAllRelations() = 0;
   bool isArgsWithinRange(StmtNoArgs args);
+
  protected:
   shared_ptr<ProgramNode> programNode;
   shared_ptr<StmtNumbers> stmtNumbers;
