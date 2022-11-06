@@ -31,7 +31,8 @@ bool AffectsRelationExtractor::isModified(const string& variable, int stmtNo) {
     case NodeType::CALL_NODE: {
       shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(stmtNode);
       string procedure = callNode->procedureName;
-      unordered_set<string> modifiedVariables = *(modifiesPMap->at(procedure));
+      unordered_set<string> modifiedVariables =
+          *(procToModifiedVars->at(procedure));
       return modifiedVariables.find(variable) != modifiedVariables.end();
     }
     default: {
@@ -208,7 +209,7 @@ void AffectsRelationExtractor::extractWithEndBTHelper(
       shared_ptr<CallNode> callNode = dynamic_pointer_cast<CallNode>(childNode);
       string procedure = callNode->procedureName;
       shared_ptr<unordered_set<string>> modifiedVariables =
-          modifiesPMap->at(procedure);
+          procToModifiedVars->at(procedure);
       unordered_set<string> usedVarCopy = unordered_set<string>();
       unordered_set<string> setUnion = unordered_set<string>();
       for (const string& usedVar : *usedVariables) {

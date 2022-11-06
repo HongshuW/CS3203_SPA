@@ -27,6 +27,10 @@ class AffectsCommonExtractor : public QueryTimeDesignExtractor,
                                public CFGExtractionInterface,
                                public CallNodeExtractionInterface,
                                public VariableExtractionInterface {
+ private:
+  shared_ptr<unordered_map<string, shared_ptr<unordered_set<string>>>>
+  initProcedureToModifiedVarMap(shared_ptr<ProgramNode> programNode);
+
  protected:
   explicit AffectsCommonExtractor(shared_ptr<ProgramNode> programNode);
   int offset;
@@ -35,7 +39,7 @@ class AffectsCommonExtractor : public QueryTimeDesignExtractor,
   shared_ptr<StmtNoToProcMap> stmtNoToProcMap;
   shared_ptr<LineNoToNodePtrMap> lineNoToNodePtrMap;
   shared_ptr<ProcCFGMap> procCFGMap;
-  shared_ptr<ModifiesPMap> modifiesPMap;
+  shared_ptr<ModifiesPMap> procToModifiedVars;
   shared_ptr<AffectsRelationTable> affectsTable;
   void initialize();
   void DFS(int curr, const shared_ptr<vector<int>>& visitCount,
