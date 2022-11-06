@@ -13,3 +13,8 @@ FALSE
 Select BOOLEAN such that Affects(3, 5)
 FALSE
 5000
+3
+stmt s1, s2;
+Select <s1, s2> such that Affects(s1, s2)
+2 3, 1 5
+5000
